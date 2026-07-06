@@ -1,0 +1,351 @@
+<mvc:View
+  controllerName="mantenimiento.controller.AnalisisSolicitudesCallCenterAtendidas"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+
+  <Page
+    id="pageAnalisisSolicitudesCallCenterAtendidas"
+    showHeader="false"
+    class="ccAtendidasPage">
+
+    <content>
+      <ScrollContainer height="100%" vertical="true">
+        <VBox class="ccAtContainer">
+
+          <!-- HEADER -->
+          <VBox class="ccAtHeader">
+
+            <HBox alignItems="Center" class="ccAtTitleRow">
+              <VBox class="ccAtMenuButton">
+                <core:Icon src="sap-icon://menu2"/>
+              </VBox>
+
+              <VBox>
+                <HBox alignItems="Baseline" class="ccAtTitleTextRow">
+                  <Text text="Análisis de solicitudes call center" class="ccAtTitle"/>
+                  <Text text="atendidas" class="ccAtTitleGreen"/>
+                </HBox>
+
+                <HBox class="ccAtBreadcrumb" alignItems="Center">
+                  <Text text="Órdenes"/>
+                  <core:Icon src="sap-icon://navigation-right-arrow"/>
+                  <Text text="Composición de órdenes del periodo"/>
+                  <core:Icon src="sap-icon://navigation-right-arrow"/>
+                  <Text text="Call Center"/>
+                </HBox>
+              </VBox>
+            </HBox>
+
+          </VBox>
+
+          <!-- FILTROS -->
+          <HBox class="ccAtFilterCard" alignItems="End" wrap="Wrap">
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Periodo"/>
+              <Select id="selPeriodoCallAt" selectedKey="mayo" width="170px">
+                <items>
+                  <core:Item key="mayo" text="Mayo 2024"/>
+                  <core:Item key="junio" text="Junio 2024"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Fecha desde"/>
+              <DatePicker id="dpDesdeCallAt" value="01/05/2024" width="170px"/>
+            </VBox>
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Fecha hasta"/>
+              <DatePicker id="dpHastaCallAt" value="31/05/2024" width="170px"/>
+            </VBox>
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Zona"/>
+              <Select id="selZonaCallAt" selectedKey="todas" width="145px">
+                <items>
+                  <core:Item key="todas" text="Todas"/>
+                  <core:Item key="norte" text="Norte"/>
+                  <core:Item key="centro" text="Centro"/>
+                  <core:Item key="sur" text="Sur"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Cliente"/>
+              <Select id="selClienteCallAt" selectedKey="todos" width="145px">
+                <items>
+                  <core:Item key="todos" text="Todos"/>
+                  <core:Item key="torre" text="Torre Reforma"/>
+                  <core:Item key="plaza" text="Plaza Satélite"/>
+                  <core:Item key="hospital" text="Hospital Ángeles"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="ccAtFilterItem">
+              <Label text="Responsable"/>
+              <Select id="selResponsableCallAt" selectedKey="todos" width="165px">
+                <items>
+                  <core:Item key="todos" text="Todos"/>
+                  <core:Item key="juan" text="Juan Pérez"/>
+                  <core:Item key="maria" text="María González"/>
+                  <core:Item key="carlos" text="Carlos Herrera"/>
+                  <core:Item key="pedro" text="Pedro López"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <Button
+              text="Aplicar filtros"
+              icon="sap-icon://filter"
+              type="Emphasized"
+              press=".onAplicarFiltros"
+              class="ccAtFilterButton"/>
+
+          </HBox>
+
+          <!-- KPIS -->
+          <HBox class="ccAtKpiRow" wrap="Wrap">
+
+            <VBox class="ccAtKpiCard ccAtKpiBlue">
+              <HBox alignItems="Center">
+                <VBox class="ccAtKpiIconBox ccAtBlueSoft">
+                  <core:Icon src="sap-icon://headset"/>
+                </VBox>
+                <VBox>
+                  <Text text="{ccAt>/kpis/planeadas}" class="ccAtKpiNumber ccAtBlueText"/>
+                  <Text text="Solicitudes" class="ccAtKpiLabel"/>
+                  <Text text="Planeadas" class="ccAtKpiLabelSmall"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="ccAtKpiCard ccAtKpiGreen">
+              <HBox alignItems="Center">
+                <VBox class="ccAtKpiIconBox ccAtGreenSoft">
+                  <core:Icon src="sap-icon://accept"/>
+                </VBox>
+                <VBox>
+                  <Text text="{ccAt>/kpis/atendidas}" class="ccAtKpiNumber ccAtGreenText"/>
+                  <Text text="Atendidas" class="ccAtKpiLabel"/>
+                  <Text text="95.3% del total" class="ccAtKpiSub ccAtGreenText"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="ccAtKpiCard ccAtKpiRed">
+              <HBox alignItems="Center">
+                <VBox class="ccAtKpiIconBox ccAtRedSoft">
+                  <core:Icon src="sap-icon://decline"/>
+                </VBox>
+                <VBox>
+                  <Text text="{ccAt>/kpis/noAtendidas}" class="ccAtKpiNumber ccAtRedText"/>
+                  <Text text="No atendidas" class="ccAtKpiLabel"/>
+                  <Text text="4.7% del total planeado" class="ccAtKpiSub ccAtRedText"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="ccAtKpiCard ccAtKpiPurple">
+              <HBox alignItems="Center">
+                <VBox class="ccAtKpiIconBox ccAtPurpleSoft">
+                  <core:Icon src="sap-icon://target-group"/>
+                </VBox>
+                <VBox>
+                  <Text text="{ccAt>/kpis/cumplimiento}" class="ccAtKpiNumber ccAtPurpleText"/>
+                  <Text text="Cumplimiento" class="ccAtKpiLabel"/>
+                  <Text text="{ccAt>/kpis/resumen}" class="ccAtKpiSub"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+          </HBox>
+
+          <!-- TABS -->
+          <HBox class="ccAtAnalysisBar" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+
+            <HBox class="ccAtTabs" alignItems="Center">
+              <Text text="Ver análisis por:" class="ccAtTabsLabel"/>
+
+              <Button
+                text="No atendidas (3)"
+                type="Transparent"
+                press=".onVerNoAtendidas"
+                class="ccAtTabButton"/>
+
+              <Button
+                text="Atendidas (62)"
+                type="Emphasized"
+                press=".onVerAtendidas"
+                class="ccAtTabButton ccAtTabButtonActive"/>
+            </HBox>
+
+            <HBox class="ccAtInfoMessage" alignItems="Center">
+              <core:Icon src="sap-icon://information"/>
+              <Text text="Análisis basado en 62 solicitudes atendidas."/>
+            </HBox>
+
+          </HBox>
+
+          <!-- TABLA PRINCIPAL -->
+          <VBox class="ccAtTableCard">
+
+            <HBox class="ccAtTableTop" justifyContent="SpaceBetween" alignItems="Center">
+              <Title
+                text="Demanda atendida por cliente"
+                level="H2"
+                class="ccAtSectionTitle"/>
+
+              <SearchField
+                width="320px"
+                placeholder="Buscar cliente..."
+                liveChange=".onBuscarCliente"
+                class="ccAtSearch"/>
+            </HBox>
+
+            <!-- HEADER -->
+            <HBox class="ccAtTableHeader">
+              <Text text="Cliente" class="ccAtColClienteHeader"/>
+
+              <HBox class="ccAtColNumber" alignItems="Center" justifyContent="Center">
+                <Text text="Solicitudes atendidas"/>
+                <core:Icon src="sap-icon://navigation-up-arrow" class="ccAtSortIcon"/>
+              </HBox>
+
+              <Text text="Elevadores atendidos" class="ccAtColNumber"/>
+              <Text text="% del total atendido" class="ccAtColNumber"/>
+              <Text text="Tiempo promedio de respuesta" class="ccAtColTiempo"/>
+              <Text text="Responsable principal" class="ccAtColResponsable"/>
+              <Text text="" class="ccAtColArrow"/>
+            </HBox>
+
+            <!-- BODY -->
+            <VBox
+              class="ccAtTableBody"
+              items="{ccAt>/clientes}">
+
+              <items>
+                <VBox class="ccAtClienteBlock">
+
+                  <HBox class="ccAtClienteRow" alignItems="Center">
+
+                    <Button
+                      icon="{ccAt>chevronIcon}"
+                      type="Transparent"
+                      press=".onToggleCliente"
+                      class="ccAtExpandButton"/>
+
+                    <HBox class="ccAtColCliente" alignItems="Center">
+                      <core:Icon src="{ccAt>icon}" class="ccAtClienteIcon"/>
+                      <Text text="{ccAt>cliente}" class="ccAtClienteName"/>
+                    </HBox>
+
+                    <Text text="{ccAt>solicitudes}" class="ccAtColNumber"/>
+                    <Text text="{ccAt>elevadores}" class="ccAtColNumber"/>
+                    <Text text="{ccAt>porcentaje}" class="ccAtColNumber ccAtBlueNumber"/>
+                    <Text text="{ccAt>tiempo}" class="ccAtColTiempo ccAtGreenNumber"/>
+
+                    <HBox class="ccAtColResponsable" alignItems="Center" justifyContent="Center">
+                      <core:Icon src="sap-icon://person-placeholder" class="ccAtPersonIcon"/>
+                      <Text text="{ccAt>responsable}" class="ccAtResponsableText"/>
+                    </HBox>
+
+                    <Button
+                      icon="{ccAt>chevronIcon}"
+                      type="Transparent"
+                      press=".onToggleCliente"
+                      class="ccAtArrowButton"/>
+
+                  </HBox>
+
+                  <!-- DETALLE EXPANDIBLE -->
+                  <VBox visible="{ccAt>expanded}" class="ccAtDetailBox">
+
+                    <Text
+                      text="Detalle de solicitudes atendidas para {ccAt>cliente}"
+                      class="ccAtDetailTitle"/>
+
+                    <Table
+                      items="{ccAt>detalle}"
+                      class="ccAtInnerTable"
+                      showSeparators="Inner">
+
+                      <columns>
+                        <Column>
+                          <Text text="OT"/>
+                        </Column>
+                        <Column>
+                          <Text text="Elevador"/>
+                        </Column>
+                        <Column>
+                          <Text text="Fecha solicitud"/>
+                        </Column>
+                        <Column>
+                          <Text text="Fecha atención"/>
+                        </Column>
+                        <Column>
+                          <Text text="Tiempo de respuesta"/>
+                        </Column>
+                        <Column>
+                          <Text text="Responsable"/>
+                        </Column>
+                      </columns>
+
+                      <items>
+                        <ColumnListItem>
+                          <cells>
+                            <HBox alignItems="Center">
+                              <core:Icon src="sap-icon://building" class="ccAtSmallBuildingIcon"/>
+                              <Text text="{ccAt>ot}" class="ccAtOtText"/>
+                            </HBox>
+
+                            <Text text="{ccAt>elevador}"/>
+                            <Text text="{ccAt>fechaSolicitud}"/>
+                            <Text text="{ccAt>fechaAtencion}"/>
+
+                            <ObjectStatus
+                              text="{ccAt>tiempoRespuesta}"
+                              state="{ccAt>tiempoState}"
+                              class="ccAtTiempoStatus"/>
+
+                            <Text text="{ccAt>responsable}"/>
+                          </cells>
+                        </ColumnListItem>
+                      </items>
+
+                    </Table>
+
+                  </VBox>
+
+                </VBox>
+              </items>
+
+            </VBox>
+
+            <!-- TOTAL -->
+            <HBox class="ccAtTotalRow" alignItems="Center">
+
+              <HBox class="ccAtColClienteTotal">
+                <Text text="Total" class="ccAtTotalLabel"/>
+              </HBox>
+
+              <Text text="{ccAt>/total/solicitudes}" class="ccAtColNumber ccAtBlueNumber"/>
+              <Text text="{ccAt>/total/elevadores}" class="ccAtColNumber"/>
+              <Text text="{ccAt>/total/porcentaje}" class="ccAtColNumber ccAtBlueNumber"/>
+              <Text text="{ccAt>/total/tiempo}" class="ccAtColTiempo ccAtGreenNumber"/>
+              <Text text="{ccAt>/total/responsable}" class="ccAtColResponsable ccAtTotalText"/>
+              <Text text="" class="ccAtColArrow"/>
+
+            </HBox>
+
+          </VBox>
+
+        </VBox>
+      </ScrollContainer>
+    </content>
+  </Page>
+</mvc:View>

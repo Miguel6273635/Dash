@@ -314,9 +314,12 @@ sap.ui.define([
                     colorPalette: aColors,
                     drawingEffect: "normal",
                     marker: {
-                        visible: true,
-                        size: 6
-                    },
+    visible: true,
+    size: 4
+},
+line: {
+    width: 2
+}
                     dataLabel: {
                         visible: false
                     },
