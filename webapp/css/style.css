@@ -2727,3 +2727,137 @@
     font-size: 18px !important;
     font-weight: 900 !important;
 }
+/* ==========================================================================
+   HORAS TRABAJADAS - FIX FINAL FILTROS Y BOTÓN APLICAR
+   ========================================================================== */
+
+.HorasTrabajadas .htwFiltersBar {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        145px
+        122px
+        122px
+        95px
+        115px
+        130px
+        95px
+        115px
+        125px
+        126px !important;
+    column-gap: 8px !important;
+    row-gap: 8px !important;
+    align-items: end !important;
+    margin-bottom: 22px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+/* Evita que UI5 haga crecer los items internos */
+.HorasTrabajadas .htwFiltersBar > .sapMFlexItem {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Cada caja del filtro */
+.HorasTrabajadas .htwFilterBox {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Labels */
+.HorasTrabajadas .htwFilterLabel {
+    color: #172554 !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    margin-bottom: 6px !important;
+    line-height: 12px !important;
+}
+
+/* Selects y DatePickers */
+.HorasTrabajadas .htwFiltersBar .sapMSlt,
+.HorasTrabajadas .htwFiltersBar .sapMInputBase {
+    width: 100% !important;
+    height: 38px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+.HorasTrabajadas .htwFiltersBar .sapMSlt,
+.HorasTrabajadas .htwFiltersBar .sapMInputBaseContentWrapper {
+    height: 38px !important;
+    border-radius: 9px !important;
+    border: 1px solid #DDE6F2 !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Texto interno */
+.HorasTrabajadas .htwFiltersBar .sapMSltLabel,
+.HorasTrabajadas .htwFiltersBar .sapMInputBaseInner {
+    height: 38px !important;
+    line-height: 38px !important;
+    color: #172554 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding-left: 8px !important;
+}
+
+/* Botón aplicar filtros */
+.HorasTrabajadas .htwApplyButton {
+    width: 126px !important;
+    min-width: 126px !important;
+    max-width: 126px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: end !important;
+}
+
+.HorasTrabajadas .htwApplyButton .sapMBtnInner {
+    width: 126px !important;
+    height: 38px !important;
+    border-radius: 9px !important;
+    background: #2563EB !important;
+    border: none !important;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-shadow: none !important;
+}
+
+.HorasTrabajadas .htwApplyButton .sapMBtnContent {
+    color: #FFFFFF !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+.HorasTrabajadas .htwApplyButton .sapMBtnIcon {
+    color: #FFFFFF !important;
+    font-size: 1rem !important;
+    margin-right: 6px !important;
+}
+
+/* En pantallas más pequeñas baja en dos filas sin cortar el botón */
+@media screen and (max-width: 1350px) {
+    .HorasTrabajadas .htwFiltersBar {
+        grid-template-columns:
+            145px
+            122px
+            122px
+            95px
+            115px !important;
+    }
+
+    .HorasTrabajadas .htwApplyButton,
+    .HorasTrabajadas .htwApplyButton .sapMBtnInner {
+        width: 126px !important;
+        min-width: 126px !important;
+        max-width: 126px !important;
+    }
+}

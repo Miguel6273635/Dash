@@ -1,0 +1,624 @@
+<mvc:View
+    controllerName="mantenimiento.controller.ConsumoMateriales"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:vizData="sap.viz.ui5.data"
+    xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
+
+    <Page id="pageConsumoMateriales" showHeader="false" class="ConsumoMateriales">
+        <content>
+            <ScrollContainer height="100%" vertical="true" horizontal="false">
+                <VBox class="cmPageContainer">
+
+                    <!-- HEADER -->
+                    <VBox class="cmHeader">
+                        <Title text="Consumo de materiales" level="H1" class="cmMainTitle"/>
+                        <Text text="Análisis de consumo, variación y control de materiales" class="cmSubtitle"/>
+                    </VBox>
+
+                    <!-- FILTROS -->
+                    <HBox class="cmFiltersBar" alignItems="End" wrap="Wrap">
+
+                        <VBox class="cmFilterBox cmFilterPeriodo">
+                            <Label text="Periodo" class="cmFilterLabel"/>
+                            <Select selectedKey="{materialesModel>/filtros/periodo}">
+                                <items>
+                                    <core:Item key="mayo2024" text="Mayo 2024"/>
+                                    <core:Item key="junio2024" text="Junio 2024"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="cmFilterBox cmFilterFecha">
+                            <Label text="Fecha desde" class="cmFilterLabel"/>
+                            <DatePicker
+                                value="{materialesModel>/filtros/fechaDesde}"
+                                displayFormat="dd/MM/yyyy"
+                                valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+
+                        <VBox class="cmFilterBox cmFilterFecha">
+                            <Label text="Fecha hasta" class="cmFilterLabel"/>
+                            <DatePicker
+                                value="{materialesModel>/filtros/fechaHasta}"
+                                displayFormat="dd/MM/yyyy"
+                                valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+
+                        <VBox class="cmFilterBox cmFilterZona">
+                            <Label text="Zona" class="cmFilterLabel"/>
+                            <Select selectedKey="{materialesModel>/filtros/zona}">
+                                <items>
+                                    <core:Item key="todas" text="Todas"/>
+                                    <core:Item key="norte" text="Norte"/>
+                                    <core:Item key="centro" text="Centro"/>
+                                    <core:Item key="sur" text="Sur"/>
+                                    <core:Item key="este" text="Este"/>
+                                    <core:Item key="oeste" text="Oeste"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="cmFilterBox cmFilterSupervisor">
+                            <Label text="Supervisor" class="cmFilterLabel"/>
+                            <Select selectedKey="{materialesModel>/filtros/supervisor}">
+                                <items>
+                                    <core:Item key="todos" text="Todas"/>
+                                    <core:Item key="sup1" text="Supervisor 1"/>
+                                    <core:Item key="sup2" text="Supervisor 2"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="cmFilterBox cmFilterTipoOrden">
+                            <Label text="Tipo de orden" class="cmFilterLabel"/>
+                            <Select selectedKey="{materialesModel>/filtros/tipoOrden}">
+                                <items>
+                                    <core:Item key="todas" text="Todas"/>
+                                    <core:Item key="mantenimiento" text="Mantenimiento planeado"/>
+                                    <core:Item key="reparacion" text="Reparación"/>
+                                    <core:Item key="callcenter" text="Call Center"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            class="cmApplyButton"
+                            press=".onAplicarFiltros"/>
+                    </HBox>
+
+                    <!-- KPI CARDS -->
+                    <HBox class="cmKpiRow" wrap="Wrap">
+
+                        <VBox class="cmKpiCard cmKpiRed">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconRed">
+                                    <core:Icon src="sap-icon://alert"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="OT afectadas por falta de material" class="cmKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="{materialesModel>/kpis/otAfectadas}" class="cmKpiNumber cmRedText"/>
+                                        <Text text=" OT" class="cmKpiUnit cmRedText"/>
+                                    </HBox>
+                                    <Text text="Requieren atención para su ejecución" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="cmKpiCard cmKpiOrange">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconOrange">
+                                    <core:Icon src="sap-icon://shipping-status"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="Material crítico principal" class="cmKpiLabel"/>
+                                    <Text text="{materialesModel>/kpis/materialCritico}" class="cmKpiNumber cmOrangeText"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="{materialesModel>/kpis/materialCriticoDelta}" class="cmKpiDelta cmOrangeText"/>
+                                        <Text text=" pzas vs plan" class="cmKpiDescription"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="cmKpiCard cmKpiPurple">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconPurple">
+                                    <core:Icon src="sap-icon://bar-chart"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="Categorías sobre plan" class="cmKpiLabel"/>
+                                    <Text text="{materialesModel>/kpis/categoriasSobrePlan}" class="cmKpiNumber cmPurpleText"/>
+                                    <Text text="Mayor consumo vs plan" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- ROW 1 -->
+                    <HBox class="cmCardsRow" wrap="Wrap">
+
+                        <!-- CARD 1 -->
+                      
+<!-- CARD 1: Consumo de materiales vs plan -->
+<!-- CARD 1: Consumo de materiales vs plan -->
+<VBox class="cmCard cmMaterialVsPlanCardExact">
+
+    <HBox class="cmCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+        <Title text="Consumo de materiales vs plan (Cantidades)" level="H3" class="cmCardTitle"/>
+    </HBox>
+
+    <!-- HEADER -->
+    <HBox class="cmMatExactHeader" alignItems="Center">
+        <Text text="Material" class="cmMatExactHeaderText">
+            <layoutData>
+                <FlexItemData baseSize="36%" growFactor="0" shrinkFactor="0"/>
+            </layoutData>
+        </Text>
+
+        <Text text="Plan" class="cmMatExactHeaderText">
+            <layoutData>
+                <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
+            </layoutData>
+        </Text>
+
+        <Text text="Real" class="cmMatExactHeaderText">
+            <layoutData>
+                <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
+            </layoutData>
+        </Text>
+
+        <Text text="Variación" class="cmMatExactHeaderText cmMatExactRight">
+            <layoutData>
+                <FlexItemData baseSize="16%" growFactor="0" shrinkFactor="0"/>
+            </layoutData>
+        </Text>
+    </HBox>
+
+    <!-- FILAS -->
+    <List
+        showSeparators="None"
+        class="cmMatExactList"
+        items="{materialesModel>/materialesVsPlan}">
+
+        <CustomListItem>
+            <HBox class="cmMatExactRow" alignItems="Center">
+
+                <!-- MATERIAL -->
+                <HBox class="cmMatExactMaterial" alignItems="Center">
+                    <layoutData>
+                        <FlexItemData baseSize="36%" growFactor="0" shrinkFactor="0"/>
+                    </layoutData>
+
+                    <core:Icon
+                        src="{materialesModel>icono}"
+                        visible="{= !${materialesModel>esEmoji} }"
+                        class="cmMatExactIcon"/>
+
+                    <Text
+                        text="{materialesModel>iconoTexto}"
+                        visible="{materialesModel>esEmoji}"
+                        class="cmMatExactEmoji"/>
+
+                    <Text
+                        text="{materialesModel>material}"
+                        wrapping="true"
+                        maxLines="2"
+                        class="cmMatExactName"/>
+                </HBox>
+
+                <!-- PLAN -->
+                <VBox class="cmMatExactMeasure">
+                    <layoutData>
+                        <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
+                    </layoutData>
+
+                    <Text text="{materialesModel>planTexto}" class="cmMatExactValue"/>
+                    <ProgressIndicator
+                        width="86px"
+                        percentValue="{materialesModel>planPorcentaje}"
+                        displayValue=""
+                        class="cmMatExactPlanBar"/>
+                </VBox>
+
+                <!-- REAL -->
+                <VBox class="cmMatExactMeasure">
+                    <layoutData>
+                        <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
+                    </layoutData>
+
+                    <Text text="{materialesModel>realTexto}" class="cmMatExactValue"/>
+                    <ProgressIndicator
+                        width="86px"
+                        percentValue="{materialesModel>realPorcentaje}"
+                        displayValue=""
+                        class="cmMatExactRealBar"/>
+                </VBox>
+
+                <!-- VARIACIÓN -->
+                <Text
+                    text="{materialesModel>variacionTexto}"
+                    class="cmMatExactVariation">
+                    <layoutData>
+                        <FlexItemData baseSize="16%" growFactor="0" shrinkFactor="0"/>
+                    </layoutData>
+
+                    <customData>
+                        <core:CustomData key="estado" value="{materialesModel>estado}" writeToDom="true"/>
+                    </customData>
+                </Text>
+
+            </HBox>
+        </CustomListItem>
+    </List>
+
+    <!-- FOOTER -->
+    <HBox class="cmMatExactFooter" alignItems="Center">
+        <core:Icon src="sap-icon://information" class="cmBlueIcon"/>
+        <Text text="Las variaciones se calculan contra el plan del periodo."/>
+    </HBox>
+
+</VBox>
+
+                        <!-- CARD 2 -->
+                        <VBox class="cmCard cmTipoOrdenCard">
+                            <HBox class="cmCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                <Title text="Consumo por tipo de orden" level="H3" class="cmCardTitle"/>
+                            </HBox>
+
+                            <Text text="Total 2,168 pzas / L" class="cmCardStrongText"/>
+
+                            <HBox class="cmStackedBar">
+                                <VBox class="cmStackSegment cmStackBlue" width="56%">
+                                    <Text text="56%" class="cmStackText"/>
+                                </VBox>
+                                <VBox class="cmStackSegment cmStackGreen" width="31%">
+                                    <Text text="31%" class="cmStackText"/>
+                                </VBox>
+                                <VBox class="cmStackSegment cmStackOrange" width="13%">
+                                    <Text text="13%" class="cmStackText"/>
+                                </VBox>
+                            </HBox>
+
+                            <List
+                                showSeparators="None"
+                                class="cmTipoOrdenList"
+                                items="{materialesModel>/consumoTipoOrden}">
+                                <CustomListItem>
+                                    <HBox class="cmTipoOrdenRow" alignItems="Center" justifyContent="SpaceBetween">
+                                        <HBox alignItems="Center">
+                                            <VBox class="cmDot">
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{materialesModel>estado}" writeToDom="true"/>
+                                                </customData>
+                                            </VBox>
+                                            <Text text="{materialesModel>tipo}" class="cmTipoOrdenName"/>
+                                        </HBox>
+
+                                        <HBox alignItems="Center">
+                                            <Text text="{materialesModel>totalTexto}" class="cmTipoOrdenValue"/>
+                                            <Text text="{materialesModel>porcentajeTexto}" class="cmTipoOrdenPercent"/>
+                                        </HBox>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+
+                            <HBox class="cmInfoFooter" alignItems="Center">
+                                <core:Icon src="sap-icon://information" class="cmBlueIcon"/>
+                                <Text text="Distribución del consumo de materiales por tipo de orden."/>
+                            </HBox>
+                        </VBox>
+
+                       
+                     
+<!-- CARD 3: OT afectadas por falta de material -->
+<VBox class="cmCard cmOtFaltaMaterialCardFinal">
+
+    <HBox class="cmCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+        <HBox alignItems="Center">
+            <Title text="OT afectadas por falta de material" level="H3" class="cmCardTitle"/>
+            <Button icon="sap-icon://hint" type="Transparent" class="cmSmallIconButton"/>
+        </HBox>
+
+        <Button icon="sap-icon://overflow" type="Transparent" class="cmIconButton"/>
+    </HBox>
+
+    <!-- ANÁLISIS -->
+    <HBox class="cmOtFinalAnalysisBox" alignItems="Start">
+        <core:Icon src="sap-icon://alert" class="cmBlueIcon"/>
+        <VBox class="sapUiTinyMarginBegin">
+            <Text text="Órdenes" class="cmOtFinalAnalysisTitle"/>
+            <Text text="afectadas parcialmente o con riesgo de atraso" class="cmOtFinalAnalysisText"/>
+        </VBox>
+    </HBox>
+
+    <!-- GRÁFICA MANUAL -->
+    <VBox class="cmOtFinalChart">
+
+        <HBox class="cmOtFinalChartBody">
+
+            <!-- EJE Y -->
+            <VBox class="cmOtFinalAxis">
+                <Text text="OT" class="cmOtFinalAxisTitle"/>
+                <Text text="10" class="cmOtFinalAxisLabel"/>
+                <Text text="8" class="cmOtFinalAxisLabel"/>
+                <Text text="6" class="cmOtFinalAxisLabel"/>
+                <Text text="4" class="cmOtFinalAxisLabel"/>
+                <Text text="2" class="cmOtFinalAxisLabel"/>
+                <Text text="0" class="cmOtFinalAxisLabel"/>
+            </VBox>
+
+            <!-- ÁREA -->
+            <HBox class="cmOtFinalPlot" justifyContent="SpaceAround" alignItems="End">
+
+                <VBox class="cmOtFinalCol" alignItems="Center">
+                    <VBox class="cmOtFinalTrack">
+                        <Text text="12" class="cmOtFinalValue cmOtFinalValueRed"/>
+                        <VBox class="cmOtFinalMarker cmOtFinalMarkerRed"/>
+                    </VBox>
+                    <Text text="No atendidas" class="cmOtFinalLabel"/>
+                </VBox>
+
+                <VBox class="cmOtFinalCol" alignItems="Center">
+                    <VBox class="cmOtFinalTrack">
+                        <Text text="6" class="cmOtFinalValue cmOtFinalValueOrange"/>
+                        <VBox class="cmOtFinalMarker cmOtFinalMarkerOrange"/>
+                    </VBox>
+                    <Text text="Reprogramadas" class="cmOtFinalLabel"/>
+                </VBox>
+
+                <VBox class="cmOtFinalCol" alignItems="Center">
+                    <VBox class="cmOtFinalTrack">
+                        <Text text="5" class="cmOtFinalValue cmOtFinalValueYellow"/>
+                        <VBox class="cmOtFinalMarker cmOtFinalMarkerYellow"/>
+                    </VBox>
+                    <Text text="Pendiente material" class="cmOtFinalLabel cmOtFinalLabelTwo"/>
+                </VBox>
+
+                <VBox class="cmOtFinalCol" alignItems="Center">
+                    <VBox class="cmOtFinalTrack">
+                        <Text text="3" class="cmOtFinalValue cmOtFinalValuePurple"/>
+                        <VBox class="cmOtFinalMarker cmOtFinalMarkerPurple"/>
+                    </VBox>
+                    <Text text="Parciales" class="cmOtFinalLabel"/>
+                </VBox>
+
+            </HBox>
+        </HBox>
+    </VBox>
+
+    <!-- LEYENDA -->
+    <HBox class="cmOtFinalLegend" wrap="Wrap">
+        <HBox alignItems="Center">
+            <VBox class="cmLegendDot cmRedBg"/>
+            <Text text="No atendidas (12 OT)"/>
+        </HBox>
+
+        <HBox alignItems="Center">
+            <VBox class="cmLegendDot cmOrangeBg"/>
+            <Text text="Reprogramadas (6 OT)"/>
+        </HBox>
+
+        <HBox alignItems="Center">
+            <VBox class="cmLegendDot cmYellowBg"/>
+            <Text text="Pendientes de material (5 OT)"/>
+        </HBox>
+
+        <HBox alignItems="Center">
+            <VBox class="cmLegendDot cmPurpleBg"/>
+            <Text text="Parciales (3 OT)"/>
+        </HBox>
+    </HBox>
+
+    <Link text="Ver detalle por estado" class="cmCardLink" press=".onVerDetalleEstado"/>
+
+</VBox>
+
+                    </HBox>
+
+                    <!-- ROW 2 -->
+                    <HBox class="cmCardsRow" wrap="Wrap">
+
+                        <!-- CARD 4 -->
+                        <VBox class="cmCard cmTableCard cmTopDesviacionCard">
+                            <HBox class="cmCardHeader" alignItems="Center">
+                                <VBox class="cmCircleIcon cmCircleIconBlue">
+                                    <core:Icon src="sap-icon://target-group"/>
+                                </VBox>
+                                <Title text="Top de materiales con mayor desviación" level="H3" class="cmCardTitle"/>
+                            </HBox>
+
+                            <Table
+                                items="{materialesModel>/topMateriales}"
+                                class="cmMiniTable"
+                                fixedLayout="true">
+                                <columns>
+                                    <Column width="12%"><Text text="#"/></Column>
+                                    <Column width="38%"><Text text="Material"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Plan"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Real"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Variación"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{materialesModel>id}"/>
+                                            <Text text="{materialesModel>material}"/>
+                                            <Text text="{materialesModel>plan}"/>
+                                            <Text text="{materialesModel>real}"/>
+                                            <Text text="{materialesModel>variacion}" class="cmMiniVariationText">
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{materialesModel>estado}" writeToDom="true"/>
+                                                </customData>
+                                            </Text>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <HBox class="cmInfoFooter" alignItems="Center">
+                                <core:Icon src="sap-icon://information" class="cmBlueIcon"/>
+                                <Text text="Materiales con mayor variación positiva o negativa vs plan."/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- CARD 5 -->
+                        <VBox class="cmCard cmTableCard cmTopConsumoCard">
+                            <HBox class="cmCardHeader" alignItems="Center">
+                                <VBox class="cmCircleIcon cmCircleIconGreen">
+                                    <core:Icon src="sap-icon://calendar"/>
+                                </VBox>
+                                <Title text="Top de órdenes con mayor consumo de material" level="H3" class="cmCardTitle"/>
+                            </HBox>
+
+                            <Table
+                                items="{materialesModel>/topOrdenesMayorConsumo}"
+                                class="cmMiniTable"
+                                fixedLayout="true">
+                                <columns>
+                                    <Column width="10%"><Text text="#"/></Column>
+                                    <Column width="22%"><Text text="OT"/></Column>
+                                    <Column width="26%"><Text text="Tipo de orden"/></Column>
+                                    <Column width="24%"><Text text="Cliente / Sitio"/></Column>
+                                    <Column width="18%" hAlign="End"><Text text="Consumo total"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{materialesModel>id}"/>
+                                            <Text text="{materialesModel>ot}"/>
+                                            <Text text="{materialesModel>tipo}"/>
+                                            <Text text="{materialesModel>cliente}"/>
+                                            <Text text="{materialesModel>consumo}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <HBox class="cmInfoFooter" alignItems="Center">
+                                <core:Icon src="sap-icon://information" class="cmGreenIcon"/>
+                                <Text text="Órdenes de trabajo con mayor consumo total de materiales."/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- CARD 6 -->
+                        <VBox class="cmCard cmTableCard cmMenorConsumoCard">
+                            <HBox class="cmCardHeader" alignItems="Center">
+                                <VBox class="cmCircleIcon cmCircleIconPurple">
+                                    <core:Icon src="sap-icon://line-charts"/>
+                                </VBox>
+                                <Title text="Top de órdenes con menor consumo vs plan" level="H3" class="cmCardTitle"/>
+                            </HBox>
+
+                            <Table
+                                items="{materialesModel>/topOrdenesMenorConsumo}"
+                                class="cmMiniTable"
+                                fixedLayout="true">
+                                <columns>
+                                    <Column width="12%"><Text text="#"/></Column>
+                                    <Column width="28%"><Text text="OT"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Plan"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Real"/></Column>
+                                    <Column width="20%" hAlign="End"><Text text="Variación"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{materialesModel>id}"/>
+                                            <Text text="{materialesModel>ot}"/>
+                                            <Text text="{materialesModel>plan}"/>
+                                            <Text text="{materialesModel>real}"/>
+                                            <Text text="{materialesModel>variacion}" class="cmMiniVariationText">
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{materialesModel>estado}" writeToDom="true"/>
+                                                </customData>
+                                            </Text>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <HBox class="cmInfoFooter" alignItems="Center">
+                                <core:Icon src="sap-icon://information" class="cmPurpleIcon"/>
+                                <Text text="Órdenes con menor consumo de materiales vs lo planificado."/>
+                            </HBox>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- HEATMAP -->
+                    <VBox class="cmCard cmHeatmapCard">
+                        <HBox class="cmCardHeader" alignItems="Center">
+                            <core:Icon src="sap-icon://bar-chart" class="cmBlueIcon"/>
+                            <Title text="Consumo de materiales por zona (pzas / L)" level="H3" class="cmCardTitle cmHeatmapTitle"/>
+                        </HBox>
+
+                        <Table
+                            items="{materialesModel>/consumoZona}"
+                            class="cmHeatmapTable"
+                            fixedLayout="true">
+                            <columns>
+                                <Column width="14%"><Text text="Zona"/></Column>
+                                <Column hAlign="Center"><Text text="Refacciones&#10;(pzas)"/></Column>
+                                <Column hAlign="Center"><Text text="Consumibles&#10;(pzas)"/></Column>
+                                <Column hAlign="Center"><Text text="Lubricantes&#10;(L)"/></Column>
+                                <Column hAlign="Center"><Text text="Herramientas&#10;(pzas)"/></Column>
+                                <Column hAlign="Center"><Text text="Total&#10;(pzas / L)"/></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <HBox alignItems="Center" class="cmZonaNameCell">
+                                            <VBox class="cmZoneDot">
+                                                <customData>
+                                                    <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
+                                                </customData>
+                                            </VBox>
+                                            <Text text="{materialesModel>zona}" class="cmHeatmapZone"/>
+                                        </HBox>
+
+                                        <Text text="{materialesModel>refacciones}" class="cmHeatCell cmHeatHigh"/>
+                                        <Text text="{materialesModel>consumibles}" class="cmHeatCell cmHeatMediumHigh"/>
+                                        <Text text="{materialesModel>lubricantes}" class="cmHeatCell cmHeatMedium"/>
+                                        <Text text="{materialesModel>herramientas}" class="cmHeatCell cmHeatLow"/>
+                                        <Text text="{materialesModel>total}" class="cmHeatTotal"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+
+                        <HBox class="cmHeatLegend" justifyContent="Center" wrap="Wrap">
+                            <HBox alignItems="Center">
+                                <VBox class="cmLegendDot cmRedBg"/>
+                                <Text text="≥ 80% del máximo"/>
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="cmLegendDot cmOrangeBg"/>
+                                <Text text="60% - 79%"/>
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="cmLegendDot cmYellowBg"/>
+                                <Text text="40% - 59%"/>
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="cmLegendDot cmLightGreenBg"/>
+                                <Text text="20% - 39%"/>
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="cmLegendDot cmTealBg"/>
+                                <Text text="&lt; 20% del máximo"/>
+                            </HBox>
+                        </HBox>
+                    </VBox>
+
+                </VBox>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>

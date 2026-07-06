@@ -1,99 +1,56 @@
-/* ================================== */
-/* CSS PARA EL NUEVO DISEÑO COMPLETO  */
-/* ================================== */
+/* ==========================================================================
+   PASO 1: COLOR DE FONDO PARA LOS FILTROS
+   ========================================================================== */
 
-/* --- Títulos Principales --- */
-.dashTitle {
-    font-size: 1.75rem !important;
-    color: #32363a !important;
-    font-weight: bold;
-}
-.dashSubtitle {
-    color: #6a6d70 !important;
-    font-size: 0.875rem !important;
-}
-
-/* --- Tabla con estilo de Tarjetas --- */
-.tableAsCards {
-    border-spacing: 0 0.5rem !important; /* Espacio vertical entre filas */
-    background: transparent !important;
-}
-.tableAsCards .sapMListTblHeader,
-.tableAsCards .sapMListTblFooter {
-    border: none !important; /* Quita bordes del header y footer */
-}
-.tableCardRow {
-    background: #FFFFFF !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.05);
-}
-.tableCardRow > td {
-    border: none !important; /* Quita las líneas de separación de las celdas */
-    vertical-align: middle !important;
-}
-.tableCardRow > td:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-.tableCardRow > td:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+/* Se aplica un fondo blanco a los 'chips' de los filtros */
+.filterChip {
+    background-color: #FFFFFF !important; 
+    border-radius: 12px !important; 
+    padding: 0 16px !important;
+    border: 1px solid #E5E7EB !important; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    height: 60px !important; 
 }
 
-/* --- Estilos de Celdas Específicas --- */
-.redText {
-    color: #d93025;
-    font-weight: bold;
-}
-.subtleText {
-    color: #6a6d70;
-}
-.cellTag {
-    background-color: #f5f7fa;
-    padding: 0.5rem;
-    border-radius: 6px;
-}
-.cellTagIcon {
-    color: #6a6d70;
+/* Y se aplica un fondo gris claro a TODA la página para que los filtros resalten */
+.pageBackground, .pageBackground section {
+    background-color: #F8F9FA !important;
 }
 
-/* --- Tag de Riesgo --- */
-.riskTag {
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    font-weight: bold;
-    border: 1px solid transparent;
-}
-.riskTag[aria-label*="Alto"] {
-    background-color: #fce8e6;
-    border-color: #f9ab9c;
-    color: #a50e0e !important;
-}
-.riskTag[aria-label*="Medio"] {
-    background-color: #feefc3;
-    border-color: #fde293;
-    color: #6d4b00 !important;
-}
-.riskTag[aria-label*="Bajo"] {
-    background-color: #e6f4ea;
-    border-color: #a8d7b3;
-    color: #1e8e3e !important;
-}
-/* ... (tu CSS existente) ... */
 
-/* --- NUEVAS CLASES PARA COLOR DE ICONOS DE CAUSA --- */
-.cellTagIcon.colorIconPurple {
-    color: #6c52a0 !important;
+/* ==========================================================================
+   PASO 2: FORZAR LA CABECERA GRIS DE LA TABLA
+   ========================================================================== */
+
+/* Este es un selector agresivo que obliga a la cabecera a ser gris */
+.customGreyHeaderTable .sapMListTblHeaderCell,
+.customGreyHeaderTable .sapMListTblHeader,
+.customGreyHeaderTable .sapMListTbl>thead>tr>th {
+    background-color: #F3F4F6 !important; 
+    border-bottom: 1px solid #E5E7EB !important; 
 }
-.cellTagIcon.colorIconBlue {
-    color: #0070f2 !important;
+
+/* Y se asegura que el texto de la cabecera sea oscuro y en mayúsculas */
+.customGreyHeaderTable .sapMListTbl>thead>tr>th .sapMText { 
+    color: #4B5563 !important; 
+    font-weight: 700 !important; 
+    font-size: 0.75rem !important; 
+    text-transform: uppercase !important; 
 }
-.cellTagIcon.colorIconGreen {
-    color: #1e8e3e !important;
-}
-.cellTagIcon.colorIconOrange {
-    color: #e9730c !important;
-}
-.cellTagIcon.colorIconDefault {
-    color: #6a6d70 !important; /* Color por defecto */
-}
+
+
+/* ==========================================================================
+   Estilos Adicionales (que ya tenías y funcionan)
+   ========================================================================== */
+.dashTitle { font-weight: bold; font-size: 1.75rem; }
+.dashSubtitle { color: #6a6d70; }
+.filterIconCustom { color: #2563EB !important; font-size: 1.5rem !important; }
+.filterLabelCustom { color: #6B7280 !important; font-size: 11px !important; }
+.filterValueCustom { color: #111827 !important; font-weight: 700 !important; font-size: 13px !important; }
+.filterArrowCustom { color: #9CA3AF !important; font-size: 1rem !important; }
+.btnBlueCustom { border-radius: 12px !important; height: 60px !important; min-width: 120px; }
+.btnBlueCustom .sapMBtnInner { background-color: #2563EB !important; }
+.btnBlueCustom .sapMBtnContent, .btnBlueCustom .sapMBtnIcon { color: #FFFFFF !important; font-weight: 700 !important; }
+.mainCard { background-color: #FFFFFF !important; border-radius: 12px !important; padding: 1.5rem !important; box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important; border: 1px solid #E5E7EB !important; }
+.tableWrapper { border-radius: 10px !important; overflow: hidden !important; border: 1px solid #E5E7EB !important; }
+.noIconProgress .sapMProgIndStateIcon, .noIconProgress .sapUiIcon { display: none !important; }

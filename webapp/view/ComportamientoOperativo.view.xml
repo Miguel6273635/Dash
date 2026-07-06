@@ -6,100 +6,121 @@
     xmlns:core="sap.ui.core"
     height="100%">
     
-    <Page id="pageComportamiento" showHeader="false" class="sapUiStdPage" backgroundDesign="List">
+    <!-- CLASE pageBackground AÑADIDA PARA QUE RESALTE LA TARJETA BLANCA -->
+    <Page id="pageComportamiento" showHeader="false" class="pageBackground">
         <content>
             <VBox class="sapUiSmallMargin">
                 
-                <!-- 1. ENCABEZADO CON FILTROS AJUSTADOS -->
-                <HBox class="dashHeader sapUiSmallMarginBottom" justifyContent="SpaceBetween" alignItems="End" wrap="Wrap">
-                    <VBox>
+                <!-- 1. ENCABEZADO Y FILTROS -->
+                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBottom">
+                    
+                    <!-- LADO IZQUIERDO -->
+                    <VBox class="sapUiMediumMarginEnd">
                         <Title text="Comportamiento operativo por responsables" level="H1" class="dashTitle"/> 
                         <Text text="Análisis del comportamiento de los responsables según las causas que explican sus desviaciones." class="dashSubtitle"/>
                     </VBox>
-                    <HBox alignItems="End" class="sapUiSmallMarginTop">
-                        <VBox class="sapUiSmallMarginEnd">
-                            <Label text="Semana"/>
-                            <!-- Ancho ajustado -->
-                            <Select width="250px">
-                                <core:Item key="18" text="Semana 18 (29 abr - 5 may 2024)"/>
-                            </Select>
-                        </VBox>
-                        <VBox class="sapUiSmallMarginEnd">
-                            <Label text="Zona"/>
-                             <!-- Ancho ajustado -->
-                            <Select width="180px">
-                                <core:Item key="norte" text="Norte"/>
-                            </Select>
-                        </VBox>
-                        <Button icon="sap-icon://filter" text="Aplicar filtros" type="Emphasized"/>
+
+                    <!-- LADO DERECHO: Filtros con medidas reducidas para que quepan -->
+                    <HBox alignItems="Center">
+                        
+                        <!-- CARD DE SEMANA (Reducida a 220px) -->
+                        <HBox width="220px" alignItems="Center" justifyContent="SpaceBetween" class="filterChip sapUiSmallMarginEnd">
+                            <HBox alignItems="Center">
+                                <core:Icon src="sap-icon://calendar" class="filterIconCustom sapUiSmallMarginEnd"/>
+                                <VBox>
+                                    <Text text="Semana" class="filterLabelCustom"/>
+                                    <Text text="18 (29 abr-5 may)" class="filterValueCustom"/>
+                                </VBox>
+                            </HBox>
+                            <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom"/>
+                        </HBox>
+                        
+                        <!-- CARD DE ZONA (Reducida a 150px) -->
+                        <HBox width="150px" alignItems="Center" justifyContent="SpaceBetween" class="filterChip sapUiSmallMarginEnd">
+                            <HBox alignItems="Center">
+                                <core:Icon src="sap-icon://map" class="filterIconCustom sapUiSmallMarginEnd"/>
+                                <VBox>
+                                    <Text text="Zona" class="filterLabelCustom"/>
+                                    <Text text="Norte" class="filterValueCustom"/>
+                                </VBox>
+                            </HBox>
+                            <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom"/>
+                        </HBox>
+                        
+                        <!-- BOTÓN -->
+                        <Button text="Aplicar" icon="sap-icon://filter" type="Emphasized" class="btnBlueCustom"/>
                     </HBox>
                 </HBox>
 
-                <!-- 2. BARRA DE PESTAÑAS CON ANCHO AJUSTADO -->
-                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginTopBottom">
-                    <SegmentedButton selectedKey="all">
-                        <items>
-                            <!-- Ancho ajustado en cada botón -->
-                            <SegmentedButtonItem key="all" text="Todas" icon="sap-icon://table-view" width="120px" />
-                            <SegmentedButtonItem key="internas" text="Internas (operación)" icon="sap-icon://wrench" width="200px" />
-                            <SegmentedButtonItem key="externas" text="Externas (cliente/proveedor)" icon="sap-icon://shipping-status" width="250px" />
-                            <SegmentedButtonItem key="justificadas" text="Justificadas" icon="sap-icon://employee-approvals" width="150px" />
-                        </items>
-                    </SegmentedButton>
-                    <Select width="180px">
-                        <core:Item key="todas" text="Origen activo: Todas"/>
-                    </Select>
-                </HBox>
+                <!-- 2. TARJETA PRINCIPAL BLANCA -->
+                <VBox class="mainCard">
+                    
+                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                        <SegmentedButton selectedKey="all">
+                            <items>
+                                <SegmentedButtonItem key="all" text="Todas" icon="sap-icon://table-view" width="120px" />
+                                <SegmentedButtonItem key="internas" text="Internas" icon="sap-icon://wrench" width="160px" />
+                                <SegmentedButtonItem key="externas" text="Externas" icon="sap-icon://shipping-status" width="160px" />
+                                <SegmentedButtonItem key="justificadas" text="Justificadas" icon="sap-icon://employee-approvals" width="140px" />
+                            </items>
+                        </SegmentedButton>
+                        <Select width="180px">
+                            <core:Item key="todas" text="Origen activo: Todas"/>
+                        </Select>
+                    </HBox>
+                    
+                    <!-- TABLA CON CABECERA GRIS -->
+                    <VBox class="tableWrapper">
+                        <Table id="idResponsablesTable" items="{path: 'data>/responsables'}" class="customGreyHeaderTable">
+                            <columns>
+                                <Column width="4%" hAlign="Center"><Text text="#"/></Column>
+                                <Column width="16%"><Text text="Responsable"/></Column>
+                                <Column width="10%" hAlign="Center"><Text text="OT desviadas"/></Column>
+                                <Column width="10%" hAlign="Center"><Text text="% del total"/></Column>
+                                <Column width="20%"><Text text="Principal causa"/></Column>
+                                <Column width="10%"><Text text="Tipo de OT"/></Column>
+                                <Column width="15%" hAlign="Center"><Text text="Cumplimiento"/></Column>
+                                <Column width="15%" hAlign="Center"><Text text="Riesgo"/></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem class="tableCardRow" vAlign="Middle">
+                                    <cells>
+                                        <Text text="{data>id}"/>
+                                        <HBox alignItems="Center">
+                                            <f:Avatar displaySize="XS" backgroundColor="{path: 'data>id', formatter:'.getAvatarColor'}" initials="{data>initials}" class="sapUiTinyMarginEnd" />
+                                            <Link text="{data>responsable}" press=".onResponsablePress"/>
+                                        </HBox>
+                                        <Text text="{data>otDesviadas}" class="redText"/>
+                                        <Text text="{data>porcentajeTotal}"/>
+                                        <VBox class="cellTag">
+                                            <HBox alignItems="Center">
+                                                <core:Icon src="{data>causaIcon}" class="cellTagIcon sapUiTinyMarginEnd {path: 'data>causaIcon', formatter:'.getIconColorClass'}"/>
+                                                <Title text="{data>causaPrincipal}" level="H6"/>
+                                            </HBox>
+                                            <Text text="{data>causaDetalle}" class="subtleText sapUiTinyMarginTop"/>
+                                        </VBox>
+                                        <VBox class="cellTag">
+                                            <Text text="{data>tipoOt}"/>
+                                        </VBox>
+                                        
+                                        <!-- BARRA DE PROGRESO SIN ICONOS -->
+                                        <VBox class="noIconProgress" justifyContent="Center">
+                                            <Text text="{data>cumplimiento}" class="sapUiTinyMarginBottom" width="100%" textAlign="Center"/>
+                                            <ProgressIndicator
+                                                percentValue="{data>cumplimientoValue}"
+                                                state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }"
+                                                showValue="false" />
+                                        </VBox>
+                                        
+                                        <ObjectStatus class="riskTag" text="{data>riesgo}" state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </VBox>
+                </VBox>
                 
-                <!-- 3. TABLA CON LÓGICA CORREGIDA -->
-                <Table id="idResponsablesTable" items="{path: 'data>/responsables'}" class="tableAsCards">
-                    <columns>
-                        <Column width="4%" hAlign="Center"><Text text="#"/></Column>
-                        <Column width="16%"><Text text="Responsable"/></Column>
-                        <Column width="10%" hAlign="Center"><Text text="OT desviadas"/></Column>
-                        <Column width="10%" hAlign="Center"><Text text="% del total"/></Column>
-                        <Column width="20%"><Text text="Principal causa"/></Column>
-                        <Column width="10%"><Text text="Tipo de OT"/></Column>
-                        <Column width="15%" hAlign="Center"><Text text="Cumplimiento"/></Column>
-                        <Column width="15%" hAlign="Center"><Text text="Riesgo"/></Column>
-                    </columns>
-                    <items>
-                        <ColumnListItem class="tableCardRow">
-                            <cells>
-                                <Text text="{data>id}"/>
-                                <HBox alignItems="Center">
-                                    <f:Avatar displaySize="XS" backgroundColor="{path: 'data>id', formatter:'.getAvatarColor'}" initials="{data>initials}" class="sapUiTinyMarginEnd" />
-                                    <Link text="{data>responsable}" press=".onResponsablePress"/>
-                                </HBox>
-                                <Text text="{data>otDesviadas}" class="redText"/>
-                                <Text text="{data>porcentajeTotal}"/>
-                                <VBox class="cellTag">
-                                    <HBox alignItems="Center">
-                                        <!-- CLASE CSS NUEVA PARA EL COLOR DEL ICONO -->
-                                        <core:Icon src="{data>causaIcon}" class="cellTagIcon sapUiTinyMarginEnd {path: 'data>causaIcon', formatter:'.getIconColorClass'}"/>
-                                        <Title text="{data>causaPrincipal}" level="H6"/>
-                                    </HBox>
-                                    <Text text="{data>causaDetalle}" class="subtleText sapUiTinyMarginTop"/>
-                                </VBox>
-                                <VBox class="cellTag">
-                                    <Text text="{data>tipoOt}"/>
-                                </VBox>
-                                <VBox>
-                                    <Text text="{data>cumplimiento}" class="sapUiTinyMarginBottom"/>
-                                    <!-- LÓGICA DE COLOR CORREGIDA -->
-                                    <ProgressIndicator
-                                        percentValue="{data>cumplimientoValue}"
-                                        state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }"
-                                        showValue="false" />
-                                </VBox>
-                                <ObjectStatus class="riskTag" text="{data>riesgo}" state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }" />
-                            </cells>
-                        </ColumnListItem>
-                    </items>
-                </Table>
-                
-                <!-- Paginador -->
-                 <Toolbar class="sapUiTinyMarginTop" style="Clear">
+                <Toolbar class="sapUiTinyMarginTop" style="Clear">
                     <Text text="Mostrando 1 a 6 de 12 responsables"/>
                     <ToolbarSpacer/>
                     <Button icon="sap-icon://slim-arrow-left" type="Transparent"/>
