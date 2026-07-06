@@ -61,30 +61,41 @@ sap.ui.define([
         },
 
         onVerDetalleCausas: function (oEvent) {
-            // El botón presionado es la fuente del evento. Su "abuelo" es el Popover.
             var oPopover = oEvent.getSource().getParent().getParent();
-            
-            // Obtenemos los datos del usuario que están en el modelo del Popover
             var oUserData = oPopover.getModel("popover").getData();
             var sResponsableId = oUserData.id;
 
-            // 1. Cerramos el popover
             oPopover.close();
             
-            // 2. Navegamos a la nueva ruta, pasando el ID del usuario como parámetro
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.navTo("RouteDetalleResponsable", {
                 responsableId: sResponsableId
             }); 
         },
 
-        /* ======================================================= */
-        /* NUEVO FORMATTER PARA COLOR DE AVATARES                 */
-        /* ======================================================= */
         getAvatarColor: function (sId) {
             var aColors = ["Accent1", "Accent2", "Accent3", "Accent4", "Accent5", "Accent6", "Accent7", "Accent8", "Accent9", "Accent10"];
             if (!sId) { return "Accent1"; }
             return aColors[sId % aColors.length];
+        },
+
+        getIconColorClass: function (sIcon) {
+            switch (sIcon) {
+                case "sap-icon://history":
+                    return "colorIconPurple";
+                case "sap-icon://calendar":
+                    return "colorIconBlue";
+                case "sap-icon://customer":
+                    return "colorIconOrange";
+                case "sap-icon://document":
+                    return "colorIconPurple";
+                case "sap-icon://wrench":
+                    return "colorIconBlue";
+                case "sap-icon://shipping-status":
+                    return "colorIconGreen";
+                default:
+                    return "colorIconDefault";
+            }
         }
 
     });

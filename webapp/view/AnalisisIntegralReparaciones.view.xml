@@ -1,0 +1,395 @@
+<mvc:View
+  controllerName="mantenimiento.controller.AnalisisIntegralReparaciones"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+
+  <Page
+    id="pageAnalisisIntegralReparaciones"
+    showHeader="false"
+    class="repaIntegralPage">
+
+    <content>
+      <ScrollContainer height="100%" vertical="true">
+        <VBox class="repaIntegralContainer">
+
+          <!-- HEADER -->
+          <HBox class="repaIntegralHeader" justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap">
+
+            <VBox>
+              <HBox alignItems="Center" class="repaIntegralTitleRow">
+                <Text text="Análisis integral de reparaciones" class="repaIntegralTitle"/>
+              </HBox>
+
+              <Text
+                text="Vista consolidada de reparaciones ejecutadas y no ejecutadas"
+                class="repaIntegralSubtitle"/>
+
+              <HBox class="repaIntegralBreadcrumb" alignItems="Center">
+                <Text text="Órdenes"/>
+                <core:Icon src="sap-icon://navigation-right-arrow"/>
+                <Text text="Composición de órdenes del periodo"/>
+                <core:Icon src="sap-icon://navigation-right-arrow"/>
+                <Text text="Reparaciones"/>
+              </HBox>
+            </VBox>
+
+            <Text text="Fecha corte: {intRep>/periodo/fechaCorte}" class="repaIntegralDate"/>
+
+          </HBox>
+
+          <!-- FILTROS -->
+          <HBox class="repaIntegralFilterCard" alignItems="End" wrap="Wrap">
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Periodo"/>
+              <Select id="selPeriodoIntegral" selectedKey="mayo" width="170px">
+                <items>
+                  <core:Item key="mayo" text="Mayo 2024"/>
+                  <core:Item key="junio" text="Junio 2024"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Fecha desde"/>
+              <DatePicker id="dpDesdeIntegral" value="01/05/2024" width="170px"/>
+            </VBox>
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Fecha hasta"/>
+              <DatePicker id="dpHastaIntegral" value="31/05/2024" width="170px"/>
+            </VBox>
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Zona"/>
+              <Select id="selZonaIntegral" selectedKey="todas" width="145px">
+                <items>
+                  <core:Item key="todas" text="Todas"/>
+                  <core:Item key="norte" text="Norte"/>
+                  <core:Item key="centro" text="Centro"/>
+                  <core:Item key="sur" text="Sur"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Cliente"/>
+              <Select id="selClienteIntegral" selectedKey="todos" width="145px">
+                <items>
+                  <core:Item key="todos" text="Todos"/>
+                  <core:Item key="torre" text="Torre Reforma"/>
+                  <core:Item key="plaza" text="Plaza Satélite"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <VBox class="repaIntegralFilterItem">
+              <Label text="Responsable"/>
+              <Select id="selResponsableIntegral" selectedKey="todos" width="165px">
+                <items>
+                  <core:Item key="todos" text="Todos"/>
+                  <core:Item key="juan" text="Juan Pérez"/>
+                  <core:Item key="maria" text="María González"/>
+                  <core:Item key="carlos" text="Carlos Herrera"/>
+                </items>
+              </Select>
+            </VBox>
+
+            <Button
+              text="Aplicar filtros"
+              icon="sap-icon://filter"
+              type="Emphasized"
+              press=".onAplicarFiltros"
+              class="repaIntegralFilterButton"/>
+
+          </HBox>
+
+          <!-- KPIS -->
+          <HBox class="repaIntegralKpiRow" wrap="Wrap">
+
+            <VBox class="repaIntegralKpiCard repaIntegralKpiBlue">
+              <HBox alignItems="Center">
+                <VBox class="repaIntegralKpiIconBox repaIntegralBlueSoft">
+                  <core:Icon src="sap-icon://appointment-2"/>
+                </VBox>
+                <VBox>
+                  <Text text="{intRep>/kpis/planeadas}" class="repaIntegralKpiNumber repaIntegralBlueText"/>
+                  <Text text="Planeadas" class="repaIntegralKpiLabel"/>
+                  <Text text="Órdenes del periodo" class="repaIntegralKpiSub"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="repaIntegralKpiCard repaIntegralKpiGreen">
+              <HBox alignItems="Center">
+                <VBox class="repaIntegralKpiIconBox repaIntegralGreenSoft">
+                  <core:Icon src="sap-icon://accept"/>
+                </VBox>
+                <VBox>
+                  <Text text="{intRep>/kpis/ejecutadas}" class="repaIntegralKpiNumber repaIntegralGreenText"/>
+                  <Text text="Ejecutadas" class="repaIntegralKpiLabel"/>
+                  <Text text="92.6% del total" class="repaIntegralKpiSub"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="repaIntegralKpiCard repaIntegralKpiRed">
+              <HBox alignItems="Center">
+                <VBox class="repaIntegralKpiIconBox repaIntegralRedSoft">
+                  <core:Icon src="sap-icon://decline"/>
+                </VBox>
+                <VBox>
+                  <Text text="{intRep>/kpis/noEjecutadas}" class="repaIntegralKpiNumber repaIntegralRedText"/>
+                  <Text text="No ejecutadas" class="repaIntegralKpiLabel"/>
+                  <Text text="7.4% del total planeado" class="repaIntegralKpiSub"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="repaIntegralKpiCard repaIntegralKpiPurple">
+              <HBox alignItems="Center">
+                <VBox class="repaIntegralKpiIconBox repaIntegralPurpleSoft">
+                  <core:Icon src="sap-icon://target-group"/>
+                </VBox>
+                <VBox>
+                  <Text text="{intRep>/kpis/cumplimiento}" class="repaIntegralKpiNumber repaIntegralPurpleText"/>
+                  <Text text="Cumplimiento" class="repaIntegralKpiLabel"/>
+                  <Text text="{intRep>/kpis/resumen}" class="repaIntegralKpiSub"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+          </HBox>
+
+          <!-- TABS -->
+          <HBox class="repaIntegralAnalysisBar" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+
+            <HBox class="repaIntegralTabs" alignItems="Center">
+              <Text text="Ver análisis por:" class="repaIntegralTabsLabel"/>
+
+              <Button
+                text="Planeadas (95)"
+                type="Emphasized"
+                press=".onVerPlaneadas"
+                class="repaIntegralTabButton repaIntegralTabButtonActive"/>
+
+              <Button
+                text="Ejecutadas (88)"
+                type="Transparent"
+                press=".onVerEjecutadas"
+                class="repaIntegralTabButton"/>
+
+              <Button
+                text="No ejecutadas (7)"
+                type="Transparent"
+                press=".onVerNoEjecutadas"
+                class="repaIntegralTabButton"/>
+            </HBox>
+
+            <HBox class="repaIntegralInfoMessage" alignItems="Center">
+              <core:Icon src="sap-icon://information"/>
+              <Text text="Vista consolidada de 95 órdenes de reparación."/>
+            </HBox>
+
+          </HBox>
+
+          <!-- TABLA PRINCIPAL -->
+          <VBox class="repaIntegralTableCard">
+
+            <HBox class="repaIntegralTableTop" justifyContent="SpaceBetween" alignItems="Center">
+              <Title
+                text="Comportamiento de reparaciones por material"
+                level="H2"
+                class="repaIntegralSectionTitle"/>
+
+              <SearchField
+                width="320px"
+                placeholder="Buscar material..."
+                liveChange=".onBuscarMaterial"
+                class="repaIntegralSearch"/>
+            </HBox>
+
+            <!-- HEADER -->
+            <HBox class="repaIntegralTableHeader">
+              <Text text="Material" class="repaIntegralColMaterialHeader"/>
+              <Text text="Planeadas" class="repaIntegralColNumber"/>
+              <Text text="Ejecutadas" class="repaIntegralColNumber"/>
+              <Text text="No ejecutadas" class="repaIntegralColNumber"/>
+              <HBox class="repaIntegralColCumplimientoHeader" alignItems="Center" justifyContent="Center">
+                <Text text="Cumplimiento"/>
+                <core:Icon src="sap-icon://information" class="repaIntegralSmallInfo"/>
+              </HBox>
+              <Text text="% del total" class="repaIntegralColTotal"/>
+              <Text text="" class="repaIntegralColArrow"/>
+            </HBox>
+
+            <!-- BODY -->
+            <VBox
+              class="repaIntegralTableBody"
+              items="{intRep>/materiales}">
+
+              <items>
+                <VBox class="repaIntegralMaterialBlock">
+
+                  <HBox class="repaIntegralMaterialRow" alignItems="Center">
+
+                    <Button
+                      icon="{intRep>chevronIcon}"
+                      type="Transparent"
+                      press=".onToggleMaterial"
+                      class="repaIntegralExpandButton"/>
+
+                    <HBox class="repaIntegralColMaterial" alignItems="Center">
+                      <core:Icon src="{intRep>icon}" class="repaIntegralMaterialIcon"/>
+                      <Text text="{intRep>material}" class="repaIntegralMaterialName"/>
+                    </HBox>
+
+                    <Text text="{intRep>planeadas}" class="repaIntegralColNumber repaIntegralBlueNumber"/>
+                    <Text text="{intRep>ejecutadas}" class="repaIntegralColNumber repaIntegralGreenNumber"/>
+                    <Text text="{intRep>noEjecutadas}" class="repaIntegralColNumber repaIntegralRedNumber"/>
+
+                    <HBox class="repaIntegralColCumplimiento" alignItems="Center">
+                      <ObjectStatus
+                        text="{intRep>cumplimiento}"
+                        state="{intRep>cumplimientoState}"
+                        class="repaIntegralCumplimientoText"/>
+
+                      <ProgressIndicator
+                        percentValue="{intRep>cumplimientoValue}"
+                        displayValue=""
+                        state="{intRep>cumplimientoState}"
+                        class="repaIntegralProgress"/>
+                    </HBox>
+
+                    <Text text="{intRep>porcentajeTotal}" class="repaIntegralColTotal repaIntegralTotalText"/>
+
+                    <Button
+                      icon="{intRep>chevronIcon}"
+                      type="Transparent"
+                      press=".onToggleMaterial"
+                      class="repaIntegralArrowButton"/>
+
+                  </HBox>
+
+                  <!-- DETALLE EXPANDIBLE -->
+                  <VBox visible="{intRep>expanded}" class="repaIntegralDetailBox">
+
+                    <HBox class="repaIntegralDetailHeader" justifyContent="SpaceBetween" alignItems="Center">
+                      <HBox alignItems="Center">
+                        <Text text="Detalle de órdenes – " class="repaIntegralDetailTitle"/>
+                        <Text text="{intRep>material}" class="repaIntegralDetailTitle"/>
+                        <Text text=" (" class="repaIntegralDetailTitle"/>
+                        <Text text="{intRep>planeadas}" class="repaIntegralDetailTitle"/>
+                        <Text text=")" class="repaIntegralDetailTitle"/>
+                      </HBox>
+
+                      <HBox class="repaIntegralMiniBadges">
+                        <ObjectStatus
+                          text="{intRep>ejecutadas} ejecutadas"
+                          state="Success"
+                          class="repaIntegralMiniBadge"/>
+                        <ObjectStatus
+                          text="{intRep>noEjecutadas} no ejecutadas"
+                          state="Error"
+                          class="repaIntegralMiniBadge"/>
+                      </HBox>
+                    </HBox>
+
+                    <Table
+                      items="{intRep>ordenes}"
+                      class="repaIntegralInnerTable"
+                      showSeparators="Inner">
+
+                      <columns>
+                        <Column>
+                          <Text text="OT"/>
+                        </Column>
+                        <Column>
+                          <Text text="Estado"/>
+                        </Column>
+                        <Column>
+                          <Text text="Cliente"/>
+                        </Column>
+                        <Column>
+                          <Text text="Elevador"/>
+                        </Column>
+                        <Column>
+                          <Text text="Fecha programada"/>
+                        </Column>
+                        <Column>
+                          <Text text="Fecha ejecución"/>
+                        </Column>
+                        <Column>
+                          <Text text="Responsable"/>
+                        </Column>
+                      </columns>
+
+                      <items>
+                        <ColumnListItem>
+                          <cells>
+                            <Text text="{intRep>ot}" class="repaIntegralOtText"/>
+
+                            <ObjectStatus
+                              text="{intRep>estado}"
+                              icon="{intRep>estadoIcon}"
+                              state="{intRep>estadoState}"
+                              class="repaIntegralStatus"/>
+
+                            <Text text="{intRep>cliente}"/>
+                            <Text text="{intRep>elevador}"/>
+                            <Text text="{intRep>fechaProgramada}"/>
+                            <Text text="{intRep>fechaEjecucion}"/>
+                            <Text text="{intRep>responsable}"/>
+                          </cells>
+                        </ColumnListItem>
+                      </items>
+
+                    </Table>
+
+                    <Button
+                      text="Ver las {intRep>planeadas} órdenes de {intRep>material}"
+                      icon="sap-icon://navigation-right-arrow"
+                      type="Transparent"
+                      press=".onVerDetalleMaterial"
+                      class="repaIntegralDetailLink"/>
+
+                  </VBox>
+
+                </VBox>
+              </items>
+
+            </VBox>
+
+            <!-- TOTAL GENERAL -->
+            <HBox class="repaIntegralTotalRow" alignItems="Center">
+
+              <HBox class="repaIntegralColMaterialTotal" alignItems="Center">
+                <Text text="Total general" class="repaIntegralTotalLabel"/>
+              </HBox>
+
+              <Text text="{intRep>/total/planeadas}" class="repaIntegralColNumber repaIntegralBlueNumber"/>
+              <Text text="{intRep>/total/ejecutadas}" class="repaIntegralColNumber repaIntegralGreenNumber"/>
+              <Text text="{intRep>/total/noEjecutadas}" class="repaIntegralColNumber repaIntegralRedNumber"/>
+
+              <HBox class="repaIntegralColCumplimiento" alignItems="Center">
+                <Text text="{intRep>/total/cumplimiento}" class="repaIntegralTotalCumplimiento"/>
+                <ProgressIndicator
+                  percentValue="{intRep>/total/cumplimientoValue}"
+                  displayValue=""
+                  state="Information"
+                  class="repaIntegralProgress"/>
+              </HBox>
+
+              <Text text="{intRep>/total/porcentajeTotal}" class="repaIntegralColTotal repaIntegralTotalText"/>
+              <Text text="" class="repaIntegralColArrow"/>
+
+            </HBox>
+
+          </VBox>
+
+        </VBox>
+      </ScrollContainer>
+    </content>
+  </Page>
+</mvc:View>
