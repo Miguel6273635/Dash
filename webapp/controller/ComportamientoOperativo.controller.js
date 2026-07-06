@@ -10,12 +10,12 @@ sap.ui.define([
         onInit: function () {
             var oData = {
                 responsables: [
-                    { id: 1, responsable: "Juan Pérez", otDesviadas: 6, porcentajeTotal: "27%", causaPrincipal: "Refacciones", causaDetalle: "Retrasos en entrega y disponibilidad", tipoOt: "Preventivo", cumplimiento: "78%", riesgo: "Alto" },
-                    { id: 2, responsable: "María González", otDesviadas: 4, porcentajeTotal: "18%", causaPrincipal: "Planeación", causaDetalle: "Programaciones incompletas o cambios de última hora", tipoOt: "Correctivo", cumplimiento: "84%", riesgo: "Medio" },
-                    { id: 3, responsable: "Carlos Herrera", otDesviadas: 3, porcentajeTotal: "14%", causaPrincipal: "Cliente no disponible", causaDetalle: "Falta de acceso o personal", tipoOt: "Preventivo", cumplimiento: "88%", riesgo: "Medio" },
-                    { id: 4, responsable: "Pedro López", otDesviadas: 2, porcentajeTotal: "9%", causaPrincipal: "Documentación", causaDetalle: "Información incompleta o incorrecta", tipoOt: "Correctivo", cumplimiento: "91%", riesgo: "Bajo" },
-                    { id: 5, responsable: "Ana Martínez", otDesviadas: 2, porcentajeTotal: "9%", causaPrincipal: "Condiciones del equipo", causaDetalle: "Equipos en mal estado o sin preparación", tipoOt: "Preventivo", cumplimiento: "94%", riesgo: "Bajo" },
-                    { id: 6, responsable: "Luis Ramírez", otDesviadas: 1, porcentajeTotal: "5%", causaPrincipal: "Proveedor", causaDetalle: "Incumplimiento o demora del proveedor", tipoOt: "Correctivo", cumplimiento: "95%", riesgo: "Bajo" }
+                    { id: 1, initials: "JP", responsable: "Juan Pérez", otDesviadas: 6, porcentajeTotal: "27%", causaPrincipal: "Refacciones", causaDetalle: "Retrasos en entrega y disponibilidad", causaIcon: "sap-icon://history", tipoOt: "Preventivo", cumplimiento: "78%", cumplimientoValue: 78, riesgo: "Alto" },
+                    { id: 2, initials: "MG", responsable: "María González", otDesviadas: 4, porcentajeTotal: "18%", causaPrincipal: "Planeación", causaDetalle: "Programaciones incompletas o cambios de última hora", causaIcon: "sap-icon://calendar", tipoOt: "Correctivo", cumplimiento: "84%", cumplimientoValue: 84, riesgo: "Medio" },
+                    { id: 3, initials: "CH", responsable: "Carlos Herrera", otDesviadas: 3, porcentajeTotal: "14%", causaPrincipal: "Cliente no disponible", causaDetalle: "Falta de acceso o personal", causaIcon: "sap-icon://customer", tipoOt: "Preventivo", cumplimiento: "88%", cumplimientoValue: 88, riesgo: "Medio" },
+                    { id: 4, initials: "PL", responsable: "Pedro López", otDesviadas: 2, porcentajeTotal: "9%", causaPrincipal: "Documentación", causaDetalle: "Información incompleta o incorrecta", causaIcon: "sap-icon://document", tipoOt: "Correctivo", cumplimiento: "91%", cumplimientoValue: 91, riesgo: "Bajo" },
+                    { id: 5, initials: "AM", responsable: "Ana Martínez", otDesviadas: 2, porcentajeTotal: "9%", causaPrincipal: "Condiciones del equipo", causaDetalle: "Equipos en mal estado o sin preparación", causaIcon: "sap-icon://wrench", tipoOt: "Preventivo", cumplimiento: "94%", cumplimientoValue: 94, riesgo: "Bajo" },
+                    { id: 6, initials: "LR", responsable: "Luis Ramírez", otDesviadas: 1, porcentajeTotal: "5%", causaPrincipal: "Proveedor", causaDetalle: "Incumplimiento o demora del proveedor", causaIcon: "sap-icon://shipping-status", tipoOt: "Correctivo", cumplimiento: "95%", cumplimientoValue: 95, riesgo: "Bajo" }
                 ]
             };
             var oModel = new JSONModel(oData);
@@ -53,7 +53,6 @@ sap.ui.define([
                     return oPopover;
                 });
             }
-
             this._pPopover.then(function (oPopover) {
                 var oPopoverModel = new JSONModel(oUserData);
                 oPopover.setModel(oPopoverModel, "popover");
@@ -77,6 +76,16 @@ sap.ui.define([
             oRouter.navTo("RouteDetalleResponsable", {
                 responsableId: sResponsableId
             }); 
+        },
+
+        /* ======================================================= */
+        /* NUEVO FORMATTER PARA COLOR DE AVATARES                 */
+        /* ======================================================= */
+        getAvatarColor: function (sId) {
+            var aColors = ["Accent1", "Accent2", "Accent3", "Accent4", "Accent5", "Accent6", "Accent7", "Accent8", "Accent9", "Accent10"];
+            if (!sId) { return "Accent1"; }
+            return aColors[sId % aColors.length];
         }
+
     });
 });
