@@ -1,0 +1,53 @@
+<core:FragmentDefinition 
+    xmlns="sap.m" 
+    xmlns:core="sap.ui.core" 
+    xmlns:layout="sap.ui.layout">
+    
+    <ResponsivePopover 
+        title="{popover>/responsable}" 
+        placement="Right" 
+        contentWidth="320px"
+        class="sapUiResponsivePadding--header sapUiResponsivePadding--content">
+        
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Text text="Responsable de mantenimiento" class="sapUiTinyMarginBottom subtleText"/>
+                
+                <!-- Contacto simulado -->
+                <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                    <core:Icon src="sap-icon://email" class="sapUiTinyMarginEnd subtleText"/>
+                    <Link text="{popover>/email}"/>
+                </HBox>
+                <HBox alignItems="Center" class="sapUiMediumMarginBottom">
+                    <core:Icon src="sap-icon://call" class="sapUiTinyMarginEnd subtleText"/>
+                    <Text text="{popover>/telefono}" class="subtleText"/>
+                </HBox>
+                
+                <!-- Resumen Operativo -->
+                <Title text="Resumen operativo" level="H5" class="sapUiTinyMarginBottom"/>
+                <layout:Grid defaultSpan="L4 M4 S4" class="sapUiSmallMarginTop">
+                    <VBox>
+                        <Text text="OT asig." class="subtleText"/>
+                        <Text text="{popover>/otAsignadas}" design="Bold"/>
+                    </VBox>
+                    <VBox>
+                        <Text text="OT desv." class="subtleText"/>
+                        <Text text="{popover>/otDesviadas}" design="Bold" class="redText"/>
+                    </VBox>
+                    <VBox>
+                        <Text text="Cumpl." class="subtleText"/>
+                        <Text text="{popover>/cumplimiento}" design="Bold" class="redText"/>
+                    </VBox>
+                </layout:Grid>
+            </VBox>
+        </content>
+        
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer/>
+                <Button text="Ver detalle del responsable" type="Emphasized" press=".onVerDetalleCausas"/>
+            </Toolbar>
+        </footer>
+        
+    </ResponsivePopover>
+</core:FragmentDefinition>

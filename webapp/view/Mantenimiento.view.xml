@@ -1,0 +1,408 @@
+<mvc:View
+  controllerName="mantenimiento.controller.Mantenimiento"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+
+  <Page id="pageMantenimiento" showHeader="false" class="dashPage">
+    <content>
+      <ScrollContainer height="100%" vertical="true">
+        <VBox class="dashContainer">
+
+          <!-- HEADER -->
+          <HBox class="dashHeader" justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap">
+            <VBox>
+              <Title text="Dashboard Ejecutivo de Mantenimiento" level="H1" class="dashTitle"/>
+              <Text text="Desempeño del periodo vs plan (Planeado vs Real del periodo seleccionado)" class="dashSubtitle"/>
+            </VBox>
+
+            <HBox class="filterBar" alignItems="End" wrap="Wrap">
+              <VBox class="filterItem">
+                <Label text="Periodo"/>
+                <Select width="160px">
+                  <items>
+                    <core:Item key="mayo" text="Mayo 2024 (Mensual)"/>
+                  </items>
+                </Select>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Fecha desde"/>
+                <DatePicker id="dpInicio" value="01/05/2024" width="135px"/>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Fecha hasta"/>
+                <DatePicker id="dpFin" value="31/05/2024" width="135px"/>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Zona"/>
+                <Select width="105px">
+                  <items>
+                    <core:Item key="todas" text="Todas"/>
+                  </items>
+                </Select>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Supervisor"/>
+                <Select width="115px">
+                  <items>
+                    <core:Item key="todos" text="Todos"/>
+                  </items>
+                </Select>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Tipo de orden"/>
+                <Select width="120px">
+                  <items>
+                    <core:Item key="todos" text="Todos"/>
+                  </items>
+                </Select>
+              </VBox>
+
+              <VBox class="filterItem">
+                <Label text="Turno"/>
+                <Select width="100px">
+                  <items>
+                    <core:Item key="todos" text="Todos"/>
+                  </items>
+                </Select>
+              </VBox>
+
+              <Button
+                text="Filtros"
+                icon="sap-icon://filter"
+                type="Emphasized"
+                press=".onActualizar"
+                class="filterButton"/>
+            </HBox>
+          </HBox>
+
+          <!-- FILA SUPERIOR -->
+          <HBox class="dashboardRow" wrap="Wrap">
+
+            <VBox class="dashCard topCard">
+              <HBox alignItems="Center">
+                <core:Icon src="sap-icon://appointment-2" class="circleIcon greenIcon"/>
+                <VBox class="sapUiSmallMarginBegin">
+                  <Text text="Cumplimiento general del plan" class="cardTitle"/>
+                  <Text text="94.8%" class="bigNumber greenText"/>
+                  <Text text="398 / 420 órdenes" class="cardValue"/>
+                </VBox>
+              </HBox>
+              <ProgressIndicator percentValue="94.8" displayValue="" state="Success" class="progressLine"/>
+              <Text text="Meta ≥ 98%" class="cardNote"/>
+            </VBox>
+
+            <VBox class="dashCard topCard">
+              <HBox alignItems="Center">
+                <core:Icon src="sap-icon://speed" class="circleIcon orangeIcon"/>
+                <VBox class="sapUiSmallMarginBegin">
+                  <Text text="Desviación global del periodo" class="cardTitle"/>
+                  <Text text="6.4%" class="bigNumber orangeText"/>
+                  <Text text="Fuera de tolerancia" class="cardValue"/>
+                </VBox>
+              </HBox>
+              <ProgressIndicator percentValue="64" displayValue="" state="Warning" class="progressLine"/>
+              <Text text="Meta ≤ 5%" class="cardNote"/>
+            </VBox>
+
+            <VBox class="dashCard blockCard">
+              <HBox justifyContent="SpaceBetween">
+                <Text text="Equipos bloqueados" class="cardTitle"/>
+                <Button text="Ver detalle" type="Transparent" class="linkButton"/>
+              </HBox>
+
+              <HBox alignItems="Center">
+                <core:Icon src="sap-icon://locked" class="circleIcon redIcon"/>
+                <VBox class="sapUiSmallMarginBegin">
+                  <Text text="18" class="bigNumber redText"/>
+                  <Text text="equipos bloqueados" class="cardValue"/>
+                </VBox>
+              </HBox>
+
+              <HBox class="miniBoxRow">
+                <VBox class="miniBox">
+                  <Text text="26" class="miniNumber"/>
+                  <Text text="OT no ejecutables" class="miniText"/>
+                </VBox>
+                <VBox class="miniBox">
+                  <Text text="Zona con más bloqueos" class="miniText"/>
+                  <Text text="Norte" class="miniNumber"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="dashCard causeCard">
+              <HBox justifyContent="SpaceBetween">
+                <Title text="Causas de no ejecución" level="H3" class="sectionTitle"/>
+                <Button text="Ver detalle" type="Transparent" class="linkButton"/>
+              </HBox>
+
+              <HBox alignItems="Center">
+                <VBox class="donutFake">
+                  <Text text="36%" class="donutText"/>
+                </VBox>
+
+                <VBox class="legendList">
+                  <Text text="● Carta de no mantenimiento       8 (36%)" class="legendBlue"/>
+                  <Text text="● Falta de materiales/refacciones 5 (23%)" class="legendBlue2"/>
+                  <Text text="● Cliente no disponible           3 (14%)" class="legendGreen"/>
+                  <Text text="● Orden reprogramada              2 (9%)"  class="legendOrange"/>
+                  <Text text="● Mecánico no disponible          2 (9%)"  class="legendOrange"/>
+                  <Text text="● Información incompleta         1 (5%)"  class="legendPurple"/>
+                  <Text text="● Otro motivo                     1 (5%)"  class="legendGray"/>
+                </VBox>
+              </HBox>
+
+              <HBox class="infoStrip">
+                <core:Icon src="sap-icon://information"/>
+                <Text text="22 órdenes no ejecutadas representan el 5.2% del plan."/>
+              </HBox>
+            </VBox>
+
+          </HBox>
+
+          <!-- FILA MEDIA -->
+          <HBox class="dashboardRow" wrap="Wrap">
+
+            <VBox class="dashCard executionCard">
+              <Title text="Ejecución del plan del periodo" level="H3" class="sectionTitle"/>
+              <Text text="Planeado vs real agrupado por semana" class="sectionSubtitle"/>
+
+              <HBox class="chartMock" alignItems="End">
+                <VBox class="bar grayBar h1"/>
+                <VBox class="bar blueBar h2"/>
+                <VBox class="bar grayBar h3"/>
+                <VBox class="bar blueBar h4"/>
+                <VBox class="bar grayBar h5"/>
+                <VBox class="bar blueBar h6"/>
+                <VBox class="bar grayBar h4"/>
+                <VBox class="bar blueBar h3"/>
+              </HBox>
+
+              <HBox justifyContent="SpaceBetween" class="chartLabels">
+                <Text text="Sem 18"/>
+                <Text text="Sem 19"/>
+                <Text text="Sem 20"/>
+                <Text text="Sem 21"/>
+                <Text text="Sem 22"/>
+              </HBox>
+
+              <HBox class="infoStrip">
+                <core:Icon src="sap-icon://information"/>
+                <Text text="La proyección indica que el periodo cerrará por debajo de la meta establecida."/>
+              </HBox>
+            </VBox>
+
+            <VBox class="dashCard orderCard">
+              <Title text="Composición de órdenes del periodo" level="H3" class="sectionTitle"/>
+
+              <HBox class="orderMiniCards">
+                <VBox class="orderMini">
+                  <core:Icon src="sap-icon://calendar" class="miniIcon greenText"/>
+                  <VBox class="smallDonut greenDonut"><Text text="95.4%"/></VBox>
+                  <Text text="Preventivas" class="cardTitle"/>
+                  <Text text="248 / 260" class="cardValue"/>
+                  <Text text="12 No ejecutadas" class="redSmall"/>
+                </VBox>
+
+                <VBox class="orderMini">
+                  <core:Icon src="sap-icon://wrench" class="miniIcon blueText"/>
+                  <VBox class="smallDonut blueDonut"><Text text="92.6%"/></VBox>
+                  <Text text="Reparación" class="cardTitle"/>
+                  <Text text="88 / 95" class="cardValue"/>
+                  <Text text="7 No ejecutadas" class="redSmall"/>
+                </VBox>
+
+                <VBox class="orderMini">
+                  <core:Icon src="sap-icon://headset" class="miniIcon purpleText"/>
+                  <VBox class="smallDonut purpleDonut"><Text text="95.3%"/></VBox>
+                  <Text text="Call Center" class="cardTitle"/>
+                  <Text text="62 / 65" class="cardValue"/>
+                  <Text text="3 No ejecutadas" class="redSmall"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox class="dashCard heatCard">
+              <Title text="Cumplimiento del plan por zona y periodo" level="H3" class="sectionTitle"/>
+              <Text text="% de ejecución" class="sectionSubtitle"/>
+
+              <VBox class="heatTable">
+                <HBox>
+                  <Text text="" class="heatLabel"/>
+                  <Text text="29 Abr - 5 May" class="heatHead"/>
+                  <Text text="6 - 12 May" class="heatHead"/>
+                  <Text text="13 - 19 May" class="heatHead"/>
+                  <Text text="20 - 26 May" class="heatHead"/>
+                  <Text text="27 May - 2 Jun" class="heatHead"/>
+                  <Text text="Cumplimiento" class="heatHead"/>
+                </HBox>
+
+                <HBox>
+                  <Text text="Norte" class="heatLabel"/>
+                  <Text text="74%" class="heatCell yellow"/>
+                  <Text text="67%" class="heatCell orange"/>
+                  <Text text="88%" class="heatCell green"/>
+                  <Text text="92%" class="heatCell green"/>
+                  <Text text="90%" class="heatCell green"/>
+                  <Text text="82%" class="heatTotal"/>
+                </HBox>
+
+                <HBox>
+                  <Text text="Centro" class="heatLabel"/>
+                  <Text text="68%" class="heatCell orange"/>
+                  <Text text="70%" class="heatCell yellow"/>
+                  <Text text="85%" class="heatCell green"/>
+                  <Text text="76%" class="heatCell yellow"/>
+                  <Text text="88%" class="heatCell green"/>
+                  <Text text="77%" class="heatTotal"/>
+                </HBox>
+
+                <HBox>
+                  <Text text="Sur" class="heatLabel"/>
+                  <Text text="62%" class="heatCell orange"/>
+                  <Text text="61%" class="heatCell orange"/>
+                  <Text text="72%" class="heatCell yellow"/>
+                  <Text text="76%" class="heatCell yellow"/>
+                  <Text text="84%" class="heatCell green"/>
+                  <Text text="71%" class="heatTotal"/>
+                </HBox>
+
+                <HBox>
+                  <Text text="Este" class="heatLabel"/>
+                  <Text text="58%" class="heatCell red"/>
+                  <Text text="62%" class="heatCell orange"/>
+                  <Text text="75%" class="heatCell yellow"/>
+                  <Text text="62%" class="heatCell orange"/>
+                  <Text text="78%" class="heatCell yellow"/>
+                  <Text text="67%" class="heatTotal"/>
+                </HBox>
+
+                <HBox>
+                  <Text text="Oeste" class="heatLabel"/>
+                  <Text text="46%" class="heatCell red"/>
+                  <Text text="52%" class="heatCell red"/>
+                  <Text text="63%" class="heatCell orange"/>
+                  <Text text="68%" class="heatCell orange"/>
+                  <Text text="70%" class="heatCell yellow"/>
+                  <Text text="60%" class="heatTotal"/>
+                </HBox>
+              </VBox>
+
+              <HBox class="infoStrip">
+                <core:Icon src="sap-icon://information"/>
+                <Text text="Da clic en una celda para ver el detalle de órdenes."/>
+              </HBox>
+            </VBox>
+
+          </HBox>
+
+          <!-- FILA INFERIOR -->
+          <HBox class="dashboardRow" wrap="Wrap">
+
+            <VBox class="dashCard capacityCard">
+              <HBox justifyContent="SpaceBetween">
+                <Title text="Capacidad de plantilla vs horas programadas" level="H3" class="sectionTitle"/>
+                <Button text="Horas" type="Transparent" class="pillButton"/>
+              </HBox>
+
+              <HBox>
+                <VBox class="sideStats">
+                  <Text text="Mecánicos activos" class="miniText"/>
+                  <Text text="76" class="miniNumber"/>
+                  <Text text="Días laborables" class="miniText"/>
+                  <Text text="21" class="miniNumber"/>
+                  <Text text="Turnos considerados" class="miniText"/>
+                  <Text text="Diurno, Nocturno, Fin de semana" class="miniText"/>
+                </VBox>
+
+                <VBox class="capacityContent">
+                  <Text text="Capacidad disponible de plantilla       6,400 h" class="cardValue"/>
+                  <ProgressIndicator percentValue="100" displayValue="" class="progressLine"/>
+
+                  <Text text="Horas programadas en órdenes           5,900 h" class="cardValue"/>
+                  <ProgressIndicator percentValue="92.1" displayValue="" state="Warning" class="progressLine"/>
+
+                  <Text text="Horas reales utilizadas                5,842 h" class="cardValue"/>
+                  <ProgressIndicator percentValue="91.2" displayValue="" state="Success" class="progressLine"/>
+
+                  <HBox class="capacityBoxes">
+                    <VBox class="capacityBox">
+                      <Text text="Capacidad comprometida" class="miniText"/>
+                      <Text text="92.1%" class="orangeText mediumNumber"/>
+                    </VBox>
+
+                    <VBox class="capacityBox">
+                      <Text text="Margen disponible" class="miniText"/>
+                      <Text text="500 h" class="greenText mediumNumber"/>
+                    </VBox>
+                  </HBox>
+                </VBox>
+              </HBox>
+
+              <HBox class="infoStrip">
+                <core:Icon src="sap-icon://information"/>
+                <Text text="Si la utilización es mayor al 100%, la plantilla actual no alcanza para cubrir la carga programada."/>
+              </HBox>
+            </VBox>
+
+            <VBox class="dashCard materialCard">
+              <Title text="Consumo de materiales vs plan (Cantidades)" level="H3" class="sectionTitle"/>
+
+              <VBox class="materialTable">
+                <HBox class="materialRow headRow">
+                  <Text text="Material" class="materialName"/>
+                  <Text text="Plan" class="materialCol"/>
+                  <Text text="Real" class="materialCol"/>
+                  <Text text="Variación" class="materialVar"/>
+                </HBox>
+
+                <HBox class="materialRow">
+                  <Text text="⚙ Refacciones (pzas)" class="materialName"/>
+                  <Text text="1,000 pzas" class="materialCol"/>
+                  <Text text="1,140 pzas" class="materialCol"/>
+                  <Text text="+14%" class="materialVar redText"/>
+                </HBox>
+
+                <HBox class="materialRow">
+                  <Text text="□ Consumibles (pzas)" class="materialName"/>
+                  <Text text="600 pzas" class="materialCol"/>
+                  <Text text="570 pzas" class="materialCol"/>
+                  <Text text="-5%" class="materialVar greenText"/>
+                </HBox>
+
+                <HBox class="materialRow">
+                  <Text text="◌ Lubricantes (L)" class="materialName"/>
+                  <Text text="400 L" class="materialCol"/>
+                  <Text text="468 L" class="materialCol"/>
+                  <Text text="+17%" class="materialVar redText"/>
+                </HBox>
+
+                <HBox class="materialRow">
+                  <Text text="🔧 Herramientas (pzas)" class="materialName"/>
+                  <Text text="200 pzas" class="materialCol"/>
+                  <Text text="190 pzas" class="materialCol"/>
+                  <Text text="-5%" class="materialVar greenText"/>
+                </HBox>
+              </VBox>
+
+              <HBox class="infoStrip">
+                <core:Icon src="sap-icon://information"/>
+                <Text text="Las variaciones se calculan contra el plan del periodo."/>
+              </HBox>
+            </VBox>
+
+            
+
+          </HBox>
+
+        </VBox>
+      </ScrollContainer>
+    </content>
+  </Page>
+</mvc:View>

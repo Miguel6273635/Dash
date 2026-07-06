@@ -1,0 +1,96 @@
+<mvc:View
+    controllerName="mantenimiento.controller.CausasZona"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:microchart="sap.suite.ui.microchart">
+
+    <Page id="pageCausasZona" showHeader="false">
+        <content>
+            <VBox id="pageContainer" class="sapUiSmallMargin">
+                
+                <!-- 1. ENCABEZADO -->
+                <HBox class="dashHeader sapUiSmallMarginBottom" justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap">
+                    <VBox>
+                        <Link text="Volver a cumplimiento general de órdenes" press=".onNavBack" class="sapUiTinyMarginBottom" />
+                        <Title text="Causas por zona" level="H1" class="dashTitle"/>
+                        <Text text="Detalle de las causas de incumplimiento del plan por zona y semana." class="dashSubtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- 2. TARJETAS KPI -->
+                <FlexBox renderType="Bare" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                    <FlexBox width="24%" direction="Row" alignItems="Center" class="sapUiTinyMargin sapUiContentPadding dashCard"><core:Icon src="sap-icon://inspection" size="2.5rem" color="#0070F2" class="sapUiSmallMarginEnd"/><VBox justifyContent="Center" alignItems="Center" width="100%"><Text text="OT PLANEADAS" /><Title text="84" level="H1" titleStyle="H1" class="sapUiTinyMarginTopBottom"/><Text text="100% del plan" /></VBox></FlexBox>
+                    <FlexBox width="24%" direction="Row" alignItems="Center" class="sapUiTinyMargin sapUiContentPadding dashCard"><core:Icon src="sap-icon://accept" size="2.5rem" color="#2B7D2B" class="sapUiSmallMarginEnd"/><VBox justifyContent="Center" alignItems="Center" width="100%"><Text text="OT EJECUTADAS" /><Title text="62" level="H1" titleStyle="H1" class="sapUiTinyMarginTopBottom"/><Text text="74% del plan" /></VBox></FlexBox>
+                    <FlexBox width="24%" direction="Row" alignItems="Center" class="sapUiTinyMargin sapUiContentPadding dashCard"><core:Icon src="sap-icon://message-error" size="2.5rem" color="#BB0000" class="sapUiSmallMarginEnd"/><VBox justifyContent="Center" alignItems="Center" width="100%"><Text text="OT NO EJECUTADAS" /><Title text="22" level="H1" titleStyle="H1" class="sapUiTinyMarginTopBottom"/><Text text="26% del plan" /></VBox></FlexBox>
+                    <FlexBox width="24%" direction="Row" alignItems="Center" class="sapUiTinyMargin sapUiContentPadding dashCard"><core:Icon src="sap-icon://line-charts" size="2.5rem" color="#666666" class="sapUiSmallMarginEnd"/><VBox justifyContent="Center" alignItems="Center" width="100%"><Text text="CUMPLIMIENTO" /><Title text="74%" level="H1" titleStyle="H1" class="sapUiTinyMarginTopBottom"/><Text text="-22 OT vs plan" /></VBox></FlexBox>
+                </FlexBox>
+
+                <!-- 3. LAYOUT MATRICIAL IRROMPIBLE -->
+                <l:Grid defaultSpan="XL12 L12 M12 S12" hSpacing="1" class="sapUiSmallMarginTop">
+                    <l:content>
+
+                        <!-- COLUMNA IZQUIERDA: TABLA + GRÁFICOS (Ocupa 8 de 12 espacios) -->
+                        <VBox>
+                            <layoutData><l:GridData span="XL8 L8 M12 S12" /></layoutData>
+                            
+                            <!-- Bloque de la Tabla -->
+                            <VBox class="sapUiSmallMarginBottom">
+                                <HBox alignItems="Center" class="sapUiSmallMarginBottom"><Title text="DETALLE DE INCUMPLIMIENTO POR ZONA NORTE (22)" level="H2"/><core:Icon src="sap-icon://information" class="sapUiTinyMarginBegin" tooltip="Información detallada"/></HBox>
+                                <VBox class="dashCard">
+                                    <OverflowToolbar><SegmentedButton selectedKey="todas"><items><SegmentedButtonItem text="Todas" key="todas"/><SegmentedButtonItem text="Preventivas" key="preventivas"/><SegmentedButtonItem text="Correctivas" key="correctivas"/><SegmentedButtonItem text="Call Center" key="callcenter"/></items></SegmentedButton><ToolbarSpacer/><Text text="Filtro activo: Todas" class="sapUiSmallMarginEnd"/></OverflowToolbar>
+                                    <ScrollContainer width="100%" horizontal="true" vertical="false">
+                                        <Table id="idIncumplimientoTable" items="{/IncumplimientosData}" alternateRowColors="true">
+                                            <columns><Column width="6.5rem"><Text text="OT"/></Column><Column width="5.5rem"><Text text="Equipo"/></Column><Column width="7rem"><Text text="Tipo OT"/></Column><Column width="9.5rem"><Text text="Cliente"/></Column><Column width="14.5rem"><Text text="Causa incumplimiento"/></Column><Column width="8rem"><Text text="Responsable"/></Column><Column width="6rem" hAlign="End"><Text text="Días"/></Column><Column width="8rem"><Text text="Estado"/></Column></columns>
+                                            <items><ColumnListItem vAlign="Middle"><cells><Link text="{OT}" emphasized="true"/><Text text="{Equipo}"/><ObjectStatus class="statusTag {= 'status' + ${StatusTipo} }" text="{TipoOT}"/><Text text="{Cliente}"/><ObjectStatus class="statusTag {= 'status' + ${StatusCausa} }" text="{CausaIncumplimiento}"/><Text text="{Responsable}"/><Text text="{DiasAtraso}" class="sapThemeNegativeText textNegrita" /><ObjectStatus class="statusTag statusNoEjecutada" text="{Estado}"/></cells></ColumnListItem></items>
+                                        </Table>
+                                    </ScrollContainer>
+                                    <OverflowToolbar class="sapUiTinyMarginTop sapUiTinyMarginBottom"><Text text="Mostrando 1 a 3 de 22 órdenes" class="sapUiSmallMarginBegin"/><ToolbarSpacer /><Button type="Transparent" icon="sap-icon://slim-arrow-left" /><Button text="1" type="Emphasized"/><Button text="2" type="Transparent"/><Button type="Transparent" icon="sap-icon://slim-arrow-right" /><ToolbarSpacer /><Select width="120px" selectedKey="10" class="sapUiSmallMarginEnd"><items><core:Item key="10" text="10 por página" /></items></Select></OverflowToolbar>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Bloque de los Gráficos (Alineados abajo de la tabla) -->
+                            <HBox width="100%" justifyContent="SpaceBetween">
+                                <VBox width="49%" class="dashCard sapUiContentPadding">
+                                    <Title text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR CAUSA" level="H3" class="sapUiSmallMarginBottom"/>
+                                    <microchart:ComparisonMicroChart size="Responsive" class="sapUiMediumMarginTop"><microchart:data><microchart:ComparisonMicroChartData title="Carta de no mantenimiento" value="8" color="Error" displayValue="8 (36%)"/><microchart:ComparisonMicroChartData title="Falta de refacciones" value="5" color="Critical" displayValue="5 (23%)"/><microchart:ComparisonMicroChartData title="Cliente no disponible" value="3" color="Neutral" displayValue="3 (14%)"/><microchart:ComparisonMicroChartData title="Reprogramación" value="2" color="Good" displayValue="2 (9%)"/><microchart:ComparisonMicroChartData title="Otra causa" value="2" color="Good" displayValue="2 (9%)"/></microchart:data></microchart:ComparisonMicroChart>
+                                </VBox>
+                                
+                                <VBox width="49%" class="dashCard sapUiContentPadding">
+                                    <Title text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR TIPO DE OT" level="H3" class="sapUiSmallMarginBottom"/>
+                                    <HBox justifyContent="Center" alignItems="Center" width="100%" class="sapUiMediumMarginTop">
+                                        <microchart:InteractiveDonutChart displayedSegments="3" selectionEnabled="false"><microchart:segments><microchart:InteractiveDonutChartSegment label="Preventivas" value="12" color="Good" displayedValue="12"/><microchart:InteractiveDonutChartSegment label="Correctivas" value="7" color="Error" displayedValue="7"/><microchart:InteractiveDonutChartSegment label="Call Center" value="3" color="Critical" displayedValue="3"/></microchart:segments></microchart:InteractiveDonutChart>
+                                        
+                                        <VBox class="sapUiMediumMarginBegin" justifyContent="Center">
+                                            <HBox alignItems="Center" class="sapUiTinyMarginBottom"><core:Icon src="sap-icon://circle-task-2" color="#107e3e" class="sapUiTinyMarginEnd"/><Text text="Preventivas" width="6rem" wrapping="true"/><Text text="12 OT (55%)" class="sapThemePositiveText textNegrita" wrapping="true"/></HBox>
+                                            <HBox alignItems="Center" class="sapUiTinyMarginBottom"><core:Icon src="sap-icon://circle-task-2" color="#bb0000" class="sapUiTinyMarginEnd"/><Text text="Correctivas" width="6rem" wrapping="true"/><Text text="7 OT (32%)" class="sapThemeNegativeText textNegrita" wrapping="true"/></HBox>
+                                            <HBox alignItems="Center"><core:Icon src="sap-icon://circle-task-2" color="#e9730c" class="sapUiTinyMarginEnd"/><Text text="Call Center" width="6rem" wrapping="true"/><Text text="3 OT (13%)" class="sapThemeCriticalText textNegrita" wrapping="true"/></HBox>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- COLUMNA DERECHA: RESUMEN (Ocupa 4 de 12 espacios) -->
+                        <VBox>
+                            <layoutData><l:GridData span="XL4 L4 M12 S12" /></layoutData>
+                            <HBox alignItems="Center" class="sapUiSmallMarginBottom"><Title text="" level="H2"/></HBox>
+                            <VBox class="dashCard sapUiContentPadding">
+                                <Title text="RESUMEN POR ZONA NORTE" level="H2" class="sapUiSmallMarginBottom"/>
+                                <List showSeparators="None">
+                                    <CustomListItem class="sapUiSmallMarginBottom"><HBox alignItems="Center"><core:Icon src="sap-icon://document-text" class="circleIcon orangeIcon sapUiSmallMarginEnd"/><VBox><Text text="Principal causa" class="sapUiTinyMarginBottom" /><Title text="Carta de no mantenimiento" level="H4" titleStyle="H5" /><HBox alignItems="Center" class="sapUiTinyMarginTop"><Title text="8 OT" level="H5" class="sapUiTinyMarginEnd"/><Text text="36% del total no ejecutadas" /></HBox></VBox></HBox></CustomListItem>
+                                    <CustomListItem class="sapUiSmallMarginBottom"><HBox alignItems="Center"><core:Icon src="sap-icon://wrench" class="circleIcon blueIcon sapUiSmallMarginEnd"/><VBox><Text text="Principal tipo de OT" class="sapUiTinyMarginBottom" /><Title text="Preventivas" level="H4" titleStyle="H5" /><HBox alignItems="Center" class="sapUiTinyMarginTop"><Title text="12 OT" level="H5" class="sapUiTinyMarginEnd"/><Text text="55% del total no ejecutadas" /></HBox></VBox></HBox></CustomListItem>
+                                    <CustomListItem class="sapUiSmallMarginBottom"><HBox alignItems="Center"><core:Icon src="sap-icon://employee" class="circleIcon purpleIcon sapUiSmallMarginEnd"/><VBox><Text text="Responsable con más OT pendientes" class="sapUiTinyMarginBottom" /><Title text="Juan Pérez" level="H4" titleStyle="H5" /><HBox alignItems="Center" class="sapUiTinyMarginTop"><Title text="6 OT" level="H5" class="sapUiTinyMarginEnd"/><Text text="27% del total no ejecutadas" /></HBox></VBox></HBox></CustomListItem>
+                                    <CustomListItem><HBox alignItems="Center"><core:Icon src="sap-icon://org-chart" class="circleIcon blueIcon sapUiSmallMarginEnd"/><VBox><Text text="Cliente más impactado" class="sapUiTinyMarginBottom" /><Title text="Torre Reforma" level="H4" titleStyle="H5" /><HBox alignItems="Center" class="sapUiTinyMarginTop"><Title text="7 OT" level="H5" class="sapUiTinyMarginEnd"/><Text text="32% del total no ejecutadas" /></HBox></VBox></HBox></CustomListItem>
+                                </List>
+                            </VBox>
+                        </VBox>
+
+                    </l:content>
+                </l:Grid>
+
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

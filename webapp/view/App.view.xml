@@ -1,0 +1,172 @@
+<mvc:View controllerName="mantenimiento.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt">
+
+  <tnt:ToolPage id="toolPage">
+
+    <!-- HEADER -->
+    <tnt:header>
+      <tnt:ToolHeader>
+        <Button
+          icon="sap-icon://menu2"
+          type="Transparent"
+          press=".onToggleSideNav" />
+        <Title text="Mantenimiento" level="H4" class="sapUiTinyMarginBegin" />
+        <ToolbarSpacer />
+        <Button
+          icon="sap-icon://refresh"
+          type="Transparent"
+          tooltip="Actualizar" />
+      </tnt:ToolHeader>
+    </tnt:header>
+
+    <!-- MENÚ LATERAL -->
+    <tnt:sideContent>
+      <tnt:SideNavigation
+        id="sideNavigation"
+        class="customSideNav"
+        itemSelect=".onMenuSelect">
+
+        <tnt:NavigationList>
+
+          <tnt:NavigationListItem
+            text="MANTENIMIENTO"
+            enabled="false"
+            class="sideSectionTitle" />
+
+          <tnt:NavigationListItem
+            text="Dashboard Ejecutivo"
+            icon="sap-icon://home"
+            key="RouteMantenimiento" />
+
+          <tnt:NavigationListItem
+            text="Órdenes"
+            icon="sap-icon://business-objects-experience"
+            key="RouteOrdenes" />
+
+          <tnt:NavigationListItem
+          text="Cumplimiento de Órdenes"
+          icon="sap-icon://chart-axis">
+         <tnt:items>
+            
+          <tnt:NavigationListItem
+            text="Causas por zona"
+            icon="sap-icon://sys-enter-2"
+            key="RouteCausasZona" />
+
+             <tnt:NavigationListItem
+            text="Comportamiento operativo por responsables"
+            icon="sap-icon://sys-enter-2"
+            key="RouteComportamientoOperativo" />
+        </tnt:items>
+      </tnt:NavigationListItem>
+
+          <tnt:NavigationListItem
+            text="Horas trabajadas"
+            icon="sap-icon://time-entry-request"
+            key="RouteHorasTrabajadas" />
+
+          <tnt:NavigationListItem
+            text="Mecánicos"
+            icon="sap-icon://employee"
+            key="RouteMecanicos" />
+
+          <tnt:NavigationListItem
+            text="Materiales"
+            icon="sap-icon://inventory"
+            key="RouteMateriales" />
+          <!-- CAMBIOS ALEJANDRA 29/06/2026 -->
+          <tnt:NavigationListItem
+            text="Análisis de causas"
+            icon="sap-icon://cause">
+            <!-- CAMBIOS TANIA 03/07/2026
+            AGERGUE UNA OPCIÓN AL SUBMENÚ-->
+             <tnt:items>
+              <tnt:NavigationListItem
+                text="Análisis de Elevadores con Desviación"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisElevadores" />
+            </tnt:items>
+
+          </tnt:NavigationListItem>
+          <!-- CAMBIOS ALEJANDRA 29/06/2026 -->
+
+          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
+          <tnt:NavigationListItem
+            text="Reparación"
+            icon="sap-icon://cause">
+            <tnt:items>
+              <tnt:NavigationListItem
+                text="Análisis de Reparaciones Ejecutadas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisReparacionesPlaneadasEjecutadas" />
+            </tnt:items>
+          </tnt:NavigationListItem>
+          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
+     
+          <tnt:NavigationListItem
+    text="Tendencia de ejecución: Planeado vs Real"
+    icon="sap-icon://chart-axis">
+    
+    <tnt:items> <!-- Contenedor de submenús abierto correctamente -->
+        
+        <tnt:NavigationListItem
+            text="Análisis Semana S22"
+            icon="sap-icon://sys-enter-2"
+            key="RouteAnalisisSemanaS22"
+            select=".onItemSelect" /> <!-- Agregado el evento select para que navegue -->
+            
+    </tnt:items> <!-- Contenedor CERRADO correctamente con diagonal "/" -->
+
+</tnt:NavigationListItem>
+
+
+
+          <tnt:NavigationListItem
+            text="Reportes"
+            icon="sap-icon://table-chart"
+            key="RouteReportes" />
+
+          <tnt:NavigationListItem
+            text="OTROS MÓDULOS"
+            enabled="false"
+            class="sideSectionTitle sideSecondTitle" />
+
+          <tnt:NavigationListItem
+            text="Inventarios"
+            icon="sap-icon://product"
+            key="RouteInventarios" />
+
+          <tnt:NavigationListItem
+            text="Compras"
+            icon="sap-icon://cart"
+            key="RouteCompras" />
+
+          <tnt:NavigationListItem
+            text="Contratos"
+            icon="sap-icon://document"
+            key="RouteContratos" />
+
+          <tnt:NavigationListItem
+            text="Finanzas"
+            icon="sap-icon://money-bills"
+            key="RouteFinanzas" />
+
+          <tnt:NavigationListItem
+            text="Recursos Humanos"
+            icon="sap-icon://group"
+            key="RouteRecursosHumanos" />
+
+        </tnt:NavigationList>
+      </tnt:SideNavigation>
+    </tnt:sideContent>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <tnt:mainContents>
+      <App id="app"/>
+    </tnt:mainContents>
+
+  </tnt:ToolPage>
+</mvc:View>

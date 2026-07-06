@@ -1,0 +1,220 @@
+{
+  "_version": "1.84.0",
+  "sap.app": {
+    "id": "mantenimiento",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.24.0",
+      "toolsId": "b12e882a-3837-4505-bf89-b09af6d5620c"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.148.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.viz": {},
+        "sap.tnt": {},
+        "sap.f": {},
+        "sap.ui.layout": {},
+        "sap.suite.ui.microchart": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozen": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "mantenimiento.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        },
+        {
+          "uri": "css/AnalisisReparacionesPlaneadasEjecutadas.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "mantenimiento.view",
+        "async": true,
+        "viewPath": "mantenimiento.view"
+      },
+      "routes": [
+        {
+          "name": "RouteMantenimiento",
+          "pattern": ":?query:",
+          "target": [
+            "TargetMantenimiento"
+          ]
+        },
+        {
+          "name": "RouteMantenimientoEjecutivo",
+          "pattern": "mantenimiento-ejecutivo",
+          "target": [
+            "TargetMantenimientoEjecutivo"
+          ]
+        },
+        {
+          "name": "RouteMantenimientoDetalle",
+          "pattern": "mantenimiento-detalle",
+          "target": [
+            "TargetMantenimientoDetalle"
+          ]
+        },
+        {
+          "name": "RouteCausasZona",
+          "pattern": "causas-zona",
+          "target": [
+            "TargetCausasZona"
+          ]
+        },
+        {
+          "name": "RouteComportamientoOperativo",
+          "pattern": "comportamiento-operativo",
+          "target": [
+            "TargetComportamientoOperativo"
+          ]
+        },
+        {
+          "name": "RouteHorasTrabajadas",
+          "pattern": "horas-trabajadas",
+          "target": [
+           "TargetHorasTrabajadas"
+       ]
+   },
+        {
+          "name": "RouteDetalleResponsable",
+          "pattern": "detalle-responsable/{responsableId}",
+          "target": [
+            "TargetDetalleResponsable"
+          ]
+        },
+        
+        {
+          "name": "RouteAnalisisElevadores",
+          "pattern": "analisis-elevadores",
+          "target": [
+            "TargetAnalisisElevadores"
+          ]
+        },
+        {
+          "name": "RouteAnalisisSemanaS22",
+          "pattern": "analisis-semana-s22",
+          "target": [
+            "TargetAnalisisSemanaS22"
+          ]
+        },
+        {
+          "name": "RouteAnalisisReparacionesPlaneadasEjecutadas",
+          "pattern": "analisis-reparaciones-planeadas-ejecutadas",
+          "target": [
+            "TargetAnalisisReparacionesPlaneadasEjecutadas"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetMantenimiento": {
+          "viewType": "XML",
+          "viewId": "Mantenimiento",
+          "viewName": "Mantenimiento"
+        },
+        "TargetMantenimientoEjecutivo": {
+          "viewType": "XML",
+          "viewId": "MantenimientoEjecutivo",
+          "viewName": "MantenimientoEjecutivo"
+        },
+        "TargetMantenimientoDetalle": {
+          "viewType": "XML",
+          "viewId": "MantenimientoDetalle",
+          "viewName": "MantenimientoDetalle"
+        },
+        "TargetCausasZona": {
+          "viewType": "XML",
+          "viewId": "CausasZona",
+          "viewName": "CausasZona"
+        },
+        "TargetComportamientoOperativo": {
+          "viewType": "XML",
+          "viewId": "ComportamientoOperativo",
+          "viewName": "ComportamientoOperativo"
+        },
+        "TargetHorasTrabajadas": {
+         "viewType": "XML",
+         "viewId": "HorasTrabajadas",
+         "viewName": "HorasTrabajadas"
+       },
+        "TargetDetalleResponsable": {
+          "viewType": "XML",
+          "viewId": "DetalleResponsable",
+          "viewName": "DetalleResponsable"
+        },
+        "TargetAnalisisElevadores": {
+          "viewType": "XML",
+          "viewId": "AnalisisElevadores",
+          "viewName": "AnalisisElevadores"
+        },
+        "TargetAnalisisSemanaS22": {
+          "viewType": "XML",
+          "viewId": "AnalisisSemanaS22",
+          "viewName": "AnalisisSemanaS22"
+        },
+        "TargetAnalisisReparacionesPlaneadasEjecutadas": {
+          "viewType": "XML",
+          "viewId": "AnalisisReparacionesPlaneadasEjecutadas",
+          "viewName": "AnalisisReparacionesPlaneadasEjecutadas"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "mantenimiento.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

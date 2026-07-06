@@ -1,0 +1,152 @@
+
+<mvc:View
+    controllerName="mantenimiento.controller.AnalisisSemanaS22"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout">
+    
+    <!-- Se agrega la clase css exclusiva "analisisS22View" -->
+    <Page showHeader="false" class="sapUiResponsiveContentPadding analisisS22View">
+        <VBox class="sapUiSmallMargin">
+        
+            <!-- Sección de Título y Filtros -->
+            <FlexBox justifyContent="SpaceBetween" alignItems="Start">
+                <VBox>
+                    <Link text="&lt; Volver a Tendencia de ejecución" press="onNavBack" />
+                    <Title text="Análisis Semana S22" level="H2" class="sapUiTinyMarginTop"/>
+                    <Text text="Detalle de OT no ejecutadas que explican la brecha de cumplimiento en la semana seleccionada." />
+                </VBox>
+                <HBox alignItems="Center">
+                    <Select class="sapUiSmallMarginEnd" width="200px">
+                        <core:Item key="s22" text="S22 (26 may - 1 jun 2025)" />
+                    </Select>
+                    <Select class="sapUiSmallMarginEnd" width="150px">
+                        <core:Item key="all" text="Todas" />
+                    </Select>
+                    <Button icon="sap-icon://filter" text="Filtros" type="Transparent"/>
+                </HBox>
+            </FlexBox>
+
+            <!-- Sección de KPIs Principales -->
+            <f:Card class="sapUiSmallMarginTop">
+                <f:header>
+                    <Title text="CONTEXTO DE LA SEMANA" level="H4" class="sapUiSmallMargin"/>
+                </f:header>
+                <f:content>
+                    <FlexBox justifyContent="SpaceAround" class="sapUiSmallMargin">
+                        <!-- OT Planeadas -->
+                        <VBox alignItems="Center">
+                            <core:Icon src="sap-icon://form" size="2rem" color="Default"/>
+                            <Text text="OT planeadas" class="sapUiTinyMarginTop"/>
+                            <Title text="84" level="H1"/>
+                            <Text text="Total de OT" />
+                        </VBox>
+                        <!-- OT Ejecutadas -->
+                        <VBox alignItems="Center">
+                           <core:Icon src="sap-icon://accept" size="2rem" color="Positive"/>
+                            <Text text="OT ejecutadas" class="sapUiTinyMarginTop"/>
+                            <Title text="63" level="H1"/>
+                            <Text text="75% del total" />
+                        </VBox>
+                        <!-- OT No Ejecutadas -->
+                        <VBox alignItems="Center">
+                             <core:Icon src="sap-icon://decline" size="2rem" color="Negative"/>
+                            <Text text="OT no ejecutadas" class="sapUiTinyMarginTop"/>
+                            <Title text="21" level="H1"/>
+                            <Text text="25% del total" />
+                        </VBox>
+                        <!-- Cumplimiento -->
+                        <VBox alignItems="Center">
+                            <ProgressIndicator percentValue="75" displayValue="75%" width="5rem" height="5rem"/>
+                            <Text text="Cumplimiento de la semana" class="sapUiTinyMarginTop"/>
+                            <Text text="vs 100% planeado" />
+                        </VBox>
+                    </FlexBox>
+                </f:content>
+            </f:Card>
+
+            <!-- Sección de KPIs Secundarios -->
+            <f:Card class="sapUiSmallMarginTop">
+                 <f:content>
+                    <FlexBox justifyContent="SpaceAround" class="sapUiSmallMargin">
+                        <VBox alignItems="Center">
+                            <core:Icon src="sap-icon://lightbulb" size="2rem"/>
+                            <Title text="21 OT no ejecutadas." level="H3"/>
+                        </VBox>
+                        <VBox alignItems="Center">
+                            <core:Icon src="sap-icon://group" size="2rem"/>
+                            <Text text="2 clientes concentran"/>
+                            <Title text="61%" level="H3"/>
+                            <Text text="de la brecha"/>
+                        </VBox>
+                        <VBox alignItems="Center">
+                            <core:Icon src="sap-icon://building" size="2rem"/>
+                            <Text text="2 elevadores explican"/>
+                            <Title text="35%" level="H3"/>
+                            <Text text="del impacto"/>
+                        </VBox>
+                        <VBox alignItems="Center">
+                            <core:Icon src="sap-icon://locate-me" size="2rem"/>
+                            <Text text="Norte y Centro concentran"/>
+                            <Title text="71%" level="H3"/>
+                            <Text text="de la afectación"/>
+                        </VBox>
+                    </FlexBox>
+                </f:content>
+            </f:Card>
+
+            <!-- Tabla de OT No Ejecutadas -->
+            <f:Card class="sapUiSmallMarginTop">
+                <f:header>
+                    <Toolbar>
+                        <Title text="OT NO EJECUTADAS (21)" />
+                        <ToolbarSpacer/>
+                        <SearchField width="250px" placeholder="Buscar OT, cliente, elevador..."/>
+                        <Button icon="sap-icon://table-view" type="Transparent"/>
+                    </Toolbar>
+                </f:header>
+                <f:content>
+                    <Table id="idOtTable"
+                        items="{path: 'otModel>/results'}"
+                        class="sapUiMediumMarginTop">
+                        <columns>
+                            <Column><Text text="Prioridad"/></Column>
+                            <Column><Text text="OT"/></Column>
+                            <Column><Text text="Cliente"/></Column>
+                            <Column><Text text="Zona"/></Column>
+                            <Column><Text text="Elevador"/></Column>
+                            <Column><Text text="Causa"/></Column>
+                            <Column><Text text="Responsable"/></Column>
+                            <Column><Text text="Estado"/></Column>
+                            <Column hAlign="End"><Text text="Contribución a la brecha"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <ObjectStatus text="{otModel>prioridad}" state="{= ${otModel>prioridad} === 'CRITICA' ? 'Error' : ${otModel>prioridad} === 'ALTA' ? 'Warning' : 'Success' }"/>
+                                    <Link text="{otModel>ot}"/>
+                                    <Text text="{otModel>cliente}"/>
+                                    <Text text="{otModel>zona}"/>
+                                    <Text text="{otModel>elevador}"/>
+                                    <Text text="{otModel>causa}"/>
+                                    <Text text="{otModel>responsable}"/>
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://status-negative" color="red" class="sapUiTinyMarginEnd"/>
+                                        <Text text="{otModel>estado}"/>
+                                    </HBox>
+                                    <ProgressIndicator
+                                        percentValue="{otModel>contribucion}"
+                                        displayValue="{otModel>contribucion}%"
+                                        state="Error"
+                                        width="100px"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </f:content>
+            </f:Card>
+        </VBox>
+    </Page>
+</mvc:View>

@@ -1,0 +1,195 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleResponsable"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:l="sap.ui.layout"
+    xmlns:mc="sap.suite.ui.microchart"
+    xmlns:core="sap.ui.core"
+    height="100%">
+    
+    <Page id="pageDetalle" showHeader="false" backgroundDesign="List">
+        
+        <content>
+              <!-- 1. ENCABEZADO GIGANTE Y FILTROS -->
+    <HBox class="sapUiMediumMarginTop sapUiMediumMarginBeginEnd sapUiSmallMarginBottom" justifyContent="SpaceBetween" alignItems="End" wrap="Wrap">
+        
+        <!-- Lado Izquierdo: Link y Título Gigante -->
+        <VBox>
+            <Link text="Volver a Comportamiento Operativo por Responsables" press=".onNavBack" class="sapUiTinyMarginBottom" />
+            
+            <!-- AQUI ESTÁ EL CAMBIO: Título gigante -->
+            <Title text="Detalle del responsable" class="titleSuperGigante"/>
+        </VBox>
+        
+        <!-- Lado Derecho: Filtros -->
+        <HBox alignItems="End" class="sapUiSmallMarginTop">
+            <VBox class="sapUiSmallMarginEnd">
+                <Label text="Semana" class="subtleText"/>
+                <Select width="200px" selectedKey="18">
+                    <core:Item key="18" text="Semana 18 (29 abr - 5 may 2024)"/>
+                    <core:Item key="17" text="Semana 17"/>
+                </Select>
+            </VBox>
+            
+            <VBox>
+                <Label text="Zona" class="subtleText"/>
+                <Select width="150px" selectedKey="norte">
+                    <core:Item key="norte" text="Norte"/>
+                    <core:Item key="sur" text="Sur"/>
+                </Select>
+            </VBox>
+        </HBox>
+    </HBox>
+
+    <!-- 2. PERFIL DEL USUARIO -->
+    <HBox alignItems="Center" class="sapUiMediumMarginBeginEnd sapUiMediumMarginBottom">
+        <f:Avatar displaySize="S" class="sapUiSmallMarginEnd"/>
+        <VBox>
+            <Title text="{detail>/responsable}" level="H4"/>
+            <Text text="Zona: {detail>/zona} | Semana: 18 (29 abr - 5 may 2024) | Origen activo: Todas" class="subtleText"/>
+        </VBox>
+    </HBox>
+
+            <!-- 1. TARJETAS DE KPIs SUPERIORES (Diseño Figma: Título arriba, Ícono Izquierda, Valores Derecha) -->
+            <l:Grid defaultSpan="L3 M6 S12" class="sapUiSmallMarginBeginEnd">
+                
+                <!-- KPI 1: OT Desviadas -->
+                <f:Card class="tarjetaFigma">
+                    <f:content>
+                        <VBox class="espaciadoTarjeta">
+                            <Text text="Total OT Desviadas" class="tituloFigma"/>
+                            <HBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <core:Icon src="sap-icon://order-status" class="iconoFigma fondoAzul sapUiMediumMarginEnd"/>
+                                <VBox>
+                                    <Text text="{detail>/kpi/otDesviadas}" class="numeroFigma"/>
+                                    <Text text="Del total de desviaciones" class="subtituloFigma"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+
+                <!-- KPI 2: Equipos Afectados -->
+                <f:Card class="tarjetaFigma">
+                    <f:content>
+                        <VBox class="espaciadoTarjeta">
+                            <Text text="Equipos Afectados" class="tituloFigma"/>
+                            <HBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <core:Icon src="sap-icon://machine" class="iconoFigma fondoVerde sapUiMediumMarginEnd"/>
+                                <VBox>
+                                    <Text text="{detail>/kpi/equiposAfectados}" class="numeroFigma"/>
+                                    <Text text="Equipos únicos" class="subtituloFigma"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+
+                <!-- KPI 3: Clientes Afectados -->
+                <f:Card class="tarjetaFigma">
+                    <f:content>
+                        <VBox class="espaciadoTarjeta">
+                            <Text text="Clientes Afectados" class="tituloFigma"/>
+                            <HBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <core:Icon src="sap-icon://customer-and-contacts" class="iconoFigma fondoNaranja sapUiMediumMarginEnd"/>
+                                <VBox>
+                                    <Text text="{detail>/kpi/clientesAfectados}" class="numeroFigma"/>
+                                    <Text text="Clientes únicos" class="subtituloFigma"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+                                <!-- KPI 4: Cumplimiento -->
+                <f:Card class="tarjetaFigma">
+                    <f:content>
+                        <VBox class="espaciadoTarjeta">
+                            <Text text="Cumplimiento" class="tituloFigma"/>
+                            <HBox alignItems="Center" class="sapUiSmallMarginTop">
+                                
+                                <!-- Regresamos al control nativo, en tamaño M (que ronda los 50px) -->
+                                <mc:RadialMicroChart 
+                                    percentage="{detail>/kpi/cumplimiento}" 
+                                    size="M" 
+                                    valueColor="Error" 
+                                    class="miDona sapUiMediumMarginEnd"/>
+                                
+                                <VBox>
+                                    <Text text="{detail>/kpi/cumplimiento}%" class="numeroFigma"/>
+                                    <Text text="Del total de sus OT" class="subtituloFigma"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+
+
+            </l:Grid>
+
+            <!-- 2. CONTENIDO PRINCIPAL (Tabla y Resumen) -->
+            <l:Grid defaultSpan="L12 M12 S12" class="sapUiSmallMargin">
+                
+                <!-- Columna Izquierda: Tarjeta de la Tabla -->
+                <f:Card class="tarjetaFigma">
+                    <f:layoutData>
+                        <l:GridData span="L8 M12 S12"/>
+                    </f:layoutData>
+                    <f:content>
+                        <Table items="{path: 'detail>/desglose'}">
+                            <headerToolbar>
+                                <OverflowToolbar class="sapUiMediumMarginTopBottom sapUiSmallMarginBeginEnd">
+                                    <Title text="Órdenes de Trabajo que explican la desviación" level="H5"/>
+                                    <ToolbarSpacer/>
+                                    <SearchField width="200px" placeholder="Buscar OT..."/>
+                                    <Button icon="sap-icon://excel-attachment" type="Transparent" tooltip="Exportar a Excel"/>
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column><Text text="OT"/></Column>
+                                <Column><Text text="Equipo"/></Column>
+                                <Column><Text text="Cliente"/></Column>
+                                <Column><Text text="Tipo OT"/></Column>
+                                <Column><Text text="Causa principal"/></Column>
+                                <Column hAlign="Center"><Text text="Días de atraso"/></Column>
+                                <Column hAlign="Center"><Text text="Estado"/></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Link text="{detail>ot}" press=".onNavToOrder"/>
+                                        <Text text="{detail>equipo}"/>
+                                        <Text text="{detail>cliente}"/>
+                                        <Text text="{detail>tipoOt}" class="tipoOtText"/>
+                                        <Text text="{detail>causa}"/>
+                                        <Text text="{detail>retraso}" class="redText"/>
+                                        <ObjectStatus text="{detail>estado}" state="{= ${detail>estado} === 'Pendiente' ? 'Error' : 'Warning'}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </f:content>
+                </f:Card>
+
+                <!-- Columna Derecha: Tarjeta del Resumen -->
+                <f:Card class="tarjetaFigma">
+                    <f:layoutData>
+                        <l:GridData span="L4 M12 S12"/>
+                    </f:layoutData>
+                    <f:content>
+                        <VBox class="sapUiMediumMargin">
+                            <Title text="Resumen del Responsable" level="H5" class="sapUiSmallMarginBottom"/>
+                            <List>
+                                <StandardListItem title="Principal causa" description="{detail>/resumen/principalCausa}" icon="sap-icon://wrench" type="Inactive"/>
+                                <StandardListItem title="Tipo de OT dominante" description="{detail>/resumen/tipoOtDominante}" icon="sap-icon://order-status" type="Inactive"/>
+                                <StandardListItem title="Cliente más afectado" description="{detail>/resumen/clienteAfectado}" icon="sap-icon://building" type="Inactive"/>
+                                <StandardListItem title="Equipo con más incidencias" description="{detail>/resumen/equipoIncidencias}" icon="sap-icon://machine" type="Inactive"/>
+                            </List>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+
+            </l:Grid>
+        </content>
+    </Page>
+</mvc:View>
