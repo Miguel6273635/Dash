@@ -1,0 +1,329 @@
+<mvc:View
+    controllerName="mantenimiento.controller.ConsumoRealVsPlanCategoria"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:vizData="sap.viz.ui5.data"
+    xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
+
+    <Page id="pageConsumoRealVsPlanCategoria" showHeader="false" class="ConsumoRealVsPlanCategoria">
+        <content>
+            <ScrollContainer height="100%" vertical="true" horizontal="false">
+                <VBox class="crpcPage">
+
+                    <VBox class="crpcHeader">
+                        <HBox alignItems="Center">
+                            <Title text="Consumo real vs plan por categoría" level="H1" class="crpcTitle"/>
+                            <Button icon="sap-icon://hint" type="Transparent" class="crpcHintButton"/>
+                        </HBox>
+                        <Text text="Análisis detallado del consumo de materiales vs lo planificado." class="crpcSubtitle"/>
+                    </VBox>
+
+                    <HBox class="crpcFilters" alignItems="End" wrap="Wrap">
+                        <VBox class="crpcFilter crpcPeriodo">
+                            <Label text="Periodo" class="crpcFilterLabel"/>
+                            <Select selectedKey="{crpc>/filtros/periodo}">
+                                <items>
+                                    <core:Item key="mayo2024" text="Mayo 2024"/>
+                                    <core:Item key="junio2024" text="Junio 2024"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcFecha">
+                            <Label text="Fecha desde" class="crpcFilterLabel"/>
+                            <DatePicker value="{crpc>/filtros/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcFecha">
+                            <Label text="Fecha hasta" class="crpcFilterLabel"/>
+                            <DatePicker value="{crpc>/filtros/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcZona">
+                            <Label text="Zona" class="crpcFilterLabel"/>
+                            <Select selectedKey="{crpc>/filtros/zona}">
+                                <items>
+                                    <core:Item key="todas" text="Todas"/>
+                                    <core:Item key="norte" text="Norte"/>
+                                    <core:Item key="centro" text="Centro"/>
+                                    <core:Item key="sur" text="Sur"/>
+                                    <core:Item key="occidente" text="Occidente"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcCliente">
+                            <Label text="Cliente" class="crpcFilterLabel"/>
+                            <Select selectedKey="{crpc>/filtros/cliente}">
+                                <items>
+                                    <core:Item key="todos" text="Todos"/>
+                                    <core:Item key="tecno" text="Tecno Elevadores"/>
+                                    <core:Item key="servi" text="Servi Ascensores"/>
+                                    <core:Item key="grupo" text="Grupo Altura"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcResponsable">
+                            <Label text="Responsable" class="crpcFilterLabel"/>
+                            <Select selectedKey="{crpc>/filtros/responsable}">
+                                <items>
+                                    <core:Item key="todos" text="Todos"/>
+                                    <core:Item key="juan" text="Juan Pérez"/>
+                                    <core:Item key="ana" text="Ana Torres"/>
+                                    <core:Item key="luis" text="Luis Gómez"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <VBox class="crpcFilter crpcTipo">
+                            <Label text="Tipo de OT" class="crpcFilterLabel"/>
+                            <Select selectedKey="{crpc>/filtros/tipoOt}">
+                                <items>
+                                    <core:Item key="todas" text="Todas"/>
+                                    <core:Item key="mantto" text="Mantenimiento"/>
+                                    <core:Item key="reparacion" text="Reparación"/>
+                                    <core:Item key="callcenter" text="Call Center"/>
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" class="crpcApplyButton" press=".onAplicarFiltros"/>
+                    </HBox>
+
+                    <HBox class="crpcKpis" wrap="Wrap">
+                        <VBox class="crpcKpi crpcKpiBlue">
+                            <HBox alignItems="Center">
+                                <VBox class="crpcKpiIcon crpcBlueBg"><core:Icon src="sap-icon://database"/></VBox>
+                                <VBox>
+                                    <Text text="Plan total" class="crpcKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="{crpc>/kpis/planTotal}" class="crpcKpiNumber crpcBlueText"/>
+                                        <Text text=" pzas / L" class="crpcKpiUnit"/>
+                                    </HBox>
+                                    <Text text="100% (base del plan)" class="crpcKpiSub crpcBlueText"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="crpcKpi crpcKpiGreen">
+                            <HBox alignItems="Center">
+                                <VBox class="crpcKpiIcon crpcGreenBg"><core:Icon src="sap-icon://line-chart"/></VBox>
+                                <VBox>
+                                    <Text text="Real total" class="crpcKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="{crpc>/kpis/realTotal}" class="crpcKpiNumber crpcGreenText"/>
+                                        <Text text=" pzas / L" class="crpcKpiUnit"/>
+                                    </HBox>
+                                    <Text text="107.6% del plan" class="crpcKpiSub crpcGreenText"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="crpcKpi crpcKpiRed">
+                            <HBox alignItems="Center">
+                                <VBox class="crpcKpiIcon crpcRedBgSoft"><core:Icon src="sap-icon://trend-up"/></VBox>
+                                <VBox>
+                                    <Text text="Desviación total (Real - Plan)" class="crpcKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="{crpc>/kpis/desviacionTotal}" class="crpcKpiNumber crpcRedText"/>
+                                        <Text text=" pzas / L" class="crpcKpiUnit"/>
+                                    </HBox>
+                                    <Text text="+7.6% sobre el plan" class="crpcKpiSub crpcRedText"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <VBox class="crpcCard crpcTableCard">
+                        <HBox class="crpcCardHead" justifyContent="SpaceBetween" alignItems="Center">
+                            <Title text="Materiales que explican la desviación" level="H3" class="crpcCardTitle"/>
+                            <HBox>
+                                <SearchField id="sfMaterial" width="240px" placeholder="Buscar material..." liveChange=".onBuscarMaterial" class="crpcSearch"/>
+                                <Button text="Columnas" icon="sap-icon://table-view" type="Transparent" class="crpcColumnButton"/>
+                            </HBox>
+                        </HBox>
+
+                        <Table id="tblMaterialesDesv" items="{crpc>/materialesDesviacion}" fixedLayout="true" class="crpcMainTable">
+                            <columns>
+                                <Column width="4%" hAlign="Center"><Text text="#"/></Column>
+                                <Column width="16%"><Text text="Material"/></Column>
+                                <Column width="10%"><Text text="Categoría"/></Column>
+                                <Column width="8%" hAlign="End"><Text text="Plan&#10;(pzas / L)"/></Column>
+                                <Column width="8%" hAlign="End"><Text text="Real&#10;(pzas / L)"/></Column>
+                                <Column width="10%" hAlign="Center"><Text text="Contribución&#10;% de la desv."/></Column>
+                                <Column width="9%" hAlign="Center"><Text text="Acumulado&#10;% Parecial"/></Column>
+                                <Column width="7%" hAlign="Center"><Text text="OT&#10;afectadas"/></Column>
+                                <Column width="8%" hAlign="Center"><Text text="Elevadores&#10;afectados"/></Column>
+                                <Column width="8%" hAlign="Center"><Text text="Clientes&#10;afectados"/></Column>
+                                <Column width="12%" hAlign="Center"><Text text="Variación por zona (pzas / L)"/></Column>
+                                <Column width="7%" hAlign="End"><Text text="Total&#10;variación"/></Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{crpc>id}" class="crpcCell"/>
+                                        <HBox alignItems="Center">
+                                            <core:Icon src="{crpc>icono}" class="crpcMaterialIcon"/>
+                                            <Link text="{crpc>material}" class="crpcMaterialLink" press=".onMaterialPress"/>
+                                        </HBox>
+                                        <Text text="{crpc>categoria}" class="crpcCell"/>
+                                        <Text text="{crpc>plan}" class="crpcNum"/>
+                                        <Text text="{crpc>real}" class="crpcNum"/>
+                                        <VBox class="crpcContribBox">
+                                            <ProgressIndicator percentValue="{crpc>contribucion}" displayValue="" class="crpcContribBar">
+                                                <customData><core:CustomData key="estado" value="{crpc>estado}" writeToDom="true"/></customData>
+                                            </ProgressIndicator>
+                                            <Text text="{crpc>contribucionTexto}" class="crpcContribText"/>
+                                        </VBox>
+                                        <Text text="{crpc>acumulado}" class="crpcNum"/>
+                                        <Text text="{crpc>ot}" class="crpcNum"/>
+                                        <Text text="{crpc>elevadores}" class="crpcNum"/>
+                                        <Text text="{crpc>clientes}" class="crpcNum"/>
+                                        <HBox class="crpcZones" justifyContent="SpaceAround">
+                                            <Text text="{crpc>norte}" class="crpcZoneVal"><customData><core:CustomData key="estado" value="{crpc>norteEstado}" writeToDom="true"/></customData></Text>
+                                            <Text text="{crpc>centro}" class="crpcZoneVal"><customData><core:CustomData key="estado" value="{crpc>centroEstado}" writeToDom="true"/></customData></Text>
+                                            <Text text="{crpc>sur}" class="crpcZoneVal"><customData><core:CustomData key="estado" value="{crpc>surEstado}" writeToDom="true"/></customData></Text>
+                                            <Text text="{crpc>occidente}" class="crpcZoneVal"><customData><core:CustomData key="estado" value="{crpc>occidenteEstado}" writeToDom="true"/></customData></Text>
+                                        </HBox>
+                                        <Text text="{crpc>total}" class="crpcTotalVar"><customData><core:CustomData key="estado" value="{crpc>totalEstado}" writeToDom="true"/></customData></Text>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+<HBox class="crvpTotalRow" alignItems="Center">
+    <Text text="Total general (8 de 24 materiales)" class="crvpTotalLabel"/>
+    <Text text="2,200" class="crvpTotalCell"/>
+    <Text text="2,368" class="crvpTotalCell"/>
+    <Text text="+168" class="crvpTotalCell crvpRedText"/>
+    <Text text="100.0%" class="crvpTotalCell"/>
+    <Text text="100.0%" class="crvpTotalCell"/>
+    <Text text="55" class="crvpTotalCell"/>
+    <Text text="42" class="crvpTotalCell"/>
+    <Text text="13" class="crvpTotalCell"/>
+    <Text text="+28" class="crvpTotalCell crvpRedText"/>
+    <Text text="+10" class="crvpTotalCell crvpRedText"/>
+    <Text text="+6" class="crvpTotalCell crvpRedText"/>
+    <Text text="0" class="crvpTotalCell"/>
+    <Text text="+168" class="crvpTotalCell crvpRedText"/>
+</HBox>
+
+                        <HBox class="crpcInfo" alignItems="Center">
+                            <core:Icon src="sap-icon://information" class="crpcInfoIcon"/>
+                            <Text text="Los 4 primeros materiales explican el 42.3% de toda la desviación total (+168 pzas / L)."/>
+                        </HBox>
+                    </VBox>
+
+                    <HBox class="crpcBottom" wrap="Wrap">
+                        <VBox class="crpcCard crpcDetail">
+                            <HBox class="crpcCardHead" justifyContent="SpaceBetween" alignItems="Center">
+                                <HBox alignItems="Center">
+                                    <Title text="Detalle de consumo – Aceite hidráulico" level="H3" class="crpcCardTitle"/>
+                                    <HBox class="crpcPill"><Text text="Lubricante"/></HBox>
+                                </HBox>
+                            </HBox>
+
+                            <HBox class="crpcMiniKpis" wrap="Wrap">
+                                <HBox class="crpcMiniKpi" alignItems="Center"><core:Icon src="sap-icon://database"/><VBox><Text text="Plan" class="crpcMiniLabel"/><Text text="250 pzas / L" class="crpcMiniValue"/></VBox></HBox>
+                                <HBox class="crpcMiniKpi" alignItems="Center"><core:Icon src="sap-icon://accept"/><VBox><Text text="Real" class="crpcMiniLabel"/><Text text="282 pzas / L" class="crpcMiniValue"/></VBox></HBox>
+                                <HBox class="crpcMiniKpi" alignItems="Center"><core:Icon src="sap-icon://trend-up" class="crpcRedText"/><VBox><Text text="Var. pzas / L" class="crpcMiniLabel"/><Text text="+32 pzas / L" class="crpcMiniValue crpcRedText"/></VBox></HBox>
+                                <HBox class="crpcMiniKpi" alignItems="Center"><core:Icon src="sap-icon://share-2"/><VBox><Text text="Variación %" class="crpcMiniLabel"/><Text text="19.0% sobre el plan" class="crpcMiniValue"/></VBox></HBox>
+                            </HBox>
+
+                            <HBox class="crpcTabs" wrap="Wrap">
+                                <Button text="Detalle" class="crpcTab crpcTabActive"/>
+                                <Button text="Por zona" class="crpcTab"/>
+                                <Button text="Por cliente" class="crpcTab"/>
+                                <Button text="Por OT" class="crpcTab"/>
+                                <Button text="Por responsable" class="crpcTab"/>
+                                <Button text="Por elevador" class="crpcTab"/>
+                                <Button text="Tendencia semanal" class="crpcTab"/>
+                            </HBox>
+
+                            <Table items="{crpc>/detalleConsumo}" fixedLayout="true" class="crpcDetailTable">
+                                <columns>
+                                    <Column><Text text="Fecha"/></Column>
+                                    <Column hAlign="End"><Text text="Plan (pzas/L)"/></Column>
+                                    <Column hAlign="End"><Text text="Real (pzas/L)"/></Column>
+                                    <Column><Text text="Zona"/></Column>
+                                    <Column><Text text="Cliente"/></Column>
+                                    <Column><Text text="Responsable"/></Column>
+                                    <Column hAlign="Center"><Text text="OT"/></Column>
+                                    <Column hAlign="Center"><Text text="Elevador"/></Column>
+                                    <Column hAlign="End"><Text text="Var. pzas/L"/></Column>
+                                    <Column hAlign="End"><Text text="Var. %"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{crpc>fecha}"/>
+                                            <Text text="{crpc>plan}"/>
+                                            <Text text="{crpc>real}"/>
+                                            <Text text="{crpc>zona}"/>
+                                            <Text text="{crpc>cliente}"/>
+                                            <Text text="{crpc>responsable}"/>
+                                            <Text text="{crpc>ot}"/>
+                                            <Text text="{crpc>elevador}"/>
+                                            <Text text="{crpc>varPzas}" class="crpcRedText"/>
+                                            <Text text="{crpc>varPct}" class="crpcRedText"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <Link text="Ver las 24 semanas de material" class="crpcLink" press=".onVerSemanas"/>
+                        </VBox>
+
+                        <VBox class="crpcCard crpcTrend">
+                            <HBox class="crpcCardHead" justifyContent="SpaceBetween" alignItems="Center">
+                                <Title text="Tendencia semanal de la desviación (pzas / L)" level="H3" class="crpcCardTitle"/>
+                                <Button icon="sap-icon://hint" type="Transparent" class="crpcHintButton"/>
+                            </HBox>
+
+                            <HBox class="crpcTrendKpis" wrap="Wrap">
+                                <HBox class="crpcTrendKpi" alignItems="Center"><core:Icon src="sap-icon://share-2"/><VBox><Text text="7" class="crpcTrendVal"/><Text text="Semanas" class="crpcTrendLbl"/></VBox></HBox>
+                                <HBox class="crpcTrendKpi" alignItems="Center"><core:Icon src="sap-icon://calendar"/><VBox><Text text="5" class="crpcTrendVal"/><Text text="Elevadores" class="crpcTrendLbl"/></VBox></HBox>
+                                <HBox class="crpcTrendKpi" alignItems="Center"><core:Icon src="sap-icon://group"/><VBox><Text text="2" class="crpcTrendVal"/><Text text="Clientes" class="crpcTrendLbl"/></VBox></HBox>
+                                <HBox class="crpcTrendKpi" alignItems="Center"><core:Icon src="sap-icon://map"/><VBox><Text text="2" class="crpcTrendVal"/><Text text="Zonas" class="crpcTrendLbl"/></VBox></HBox>
+                            </HBox>
+
+                            <HBox class="crpcLegend" wrap="Wrap">
+                                <HBox alignItems="Center"><VBox class="crpcLegendLine crpcPlanLine"/><Text text="Plan"/></HBox>
+                                <HBox alignItems="Center"><VBox class="crpcLegendLine crpcRealLine"/><Text text="Real"/></HBox>
+                                <HBox alignItems="Center"><VBox class="crpcLegendLine crpcVarLine"/><Text text="Variación (pzas / L)"/></HBox>
+                            </HBox>
+
+                            <viz:VizFrame id="vfTendenciaDesviacion" vizType="line" width="100%" height="205px" uiConfig="{applicationSet:'fiori'}">
+                                <viz:dataset>
+                                    <vizData:FlattenedDataset data="{crpc>/tendenciaSemanal}">
+                                        <vizData:dimensions>
+                                            <vizData:DimensionDefinition name="Semana" value="{crpc>semana}"/>
+                                        </vizData:dimensions>
+                                        <vizData:measures>
+                                            <vizData:MeasureDefinition name="Plan" value="{crpc>plan}"/>
+                                            <vizData:MeasureDefinition name="Real" value="{crpc>real}"/>
+                                            <vizData:MeasureDefinition name="Variación" value="{crpc>variacion}"/>
+                                        </vizData:measures>
+                                    </vizData:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <vizFeeds:FeedItem uid="valueAxis" type="Measure" values="Plan,Real,Variación"/>
+                                    <vizFeeds:FeedItem uid="categoryAxis" type="Dimension" values="Semana"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+
+                            <HBox class="crpcSuccess" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://sys-enter-2"/>
+                                <Text text="El exceso se concentró en la última semana (+11 pzas / L)."/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>

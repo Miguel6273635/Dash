@@ -45,7 +45,7 @@
         "sap.ui.layout": {},
         "sap.suite.ui.microchart": {}
       }
-    }, 
+    },
     "contentDensities": {
       "compact": true,
       "cozen": true
@@ -62,25 +62,31 @@
         }
       }
     },
- "resources": {
-  "css": [
-    {
-      "uri": "css/style.css"
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        },
+        {
+          "uri": "css/AnalisisReparacionesPlaneadasEjecutadas.css"
+        },
+        {
+          "uri": "css/AnalisisIntegralReparaciones.css"
+        },
+        {
+          "uri": "css/AnalisisSolicitudesCallCenterAtendidas.css"
+        },
+        {
+          "uri": "css/ConsumoMateriales.css"
+        },
+        {
+          "uri": "css/ConsumoRealVsPlanCategoria.css"
+        },
+        {
+          "uri": "css/CausasZona.css"
+        }
+      ]
     },
-    {
-      "uri": "css/AnalisisReparacionesPlaneadasEjecutadas.css"
-    },
-    {
-      "uri": "css/AnalisisIntegralReparaciones.css"
-    },
-    {
-      "uri": "css/AnalisisSolicitudesCallCenterAtendidas.css"
-    },
-    {
-      "uri": "css/ConsumoMateriales.css"
-    }
-  ]
-},
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
@@ -133,16 +139,23 @@
           "name": "RouteHorasTrabajadas",
           "pattern": "horas-trabajadas",
           "target": [
-           "TargetHorasTrabajadas"
-       ]
-   },
-   {
-  "name": "RouteConsumoMateriales",
-  "pattern": "consumo-materiales",
-  "target": [
-    "TargetConsumoMateriales"
-  ]
-},
+            "TargetHorasTrabajadas"
+          ]
+        },
+        {
+          "name": "RouteConsumoMateriales",
+          "pattern": "consumo-materiales",
+          "target": [
+            "TargetConsumoMateriales"
+          ]
+        },
+        {
+          "name": "RouteConsumoRealVsPlanCategoria",
+          "pattern": "consumo-real-vs-plan-categoria",
+          "target": [
+            "TargetConsumoRealVsPlanCategoria"
+          ]
+        },
         {
           "name": "RouteDetalleResponsable",
           "pattern": "detalle-responsable/{responsableId}",
@@ -150,7 +163,6 @@
             "TargetDetalleResponsable"
           ]
         },
-        
         {
           "name": "RouteAnalisisElevadores",
           "pattern": "analisis-elevadores",
@@ -214,15 +226,20 @@
           "viewName": "ComportamientoOperativo"
         },
         "TargetHorasTrabajadas": {
-         "viewType": "XML",
-         "viewId": "HorasTrabajadas",
-         "viewName": "HorasTrabajadas"
-       },
-       "TargetConsumoMateriales": {
-  "viewType": "XML",
-  "viewId": "ConsumoMateriales",
-  "viewName": "ConsumoMateriales"
-},
+          "viewType": "XML",
+          "viewId": "HorasTrabajadas",
+          "viewName": "HorasTrabajadas"
+        },
+        "TargetConsumoMateriales": {
+          "viewType": "XML",
+          "viewId": "ConsumoMateriales",
+          "viewName": "ConsumoMateriales"
+        },
+        "TargetConsumoRealVsPlanCategoria": {
+          "viewType": "XML",
+          "viewId": "ConsumoRealVsPlanCategoria",
+          "viewName": "ConsumoRealVsPlanCategoria"
+        },
         "TargetDetalleResponsable": {
           "viewType": "XML",
           "viewId": "DetalleResponsable",
