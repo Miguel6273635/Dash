@@ -1,7 +1,6 @@
 /* ==========================================================================
    PASO 1: COLOR DE FONDO PARA LOS FILTROS
    ========================================================================== */
-
 /* Se aplica un fondo blanco a los 'chips' de los filtros */
 .filterChip {
     background-color: #FFFFFF !important; 
@@ -17,11 +16,9 @@
     background-color: #F8F9FA !important;
 }
 
-
 /* ==========================================================================
    PASO 2: FORZAR LA CABECERA GRIS DE LA TABLA
    ========================================================================== */
-
 /* Este es un selector agresivo que obliga a la cabecera a ser gris */
 .customGreyHeaderTable .sapMListTblHeaderCell,
 .customGreyHeaderTable .sapMListTblHeader,
@@ -38,6 +35,48 @@
     text-transform: uppercase !important; 
 }
 
+/* ==========================================================================
+   PASO 3: ESTILO PARA TIPO DE OT (ETIQUETAS CON COLOR)
+   ========================================================================== */
+/* Estilo base para que parezca una etiqueta (pill) */
+.cellTag {
+    background-color: #F3F4F6 !important; /* Gris claro por defecto */
+    border-radius: 12px !important;
+    padding: 4px 12px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #E5E7EB !important;
+}
+
+.cellTag .sapMText {
+    color: #4B5563 !important; /* Texto gris oscuro por defecto */
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+}
+
+/* Opcional: Clases para colores dinámicos desde tu formatter */
+.tagPreventivo { background-color: #EDE9FE !important; border-color: #DDD6FE !important; }
+.tagPreventivo .sapMText { color: #6D28D9 !important; } /* Morado */
+
+.tagCorrectivo { background-color: #DBEAFE !important; border-color: #BFDBFE !important; }
+.tagCorrectivo .sapMText { color: #1D4ED8 !important; } /* Azul */
+
+/* ==========================================================================
+   PASO 4: COLOR Y SEPARACIÓN DE ÍCONOS EN "PRINCIPAL CAUSA"
+   ========================================================================== */
+/* Forzar un margen derecho mayor para separar el ícono del texto */
+.cellTagIcon {
+    font-size: 1.25rem !important; 
+    margin-right: 12px !important; /* Aumentamos el margen para separar el texto */
+}
+
+/* Clases de color para que tu formatter '.getIconColorClass' las asigne dinámicamente */
+.iconPurple { color: #6D28D9 !important; } /* Morado */
+.iconBlue { color: #2563EB !important; }   /* Azul */
+.iconOrange { color: #F59E0B !important; } /* Naranja */
+.iconRed { color: #DC2626 !important; }    /* Rojo */
+
 
 /* ==========================================================================
    Estilos Adicionales (que ya tenías y funcionan)
@@ -52,5 +91,6 @@
 .btnBlueCustom .sapMBtnInner { background-color: #2563EB !important; }
 .btnBlueCustom .sapMBtnContent, .btnBlueCustom .sapMBtnIcon { color: #FFFFFF !important; font-weight: 700 !important; }
 .mainCard { background-color: #FFFFFF !important; border-radius: 12px !important; padding: 1.5rem !important; box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important; border: 1px solid #E5E7EB !important; }
-.tableWrapper { border-radius: 10px !important; overflow: hidden !important; border: 1px solid #E5E7EB !important; }
+.tableWrapper { border-radius: 10px !important; overflow: hidden !important; border: 1px solid hsl(220, 13%, 91%) !important; }
 .noIconProgress .sapMProgIndStateIcon, .noIconProgress .sapUiIcon { display: none !important; }
+
