@@ -48,7 +48,7 @@
     },
     "contentDensities": {
       "compact": true,
-     "cozy": true
+      "cozy": true
     },
     "models": {
       "i18n": {
@@ -86,8 +86,14 @@
           "uri": "css/CausasZona.css"
         },
         {
-           "uri": "css/BalanceOperativoZona.css"
-       }
+          "uri": "css/BalanceOperativoZona.css"
+        },
+        {
+          "uri": "css/DetalleOperativoZonaSur.css"
+        },
+        {
+          "uri": "css/AnalisisFallas.css"
+        }
       ]
     },
     "routing": {
@@ -96,16 +102,21 @@
         "controlAggregation": "pages",
         "controlId": "app",
         "transition": "slide",
-        "type": "View",
         "viewType": "XML",
-        "path": "mantenimiento.view",
-        "async": true,
-        "viewPath": "mantenimiento.view"
+        "viewPath": "mantenimiento.view",
+        "async": true
       },
       "routes": [
         {
-          "name": "RouteMantenimiento",
+          "name": "RouteAnalisisFallas",
           "pattern": ":?query:",
+          "target": [
+            "TargetAnalisisFallas"
+          ]
+        },
+        {
+          "name": "RouteMantenimiento",
+          "pattern": "mantenimiento",
           "target": [
             "TargetMantenimiento"
           ]
@@ -152,7 +163,6 @@
             "TargetConsumoMateriales"
           ]
         },
-
         {
           "name": "RouteConsumoRealVsPlanCategoria",
           "pattern": "consumo-real-vs-plan-categoria",
@@ -203,14 +213,26 @@
           ]
         },
         {
-  "name": "RouteBalanceOperativoZona",
-  "pattern": "balance-operativo-zona",
-  "target": [
-    "TargetBalanceOperativoZona"
-  ]
-}
+          "name": "RouteBalanceOperativoZona",
+          "pattern": "balance-operativo-zona",
+          "target": [
+            "TargetBalanceOperativoZona"
+          ]
+        },
+        {
+          "name": "RouteDetalleOperativoZonaSur",
+          "pattern": "detalle-operativo-zona-sur",
+          "target": [
+            "TargetDetalleOperativoZonaSur"
+          ]
+        }
       ],
       "targets": {
+        "TargetAnalisisFallas": {
+          "viewType": "XML",
+          "viewId": "AnalisisFallas",
+          "viewName": "AnalisisFallas"
+        },
         "TargetMantenimiento": {
           "viewType": "XML",
           "viewId": "Mantenimiento",
@@ -282,10 +304,15 @@
           "viewName": "AnalisisSolicitudesCallCenterAtendidas"
         },
         "TargetBalanceOperativoZona": {
-  "viewType": "XML",
-  "viewId": "BalanceOperativoZona",
-  "viewName": "BalanceOperativoZona"
-}
+          "viewType": "XML",
+          "viewId": "BalanceOperativoZona",
+          "viewName": "BalanceOperativoZona"
+        },
+        "TargetDetalleOperativoZonaSur": {
+          "viewType": "XML",
+          "viewId": "DetalleOperativoZonaSur",
+          "viewName": "DetalleOperativoZonaSur"
+        }
       }
     },
     "rootView": {

@@ -4,13 +4,17 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
-    xmlns:mc="sap.suite.ui.microchart"> <!-- ESTA ES LA LÍNEA CRÍTICA -->
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+
+    xmlns:mc="sap.suite.ui.microchart">
 
     <Page id="pageCausasZona" showHeader="false" class="CausasZonaView">
         <content>
             <VBox id="pageContainer" class="czContainer">
                 
-                <!-- 1. ENCABEZADO Y FILTROS (INTACTO Y FUNCIONANDO) -->
+                <!-- 1. ENCABEZADO Y FILTROS -->
                 <HBox class="czHeader" justifyContent="SpaceBetween" alignItems="End" wrap="Wrap" width="100%">
                     <VBox class="sapUiSmallMarginBottom">
                         <Link text="&lt; Volver a cumplimiento general de órdenes" press=".onNavBack" class="czBackLink"/>
@@ -24,7 +28,7 @@
                     </HBox>
                 </HBox>
 
-                <!-- 2. TARJETAS KPI (INTACTO Y FUNCIONANDO) -->
+                <!-- 2. TARJETAS KPI -->
                 <HBox class="czKpiRow" wrap="Wrap">
                     <VBox class="czKpiCard czKpiBlue"><HBox alignItems="Center"><VBox class="czKpiIconBox czBlueSoft"><core:Icon src="sap-icon://inspection" class="czKpiIcon"/></VBox><VBox><Text text="OT PLANEADAS" class="czKpiLabel"/><Title text="84" class="czKpiNumber czBlueText"/><Text text="100% del plan" class="czKpiSub"/></VBox></HBox></VBox>
                     <VBox class="czKpiCard czKpiGreen"><HBox alignItems="Center"><VBox class="czKpiIconBox czGreenSoft"><core:Icon src="sap-icon://accept" class="czKpiIcon"/></VBox><VBox><Text text="OT EJECUTADAS" class="czKpiLabel"/><Title text="62" class="czKpiNumber czGreenText"/><Text text="74% del plan" class="czKpiSub"/></VBox></HBox></VBox>
@@ -32,24 +36,20 @@
                     <VBox class="czKpiCard czKpiPurple"><HBox alignItems="Center"><VBox class="czKpiIconBox czPurpleSoft"><core:Icon src="sap-icon://line-charts" class="czKpiIcon"/></VBox><VBox><Text text="CUMPLIMIENTO" class="czKpiLabel"/><Title text="74%" class="czKpiNumber czPurpleText"/><Text text="-22 OT vs plan" class="czKpiSub"/></VBox></HBox></VBox>
                 </HBox>
 
-                <!-- ========================================== -->
                 <!-- 3. LAYOUT PRINCIPAL (TABLA 75% / DERECHA 25%)-->
-                <!-- ========================================== -->
                 <l:Grid defaultSpan="XL12 L12 M12 S12" hSpacing="1" class="sapUiSmallMarginTop">
                     <l:content>
-
-                        <!-- COLUMNA IZQUIERDA: TABLA (75% -> 9 de 12 Columnas) -->
+                        
+                        <!-- COLUMNA IZQUIERDA: TABLA (75%) -->
                         <VBox>
                             <layoutData><l:GridData span="XL9 L9 M12 S12" /></layoutData>
                             
-                            <!-- TARJETA BLANCA CON MARCO DE SEPARACIÓN -->
                             <VBox class="dashCard sapUiContentPadding">
-                                
                                 <HBox alignItems="Center" class="sapUiSmallMarginBottom">
                                     <Title text="DETALLE DE INCUMPLIMIENTO POR ZONA NORTE (22)" class="czSectionTitle"/>
                                     <core:Icon src="sap-icon://information" class="sapUiTinyMarginBegin" color="#94a3b8"/>
                                 </HBox>
-
+                                
                                 <OverflowToolbar class="czTableToolbar">
                                     <SegmentedButton selectedKey="todas">
                                         <items>
@@ -63,10 +63,8 @@
                                     <Text text="Filtro activo: Todas" class="czFilterActiveText"/>
                                 </OverflowToolbar>
 
-                                <!-- EL MARCO DE LA TABLA (czTableScroll le da borde y curvas a la tabla gris) -->
                                 <ScrollContainer width="100%" horizontal="true" vertical="false" class="czTableScroll">
                                     <Table id="idIncumplimientoTable" items="{/IncumplimientosData}" alternateRowColors="true" class="czInnerTable">
-                                                                          <!-- Columnas de la tabla (INTACTAS) -->
                                         <columns>
                                             <Column width="6.5rem"><Text text="OT"/></Column>
                                             <Column width="5.5rem"><Text text="EQUIPO"/></Column>
@@ -78,22 +76,20 @@
                                             <Column width="8.5rem"><Text text="ESTADO"/></Column>
                                         </columns>
                                         
-                                        <!-- Celdas de la tabla (CON EL ÍCONO DEL RESPONSABLE AÑADIDO) -->
                                         <items>
                                             <ColumnListItem vAlign="Middle">
                                                 <cells>
                                                     <Link text="{OT}" class="czLinkText" wrapping="true"/>
                                                     <Text text="{Equipo}" class="czRowText" wrapping="true"/>
                                                     
-                                                    <!-- Píldora Tipo OT -->
-                                                    <ObjectStatus class="statusTag {= 'tag' + ${StatusTipo} }" text="{TipoOT}"/>
+                                                    <!-- === 1. PÍLDORA CORREGIDA: TIPO OT === -->
+                                                    <ObjectStatus class="statusTag" text="{TipoOT}" state="{= ${TipoOT} === 'Preventivo' ? 'Information' : 'Warning' }"/>
                                                     
                                                     <Text text="{Cliente}" class="czRowText" wrapping="true"/>
                                                     
-                                                    <!-- Píldora Causa -->
-                                                    <ObjectStatus class="statusTag {= 'tag' + ${StatusCausa} }" text="{CausaIncumplimiento}"/>
+                                                    <!-- === 2. PÍLDORA CORREGIDA: CAUSA INCUMPLIMIENTO === -->
+                                                    <ObjectStatus class="statusTag" text="{CausaIncumplimiento}" state="{= ${StatusCausa} === 'Error' ? 'Error' : (${StatusCausa} === 'Warning' ? 'Warning' : 'None') }"/>
                                                     
-                                                    <!-- NUEVO: Ícono junto al Responsable -->
                                                     <HBox alignItems="Center">
                                                         <core:Icon src="sap-icon://employee" color="#94a3b8" class="sapUiTinyMarginEnd"/>
                                                         <Text text="{Responsable}" class="czRowText" wrapping="true"/>
@@ -101,17 +97,16 @@
                                                     
                                                     <Text text="{DiasAtraso}" class="czRowText czRedNumber" />
                                                     
-                                                    <!-- Píldora Estado -->
-                                                    <ObjectStatus class="statusTag tagError" text="{Estado}"/>
+                                                    <!-- === 3. PÍLDORA CORREGIDA: ESTADO === -->
+                                                    <ObjectStatus class="statusTag" text="{Estado}" state="Error"/>
                                                 </cells>
                                             </ColumnListItem>
                                         </items>
-
                                     </Table>
                                 </ScrollContainer>
                                 
                                 <OverflowToolbar class="czTableFooter">
-                                    <Text text="Mostrando 1 a 3 de 22 órdenes" class="czFooterText"/>
+                                    <Text text="Mostrando 1 a 6 de 22 órdenes" class="czFooterText"/>
                                     <ToolbarSpacer />
                                     <Button type="Transparent" icon="sap-icon://slim-arrow-left" />
                                     <Button text="1" type="Emphasized"/>
@@ -124,72 +119,68 @@
                                 </OverflowToolbar>
                             </VBox>
                         </VBox>
-<!-- COLUMNA DERECHA: GRÁFICOS (25% -> 3 Columnas) -->
+<!-- COLUMNA DERECHA: GRÁFICOS (25%) -->
 <VBox>
     <layoutData><l:GridData span="XL3 L3 M12 S12" /></layoutData>
     
-    <!-- TARJETA DEL RESUMEN -->
     <VBox class="dashCard sapUiContentPadding">
-        
         <HBox alignItems="Center" class="sapUiMediumMarginBottom">
             <Title text="RESUMEN" class="czSectionTitle"/>
             <core:Icon src="sap-icon://pie-chart" class="sapUiTinyMarginBegin" color="#94a3b8"/>
         </HBox>
 
-        <!-- GRÁFICO 1: Distribución por Causa (Gráfico de Barras) -->
+        <!-- GRÁFICO 1: BARRAS HORIZONTALES (VizFrame) -->
         <VBox class="sapUiLargeMarginBottom">
-            <Text text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR CAUSA" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
+            <Text text="OT NO EJECUTADAS POR CAUSA" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
             
-            <!-- Binding al modelo de datos /ResumenCausas -->
-            <mc:InteractiveBarChart 
-                bars="{/ResumenCausas}"
-                displayedBars="5"
-                labelWidth="50%">
-                <mc:bars>
-                    <mc:InteractiveBarChartBar 
-                        label="{Causa}" 
-                        value="{Cantidad}" 
-                        displayedValue="{Cantidad} ({Porcentaje}%)" 
-                        color="{Color}"/>
-                </mc:bars>
-            </mc:InteractiveBarChart>
-            
-            <HBox justifyContent="End" class="sapUiTinyMarginTop">
-                <Text text="Total: 22 (100%)" class="czRowText" />
-            </HBox>
+            <viz:VizFrame id="barChartCausas" uiConfig="{applicationSet:'fiori'}" height="220px" width="100%" vizType="bar">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/ResumenCausas}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Causa" value="{Causa}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="OTs" value="{Cantidad}" />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="OTs" />
+                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Causa" />
+                </viz:feeds>
+            </viz:VizFrame>
         </VBox>
 
-        <!-- LÍNEA SEPARADORA (Opcional, usando un componente simple) -->
-        <Toolbar width="100%" height="1px" class="sapUiSmallMarginBottom" style="Clear"/>
+        <Toolbar width="100%" class="sapUiSmallMarginBottom" design="Transparent"/>
 
-        <!-- GRÁFICO 2: Distribución por Tipo de OT (Gráfico de Dona) -->
+        <!-- GRÁFICO 2: DONA (VizFrame) -->
         <VBox>
-            <Text text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR TIPO DE OT" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
+            <Text text="OT NO EJECUTADAS POR TIPO" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
             
-            <!-- Binding al modelo de datos /ResumenTipos -->
-            <mc:InteractiveDonutChart 
-                segments="{/ResumenTipos}"
-                displayedSegments="4">
-                <mc:segments>
-                    <mc:InteractiveDonutChartSegment 
-                        label="{Tipo}" 
-                        value="{Cantidad}" 
-                        displayedValue="{Tipo}: {Cantidad} ({Porcentaje}%)" 
-                        color="{Color}"/>
-                </mc:segments>
-            </mc:InteractiveDonutChart>
-
-            <HBox justifyContent="End" class="sapUiTinyMarginTop">
-                <Text text="Total: 22 (100%)" class="czRowText" />
-            </HBox>
+            <viz:VizFrame id="donutChartTipos" uiConfig="{applicationSet:'fiori'}" height="240px" width="100%" vizType="donut">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/ResumenTipos}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Tipo" value="{Tipo}" />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="OTs" value="{Cantidad}" />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem uid="size" type="Measure" values="OTs" />
+                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Tipo" />
+                </viz:feeds>
+            </viz:VizFrame>
         </VBox>
-
+        
     </VBox>
 </VBox>
 
+
                     </l:content>
                 </l:Grid>
-
             </VBox>
         </content>
     </Page>

@@ -1,0 +1,320 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleOperativoZonaSur"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+
+    <Page showHeader="false" class="DetalleOperativoZonaSur">
+        <content>
+            <ScrollContainer height="100%" width="100%" vertical="true" horizontal="false">
+                <VBox class="dozPage">
+
+                    <VBox class="dozHeader">
+                        <Title text="Detalle operativo de zona:" level="H1" class="dozTitle"/>
+                        <Text text="Información consolidada de carga, horas y recursos de la zona seleccionada." class="dozSubtitle"/>
+                    </VBox>
+
+                    <HBox class="dozFiltersBar" wrap="NoWrap" alignItems="End">
+                        <VBox class="dozFilterBox">
+                            <Label text="Periodo" class="dozFilterLabel"/>
+                            <Select selectedKey="{doz>/filtros/periodo}">
+                                <core:Item key="Mayo 2024" text="Mayo 2024"/>
+                                <core:Item key="Junio 2024" text="Junio 2024"/>
+                            </Select>
+                        </VBox>
+                        <VBox class="dozFilterBox">
+                            <Label text="Fecha desde" class="dozFilterLabel"/>
+                            <DatePicker value="{doz>/filtros/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+                        <VBox class="dozFilterBox">
+                            <Label text="Fecha hasta" class="dozFilterLabel"/>
+                            <DatePicker value="{doz>/filtros/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                        </VBox>
+                        <VBox class="dozFilterBox">
+                            <Label text="Zona" class="dozFilterLabel"/>
+                            <Select selectedKey="{doz>/filtros/zona}">
+                                <core:Item key="Todas" text="Todas"/>
+                                <core:Item key="Sur" text="Sur"/>
+                                <core:Item key="Norte" text="Norte"/>
+                                <core:Item key="Centro" text="Centro"/>
+                                <core:Item key="Este" text="Este"/>
+                                <core:Item key="Oeste" text="Oeste"/>
+                            </Select>
+                        </VBox>
+                        <VBox class="dozFilterBox">
+                            <Label text="Supervisor" class="dozFilterLabel"/>
+                            <Select selectedKey="{doz>/filtros/supervisor}">
+                                <core:Item key="Todas" text="Todas"/>
+                                <core:Item key="Juan Pérez" text="Juan Pérez"/>
+                                <core:Item key="Ana Torres" text="Ana Torres"/>
+                            </Select>
+                        </VBox>
+                        <VBox class="dozFilterBox">
+                            <Label text="Tipo de orden" class="dozFilterLabel"/>
+                            <Select selectedKey="{doz>/filtros/tipoOrden}">
+                                <core:Item key="Todas" text="Todas"/>
+                                <core:Item key="Inspección" text="Inspección"/>
+                                <core:Item key="Mantenimiento" text="Mantenimiento"/>
+                                <core:Item key="Call Center" text="Call Center"/>
+                            </Select>
+                        </VBox>
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" class="dozApplyButton" press=".onAplicarFiltros"/>
+                    </HBox>
+
+                    <HBox class="dozKpiRow" wrap="NoWrap">
+                        <HBox class="dozKpiCard dozKpiDanger" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconDanger" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://target-group"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Índice de presión de la zona" class="dozKpiLabel"/>
+                                <HBox alignItems="Center" class="dozKpiMainLine">
+                                    <Text text="92%" class="dozKpiNumber dozTextDanger"/>
+                                    <ObjectStatus text="Crítica" class="dozKpiBadge"/>
+                                </HBox>
+                                <Text text="Nivel muy alto" class="dozKpiSmall"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox class="dozKpiCard dozKpiBlue" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconBlue" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://checklist"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Órdenes abiertas" class="dozKpiLabel"/>
+                                <Text text="41" class="dozKpiNumber dozTextBlue"/>
+                                <Text text="30.2% del total" class="dozKpiSmall"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox class="dozKpiCard dozKpiRed" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconRed" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://lateness"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Órdenes vencidas" class="dozKpiLabel"/>
+                                <Text text="9" class="dozKpiNumber dozTextRed"/>
+                                <Text text="22.0% de las abiertas" class="dozKpiSmall"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox class="dozKpiCard dozKpiPurple" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconPurple" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://time-entry-request"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Horas programadas" class="dozKpiLabel"/>
+                                <Text text="1,420 h" class="dozKpiNumber dozTextPurple"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox class="dozKpiCard dozKpiGreen" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconGreen" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://clock"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Horas reales" class="dozKpiLabel"/>
+                                <Text text="1,518 h" class="dozKpiNumber dozTextGreen"/>
+                                <Text text="+98 h (6.9%)" class="dozKpiSmall dozTextRed"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox class="dozKpiCard dozKpiResource" alignItems="Center">
+                            <HBox class="dozKpiIcon dozIconResource" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://group"/>
+                            </HBox>
+                            <VBox class="dozKpiTextBox">
+                                <Text text="Recursos disponibles (Mecánicos / Ayudantes)" class="dozKpiLabel"/>
+                                <Text text="6 / 3" class="dozKpiNumber dozTextGreen"/>
+                                <Text text="Utilización: 96%" class="dozKpiSmall"/>
+                            </VBox>
+                        </HBox>
+                    </HBox>
+
+                    <HBox class="dozTopGrid" wrap="NoWrap">
+                        <VBox class="dozCard dozStatusCard">
+                            <HBox class="dozCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                <HBox alignItems="Center">
+                                    <Title text="Resumen de carga operativa por estado" level="H3" class="dozCardTitle"/>
+                                    <Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/>
+                                </HBox>
+                                <HBox class="dozTotalPill" alignItems="Center" justifyContent="Center">
+                                    <Text text="Total"/>
+                                    <Text text="41" class="dozTotalValue"/>
+                                </HBox>
+                            </HBox>
+                            <Text text="Distribución de órdenes de la zona por estado." class="dozCardSubtitle"/>
+
+                            <VBox class="dozStatusList" items="{doz>/resumenEstados}">
+                                <items>
+                                    <HBox class="dozStatusRow" alignItems="Center">
+                                        <HBox class="dozStatusIconBox" alignItems="Center" justifyContent="Center">
+                                            <customData><core:CustomData key="color" value="{doz>color}" writeToDom="true"/></customData>
+                                            <core:Icon src="{doz>icon}"/>
+                                        </HBox>
+                                        <Text text="{doz>estado}" class="dozStatusName"/>
+                                        <ProgressIndicator percentValue="{doz>porcentajeNumero}" displayValue="" width="100%" class="dozStatusProgress">
+                                            <customData><core:CustomData key="color" value="{doz>color}" writeToDom="true"/></customData>
+                                        </ProgressIndicator>
+                                        <Text text="{doz>cantidad}" class="dozStatusQty"/>
+                                        <Text text="{doz>porcentajeTexto}" class="dozStatusPct"/>
+                                    </HBox>
+                                </items>
+                            </VBox>
+                            <HBox class="dozCardLink" justifyContent="End" alignItems="Center"><Link text="Ver detalle de órdenes" press=".onVerDetalleOrdenes"/><core:Icon src="sap-icon://arrow-right"/></HBox>
+                        </VBox>
+
+                        <VBox class="dozCard dozHoursCard">
+
+    <HBox class="dozCardHeader" alignItems="Center">
+        <Title text="Evolución de horas (programadas vs reales)" level="H3" class="dozCardTitle"/>
+        <Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/>
+    </HBox>
+
+    <Text text="Comparativa acumulada de horas en el periodo." class="dozCardSubtitle"/>
+
+    <HBox class="dozMiniKpiRow" wrap="NoWrap">
+        <HBox class="dozMiniKpi dozMiniPurple" alignItems="Center">
+            <core:Icon src="sap-icon://calendar"/>
+            <VBox>
+                <Text text="Total programadas"/>
+                <Text text="1,420 h"/>
+            </VBox>
+        </HBox>
+
+        <HBox class="dozMiniKpi dozMiniGreen" alignItems="Center">
+            <core:Icon src="sap-icon://clock"/>
+            <VBox>
+                <Text text="Total reales"/>
+                <Text text="1,518 h"/>
+            </VBox>
+        </HBox>
+
+        <HBox class="dozMiniKpi dozMiniRed" alignItems="Center">
+            <core:Icon src="sap-icon://trend-up"/>
+            <VBox>
+                <Text text="Variación"/>
+                <Text text="+98 h (6.9%)"/>
+            </VBox>
+        </HBox>
+    </HBox>
+
+    <VBox class="dozLineChartBox">
+
+        <HBox class="dozChartLegend" justifyContent="End">
+            <HBox alignItems="Center">
+                <VBox class="dozLegendLinePurple"/>
+                <Text text="Programadas"/>
+            </HBox>
+            <HBox alignItems="Center">
+                <VBox class="dozLegendLineGreen"/>
+                <Text text="Reales"/>
+            </HBox>
+        </HBox>
+
+        <html:svg class="dozLineSvg" viewBox="0 0 620 245" preserveAspectRatio="none">
+
+            <html:defs>
+                <html:linearGradient id="dozAreaPurpleDetalle" x1="0" y1="0" x2="0" y2="1">
+                    <html:stop offset="0%" stop-color="#7C3AED" stop-opacity="0.20"/>
+                    <html:stop offset="100%" stop-color="#7C3AED" stop-opacity="0.02"/>
+                </html:linearGradient>
+            </html:defs>
+
+            <!-- Grid horizontal -->
+            <html:line x1="60" y1="30" x2="590" y2="30" class="dozGridLine"/>
+            <html:line x1="60" y1="72" x2="590" y2="72" class="dozGridLine"/>
+            <html:line x1="60" y1="114" x2="590" y2="114" class="dozGridLine"/>
+            <html:line x1="60" y1="156" x2="590" y2="156" class="dozGridLine"/>
+            <html:line x1="60" y1="198" x2="590" y2="198" class="dozGridLine"/>
+
+            <!-- Axis -->
+            <html:line x1="60" y1="30" x2="60" y2="198" class="dozAxisLine"/>
+            <html:line x1="60" y1="198" x2="590" y2="198" class="dozAxisLine"/>
+
+            <!-- Area morada -->
+            <html:path d="M 60 184 L 185 154 L 310 124 L 435 92 L 560 60 L 560 198 L 60 198 Z" fill="url(#dozAreaPurpleDetalle)"/>
+
+            <!-- Lines -->
+            <html:polyline points="60,184 185,154 310,124 435,92 560,60" class="dozLineProgramada"/>
+            <html:polyline points="60,174 185,134 310,104 435,72 560,38" class="dozLineReal"/>
+
+            <!-- Dots programadas -->
+            <html:circle cx="60" cy="184" r="4.5" class="dozDotProgramada"/>
+            <html:circle cx="185" cy="154" r="4.5" class="dozDotProgramada"/>
+            <html:circle cx="310" cy="124" r="4.5" class="dozDotProgramada"/>
+            <html:circle cx="435" cy="92" r="4.5" class="dozDotProgramada"/>
+            <html:circle cx="560" cy="60" r="4.5" class="dozDotProgramada"/>
+
+            <!-- Dots reales -->
+            <html:circle cx="60" cy="174" r="4.5" class="dozDotReal"/>
+            <html:circle cx="185" cy="134" r="4.5" class="dozDotReal"/>
+            <html:circle cx="310" cy="104" r="4.5" class="dozDotReal"/>
+            <html:circle cx="435" cy="72" r="4.5" class="dozDotReal"/>
+            <html:circle cx="560" cy="38" r="4.5" class="dozDotReal"/>
+
+            <!-- Y labels -->
+            <html:text x="12" y="35" class="dozSvgLabel">2,000</html:text>
+            <html:text x="18" y="77" class="dozSvgLabel">1,600</html:text>
+            <html:text x="20" y="119" class="dozSvgLabel">1,200</html:text>
+            <html:text x="29" y="161" class="dozSvgLabel">800</html:text>
+            <html:text x="29" y="202" class="dozSvgLabel">400</html:text>
+
+            <!-- X labels -->
+            <html:text x="46" y="226" class="dozSvgLabel">Sem 18</html:text>
+            <html:text x="171" y="226" class="dozSvgLabel">Sem 19</html:text>
+            <html:text x="296" y="226" class="dozSvgLabel">Sem 20</html:text>
+            <html:text x="421" y="226" class="dozSvgLabel">Sem 21</html:text>
+            <html:text x="546" y="226" class="dozSvgLabel">Sem 22</html:text>
+
+            <!-- Final labels -->
+            <html:text x="566" y="41" class="dozSvgLabelGreen">1,518 h</html:text>
+            <html:text x="566" y="63" class="dozSvgLabelPurple">1,420 h</html:text>
+
+        </html:svg>
+    </VBox>
+
+    <HBox class="dozCardLink" justifyContent="End" alignItems="Center">
+        <Link text="Ver detalle de horas" press=".onVerDetalleHoras"/>
+        <core:Icon src="sap-icon://arrow-right"/>
+    </HBox>
+
+</VBox>
+
+                        <VBox class="dozCard dozResourcesCard">
+                            <HBox class="dozCardHeader" alignItems="Center"><Title text="Recursos y utilización" level="H3" class="dozCardTitle"/><Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/></HBox>
+                            <Text text="Capacidad, utilización y disponibilidad de recursos." class="dozCardSubtitle"/>
+                            <VBox class="dozGaugeWrap" alignItems="Center"><html:div class="dozGauge"><html:div class="dozGaugeNeedle"></html:div><html:div class="dozGaugeCenter"><html:div class="dozGaugeValue">96%</html:div><html:div class="dozGaugeText">Utilización</html:div></html:div><html:span class="dozGaugeLabel dozGaugeLabel0">0%</html:span><html:span class="dozGaugeLabel dozGaugeLabel50">50%</html:span><html:span class="dozGaugeLabel dozGaugeLabel80">80%</html:span><html:span class="dozGaugeLabel dozGaugeLabel100">100%</html:span></html:div></VBox>
+                            <HBox class="dozResourceBoxes" wrap="NoWrap"><VBox class="dozResourceBox"><HBox alignItems="Center"><HBox class="dozResourceIcon dozIconBlue" alignItems="Center" justifyContent="Center"><core:Icon src="sap-icon://technical-object"/></HBox><Text text="Asignados" class="dozResourceTitle"/></HBox><HBox justifyContent="SpaceBetween"><Text text="Mecánicos"/><Text text="54"/></HBox><HBox justifyContent="SpaceBetween"><Text text="Ayudantes"/><Text text="24"/></HBox></VBox><VBox class="dozResourceBox"><HBox alignItems="Center"><HBox class="dozResourceIcon dozIconGreen" alignItems="Center" justifyContent="Center"><core:Icon src="sap-icon://sys-enter-2"/></HBox><Text text="Disponibles" class="dozResourceTitle"/></HBox><HBox justifyContent="SpaceBetween"><Text text="Mecánicos"/><Text text="6"/></HBox><HBox justifyContent="SpaceBetween"><Text text="Ayudantes"/><Text text="3"/></HBox></VBox></HBox>
+                            <HBox class="dozCardLink" justifyContent="End" alignItems="Center"><Link text="Ver detalle de recursos" press=".onVerDetalleRecursos"/><core:Icon src="sap-icon://arrow-right"/></HBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox class="dozBottomGrid" wrap="NoWrap">
+                        <VBox class="dozCard dozCausesCard">
+                            <HBox class="dozCardHeader" alignItems="Center"><Title text="Principales causas de presión" level="H3" class="dozCardTitle"/><Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/></HBox>
+                            <Text text="Factores que más impactan el índice de presión de la zona." class="dozCardSubtitle"/>
+                            <HBox class="dozCauseHeader"><Text text=""/><Text text="IMPACTO"/></HBox>
+                            <VBox class="dozCauseList" items="{doz>/causasPresion}"><items><HBox class="dozCauseRow" alignItems="Center"><HBox class="dozCauseIconBox" alignItems="Center" justifyContent="Center"><customData><core:CustomData key="color" value="{doz>color}" writeToDom="true"/></customData><core:Icon src="{doz>icon}"/></HBox><Text text="{doz>causa}" class="dozCauseName"/><ProgressIndicator percentValue="{doz>impacto}" displayValue="" width="100%" class="dozCauseProgress"><customData><core:CustomData key="color" value="{doz>color}" writeToDom="true"/></customData></ProgressIndicator><Text text="{doz>impactoTexto}" class="dozCauseImpact"/><Link text="Ver detalle" press=".onVerDetalleCausa"/><core:Icon src="sap-icon://navigation-right-arrow" class="dozMiniArrow"/></HBox></items></VBox>
+                        </VBox>
+
+                        <VBox class="dozCard dozClientsCard">
+                            <HBox class="dozCardHeader" alignItems="Center" justifyContent="Center"><Title text="Clientes / Elevadores con mayor carga" level="H3" class="dozCardTitle"/><Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/></HBox>
+                            <Text text="Top 5 de clientes o elevadores con más órdenes abiertas y vencidas." class="dozCardSubtitle"/>
+                            <Table id="tblClientesCarga" items="{doz>/clientesCarga}" class="dozSmallTable" fixedLayout="true"><columns><Column width="42%"><Text text="Cliente / Sitio"/></Column><Column hAlign="Center"><Text text="Elevador"/></Column><Column hAlign="Center"><Text text="Órdenes abiertas"/></Column><Column hAlign="Center"><Text text="Vencidas"/></Column></columns><items><ColumnListItem><cells><HBox alignItems="Center"><core:Icon src="sap-icon://building" class="dozTableIcon"/><Text text="{doz>cliente}" class="dozTableStrong"/></HBox><Text text="{doz>elevador}" class="dozTableText"/><Text text="{doz>abiertas}" class="dozTableStrongCenter"/><ObjectStatus text="{doz>vencidas}" class="dozNumberBadge"/></cells></ColumnListItem></items></Table>
+                            <HBox class="dozCardLink" justifyContent="End" alignItems="Center"><Link text="Ver detalle por cliente / elevador" press=".onVerDetalleCliente"/><core:Icon src="sap-icon://arrow-right"/></HBox>
+                        </VBox>
+
+                        <VBox class="dozCard dozOrdersCard">
+                            <HBox class="dozCardHeader" alignItems="Center" justifyContent="SpaceBetween"><HBox alignItems="Center"><Title text="Órdenes próximas a vencer" level="H3" class="dozCardTitle"/><Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/></HBox><HBox class="dozCardLinkTop" alignItems="Center"><Link text="Ver todas próximas a vencer" press=".onVerTodasProximas"/><core:Icon src="sap-icon://arrow-right"/></HBox></HBox>
+                            <Text text="Órdenes que vencerán en los próximos 7 días." class="dozCardSubtitle"/>
+                            <Table id="tblOrdenesVencer" items="{doz>/ordenesVencer}" class="dozOrdersTable" fixedLayout="true"><columns><Column width="18%"><Text text="OT"/></Column><Column width="22%"><Text text="TIPO DE ORDEN"/></Column><Column hAlign="Center"><Text text="ELEVADOR"/></Column><Column hAlign="Center"><Text text="COMPROMISO"/></Column><Column hAlign="Center" width="9%"><Text text="DÍAS"/></Column><Column hAlign="Center"><Text text="PRIORIDAD"/></Column></columns><items><ColumnListItem><cells><HBox alignItems="Center"><core:Icon src="sap-icon://building" class="dozTableIcon"/><Text text="{doz>ot}" class="dozTableStrong"/></HBox><ObjectStatus text="{doz>tipo}" class="dozTypeBadge"><customData><core:CustomData key="tipo" value="{doz>tipoKey}" writeToDom="true"/></customData></ObjectStatus><Text text="{doz>elevador}" class="dozTableText"/><Text text="{doz>compromiso}" class="dozTableText"/><ObjectStatus text="{doz>dias}" class="dozDayBadge"/><ObjectStatus text="{doz>prioridad}" class="dozPriorityBadge"><customData><core:CustomData key="priority" value="{doz>prioridadKey}" writeToDom="true"/></customData></ObjectStatus></cells></ColumnListItem></items></Table>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>

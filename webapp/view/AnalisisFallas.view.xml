@@ -1,0 +1,170 @@
+<mvc:View
+    controllerName="mantenimiento.controller.AnalisisFallas"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:microchart="sap.suite.ui.microchart"
+    displayBlock="true">
+
+    <Page showHeader="false" id="fallasPage" class="AnalisisFallas">
+        <content>
+            <ScrollContainer height="100%" vertical="true" horizontal="false">
+                <VBox class="cmPageContainer">
+                    
+                    <!-- HEADER -->
+                    <VBox class="cmHeader">
+                        <Title text="Análisis de fallas y servicios afectados" level="H1" class="cmMainTitle"/>
+                        <Text text="Identifique qué tipos de fallas están impactando más el cumplimiento y dónde se concentran." class="cmSubtitle"/>
+                    </VBox>
+
+                    <!-- FILTROS -->
+                    <HBox class="sapUiSmallMarginBottom" justifyContent="End" alignItems="End">
+                        <DatePicker value="Semana 18 (29 abr - 5 may 2024)" class="sapUiSmallMarginEnd" width="220px"/>
+                        <Select selectedKey="norte" width="120px" class="sapUiSmallMarginEnd">
+                            <core:Item key="norte" text="Norte" />
+                            <core:Item key="sur" text="Sur" />
+                            <core:Item key="centro" text="Centro" />
+                        </Select>
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized"/>
+                    </HBox>
+
+                    <!-- KPI CARDS (ESTRUCTURA FIEL A TU IMAGEN) -->
+                    <HBox class="cmKpiRow" wrap="Wrap">
+                        
+                        <!-- KPI 1: OT Afectadas (Morado) -->
+                        <VBox class="cmKpiCard cmKpiPurple">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconPurple">
+                                    <core:Icon src="sap-icon://form"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="OT afectadas" class="cmKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="22" class="cmKpiNumber cmPurpleText"/>
+                                    </HBox>
+                                    <Text text="Del total de desviaciones" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- KPI 2: Clasificación Principal (Verde) -->
+                        <VBox class="cmKpiCard cmKpiGreen">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconGreen">
+                                    <core:Icon src="sap-icon://wrench"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="Clasificación principal" class="cmKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="Falla mecánica" class="cmKpiTextValue cmGreenText"/>
+                                    </HBox>
+                                    <Text text="32% del total" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- KPI 3: Equipos Afectados (Naranja) -->
+                        <VBox class="cmKpiCard cmKpiOrange">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconOrange">
+                                    <core:Icon src="sap-icon://BusinessSuiteInAppSymbols/icon-multiple-objects"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="Equipos afectados" class="cmKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="15" class="cmKpiNumber cmOrangeText"/>
+                                    </HBox>
+                                    <Text text="Equipos únicos" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- KPI 4: Clientes Afectados (Azul) -->
+                        <VBox class="cmKpiCard cmKpiBlue">
+                            <HBox alignItems="Center">
+                                <VBox class="cmKpiIcon cmKpiIconBlue">
+                                    <core:Icon src="sap-icon://business-objects-mobile"/>
+                                </VBox>
+                                <VBox class="cmKpiContent">
+                                    <Text text="Clientes afectados" class="cmKpiLabel"/>
+                                    <HBox alignItems="Baseline">
+                                        <Text text="9" class="cmKpiNumber cmBlueText"/>
+                                    </HBox>
+                                    <Text text="Clientes únicos" class="cmKpiDescription"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- TABLA DE FALLAS (se mantiene intacta) -->
+                    <f:Card class="sapUiLargeMarginTop">
+                        <f:header>
+                            <HBox alignItems="Center" class="sapUiSmallMargin">
+                                <core:Icon src="sap-icon://shield" class="sapUiTinyMarginEnd" color="#3F5161"/>
+                                <Title level="H4" text="CLASIFICACIÓN DE FALLAS"/>
+                                <core:Icon src="sap-icon://information" class="sapUiTinyMarginBegin" size="0.875rem"/>
+                            </HBox>
+                        </f:header>
+                        <f:content>
+                            <VBox>
+                                <Table id="fallasTable" items="{path: 'fallasModel>/clasificaciones'}" class="sapUiNoMarginTop">
+                                    <columns>
+                                        <Column width="3rem"><Text text="#"/></Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true"><Text text="Clasificación de falla"/></Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                                            <HBox alignItems="Center" justifyContent="End">
+                                                <Text text="OT afectadas"/>
+                                                <core:Icon src="sap-icon://sort-ascending" size="0.75rem" class="sapUiTinyMarginBegin"/>
+                                            </HBox>
+                                        </Column>
+                                        <Column minScreenWidth="Desktop" demandPopin="true" hAlign="End"><Text text="Equipos afectados"/></Column>
+                                        <Column minScreenWidth="Desktop" demandPopin="true" hAlign="End"><Text text="Clientes afectados"/></Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true" width="10rem"><Text text="% del impacto"/></Column>
+                                        <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="Tendencia"/></Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem type="Navigation">
+                                            <cells>
+                                                <Text text="{fallasModel>id}"/>
+                                                <HBox alignItems="Center">
+                                                    <core:Icon src="{fallasModel>icon}" class="sapUiTinyMarginEnd icon-falla"/>
+                                                    <Text text="{fallasModel>nombre}"/>
+                                                </HBox>
+                                                <Text text="{fallasModel>otAfectadas}"/>
+                                                <Text text="{fallasModel>equiposAfectados}"/>
+                                                <Text text="{fallasModel>clientesAfectados}"/>
+                                                <VBox>
+                                                    <Text text="{= ${fallasModel>impacto} + '%'}" class="impactoText"/>
+                                                    <ProgressIndicator percentValue="{fallasModel>impacto}" displayValue=" " state="{fallasModel>impactoState}" class="impactoProgress"/>
+                                                </VBox>
+                                                <VBox alignItems="Center" class="tendenciaCell">
+                                                    <microchart:LineMicroChart points="{path: 'fallasModel>tendenciaData'}" showPoints="true" size="Responsive" color="{fallasModel>tendenciaColor}">
+                                                        <microchart:points>
+                                                            <microchart:LineMicroChartPoint x="{fallasModel>x}" y="{fallasModel>y}" />
+                                                        </microchart:points>
+                                                    </microchart:LineMicroChart>
+                                                    <Text text="{fallasModel>tendenciaTexto}" class="tendenciaTexto"/>
+                                                </VBox>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                                <Toolbar>
+                                    <Text text="Mostrando 1 a 6 de 6 clasificaciones" class="sapUiSmallMarginBegin"/>
+                                    <ToolbarSpacer/>
+                                    <Select selectedKey="10" width="120px" class="sapUiSmallMarginEnd">
+                                        <core:Item key="10" text="10 por página"/>
+                                        <core:Item key="20" text="20 por página"/>
+                                        <core:Item key="50" text="50 por página"/>
+                                    </Select>
+                                </Toolbar>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
+                </VBox>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>
