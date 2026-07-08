@@ -7,342 +7,144 @@ sap.ui.define([
 ], function (Controller, JSONModel, MessageToast, Filter, FilterOperator) {
     "use strict";
 
-    return Controller.extend("mantenimiento.controller.ConsumoRealVsPlanCategoria", {
+    return Controller.extend("mantenimiento.controller.BalanceOperativoZona", {
 
         onInit: function () {
-            var oData = this._getMockData();
-            this.getView().setModel(new JSONModel(oData), "crpc");
+            this.getView().setModel(new JSONModel(this._getMockData()), "boz");
         },
 
         onAfterRendering: function () {
             var that = this;
 
             setTimeout(function () {
-                that._configurarGraficaTendencia();
-            }, 300);
+                that._configurarGraficaCapacidad();
+            }, 250);
         },
 
         _getMockData: function () {
             return {
-                filtros: {
-                    periodo: "mayo2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
-                    zona: "todas",
-                    cliente: "todos",
-                    responsable: "todos",
-                    tipoOt: "todas"
-                },
-
-                kpis: {
-                    planTotal: "2,200",
-                    realTotal: "2,368",
-                    desviacionTotal: "+168"
-                },
-
-                materialesDesviacion: [
-                    {
-                        id: "1",
-                        material: "Aceite hidráulico",
-                        icono: "sap-icon://water",
-                        categoria: "Lubricantes",
-                        plan: "250",
-                        real: "282",
-                        contribucion: 100,
-                        contribucionTexto: "19.0%",
-                        acumulado: "19.0%",
-                        ot: "7",
-                        elevadores: "5",
-                        clientes: "2",
-                        norte: "+19",
-                        centro: "+10",
-                        sur: "+3",
-                        occidente: "0",
-                        total: "+32",
-                        estado: "Red",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "2",
-                        material: "Sensor de puerta",
-                        icono: "sap-icon://shipping-status",
-                        categoria: "Refacciones",
-                        plan: "82",
-                        real: "100",
-                        contribucion: 56,
-                        contribucionTexto: "10.7%",
-                        acumulado: "29.8%",
-                        ot: "16",
-                        elevadores: "12",
-                        clientes: "4",
-                        norte: "+12",
-                        centro: "+1",
-                        sur: "+2",
-                        occidente: "0",
-                        total: "+18",
-                        estado: "Orange",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "3",
-                        material: "Zapata de freno",
-                        icono: "sap-icon://product",
-                        categoria: "Refacciones",
-                        plan: "129",
-                        real: "142",
-                        contribucion: 41,
-                        contribucionTexto: "7.7%",
-                        acumulado: "37.5%",
-                        ot: "11",
-                        elevadores: "8",
-                        clientes: "3",
-                        norte: "+6",
-                        centro: "+3",
-                        sur: "+2",
-                        occidente: "0",
-                        total: "+13",
-                        estado: "Orange",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "4",
-                        material: "Rodamiento guía",
-                        icono: "sap-icon://technical-object",
-                        categoria: "Refacciones",
-                        plan: "40",
-                        real: "48",
-                        contribucion: 25,
-                        contribucionTexto: "4.8%",
-                        acumulado: "42.3%",
-                        ot: "6",
-                        elevadores: "5",
-                        clientes: "2",
-                        norte: "+5",
-                        centro: "+2",
-                        sur: "+1",
-                        occidente: "0",
-                        total: "+8",
-                        estado: "Yellow",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "5",
-                        material: "Fusible de control",
-                        icono: "sap-icon://electrocardiogram",
-                        categoria: "Consumibles",
-                        plan: "67",
-                        real: "51",
-                        contribucion: 50,
-                        contribucionTexto: "-9.5%",
-                        acumulado: "32.7%",
-                        ot: "5",
-                        elevadores: "4",
-                        clientes: "2",
-                        norte: "-10",
-                        centro: "-5",
-                        sur: "-1",
-                        occidente: "0",
-                        total: "-16",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Green",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "6",
-                        material: "Cable eléctrico",
-                        icono: "sap-icon://chain-link",
-                        categoria: "Consumibles",
-                        plan: "60",
-                        real: "58",
-                        contribucion: 8,
-                        contribucionTexto: "-1.2%",
-                        acumulado: "31.5%",
-                        ot: "4",
-                        elevadores: "3",
-                        clientes: "2",
-                        norte: "-1",
-                        centro: "-1",
-                        sur: "0",
-                        occidente: "0",
-                        total: "-2",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Neutral",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "7",
-                        material: "Grasa multipropósito",
-                        icono: "sap-icon://lab",
-                        categoria: "Lubricantes",
-                        plan: "80",
-                        real: "74",
-                        contribucion: 19,
-                        contribucionTexto: "-3.6%",
-                        acumulado: "27.9%",
-                        ot: "3",
-                        elevadores: "3",
-                        clientes: "1",
-                        norte: "-3",
-                        centro: "-2",
-                        sur: "-1",
-                        occidente: "0",
-                        total: "-6",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Green",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "8",
-                        material: "Contactores",
-                        icono: "sap-icon://connected",
-                        categoria: "Refacciones",
-                        plan: "70",
-                        real: "67",
-                        contribucion: 10,
-                        contribucionTexto: "-1.8%",
-                        acumulado: "26.1%",
-                        ot: "3",
-                        elevadores: "2",
-                        clientes: "1",
-                        norte: "-2",
-                        centro: "-1",
-                        sur: "0",
-                        occidente: "0",
-                        total: "-3",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Neutral",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    }
+                presionZona: [
+                    { zona: "Sur", valor: "92%", porcentaje: "92%", label: "Crítica", estado: "Red" },
+                    { zona: "Norte", valor: "87%", porcentaje: "87%", label: "Alta", estado: "Orange" },
+                    { zona: "Centro", valor: "74%", porcentaje: "74%", label: "Media", estado: "Yellow" },
+                    { zona: "Este", valor: "58%", porcentaje: "58%", label: "Controlada", estado: "Green" },
+                    { zona: "Oeste", valor: "42%", porcentaje: "42%", label: "Baja", estado: "GreenLight" }
                 ],
 
-                detalleConsumo: [
+                matriz: [
                     {
-                        fecha: "01/05/2024",
-                        plan: "50.0",
-                        real: "58.0",
-                        zona: "Norte",
-                        cliente: "Tecno Elevadores",
-                        responsable: "Juan Pérez",
-                        ot: "15",
-                        elevador: "E-101",
-                        varPzas: "+8.0",
-                        varPct: "+16%"
-                    },
-                    {
-                        fecha: "08/05/2024",
-                        plan: "50.0",
-                        real: "52.0",
-                        zona: "Centro",
-                        cliente: "Servi Ascensores",
-                        responsable: "Ana Torres",
-                        ot: "18",
-                        elevador: "E-203",
-                        varPzas: "+2.0",
-                        varPct: "+4%"
-                    },
-                    {
-                        fecha: "15/05/2024",
-                        plan: "50.0",
-                        real: "55.0",
                         zona: "Sur",
-                        cliente: "Grupo Altura",
-                        responsable: "Luis Gómez",
-                        ot: "12",
-                        elevador: "E-305",
-                        varPzas: "+5.0",
-                        varPct: "+10%"
+                        carga: "41",
+                        pendientes: "22",
+                        vencidas: "9",
+                        estadoOrdenes: "Alta",
+                        estadoOrdenesKey: "Red",
+                        programadas: "1,420 h",
+                        reales: "1,518 h",
+                        utilHoras: "107%",
+                        estadoHoras: "Alta",
+                        estadoHorasKey: "Red",
+                        disponibles: "6",
+                        utilRecursos: "96%",
+                        estadoRecursos: "Bajo",
+                        estadoRecursosKey: "Red"
                     },
                     {
-                        fecha: "22/05/2024",
-                        plan: "50.0",
-                        real: "60.0",
                         zona: "Norte",
-                        cliente: "Tecno Elevadores",
-                        responsable: "Juan Pérez",
-                        ot: "16",
-                        elevador: "E-101",
-                        varPzas: "+10.0",
-                        varPct: "+20%"
+                        carga: "44",
+                        pendientes: "18",
+                        vencidas: "8",
+                        estadoOrdenes: "Alta",
+                        estadoOrdenesKey: "Red",
+                        programadas: "1,680 h",
+                        reales: "1,597 h",
+                        utilHoras: "95%",
+                        estadoHoras: "Alta",
+                        estadoHorasKey: "Red",
+                        disponibles: "9",
+                        utilRecursos: "80%",
+                        estadoRecursos: "Media",
+                        estadoRecursosKey: "Yellow"
                     },
                     {
-                        fecha: "29/05/2024",
-                        plan: "50.0",
-                        real: "57.0",
-                        zona: "Occidente",
-                        cliente: "Plus Elevadores",
-                        responsable: "Carla Méndez",
-                        ot: "14",
-                        elevador: "E-402",
-                        varPzas: "+7.0",
-                        varPct: "+14%"
+                        zona: "Centro",
+                        carga: "34",
+                        pendientes: "14",
+                        vencidas: "5",
+                        estadoOrdenes: "Media",
+                        estadoOrdenesKey: "Yellow",
+                        programadas: "1,280 h",
+                        reales: "1,201 h",
+                        utilHoras: "94%",
+                        estadoHoras: "Media",
+                        estadoHorasKey: "Yellow",
+                        disponibles: "8",
+                        utilRecursos: "67%",
+                        estadoRecursos: "Media",
+                        estadoRecursosKey: "Yellow"
+                    },
+                    {
+                        zona: "Este",
+                        carga: "21",
+                        pendientes: "8",
+                        vencidas: "2",
+                        estadoOrdenes: "Baja",
+                        estadoOrdenesKey: "Green",
+                        programadas: "900 h",
+                        reales: "765 h",
+                        utilHoras: "85%",
+                        estadoHoras: "Media",
+                        estadoHorasKey: "Yellow",
+                        disponibles: "7",
+                        utilRecursos: "68%",
+                        estadoRecursos: "Alta",
+                        estadoRecursosKey: "Green"
+                    },
+                    {
+                        zona: "Oeste",
+                        carga: "14",
+                        pendientes: "5",
+                        vencidas: "0",
+                        estadoOrdenes: "Baja",
+                        estadoOrdenesKey: "Green",
+                        programadas: "720 h",
+                        reales: "540 h",
+                        utilHoras: "75%",
+                        estadoHoras: "Baja",
+                        estadoHorasKey: "Green",
+                        disponibles: "7",
+                        utilRecursos: "55%",
+                        estadoRecursos: "Alta",
+                        estadoRecursosKey: "Green"
                     }
                 ],
 
-                tendenciaSemanal: [
-                    {
-                        semana: "Semana 1\n29 abr - 5 may",
-                        plan: 0,
-                        real: 3,
-                        variacion: -3
-                    },
-                    {
-                        semana: "Semana 2\n6 - 12 may",
-                        plan: 2,
-                        real: 5,
-                        variacion: 3
-                    },
-                    {
-                        semana: "Semana 3\n13 - 19 may",
-                        plan: 3,
-                        real: 10,
-                        variacion: 7
-                    },
-                    {
-                        semana: "Semana 4\n20 - 26 may",
-                        plan: 4,
-                        real: 15,
-                        variacion: 11
-                    },
-                    {
-                        semana: "Semana 5\n27 may - 2 jun",
-                        plan: 3,
-                        real: 20,
-                        variacion: 17
-                    }
+                composicion: [
+                    { zona: "Sur", vencidas: "46%", vencidasTxt: "46%", excedidas: "14%", excedidasTxt: "14%", recursos: "17%", recursosTxt: "17%", reprogramaciones: "8%", reprogramacionesTxt: "8%", materiales: "15%", materialesTxt: "15%" },
+                    { zona: "Norte", vencidas: "38%", vencidasTxt: "38%", excedidas: "18%", excedidasTxt: "18%", recursos: "20%", recursosTxt: "20%", reprogramaciones: "9%", reprogramacionesTxt: "9%", materiales: "15%", materialesTxt: "15%" },
+                    { zona: "Centro", vencidas: "28%", vencidasTxt: "28%", excedidas: "17%", excedidasTxt: "17%", recursos: "20%", recursosTxt: "20%", reprogramaciones: "14%", reprogramacionesTxt: "14%", materiales: "15%", materialesTxt: "15%" },
+                    { zona: "Este", vencidas: "26%", vencidasTxt: "26%", excedidas: "16%", excedidasTxt: "16%", recursos: "13%", recursosTxt: "13%", reprogramaciones: "20%", reprogramacionesTxt: "20%", materiales: "25%", materialesTxt: "25%" },
+                    { zona: "Oeste", vencidas: "24%", vencidasTxt: "24%", excedidas: "14%", excedidasTxt: "14%", recursos: "21%", recursosTxt: "21%", reprogramaciones: "16%", reprogramacionesTxt: "16%", materiales: "25%", materialesTxt: "25%" }
+                ],
+
+                capacidad: [
+                    { zona: "Sur", recursos: 14 },
+                    { zona: "Norte", recursos: 10 },
+                    { zona: "Centro", recursos: 6 },
+                    { zona: "Este", recursos: 8 },
+                    { zona: "Oeste", recursos: 13 }
+                ],
+
+                redistribucion: [
+                    { origen: "Sur", destino: "Oeste", motivo: "Oeste tiene capacidad disponible" },
+                    { origen: "Sur", destino: "Este", motivo: "Este tiene menor utilización" },
+                    { origen: "Norte", destino: "Este", motivo: "Este tiene menor utilización" }
                 ]
             };
         },
 
-        _configurarGraficaTendencia: function () {
-            var oChart = this.byId("vfTendenciaDesviacion");
+        _configurarGraficaCapacidad: function () {
+            var oChart = this.byId("vfCapacidadDisponible");
 
             if (!oChart) {
                 return;
@@ -350,47 +152,50 @@ sap.ui.define([
 
             oChart.setVizProperties({
                 plotArea: {
-                    colorPalette: [
-                        "#93C5FD",
-                        "#2563EB",
-                        "#EF4444"
-                    ],
+                    colorPalette: ["#16A34A"],
                     drawingEffect: "normal",
                     marker: {
                         visible: true,
-                        size: 4
+                        size: 7
                     },
                     dataLabel: {
-                        visible: true,
+                        visible: false
+                    },
+                    line: {
+                        width: 3
+                    }
+                },
+                legend: {
+                    visible: true,
+                    label: {
                         style: {
                             color: "#172554",
                             fontSize: "10px"
                         }
-                    },
-                    line: {
-                        width: 2
                     }
-                },
-                legend: {
-                    visible: false
                 },
                 title: {
                     visible: false
                 },
                 valueAxis: {
                     title: {
-                        visible: false
+                        visible: true,
+                        text: "Recursos disponibles (uds.)",
+                        style: {
+                            color: "#16A34A",
+                            fontSize: "10px"
+                        }
                     },
                     label: {
                         style: {
-                            color: "#64748B",
+                            color: "#16A34A",
                             fontSize: "10px"
                         }
                     },
                     scale: {
                         fixedRange: true,
-                        minValue: -10,
-                        maxValue: 30
+                        minValue: 0,
+                        maxValue: 16
                     },
                     gridline: {
                         visible: true
@@ -402,8 +207,9 @@ sap.ui.define([
                     },
                     label: {
                         style: {
-                            color: "#334155",
-                            fontSize: "9px"
+                            color: "#172554",
+                            fontSize: "10px",
+                            fontWeight: "bold"
                         }
                     }
                 },
@@ -425,9 +231,9 @@ sap.ui.define([
             MessageToast.show("Filtros aplicados correctamente");
         },
 
-        onBuscarMaterial: function (oEvent) {
+        onBuscarZona: function (oEvent) {
             var sValue = oEvent.getParameter("newValue") || "";
-            var oTable = this.byId("tblMaterialesDesv");
+            var oTable = this.byId("tblBalanceZona");
             var oBinding = oTable && oTable.getBinding("items");
 
             if (!oBinding) {
@@ -440,17 +246,8 @@ sap.ui.define([
             }
 
             oBinding.filter([
-                new Filter("material", FilterOperator.Contains, sValue)
+                new Filter("zona", FilterOperator.Contains, sValue)
             ]);
-        },
-
-        onMaterialPress: function (oEvent) {
-            MessageToast.show("Detalle de " + oEvent.getSource().getText());
-        },
-
-        onVerSemanas: function () {
-            MessageToast.show("Ver histórico de 24 semanas");
         }
-
     });
 });

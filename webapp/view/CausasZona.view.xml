@@ -4,73 +4,36 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
-    xmlns:microchart="sap.suite.ui.microchart">
+    xmlns:mc="sap.suite.ui.microchart"> <!-- ESTA ES LA LÍNEA CRÍTICA -->
 
     <Page id="pageCausasZona" showHeader="false" class="CausasZonaView">
         <content>
             <VBox id="pageContainer" class="czContainer">
                 
-                <!-- ========================================== -->
-                <!-- 1. ENCABEZADO Y FILTROS (TU CÓDIGO INTACTO)-->
-                <!-- ========================================== -->
-                <HBox class="czHeader" justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap">
-                    <VBox>
+                <!-- 1. ENCABEZADO Y FILTROS (INTACTO Y FUNCIONANDO) -->
+                <HBox class="czHeader" justifyContent="SpaceBetween" alignItems="End" wrap="Wrap" width="100%">
+                    <VBox class="sapUiSmallMarginBottom">
                         <Link text="&lt; Volver a cumplimiento general de órdenes" press=".onNavBack" class="czBackLink"/>
                         <Title text="Causas por zona" class="czTitle"/>
                         <Text text="Detalle de las causas de incumplimiento del plan por zona y semana." class="czSubtitle"/>
                     </VBox>
-                </HBox>
-
-                <FlexBox class="czFilterCard" justifyContent="End" alignItems="End" wrap="Wrap">
-                    <HBox alignItems="End" wrap="Wrap">
-                        <VBox class="czFilterItem sapUiSmallMarginEnd">
-                            <Label text="Semana"/>
-                            <DatePicker value="Semana 18 (29 abr - 5 may 2024)" displayFormat="dd/MM/yyyy" />
-                        </VBox>
-                        <VBox class="czFilterItem sapUiSmallMarginEnd">
-                            <Label text="Zona"/>
-                            <Select selectedKey="norte">
-                                <items><core:Item key="norte" text="Norte" /></items>
-                            </Select>
-                        </VBox>
-                        <VBox class="czFilterItem">
-                            <Button text="Aplicar Filtros" icon="sap-icon://filter" type="Emphasized" class="czFilterButton"/>
-                        </VBox>
+                    <HBox alignItems="End" class="czFilterPanel sapUiSmallMarginBottom" wrap="Wrap">
+                        <VBox class="czFilterItem"><Label text="Semana" class="czFilterLabel"/><DatePicker value="Semana 18 (29 abr - 5 may 2024)" displayFormat="dd/MM/yyyy" class="czFilterInput"/></VBox>
+                        <VBox class="czFilterItem"><Label text="Zona" class="czFilterLabel"/><Select selectedKey="norte" class="czFilterInput"><items><core:Item key="norte" text="Norte" /></items></Select></VBox>
+                        <VBox class="czFilterItem"><Button text="Aplicar Filtros" icon="sap-icon://filter" class="czFilterButton"/></VBox>
                     </HBox>
-                </FlexBox>
+                </HBox>
 
-                <!-- ========================================== -->
-                <!-- 2. TARJETAS KPI (TU CÓDIGO INTACTO)        -->
-                <!-- ========================================== -->
+                <!-- 2. TARJETAS KPI (INTACTO Y FUNCIONANDO) -->
                 <HBox class="czKpiRow" wrap="Wrap">
-                    <VBox class="czKpiCard czKpiBlue">
-                        <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czBlueSoft"><core:Icon src="sap-icon://inspection" class="czKpiIcon"/></VBox>
-                            <VBox><Text text="OT PLANEADAS" class="czKpiLabel"/><Title text="84" class="czKpiNumber czBlueText"/><Text text="100% del plan" class="czKpiSub"/></VBox>
-                        </HBox>
-                    </VBox>
-                    <VBox class="czKpiCard czKpiGreen">
-                        <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czGreenSoft"><core:Icon src="sap-icon://accept" class="czKpiIcon"/></VBox>
-                            <VBox><Text text="OT EJECUTADAS" class="czKpiLabel"/><Title text="62" class="czKpiNumber czGreenText"/><Text text="74% del plan" class="czKpiSub"/></VBox>
-                        </HBox>
-                    </VBox>
-                    <VBox class="czKpiCard czKpiRed">
-                        <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czRedSoft"><core:Icon src="sap-icon://message-error" class="czKpiIcon"/></VBox>
-                            <VBox><Text text="OT NO EJECUTADAS" class="czKpiLabel"/><Title text="22" class="czKpiNumber czRedText"/><Text text="26% del plan" class="czKpiSub"/></VBox>
-                        </HBox>
-                    </VBox>
-                    <VBox class="czKpiCard czKpiPurple">
-                        <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czPurpleSoft"><core:Icon src="sap-icon://line-charts" class="czKpiIcon"/></VBox>
-                            <VBox><Text text="CUMPLIMIENTO" class="czKpiLabel"/><Title text="74%" class="czKpiNumber czPurpleText"/><Text text="-22 OT vs plan" class="czKpiSub"/></VBox>
-                        </HBox>
-                    </VBox>
+                    <VBox class="czKpiCard czKpiBlue"><HBox alignItems="Center"><VBox class="czKpiIconBox czBlueSoft"><core:Icon src="sap-icon://inspection" class="czKpiIcon"/></VBox><VBox><Text text="OT PLANEADAS" class="czKpiLabel"/><Title text="84" class="czKpiNumber czBlueText"/><Text text="100% del plan" class="czKpiSub"/></VBox></HBox></VBox>
+                    <VBox class="czKpiCard czKpiGreen"><HBox alignItems="Center"><VBox class="czKpiIconBox czGreenSoft"><core:Icon src="sap-icon://accept" class="czKpiIcon"/></VBox><VBox><Text text="OT EJECUTADAS" class="czKpiLabel"/><Title text="62" class="czKpiNumber czGreenText"/><Text text="74% del plan" class="czKpiSub"/></VBox></HBox></VBox>
+                    <VBox class="czKpiCard czKpiRed"><HBox alignItems="Center"><VBox class="czKpiIconBox czRedSoft"><core:Icon src="sap-icon://message-error" class="czKpiIcon"/></VBox><VBox><Text text="OT NO EJECUTADAS" class="czKpiLabel"/><Title text="22" class="czKpiNumber czRedText"/><Text text="26% del plan" class="czKpiSub"/></VBox></HBox></VBox>
+                    <VBox class="czKpiCard czKpiPurple"><HBox alignItems="Center"><VBox class="czKpiIconBox czPurpleSoft"><core:Icon src="sap-icon://line-charts" class="czKpiIcon"/></VBox><VBox><Text text="CUMPLIMIENTO" class="czKpiLabel"/><Title text="74%" class="czKpiNumber czPurpleText"/><Text text="-22 OT vs plan" class="czKpiSub"/></VBox></HBox></VBox>
                 </HBox>
 
                 <!-- ========================================== -->
-                <!-- 3. LAYOUT PRINCIPAL (TABLA 75% / GRÁFICOS 25%) -->
+                <!-- 3. LAYOUT PRINCIPAL (TABLA 75% / DERECHA 25%)-->
                 <!-- ========================================== -->
                 <l:Grid defaultSpan="XL12 L12 M12 S12" hSpacing="1" class="sapUiSmallMarginTop">
                     <l:content>
@@ -79,13 +42,14 @@
                         <VBox>
                             <layoutData><l:GridData span="XL9 L9 M12 S12" /></layoutData>
                             
-                            <HBox alignItems="Center" class="sapUiSmallMarginBottom">
-                                <Title text="DETALLE DE INCUMPLIMIENTO POR ZONA NORTE (22)" level="H2" class="czSectionTitle"/>
-                                <core:Icon src="sap-icon://information" class="sapUiTinyMarginBegin" color="#94a3b8"/>
-                            </HBox>
-                            
-                            <!-- TARJETA BLANCA CON MARCO DE SEPARACIÓN (sapUiContentPadding) -->
+                            <!-- TARJETA BLANCA CON MARCO DE SEPARACIÓN -->
                             <VBox class="dashCard sapUiContentPadding">
+                                
+                                <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <Title text="DETALLE DE INCUMPLIMIENTO POR ZONA NORTE (22)" class="czSectionTitle"/>
+                                    <core:Icon src="sap-icon://information" class="sapUiTinyMarginBegin" color="#94a3b8"/>
+                                </HBox>
+
                                 <OverflowToolbar class="czTableToolbar">
                                     <SegmentedButton selectedKey="todas">
                                         <items>
@@ -99,95 +63,129 @@
                                     <Text text="Filtro activo: Todas" class="czFilterActiveText"/>
                                 </OverflowToolbar>
 
-                                <!-- TABLA CON CABECERA GRIS Y PÍLDORAS -->
-                                <Table id="idIncumplimientoTable" items="{/IncumplimientosData}" class="czInnerTable">
-                                    <columns>
-                                        <Column width="5.5rem"><Text text="OT"/></Column>
-                                        <Column width="5rem"><Text text="EQUIPO"/></Column>
-                                        <Column width="7.5rem"><Text text="TIPO OT"/></Column>
-                                        <Column width="9rem"><Text text="CLIENTE"/></Column>
-                                        <Column><Text text="CAUSA INCUMPLIMIENTO"/></Column>
-                                        <Column width="8rem"><Text text="RESPONSABLE"/></Column>
-                                        <Column width="5rem" hAlign="End"><Text text="DÍAS ▾"/></Column>
-                                        <Column width="8.5rem"><Text text="ESTADO"/></Column>
-                                    </columns>
-                                    <items>
-                                        <ColumnListItem vAlign="Middle">
-                                            <cells>
-                                                <Link text="{OT}" class="czLinkText"/>
-                                                <Text text="{Equipo}" class="czRowText"/>
-                                                <!-- Píldora Tipo OT -->
-                                                <ObjectStatus class="statusTag {= 'tag' + ${StatusTipo} }" text="{TipoOT}"/>
-                                                <Text text="{Cliente}" class="czRowText"/>
-                                                <!-- Píldora Causa -->
-                                                <ObjectStatus class="statusTag {= 'tag' + ${StatusCausa} }" text="{CausaIncumplimiento}"/>
-                                                <Text text="{Responsable}" class="czRowText"/>
-                                                <Text text="{DiasAtraso}" class="czRowText czRedNumber" />
-                                                <!-- Píldora Estado -->
-                                                <ObjectStatus class="statusTag tagError" text="{Estado}"/>
-                                            </cells>
-                                        </ColumnListItem>
-                                    </items>
-                                </Table>
+                                <!-- EL MARCO DE LA TABLA (czTableScroll le da borde y curvas a la tabla gris) -->
+                                <ScrollContainer width="100%" horizontal="true" vertical="false" class="czTableScroll">
+                                    <Table id="idIncumplimientoTable" items="{/IncumplimientosData}" alternateRowColors="true" class="czInnerTable">
+                                                                          <!-- Columnas de la tabla (INTACTAS) -->
+                                        <columns>
+                                            <Column width="6.5rem"><Text text="OT"/></Column>
+                                            <Column width="5.5rem"><Text text="EQUIPO"/></Column>
+                                            <Column width="7.5rem"><Text text="TIPO OT"/></Column>
+                                            <Column width="10rem"><Text text="CLIENTE"/></Column>
+                                            <Column width="15rem"><Text text="CAUSA INCUMPLIMIENTO"/></Column>
+                                            <Column width="10rem"><Text text="RESPONSABLE"/></Column>
+                                            <Column width="6rem" hAlign="End"><Text text="DÍAS ▾"/></Column>
+                                            <Column width="8.5rem"><Text text="ESTADO"/></Column>
+                                        </columns>
+                                        
+                                        <!-- Celdas de la tabla (CON EL ÍCONO DEL RESPONSABLE AÑADIDO) -->
+                                        <items>
+                                            <ColumnListItem vAlign="Middle">
+                                                <cells>
+                                                    <Link text="{OT}" class="czLinkText" wrapping="true"/>
+                                                    <Text text="{Equipo}" class="czRowText" wrapping="true"/>
+                                                    
+                                                    <!-- Píldora Tipo OT -->
+                                                    <ObjectStatus class="statusTag {= 'tag' + ${StatusTipo} }" text="{TipoOT}"/>
+                                                    
+                                                    <Text text="{Cliente}" class="czRowText" wrapping="true"/>
+                                                    
+                                                    <!-- Píldora Causa -->
+                                                    <ObjectStatus class="statusTag {= 'tag' + ${StatusCausa} }" text="{CausaIncumplimiento}"/>
+                                                    
+                                                    <!-- NUEVO: Ícono junto al Responsable -->
+                                                    <HBox alignItems="Center">
+                                                        <core:Icon src="sap-icon://employee" color="#94a3b8" class="sapUiTinyMarginEnd"/>
+                                                        <Text text="{Responsable}" class="czRowText" wrapping="true"/>
+                                                    </HBox>
+                                                    
+                                                    <Text text="{DiasAtraso}" class="czRowText czRedNumber" />
+                                                    
+                                                    <!-- Píldora Estado -->
+                                                    <ObjectStatus class="statusTag tagError" text="{Estado}"/>
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+
+                                    </Table>
+                                </ScrollContainer>
                                 
                                 <OverflowToolbar class="czTableFooter">
-                                    <Text text="Mostrando 1 a 3 de 22 órdenes" class="sapUiSmallMarginBegin czFooterText"/>
+                                    <Text text="Mostrando 1 a 3 de 22 órdenes" class="czFooterText"/>
                                     <ToolbarSpacer />
                                     <Button type="Transparent" icon="sap-icon://slim-arrow-left" />
                                     <Button text="1" type="Emphasized"/>
                                     <Button text="2" type="Transparent"/>
                                     <Button type="Transparent" icon="sap-icon://slim-arrow-right" />
                                     <ToolbarSpacer />
-                                    <Select width="120px" selectedKey="10" class="sapUiSmallMarginEnd">
+                                    <Select width="120px" selectedKey="10">
                                         <items><core:Item key="10" text="10 por página" /></items>
                                     </Select>
                                 </OverflowToolbar>
                             </VBox>
                         </VBox>
+<!-- COLUMNA DERECHA: GRÁFICOS (25% -> 3 Columnas) -->
+<VBox>
+    <layoutData><l:GridData span="XL3 L3 M12 S12" /></layoutData>
+    
+    <!-- TARJETA DEL RESUMEN -->
+    <VBox class="dashCard sapUiContentPadding">
+        
+        <HBox alignItems="Center" class="sapUiMediumMarginBottom">
+            <Title text="RESUMEN" class="czSectionTitle"/>
+            <core:Icon src="sap-icon://pie-chart" class="sapUiTinyMarginBegin" color="#94a3b8"/>
+        </HBox>
 
-                        <!-- COLUMNA DERECHA: DOS GRÁFICAS (25% -> 3 de 12 Columnas) -->
-                        <VBox>
-                            <layoutData><l:GridData span="XL3 L3 M12 S12" /></layoutData>
-                            
-                            <!-- Espaciador invisible para alinear con la tarjeta de la tabla -->
-                            <HBox alignItems="Center" class="sapUiSmallMarginBottom"><Title text=" " level="H2"/></HBox>
+        <!-- GRÁFICO 1: Distribución por Causa (Gráfico de Barras) -->
+        <VBox class="sapUiLargeMarginBottom">
+            <Text text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR CAUSA" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
+            
+            <!-- Binding al modelo de datos /ResumenCausas -->
+            <mc:InteractiveBarChart 
+                bars="{/ResumenCausas}"
+                displayedBars="5"
+                labelWidth="50%">
+                <mc:bars>
+                    <mc:InteractiveBarChartBar 
+                        label="{Causa}" 
+                        value="{Cantidad}" 
+                        displayedValue="{Cantidad} ({Porcentaje}%)" 
+                        color="{Color}"/>
+                </mc:bars>
+            </mc:InteractiveBarChart>
+            
+            <HBox justifyContent="End" class="sapUiTinyMarginTop">
+                <Text text="Total: 22 (100%)" class="czRowText" />
+            </HBox>
+        </VBox>
 
-                            <!-- CARD 1: Gráfico de Barras ACOSTADAS -->
-                            <VBox class="dashCard sapUiContentPadding sapUiSmallMarginBottom">
-                                <Title text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR CAUSA" class="chartTitle sapUiSmallMarginBottom" wrapping="true"/>
-                                
-                                <VBox class="sapUiSmallMarginTop">
-                                    <VBox class="sapUiSmallMarginBottom"><Text text="Carta de no mantenimiento" class="czRowText sapUiTinyMarginBottom"/><ProgressIndicator percentValue="36" displayValue="8 (36%)" state="Error"/></VBox>
-                                    <VBox class="sapUiSmallMarginBottom"><Text text="Falta de refacciones" class="czRowText sapUiTinyMarginBottom"/><ProgressIndicator percentValue="23" displayValue="5 (23%)" state="Error"/></VBox>
-                                    <VBox class="sapUiSmallMarginBottom"><Text text="Cliente no disponible" class="czRowText sapUiTinyMarginBottom"/><ProgressIndicator percentValue="14" displayValue="3 (14%)" state="Warning"/></VBox>
-                                    <VBox class="sapUiSmallMarginBottom"><Text text="Reprogramación" class="czRowText sapUiTinyMarginBottom"/><ProgressIndicator percentValue="9" displayValue="2 (9%)" state="Success"/></VBox>
-                                    <VBox><Text text="Otra causa" class="czRowText sapUiTinyMarginBottom"/><ProgressIndicator percentValue="9" displayValue="2 (9%)" state="Success"/></VBox>
-                                </VBox>
-                            </VBox>
+        <!-- LÍNEA SEPARADORA (Opcional, usando un componente simple) -->
+        <Toolbar width="100%" height="1px" class="sapUiSmallMarginBottom" style="Clear"/>
 
-                            <!-- CARD 2: Gráfico de DONA -->
-                            <VBox class="dashCard sapUiContentPadding">
-                                <Title text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR TIPO" class="chartTitle sapUiSmallMarginBottom" wrapping="true"/>
-                                
-                                <VBox alignItems="Center" width="100%" class="sapUiMediumMarginTop">
-                                    <microchart:InteractiveDonutChart displayedSegments="3" selectionEnabled="false" class="sapUiMediumMarginBottom">
-                                        <microchart:segments>
-                                            <microchart:InteractiveDonutChartSegment label="Preventivo" value="12" color="Good"/>
-                                            <microchart:InteractiveDonutChartSegment label="Correctivo" value="7" color="Error"/>
-                                            <microchart:InteractiveDonutChartSegment label="Call Center" value="3" color="Critical"/>
-                                        </microchart:segments>
-                                    </microchart:InteractiveDonutChart>
-                                    
-                                    <!-- Leyenda de la Dona adaptada al espacio -->
-                                    <VBox width="100%">
-                                        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom"><HBox alignItems="Center"><core:Icon src="sap-icon://circle-task-2" color="#107e3e" class="sapUiTinyMarginEnd"/><Text text="Preventivas" class="czRowText"/></HBox><Text text="12 (55%)" class="czRowText sapThemePositiveText"/></HBox>
-                                        <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiTinyMarginBottom"><HBox alignItems="Center"><core:Icon src="sap-icon://circle-task-2" color="#bb0000" class="sapUiTinyMarginEnd"/><Text text="Correctivas" class="czRowText"/></HBox><Text text="7 (32%)" class="czRowText sapThemeNegativeText"/></HBox>
-                                        <HBox alignItems="Center" justifyContent="SpaceBetween"><HBox alignItems="Center"><core:Icon src="sap-icon://circle-task-2" color="#e9730c" class="sapUiTinyMarginEnd"/><Text text="Call Center" class="czRowText"/></HBox><Text text="3 (13%)" class="czRowText sapThemeCriticalText"/></HBox>
-                                    </VBox>
-                                </VBox>
-                            </VBox>
+        <!-- GRÁFICO 2: Distribución por Tipo de OT (Gráfico de Dona) -->
+        <VBox>
+            <Text text="DISTRIBUCIÓN DE OT NO EJECUTADAS POR TIPO DE OT" class="czChartTitle sapUiSmallMarginBottom" wrapping="true"/>
+            
+            <!-- Binding al modelo de datos /ResumenTipos -->
+            <mc:InteractiveDonutChart 
+                segments="{/ResumenTipos}"
+                displayedSegments="4">
+                <mc:segments>
+                    <mc:InteractiveDonutChartSegment 
+                        label="{Tipo}" 
+                        value="{Cantidad}" 
+                        displayedValue="{Tipo}: {Cantidad} ({Porcentaje}%)" 
+                        color="{Color}"/>
+                </mc:segments>
+            </mc:InteractiveDonutChart>
 
-                        </VBox>
+            <HBox justifyContent="End" class="sapUiTinyMarginTop">
+                <Text text="Total: 22 (100%)" class="czRowText" />
+            </HBox>
+        </VBox>
+
+    </VBox>
+</VBox>
 
                     </l:content>
                 </l:Grid>
