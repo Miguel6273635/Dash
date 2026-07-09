@@ -5,134 +5,402 @@
     xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
     height="100%">
-    
-    <!-- CLASE pageBackground AÑADIDA PARA QUE RESALTE LA TARJETA BLANCA -->
-    <Page id="pageComportamiento" showHeader="false" class="pageBackground">
+
+    <Page id="pageComportamiento" showHeader="false" class="coPageBackground">
         <content>
-            <VBox class="sapUiSmallMargin">
-                
-                <!-- 1. ENCABEZADO Y FILTROS -->
-                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBottom">
-                    
-                    <!-- LADO IZQUIERDO -->
-                    <VBox class="sapUiMediumMarginEnd">
-                        <Title text="Comportamiento operativo por responsables" level="H1" class="dashTitle"/> 
-                        <Text text="Análisis del comportamiento de los responsables según las causas que explican sus desviaciones." class="dashSubtitle"/>
+
+            <VBox class="coPage">
+
+                <!-- ===================================================== -->
+                <!-- 1. HEADER SUPERIOR -->
+                <!-- ===================================================== -->
+                <HBox
+                    class="coHeader"
+                    justifyContent="SpaceBetween"
+                    alignItems="Center">
+
+                    <!-- Título -->
+                    <VBox class="coHeaderText">
+                        <Title
+                            text="Comportamiento operativo por responsables"
+                            level="H1"
+                            class="coTitle" />
+
+                        <Text
+                            text="Análisis del comportamiento de los responsables según las causas que explican sus desviaciones."
+                            class="coSubtitle" />
                     </VBox>
 
-                    <!-- LADO DERECHO: Filtros con medidas reducidas para que quepan -->
-                    <HBox alignItems="Center">
-                        
-                        <!-- CARD DE SEMANA (Reducida a 220px) -->
-                        <HBox width="220px" alignItems="Center" justifyContent="SpaceBetween" class="filterChip sapUiSmallMarginEnd">
+                    <!-- Filtros superiores -->
+                    <HBox
+                        class="coFilters"
+                        alignItems="Center">
+
+                        <!-- Semana -->
+                        <HBox
+                            class="coFilterCard"
+                            width="250px"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween">
+
                             <HBox alignItems="Center">
-                                <core:Icon src="sap-icon://calendar" class="filterIconCustom sapUiSmallMarginEnd"/>
-                                <VBox>
-                                    <Text text="Semana" class="filterLabelCustom"/>
-                                    <Text text="18 (29 abr-5 may)" class="filterValueCustom"/>
+                                <core:Icon
+                                    src="sap-icon://calendar"
+                                    class="coFilterIcon" />
+
+                                <VBox class="coFilterTexts">
+                                    <Text
+                                        text="Semana"
+                                        class="coFilterLabel" />
+
+                                    <Text
+                                        text="Semana 18 (29 abr. - 5 may 2024)"
+                                        class="coFilterValue" />
                                 </VBox>
                             </HBox>
-                            <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom"/>
+
+                            <core:Icon
+                                src="sap-icon://slim-arrow-down"
+                                class="coFilterArrow" />
                         </HBox>
-                        
-                        <!-- CARD DE ZONA (Reducida a 150px) -->
-                        <HBox width="150px" alignItems="Center" justifyContent="SpaceBetween" class="filterChip sapUiSmallMarginEnd">
+
+                        <!-- Zona -->
+                        <HBox
+                            class="coFilterCard"
+                            width="165px"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween">
+
                             <HBox alignItems="Center">
-                                <core:Icon src="sap-icon://map" class="filterIconCustom sapUiSmallMarginEnd"/>
-                                <VBox>
-                                    <Text text="Zona" class="filterLabelCustom"/>
-                                    <Text text="Norte" class="filterValueCustom"/>
+                                <core:Icon
+                                    src="sap-icon://map"
+                                    class="coFilterIcon" />
+
+                                <VBox class="coFilterTexts">
+                                    <Text
+                                        text="Zona"
+                                        class="coFilterLabel" />
+
+                                    <Text
+                                        text="Norte"
+                                        class="coFilterValue" />
                                 </VBox>
                             </HBox>
-                            <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom"/>
+
+                            <core:Icon
+                                src="sap-icon://slim-arrow-down"
+                                class="coFilterArrow" />
                         </HBox>
-                        
-                        <!-- BOTÓN -->
-                        <Button text="Aplicar" icon="sap-icon://filter" type="Emphasized" class="btnBlueCustom"/>
+
+                        <!-- Botón aplicar filtros -->
+                        <Button
+                            text="Aplicar Filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            class="coApplyButton" />
+
                     </HBox>
                 </HBox>
 
-                <!-- 2. TARJETA PRINCIPAL BLANCA -->
-                <VBox class="mainCard">
-                    
-                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                        <SegmentedButton selectedKey="all">
-                            <items>
-                                <SegmentedButtonItem key="all" text="Todas" icon="sap-icon://table-view" width="120px" />
-                                <SegmentedButtonItem key="internas" text="Internas" icon="sap-icon://wrench" width="160px" />
-                                <SegmentedButtonItem key="externas" text="Externas" icon="sap-icon://shipping-status" width="160px" />
-                                <SegmentedButtonItem key="justificadas" text="Justificadas" icon="sap-icon://employee-approvals" width="140px" />
-                            </items>
-                        </SegmentedButton>
-                        <Select width="180px">
-                            <core:Item key="todas" text="Origen activo: Todas"/>
-                        </Select>
+
+                <!-- ===================================================== -->
+                <!-- 2. CARD PRINCIPAL -->
+                <!-- ===================================================== -->
+                <VBox class="coMainCard">
+
+                    <!-- Tabs + origen activo -->
+                    <HBox
+                        class="coCardToolbar"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center">
+
+                        <HBox
+                            class="coTabs"
+                            alignItems="Center">
+
+                            <Button
+                                text="Todas"
+                                icon="sap-icon://table-view"
+                                type="Emphasized"
+                                class="coTabButton coTabButtonActive" />
+
+                            <Button
+                                text="Internas (operación)"
+                                icon="sap-icon://wrench"
+                                type="Transparent"
+                                class="coTabButton" />
+
+                            <Button
+                                text="Externas (cliente/proveedor)"
+                                icon="sap-icon://shipping-status"
+                                type="Transparent"
+                                class="coTabButton" />
+
+                            <Button
+                                text="Justificadas"
+                                icon="sap-icon://employee-approvals"
+                                type="Transparent"
+                                class="coTabButton" />
+                        </HBox>
+
+                        <HBox
+                            class="coOriginBox"
+                            alignItems="Center">
+
+                            <Text
+                                text="Origen activo:"
+                                class="coOriginLabel" />
+
+                            <Select
+                                selectedKey="todas"
+                                width="92px"
+                                class="coOriginSelect">
+
+                                <items>
+                                    <core:Item key="todas" text="Todas" />
+                                    <core:Item key="internas" text="Internas" />
+                                    <core:Item key="externas" text="Externas" />
+                                    <core:Item key="justificadas" text="Justificadas" />
+                                </items>
+                            </Select>
+                        </HBox>
                     </HBox>
-                    
-                    <!-- TABLA CON CABECERA GRIS -->
-                    <VBox class="tableWrapper">
-                        <Table id="idResponsablesTable" items="{path: 'data>/responsables'}" class="customGreyHeaderTable">
+
+
+                    <!-- ===================================================== -->
+                    <!-- 3. TABLA PRINCIPAL -->
+                    <!-- ===================================================== -->
+                    <VBox class="coTableWrapper">
+
+                        <Table
+                            id="idResponsablesTable"
+                            items="{path: 'data>/responsables'}"
+                            class="coTable"
+                            fixedLayout="true"
+                            mode="None">
+
                             <columns>
-                                <Column width="4%" hAlign="Center"><Text text="#"/></Column>
-                                <Column width="16%"><Text text="Responsable"/></Column>
-                                <Column width="10%" hAlign="Center"><Text text="OT desviadas"/></Column>
-                                <Column width="10%" hAlign="Center"><Text text="% del total"/></Column>
-                                <Column width="20%"><Text text="Principal causa"/></Column>
-                                <Column width="10%"><Text text="Tipo de OT"/></Column>
-                                <Column width="15%" hAlign="Center"><Text text="Cumplimiento"/></Column>
-                                <Column width="15%" hAlign="Center"><Text text="Riesgo"/></Column>
+                                <Column width="5%" hAlign="Center">
+                                    <Text text="#" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text text="Responsable" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="10%" hAlign="Center">
+                                    <Text text="OT desviadas" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="10%" hAlign="Center">
+                                    <Text text="% del total" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="25%">
+                                    <HBox alignItems="Center">
+                                        <Text
+                                            text="Principal causa"
+                                            class="coTableHeaderText" />
+
+                                        <core:Icon
+                                            src="sap-icon://hint"
+                                            class="coHeaderInfoIcon" />
+                                    </HBox>
+                                </Column>
+
+                                <Column width="11%" hAlign="Center">
+                                    <Text text="Tipo de OT" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="15%" hAlign="Center">
+                                    <Text text="Cumplimiento" class="coTableHeaderText" />
+                                </Column>
+
+                                <Column width="11%" hAlign="Center">
+                                    <Text text="Riesgo" class="coTableHeaderText" />
+                                </Column>
                             </columns>
+
                             <items>
-                                <ColumnListItem class="tableCardRow" vAlign="Middle">
+                                <ColumnListItem
+                                    class="coTableRow"
+                                    vAlign="Middle"
+                                    type="Inactive">
+
                                     <cells>
-                                        <Text text="{data>id}"/>
-                                        <HBox alignItems="Center">
-                                            <f:Avatar displaySize="XS" backgroundColor="{path: 'data>id', formatter:'.getAvatarColor'}" initials="{data>initials}" class="sapUiTinyMarginEnd" />
-                                            <Link text="{data>responsable}" press=".onResponsablePress"/>
+
+                                        <!-- Ranking -->
+                                        <Text
+                                            text="{data>id}"
+                                            textAlign="Center"
+                                            class="coRankText" />
+
+                                        <!-- Responsable -->
+                                        <HBox
+                                            alignItems="Center"
+                                            class="coResponsibleCell">
+
+                                            <f:Avatar
+                                                displaySize="XS"
+                                                backgroundColor="{path: 'data>id', formatter: '.getAvatarColor'}"
+                                                initials="{data>initials}"
+                                                class="coAvatar" />
+
+                                            <Link
+                                                text="{data>responsable}"
+                                                press=".onResponsablePress"
+                                                class="coResponsibleLink" />
                                         </HBox>
-                                        <Text text="{data>otDesviadas}" class="redText"/>
-                                        <Text text="{data>porcentajeTotal}"/>
-                                        <VBox class="cellTag">
-                                            <HBox alignItems="Center">
-                                                <core:Icon src="{data>causaIcon}" class="cellTagIcon sapUiTinyMarginEnd {path: 'data>causaIcon', formatter:'.getIconColorClass'}"/>
-                                                <Title text="{data>causaPrincipal}" level="H6"/>
+
+                                        <!-- OT desviadas -->
+                                        <Text
+                                            text="{data>otDesviadas}"
+                                            textAlign="Center"
+                                            class="coOtDeviationText" />
+
+                                        <!-- Porcentaje total -->
+                                        <Text
+                                            text="{data>porcentajeTotal}"
+                                            textAlign="Center"
+                                            class="coPercentText" />
+
+                                        <!-- Principal causa -->
+                                        <HBox
+                                            class="coCauseCard"
+                                            alignItems="Center">
+
+                                            <HBox
+                                                class="coCauseIconBox"
+                                                alignItems="Center"
+                                                justifyContent="Center">
+
+                                                <core:Icon
+                                                    src="{data>causaIcon}"
+                                                    class="coCauseIcon" />
                                             </HBox>
-                                            <Text text="{data>causaDetalle}" class="subtleText sapUiTinyMarginTop"/>
+
+                                            <VBox class="coCauseTexts">
+                                                <Text
+                                                    text="{data>causaPrincipal}"
+                                                    class="coCauseTitle"
+                                                    wrapping="false" />
+
+                                                <Text
+                                                    text="{data>causaDetalle}"
+                                                    class="coCauseDetail"
+                                                    wrapping="true" />
+                                            </VBox>
+                                        </HBox>
+
+                                        <!-- Tipo de OT -->
+                                        <HBox
+                                            justifyContent="Center"
+                                            alignItems="Center">
+
+                                            <Text
+                                                text="{data>tipoOt}"
+                                                class="coTipoOtBadge" />
+                                        </HBox>
+
+                                        <!-- Cumplimiento -->
+                                        <VBox
+                                            class="coComplianceCell"
+                                            alignItems="Center"
+                                            justifyContent="Center">
+
+                                            <Text
+                                                text="{data>cumplimiento}"
+                                                class="coComplianceValue" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="coComplianceBarBox">
+
+                                                <ProgressIndicator
+                                                    percentValue="{data>cumplimientoValue}"
+                                                    state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }"
+                                                    showValue="false"
+                                                    class="coComplianceProgress" />
+
+                                                <core:Icon
+                                                    src="{= ${data>riesgo} === 'Bajo' ? 'sap-icon://accept' : (${data>riesgo} === 'Medio' ? 'sap-icon://message-warning' : 'sap-icon://decline') }"
+                                                    color="{= ${data>riesgo} === 'Alto' ? '#ef4444' : (${data>riesgo} === 'Medio' ? '#f97316' : '#16a34a') }"
+                                                    class="coComplianceStatusIcon" />
+                                            </HBox>
                                         </VBox>
-                                        <VBox class="cellTag">
-                                            <Text text="{data>tipoOt}"/>
-                                        </VBox>
-                                        
-                                        <!-- BARRA DE PROGRESO SIN ICONOS -->
-                                        <VBox class="noIconProgress" justifyContent="Center">
-                                            <Text text="{data>cumplimiento}" class="sapUiTinyMarginBottom" width="100%" textAlign="Center"/>
-                                            <ProgressIndicator
-                                                percentValue="{data>cumplimientoValue}"
+
+                                        <!-- Riesgo -->
+                                        <HBox
+                                            justifyContent="Center"
+                                            alignItems="Center">
+
+                                            <ObjectStatus
+                                                text="{data>riesgo}"
                                                 state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }"
-                                                showValue="false" />
-                                        </VBox>
-                                        
-                                        <ObjectStatus class="riskTag" text="{data>riesgo}" state="{= ${data>riesgo} === 'Alto' ? 'Error' : (${data>riesgo} === 'Medio' ? 'Warning' : 'Success') }" />
+                                                class="coRiskBadge" />
+                                        </HBox>
+
                                     </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
                     </VBox>
+
+
+                    <!-- ===================================================== -->
+                    <!-- 4. FOOTER / PAGINACIÓN -->
+                    <!-- ===================================================== -->
+                    <HBox
+                        class="coPagination"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center">
+
+                        <Text
+                            text="Mostrando 1 a 6 de 12 responsables"
+                            class="coPaginationText" />
+
+                        <HBox
+                            class="coPaginationCenter"
+                            alignItems="Center">
+
+                            <Button
+                                icon="sap-icon://slim-arrow-left"
+                                type="Transparent"
+                                class="coPageArrow" />
+
+                            <Button
+                                text="1"
+                                type="Emphasized"
+                                class="coPageButton coPageButtonActive" />
+
+                            <Button
+                                text="2"
+                                type="Transparent"
+                                class="coPageButton" />
+
+                            <Button
+                                icon="sap-icon://slim-arrow-right"
+                                type="Transparent"
+                                class="coPageArrow" />
+                        </HBox>
+
+                        <Select
+                            width="130px"
+                            selectedKey="10"
+                            class="coPageSizeSelect">
+
+                            <items>
+                                <core:Item key="10" text="10 por página" />
+                                <core:Item key="20" text="20 por página" />
+                                <core:Item key="50" text="50 por página" />
+                            </items>
+                        </Select>
+                    </HBox>
+
                 </VBox>
-                
-                <Toolbar class="sapUiTinyMarginTop" style="Clear">
-                    <Text text="Mostrando 1 a 6 de 12 responsables"/>
-                    <ToolbarSpacer/>
-                    <Button icon="sap-icon://slim-arrow-left" type="Transparent"/>
-                    <Button text="1" type="Emphasized"/>
-                    <Button text="2" type="Transparent"/>
-                    <Button icon="sap-icon://slim-arrow-right" type="Transparent"/>
-                    <ToolbarSpacer/>
-                    <Select width="140px">
-                        <core:Item text="10 por página"/>
-                    </Select>
-                </Toolbar>
             </VBox>
+
         </content>
     </Page>
 </mvc:View>

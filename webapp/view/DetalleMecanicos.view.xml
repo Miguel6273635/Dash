@@ -1,0 +1,639 @@
+<mvc:View
+  controllerName="mantenimiento.controller.DetalleMecanicos"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  displayBlock="true">
+
+  <Page showHeader="false" class="dmPage">
+    <ScrollContainer
+      width="100%"
+      height="100%"
+      vertical="true"
+      horizontal="false"
+      class="dmScroll">
+
+      <VBox class="dmContainer">
+
+        <!-- HEADER -->
+        <VBox class="dmHeaderBox">
+          <Title
+            text="Detalle de mecánicos"
+            level="H1"
+            class="dmTitle" />
+
+          <Text
+            text="Análisis de capacidad, disponibilidad y carga de la plantilla de mecánicos"
+            class="dmSubtitle" />
+        </VBox>
+
+        <!-- FILTROS -->
+        <HBox
+          class="dmFilters"
+          wrap="Wrap"
+          alignItems="Stretch"
+          justifyContent="Start">
+
+          <VBox class="dmFilterItem dmFilterSmall">
+            <Label text="Periodo" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/periodo}"
+              items="{detalle>/catalogos/periodos}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterDate">
+            <Label text="Fecha desde" class="dmFilterLabel" />
+            <DatePicker
+              width="100%"
+              value="{detalle>/filters/fechaDesde}"
+              displayFormat="dd/MM/yyyy"
+              valueFormat="dd/MM/yyyy" />
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterDate">
+            <Label text="Fecha hasta" class="dmFilterLabel" />
+            <DatePicker
+              width="100%"
+              value="{detalle>/filters/fechaHasta}"
+              displayFormat="dd/MM/yyyy"
+              valueFormat="dd/MM/yyyy" />
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterSmall">
+            <Label text="Zona" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/zona}"
+              items="{detalle>/catalogos/zonas}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterMedium">
+            <Label text="Supervisor" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/supervisor}"
+              items="{detalle>/catalogos/supervisores}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterSmall">
+            <Label text="Turno" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/turno}"
+              items="{detalle>/catalogos/turnos}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterLarge">
+            <Label text="Tipo de servicio" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/tipoServicio}"
+              items="{detalle>/catalogos/tiposServicio}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterMedium">
+            <Label text="Especialidad" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/especialidad}"
+              items="{detalle>/catalogos/especialidades}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dmFilterItem dmFilterSmall">
+            <Label text="Estado" class="dmFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{detalle>/filters/estado}"
+              items="{detalle>/catalogos/estados}">
+              <core:Item key="{detalle>key}" text="{detalle>text}" />
+            </Select>
+          </VBox>
+
+          <Button
+            text="Aplicar Filtros"
+            icon="sap-icon://filter"
+            type="Emphasized"
+            class="dmApplyBtn"
+            press=".onApplyFilters" />
+
+        </HBox>
+
+        <!-- KPI CARDS -->
+        <HBox class="dmKpiGrid" wrap="Wrap">
+
+          <HBox class="dmKpiCard dmKpiBlue">
+            <VBox class="dmKpiIconCircle dmBlueBg">
+              <core:Icon src="sap-icon://group" class="dmKpiIcon dmBlueText" />
+            </VBox>
+
+            <VBox>
+              <Text text="{detalle>/kpis/activos}" class="dmKpiNumber dmBlueText" />
+              <Text text="Mecánicos activos" class="dmKpiLabel" />
+              <Text text="Plantilla activa en el periodo" class="dmKpiSubLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dmKpiCard dmKpiGreen">
+            <VBox class="dmKpiIconCircle dmGreenBg">
+              <core:Icon src="sap-icon://employee-approvals" class="dmKpiIcon dmGreenText" />
+            </VBox>
+
+            <VBox>
+              <Text text="{detalle>/kpis/disponibles}" class="dmKpiNumber dmGreenText" />
+              <Text text="Mecánicos disponibles" class="dmKpiLabel" />
+              <Text text="{detalle>/kpis/disponiblesPct}" class="dmKpiSubLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dmKpiCard dmKpiOrange">
+            <VBox class="dmKpiIconCircle dmOrangeBg">
+              <core:Icon src="sap-icon://warning" class="dmKpiIcon dmOrangeText" />
+            </VBox>
+
+            <VBox>
+              <Text text="{detalle>/kpis/sobrecapacidad}" class="dmKpiNumber dmOrangeText" />
+              <Text text="Recursos sobre capacidad" class="dmKpiLabel" />
+              <Text text="{detalle>/kpis/sobrecapacidadPct}" class="dmKpiSubLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dmKpiCard dmKpiPurple">
+            <VBox class="dmKpiIconCircle dmPurpleBg">
+              <core:Icon src="sap-icon://shield" class="dmKpiIcon dmPurpleText" />
+            </VBox>
+
+            <VBox>
+              <Text text="{detalle>/kpis/cobertura}" class="dmKpiNumber dmPurpleText" />
+              <Text text="Cobertura de demanda programada" class="dmKpiLabel" />
+              <Text text="Demanda cubierta con la plantilla actual" class="dmKpiSubLabel" />
+            </VBox>
+          </HBox>
+
+        </HBox>
+
+        <!-- GRID PRINCIPAL -->
+        <VBox class="dmMainGrid">
+
+          <!-- CARD 1 DISTRIBUCIÓN -->
+          <VBox class="dmCard dmCardDist">
+            <HBox alignItems="Center">
+              <Text text="2. Distribución de mecánicos" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <Text
+              text="Resumen de mecánicos por turno y condición"
+              class="dmCardSubtitle" />
+
+            <VBox class="dmDistributionList">
+
+              <HBox class="dmDistRow" alignItems="Center">
+                <VBox class="dmIconBubble dmBlueBg">
+                  <core:Icon src="sap-icon://light-mode" class="dmBlueText dmRowIcon" />
+                </VBox>
+
+                <VBox class="dmDistContent">
+                  <Text text="{detalle>/turnos/0/label}" class="dmDistLabel" />
+                  <ProgressIndicator
+                    percentValue="{detalle>/turnos/0/pct}"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarBlue" />
+                </VBox>
+
+                <Text text="{detalle>/turnos/0/value}" class="dmDistValue dmBlueText" />
+                <Text text="{detalle>/turnos/0/pctText}" class="dmDistPct dmBlueText" />
+              </HBox>
+
+              <HBox class="dmDistRow" alignItems="Center">
+                <VBox class="dmIconBubble dmGreenBg">
+                  <core:Icon src="sap-icon://circle-task-2" class="dmGreenText dmRowIcon" />
+                </VBox>
+
+                <VBox class="dmDistContent">
+                  <Text text="{detalle>/turnos/1/label}" class="dmDistLabel" />
+                  <ProgressIndicator
+                    percentValue="{detalle>/turnos/1/pct}"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                </VBox>
+
+                <Text text="{detalle>/turnos/1/value}" class="dmDistValue dmGreenText" />
+                <Text text="{detalle>/turnos/1/pctText}" class="dmDistPct dmGreenText" />
+              </HBox>
+
+              <HBox class="dmDistRow" alignItems="Center">
+                <VBox class="dmIconBubble dmPurpleBg">
+                  <core:Icon src="sap-icon://calendar" class="dmPurpleText dmRowIcon" />
+                </VBox>
+
+                <VBox class="dmDistContent">
+                  <Text text="{detalle>/turnos/2/label}" class="dmDistLabel" />
+                  <ProgressIndicator
+                    percentValue="{detalle>/turnos/2/pct}"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarPurple" />
+                </VBox>
+
+                <Text text="{detalle>/turnos/2/value}" class="dmDistValue dmPurpleText" />
+                <Text text="{detalle>/turnos/2/pctText}" class="dmDistPct dmPurpleText" />
+              </HBox>
+
+            </VBox>
+
+            <HBox class="dmTotalBox" justifyContent="SpaceBetween" alignItems="Center">
+              <HBox alignItems="Center">
+                <core:Icon src="sap-icon://group" class="dmBlueText dmTotalIcon" />
+                <Text text="Total mecánicos" class="dmTotalLabel" />
+              </HBox>
+
+              <Text text="{detalle>/kpis/activos}" class="dmTotalNumber" />
+            </HBox>
+          </VBox>
+
+          <!-- CARD 2 UTILIZACIÓN -->
+          <VBox class="dmCard dmCardTurno">
+            <HBox alignItems="Center">
+              <core:Icon src="sap-icon://group" class="dmCardIcon" />
+              <Text text="Utilización de plantilla por turno" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <VBox class="dmTurnoTable">
+
+              <HBox class="dmTurnoHeader">
+                <Text text="Turno" />
+                <Text text="Cap. disponible" />
+                <Text text="Carga programada" />
+                <Text text="Utilización" />
+              </HBox>
+
+              <HBox class="dmTurnoRow">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://light-mode" class="dmTurnoIcon" />
+                  <Text text="Diurno" class="dmRowName" />
+                </HBox>
+
+                <Text text="{detalle>/utilTurno/0/capacidad}" class="dmStrong" />
+                <Text text="{detalle>/utilTurno/0/carga}" class="dmStrong" />
+
+                <HBox class="dmUtilCell" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="84.9"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="84.9%" class="dmUtilOk" />
+                </HBox>
+              </HBox>
+
+              <HBox class="dmTurnoRow">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://circle-task-2" class="dmTurnoIcon" />
+                  <Text text="Nocturno" class="dmRowName" />
+                </HBox>
+
+                <Text text="{detalle>/utilTurno/1/capacidad}" class="dmStrong" />
+                <Text text="{detalle>/utilTurno/1/carga}" class="dmStrong" />
+
+                <HBox class="dmUtilCell" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="95.1"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarOrange" />
+                  <Text text="95.1%" class="dmUtilWarn" />
+                </HBox>
+              </HBox>
+
+              <HBox class="dmTurnoRow">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://calendar" class="dmTurnoIcon" />
+                  <Text text="Fin semana" class="dmRowName" />
+                </HBox>
+
+                <Text text="{detalle>/utilTurno/2/capacidad}" class="dmStrong" />
+                <Text text="{detalle>/utilTurno/2/carga}" class="dmStrong" />
+
+                <HBox class="dmUtilCell" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarRed" />
+                  <Text text="117.4%" class="dmUtilDanger" />
+                </HBox>
+              </HBox>
+
+              <HBox class="dmTurnoRow dmTurnoTotal">
+                <HBox alignItems="Center">
+                  <core:Icon src="sap-icon://bar-chart" class="dmTurnoIcon" />
+                  <Text text="Total" class="dmRowName" />
+                </HBox>
+
+                <Text text="{detalle>/utilTotal/capacidad}" class="dmStrong" />
+                <Text text="{detalle>/utilTotal/carga}" class="dmStrong" />
+
+                <HBox class="dmUtilCell" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="92.1"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="92.1%" class="dmUtilOk" />
+                </HBox>
+              </HBox>
+
+            </VBox>
+
+            <Link text="Ver detalle por turno →" class="dmCardLink" />
+          </VBox>
+
+          <!-- CARD 3 COBERTURA -->
+          <VBox class="dmCard dmCardZona">
+            <HBox alignItems="Center">
+              <Text text="Cobertura de mecánicos por zona" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <VBox class="dmZoneTable">
+
+              <HBox class="dmZoneHeader">
+                <Text text="Zona" />
+                <Text text="Mec." />
+                <Text text="Hrs disp." />
+                <Text text="Carga" />
+                <Text text="Déficit" />
+                <Text text="Estado" />
+              </HBox>
+
+              <HBox class="dmZoneRow">
+                <Text text="Norte" class="dmStrong" />
+                <Text text="18" />
+                <Text text="1,800 h" />
+                <Text text="1,450 h" />
+                <HBox class="dmZoneUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="100%" class="dmUtilOk" />
+                </HBox>
+                <Text text="Balanceado" class="dmStateOk" />
+              </HBox>
+
+              <HBox class="dmZoneRow">
+                <Text text="Centro" class="dmStrong" />
+                <Text text="15" />
+                <Text text="1,500 h" />
+                <Text text="1,300 h" />
+                <HBox class="dmZoneUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="100%" class="dmUtilOk" />
+                </HBox>
+                <Text text="Balanceado" class="dmStateOk" />
+              </HBox>
+
+              <HBox class="dmZoneRow">
+                <Text text="Sur" class="dmStrong" />
+                <Text text="14" />
+                <Text text="1,200 h" />
+                <Text text="960 h" />
+                <HBox class="dmZoneUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarOrange" />
+                  <Text text="120%" class="dmUtilWarn" />
+                </HBox>
+                <Text text="Balanceado" class="dmStateWarn" />
+              </HBox>
+
+              <HBox class="dmZoneRow">
+                <Text text="Este" class="dmStrong" />
+                <Text text="12" />
+                <Text text="1,100 h" />
+                <Text text="780 h" />
+                <HBox class="dmZoneUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="100%" class="dmUtilOk" />
+                </HBox>
+                <Text text="Cap. disp." class="dmStateOk" />
+              </HBox>
+
+              <HBox class="dmZoneRow">
+                <Text text="Oeste" class="dmStrong" />
+                <Text text="17" />
+                <Text text="1,200 h" />
+                <Text text="620 h" />
+                <HBox class="dmZoneUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="100%" class="dmUtilOk" />
+                </HBox>
+                <Text text="Cap. disp." class="dmStateOk" />
+              </HBox>
+
+            </VBox>
+
+            <HBox class="dmLegend" wrap="Wrap">
+              <Text text="● &gt;100% Falta capacidad" class="dmLegendDanger" />
+              <Text text="● 100%-120% Balance adecuado" class="dmLegendWarn" />
+              <Text text="● &lt;100% Capacidad disponible" class="dmLegendOk" />
+            </HBox>
+
+            <Link text="Ver detalle por zona →" class="dmCardLink" />
+          </VBox>
+
+          <!-- CARD 4 ESTADO -->
+          <VBox class="dmCard dmCardEstado">
+            <HBox alignItems="Center">
+              <Text text="Estado de plantilla" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <HBox class="dmStateContent" alignItems="Center">
+              <core:HTML sanitizeContent="false" content="{detalle>/estadoHtml}" />
+
+              <VBox class="dmStateLegend">
+                <HBox class="dmStateLegendRow">
+                  <VBox class="dmDot dmDotGreen" />
+                  <Text text="Disponibles" />
+                  <Text text="14" />
+                  <Text text="18.4%" />
+                </HBox>
+
+                <HBox class="dmStateLegendRow">
+                  <VBox class="dmDot dmDotBlue" />
+                  <Text text="Dentro cap." />
+                  <Text text="43" />
+                  <Text text="56.6%" />
+                </HBox>
+
+                <HBox class="dmStateLegendRow">
+                  <VBox class="dmDot dmDotOrange" />
+                  <Text text="Cerca sat." />
+                  <Text text="10" />
+                  <Text text="13.2%" />
+                </HBox>
+
+                <HBox class="dmStateLegendRow">
+                  <VBox class="dmDot dmDotRed" />
+                  <Text text="Sobre cap." />
+                  <Text text="9" />
+                  <Text text="11.8%" />
+                </HBox>
+
+                <HBox class="dmStateLegendRow">
+                  <VBox class="dmDot dmDotGray" />
+                  <Text text="Inactivos" />
+                  <Text text="0" />
+                  <Text text="0.0%" />
+                </HBox>
+              </VBox>
+            </HBox>
+
+            <Link text="Ver detalle por estado →" class="dmCardLink" />
+          </VBox>
+
+          <!-- CARD 5 SERVICIO -->
+          <VBox class="dmCard dmCardServicio">
+            <HBox alignItems="Center">
+              <Text text="Por tipo de servicio / orden" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <HBox class="dmChartLegend" wrap="Wrap">
+              <Text text="■ Horas programadas" class="dmBlueText" />
+              <Text text="■ Horas reales" class="dmPurpleText" />
+              <Text text="○ Utilización" class="dmGreenText" />
+            </HBox>
+
+            <core:HTML sanitizeContent="false" content="{detalle>/servicioHtml}" />
+          </VBox>
+
+          <!-- CARD 6 PRESIÓN -->
+          <VBox class="dmCard dmCardPresion">
+            <HBox alignItems="Center">
+              <Text text="Presión operativa por zona" class="dmCardTitle" />
+              <core:Icon src="sap-icon://hint" class="dmInfoIcon" />
+            </HBox>
+
+            <VBox class="dmPressureTable">
+
+              <HBox class="dmPressureHeader">
+                <Text text="Zona" />
+                <Text text="Utilización" />
+                <Text text="Órdenes" />
+                <Text text="Estado" />
+              </HBox>
+
+              <HBox class="dmPressureRow">
+                <Text text="Sur" class="dmStrong" />
+                <HBox class="dmPressureUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarRed" />
+                  <Text text="117.4%" class="dmUtilDanger" />
+                </HBox>
+                <Text text="8.8" class="dmStrong" />
+                <Text text="● Crítico" class="dmStateCritical" />
+              </HBox>
+
+              <HBox class="dmPressureRow">
+                <Text text="Norte" class="dmStrong" />
+                <HBox class="dmPressureUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="100"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarRed" />
+                  <Text text="101.3%" class="dmUtilDanger" />
+                </HBox>
+                <Text text="7.1" class="dmStrong" />
+                <Text text="● Sobrecargado" class="dmStateCritical" />
+              </HBox>
+
+              <HBox class="dmPressureRow">
+                <Text text="Centro" class="dmStrong" />
+                <HBox class="dmPressureUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="95.1"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarOrange" />
+                  <Text text="95.1%" class="dmUtilWarn" />
+                </HBox>
+                <Text text="6.4" class="dmStrong" />
+                <Text text="● Cerca sat." class="dmStateWarn" />
+              </HBox>
+
+              <HBox class="dmPressureRow">
+                <Text text="Este" class="dmStrong" />
+                <HBox class="dmPressureUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="64.6"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="64.6%" class="dmUtilOk" />
+                </HBox>
+                <Text text="4.2" class="dmStrong" />
+                <Text text="● Balanceado" class="dmStateOk" />
+              </HBox>
+
+              <HBox class="dmPressureRow">
+                <Text text="Oeste" class="dmStrong" />
+                <HBox class="dmPressureUtil" alignItems="Center">
+                  <ProgressIndicator
+                    percentValue="48.3"
+                    displayValue=""
+                    showValue="false"
+                    class="dmProgress dmBarGreen" />
+                  <Text text="48.3%" class="dmUtilOk" />
+                </HBox>
+                <Text text="3.1" class="dmStrong" />
+                <Text text="● Cap. disp." class="dmStateOk" />
+              </HBox>
+
+            </VBox>
+
+            <Link text="Ver detalle de presión operativa →" class="dmCardLink" />
+          </VBox>
+
+        </VBox>
+
+      </VBox>
+    </ScrollContainer>
+  </Page>
+</mvc:View>

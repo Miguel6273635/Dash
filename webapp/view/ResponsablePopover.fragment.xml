@@ -1,53 +1,131 @@
-<core:FragmentDefinition 
-    xmlns="sap.m" 
-    xmlns:core="sap.ui.core" 
-    xmlns:layout="sap.ui.layout">
-    
-    <ResponsivePopover 
-        title="{popover>/responsable}" 
-        placement="Right" 
-        contentWidth="320px"
-        class="sapUiResponsivePadding--header sapUiResponsivePadding--content">
-        
-        <content>
-            <VBox class="sapUiSmallMargin">
-                <Text text="Responsable de mantenimiento" class="sapUiTinyMarginBottom subtleText"/>
-                
-                <!-- Contacto simulado -->
-                <HBox alignItems="Center" class="sapUiTinyMarginBottom">
-                    <core:Icon src="sap-icon://email" class="sapUiTinyMarginEnd subtleText"/>
-                    <Link text="{popover>/email}"/>
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f">
+
+    <Popover
+        id="responsablePopover"
+        showHeader="false"
+        placement="Right"
+        contentWidth="270px"
+        class="coResponsiblePopover">
+        <VBox class="coPopoverContent">
+
+            <!-- HEADER RESPONSABLE -->
+            <HBox
+                alignItems="Center"
+                class="coPopoverHeader">
+
+                <f:Avatar
+                    displaySize="XS"
+                    initials="{popover>/initials}"
+                    backgroundColor="Accent6"
+                    class="coPopoverAvatar" />
+
+                <VBox>
+                    <Text
+                        text="{popover>/responsable}"
+                        class="coPopoverName" />
+
+                    <Text
+                        text="{popover>/otDesviadasText}"
+                        class="coPopoverDeviation" />
+                </VBox>
+            </HBox>
+
+
+            <!-- EQUIPOS AFECTADOS -->
+            <VBox class="coPopoverSection">
+
+                <HBox
+                    alignItems="Center"
+                    class="coPopoverSectionHeader">
+
+                    <core:Icon
+                        src="sap-icon://technical-object"
+                        class="coPopoverSectionIcon" />
+
+                    <Text
+                        text="{popover>/equiposTitulo}"
+                        class="coPopoverSectionTitle" />
                 </HBox>
-                <HBox alignItems="Center" class="sapUiMediumMarginBottom">
-                    <core:Icon src="sap-icon://call" class="sapUiTinyMarginEnd subtleText"/>
-                    <Text text="{popover>/telefono}" class="subtleText"/>
-                </HBox>
-                
-                <!-- Resumen Operativo -->
-                <Title text="Resumen operativo" level="H5" class="sapUiTinyMarginBottom"/>
-                <layout:Grid defaultSpan="L4 M4 S4" class="sapUiSmallMarginTop">
-                    <VBox>
-                        <Text text="OT asig." class="subtleText"/>
-                        <Text text="{popover>/otAsignadas}" design="Bold"/>
-                    </VBox>
-                    <VBox>
-                        <Text text="OT desv." class="subtleText"/>
-                        <Text text="{popover>/otDesviadas}" design="Bold" class="redText"/>
-                    </VBox>
-                    <VBox>
-                        <Text text="Cumpl." class="subtleText"/>
-                        <Text text="{popover>/cumplimiento}" design="Bold" class="redText"/>
-                    </VBox>
-                </layout:Grid>
+
+                <VBox
+                    class="coPopoverList"
+                    items="{popover>/equipos}">
+
+                    <items>
+                        <HBox
+                            justifyContent="SpaceBetween"
+                            alignItems="Center"
+                            class="coPopoverListItem">
+
+                            <Text
+                                text="{popover>nombre}"
+                                wrapping="false"
+                                class="coPopoverItemText" />
+
+                            <Text
+                                text="{popover>ots}"
+                                wrapping="false"
+                                class="coPopoverItemCount" />
+                        </HBox>
+                    </items>
+                </VBox>
             </VBox>
-        </content>
-        
-        <footer>
-            <Toolbar>
-                <ToolbarSpacer/>
-                <Button text="Ver detalle del responsable" type="Emphasized" press=".onVerDetalleCausas"/>
-            </Toolbar>
-        </footer>
-        
-    </ResponsivePopover>
+
+
+            <!-- CLIENTES AFECTADOS -->
+            <VBox class="coPopoverSection">
+
+                <HBox
+                    alignItems="Center"
+                    class="coPopoverSectionHeader">
+
+                    <core:Icon
+                        src="sap-icon://customer"
+                        class="coPopoverSectionIcon" />
+
+                    <Text
+                        text="{popover>/clientesTitulo}"
+                        class="coPopoverSectionTitle" />
+                </HBox>
+
+                <VBox
+                    class="coPopoverList"
+                    items="{popover>/clientes}">
+
+                    <items>
+                        <HBox
+                            justifyContent="SpaceBetween"
+                            alignItems="Center"
+                            class="coPopoverListItem">
+
+                            <Text
+                                text="{popover>nombre}"
+                                wrapping="false"
+                                class="coPopoverItemText" />
+
+                            <Text
+                                text="{popover>ots}"
+                                wrapping="false"
+                                class="coPopoverItemCount" />
+                        </HBox>
+                    </items>
+                </VBox>
+            </VBox>
+
+
+            <!-- FOOTER -->
+            <Button
+                text="Ver detalle del responsable"
+                icon="sap-icon://navigation-right-arrow"
+                iconFirst="false"
+                type="Transparent"
+                press=".onVerDetalleResponsable"
+                class="coPopoverDetailButton" />
+
+        </VBox>
+    </Popover>
+
 </core:FragmentDefinition>

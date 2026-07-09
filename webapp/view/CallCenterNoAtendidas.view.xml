@@ -1,0 +1,661 @@
+<mvc:View
+    controllerName="mantenimiento.controller.CallCenterNoAtendidas"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="pageCallCenterNoAtendidas"
+        showHeader="false"
+        class="ccnaPage">
+
+        <content>
+            <VBox class="ccnaContainer">
+
+                <!-- HEADER -->
+                <VBox class="ccnaHeader">
+
+                    <HBox alignItems="Center" class="ccnaTitleRow">
+                        <Button
+                            icon="sap-icon://menu2"
+                            type="Transparent"
+                            class="ccnaMenuButton"
+                            press=".onToggleMenu" />
+
+                        <Text
+                            text="Análisis de Solicitudes Call Center"
+                            class="ccnaTitle" />
+
+                        <Text
+                            text="No Atendidas"
+                            class="ccnaTitleDanger" />
+                    </HBox>
+
+                    <HBox alignItems="Center" class="ccnaBreadcrumb">
+                        <Text text="Órdenes" />
+                        <core:Icon src="sap-icon://slim-arrow-right" size="0.65rem" />
+                        <Text text="Composición de órdenes del periodo" />
+                        <core:Icon src="sap-icon://slim-arrow-right" size="0.65rem" />
+                        <Text text="Call Center" />
+                    </HBox>
+
+                </VBox>
+
+                <!-- FILTROS -->
+                <HBox class="ccnaFilterBar" alignItems="Stretch">
+
+                    <VBox class="ccnaFilterCard">
+                        <Label text="Periodo" />
+                        <Select
+                            selectedKey="{/filters/periodo}"
+                            width="100%">
+
+                            <core:Item key="2024-05" text="Mayo 2024" />
+                            <core:Item key="2024-04" text="Abril 2024" />
+                            <core:Item key="2024-03" text="Marzo 2024" />
+
+                        </Select>
+                    </VBox>
+
+                    <VBox class="ccnaFilterCard ccnaFilterDate">
+                        <Label text="Fecha desde" />
+                        <DatePicker
+                            value="{/filters/fechaDesde}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            width="100%" />
+                    </VBox>
+
+                    <VBox class="ccnaFilterCard ccnaFilterDate">
+                        <Label text="Fecha hasta" />
+                        <DatePicker
+                            value="{/filters/fechaHasta}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            width="100%" />
+                    </VBox>
+
+                    <VBox class="ccnaFilterCard">
+                        <Label text="Zona" />
+                        <Select
+                            selectedKey="{/filters/zona}"
+                            width="100%">
+
+                            <core:Item key="TODAS" text="Todas" />
+                            <core:Item key="NORTE" text="Norte" />
+                            <core:Item key="SUR" text="Sur" />
+                            <core:Item key="CENTRO" text="Centro" />
+
+                        </Select>
+                    </VBox>
+
+                    <VBox class="ccnaFilterCard">
+                        <Label text="Cliente" />
+                        <Select
+                            selectedKey="{/filters/cliente}"
+                            width="100%">
+
+                            <core:Item key="TODOS" text="Todos" />
+                            <core:Item key="TORRE_REFORMA" text="Torre Reforma" />
+                            <core:Item key="PLAZA_SATELITE" text="Plaza Satélite" />
+                            <core:Item key="HOSPITAL_ANGELES" text="Hospital Ángeles" />
+
+                        </Select>
+                    </VBox>
+
+                    <VBox class="ccnaFilterCard">
+                        <Label text="Responsable" />
+                        <Select
+                            selectedKey="{/filters/responsable}"
+                            width="100%">
+
+                            <core:Item key="TODOS" text="Todos" />
+                            <core:Item key="JP" text="Juan Pérez" />
+                            <core:Item key="MG" text="María Gómez" />
+                            <core:Item key="CR" text="Carlos Ruiz" />
+
+                        </Select>
+                    </VBox>
+
+                    <VBox class="ccnaApplyBox">
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            class="ccnaApplyButton"
+                            press=".onApplyFilters" />
+                    </VBox>
+
+                </HBox>
+
+                <!-- KPI CARDS -->
+                <HBox class="ccnaKpiGrid">
+
+                    <HBox
+                        class="ccnaKpiCard ccnaKpiBlue"
+                        alignItems="Center">
+
+                        <HBox
+                            class="ccnaKpiIconWrap ccnaIconBlue"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://headset"
+                                size="1.45rem" />
+
+                        </HBox>
+
+                        <VBox>
+                            <Text
+                                text="{/kpis/planeadas/value}"
+                                class="ccnaKpiNumber ccnaBlueText" />
+
+                            <Text
+                                text="{/kpis/planeadas/title}"
+                                class="ccnaKpiTitle" />
+
+                            <Text
+                                text="{/kpis/planeadas/subtitle}"
+                                class="ccnaKpiSubtitle" />
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        class="ccnaKpiCard ccnaKpiGreen"
+                        alignItems="Center">
+
+                        <HBox
+                            class="ccnaKpiIconWrap ccnaIconGreen"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://accept"
+                                size="1.45rem" />
+
+                        </HBox>
+
+                        <VBox>
+                            <Text
+                                text="{/kpis/atendidas/value}"
+                                class="ccnaKpiNumber ccnaGreenText" />
+
+                            <Text
+                                text="{/kpis/atendidas/title}"
+                                class="ccnaKpiTitle" />
+
+                            <Text
+                                text="{/kpis/atendidas/subtitle}"
+                                class="ccnaKpiSubtitle ccnaGreenText" />
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        class="ccnaKpiCard ccnaKpiRed"
+                        alignItems="Center">
+
+                        <HBox
+                            class="ccnaKpiIconWrap ccnaIconRed"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://decline"
+                                size="1.45rem" />
+
+                        </HBox>
+
+                        <VBox>
+                            <Text
+                                text="{/kpis/noAtendidas/value}"
+                                class="ccnaKpiNumber ccnaRedText" />
+
+                            <Text
+                                text="{/kpis/noAtendidas/title}"
+                                class="ccnaKpiTitle" />
+
+                            <Text
+                                text="{/kpis/noAtendidas/subtitle}"
+                                class="ccnaKpiSubtitle ccnaRedText" />
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        class="ccnaKpiCard ccnaKpiPurple"
+                        alignItems="Center">
+
+                        <HBox
+                            class="ccnaKpiIconWrap ccnaIconPurple"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://target-group"
+                                size="1.45rem" />
+
+                        </HBox>
+
+                        <VBox>
+                            <Text
+                                text="{/kpis/cumplimiento/value}"
+                                class="ccnaKpiNumber ccnaPurpleText" />
+
+                            <Text
+                                text="{/kpis/cumplimiento/title}"
+                                class="ccnaKpiTitle" />
+
+                            <Text
+                                text="{/kpis/cumplimiento/subtitle}"
+                                class="ccnaKpiSubtitle" />
+                        </VBox>
+
+                    </HBox>
+
+                </HBox>
+
+                <!-- SWITCH ANÁLISIS -->
+                <HBox
+                    class="ccnaAnalysisBar"
+                    alignItems="Center"
+                    justifyContent="SpaceBetween">
+
+                    <HBox
+                        alignItems="Center"
+                        class="ccnaAnalysisLeft">
+
+                        <Text
+                            text="Ver análisis por:"
+                            class="ccnaSmallLabel" />
+
+                        <SegmentedButton
+                            selectedKey="{/selectedSegment}"
+                            selectionChange=".onSegmentChange"
+                            class="ccnaSegmented">
+
+                            <items>
+                                <SegmentedButtonItem
+                                    key="NO_ATENDIDAS"
+                                    text="No atendidas (3)" />
+
+                                <SegmentedButtonItem
+                                    key="ATENDIDAS"
+                                    text="Atendidas (62)" />
+                            </items>
+
+                        </SegmentedButton>
+
+                    </HBox>
+
+                    <MessageStrip
+                        text="{/analysisInfo}"
+                        type="Information"
+                        showIcon="true"
+                        showCloseButton="false"
+                        class="ccnaInfoStrip" />
+
+                </HBox>
+
+                <!-- TABLA / LISTADO -->
+                <VBox class="ccnaTableCard">
+
+                    <!-- TÍTULO Y BUSCADOR -->
+                    <HBox
+                        class="ccnaTableTop"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween">
+
+                        <Title
+                            text="Solicitudes pendientes por cliente"
+                            level="H4"
+                            class="ccnaSectionTitle" />
+
+                        <SearchField
+                            width="18rem"
+                            placeholder="Buscar cliente..."
+                            liveChange=".onSearchClient"
+                            search=".onSearchClient"
+                            class="ccnaSearch" />
+
+                    </HBox>
+
+                    <!-- CABECERA -->
+                    <HBox
+                        class="ccnaColumnHeader"
+                        alignItems="Center">
+
+                        <Text
+                            text="Cliente"
+                            class="ccnaCol ccnaColClient" />
+
+                        <Text
+                            text="Solicitudes pendientes"
+                            class="ccnaCol ccnaColPending ccnaCenterText" />
+
+                        <Text
+                            text="Elevadores afectados"
+                            class="ccnaCol ccnaColElevators ccnaCenterText" />
+
+                        <Text
+                            text="Días pendiente"
+                            class="ccnaCol ccnaColDays ccnaCenterText" />
+
+                        <Text
+                            text="Motivo principal"
+                            class="ccnaCol ccnaColReason" />
+
+                        <Text
+                            text="Estado"
+                            class="ccnaCol ccnaColStatus ccnaCenterText" />
+
+                    </HBox>
+
+                    <!-- LISTADO CLIENTES -->
+                    <List
+                        id="clientList"
+                        items="{/clientes}"
+                        showSeparators="None"
+                        noDataText="No se encontraron clientes con solicitudes pendientes."
+                        class="ccnaClientList">
+
+                        <items>
+                            <CustomListItem>
+                                <VBox class="ccnaClientItem">
+
+                                    <!-- FILA PRINCIPAL -->
+                                    <HBox
+                                        class="ccnaClientRow"
+                                        alignItems="Center">
+
+                                        <!-- CLIENTE -->
+                                        <HBox
+                                            class="ccnaCol ccnaColClient"
+                                            alignItems="Center">
+
+                                            <Button
+                                                icon="{= ${expanded} ? 'sap-icon://slim-arrow-down' : 'sap-icon://slim-arrow-right' }"
+                                                type="Transparent"
+                                                class="ccnaExpandButton"
+                                                press=".onToggleCliente" />
+
+                                            <core:Icon
+                                                src="sap-icon://building"
+                                                size="1rem"
+                                                class="ccnaBuildingIcon" />
+
+                                            <Text
+                                                text="{cliente}"
+                                                class="ccnaClientName" />
+
+                                        </HBox>
+
+                                        <!-- SOLICITUDES PENDIENTES -->
+                                        <HBox
+                                            class="ccnaCol ccnaColPending"
+                                            alignItems="Center"
+                                            justifyContent="Center">
+
+                                            <Text
+                                                text="{pendientes}"
+                                                class="ccnaStrongText" />
+
+                                        </HBox>
+
+                                        <!-- ELEVADORES AFECTADOS -->
+                                        <HBox
+                                            class="ccnaCol ccnaColElevators"
+                                            alignItems="Center"
+                                            justifyContent="Center">
+
+                                            <Text
+                                                text="{elevadores}"
+                                                class="ccnaStrongText" />
+
+                                        </HBox>
+
+                                        <!-- DÍAS PENDIENTE -->
+                                        <HBox
+                                            class="ccnaCol ccnaColDays"
+                                            alignItems="Center"
+                                            justifyContent="Center">
+
+                                            <ObjectStatus
+                                                text="{diasLabel}"
+                                                state="{diasState}"
+                                                class="ccnaDaysStatus" />
+
+                                        </HBox>
+
+                                        <!-- MOTIVO -->
+                                        <HBox
+                                            class="ccnaCol ccnaColReason"
+                                            alignItems="Center">
+
+                                            <Text
+                                                text="{motivo}"
+                                                class="ccnaReasonText" />
+
+                                        </HBox>
+
+                                        <!-- ESTADO -->
+                                        <HBox
+                                            class="ccnaCol ccnaColStatus"
+                                            alignItems="Center"
+                                            justifyContent="Center">
+
+                                            <core:Icon
+                                                src="sap-icon://circle-task-2"
+                                                size="0.55rem"
+                                                color="{estadoColor}"
+                                                class="ccnaStatusDot" />
+
+                                            <ObjectStatus
+                                                text="{estado}"
+                                                state="{estadoState}"
+                                                class="ccnaStatusPill" />
+
+                                        </HBox>
+
+                                    </HBox>
+
+                                    <!-- DETALLE EXPANDIDO -->
+                                    <VBox
+                                        visible="{expanded}"
+                                        class="ccnaDetailBlock">
+
+                                        <Text
+                                            text="{= 'Detalle de solicitud pendiente - ' + ${cliente} }"
+                                            class="ccnaDetailTitle" />
+
+                                        <!-- CABECERA DETALLE -->
+                                        <HBox
+                                            class="ccnaDetailHeader"
+                                            alignItems="Center">
+
+                                            <Text
+                                                text="OT"
+                                                class="ccnaDetailCol ccnaDetailColOT" />
+
+                                            <Text
+                                                text="Elevador"
+                                                class="ccnaDetailCol ccnaDetailColElevador" />
+
+                                            <Text
+                                                text="Fecha solicitud"
+                                                class="ccnaDetailCol ccnaDetailColFecha" />
+
+                                            <Text
+                                                text="Días pendiente"
+                                                class="ccnaDetailCol ccnaDetailColDias" />
+
+                                            <Text
+                                                text="Responsable"
+                                                class="ccnaDetailCol ccnaDetailColResponsable" />
+
+                                            <Text
+                                                text="Motivo"
+                                                class="ccnaDetailCol ccnaDetailColMotivo" />
+
+                                            <Text
+                                                text="Notas"
+                                                class="ccnaDetailCol ccnaDetailColNotas" />
+
+                                        </HBox>
+
+                                        <!-- LISTA DETALLE -->
+                                        <List
+                                            items="{detalle}"
+                                            showSeparators="None"
+                                            class="ccnaDetailList">
+
+                                            <items>
+                                                <CustomListItem>
+
+                                                    <HBox
+                                                        class="ccnaDetailRow"
+                                                        alignItems="Center">
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColOT">
+                                                            <Text
+                                                                text="{ot}"
+                                                                class="ccnaStrongText" />
+                                                        </HBox>
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColElevador">
+                                                            <Text text="{elevador}" />
+                                                        </HBox>
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColFecha">
+                                                            <Text text="{fechaSolicitud}" />
+                                                        </HBox>
+
+                                                        <HBox
+                                                            class="ccnaDetailCol ccnaDetailColDias"
+                                                            alignItems="Center"
+                                                            justifyContent="Center">
+
+                                                            <ObjectStatus
+                                                                text="{diasLabel}"
+                                                                state="{diasState}"
+                                                                class="ccnaDaysStatus" />
+
+                                                        </HBox>
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColResponsable">
+                                                            <Text text="{responsable}" />
+                                                        </HBox>
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColMotivo">
+                                                            <Text text="{motivo}" />
+                                                        </HBox>
+
+                                                        <HBox class="ccnaDetailCol ccnaDetailColNotas">
+                                                            <Text text="{notas}" />
+                                                        </HBox>
+
+                                                    </HBox>
+
+                                                </CustomListItem>
+                                            </items>
+
+                                        </List>
+
+                                        <Link
+                                            text="{= 'Ver todas las ' + ${pendientes} + ' solicitudes de ' + ${cliente} }"
+                                            press=".onOpenCliente"
+                                            class="ccnaDetailLink" />
+
+                                    </VBox>
+
+                                </VBox>
+                            </CustomListItem>
+                        </items>
+
+                    </List>
+
+                    <!-- TOTAL -->
+                    <HBox
+                        class="ccnaTotalRow"
+                        alignItems="Center">
+
+                        <HBox class="ccnaCol ccnaColClient">
+                            <Text
+                                text="Total"
+                                class="ccnaTotalText" />
+                        </HBox>
+
+                        <HBox
+                            class="ccnaCol ccnaColPending"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{/totales/pendientes}"
+                                class="ccnaTotalText" />
+
+                        </HBox>
+
+                        <HBox
+                            class="ccnaCol ccnaColElevators"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{/totales/elevadores}"
+                                class="ccnaTotalText" />
+
+                        </HBox>
+
+                        <HBox
+                            class="ccnaCol ccnaColDays"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{/totales/promedioDias}"
+                                class="ccnaTotalDanger" />
+
+                        </HBox>
+
+                        <HBox
+                            class="ccnaCol ccnaColReason"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <Text
+                                text="—"
+                                class="ccnaMutedText" />
+
+                        </HBox>
+
+                        <HBox
+                            class="ccnaCol ccnaColStatus"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <Text
+                                text="—"
+                                class="ccnaMutedText" />
+
+                        </HBox>
+
+                    </HBox>
+
+                    <!-- NOTA INFORMATIVA -->
+                    <MessageStrip
+                        text="Los días pendientes se calculan desde la fecha de solicitud hasta la fecha actual."
+                        type="Information"
+                        showIcon="true"
+                        showCloseButton="false"
+                        class="ccnaFooterInfo" />
+
+                </VBox>
+
+            </VBox>
+        </content>
+
+    </Page>
+</mvc:View>

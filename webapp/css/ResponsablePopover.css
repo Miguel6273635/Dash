@@ -1,135 +1,149 @@
 /* ==========================================================================
-   CSS EXCLUSIVO PARA POPOVER DE RESPONSABLES (EXACTITUD PIXEL-PERFECT)
+   POPOVER RESPONSABLE
    ========================================================================== */
-
-/* 1. Limpieza de bordes y padding nativo del Popover de SAPUI5 */
-.customPopoverResponsable {
-    box-shadow: 0px 8px 24px rgba(9, 30, 66, 0.15) !important;
-    border-radius: 8px !important;
+.coResponsiblePopover .sapMPopoverCont {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    background: #FFFFFF !important;
     border: none !important;
+    box-shadow: 0 20px 44px rgba(15, 23, 42, 0.22) !important;
 }
 
-.customPopoverResponsable .sapMPopoverCont {
-    padding: 0 !important; /* Quitamos el padding intrusivo de SAP */
-    border-radius: 8px !important;
-}
-
-/* 2. Contenedor principal con espaciado interior (padding) exacto */
-.popoverContentWrapper {
-    padding: 20px !important;
-    background-color: #FFFFFF !important;
-    box-sizing: border-box;
-}
-
-/* 3. Encabezado (Avatar + Textos) */
-.popoverHeaderContainer {
-    display: flex !important;
-    align-items: center !important;
-    margin-bottom: 16px !important;
-}
-
-.popoverAvatar {
-    margin-right: 14px !important;
-    border: 1px solid #DFE1E6 !important; 
-}
-
-.popoverHeaderText {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.popoverTitleName {
-    color: #172B4D !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-    margin-bottom: 4px !important;
-}
-
-.popoverSubtitleOts {
-    color: #5E6C84 !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-}
-
-/* 4. Línea Divisoria */
-.popoverDivider {
-    height: 1px;
-    background-color: #DFE1E6;
-    margin-bottom: 16px;
-    width: 100%;
-}
-
-/* 5. Secciones genéricas (Control de separación vertical) */
-.popoverSection {
-    margin-bottom: 20px !important;
-}
-
-.popoverSectionTitle {
-    color: #5E6C84 !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    margin-bottom: 12px !important;
-    display: block !important;
-}
-
-/* 6. Equipos Afectados (Tags / Pills) */
-.popoverTagsContainer {
-    gap: 8px !important; /* Espaciado moderno css grid/flex */
-}
-
-.popoverTag {
-    background-color: #F4F5F7 !important;
-    color: #172B4D !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    padding: 4px 10px !important;
-    border-radius: 4px !important;
-    border: 1px solid #DFE1E6 !important;
-    display: inline-block !important;
-}
-
-/* 7. Clientes Afectados (Lista con separadores) */
-.popoverClientsContainer {
+.coResponsiblePopover .sapMPopoverScroll,
+.coResponsiblePopover .sapMPopoverScrollCont,
+.coResponsiblePopover .sapMScrollCont,
+.coResponsiblePopover .sapMScrollContScroll {
     width: 100% !important;
+    background: #FFFFFF !important;
+    overflow: hidden !important;
 }
 
-.popoverClientRow {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+.coPopoverContent {
     width: 100% !important;
-    padding: 8px 0 !important;
-    border-bottom: 1px solid #F4F5F7 !important;
+    padding: 1rem !important;
+    background: #FFFFFF !important;
+    border-radius: 18px !important;
+    box-sizing: border-box !important;
 }
 
-/* Quitamos la línea de la última fila para que se vea limpio */
-.popoverClientRow:last-child {
-    border-bottom: none !important;
+/* Header */
+
+.coPopoverHeader {
+    padding-bottom: 0.8rem !important;
+    margin-bottom: 0.85rem !important;
+    border-bottom: 1px solid #EEF2F7 !important;
 }
 
-.popoverClientName {
-    color: #172B4D !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
+.coPopoverAvatar {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    margin-right: 0.65rem !important;
 }
 
-.popoverClientOts {
-    color: #172B4D !important; /* Color oscuro para resaltar la cantidad */
+.coPopoverAvatar .sapFAvatarInitialsHolder {
+    font-size: 0.78rem !important;
+    font-weight: 900 !important;
+}
+
+.coPopoverName {
+    color: #111827 !important;
+    font-size: 0.86rem !important;
+    font-weight: 900 !important;
+    line-height: 1.1 !important;
+}
+
+.coPopoverDeviation {
+    color: #EF4444 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    margin-top: 0.16rem !important;
+}
+
+
+/* Secciones */
+
+.coPopoverSection {
+    margin-bottom: 0.85rem !important;
+}
+
+.coPopoverSectionHeader {
+    margin-bottom: 0.42rem !important;
+}
+
+.coPopoverSectionIcon {
+    color: #0B75F6 !important;
+    font-size: 0.92rem !important;
+    margin-right: 0.4rem !important;
+}
+
+.coPopoverSectionTitle {
+    color: #253247 !important;
+    font-size: 0.74rem !important;
+    font-weight: 900 !important;
+}
+
+
+/* Listas */
+
+.coPopoverList {
+    gap: 0.32rem !important;
+}
+
+.coPopoverListItem {
+    min-height: 24px !important;
+    padding-left: 1.3rem !important;
+    box-sizing: border-box !important;
+}
+
+.coPopoverItemText {
+    color: #667085 !important;
+    font-size: 0.69rem !important;
     font-weight: 700 !important;
-    font-size: 13px !important;
+    max-width: 190px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-/* 8. Enlace Final (Call to Action) */
-.popoverDetailLink {
-    color: #0052CC !important;
-    font-weight: 600 !important;
-    font-size: 13px !important;
-    margin-top: 4px !important;
-    display: inline-block !important;
+.coPopoverItemCount {
+    color: #1F2937 !important;
+    font-size: 0.69rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
 }
 
-.popoverDetailLink:hover {
-    text-decoration: underline !important;
+
+/* Botón inferior */
+
+.coPopoverDetailButton {
+    width: 100% !important;
+    height: 36px !important;
+    padding: 0 !important;
+    margin-top: 0.15rem !important;
+}
+
+.coPopoverDetailButton .sapMBtnInner {
+    width: 100% !important;
+    height: 36px !important;
+    border-radius: 11px !important;
+    background: #F0F7FF !important;
+    border: 1px solid #D8EAFE !important;
+}
+
+.coPopoverDetailButton .sapMBtnContent {
+    color: #0B75F6 !important;
+    font-size: 0.74rem !important;
+    font-weight: 900 !important;
+    line-height: 34px !important;
+}
+
+.coPopoverDetailButton .sapMBtnIcon {
+    color: #0B75F6 !important;
+    font-size: 0.72rem !important;
+    line-height: 34px !important;
+}
+
+.coPopoverDetailButton:hover .sapMBtnInner {
+    background: #E6F2FF !important;
+    border-color: #B8DCFF !important;
 }

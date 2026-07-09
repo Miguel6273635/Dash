@@ -1,0 +1,719 @@
+/* =========================================================
+   Dashboard: Detalle de cumplimiento general de las órdenes
+   View actual: JSONModel + VizFrame
+   Scope: .DetalleCumplimientoOrdenes
+========================================================= */
+
+.DetalleCumplimientoOrdenes {
+    background: #f5f7fb !important;
+}
+
+.DetalleCumplimientoOrdenes .sapMPageEnableScrolling {
+    background: #f5f7fb !important;
+}
+
+/* =========================================================
+   CONTENEDOR GENERAL
+========================================================= */
+
+.dcgoPageContainer {
+    width: 100%;
+    max-width: 1440px;
+    box-sizing: border-box;
+    padding: 18px 24px 14px;
+    margin: 0 auto;
+    gap: 14px;
+}
+
+/* =========================================================
+   HEADER COMPACTO
+========================================================= */
+
+.dcgoCompactHeader {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.dcgoCompactTitle {
+    font-size: 1rem !important;
+    line-height: 1.25rem !important;
+    font-weight: 900 !important;
+    color: #1f2937 !important;
+    letter-spacing: -0.02em;
+}
+
+.dcgoHeaderFilterButton {
+    min-width: 128px;
+}
+
+.dcgoHeaderFilterButton .sapMBtnInner {
+    height: 34px !important;
+    border-radius: 8px !important;
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+}
+
+.dcgoHeaderFilterButton .sapMBtnContent,
+.dcgoHeaderFilterButton .sapUiIcon {
+    color: #ffffff !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+}
+
+/* =========================================================
+   FILTROS COMPACTOS COMO CARDS
+========================================================= */
+
+.dcgoCompactFiltersRow.sapMFlexBox {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.dcgoCompactFilterCard {
+    min-height: 42px;
+    padding: 7px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    box-sizing: border-box;
+    box-shadow: 0 2px 7px rgba(15, 23, 42, 0.045);
+    gap: 8px;
+}
+
+.dcgoCompactFilterIcon {
+    font-size: 0.9rem !important;
+    color: #6b7280 !important;
+    min-width: 15px;
+}
+
+.dcgoCompactFilterContent {
+    width: 100%;
+    min-width: 0;
+}
+
+.dcgoCompactFilterLabel {
+    font-size: 0.58rem !important;
+    line-height: 0.72rem !important;
+    color: #6b7280 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0;
+}
+
+/* SELECT COMPACTO */
+
+.dcgoCompactFilterSelect.sapMSlt {
+    width: 100% !important;
+    height: 19px !important;
+    min-height: 19px !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.dcgoCompactFilterSelect .sapMSltInner {
+    height: 19px !important;
+    line-height: 19px !important;
+    padding-left: 0 !important;
+    padding-right: 1.2rem !important;
+    font-size: 0.72rem !important;
+    color: #111827 !important;
+    font-weight: 800 !important;
+}
+
+.dcgoCompactFilterSelect .sapMSltArrow {
+    height: 19px !important;
+    line-height: 19px !important;
+    color: #9ca3af !important;
+    background: transparent !important;
+}
+
+/* DATEPICKER COMPACTO */
+
+.dcgoCompactFilterDate.sapMInputBase {
+    width: 100% !important;
+    height: 19px !important;
+    min-height: 19px !important;
+}
+
+.dcgoCompactFilterDate .sapMInputBaseContentWrapper {
+    height: 19px !important;
+    min-height: 19px !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.dcgoCompactFilterDate .sapMInputBaseInner {
+    height: 19px !important;
+    line-height: 19px !important;
+    padding-left: 0 !important;
+    font-size: 0.72rem !important;
+    color: #111827 !important;
+    font-weight: 800 !important;
+}
+
+.dcgoCompactFilterDate .sapMInputBaseIcon {
+    height: 19px !important;
+    line-height: 19px !important;
+    color: #111827 !important;
+    background: transparent !important;
+}
+
+/* =========================================================
+   KPI CARDS
+   Estilo: degradado izquierda a derecha + línea lateral
+========================================================= */
+
+.dcgoKpiWrapper {
+    width: 100%;
+    gap: 14px;
+    margin-bottom: 2px;
+}
+
+.dcgoBigKpi {
+    flex: 1 1 250px;
+    min-width: 240px;
+    min-height: 118px;
+    padding: 18px 20px 18px 22px;
+    border-radius: 18px;
+    border: 1px solid #e8edf5;
+    box-sizing: border-box;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.045);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Línea lateral */
+.dcgoBigKpi::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    border-radius: 18px 0 0 18px;
+}
+
+/* Quita línea inferior anterior */
+.dcgoBigKpi::after {
+    display: none !important;
+}
+
+/* Fondo degradado de izquierda a derecha */
+.dcgoPurpleKpi {
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.12) 0%, #ffffff 58%, #ffffff 100%);
+}
+
+.dcgoGreenKpi {
+    background: linear-gradient(90deg, rgba(34, 197, 94, 0.14) 0%, #ffffff 58%, #ffffff 100%);
+}
+
+.dcgoRedKpi {
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.14) 0%, #ffffff 58%, #ffffff 100%);
+}
+
+.dcgoBlueKpi {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, #ffffff 58%, #ffffff 100%);
+}
+
+.dcgoPurpleKpi::before {
+    background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.dcgoGreenKpi::before {
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+}
+
+.dcgoRedKpi::before {
+    background: linear-gradient(180deg, #fb7185 0%, #ef4444 100%);
+}
+
+.dcgoBlueKpi::before {
+    background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+}
+
+/* Icono KPI */
+
+.dcgoKpiIcon {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+}
+
+.dcgoKpiIcon .sapUiIcon {
+    font-size: 1.35rem;
+}
+
+.dcgoKpiIconPurple {
+    background: rgba(124, 58, 237, 0.12);
+}
+
+.dcgoKpiIconPurple .sapUiIcon {
+    color: #6d28d9;
+}
+
+.dcgoKpiIconGreen {
+    background: rgba(34, 197, 94, 0.14);
+}
+
+.dcgoKpiIconGreen .sapUiIcon {
+    color: #16a34a;
+}
+
+.dcgoKpiIconRed {
+    background: rgba(239, 68, 68, 0.14);
+}
+
+.dcgoKpiIconRed .sapUiIcon {
+    color: #ef4444;
+}
+
+.dcgoKpiIconBlue {
+    background: rgba(37, 99, 235, 0.12);
+}
+
+.dcgoKpiIconBlue .sapUiIcon {
+    color: #2563eb;
+}
+
+.dcgoKpiContent {
+    width: 100%;
+    min-width: 0;
+}
+
+.dcgoKpiLabel {
+    font-size: 0.72rem !important;
+    color: #374151 !important;
+    font-weight: 900 !important;
+    margin-bottom: 3px;
+}
+
+.dcgoKpiNumber {
+    font-size: 1.9rem !important;
+    line-height: 1.95rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.04em;
+}
+
+.dcgoKpiUnit {
+    margin-left: 6px;
+    margin-bottom: 4px;
+    font-size: 0.68rem !important;
+    color: #64748b !important;
+    font-weight: 900 !important;
+}
+
+.dcgoKpiDescription {
+    margin-top: 5px;
+    font-size: 0.66rem !important;
+    color: #64748b !important;
+    font-weight: 800 !important;
+}
+
+.dcgoPurpleText {
+    color: #6d28d9 !important;
+}
+
+.dcgoGreenText {
+    color: #16a34a !important;
+}
+
+.dcgoRedText {
+    color: #ef4444 !important;
+}
+
+.dcgoBlueText {
+    color: #2563eb !important;
+}
+
+/* =========================================================
+   GRID / CARDS
+   Layout:
+   [ Brecha        ][ Elevadores   ]
+   [ Causas ][ Resp ][ Tendencia   ]
+   [ Fallas        ][ Tendencia    ]
+========================================================= */
+
+.dcgoDashboardGrid.sapMFlexBox {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-areas:
+        "brecha brecha brecha elevadores elevadores elevadores"
+        "causas causas responsable responsable tendencia tendencia"
+        "fallas fallas fallas fallas tendencia tendencia";
+    gap: 14px;
+    width: 100%;
+    align-items: stretch;
+}
+
+/* Ya no se usa con el View nuevo */
+.dcgoCardsRow {
+    display: contents !important;
+}
+
+.dcgoCard {
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid #e8edf5;
+    background: #ffffff;
+    box-sizing: border-box;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.045);
+    overflow: hidden;
+}
+
+/* Asignación de áreas */
+
+.dcgoBrechaCard {
+    grid-area: brecha;
+    min-height: 340px;
+}
+
+.dcgoElevadoresCard {
+    grid-area: elevadores;
+    min-height: 340px;
+}
+
+.dcgoCausasZonaCard {
+    grid-area: causas;
+    min-height: 365px;
+}
+
+.dcgoResponsablesCard {
+    grid-area: responsable;
+    min-height: 365px;
+}
+
+.dcgoTendenciaCard {
+    grid-area: tendencia;
+    min-height: 744px;
+}
+
+.dcgoFallasCard {
+    grid-area: fallas;
+    min-height: 365px;
+}
+
+.dcgoCardHeader {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.dcgoCardTitle {
+    font-size: 0.86rem !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+    margin-bottom: 2px;
+}
+
+.dcgoCardSubtitle {
+    font-size: 0.66rem !important;
+    color: #64748b !important;
+    font-weight: 700 !important;
+}
+
+.dcgoIconButton .sapMBtnInner {
+    border: none !important;
+    background: transparent !important;
+}
+
+.dcgoIconButton .sapUiIcon {
+    color: #94a3b8 !important;
+}
+
+/* =========================================================
+   LEYENDAS
+========================================================= */
+
+.dcgoLegendRow {
+    gap: 12px;
+    margin: 4px 0 6px;
+}
+
+.dcgoLegendItem {
+    gap: 4px;
+}
+
+.dcgoLegendItem .sapMText {
+    font-size: 0.62rem !important;
+    color: #64748b !important;
+    font-weight: 800 !important;
+}
+
+.dcgoGrayIcon {
+    color: #94a3b8 !important;
+}
+
+.dcgoBlueIcon {
+    color: #2563eb !important;
+}
+
+.dcgoGreenIcon {
+    color: #16a34a !important;
+}
+
+.dcgoPurpleIcon {
+    color: #6d28d9 !important;
+}
+
+.dcgoRedIcon {
+    color: #ef4444 !important;
+}
+
+/* =========================================================
+   VIZFRAME
+========================================================= */
+
+.dcgoCard .sapVizFrame,
+.dcgoCard .v-m-root {
+    background: transparent !important;
+}
+
+.dcgoCardFooter {
+    gap: 6px;
+    margin-top: 4px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.dcgoCardFooter .sapMText {
+    font-size: 0.66rem !important;
+    color: #64748b !important;
+    font-weight: 700 !important;
+}
+
+.dcgoCardLink {
+    margin-top: 6px;
+    font-size: 0.7rem !important;
+    font-weight: 900 !important;
+    color: #6d28d9 !important;
+}
+
+/* =========================================================
+   CAUSAS POR ZONA / HEATMAP
+========================================================= */
+
+.dcgoCausasHeader {
+    width: 100%;
+    padding: 8px 0 6px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.dcgoCausasHeaderText {
+    font-size: 0.58rem !important;
+    color: #64748b !important;
+    font-weight: 900 !important;
+}
+
+.dcgoTextCenter {
+    text-align: center !important;
+}
+
+.dcgoCausasList {
+    margin-top: 4px;
+}
+
+.dcgoCausasList .sapMLIB {
+    background: transparent !important;
+    border: none !important;
+}
+
+.dcgoCausasRow {
+    width: 100%;
+    min-height: 30px;
+}
+
+.dcgoCausaName {
+    font-size: 0.58rem !important;
+    color: #334155 !important;
+    font-weight: 800 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dcgoHeatCell,
+.dcgoHeatTotal {
+    display: inline-block;
+    width: 26px;
+    height: 23px;
+    line-height: 23px;
+    border-radius: 6px;
+    text-align: center !important;
+    font-size: 0.62rem !important;
+    font-weight: 900 !important;
+    color: #111827 !important;
+    margin: 0 auto;
+}
+
+.dcgoHeatCell[data-level="0"] {
+    background: #f8fafc;
+}
+
+.dcgoHeatCell[data-level="1"] {
+    background: #dcfce7;
+}
+
+.dcgoHeatCell[data-level="2"] {
+    background: #fef3c7;
+}
+
+.dcgoHeatCell[data-level="3"] {
+    background: #fed7aa;
+}
+
+.dcgoHeatCell[data-level="4"] {
+    background: #fb923c;
+    color: #ffffff !important;
+}
+
+.dcgoHeatTotal {
+    background: transparent !important;
+    color: #111827 !important;
+}
+
+.dcgoHeatLegend {
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.dcgoHeatLegend .sapMText {
+    font-size: 0.58rem !important;
+    color: #64748b !important;
+    font-weight: 800 !important;
+}
+
+.dcgoLegendGradient {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #22c55e, #facc15, #f97316);
+}
+
+/* =========================================================
+   TENDENCIA
+========================================================= */
+
+.dcgoTendenciaResumen {
+    gap: 10px;
+    margin: 4px 0 8px;
+}
+
+.dcgoMiniMetric {
+    flex: 1 1 180px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+}
+
+.dcgoMiniMetricLabel {
+    font-size: 0.62rem !important;
+    color: #64748b !important;
+    font-weight: 800 !important;
+}
+
+.dcgoMiniMetricValue {
+    margin-top: 2px;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+}
+
+.dcgoTrendTable {
+    margin-top: 4px;
+}
+
+.dcgoTrendTable .sapMListTblHeaderCell {
+    padding: 0.25rem 0.35rem !important;
+    background: #f8fafc !important;
+}
+
+.dcgoTrendTable .sapMListTblCell {
+    padding: 0.22rem 0.35rem !important;
+}
+
+.dcgoTrendTable .sapMText,
+.dcgoTrendTable .sapMObjStatusText {
+    font-size: 0.64rem !important;
+    font-weight: 800 !important;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.dcgoFooter {
+    text-align: center !important;
+    color: #94a3b8 !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    margin-top: 2px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1300px) {
+    .dcgoCompactFiltersRow.sapMFlexBox {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1200px) {
+    .dcgoDashboardGrid.sapMFlexBox {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "brecha"
+            "elevadores"
+            "causas"
+            "responsable"
+            "tendencia"
+            "fallas";
+    }
+
+    .dcgoBrechaCard,
+    .dcgoElevadoresCard,
+    .dcgoCausasZonaCard,
+    .dcgoResponsablesCard,
+    .dcgoTendenciaCard,
+    .dcgoFallasCard {
+        min-width: 100%;
+        min-height: auto;
+    }
+
+    .dcgoBigKpi {
+        flex: 1 1 calc(50% - 8px);
+    }
+}
+
+@media (max-width: 768px) {
+    .dcgoPageContainer {
+        padding: 16px;
+    }
+
+    .dcgoCompactHeader {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    .dcgoCompactFiltersRow.sapMFlexBox {
+        grid-template-columns: 1fr;
+    }
+
+    .dcgoHeaderFilterButton {
+        width: 100%;
+    }
+
+    .dcgoBigKpi {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+}

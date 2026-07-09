@@ -12,7 +12,7 @@
                 <VBox class="dozPage">
 
                     <VBox class="dozHeader">
-                        <Title text="Detalle operativo de zona:" level="H1" class="dozTitle"/>
+                        <Title text="Detalle operativo de zona" level="H1" class="dozTitle"/>
                         <Text text="Información consolidada de carga, horas y recursos de la zona seleccionada." class="dozSubtitle"/>
                     </VBox>
 
@@ -165,124 +165,136 @@
                             </VBox>
                             <HBox class="dozCardLink" justifyContent="End" alignItems="Center"><Link text="Ver detalle de órdenes" press=".onVerDetalleOrdenes"/><core:Icon src="sap-icon://arrow-right"/></HBox>
                         </VBox>
+<VBox class="dozCard dozHoursCardFixed">
 
-                        <VBox class="dozCard dozHoursCard">
-
-    <HBox class="dozCardHeader" alignItems="Center">
-        <Title text="Evolución de horas (programadas vs reales)" level="H3" class="dozCardTitle"/>
-        <Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/>
+    <HBox class="dozHoursFixedHeader" alignItems="Center">
+        <Title text="Evolución de horas (programadas vs reales)" level="H3" class="dozHoursFixedTitle"/>
+        <Button icon="sap-icon://hint" type="Transparent" class="dozHoursFixedInfo"/>
     </HBox>
 
-    <Text text="Comparativa acumulada de horas en el periodo." class="dozCardSubtitle"/>
+    <Text text="Comparativa acumulada de horas en el periodo." class="dozHoursFixedSubtitle"/>
 
-    <HBox class="dozMiniKpiRow" wrap="NoWrap">
-        <HBox class="dozMiniKpi dozMiniPurple" alignItems="Center">
+    <HBox class="dozHoursFixedMiniRow" wrap="NoWrap">
+
+        <HBox class="dozHoursFixedMini dozHoursFixedPurple" alignItems="Center">
             <core:Icon src="sap-icon://calendar"/>
             <VBox>
-                <Text text="Total programadas"/>
-                <Text text="1,420 h"/>
+                <Text text="Total programadas" class="dozHoursFixedMiniLabel"/>
+                <Text text="1,420 h" class="dozHoursFixedMiniValue"/>
             </VBox>
         </HBox>
 
-        <HBox class="dozMiniKpi dozMiniGreen" alignItems="Center">
+        <HBox class="dozHoursFixedMini dozHoursFixedGreen" alignItems="Center">
             <core:Icon src="sap-icon://clock"/>
             <VBox>
-                <Text text="Total reales"/>
-                <Text text="1,518 h"/>
+                <Text text="Total reales" class="dozHoursFixedMiniLabel"/>
+                <Text text="1,518 h" class="dozHoursFixedMiniValue"/>
             </VBox>
         </HBox>
 
-        <HBox class="dozMiniKpi dozMiniRed" alignItems="Center">
+        <HBox class="dozHoursFixedMini dozHoursFixedRed" alignItems="Center">
             <core:Icon src="sap-icon://trend-up"/>
             <VBox>
-                <Text text="Variación"/>
-                <Text text="+98 h (6.9%)"/>
+                <Text text="Variación" class="dozHoursFixedMiniLabel"/>
+                <Text text="+98 h (6.9%)" class="dozHoursFixedMiniValue"/>
             </VBox>
         </HBox>
+
     </HBox>
 
-    <VBox class="dozLineChartBox">
+    <VBox class="dozHoursFixedChartBox">
 
-        <HBox class="dozChartLegend" justifyContent="End">
+        <HBox class="dozHoursFixedLegend" justifyContent="End" alignItems="Center">
             <HBox alignItems="Center">
-                <VBox class="dozLegendLinePurple"/>
+                <VBox class="dozHoursFixedLegendPurple"/>
                 <Text text="Programadas"/>
             </HBox>
+
             <HBox alignItems="Center">
-                <VBox class="dozLegendLineGreen"/>
+                <VBox class="dozHoursFixedLegendGreen"/>
                 <Text text="Reales"/>
             </HBox>
         </HBox>
+       <html:svg
+    class="dozHoursFixedSvg"
+    viewBox="0 0 420 178"
+    preserveAspectRatio="none"
+    translate="no">
 
-        <html:svg class="dozLineSvg" viewBox="0 0 620 245" preserveAspectRatio="none">
+    <html:defs>
+        <html:linearGradient id="dozAreaPurpleFixedFinal" x1="0" y1="0" x2="0" y2="1">
+            <html:stop offset="0%" stop-color="#7C3AED" stop-opacity="0.18"/>
+            <html:stop offset="100%" stop-color="#7C3AED" stop-opacity="0.03"/>
+        </html:linearGradient>
+    </html:defs>
 
-            <html:defs>
-                <html:linearGradient id="dozAreaPurpleDetalle" x1="0" y1="0" x2="0" y2="1">
-                    <html:stop offset="0%" stop-color="#7C3AED" stop-opacity="0.20"/>
-                    <html:stop offset="100%" stop-color="#7C3AED" stop-opacity="0.02"/>
-                </html:linearGradient>
-            </html:defs>
+    <!-- GRID -->
+    <html:line x1="54" y1="22" x2="358" y2="22" class="dozHoursFixedGrid"/>
+    <html:line x1="54" y1="48" x2="358" y2="48" class="dozHoursFixedGrid"/>
+    <html:line x1="54" y1="74" x2="358" y2="74" class="dozHoursFixedGrid"/>
+    <html:line x1="54" y1="100" x2="358" y2="100" class="dozHoursFixedGrid"/>
+    <html:line x1="54" y1="126" x2="358" y2="126" class="dozHoursFixedGrid"/>
 
-            <!-- Grid horizontal -->
-            <html:line x1="60" y1="30" x2="590" y2="30" class="dozGridLine"/>
-            <html:line x1="60" y1="72" x2="590" y2="72" class="dozGridLine"/>
-            <html:line x1="60" y1="114" x2="590" y2="114" class="dozGridLine"/>
-            <html:line x1="60" y1="156" x2="590" y2="156" class="dozGridLine"/>
-            <html:line x1="60" y1="198" x2="590" y2="198" class="dozGridLine"/>
+    <!-- EJES -->
+    <html:line x1="54" y1="22" x2="54" y2="126" class="dozHoursFixedAxis"/>
+    <html:line x1="54" y1="126" x2="358" y2="126" class="dozHoursFixedAxis"/>
 
-            <!-- Axis -->
-            <html:line x1="60" y1="30" x2="60" y2="198" class="dozAxisLine"/>
-            <html:line x1="60" y1="198" x2="590" y2="198" class="dozAxisLine"/>
+    <!-- ÁREA MORADA -->
+    <html:path
+        d="M 54 117 L 126 101 L 198 85 L 270 69 L 342 53 L 342 126 L 54 126 Z"
+        fill="url(#dozAreaPurpleFixedFinal)"/>
 
-            <!-- Area morada -->
-            <html:path d="M 60 184 L 185 154 L 310 124 L 435 92 L 560 60 L 560 198 L 60 198 Z" fill="url(#dozAreaPurpleDetalle)"/>
+    <!-- LÍNEA PROGRAMADAS -->
+    <html:polyline
+        points="54,117 126,101 198,85 270,69 342,53"
+        class="dozHoursFixedLinePurple"/>
 
-            <!-- Lines -->
-            <html:polyline points="60,184 185,154 310,124 435,92 560,60" class="dozLineProgramada"/>
-            <html:polyline points="60,174 185,134 310,104 435,72 560,38" class="dozLineReal"/>
+    <!-- LÍNEA REALES -->
+    <html:polyline
+        points="54,108 126,88 198,70 270,52 342,35"
+        class="dozHoursFixedLineGreen"/>
 
-            <!-- Dots programadas -->
-            <html:circle cx="60" cy="184" r="4.5" class="dozDotProgramada"/>
-            <html:circle cx="185" cy="154" r="4.5" class="dozDotProgramada"/>
-            <html:circle cx="310" cy="124" r="4.5" class="dozDotProgramada"/>
-            <html:circle cx="435" cy="92" r="4.5" class="dozDotProgramada"/>
-            <html:circle cx="560" cy="60" r="4.5" class="dozDotProgramada"/>
+    <!-- PUNTOS PROGRAMADAS -->
+    <html:circle cx="54" cy="117" r="3.5" class="dozHoursFixedDotPurple"/>
+    <html:circle cx="126" cy="101" r="3.5" class="dozHoursFixedDotPurple"/>
+    <html:circle cx="198" cy="85" r="3.5" class="dozHoursFixedDotPurple"/>
+    <html:circle cx="270" cy="69" r="3.5" class="dozHoursFixedDotPurple"/>
+    <html:circle cx="342" cy="53" r="3.5" class="dozHoursFixedDotPurple"/>
 
-            <!-- Dots reales -->
-            <html:circle cx="60" cy="174" r="4.5" class="dozDotReal"/>
-            <html:circle cx="185" cy="134" r="4.5" class="dozDotReal"/>
-            <html:circle cx="310" cy="104" r="4.5" class="dozDotReal"/>
-            <html:circle cx="435" cy="72" r="4.5" class="dozDotReal"/>
-            <html:circle cx="560" cy="38" r="4.5" class="dozDotReal"/>
+    <!-- PUNTOS REALES -->
+    <html:circle cx="54" cy="108" r="3.5" class="dozHoursFixedDotGreen"/>
+    <html:circle cx="126" cy="88" r="3.5" class="dozHoursFixedDotGreen"/>
+    <html:circle cx="198" cy="70" r="3.5" class="dozHoursFixedDotGreen"/>
+    <html:circle cx="270" cy="52" r="3.5" class="dozHoursFixedDotGreen"/>
+    <html:circle cx="342" cy="35" r="3.5" class="dozHoursFixedDotGreen"/>
 
-            <!-- Y labels -->
-            <html:text x="12" y="35" class="dozSvgLabel">2,000</html:text>
-            <html:text x="18" y="77" class="dozSvgLabel">1,600</html:text>
-            <html:text x="20" y="119" class="dozSvgLabel">1,200</html:text>
-            <html:text x="29" y="161" class="dozSvgLabel">800</html:text>
-            <html:text x="29" y="202" class="dozSvgLabel">400</html:text>
+    <!-- LABELS Y -->
+    <html:text x="8" y="26" class="dozHoursFixedLabel">2,000</html:text>
+    <html:text x="11" y="52" class="dozHoursFixedLabel">1,600</html:text>
+    <html:text x="11" y="78" class="dozHoursFixedLabel">1,200</html:text>
+    <html:text x="25" y="104" class="dozHoursFixedLabel">800</html:text>
+    <html:text x="25" y="130" class="dozHoursFixedLabel">400</html:text>
 
-            <!-- X labels -->
-            <html:text x="46" y="226" class="dozSvgLabel">Sem 18</html:text>
-            <html:text x="171" y="226" class="dozSvgLabel">Sem 19</html:text>
-            <html:text x="296" y="226" class="dozSvgLabel">Sem 20</html:text>
-            <html:text x="421" y="226" class="dozSvgLabel">Sem 21</html:text>
-            <html:text x="546" y="226" class="dozSvgLabel">Sem 22</html:text>
+    <!-- LABELS X -->
+    <html:text x="41" y="152" class="dozHoursFixedLabel" translate="no">Sem 18</html:text>
+    <html:text x="113" y="152" class="dozHoursFixedLabel" translate="no">Sem 19</html:text>
+    <html:text x="185" y="152" class="dozHoursFixedLabel" translate="no">Sem 20</html:text>
+    <html:text x="257" y="152" class="dozHoursFixedLabel" translate="no">Sem 21</html:text>
+    <html:text x="329" y="152" class="dozHoursFixedLabel" translate="no">Sem 22</html:text>
 
-            <!-- Final labels -->
-            <html:text x="566" y="41" class="dozSvgLabelGreen">1,518 h</html:text>
-            <html:text x="566" y="63" class="dozSvgLabelPurple">1,420 h</html:text>
+    <!-- ETIQUETAS FINALES -->
+    <html:text x="348" y="37" class="dozHoursFixedLabelGreen">1,518 h</html:text>
+    <html:text x="348" y="55" class="dozHoursFixedLabelPurple">1,420 h</html:text>
 
-        </html:svg>
+</html:svg>
     </VBox>
 
-    <HBox class="dozCardLink" justifyContent="End" alignItems="Center">
+    <HBox class="dozHoursFixedLink" justifyContent="End" alignItems="Center">
         <Link text="Ver detalle de horas" press=".onVerDetalleHoras"/>
         <core:Icon src="sap-icon://arrow-right"/>
     </HBox>
 
 </VBox>
-
                         <VBox class="dozCard dozResourcesCard">
                             <HBox class="dozCardHeader" alignItems="Center"><Title text="Recursos y utilización" level="H3" class="dozCardTitle"/><Button icon="sap-icon://hint" type="Transparent" class="dozInfoBtn"/></HBox>
                             <Text text="Capacidad, utilización y disponibilidad de recursos." class="dozCardSubtitle"/>

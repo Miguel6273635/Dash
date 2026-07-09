@@ -15,12 +15,7 @@
 
           <!-- HEADER -->
           <VBox class="ccAtHeader">
-
             <HBox alignItems="Center" class="ccAtTitleRow">
-              <VBox class="ccAtMenuButton">
-                <core:Icon src="sap-icon://menu2"/>
-              </VBox>
-
               <VBox>
                 <HBox alignItems="Baseline" class="ccAtTitleTextRow">
                   <Text text="Análisis de solicitudes call center" class="ccAtTitle"/>
@@ -36,35 +31,43 @@
                 </HBox>
               </VBox>
             </HBox>
-
           </VBox>
 
           <!-- FILTROS -->
-          <HBox class="ccAtFilterCard" alignItems="End" wrap="Wrap">
+          <HBox class="ccAtFilterCard" wrap="NoWrap">
 
             <VBox class="ccAtFilterItem">
               <Label text="Periodo"/>
-              <Select id="selPeriodoCallAt" selectedKey="mayo" width="170px">
+              <Select id="selPeriodoCallAt" selectedKey="mayo">
                 <items>
                   <core:Item key="mayo" text="Mayo 2024"/>
                   <core:Item key="junio" text="Junio 2024"/>
+                  <core:Item key="todos" text="Todos"/>
                 </items>
               </Select>
             </VBox>
 
             <VBox class="ccAtFilterItem">
               <Label text="Fecha desde"/>
-              <DatePicker id="dpDesdeCallAt" value="01/05/2024" width="170px"/>
+              <DatePicker
+                id="dpDesdeCallAt"
+                value="01/05/2024"
+                valueFormat="dd/MM/yyyy"
+                displayFormat="dd/MM/yyyy"/>
             </VBox>
 
             <VBox class="ccAtFilterItem">
               <Label text="Fecha hasta"/>
-              <DatePicker id="dpHastaCallAt" value="31/05/2024" width="170px"/>
+              <DatePicker
+                id="dpHastaCallAt"
+                value="31/05/2024"
+                valueFormat="dd/MM/yyyy"
+                displayFormat="dd/MM/yyyy"/>
             </VBox>
 
             <VBox class="ccAtFilterItem">
               <Label text="Zona"/>
-              <Select id="selZonaCallAt" selectedKey="todas" width="145px">
+              <Select id="selZonaCallAt" selectedKey="todas">
                 <items>
                   <core:Item key="todas" text="Todas"/>
                   <core:Item key="norte" text="Norte"/>
@@ -76,7 +79,7 @@
 
             <VBox class="ccAtFilterItem">
               <Label text="Cliente"/>
-              <Select id="selClienteCallAt" selectedKey="todos" width="145px">
+              <Select id="selClienteCallAt" selectedKey="todos">
                 <items>
                   <core:Item key="todos" text="Todos"/>
                   <core:Item key="torre" text="Torre Reforma"/>
@@ -88,7 +91,7 @@
 
             <VBox class="ccAtFilterItem">
               <Label text="Responsable"/>
-              <Select id="selResponsableCallAt" selectedKey="todos" width="165px">
+              <Select id="selResponsableCallAt" selectedKey="todos">
                 <items>
                   <core:Item key="todos" text="Todos"/>
                   <core:Item key="juan" text="Juan Pérez"/>
@@ -99,12 +102,15 @@
               </Select>
             </VBox>
 
-            <Button
-              text="Aplicar filtros"
-              icon="sap-icon://filter"
-              type="Emphasized"
-              press=".onAplicarFiltros"
-              class="ccAtFilterButton"/>
+            <VBox class="ccAtFilterAction">
+              <Label text=" "/>
+              <Button
+                text="Aplicar filtros"
+                icon="sap-icon://filter"
+                type="Emphasized"
+                press=".onAplicarFiltros"
+                class="ccAtFilterButton"/>
+            </VBox>
 
           </HBox>
 
@@ -132,7 +138,7 @@
                 <VBox>
                   <Text text="{ccAt>/kpis/atendidas}" class="ccAtKpiNumber ccAtGreenText"/>
                   <Text text="Atendidas" class="ccAtKpiLabel"/>
-                  <Text text="95.3% del total" class="ccAtKpiSub ccAtGreenText"/>
+                  <Text text="95.3% del total" class="ccAtKpiSub"/>
                 </VBox>
               </HBox>
             </VBox>
@@ -145,7 +151,7 @@
                 <VBox>
                   <Text text="{ccAt>/kpis/noAtendidas}" class="ccAtKpiNumber ccAtRedText"/>
                   <Text text="No atendidas" class="ccAtKpiLabel"/>
-                  <Text text="4.7% del total planeado" class="ccAtKpiSub ccAtRedText"/>
+                  <Text text="4.7% del total planeado" class="ccAtKpiSub"/>
                 </VBox>
               </HBox>
             </VBox>
@@ -207,49 +213,47 @@
                 class="ccAtSearch"/>
             </HBox>
 
-            <!-- HEADER -->
-            <HBox class="ccAtTableHeader">
-              <Text text="Cliente" class="ccAtColClienteHeader"/>
+            <!-- HEADER TABLA -->
+            <HBox class="ccAtTableGrid ccAtTableHeaderRow">
+              <Text text="" class="ccAtCellExpand"/>
+              <Text text="Cliente" class="ccAtCellCliente ccAtHeaderText"/>
 
-              <HBox class="ccAtColNumber" alignItems="Center" justifyContent="Center">
-                <Text text="Solicitudes atendidas"/>
+              <HBox class="ccAtCellNumber ccAtHeaderSort" alignItems="Center" justifyContent="Center">
+                <Text text="Solicitudes atendidas" class="ccAtHeaderText"/>
                 <core:Icon src="sap-icon://navigation-up-arrow" class="ccAtSortIcon"/>
               </HBox>
 
-              <Text text="Elevadores atendidos" class="ccAtColNumber"/>
-              <Text text="% del total atendido" class="ccAtColNumber"/>
-              <Text text="Tiempo promedio de respuesta" class="ccAtColTiempo"/>
-              <Text text="Responsable principal" class="ccAtColResponsable"/>
-              <Text text="" class="ccAtColArrow"/>
+              <Text text="Elevadores atendidos" class="ccAtCellNumber ccAtHeaderText"/>
+              <Text text="% del total atendido" class="ccAtCellNumber ccAtHeaderText"/>
+              <Text text="Tiempo promedio de respuesta" class="ccAtCellTiempo ccAtHeaderText"/>
+              <Text text="Responsable principal" class="ccAtCellResponsable ccAtHeaderText"/>
+              <Text text="" class="ccAtCellArrow"/>
             </HBox>
 
-            <!-- BODY -->
-            <VBox
-              class="ccAtTableBody"
-              items="{ccAt>/clientes}">
-
+            <!-- BODY TABLA -->
+            <VBox items="{ccAt>/clientes}" class="ccAtClienteList">
               <items>
                 <VBox class="ccAtClienteBlock">
 
-                  <HBox class="ccAtClienteRow" alignItems="Center">
+                  <HBox class="ccAtTableGrid ccAtClienteRow">
 
                     <Button
                       icon="{ccAt>chevronIcon}"
                       type="Transparent"
                       press=".onToggleCliente"
-                      class="ccAtExpandButton"/>
+                      class="ccAtExpandButton ccAtCellExpand"/>
 
-                    <HBox class="ccAtColCliente" alignItems="Center">
+                    <HBox class="ccAtCellCliente ccAtClienteContent" alignItems="Center">
                       <core:Icon src="{ccAt>icon}" class="ccAtClienteIcon"/>
                       <Text text="{ccAt>cliente}" class="ccAtClienteName"/>
                     </HBox>
 
-                    <Text text="{ccAt>solicitudes}" class="ccAtColNumber"/>
-                    <Text text="{ccAt>elevadores}" class="ccAtColNumber"/>
-                    <Text text="{ccAt>porcentaje}" class="ccAtColNumber ccAtBlueNumber"/>
-                    <Text text="{ccAt>tiempo}" class="ccAtColTiempo ccAtGreenNumber"/>
+                    <Text text="{ccAt>solicitudes}" class="ccAtCellNumber"/>
+                    <Text text="{ccAt>elevadores}" class="ccAtCellNumber"/>
+                    <Text text="{ccAt>porcentaje}" class="ccAtCellNumber ccAtBlueNumber"/>
+                    <Text text="{ccAt>tiempo}" class="ccAtCellTiempo ccAtGreenNumber"/>
 
-                    <HBox class="ccAtColResponsable" alignItems="Center" justifyContent="Center">
+                    <HBox class="ccAtCellResponsable" alignItems="Center" justifyContent="Center">
                       <core:Icon src="sap-icon://person-placeholder" class="ccAtPersonIcon"/>
                       <Text text="{ccAt>responsable}" class="ccAtResponsableText"/>
                     </HBox>
@@ -258,7 +262,7 @@
                       icon="{ccAt>chevronIcon}"
                       type="Transparent"
                       press=".onToggleCliente"
-                      class="ccAtArrowButton"/>
+                      class="ccAtArrowButton ccAtCellArrow"/>
 
                   </HBox>
 
@@ -272,25 +276,31 @@
                     <Table
                       items="{ccAt>detalle}"
                       class="ccAtInnerTable"
+                      fixedLayout="Strict"
                       showSeparators="Inner">
 
                       <columns>
-                        <Column>
+                        <Column width="14%">
                           <Text text="OT"/>
                         </Column>
-                        <Column>
+
+                        <Column width="14%">
                           <Text text="Elevador"/>
                         </Column>
-                        <Column>
+
+                        <Column width="20%">
                           <Text text="Fecha solicitud"/>
                         </Column>
-                        <Column>
+
+                        <Column width="20%">
                           <Text text="Fecha atención"/>
                         </Column>
-                        <Column>
+
+                        <Column width="17%">
                           <Text text="Tiempo de respuesta"/>
                         </Column>
-                        <Column>
+
+                        <Column width="15%">
                           <Text text="Responsable"/>
                         </Column>
                       </columns>
@@ -323,22 +333,19 @@
 
                 </VBox>
               </items>
-
             </VBox>
 
             <!-- TOTAL -->
-            <HBox class="ccAtTotalRow" alignItems="Center">
+            <HBox class="ccAtTableGrid ccAtTotalRow">
 
-              <HBox class="ccAtColClienteTotal">
-                <Text text="Total" class="ccAtTotalLabel"/>
-              </HBox>
-
-              <Text text="{ccAt>/total/solicitudes}" class="ccAtColNumber ccAtBlueNumber"/>
-              <Text text="{ccAt>/total/elevadores}" class="ccAtColNumber"/>
-              <Text text="{ccAt>/total/porcentaje}" class="ccAtColNumber ccAtBlueNumber"/>
-              <Text text="{ccAt>/total/tiempo}" class="ccAtColTiempo ccAtGreenNumber"/>
-              <Text text="{ccAt>/total/responsable}" class="ccAtColResponsable ccAtTotalText"/>
-              <Text text="" class="ccAtColArrow"/>
+              <Text text="" class="ccAtCellExpand"/>
+              <Text text="Total" class="ccAtCellCliente ccAtTotalLabel"/>
+              <Text text="{ccAt>/total/solicitudes}" class="ccAtCellNumber ccAtBlueNumber"/>
+              <Text text="{ccAt>/total/elevadores}" class="ccAtCellNumber"/>
+              <Text text="{ccAt>/total/porcentaje}" class="ccAtCellNumber ccAtBlueNumber"/>
+              <Text text="{ccAt>/total/tiempo}" class="ccAtCellTiempo ccAtGreenNumber"/>
+              <Text text="{ccAt>/total/responsable}" class="ccAtCellResponsable ccAtTotalText"/>
+              <Text text="" class="ccAtCellArrow"/>
 
             </HBox>
 

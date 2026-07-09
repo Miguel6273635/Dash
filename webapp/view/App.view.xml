@@ -1,8 +1,9 @@
-<mvc:View controllerName="mantenimiento.controller.App"
-    displayBlock="true"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
-    xmlns:tnt="sap.tnt">
+<mvc:View
+  controllerName="mantenimiento.controller.App"
+  displayBlock="true"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:tnt="sap.tnt">
 
   <tnt:ToolPage id="toolPage">
 
@@ -13,12 +14,19 @@
           icon="sap-icon://menu2"
           type="Transparent"
           press=".onToggleSideNav" />
-        <Title text="Mantenimiento" level="H4" class="sapUiTinyMarginBegin" />
+
+        <Title
+          text="Mantenimiento"
+          level="H4"
+          class="sapUiTinyMarginBegin" />
+
         <ToolbarSpacer />
+
         <Button
           icon="sap-icon://refresh"
           type="Transparent"
-          tooltip="Actualizar" />
+          tooltip="Actualizar"
+          press=".onRefresh" />
       </tnt:ToolHeader>
     </tnt:header>
 
@@ -41,58 +49,90 @@
             icon="sap-icon://home"
             key="RouteMantenimiento" />
 
+          <!-- ÓRDENES CON SUBMENÚ -->
           <tnt:NavigationListItem
             text="Órdenes"
-            icon="sap-icon://business-objects-experience"
-            key="RouteOrdenes" />
-
-          <tnt:NavigationListItem
-            text="Cumplimiento de Órdenes"
-            icon="sap-icon://chart-axis">
+            icon="sap-icon://business-objects-experience">
 
             <tnt:items>
               <tnt:NavigationListItem
-                text="Causas por zona"
+                text="Preventivas no ejecutadas"
                 icon="sap-icon://sys-enter-2"
-                key="RouteCausasZona" />
+                key="RouteAnalisisOTPreventivasNoEjecutadas" />
 
               <tnt:NavigationListItem
-                text="Comportamiento operativo por responsables"
+                text="Preventivas ejecutadas"
                 icon="sap-icon://sys-enter-2"
-                key="RouteComportamientoOperativo" />
+                key="RouteAnalisisOTPreventivasEjecutadas" />
+
+              <tnt:NavigationListItem
+                text="Reparaciones no ejecutadas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisReparacionesPlaneadasNoEjecutadas" />
             </tnt:items>
 
           </tnt:NavigationListItem>
 
-          <!-- NUEVA SECCIÓN -->
-       <tnt:NavigationListItem
-  text="Plan por zona y periodo"
-  icon="sap-icon://map-2">
+          <!-- MENÚS SEPARADOS -->
+          <tnt:NavigationListItem
+            text="Cumplimiento de Órdenes"
+            icon="sap-icon://chart-axis"
+            key="RouteDetalleCumplimientoOrdenes" />
 
-  <tnt:items>
-  <tnt:NavigationListItem
-  text="Balance operativo por zona"
-  icon="sap-icon://sys-enter-2"
-  key="RouteBalanceOperativoZona" />
+          <tnt:NavigationListItem
+            text="Causas por zona"
+            icon="sap-icon://map-2"
+            key="RouteCausasZona" />
 
-<tnt:NavigationListItem
-  text="Detalle operativo zona "
-  icon="sap-icon://sys-enter-2"
-  key="RouteDetalleOperativoZonaSur" />
-  </tnt:items>
+          <tnt:NavigationListItem
+            text="Comportamiento operativo por responsables"
+            icon="sap-icon://group"
+            key="RouteComportamientoOperativo" />
 
-</tnt:NavigationListItem>
+          <!-- PLAN POR ZONA Y PERIODO -->
+          <tnt:NavigationListItem
+            text="Plan por zona y periodo"
+            icon="sap-icon://map-2">
+
+            <tnt:items>
+              <tnt:NavigationListItem
+                text="Balance operativo por zona"
+                icon="sap-icon://sys-enter-2"
+                key="RouteBalanceOperativoZona" />
+
+              <tnt:NavigationListItem
+                text="Detalle operativo zona"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleOperativoZonaSur" />
+            </tnt:items>
+
+          </tnt:NavigationListItem>
 
           <tnt:NavigationListItem
             text="Horas trabajadas"
             icon="sap-icon://time-entry-request"
             key="RouteHorasTrabajadas" />
 
+          <!-- MECÁNICOS CON SUBMENÚ -->
           <tnt:NavigationListItem
             text="Mecánicos"
-            icon="sap-icon://employee"
-            key="RouteMecanicos" />
+            icon="sap-icon://employee">
 
+            <tnt:items>
+              <tnt:NavigationListItem
+                text="Mecánicos"
+                icon="sap-icon://sys-enter-2"
+                key="RouteMecanicos" />
+
+              <tnt:NavigationListItem
+                text="Detalle de mecánicos"
+                icon="sap-icon://detail-view"
+                key="RouteDetalleMecanicos" />
+            </tnt:items>
+
+          </tnt:NavigationListItem>
+
+          <!-- MATERIALES -->
           <tnt:NavigationListItem
             text="Materiales"
             icon="sap-icon://inventory">
@@ -111,30 +151,26 @@
 
           </tnt:NavigationListItem>
 
-          <!-- CAMBIOS ALEJANDRA 29/06/2026 -->
+          <!-- ANÁLISIS DE CAUSAS -->
           <tnt:NavigationListItem
             text="Análisis de causas"
             icon="sap-icon://cause">
 
-            <!-- CAMBIOS TANIA 03/07/2026
-            AGERGUE UNA OPCIÓN AL SUBMENÚ-->
             <tnt:items>
               <tnt:NavigationListItem
                 text="Análisis de Elevadores con Desviación"
                 icon="sap-icon://sys-enter-2"
                 key="RouteAnalisisElevadores" />
-            </tnt:items>
 
-            <tnt:items>
               <tnt:NavigationListItem
                 text="Análisis de fallas y servicios afectados"
                 icon="sap-icon://sys-enter-2"
                 key="RouteAnalisisFallas" />
             </tnt:items>
-          </tnt:NavigationListItem>
-          <!-- CAMBIOS ALEJANDRA 29/06/2026 -->
 
-          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
+          </tnt:NavigationListItem>
+
+          <!-- REPARACIÓN -->
           <tnt:NavigationListItem
             text="Reparación"
             icon="sap-icon://cause">
@@ -144,9 +180,7 @@
                 text="Análisis de reparaciones ejecutadas"
                 icon="sap-icon://sys-enter-2"
                 key="RouteAnalisisReparacionesPlaneadasEjecutadas" />
-            </tnt:items>
 
-            <tnt:items>
               <tnt:NavigationListItem
                 text="Análisis integral de reparaciones"
                 icon="sap-icon://sys-enter-2"
@@ -154,9 +188,8 @@
             </tnt:items>
 
           </tnt:NavigationListItem>
-          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
 
-          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
+          <!-- CALL CENTER -->
           <tnt:NavigationListItem
             text="Call Center"
             icon="sap-icon://call">
@@ -166,24 +199,26 @@
                 text="Análisis de solicitudes atendidas"
                 icon="sap-icon://sys-enter-2"
                 key="RouteAnalisisSolicitudesCallCenterAtendidas" />
+              
+            <tnt:NavigationListItem
+              text="Análisis de solicitudes no atendidas"
+              icon="sap-icon://decline"
+              key="RouteCallCenterNoAtendidas" />
+
             </tnt:items>
 
           </tnt:NavigationListItem>
-          <!-- CAMBIOS ALEJANDRA 06/07/2026 -->
 
+          <!-- TENDENCIA -->
           <tnt:NavigationListItem
             text="Tendencia de ejecución: Planeado vs Real"
-            icon="sap-icon://chart-axis">
+            icon="sap-icon://chart-axis"
+            key="RouteTendenciasEjecucion" />
 
-            <tnt:items>
-              <tnt:NavigationListItem
-                text="Análisis Semana S22"
-                icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisSemanaS22"
-                select=".onItemSelect" />
-            </tnt:items>
-
-          </tnt:NavigationListItem>
+          <tnt:NavigationListItem
+            text="Análisis Semana S22"
+            icon="sap-icon://sys-enter-2"
+            key="RouteAnalisisSemanaS22" />
 
           <tnt:NavigationListItem
             text="Reportes"
@@ -226,7 +261,7 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <tnt:mainContents>
-      <App id="app"/>
+      <App id="app" />
     </tnt:mainContents>
 
   </tnt:ToolPage>

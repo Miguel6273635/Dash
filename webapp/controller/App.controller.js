@@ -1,48 +1,62 @@
-/*sap.ui.define([
-  "sap/ui/core/mvc/Controller"
-], (BaseController) => {
-  "use strict";
-
-  return BaseController.extend("mantenimiento.controller.App", {
-      onInit() {
-      }
-  });
-});
-
-*/
-
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/m/MessageToast"
-], (BaseController, MessageToast) => {
+], function (BaseController, MessageToast) {
   "use strict";
 
   return BaseController.extend("mantenimiento.controller.App", {
 
-    onInit() {
-      this.byId("sideNavigation").setSelectedKey("RouteMantenimiento");
+    onInit: function () {
+      this.oRouter = this.getOwnerComponent().getRouter();
+
+      var oSideNavigation = this.byId("sideNavigation");
+
+      if (oSideNavigation) {
+        oSideNavigation.setSelectedKey("RouteMantenimiento");
+      }
     },
 
-    onToggleSideNav() {
-      const oToolPage = this.byId("toolPage");
-      const bExpanded = oToolPage.getSideExpanded();
+    onToggleSideNav: function () {
+      var oToolPage = this.byId("toolPage");
+
+      if (!oToolPage) {
+        return;
+      }
+
+      var bExpanded = oToolPage.getSideExpanded();
       oToolPage.setSideExpanded(!bExpanded);
     },
-onMenuSelect: function (oEvent) {
-    // 1. Obtenemos el item del menú al que se le hizo clic.
-    const oItem = oEvent.getParameter("item");
-    // 2. Sacamos su 'key', que es el nombre de la ruta (ej: "RouteCausasZona").
-    const sKey = oItem.getKey();
 
-    // 3. Si el elemento no tiene una 'key' (como un título de sección), no hacemos nada y salimos.
-    if (!sKey) {
+    onMenuSelect: function (oEvent) {
+      var oItem = oEvent.getParameter("item");
+
+      if (!oItem) {
+        MessageToast.show("No se encontró la opción seleccionada.");
         return;
-    }
+      }
 
-    // 4. Esta es la magia: Obtenemos el router y navegamos DIRECTAMENTE a la ruta que viene en la 'key', sin preguntar cuál es.
-    // Si tiene una 'key', está definida en el manifest.json.
-    this.getOwnerComponent().getRouter().navTo(sKey);
-}
+      var sKey = oItem.getKey();
+
+      if (!sKey) {
+        return;
+      }
+
+      console.log("Ruta seleccionada:", sKey);
+
+      var oRouter = this.getOwnerComponent().getRouter();
+
+      if (!oRouter.getRoute(sKey)) {
+        MessageToast.show("La ruta no existe en el manifest: " + sKey);
+        console.error("Ruta no encontrada en manifest.json:", sKey);
+        return;
+      }
+
+      oRouter.navTo(sKey);
+    },
+
+    onRefresh: function () {
+      window.location.reload();
+    }
 
   });
 });
