@@ -16,12 +16,6 @@
                 <VBox class="ccnaHeader">
 
                     <HBox alignItems="Center" class="ccnaTitleRow">
-                        <Button
-                            icon="sap-icon://menu2"
-                            type="Transparent"
-                            class="ccnaMenuButton"
-                            press=".onToggleMenu" />
-
                         <Text
                             text="Análisis de Solicitudes Call Center"
                             class="ccnaTitle" />
@@ -48,7 +42,8 @@
                         <Label text="Periodo" />
                         <Select
                             selectedKey="{/filters/periodo}"
-                            width="100%">
+                            width="100%"
+                            class="ccnaFilterSelect">
 
                             <core:Item key="2024-05" text="Mayo 2024" />
                             <core:Item key="2024-04" text="Abril 2024" />
@@ -63,7 +58,8 @@
                             value="{/filters/fechaDesde}"
                             valueFormat="yyyy-MM-dd"
                             displayFormat="dd/MM/yyyy"
-                            width="100%" />
+                            width="100%"
+                            class="ccnaFilterDatePicker" />
                     </VBox>
 
                     <VBox class="ccnaFilterCard ccnaFilterDate">
@@ -72,14 +68,16 @@
                             value="{/filters/fechaHasta}"
                             valueFormat="yyyy-MM-dd"
                             displayFormat="dd/MM/yyyy"
-                            width="100%" />
+                            width="100%"
+                            class="ccnaFilterDatePicker" />
                     </VBox>
 
                     <VBox class="ccnaFilterCard">
                         <Label text="Zona" />
                         <Select
                             selectedKey="{/filters/zona}"
-                            width="100%">
+                            width="100%"
+                            class="ccnaFilterSelect">
 
                             <core:Item key="TODAS" text="Todas" />
                             <core:Item key="NORTE" text="Norte" />
@@ -93,7 +91,8 @@
                         <Label text="Cliente" />
                         <Select
                             selectedKey="{/filters/cliente}"
-                            width="100%">
+                            width="100%"
+                            class="ccnaFilterSelect">
 
                             <core:Item key="TODOS" text="Todos" />
                             <core:Item key="TORRE_REFORMA" text="Torre Reforma" />
@@ -107,7 +106,8 @@
                         <Label text="Responsable" />
                         <Select
                             selectedKey="{/filters/responsable}"
-                            width="100%">
+                            width="100%"
+                            class="ccnaFilterSelect">
 
                             <core:Item key="TODOS" text="Todos" />
                             <core:Item key="JP" text="Juan Pérez" />
@@ -256,48 +256,50 @@
                     </HBox>
 
                 </HBox>
+<!-- SWITCH ANÁLISIS -->
+<HBox
+    class="ccnaAnalysisBar"
+    alignItems="Center">
 
-                <!-- SWITCH ANÁLISIS -->
-                <HBox
-                    class="ccnaAnalysisBar"
-                    alignItems="Center"
-                    justifyContent="SpaceBetween">
+    <!-- IZQUIERDA -->
+    <HBox
+        class="ccnaAnalysisLeft"
+        alignItems="Center">
 
-                    <HBox
-                        alignItems="Center"
-                        class="ccnaAnalysisLeft">
+        <Text
+            text="Ver análisis por:"
+            class="ccnaSmallLabel" />
 
-                        <Text
-                            text="Ver análisis por:"
-                            class="ccnaSmallLabel" />
+        <Button
+            text="No atendidas (3)"
+            press=".onSelectNoAtendidas"
+            type="{= ${/selectedSegment} === 'NO_ATENDIDAS' ? 'Emphasized' : 'Default' }"
+            class="ccnaAnalysisButton" />
 
-                        <SegmentedButton
-                            selectedKey="{/selectedSegment}"
-                            selectionChange=".onSegmentChange"
-                            class="ccnaSegmented">
+        <Button
+            text="Atendidas (62)"
+            press=".onSelectAtendidas"
+            type="{= ${/selectedSegment} === 'ATENDIDAS' ? 'Emphasized' : 'Default' }"
+            class="ccnaAnalysisButton" />
 
-                            <items>
-                                <SegmentedButtonItem
-                                    key="NO_ATENDIDAS"
-                                    text="No atendidas (3)" />
+    </HBox>
 
-                                <SegmentedButtonItem
-                                    key="ATENDIDAS"
-                                    text="Atendidas (62)" />
-                            </items>
+    <!-- DERECHA -->
+    <HBox
+        class="ccnaInfoBox"
+        alignItems="Center"
+        justifyContent="End">
 
-                        </SegmentedButton>
+        <MessageStrip
+            text="{/analysisInfo}"
+            type="Information"
+            showIcon="true"
+            showCloseButton="false"
+            class="ccnaInfoStrip" />
 
-                    </HBox>
+    </HBox>
 
-                    <MessageStrip
-                        text="{/analysisInfo}"
-                        type="Information"
-                        showIcon="true"
-                        showCloseButton="false"
-                        class="ccnaInfoStrip" />
-
-                </HBox>
+</HBox>
 
                 <!-- TABLA / LISTADO -->
                 <VBox class="ccnaTableCard">
@@ -446,10 +448,28 @@
                                             alignItems="Center"
                                             justifyContent="Center">
 
+                                            <!-- Punto crítico -->
                                             <core:Icon
                                                 src="sap-icon://circle-task-2"
                                                 size="0.55rem"
-                                                color="{estadoColor}"
+                                                color="#ff4d4f"
+                                                visible="{= ${estado} === 'Crítico' }"
+                                                class="ccnaStatusDot" />
+
+                                            <!-- Punto alto -->
+                                            <core:Icon
+                                                src="sap-icon://circle-task-2"
+                                                size="0.55rem"
+                                                color="#f59e0b"
+                                                visible="{= ${estado} === 'Alto' }"
+                                                class="ccnaStatusDot" />
+
+                                            <!-- Punto medio -->
+                                            <core:Icon
+                                                src="sap-icon://circle-task-2"
+                                                size="0.55rem"
+                                                color="#eab308"
+                                                visible="{= ${estado} === 'Medio' }"
                                                 class="ccnaStatusDot" />
 
                                             <ObjectStatus

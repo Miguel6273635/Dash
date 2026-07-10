@@ -1,0 +1,368 @@
+<mvc:View
+  controllerName="mantenimiento.controller.DetalleHorasTipoOrden"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  displayBlock="true">
+
+  <Page showHeader="false" class="dhtoPage">
+    <ScrollContainer
+      width="100%"
+      height="100%"
+      vertical="true"
+      horizontal="false"
+      class="dhtoScroll">
+
+      <VBox class="dhtoContainer">
+
+        <!-- HEADER -->
+        <HBox class="dhtoHeader" alignItems="Start" justifyContent="SpaceBetween">
+
+          <VBox>
+            <Text text="Detalle de horas por tipo de orden" class="dhtoTitle" />
+            <Text
+              text="Consulta del detalle de horas plan vs real para el tipo de orden seleccionado."
+              class="dhtoSubtitle" />
+          </VBox>
+
+          <Button
+            text="Exportar"
+            icon="sap-icon://download"
+            type="Transparent"
+            class="dhtoExportBtn"
+            press=".onExportar" />
+
+        </HBox>
+
+        <!-- FILTROS -->
+        <HBox
+          class="dhtoFilters"
+          wrap="Wrap"
+          alignItems="Stretch"
+          justifyContent="Start">
+
+          <VBox class="dhtoFilterItem dhtoFilterPeriod">
+            <Label text="Periodo" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/periodo}"
+              items="{dhto>/catalogos/periodos}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterDate">
+            <Label text="Fecha desde" class="dhtoFilterLabel" />
+            <DatePicker
+              width="100%"
+              value="{dhto>/filters/fechaDesde}"
+              displayFormat="dd/MM/yyyy"
+              valueFormat="dd/MM/yyyy" />
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterDate">
+            <Label text="Fecha hasta" class="dhtoFilterLabel" />
+            <DatePicker
+              width="100%"
+              value="{dhto>/filters/fechaHasta}"
+              displayFormat="dd/MM/yyyy"
+              valueFormat="dd/MM/yyyy" />
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterNormal">
+            <Label text="Zona" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/zona}"
+              items="{dhto>/catalogos/zonas}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterNormal">
+            <Label text="Supervisor" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/supervisor}"
+              items="{dhto>/catalogos/supervisores}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterNormal">
+            <Label text="Turno" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/turno}"
+              items="{dhto>/catalogos/turnos}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterOrder">
+            <Label text="Tipo de orden" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/tipoOrden}"
+              items="{dhto>/catalogos/tiposOrden}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <VBox class="dhtoFilterItem dhtoFilterNormal">
+            <Label text="Estado de orden" class="dhtoFilterLabel" />
+            <Select
+              width="100%"
+              selectedKey="{dhto>/filters/estado}"
+              items="{dhto>/catalogos/estados}">
+              <core:Item key="{dhto>key}" text="{dhto>text}" />
+            </Select>
+          </VBox>
+
+          <Button
+            text="Aplicar filtros"
+            icon="sap-icon://filter"
+            type="Emphasized"
+            class="dhtoApplyBtn"
+            press=".onApplyFilters" />
+
+        </HBox>
+
+        <!-- KPI CARDS -->
+        <HBox class="dhtoKpiGrid" wrap="Wrap">
+
+          <HBox class="dhtoKpiCard dhtoKpiBlue">
+            <VBox class="dhtoKpiIconCircle dhtoBlueBg">
+              <core:Icon src="sap-icon://time-entry-request" class="dhtoKpiIcon dhtoBlueText" />
+            </VBox>
+            <VBox>
+              <Text text="{dhto>/kpis/horasProgramadas}" class="dhtoKpiNumber dhtoBlueText" />
+              <Text text="Horas programadas" class="dhtoKpiLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dhtoKpiCard dhtoKpiBlue">
+            <VBox class="dhtoKpiIconCircle dhtoBlueBg">
+              <core:Icon src="sap-icon://lateness" class="dhtoKpiIcon dhtoBlueText" />
+            </VBox>
+            <VBox>
+              <Text text="{dhto>/kpis/horasReales}" class="dhtoKpiNumber dhtoDarkText" />
+              <Text text="Horas reales" class="dhtoKpiLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dhtoKpiCard dhtoKpiOrange">
+            <VBox class="dhtoKpiIconCircle dhtoOrangeBg">
+              <core:Icon src="sap-icon://sort" class="dhtoKpiIcon dhtoOrangeText" />
+            </VBox>
+            <VBox>
+              <Text text="{dhto>/kpis/variacionHoras}" class="dhtoKpiNumber dhtoRedText" />
+              <Text text="Variación" class="dhtoKpiLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dhtoKpiCard dhtoKpiRed">
+           <VBox class="dhtoKpiIconCircle dhtoRedBg">
+  <Text text="%" class="dhtoPercentIcon dhtoRedText" />
+</VBox>
+            <VBox>
+              <Text text="{dhto>/kpis/variacionPct}" class="dhtoKpiNumber dhtoRedText" />
+              <Text text="Variación %" class="dhtoKpiLabel" />
+            </VBox>
+          </HBox>
+
+          <HBox class="dhtoKpiCard dhtoKpiPurple">
+            <VBox class="dhtoKpiIconCircle dhtoPurpleBg">
+              <core:Icon src="sap-icon://task" class="dhtoKpiIcon dhtoPurpleText" />
+            </VBox>
+            <VBox>
+              <Text text="{dhto>/kpis/otRelacionadas}" class="dhtoKpiNumber dhtoDarkText" />
+              <Text text="OT relacionadas" class="dhtoKpiLabel" />
+            </VBox>
+          </HBox>
+
+        </HBox>
+
+        <!-- TABLA PRINCIPAL -->
+        <VBox class="dhtoTableCard">
+
+          <HBox class="dhtoTableTop" alignItems="Center" justifyContent="SpaceBetween">
+            <Text
+              text="Órdenes asociadas al tipo de orden seleccionado"
+              class="dhtoTableTitle" />
+
+            <HBox alignItems="Center" class="dhtoTableActions">
+              <SearchField
+                width="310px"
+                placeholder="Buscar OT, cliente, elevador, responsable..."
+                class="dhtoSearch"
+                liveChange=".onSearchOrden" />
+
+              <Button
+                text="Columnas"
+                icon="sap-icon://table-view"
+                type="Transparent"
+                class="dhtoColumnsBtn"
+                press=".onColumnas" />
+            </HBox>
+          </HBox>
+
+          <HBox class="dhtoOrderHeader">
+            <Text text="OT" />
+            <Text text="Cliente" />
+            <Text text="Elevador / Equipo" />
+            <Text text="Zona" />
+            <Text text="Responsable" />
+            <Text text="Turno" />
+            <Text text="Horas plan (h)" />
+            <Text text="Horas reales (h)" />
+            <Text text="Variación (h)" />
+            <Text text="Variación (%)" />
+            <Text text="Estado" />
+          </HBox>
+
+          <VBox items="{dhto>/ordenes}">
+            <HBox class="dhtoOrderRow">
+              <Text text="{dhto>ot}" class="dhtoBlueStrong" />
+              <Text text="{dhto>cliente}" />
+              <Text text="{dhto>elevador}" />
+              <Text text="{dhto>zona}" />
+              <Text text="{dhto>responsable}" />
+              <Text text="{dhto>turno}" />
+              <Text text="{dhto>horasPlan}" />
+              <Text text="{dhto>horasReales}" />
+              <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
+              <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+              <HBox alignItems="Center" justifyContent="Center" class="dhtoStatusCell">
+                <VBox class="{dhto>statusDotClass}" />
+                <Text text="{dhto>estado}" class="dhtoStatusText" />
+              </HBox>
+            </HBox>
+          </VBox>
+
+          <HBox class="dhtoTableFooter" alignItems="Center" justifyContent="SpaceBetween">
+            <Text text="Mostrando 1 a 10 de 95 resultados" class="dhtoSmallText" />
+
+            <HBox class="dhtoPagination" alignItems="Center">
+              <Select selectedKey="10" width="110px">
+                <core:Item key="10" text="10 por página" />
+                <core:Item key="20" text="20 por página" />
+              </Select>
+
+              <Button icon="sap-icon://navigation-left-arrow" type="Transparent" class="dhtoPageBtn" />
+              <Button text="1" type="Emphasized" class="dhtoPageNumber" />
+              <Button text="2" type="Transparent" class="dhtoPageNumber" />
+              <Button text="3" type="Transparent" class="dhtoPageNumber" />
+              <Text text="..." class="dhtoSmallText" />
+              <Button text="10" type="Transparent" class="dhtoPageNumber" />
+              <Button icon="sap-icon://navigation-right-arrow" type="Transparent" class="dhtoPageBtn" />
+            </HBox>
+          </HBox>
+
+        </VBox>
+
+        <!-- RESÚMENES -->
+        <HBox class="dhtoSummaryGrid" wrap="Wrap">
+
+          <!-- RESUMEN POR ZONA -->
+          <VBox class="dhtoSummaryCard dhtoSummaryBlue">
+
+            <HBox class="dhtoSummaryTitleRow" alignItems="Center">
+              <core:Icon src="sap-icon://map-2" class="dhtoSummaryIcon dhtoBlueText" />
+              <Text text="Resumen por zona (del tipo seleccionado)" class="dhtoSummaryTitle" />
+            </HBox>
+
+            <HBox class="dhtoSummaryHeader">
+              <Text text="Zona" />
+              <Text text="OT" />
+              <Text text="Horas plan (h)" />
+              <Text text="Horas reales (h)" />
+              <Text text="Variación (h)" />
+              <Text text="Variación (%)" />
+              <Text text="Estado" />
+            </HBox>
+
+            <VBox items="{dhto>/resumenZona}">
+              <HBox class="dhtoSummaryRow">
+                <Text text="{dhto>zona}" />
+                <Text text="{dhto>ot}" />
+                <Text text="{dhto>horasPlan}" />
+                <Text text="{dhto>horasReales}" />
+                <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
+                <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+                <HBox alignItems="Center" justifyContent="Center">
+                  <VBox class="{dhto>statusDotClass}" />
+                  <Text text="{dhto>estado}" class="dhtoStatusText" />
+                </HBox>
+              </HBox>
+            </VBox>
+
+            <HBox class="dhtoSummaryRow dhtoSummaryTotal">
+              <Text text="Total" />
+              <Text text="95" />
+              <Text text="1,700" />
+              <Text text="1,910" />
+              <Text text="+210" class="dhtoRedStrong" />
+              <Text text="+12.4%" class="dhtoRedStrong" />
+              <HBox alignItems="Center" justifyContent="Center">
+                <VBox class="dhtoDotRed" />
+                <Text text="Sobrecargado" class="dhtoStatusText" />
+              </HBox>
+            </HBox>
+
+          </VBox>
+
+          <!-- RESUMEN POR RESPONSABLE -->
+          <VBox class="dhtoSummaryCard dhtoSummaryGreen">
+
+            <HBox class="dhtoSummaryTitleRow" alignItems="Center">
+              <core:Icon src="sap-icon://employee" class="dhtoSummaryIcon dhtoGreenText" />
+              <Text text="Resumen por responsable (del tipo seleccionado)" class="dhtoSummaryTitle" />
+            </HBox>
+
+            <HBox class="dhtoSummaryHeader">
+              <Text text="Responsable" />
+              <Text text="OT" />
+              <Text text="Horas plan (h)" />
+              <Text text="Horas reales (h)" />
+              <Text text="Variación (h)" />
+              <Text text="Variación (%)" />
+              <Text text="Estado" />
+            </HBox>
+
+            <VBox items="{dhto>/resumenResponsable}">
+              <HBox class="dhtoSummaryRow">
+                <Text text="{dhto>responsable}" />
+                <Text text="{dhto>ot}" />
+                <Text text="{dhto>horasPlan}" />
+                <Text text="{dhto>horasReales}" />
+                <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
+                <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+                <HBox alignItems="Center" justifyContent="Center">
+                  <VBox class="{dhto>statusDotClass}" />
+                  <Text text="{dhto>estado}" class="dhtoStatusText" />
+                </HBox>
+              </HBox>
+            </VBox>
+
+            <HBox class="dhtoSummaryRow dhtoSummaryTotal">
+              <Text text="Total" />
+              <Text text="95" />
+              <Text text="1,700" />
+              <Text text="1,910" />
+              <Text text="+210" class="dhtoRedStrong" />
+              <Text text="+12.4%" class="dhtoRedStrong" />
+              <HBox alignItems="Center" justifyContent="Center">
+                <VBox class="dhtoDotRed" />
+                <Text text="Sobrecargado" class="dhtoStatusText" />
+              </HBox>
+            </HBox>
+
+          </VBox>
+
+        </HBox>
+
+      </VBox>
+    </ScrollContainer>
+  </Page>
+</mvc:View>

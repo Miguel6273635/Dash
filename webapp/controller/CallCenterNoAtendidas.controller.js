@@ -221,7 +221,20 @@ sap.ui.define([
             Si no aplica, puedes quitar este método y el botón.
             */
             MessageToast.show("Menú");
-        }
+        },
+        onSelectNoAtendidas: function () {
+    var oModel = this.getView().getModel();
+
+    oModel.setProperty("/selectedSegment", "NO_ATENDIDAS");
+    oModel.setProperty("/analysisInfo", "Análisis basado en 3 solicitudes no atendidas.");
+},
+
+onSelectAtendidas: function () {
+    var oModel = this.getView().getModel();
+
+    oModel.setProperty("/selectedSegment", "ATENDIDAS");
+    oModel.setProperty("/analysisInfo", "Análisis basado en 62 solicitudes atendidas.");
+},
 
     });
 });

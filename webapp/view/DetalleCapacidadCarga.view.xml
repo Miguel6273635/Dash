@@ -1,0 +1,408 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleCapacidadCarga"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page showHeader="false" enableScrolling="true" class="dccPage">
+        <content>
+            <VBox class="dccDashboard">
+
+                <!-- Header -->
+                <VBox class="dccHeader">
+                    <Title
+                        text="Detalle de capacidad vs carga programada"
+                        level="H1"
+                        class="dccTitle" />
+
+                    <Text
+                        text="Análisis consolidado entre la capacidad disponible, la carga programada y las horas reales por zona y turno"
+                        class="dccSubtitle" />
+                </VBox>
+
+                <!-- Filtros -->
+                <HBox class="dccFilterBar" alignItems="Stretch">
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Periodo" class="dccFilterLabel" />
+                        <ComboBox
+                            selectedKey="{/filtros/periodo}"
+                            items="{/catalogos/periodos}"
+                            class="dccFilterControl">
+                            <core:Item key="{key}" text="{text}" />
+                        </ComboBox>
+                    </VBox>
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Fecha desde" class="dccFilterLabel" />
+                        <DatePicker
+                            value="{/filtros/fechaDesde}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            class="dccFilterControl" />
+                    </VBox>
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Fecha hasta" class="dccFilterLabel" />
+                        <DatePicker
+                            value="{/filtros/fechaHasta}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            class="dccFilterControl" />
+                    </VBox>
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Zona" class="dccFilterLabel" />
+                        <ComboBox
+                            selectedKey="{/filtros/zona}"
+                            items="{/catalogos/zonas}"
+                            class="dccFilterControl">
+                            <core:Item key="{key}" text="{text}" />
+                        </ComboBox>
+                    </VBox>
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Turno" class="dccFilterLabel" />
+                        <ComboBox
+                            selectedKey="{/filtros/turno}"
+                            items="{/catalogos/turnos}"
+                            class="dccFilterControl">
+                            <core:Item key="{key}" text="{text}" />
+                        </ComboBox>
+                    </VBox>
+
+                    <VBox class="dccFilterItem">
+                        <Label text="Supervisor" class="dccFilterLabel" />
+                        <ComboBox
+                            selectedKey="{/filtros/supervisor}"
+                            items="{/catalogos/supervisores}"
+                            class="dccFilterControl">
+                            <core:Item key="{key}" text="{text}" />
+                        </ComboBox>
+                    </VBox>
+
+                    <Button
+                        text="Aplicar filtros"
+                        icon="sap-icon://filter"
+                        type="Emphasized"
+                        press=".onApplyFilters"
+                        class="dccApplyButton" />
+
+                </HBox>
+
+                <!-- KPI Cards -->
+                <HBox class="dccKpiGrid" alignItems="Stretch">
+
+                    <HBox class="dccKpiCard dccKpiBlue">
+                        <HBox class="dccKpiIconWrap dccKpiIconBlue" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://group" class="dccKpiIcon" />
+                        </HBox>
+                        <VBox>
+                            <Text text="Capacidad disponible total" class="dccKpiLabel" />
+                            <Text text="{/kpis/capacidadDisponible/valor}" class="dccKpiValue dccTextBlue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox class="dccKpiCard dccKpiGreen">
+                        <HBox class="dccKpiIconWrap dccKpiIconGreen" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://appointment-2" class="dccKpiIcon" />
+                        </HBox>
+                        <VBox>
+                            <Text text="Horas programadas" class="dccKpiLabel" />
+                            <Text text="{/kpis/horasProgramadas/valor}" class="dccKpiValue dccTextGreen" />
+                            <Text text="{/kpis/horasProgramadas/subtitulo}" class="dccKpiSubValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox class="dccKpiCard dccKpiPurple">
+                        <HBox class="dccKpiIconWrap dccKpiIconPurple" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://lateness" class="dccKpiIcon" />
+                        </HBox>
+                        <VBox>
+                            <Text text="Horas reales" class="dccKpiLabel" />
+                            <Text text="{/kpis/horasReales/valor}" class="dccKpiValue dccTextPurple" />
+                            <Text text="{/kpis/horasReales/subtitulo}" class="dccKpiSubValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox class="dccKpiCard dccKpiOrange">
+                        <HBox class="dccKpiIconWrap dccKpiIconOrange" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://business-objects-experience" class="dccKpiIcon" />
+                        </HBox>
+                        <VBox>
+                            <Text text="Margen disponible" class="dccKpiLabel" />
+                            <Text text="{/kpis/margenDisponible/valor}" class="dccKpiValue dccTextOrange" />
+                            <Text text="{/kpis/margenDisponible/subtitulo}" class="dccKpiSubValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox class="dccKpiCard dccKpiRed">
+                        <HBox class="dccKpiIconWrap dccKpiIconRed" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://performance" class="dccKpiIcon" />
+                        </HBox>
+                        <VBox>
+                            <Text text="Utilización real" class="dccKpiLabel" />
+                            <Text text="{/kpis/utilizacionReal/valor}" class="dccKpiValue dccTextRed" />
+                            <Text text="{/kpis/utilizacionReal/subtitulo}" class="dccKpiSubValue" />
+                        </VBox>
+                    </HBox>
+
+                </HBox>
+
+                <!-- Gráfica + resumen turno -->
+                <HBox class="dccMiddleRow" alignItems="Stretch">
+
+                    <!-- Donut -->
+                    <VBox class="dccCard dccChartCard">
+                        <HBox class="dccCardHeader" alignItems="Center">
+                            <Title text="Capacidad vs carga programada" level="H3" class="dccCardTitle" />
+                            <core:Icon src="sap-icon://hint" class="dccHintIcon" />
+                        </HBox>
+
+                        <HBox class="dccDonutLayout" alignItems="Center" justifyContent="Center">
+
+                            <core:HTML
+                                sanitizeContent="false"
+                                content='&lt;div class="dccDonut"&gt;
+                                            &lt;div class="dccDonutHole"&gt;
+                                                &lt;span&gt;Total&lt;/span&gt;
+                                                &lt;strong&gt;6,400 h&lt;/strong&gt;
+                                            &lt;/div&gt;
+                                            &lt;span class="dccDonutPercent dccPctOrange"&gt;31.7%&lt;/span&gt;
+                                            &lt;span class="dccDonutPercent dccPctGreen"&gt;34.3%&lt;/span&gt;
+                                            &lt;span class="dccDonutPercent dccPctBlue"&gt;31.0%&lt;/span&gt;
+                                        &lt;/div&gt;' />
+
+                            <VBox class="dccLegend">
+                                <HBox class="dccLegendItem" alignItems="Center">
+                                    <core:Icon src="sap-icon://circle-task-2" class="dccLegendDot dccDotOrange" />
+                                    <VBox>
+                                        <Text text="Capacidad disponible" class="dccLegendLabel" />
+                                        <Text text="6,400 h (34.3%)" class="dccLegendValue" />
+                                    </VBox>
+                                </HBox>
+
+                                <HBox class="dccLegendItem" alignItems="Center">
+                                    <core:Icon src="sap-icon://circle-task-2" class="dccLegendDot dccDotGreen" />
+                                    <VBox>
+                                        <Text text="Horas programadas" class="dccLegendLabel" />
+                                        <Text text="5,900 h (31.7%)" class="dccLegendValue" />
+                                    </VBox>
+                                </HBox>
+
+                                <HBox class="dccLegendItem" alignItems="Center">
+                                    <core:Icon src="sap-icon://circle-task-2" class="dccLegendDot dccDotBlue" />
+                                    <VBox>
+                                        <Text text="Horas reales" class="dccLegendLabel" />
+                                        <Text text="5,842 h (31.0%)" class="dccLegendValue" />
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+
+                        </HBox>
+                    </VBox>
+
+                    <!-- Resumen por turno -->
+                    <VBox class="dccCard dccSummaryCard">
+                        <Title text="Resumen por turno" level="H3" class="dccCardTitle dccSummaryTitle" />
+
+                        <Table
+                            items="{/resumenTurno}"
+                            class="dccSummaryTable"
+                            fixedLayout="false"
+                            inset="false">
+
+                            <columns>
+                                <Column>
+                                    <Text text="Turno" />
+                                </Column>
+                                <Column hAlign="End">
+                                    <Text text="Capacidad disponible" />
+                                </Column>
+                                <Column hAlign="End">
+                                    <Text text="Horas programadas" />
+                                </Column>
+                                <Column hAlign="End">
+                                    <Text text="Horas reales" />
+                                </Column>
+                                <Column hAlign="End">
+                                    <Text text="Utilización real / capacidad" />
+                                </Column>
+                                <Column>
+                                    <Text text="Estado" />
+                                </Column>
+                            </columns>
+
+                       <items>
+    <ColumnListItem>
+        <cells>
+            <!-- Turno sin ícono -->
+            <Text text="{turno}" class="dccSummaryTurnText" />
+
+            <Text text="{capacidad}" textAlign="End" class="dccSummaryNumber" />
+            <Text text="{programadas}" textAlign="End" class="dccSummaryNumber" />
+            <Text text="{reales}" textAlign="End" class="dccSummaryNumber" />
+
+            <!-- Utilización como texto de color, sin píldora -->
+            <ObjectStatus
+                text="{utilizacion}"
+                state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}"
+                class="dccUtilizacionText" />
+
+            <!-- Estado con círculo de color + texto, sin píldora -->
+            <ObjectStatus
+                text="{estado}"
+                state="{path: 'estado', formatter: '.formatEstadoState'}"
+                icon="{path: 'estado', formatter: '.formatEstadoCircleIcon'}"
+                class="dccEstadoText" />
+        </cells>
+    </ColumnListItem>
+</items>
+                        </Table>
+                    </VBox>
+
+                </HBox>
+
+                <!-- Detalle por zona y turno -->
+                <VBox class="dccCard dccTableCard">
+
+                    <HBox class="dccDetailHeader" alignItems="Center">
+                        <HBox alignItems="Center">
+                            <Title text="Detalle por zona y turno" level="H3" class="dccCardTitle" />
+                            <core:Icon src="sap-icon://hint" class="dccHintIcon" />
+                        </HBox>
+
+                        <ToolbarSpacer />
+
+                        <SearchField
+                            width="16rem"
+                            placeholder="Buscar zona, turno..."
+                            search=".onSearch"
+                            liveChange=".onSearch"
+                            class="dccSearch" />
+
+                        <Button
+                            text="Columnas"
+                            icon="sap-icon://table-column"
+                            type="Transparent"
+                            press=".onColumns"
+                            class="dccActionButton" />
+
+                        <Button
+                            text="Exportar"
+                            icon="sap-icon://excel-attachment"
+                            type="Transparent"
+                            press=".onExport"
+                            class="dccActionButton" />
+                    </HBox>
+
+                    <Table
+                        id="detalleTable"
+                        items="{/detalles}"
+                        class="dccDetailTable"
+                        fixedLayout="false"
+                        inset="false">
+
+                        <columns>
+                            <Column>
+                                <Text text="Zona" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Turno" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Capacidad disponible (h)" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Horas programadas (h)" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Horas reales (h)" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Margen (h)" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Utilización real / capacidad" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Variación vs programada (h)" />
+                            </Column>
+
+                            <Column hAlign="End">
+                                <Text text="Variación vs programada (%)" />
+                            </Column>
+
+                            <Column>
+                                <Text text="Estado" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{zona}" />
+                                    <Text text="{turno}" />
+
+                                    <Text text="{capacidad}" textAlign="End" />
+                                    <Text text="{programadas}" textAlign="End" />
+                                    <Text text="{reales}" textAlign="End" />
+
+                                    <ObjectStatus
+                                        text="{margen}"
+                                        state="{path: 'margen', formatter: '.formatMargenState'}" />
+
+                                    <ObjectStatus
+                                        text="{utilizacion}"
+                                        state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}" />
+
+                                    <ObjectStatus
+                                        text="{variacionProgH}"
+                                        state="{path: 'variacionProgH', formatter: '.formatTrendState'}" />
+
+                                    <ObjectStatus
+                                        text="{variacionProgP}"
+                                        state="{path: 'variacionProgP', formatter: '.formatTrendState'}" />
+
+                                    <ObjectStatus
+                                        text="{estado}"
+                                        state="{path: 'estado', formatter: '.formatEstadoState'}"
+                                        icon="{path: 'estado', formatter: '.formatEstadoIcon'}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <HBox class="dccTableFooter" alignItems="Center">
+                        <Text text="Mostrando 1 a 12 de 12 resultados" class="dccFooterText" />
+
+                        <ToolbarSpacer />
+
+                        <ComboBox
+                            selectedKey="{/paginacion/pageSize}"
+                            width="7rem"
+                            change=".onChangePageSize"
+                            class="dccPageSize">
+                            <core:Item key="10" text="10 por página" />
+                            <core:Item key="20" text="20 por página" />
+                            <core:Item key="50" text="50 por página" />
+                        </ComboBox>
+
+                        <Button icon="sap-icon://navigation-left-arrow" type="Transparent" class="dccPagerButton" />
+                        <Button text="1" type="Emphasized" class="dccPagerCurrent" />
+                        <Button icon="sap-icon://navigation-right-arrow" type="Transparent" class="dccPagerButton" />
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

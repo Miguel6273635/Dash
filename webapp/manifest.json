@@ -118,13 +118,24 @@
         {
           "uri": "css/DetalleResponsable.css"
         },
-         {
+        {
           "uri": "css/ComportamientoOperativo.css"
         },
-           {
+        {
           "uri": "css/CallCenterNoAtendidas.css"
+        },
+        {
+          "uri": "css/DetalleHorasTipoOrden.css"
+        },
+        {
+          "uri": "css/DetalleCapacidadZona.css"
+        },
+        {
+          "uri": "css/DetalleDesviacionHoras.css"
+        },
+        {
+          "uri": "css/DetalleCapacidadCarga.css"
         }
-
       ]
     },
     "routing": {
@@ -307,12 +318,40 @@
           ]
         },
         {
-        "name": "RouteCallCenterNoAtendidas",
-        "pattern": "call-center/no-atendidas",
-        "target": [
-        "TargetCallCenterNoAtendidas"
-        ]
-      }
+          "name": "RouteCallCenterNoAtendidas",
+          "pattern": "call-center/no-atendidas",
+          "target": [
+            "TargetCallCenterNoAtendidas"
+          ]
+        },
+        {
+          "name": "RouteDetalleHorasTipoOrden",
+          "pattern": "detalle-horas-tipo-orden",
+          "target": [
+            "TargetDetalleHorasTipoOrden"
+          ]
+        },
+        {
+          "name": "RouteDetalleCapacidadZona",
+          "pattern": "detalle-capacidad-zona",
+          "target": [
+            "TargetDetalleCapacidadZona"
+          ]
+        },
+        {
+          "name": "RouteDetalleDesviacionHoras",
+          "pattern": "detalle-desviacion-horas",
+          "target": [
+            "TargetDetalleDesviacionHoras"
+          ]
+        },
+        {
+  "name": "RouteDetalleCapacidadCarga",
+  "pattern": "detalle-capacidad-carga",
+  "target": [
+    "TargetDetalleCapacidadCarga"
+  ]
+}
       ],
       "targets": {
         "TargetAnalisisFallas": {
@@ -436,12 +475,32 @@
           "viewName": "AnalisisReparacionesPlaneadasNoEjecutadas"
         },
         "TargetCallCenterNoAtendidas": {
-         "viewType": "XML",
-         "transition": "slide",
-         "clearControlAggregation": false,
-        "viewId": "CallCenterNoAtendidas",
-        "viewName": "CallCenterNoAtendidas"
-         }
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CallCenterNoAtendidas",
+          "viewName": "CallCenterNoAtendidas"
+        },
+        "TargetDetalleHorasTipoOrden": {
+          "viewType": "XML",
+          "viewId": "DetalleHorasTipoOrden",
+          "viewName": "DetalleHorasTipoOrden"
+        },
+        "TargetDetalleCapacidadZona": {
+          "viewType": "XML",
+          "viewId": "DetalleCapacidadZona",
+          "viewName": "DetalleCapacidadZona"
+        },
+        "TargetDetalleDesviacionHoras": {
+          "viewType": "XML",
+          "viewId": "DetalleDesviacionHoras",
+          "viewName": "DetalleDesviacionHoras"
+        },
+        "TargetDetalleCapacidadCarga": {
+  "viewName": "DetalleCapacidadCarga",
+  "viewId": "DetalleCapacidadCarga",
+  "viewLevel": 1
+}
       }
     },
     "rootView": {
