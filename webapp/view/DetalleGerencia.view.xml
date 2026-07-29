@@ -1,0 +1,1321 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleGerencia"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <Page
+        id="detalleGerenciaPage"
+        showHeader="false"
+        enableScrolling="true"
+        backgroundDesign="Transparent"
+        class="dgPage">
+
+        <content>
+            <VBox class="dgWorkspace">
+
+                <!-- =====================================================
+                     CABECERA COMPARTIDA: SIEMPRE VISIBLE
+                     ===================================================== -->
+                <Breadcrumbs
+                    currentLocationText="Detalle de carga, capacidad, órdenes y materiales de Gerencia"
+                    class="dgBreadcrumbs">
+
+                    <links>
+                        <Link
+                            text="Vista Gerencia"
+                            press=".onBackToCapacity" />
+                    </links>
+                </Breadcrumbs>
+
+                <VBox class="dgHeaderBlock">
+                    <Title
+                        text="Detalle de carga, capacidad, órdenes y materiales de Gerencia"
+                        level="H1"
+                        class="dgMainTitle" />
+
+                    <Text
+                        text="Consulta consolidada por jefatura. Seleccione una jefatura para ver el detalle de supervisores."
+                        class="dgSubtitle" />
+                </VBox>
+
+                <!-- Filtros compartidos -->
+                <HBox
+                    alignItems="Stretch"
+                    wrap="Wrap"
+                    class="dgFiltersRow">
+
+                    <VBox class="dgFilterField dgFilterPeriod">
+                        <Label
+                            text="Periodo"
+                            class="dgFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/period}"
+                            width="100%"
+                            class="dgFilterControl"
+                            items="{view>/periodOptions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterDate">
+                        <Label
+                            text="Fecha desde"
+                            class="dgFilterLabel" />
+
+                        <DatePicker
+                            value="{view>/filters/dateFrom}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            width="100%"
+                            class="dgFilterControl" />
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterDate">
+                        <Label
+                            text="Fecha hasta"
+                            class="dgFilterLabel" />
+
+                        <DatePicker
+                            value="{view>/filters/dateTo}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            width="100%"
+                            class="dgFilterControl" />
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterManagement">
+                        <Label
+                            text="Gerencia"
+                            class="dgFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/management}"
+                            width="100%"
+                            class="dgFilterControl"
+                            items="{view>/managementOptions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterCompact">
+                        <Label
+                            text="Jefatura"
+                            class="dgFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/headship}"
+                            width="100%"
+                            class="dgFilterControl"
+                            items="{view>/headshipOptions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterCompact">
+                        <Label
+                            text="Zona"
+                            class="dgFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/zone}"
+                            width="100%"
+                            class="dgFilterControl"
+                            items="{view>/zoneOptions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dgFilterField dgFilterService">
+                        <Label
+                            text="Tipo de servicio"
+                            class="dgFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/serviceType}"
+                            width="100%"
+                            class="dgFilterControl"
+                            items="{view>/serviceOptions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox
+                        justifyContent="End"
+                        class="dgApplyButtonWrap">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="dgApplyButton" />
+                    </VBox>
+                </HBox>
+
+                <!-- =====================================================
+                     KPIs: CARGA Y CAPACIDAD
+                     ===================================================== -->
+                <HBox
+                    alignItems="Stretch"
+                    wrap="NoWrap"
+                    visible="{= ${view>/activeSection} === 'capacity' }"
+                    class="dgKpiRow dgCapacityKpis">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiBlue">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://group"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Jefaturas"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="12"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiPurple">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://employee"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Supervisores"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="48"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiGreen">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://history"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Capacidad disponible"
+                                class="dgKpiLabel" />
+
+                            <HBox alignItems="End">
+                                <ObjectNumber
+                                    number="18,420"
+                                    class="dgKpiNumber" />
+
+                                <Text
+                                    text="h"
+                                    class="dgKpiUnit" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiOrange">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://calendar"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Carga programada"
+                                class="dgKpiLabel" />
+
+                            <HBox alignItems="End">
+                                <ObjectNumber
+                                    number="16,970"
+                                    class="dgKpiNumber" />
+
+                                <Text
+                                    text="h"
+                                    class="dgKpiUnit" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiTeal">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://performance"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Utilización promedio"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="92%"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiRed">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://task"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Órdenes activas"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="148"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgKpiSky">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://product"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Movimientos de material"
+                                class="dgKpiLabel dgKpiLabelTwoLines" />
+
+                            <ObjectNumber
+                                number="3,245"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <CustomTile
+                        press=".onViewTotals"
+                        class="dgKpiCard dgKpiActionCard dgKpiBlue">
+
+                        <content>
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dgKpiActionContent">
+
+                                <VBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgKpiIconBox dgKpiActionIconBox">
+
+                                    <core:Icon
+                                        src="sap-icon://bar-chart"
+                                        class="dgKpiIcon" />
+                                </VBox>
+
+                                <Text
+                                    text="Ver totales por gerencia"
+                                    textAlign="Center"
+                                    class="dgKpiActionText" />
+                            </VBox>
+                        </content>
+                    </CustomTile>
+                </HBox>
+
+                <!-- =====================================================
+                     KPIs: CONSUMO DE MATERIALES
+                     ===================================================== -->
+                <HBox
+                    alignItems="Stretch"
+                    wrap="NoWrap"
+                    visible="{= ${view>/activeSection} === 'materials' }"
+                    class="dgKpiRow dgMaterialsKpis">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgMaterialKpiCard dgKpiBlue">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://document-text"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Órdenes con consumo de material"
+                                class="dgKpiLabel dgKpiLabelTwoLines" />
+
+                            <ObjectNumber
+                                number="148"
+                                class="dgKpiNumber" />
+
+                            <Text
+                                text="En el periodo"
+                                class="dgKpiCaption" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgMaterialKpiCard dgKpiTeal">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://product"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Materiales utilizados"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="42"
+                                class="dgKpiNumber" />
+
+                            <Text
+                                text="Materiales distintos"
+                                class="dgKpiCaption" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgMaterialKpiCard dgKpiOrange">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://message-warning"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Materiales críticos"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="14"
+                                class="dgKpiNumber" />
+
+                            <Text
+                                text="5% del total"
+                                class="dgKpiCaption dgKpiCaptionAlert" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgMaterialKpiCard dgKpiPurple">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://measure"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Material con mayor consumo"
+                                class="dgKpiLabel" />
+
+                            <Text
+                                text="Aceite Hidráulico ISO 68"
+                                class="dgKpiHighlightText" />
+
+                            <ObjectNumber
+                                number="8,950"
+                                unit="L"
+                                class="dgKpiNumber" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgKpiCard dgMaterialKpiCard dgKpiGreen">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://trend-up"
+                                class="dgKpiIcon" />
+                        </VBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dgKpiBody">
+
+                            <Text
+                                text="Variación vs plan"
+                                class="dgKpiLabel" />
+
+                            <ObjectNumber
+                                number="-4.2%"
+                                class="dgKpiNumber" />
+
+                            <Text
+                                text="Dentro del objetivo"
+                                class="dgKpiCaption dgKpiCaptionSuccess" />
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- =====================================================
+                     SELECTOR DE TABLAS: SIEMPRE VISIBLE
+                     Debajo de los KPIs y separado de la tabla
+                     ===================================================== -->
+                <VBox class="dgTabArea">
+                <HBox
+                    alignItems="End"
+                    class="dgTabStrip">
+
+                    <!-- Carga activa -->
+                    <Button
+                        text="Carga y capacidad por jefatura"
+                        type="Transparent"
+                        visible="{= ${view>/activeSection} === 'capacity' }"
+                        class="dgTabButton dgTabButtonActive" />
+
+                    <!-- Carga inactiva -->
+                    <Button
+                        text="Carga y capacidad por jefatura"
+                        type="Transparent"
+                        visible="{= ${view>/activeSection} !== 'capacity' }"
+                        press=".onBackToCapacity"
+                        class="dgTabButton" />
+
+                    <!-- Materiales activa -->
+                    <Button
+                        text="Consumo de materiales por jefatura"
+                        type="Transparent"
+                        visible="{= ${view>/activeSection} === 'materials' }"
+                        class="dgTabButton dgTabButtonActive" />
+
+                    <!-- Materiales inactiva -->
+                    <Button
+                        text="Consumo de materiales por jefatura"
+                        type="Transparent"
+                        visible="{= ${view>/activeSection} !== 'materials' }"
+                        press=".onOpenMaterials"
+                        class="dgTabButton" />
+                </HBox>
+                </VBox>
+
+                <!-- =====================================================
+                     CONTENIDO: CARGA Y CAPACIDAD
+                     ===================================================== -->
+                <VBox
+                    visible="{= ${view>/activeSection} === 'capacity' }"
+                    class="dgTableCard dgCapacityTableCard">
+
+                    <Table
+                        id="capacityTable"
+                        items="{view>/capacityRows}"
+                        fixedLayout="true"
+                        inset="false"
+                        growing="false"
+                        class="dgDataTable dgCapacityTable">
+
+                        <columns>
+                            <Column width="14%">
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="SpaceBetween"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Jefatura" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="8%"
+                                hAlign="Center">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Supervisores" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="14%"
+                                hAlign="End">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="End"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Capacidad disponible (h)" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="14%"
+                                hAlign="End">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="End"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Carga programada (h)" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <!-- Utilización: porcentaje arriba y barra debajo -->
+                            <Column
+                                width="11%"
+                                hAlign="Center">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgColumnHeader dgUtilHeader">
+
+                                    <Text
+                                        text="Utilización (real / capacidad)"
+                                        wrapping="true"
+                                        textAlign="Center" />
+
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="10%"
+                                hAlign="Center">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Órdenes activas" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="13%"
+                                hAlign="Center">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgColumnHeader dgColumnHeaderWrap">
+
+                                    <Text
+                                        text="Supervisores sobre capacidad"
+                                        wrapping="true"
+                                        textAlign="Center" />
+
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="8%"
+                                hAlign="Center">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="dgColumnHeader">
+
+                                    <Text text="Estatus" />
+                                    <core:Icon src="sap-icon://sort" />
+                                </HBox>
+                            </Column>
+
+                            <Column
+                                width="8%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Acción"
+                                    class="dgColumnHeaderText" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                          <ColumnListItem
+                            vAlign="Middle"
+                          type="Inactive"
+                          class="dgDataRow">
+
+                                <cells>
+                                    <Link
+                                        text="{view>jefatura}"
+                                        press=".onViewSupervisors"
+                                        class="dgPrimaryLink" />
+
+                                    <Text
+                                        text="{view>supervisors}"
+                                        textAlign="Center" />
+
+                                    <Text
+                                        text="{view>capacity}"
+                                        textAlign="End" />
+
+                                    <Text
+                                        text="{view>load}"
+                                        textAlign="End" />
+
+                                    <!-- Utilización: texto arriba + barra simple debajo -->
+                                    <VBox
+                                        alignItems="Start"
+                                        justifyContent="Center"
+                                        class="dgUtilizationCell">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="utiltone"
+                                                value="{= ${view>utilization} >= 95 ? 'orange' : 'green' }"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{= ${view>utilization} + '%' }"
+                                            class="dgUtilizationText" />
+
+                                        <HBox class="dgUtilBarTrack">
+                                            <HBox
+                                                width="{= (${view>barPercent} > 100 ? 100 : ${view>barPercent}) + '%' }"
+                                                class="dgUtilBarFill" />
+                                        </HBox>
+                                    </VBox>
+
+                                    <Text
+                                        text="{view>activeOrders}"
+                                        textAlign="Center" />
+
+                                    <Text
+                                        text="{view>overCapacity}"
+                                        textAlign="Center" />
+
+                                    <ObjectStatus
+                                        text="{view>status}"
+                                        state="{view>statusState}"
+                                        class="dgStatusPill" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="dgActionCell">
+
+                                        <Link
+                                            text="Ver supervisores"
+                                            press=".onViewSupervisors"
+                                            class="dgActionLink" />
+
+                                        <core:Icon
+                                            src="sap-icon://navigation-right-arrow"
+                                            class="dgActionArrow" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="dgPaginationBar">
+
+                        <HBox
+                            alignItems="Center"
+                            class="dgPageSizeGroup">
+
+                            <Text text="Mostrar" />
+
+                            <Select
+                                selectedKey="10"
+                                width="4.1rem"
+                                class="dgPageSizeSelect">
+
+                                <core:Item key="10" text="10" />
+                                <core:Item key="25" text="25" />
+                                <core:Item key="50" text="50" />
+                            </Select>
+
+                            <Text text="por página" />
+                        </HBox>
+
+                        <Text
+                            text="1 - 6 de 6 registros"
+                            class="dgRecordCount" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="dgPaginator">
+
+                            <Button
+                                icon="sap-icon://media-rewind"
+                                type="Transparent"
+                                enabled="false"
+                                class="dgPageButton" />
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="false"
+                                class="dgPageButton" />
+
+                            <Button
+                                text="1"
+                                type="Emphasized"
+                                class="dgPageButton dgCurrentPage" />
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="false"
+                                class="dgPageButton" />
+
+                            <Button
+                                icon="sap-icon://media-forward"
+                                type="Transparent"
+                                enabled="false"
+                                class="dgPageButton" />
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- =====================================================
+                     CONTENIDO: CONSUMO DE MATERIALES
+                     ===================================================== -->
+                <VBox
+                    visible="{= ${view>/activeSection} === 'materials' }"
+                    class="dgMaterialsContentCard">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dgSectionHeader">
+
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dgSectionHeaderIconBox">
+
+                            <core:Icon
+                                src="sap-icon://list"
+                                class="dgSectionHeaderIcon" />
+                        </VBox>
+
+                        <Title
+                            text="Consumo de materiales por jefatura"
+                            level="H3"
+                            class="dgSectionTitle" />
+                    </HBox>
+
+                    <HBox
+                        alignItems="Stretch"
+                        class="dgMaterialsMainRow">
+
+                        <VBox class="dgMaterialsTablePane">
+
+                            <Table
+                                id="materialsTable"
+                                items="{view>/materialRows}"
+                                fixedLayout="true"
+                                inset="false"
+                                growing="false"
+                                class="dgDataTable dgMaterialsTable">
+
+                                <columns>
+                                    <Column width="11%">
+                                        <Text
+                                            text="Jefatura"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="7%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Supervisores"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column width="10%">
+                                        <Text
+                                            text="Categoría principal"
+                                            wrapping="true"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column width="16%">
+                                        <Text
+                                            text="Material más consumido"
+                                            wrapping="true"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="End">
+
+                                        <Text
+                                            text="Consumo real"
+                                            wrapping="true"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="5%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Unidad"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="7%"
+                                        hAlign="End">
+
+                                        <Text
+                                            text="Plan"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="6%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Unidad plan"
+                                            wrapping="true"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="7%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Variación"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="7%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Órdenes con consumo"
+                                            wrapping="true"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Estatus"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Acción"
+                                            class="dgColumnHeaderText" />
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem
+                                        type="Inactive"
+                                        vAlign="Middle"
+                                        class="dgDataRow">
+
+                                        <cells>
+                                            <Link
+                                                text="{view>jefatura}"
+                                                press=".onViewSupervisors"
+                                                class="dgPrimaryLink" />
+
+                                            <Text
+                                                text="{view>supervisors}"
+                                                textAlign="Center" />
+
+                                            <Text text="{view>category}" />
+
+                                            <Text
+                                                text="{view>material}"
+                                                wrapping="true" />
+
+                                            <Text
+                                                text="{view>actual}"
+                                                textAlign="End" />
+
+                                            <Text
+                                                text="{view>unit}"
+                                                textAlign="Center" />
+
+                                            <Text
+                                                text="{view>plan}"
+                                                textAlign="End" />
+
+                                            <Text
+                                                text="{view>planUnit}"
+                                                textAlign="Center" />
+
+                                            <!-- Variación: solo texto de color, sin píldora -->
+                                            <VBox class="dgVariationTextWrap">
+                                                <customData>
+                                                    <core:CustomData
+                                                        key="vartone"
+                                                        value="{= ${view>variationState} === 'Warning' ? 'orange' : (${view>variationState} === 'Error' ? 'red' : 'green') }"
+                                                        writeToDom="true" />
+                                                </customData>
+
+                                                <Text
+                                                    text="{view>variation}"
+                                                    class="dgVariationText" />
+                                            </VBox>
+
+                                            <Text
+                                                text="{view>orders}"
+                                                textAlign="Center" />
+
+                                            <ObjectStatus
+                                                text="{view>status}"
+                                                state="{view>statusState}"
+                                                class="dgStatusPill dgMaterialStatusPill" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="dgActionCell">
+
+                                                <Link
+                                                    text="Ver supervisores"
+                                                    press=".onViewSupervisors"
+                                                    class="dgActionLink" />
+
+                                                <core:Icon
+                                                    src="sap-icon://navigation-right-arrow"
+                                                    class="dgActionArrow" />
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                class="dgPaginationBar dgMaterialPagination">
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="dgPageSizeGroup">
+
+                                    <Text text="Mostrar" />
+
+                                    <Select
+                                        selectedKey="10"
+                                        width="4.1rem"
+                                        class="dgPageSizeSelect">
+
+                                        <core:Item key="10" text="10" />
+                                        <core:Item key="25" text="25" />
+                                        <core:Item key="50" text="50" />
+                                    </Select>
+
+                                    <Text text="por página" />
+                                </HBox>
+
+                                <Text
+                                    text="1 - 6 de 6 registros"
+                                    class="dgRecordCount" />
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="dgPaginator">
+
+                                    <Button
+                                        icon="sap-icon://media-rewind"
+                                        type="Transparent"
+                                        enabled="false"
+                                        class="dgPageButton" />
+
+                                    <Button
+                                        icon="sap-icon://navigation-left-arrow"
+                                        type="Transparent"
+                                        enabled="false"
+                                        class="dgPageButton" />
+
+                                    <Button
+                                        text="1"
+                                        type="Emphasized"
+                                        class="dgPageButton dgCurrentPage" />
+
+                                    <Button
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        enabled="false"
+                                        class="dgPageButton" />
+
+                                    <Button
+                                        icon="sap-icon://media-forward"
+                                        type="Transparent"
+                                        enabled="false"
+                                        class="dgPageButton" />
+                                </HBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Panel lateral -->
+                        <VBox class="dgCategoryPanel">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                class="dgCategoryPanelHeader">
+
+                                <Title
+                                    text="Consumo por categoría de material"
+                                    level="H4"
+                                    class="dgCategoryPanelTitle" />
+
+                                <core:Icon
+                                    src="sap-icon://hint"
+                                    class="dgInfoIcon" />
+                            </HBox>
+
+                            <!-- =================================================
+                                 CABECERA DE COLUMNAS DEL PANEL LATERAL
+                                 Usa la misma cuadrícula que las filas para que
+                                 Cantidad y Unidad queden alineadas con sus datos.
+                                 ================================================= -->
+                            <HBox
+                                alignItems="Center"
+                                class="dgCategoryColumnsHeader">
+
+                                <!-- Espacio reservado para el ícono de cada fila -->
+                                <VBox class="dgCategoryHeaderIconSpace" />
+
+                                <Text
+                                    text="Categoría"
+                                    class="dgCategoryHeaderCategory" />
+
+                                <Text
+                                    text="Cantidad"
+                                    class="dgCategoryHeaderQuantity" />
+
+                                <Text
+                                    text="Unidad"
+                                    class="dgCategoryHeaderUnit" />
+                            </HBox>
+
+                            <!-- =================================================
+                                 LISTA DE CATEGORÍAS
+                                 Cada fila usa cuatro columnas:
+                                 ícono | categoría | cantidad | unidad
+                                 ================================================= -->
+                            <VBox
+                                items="{view>/categoryRows}"
+                                class="dgCategoryList">
+
+                                <items>
+                                    <VBox class="dgCategoryItem">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="categorytone"
+                                                value="{= ${view>category} === 'Lubricantes' ? 'lubricants' : 'standard' }"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <!-- Primera línea: ícono y valores -->
+                                        <HBox
+                                            alignItems="Center"
+                                            class="dgCategoryItemTop">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="dgCategoryIconBox">
+
+                                                <core:Icon
+                                                    src="{view>icon}"
+                                                    class="dgCategoryIcon" />
+                                            </VBox>
+
+                                            <Text
+                                                text="{view>category}"
+                                                class="dgCategoryName" />
+
+                                            <Text
+                                                text="{view>quantity}"
+                                                class="dgCategoryQuantity" />
+
+                                            <Text
+                                                text="{view>unit}"
+                                                class="dgCategoryUnit" />
+                                        </HBox>
+
+                                        <!-- Segunda línea: barra azul alineada con los datos -->
+                                        <HBox class="dgCategoryBarRow">
+                                            <HBox class="dgCategoryBarTrack">
+                                                <HBox
+                                                    width="{= (${view>percent} > 100 ? 100 : ${view>percent}) + '%' }"
+                                                    class="dgCategoryBarFill" />
+                                            </HBox>
+                                        </HBox>
+                                    </VBox>
+                                </items>
+                            </VBox>
+
+                            <Text
+                                text="Unidades según categoría"
+                                class="dgCategoryFootnote" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

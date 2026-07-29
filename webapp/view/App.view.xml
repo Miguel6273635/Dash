@@ -5,14 +5,21 @@
   xmlns="sap.m"
   xmlns:tnt="sap.tnt">
 
-  <tnt:ToolPage id="toolPage">
+
+  <tnt:ToolPage
+    id="toolPage"
+    sideExpanded="false"
+    class="appToolPage">
 
     <!-- HEADER -->
     <tnt:header>
       <tnt:ToolHeader>
+
         <Button
+          id="sideNavToggleButton"
           icon="sap-icon://menu2"
           type="Transparent"
+          tooltip="Abrir o cerrar menú"
           press=".onToggleSideNav" />
 
         <Title
@@ -23,10 +30,12 @@
         <ToolbarSpacer />
 
         <Button
+          id="refreshButton"
           icon="sap-icon://refresh"
           type="Transparent"
           tooltip="Actualizar"
           press=".onRefresh" />
+
       </tnt:ToolHeader>
     </tnt:header>
 
@@ -34,7 +43,7 @@
     <tnt:sideContent>
       <tnt:SideNavigation
         id="sideNavigation"
-        class="customSideNav"
+        class="customSideNav appSideNavigation"
         itemSelect=".onMenuSelect">
 
         <tnt:NavigationList>
@@ -44,17 +53,20 @@
             enabled="false"
             class="sideSectionTitle" />
 
+          <!-- PANTALLA PRINCIPAL -->
           <tnt:NavigationListItem
-            text="Dashboard Ejecutivo"
+            text="Pantalla principal"
             icon="sap-icon://home"
             key="RouteMantenimiento" />
 
-          <!-- ÓRDENES CON SUBMENÚ -->
+          <!-- ÓRDENES -->
           <tnt:NavigationListItem
             text="Órdenes"
-            icon="sap-icon://business-objects-experience">
+            icon="sap-icon://business-objects-experience"
+            expanded="false">
 
             <tnt:items>
+
               <tnt:NavigationListItem
                 text="Preventivas no ejecutadas"
                 icon="sap-icon://sys-enter-2"
@@ -69,61 +81,95 @@
                 text="Reparaciones no ejecutadas"
                 icon="sap-icon://sys-enter-2"
                 key="RouteAnalisisReparacionesPlaneadasNoEjecutadas" />
-            </tnt:items>
 
+              <tnt:NavigationListItem
+                text="Reparaciones ejecutadas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisReparacionesPlaneadasEjecutadas" />
+
+              <tnt:NavigationListItem
+                text="Análisis de reparaciones"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisIntegralReparaciones" />
+
+              <tnt:NavigationListItem
+                text="Call Center no atendidas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteCallCenterNoAtendidas" />
+
+              <tnt:NavigationListItem
+                text="Call Center atendidas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisSolicitudesCallCenterAtendidas" />
+
+            </tnt:items>
           </tnt:NavigationListItem>
 
-          <!-- MENÚS SEPARADOS -->
+          <!-- CUMPLIMIENTO DE ÓRDENES -->
           <tnt:NavigationListItem
-            text="Cumplimiento de Órdenes"
+            text="Cumplimiento de órdenes"
             icon="sap-icon://chart-axis"
-            key="RouteDetalleCumplimientoOrdenes" />
-
-          <tnt:NavigationListItem
-            text="Causas por zona"
-            icon="sap-icon://map-2"
-            key="RouteCausasZona" />
-
-          <tnt:NavigationListItem
-            text="Comportamiento operativo por responsables"
-            icon="sap-icon://group"
-            key="RouteComportamientoOperativo" />
-
-          <!-- PLAN POR ZONA Y PERIODO -->
-          <tnt:NavigationListItem
-            text="Plan por zona y periodo"
-            icon="sap-icon://map-2">
+            key="RouteDetalleCumplimientoOrdenes"
+            expanded="false">
 
             <tnt:items>
-              <tnt:NavigationListItem
-                text="Balance operativo por zona"
-                icon="sap-icon://sys-enter-2"
-                key="RouteBalanceOperativoZona" />
 
               <tnt:NavigationListItem
-                text="Detalle operativo zona"
+                text="Elevadores con desviación"
                 icon="sap-icon://sys-enter-2"
-                key="RouteDetalleOperativoZonaSur" />
+                key="RouteAnalisisElevadores" />
+
+              <tnt:NavigationListItem
+                text="Causas por zona"
+                icon="sap-icon://sys-enter-2"
+                key="RouteCausasZona" />
+
+              <tnt:NavigationListItem
+                text="Fallas y servicios afectados"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisFallas" />
+
+              <tnt:NavigationListItem
+                text="Responsables"
+                icon="sap-icon://sys-enter-2"
+                key="RouteComportamientoOperativo" />
+
+              <tnt:NavigationListItem
+                text="Detalle del responsable"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleResponsable" />
+
+              <tnt:NavigationListItem
+                text="Tendencia planeado vs real"
+                icon="sap-icon://sys-enter-2"
+                key="RouteTendenciasEjecucion" />
+
+              <tnt:NavigationListItem
+                text="Análisis de semana"
+                icon="sap-icon://sys-enter-2"
+                key="RouteAnalisisSemanaS22" />
+
             </tnt:items>
-
           </tnt:NavigationListItem>
 
-          <!-- HORAS TRABAJADAS CON SUBMENÚ -->
+          <!-- HORAS TRABAJADAS -->
           <tnt:NavigationListItem
             text="Horas trabajadas"
-            icon="sap-icon://time-entry-request">
+            icon="sap-icon://time-entry-request"
+            key="RouteHorasTrabajadas"
+            expanded="false">
 
             <tnt:items>
-               <tnt:NavigationListItem
-                text="Detalle de capacidad vs carga programada"
+
+              <tnt:NavigationListItem
+                text="Capacidad vs carga"
                 icon="sap-icon://sys-enter-2"
                 key="RouteDetalleCapacidadCarga" />
 
-
               <tnt:NavigationListItem
-                text="Resumen horas trabajadas"
+                text="Utilización por turno"
                 icon="sap-icon://sys-enter-2"
-                key="RouteHorasTrabajadas" />
+                key="RouteDetalleUtilizacionTurno" />
 
               <tnt:NavigationListItem
                 text="Horas por tipo de orden"
@@ -139,121 +185,144 @@
                 text="Desviación de horas"
                 icon="sap-icon://sys-enter-2"
                 key="RouteDetalleDesviacionHoras" />
-            </tnt:items>
 
+            </tnt:items>
           </tnt:NavigationListItem>
 
-          <!-- MECÁNICOS CON SUBMENÚ -->
+          <!-- MECÁNICOS -->
           <tnt:NavigationListItem
             text="Mecánicos"
-            icon="sap-icon://employee">
+            icon="sap-icon://employee"
+            key="RouteMecanicos"
+            expanded="false">
 
             <tnt:items>
-              <tnt:NavigationListItem
-                text="Mecánicos"
-                icon="sap-icon://sys-enter-2"
-                key="RouteMecanicos" />
 
               <tnt:NavigationListItem
                 text="Detalle de mecánicos"
-                icon="sap-icon://detail-view"
+                icon="sap-icon://sys-enter-2"
                 key="RouteDetalleMecanicos" />
-            </tnt:items>
 
+              <tnt:NavigationListItem
+                text="Vista dirección"
+                icon="sap-icon://sys-enter-2"
+                key="RouteVistaDireccion" />
+
+              <tnt:NavigationListItem
+                text="Vista jefatura"
+                icon="sap-icon://sys-enter-2"
+                key="RouteVistaJefatura" />
+
+              <tnt:NavigationListItem
+                text="Vista supervisor"
+                icon="sap-icon://sys-enter-2"
+                key="RouteVistaSupervisor" />
+
+              <tnt:NavigationListItem
+                text="Detalle operativo de jefaturas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleOperativoJefaturas" />
+
+              <tnt:NavigationListItem
+                text="Detalle operativo de supervisores"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleOperativoSupervisores" />
+
+              <tnt:NavigationListItem
+                text="Detalle operativo de recursos"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleOperativoRecursos" />
+
+              <tnt:NavigationListItem
+                text="Detalle de Gerencia"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleGerencia" />
+
+              <tnt:NavigationListItem
+                text="Detalle de Jefatura"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleCargaCapacidadJefatura" />
+
+              <tnt:NavigationListItem
+                text="Detalle de Supervisor"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleCargaSupervisor" />
+
+            </tnt:items>
           </tnt:NavigationListItem>
 
           <!-- MATERIALES -->
           <tnt:NavigationListItem
             text="Materiales"
-            icon="sap-icon://inventory">
+            icon="sap-icon://inventory"
+            key="RouteConsumoMateriales"
+            expanded="false">
 
             <tnt:items>
-              <tnt:NavigationListItem
-                text="Consumo de materiales"
-                icon="sap-icon://sys-enter-2"
-                key="RouteConsumoMateriales" />
 
               <tnt:NavigationListItem
-                text="Consumo real vs plan categoria"
+                text="Consumo real vs plan"
                 icon="sap-icon://sys-enter-2"
                 key="RouteConsumoRealVsPlanCategoria" />
-            </tnt:items>
 
+            </tnt:items>
           </tnt:NavigationListItem>
 
-          <!-- ANÁLISIS DE CAUSAS -->
+          <!-- BALANCE OPERATIVO -->
           <tnt:NavigationListItem
-            text="Análisis de causas"
-            icon="sap-icon://cause">
+            text="Balance operativo"
+            icon="sap-icon://map-2"
+            key="RouteBalanceOperativoZona"
+            expanded="false">
 
             <tnt:items>
-              <tnt:NavigationListItem
-                text="Análisis de Elevadores con Desviación"
-                icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisElevadores" />
 
               <tnt:NavigationListItem
-                text="Análisis de fallas y servicios afectados"
+                text="Detalle por zona"
                 icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisFallas" />
+                key="RouteDetalleOperativoZonaSur" />
+
             </tnt:items>
-
           </tnt:NavigationListItem>
 
-          <!-- REPARACIÓN -->
+          <!-- EQUIPOS BLOQUEADOS -->
           <tnt:NavigationListItem
-            text="Reparación"
-            icon="sap-icon://cause">
+            text="Equipos bloqueados"
+            icon="sap-icon://locked"
+            key="RouteEquiposBloqueados"
+            expanded="false">
 
             <tnt:items>
-              <tnt:NavigationListItem
-                text="Análisis de reparaciones ejecutadas"
-                icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisReparacionesPlaneadasEjecutadas" />
 
               <tnt:NavigationListItem
-                text="Análisis integral de reparaciones"
+                text="Listado de equipos bloqueados"
                 icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisIntegralReparaciones" />
+                key="RouteDetalleEquiposBloqueados" />
+
+              <tnt:NavigationListItem
+                text="Órdenes afectadas"
+                icon="sap-icon://sys-enter-2"
+                key="RouteListadoOrdenesAfectadas" />
+
+              <tnt:NavigationListItem
+                text="Pendientes de desbloqueo"
+                icon="sap-icon://sys-enter-2"
+                key="RoutePendientesDesbloqueo" />
+
+              <tnt:NavigationListItem
+                text="Detalle del equipo bloqueado"
+                icon="sap-icon://sys-enter-2"
+                key="RouteFichaEquipoBloqueado" />
+
+              <tnt:NavigationListItem
+                text="Detalle de orden afectada"
+                icon="sap-icon://sys-enter-2"
+                key="RouteDetalleOrdenAfectada" />
+
             </tnt:items>
-
           </tnt:NavigationListItem>
 
-          <!-- CALL CENTER -->
-          <tnt:NavigationListItem
-            text="Call Center"
-            icon="sap-icon://call">
-
-            <tnt:items>
-              <tnt:NavigationListItem
-                text="Análisis de solicitudes atendidas"
-                icon="sap-icon://sys-enter-2"
-                key="RouteAnalisisSolicitudesCallCenterAtendidas" />
-
-              <tnt:NavigationListItem
-                text="Análisis de solicitudes no atendidas"
-                icon="sap-icon://decline"
-                key="RouteCallCenterNoAtendidas" />
-            </tnt:items>
-
-          </tnt:NavigationListItem>
-
-          <!-- TENDENCIA -->
-          <tnt:NavigationListItem
-            text="Tendencia de ejecución: Planeado vs Real"
-            icon="sap-icon://chart-axis"
-            key="RouteTendenciasEjecucion" />
-
-          <tnt:NavigationListItem
-            text="Análisis Semana S22"
-            icon="sap-icon://sys-enter-2"
-            key="RouteAnalisisSemanaS22" />
-
-          <tnt:NavigationListItem
-            text="Reportes"
-            icon="sap-icon://table-chart"
-            key="RouteReportes" />
-
+          <!-- OTROS MÓDULOS -->
           <tnt:NavigationListItem
             text="OTROS MÓDULOS"
             enabled="false"
@@ -261,28 +330,23 @@
 
           <tnt:NavigationListItem
             text="Inventarios"
-            icon="sap-icon://product"
-            key="RouteInventarios" />
+            icon="sap-icon://product" />
 
           <tnt:NavigationListItem
             text="Compras"
-            icon="sap-icon://cart"
-            key="RouteCompras" />
+            icon="sap-icon://cart" />
 
           <tnt:NavigationListItem
             text="Contratos"
-            icon="sap-icon://document"
-            key="RouteContratos" />
+            icon="sap-icon://document" />
 
           <tnt:NavigationListItem
             text="Finanzas"
-            icon="sap-icon://money-bills"
-            key="RouteFinanzas" />
+            icon="sap-icon://money-bills" />
 
           <tnt:NavigationListItem
             text="Recursos Humanos"
-            icon="sap-icon://group"
-            key="RouteRecursosHumanos" />
+            icon="sap-icon://group" />
 
         </tnt:NavigationList>
       </tnt:SideNavigation>

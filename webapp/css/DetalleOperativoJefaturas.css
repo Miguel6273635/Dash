@@ -1,0 +1,1288 @@
+/* ================================================================
+   DETALLE OPERATIVO DE JEFATURAS
+   ================================================================ */
+
+/* ================================================================
+   PÁGINA GENERAL
+   ================================================================ */
+
+.dojPage,
+.dojPage .sapMPage,
+.dojPage .sapMPageBgStandard,
+.dojPage .sapMPageScroll {
+    background: #f6f8fb !important;
+}
+
+.dojPage .sapMPageScroll {
+    padding: 0 !important;
+}
+
+.dojDashboard {
+    width: auto !important;
+    min-height: calc(100vh - 2rem);
+    margin: 1rem;
+    padding: 1rem 1.1rem 0.85rem;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border: 1px solid #e8edf4;
+    border-radius: 1rem;
+
+    box-shadow:
+        0 0.125rem 0.375rem rgba(16, 42, 67, 0.035),
+        0 0.5rem 1.5rem rgba(16, 42, 67, 0.025);
+}
+
+/* ================================================================
+   ENCABEZADO
+   ================================================================ */
+
+.dojHeaderBlock {
+    margin-bottom: 0.8rem;
+}
+
+.dojMainTitle.sapMTitle {
+    margin: 0 !important;
+
+    color: #17233b !important;
+    font-size: 1.35rem !important;
+    line-height: 1.55rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.025rem;
+}
+
+.dojSubtitle.sapMText {
+    display: block;
+    margin-top: 0.2rem;
+
+    color: #6f7d90 !important;
+    font-size: 0.69rem !important;
+    line-height: 1rem !important;
+    font-weight: 500 !important;
+}
+
+/* ================================================================
+   CONTENEDOR DE FILTROS
+   ================================================================ */
+
+.dojFiltersBar {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 0.85fr)
+        minmax(0, 1.08fr)
+        minmax(0, 1.08fr)
+        minmax(0, 1.38fr)
+        minmax(0, 0.85fr)
+        minmax(0, 0.76fr)
+        minmax(0, 0.76fr)
+        minmax(0, 1.02fr)
+        minmax(0, 1.02fr)
+        minmax(7.1rem, auto);
+
+    align-items: end;
+
+    width: 100%;
+    column-gap: 0.5rem;
+    row-gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.dojFilter,
+.dojFilterPeriod,
+.dojFilterDate,
+.dojFilterManagement,
+.dojFilterMedium,
+.dojFilterSmall,
+.dojFilterService,
+.dojFilterResource {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+.dojFilterLabel.sapMLabel {
+    display: block;
+    margin: 0 0 0.25rem 0.1rem;
+
+    color: #394860 !important;
+    font-size: 0.6rem !important;
+    line-height: 0.85rem !important;
+    font-weight: 700 !important;
+}
+
+/* ================================================================
+   SELECTS Y DATEPICKERS
+   ================================================================ */
+
+.dojFilter .sapMSlt,
+.dojFilter .sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.dojFilter .sapMSlt,
+.dojFilter .sapMInputBaseContentWrapper {
+    height: 2.15rem !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e3e8ef !important;
+    border-radius: 0.45rem !important;
+
+    box-shadow:
+        0 0.0625rem 0.18rem
+        rgba(17, 40, 73, 0.035) !important;
+}
+
+.dojFilter .sapMSlt:hover,
+.dojFilter .sapMInputBaseContentWrapper:hover {
+    border-color: #cbd5e1 !important;
+}
+
+.dojFilter .sapMSlt.sapMSltPressed,
+.dojFilter .sapMInputBaseContentWrapper:focus-within {
+    border-color: #0a6ed1 !important;
+
+    box-shadow:
+        0 0 0 0.0625rem
+        rgba(10, 110, 209, 0.08) !important;
+}
+
+.dojFilter .sapMSltLabel {
+    height: 2.08rem !important;
+    padding-left: 0.65rem !important;
+    padding-right: 1.75rem !important;
+
+    overflow: hidden;
+
+    color: #25334a !important;
+    font-size: 0.63rem !important;
+    line-height: 2.08rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojFilter .sapMSltArrow {
+    width: 1.7rem !important;
+    height: 2.08rem !important;
+
+    color: #67768a !important;
+    font-size: 0.68rem !important;
+    line-height: 2.08rem !important;
+}
+
+.dojFilter .sapMInputBaseInner {
+    height: 2.08rem !important;
+    padding: 0 1.9rem 0 0.65rem !important;
+
+    overflow: hidden;
+
+    color: #25334a !important;
+    font-size: 0.63rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojFilter .sapMInputBaseIconContainer,
+.dojFilter .sapMInputBaseIcon {
+    height: 2.08rem !important;
+    line-height: 2.08rem !important;
+}
+
+.dojFilter .sapMInputBaseIcon {
+    color: #66758a !important;
+    font-size: 0.76rem !important;
+}
+
+/* ================================================================
+   ACCIONES DE FILTRO
+   ================================================================ */
+
+.dojFilterActions {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: flex-end !important;
+    align-self: end;
+
+    width: 100% !important;
+    min-width: 7.1rem;
+    height: 2.15rem;
+
+    gap: 0.5rem;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dojAdaptFiltersLink.sapMLnk {
+    color: #0a6ed1 !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+}
+
+.dojApplyFiltersButton.sapMBtn {
+    flex: 0 0 auto;
+
+    width: 2.45rem !important;
+    min-width: 2.45rem !important;
+    height: 2.15rem !important;
+    margin: 0 !important;
+}
+
+.dojApplyFiltersButton .sapMBtnInner {
+    width: 2.45rem !important;
+    min-width: 2.45rem !important;
+    height: 2.15rem !important;
+    padding: 0 !important;
+
+    background: #087af5 !important;
+    border: 1px solid #087af5 !important;
+    border-radius: 0.45rem !important;
+
+    box-shadow:
+        0 0.25rem 0.6rem
+        rgba(8, 122, 245, 0.2) !important;
+}
+
+.dojApplyFiltersButton .sapMBtnIcon {
+    width: 100% !important;
+
+    color: #ffffff !important;
+    font-size: 0.72rem !important;
+    line-height: 2.05rem !important;
+}
+
+.dojApplyFiltersButton:hover .sapMBtnInner {
+    background: #006edc !important;
+    border-color: #006edc !important;
+}
+
+.dojApplyFiltersButton .sapMBtnInner::after,
+.dojApplyFiltersButton .sapMBtnInner:focus::after {
+    display: none !important;
+}
+
+/* ================================================================
+   GRID DE KPI
+   ================================================================ */
+
+.dojKpiGrid {
+    display: flex !important;
+
+    gap: 0.7rem;
+    margin-bottom: 0.9rem;
+}
+
+.dojKpiCard {
+    position: relative;
+
+    flex: 1 1 calc((100% - 3.5rem) / 6);
+
+    min-width: 9.6rem;
+    min-height: 6.25rem;
+
+    padding: 0.75rem 0.7rem 0.7rem 0.6rem;
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    background: #ffffff;
+    border: 1px solid #e4e9f0;
+    border-left-width: 0.25rem;
+    border-radius: 0.7rem;
+
+    box-shadow:
+        0 0.125rem 0.35rem rgba(26, 46, 76, 0.04),
+        0 0.45rem 1rem rgba(26, 46, 76, 0.025);
+
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.dojKpiCard:hover {
+    transform: translateY(-0.08rem);
+
+    box-shadow:
+        0 0.25rem 0.7rem rgba(26, 46, 76, 0.07),
+        0 0.7rem 1.4rem rgba(26, 46, 76, 0.04);
+}
+
+/* Brillo tenue hacia la parte derecha */
+
+.dojKpiCard::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(255, 255, 255, 0) 35%,
+            rgba(255, 255, 255, 0.5) 72%,
+            rgba(255, 255, 255, 0.92) 100%
+        );
+}
+
+/* Separador vertical entre el icono y los datos */
+
+.dojKpiCard::after {
+    content: "";
+
+    position: absolute;
+    top: 0.82rem;
+    bottom: 0.82rem;
+    left: 3.65rem;
+
+    z-index: 1;
+
+    width: 1px;
+
+    background: rgba(85, 105, 132, 0.14);
+}
+
+/* ================================================================
+   ICONOS Y CONTENIDO DE KPI
+   ================================================================ */
+
+.dojKpiIconWrap {
+    position: relative;
+    z-index: 2;
+
+    flex: 0 0 auto;
+
+    width: 2.5rem !important;
+    min-width: 2.5rem !important;
+    height: 2.5rem !important;
+
+    margin-right: 1rem;
+
+    border-radius: 50%;
+}
+
+.dojKpiIcon.sapUiIcon {
+    font-size: 1.22rem !important;
+    line-height: 2.5rem !important;
+}
+
+.dojKpiContent {
+    position: relative;
+    z-index: 2;
+
+    min-width: 0;
+}
+
+.dojKpiLabel.sapMText {
+    display: block;
+
+    overflow: hidden;
+
+    color: #435169 !important;
+    font-size: 0.59rem !important;
+    line-height: 0.82rem !important;
+    font-weight: 700 !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojKpiValue.sapMText {
+    display: block;
+    margin-top: 0.12rem;
+
+    overflow: hidden;
+
+    font-size: 1.3rem !important;
+    line-height: 1.55rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojKpiDescription.sapMText {
+    display: block;
+    margin-top: 0.3rem;
+
+    overflow: hidden;
+
+    color: #788599 !important;
+    font-size: 0.53rem !important;
+    line-height: 0.75rem !important;
+    font-weight: 500 !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ================================================================
+   KPI AZUL
+   ================================================================ */
+
+.dojKpiBlue {
+    border-left-color: #248cff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(36, 140, 255, 0.2) 0%,
+            rgba(36, 140, 255, 0.12) 25%,
+            rgba(36, 140, 255, 0.045) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiBlue .dojKpiIconWrap {
+    background: rgba(36, 140, 255, 0.14);
+}
+
+.dojKpiBlue .dojKpiIcon,
+.dojKpiBlue .dojKpiValue {
+    color: #248cff !important;
+}
+
+/* ================================================================
+   KPI MORADO
+   ================================================================ */
+
+.dojKpiPurple {
+    border-left-color: #9a52eb;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(154, 82, 235, 0.21) 0%,
+            rgba(154, 82, 235, 0.12) 25%,
+            rgba(154, 82, 235, 0.045) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiPurple .dojKpiIconWrap {
+    background: rgba(154, 82, 235, 0.14);
+}
+
+.dojKpiPurple .dojKpiIcon,
+.dojKpiPurple .dojKpiValue {
+    color: #9650e6 !important;
+}
+
+/* ================================================================
+   KPI VERDE
+   ================================================================ */
+
+.dojKpiGreen {
+    border-left-color: #35ba62;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(53, 186, 98, 0.2) 0%,
+            rgba(53, 186, 98, 0.115) 25%,
+            rgba(53, 186, 98, 0.042) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiGreen .dojKpiIconWrap {
+    background: rgba(53, 186, 98, 0.14);
+}
+
+.dojKpiGreen .dojKpiIcon,
+.dojKpiGreen .dojKpiValue {
+    color: #2faf59 !important;
+}
+
+/* ================================================================
+   KPI NARANJA
+   ================================================================ */
+
+.dojKpiOrange {
+    border-left-color: #ff9228;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 146, 40, 0.21) 0%,
+            rgba(255, 146, 40, 0.12) 25%,
+            rgba(255, 146, 40, 0.045) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiOrange .dojKpiIconWrap {
+    background: rgba(255, 146, 40, 0.15);
+}
+
+.dojKpiOrange .dojKpiIcon,
+.dojKpiOrange .dojKpiValue {
+    color: #ff8b1d !important;
+}
+
+/* ================================================================
+   KPI ROJO
+   ================================================================ */
+
+.dojKpiRed {
+    border-left-color: #f45768;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(244, 87, 104, 0.21) 0%,
+            rgba(244, 87, 104, 0.12) 25%,
+            rgba(244, 87, 104, 0.045) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiRed .dojKpiIconWrap {
+    background: rgba(244, 87, 104, 0.14);
+}
+
+.dojKpiRed .dojKpiIcon,
+.dojKpiRed .dojKpiValue {
+    color: #f15364 !important;
+}
+
+/* ================================================================
+   KPI TURQUESA
+   ================================================================ */
+
+.dojKpiTurquoise {
+    border-left-color: #18b5bc;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(24, 181, 188, 0.21) 0%,
+            rgba(24, 181, 188, 0.12) 25%,
+            rgba(24, 181, 188, 0.045) 53%,
+            #ffffff 84%
+        );
+}
+
+.dojKpiTurquoise .dojKpiIconWrap {
+    background: rgba(24, 181, 188, 0.14);
+}
+
+.dojKpiTurquoise .dojKpiIcon,
+.dojKpiTurquoise .dojKpiValue {
+    color: #14aeb5 !important;
+}
+
+/* ================================================================
+   CARD DE TABLA
+   ================================================================ */
+
+.dojTableCard {
+    overflow: hidden;
+
+    background: #ffffff;
+    border: 1px solid #e7ecf2;
+    border-radius: 0.75rem;
+
+    box-shadow:
+        0 0.125rem 0.375rem rgba(19, 38, 69, 0.025),
+        0 0.4rem 1rem rgba(19, 38, 69, 0.02);
+}
+
+/* ================================================================
+   CABECERA DE TABLA
+   ================================================================ */
+
+.dojTableToolbar.sapMTB {
+    min-height: 3.05rem !important;
+    height: auto !important;
+    padding: 0.45rem 0.75rem !important;
+
+    background: #ffffff !important;
+    border-bottom: 1px solid #edf0f4 !important;
+}
+
+.dojTableTitleBox {
+    min-width: 17rem;
+}
+
+.dojTableIconWrap {
+    width: 1.85rem !important;
+    min-width: 1.85rem !important;
+    height: 1.85rem !important;
+    margin-right: 0.5rem;
+
+    background: rgba(32, 183, 189, 0.09);
+    border-radius: 50%;
+}
+
+.dojTableIcon.sapUiIcon {
+    color: #20b7bd !important;
+    font-size: 0.82rem !important;
+    line-height: 1.85rem !important;
+}
+
+.dojTableTitle.sapMTitle {
+    color: #24324a !important;
+    font-size: 0.83rem !important;
+    font-weight: 800 !important;
+}
+
+/* ================================================================
+   LEYENDA
+   ================================================================ */
+
+.dojLegend {
+    gap: 0.9rem;
+}
+
+.dojLegendItem {
+    gap: 0.25rem;
+}
+
+.dojLegendDot.sapMText {
+    font-size: 0.72rem !important;
+    line-height: 0.72rem !important;
+}
+
+.dojLegendText.sapMText {
+    color: #445269 !important;
+    font-size: 0.58rem !important;
+    line-height: 0.8rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+}
+
+.dojLegendBlue {
+    color: #087af5 !important;
+}
+
+.dojLegendGreen {
+    color: #28b451 !important;
+}
+
+.dojLegendOrange {
+    color: #f59b23 !important;
+}
+
+.dojLegendRed {
+    color: #ed4554 !important;
+}
+
+/* ================================================================
+   TABLA
+   ================================================================ */
+
+.dojOperationsTable {
+    width: 100%;
+    background: #ffffff;
+}
+
+.dojOperationsTable .sapMListTbl {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.dojOperationsTable .sapMListTblHeader {
+    height: 3.15rem !important;
+    background: #f6f8fb !important;
+}
+
+.dojOperationsTable .sapMListTblHeaderCell {
+    height: 3.15rem !important;
+    padding: 0.38rem 0.28rem !important;
+    box-sizing: border-box;
+
+    vertical-align: middle !important;
+
+    background: #f6f8fb !important;
+    border-bottom: 1px solid #e4e9f0 !important;
+}
+
+.dojOperationsTable .sapMListTblHeaderCell:first-child {
+    padding-left: 0.75rem !important;
+}
+
+.dojColumnHeader.sapMText {
+    display: block;
+    width: 100%;
+
+    color: #3c485d !important;
+    font-size: 0.56rem !important;
+    line-height: 0.76rem !important;
+    font-weight: 800 !important;
+}
+
+.dojColumnHeaderLeft.sapMText {
+    text-align: left !important;
+}
+
+/* ================================================================
+   FILAS Y CELDAS
+   ================================================================ */
+
+.dojOperationsTable .sapMListTblRow {
+    height: 2.8rem !important;
+    background: #ffffff;
+}
+
+.dojOperationsTable .sapMListTblRow:hover > td {
+    background: #f8fbff !important;
+}
+
+.dojOperationsTable .sapMListTblCell {
+    height: 2.8rem !important;
+    padding: 0.35rem 0.28rem !important;
+    box-sizing: border-box;
+
+    vertical-align: middle !important;
+
+    border-bottom: 1px solid #edf1f5 !important;
+}
+
+.dojOperationsTable .sapMListTblCell:first-child {
+    padding-left: 0.75rem !important;
+}
+
+.dojCellText.sapMText {
+    display: block;
+    width: 100%;
+
+    overflow: hidden;
+
+    color: #334158 !important;
+    font-size: 0.59rem !important;
+    line-height: 0.85rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojNumericCell.sapMText,
+.dojUtilizationValue.sapMText {
+    color: #273650 !important;
+    font-weight: 700 !important;
+}
+
+.dojManagementLink.sapMLnk {
+    display: block;
+    width: 100%;
+
+    overflow: hidden;
+
+    color: #1381dc !important;
+    font-size: 0.59rem !important;
+    line-height: 0.85rem !important;
+    font-weight: 700 !important;
+
+    text-decoration: none !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dojManagementLink.sapMLnk:hover {
+    color: #0767b6 !important;
+    text-decoration: underline !important;
+}
+
+/* ================================================================
+   PÍLDORAS DE ESTATUS DE UTILIZACIÓN
+   ================================================================ */
+
+.dojUtilStatus.sapMObjStatus {
+    min-width: 3.25rem;
+    padding: 0.16rem 0.42rem;
+    box-sizing: border-box;
+
+    text-align: center;
+    border-radius: 0.3rem;
+}
+
+.dojUtilStatus .sapMObjStatusText {
+    width: 100%;
+
+    font-size: 0.55rem !important;
+    line-height: 0.78rem !important;
+    font-weight: 800 !important;
+    text-align: center;
+}
+
+.dojUtilStatus.sapMObjStatusSuccess {
+    background: #ebfbef !important;
+}
+
+.dojUtilStatus.sapMObjStatusSuccess .sapMObjStatusText {
+    color: #25a84c !important;
+}
+
+.dojUtilStatus.sapMObjStatusWarning {
+    background: #fff3e6 !important;
+}
+
+.dojUtilStatus.sapMObjStatusWarning .sapMObjStatusText {
+    color: #ed9220 !important;
+}
+
+.dojUtilStatus.sapMObjStatusError {
+    background: #ffebed !important;
+}
+
+.dojUtilStatus.sapMObjStatusError .sapMObjStatusText {
+    color: #e64555 !important;
+}
+
+/* ================================================================
+   DIFERENCIA CONTRA META
+   SOLO TEXTO, SIN FONDO, BORDE O PÍLDORA
+   ================================================================ */
+
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatus,
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatusSuccess,
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatusError,
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatusWarning,
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatusInformation,
+.dojOperationsTable .dojDifferenceStatus.sapMObjStatusNone {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: 0 !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    outline: 0 !important;
+    box-shadow: none !important;
+
+    text-align: center !important;
+}
+
+.dojOperationsTable .dojDifferenceStatus::before,
+.dojOperationsTable .dojDifferenceStatus::after {
+    display: none !important;
+}
+
+.dojOperationsTable .dojDifferenceStatus .sapMObjStatusText {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: 0 !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    outline: 0 !important;
+    box-shadow: none !important;
+
+    font-size: 0.59rem !important;
+    line-height: 0.85rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+}
+
+.dojOperationsTable .dojDifferenceStatus .sapMObjStatusText::before,
+.dojOperationsTable .dojDifferenceStatus .sapMObjStatusText::after {
+    display: none !important;
+}
+
+.dojOperationsTable .dojDifferenceStatus .sapMObjStatusIcon {
+    display: none !important;
+}
+
+.dojOperationsTable
+.dojDifferenceStatus.sapMObjStatusSuccess
+.sapMObjStatusText {
+    color: #24ad4d !important;
+}
+
+.dojOperationsTable
+.dojDifferenceStatus.sapMObjStatusError
+.sapMObjStatusText {
+    color: #eb5260 !important;
+}
+
+.dojOperationsTable
+.dojDifferenceStatus.sapMObjStatusWarning
+.sapMObjStatusText {
+    color: #e98a18 !important;
+}
+
+.dojOperationsTable
+.dojDifferenceStatus.sapMObjStatusInformation
+.sapMObjStatusText {
+    color: #1680d5 !important;
+}
+
+/* ================================================================
+   BOTÓN VER JEFATURA
+   ================================================================ */
+
+.dojViewManagementButton.sapMBtn {
+    height: 1.65rem !important;
+    margin: 0 !important;
+}
+
+.dojViewManagementButton .sapMBtnInner {
+    min-width: auto !important;
+    height: 1.65rem !important;
+    padding: 0 0.38rem 0 0.48rem !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e5ebf2 !important;
+    border-radius: 0.4rem !important;
+
+    box-shadow:
+        0 0.0625rem 0.18rem
+        rgba(23, 47, 79, 0.025) !important;
+}
+
+.dojViewManagementButton .sapMBtnContent {
+    color: #1680d5 !important;
+    font-size: 0.53rem !important;
+    line-height: 1.55rem !important;
+    font-weight: 700 !important;
+}
+
+.dojViewManagementButton .sapMBtnIcon {
+    width: 0.65rem !important;
+    margin-left: 0.18rem !important;
+
+    color: #1680d5 !important;
+    font-size: 0.52rem !important;
+    line-height: 1.55rem !important;
+}
+
+.dojViewManagementButton:hover .sapMBtnInner {
+    background: #f4f9fe !important;
+    border-color: #bddcf5 !important;
+}
+
+.dojViewManagementButton .sapMBtnInner::after {
+    display: none !important;
+}
+
+/* ================================================================
+   FILA TOTAL GENERAL
+   ================================================================ */
+
+.dojOperationsTable .dojTotalRow > td {
+    background: #f1f4fa !important;
+    border-bottom: 0 !important;
+}
+
+.dojOperationsTable .dojTotalRow:hover > td {
+    background: #f1f4fa !important;
+}
+
+.dojTotalRow .sapMText,
+.dojTotalRow .sapMObjStatusText {
+    color: #27354d !important;
+    font-weight: 800 !important;
+}
+
+.dojOperationsTable
+.dojTotalRow
+.dojDifferenceStatus.sapMObjStatusError
+.sapMObjStatusText {
+    color: #e64d5c !important;
+}
+
+.dojOperationsTable
+.dojTotalRow
+.dojDifferenceStatus.sapMObjStatusSuccess
+.sapMObjStatusText {
+    color: #24ad4d !important;
+}
+
+.dojTotalLabel.sapMText {
+    color: #243149 !important;
+    font-weight: 800 !important;
+}
+
+/* ================================================================
+   PIE DE TABLA
+   ================================================================ */
+
+.dojTableFooter {
+    min-height: 2.7rem;
+    padding: 0.35rem 0.65rem;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-top: 1px solid #edf1f5;
+}
+
+.dojUpdateInformation {
+    gap: 0.4rem;
+}
+
+.dojInformationIcon.sapUiIcon {
+    color: #2a91df !important;
+    font-size: 0.75rem !important;
+}
+
+.dojInformationText.sapMText {
+    color: #718095 !important;
+    font-size: 0.56rem !important;
+    font-weight: 600 !important;
+}
+
+/* ================================================================
+   PAGINACIÓN
+   ================================================================ */
+
+.dojPagination {
+    gap: 0.18rem;
+}
+
+.dojPaginationSummary.sapMText {
+    min-width: 5.8rem;
+    margin-right: 0.55rem;
+
+    color: #617087 !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    text-align: right;
+}
+
+.dojPaginationArrow.sapMBtn {
+    width: 1.75rem !important;
+    min-width: 1.75rem !important;
+    height: 1.75rem !important;
+    margin: 0 !important;
+}
+
+.dojPaginationArrow .sapMBtnInner {
+    width: 1.75rem !important;
+    min-width: 1.75rem !important;
+    height: 1.75rem !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0.3rem !important;
+}
+
+.dojPaginationArrow .sapMBtnIcon {
+    width: 100% !important;
+
+    color: #65748b !important;
+    font-size: 0.62rem !important;
+    line-height: 1.7rem !important;
+}
+
+.dojPaginationArrow .sapMBtnInner::after {
+    display: none !important;
+}
+
+.dojCurrentPageButton.sapMBtn {
+    width: 1.85rem !important;
+    min-width: 1.85rem !important;
+    height: 1.85rem !important;
+    margin: 0 0.12rem !important;
+}
+
+.dojCurrentPageButton .sapMBtnInner {
+    width: 1.85rem !important;
+    min-width: 1.85rem !important;
+    height: 1.85rem !important;
+    padding: 0 !important;
+
+    background: #087af5 !important;
+    border: 1px solid #087af5 !important;
+    border-radius: 0.35rem !important;
+
+    box-shadow:
+        0 0.18rem 0.45rem
+        rgba(8, 122, 245, 0.19) !important;
+}
+
+.dojCurrentPageButton .sapMBtnContent {
+    color: #ffffff !important;
+    font-size: 0.62rem !important;
+    line-height: 1.72rem !important;
+    font-weight: 800 !important;
+}
+
+.dojCurrentPageButton .sapMBtnInner::after {
+    display: none !important;
+}
+
+/* ================================================================
+   RESOLUCIONES INTERMEDIAS
+   ================================================================ */
+
+@media screen and (max-width: 1450px) {
+
+    .dojFiltersBar {
+        column-gap: 0.4rem;
+    }
+
+    .dojAdaptFiltersLink.sapMLnk {
+        font-size: 0.55rem !important;
+    }
+
+    .dojKpiCard {
+        min-width: 9.2rem;
+    }
+
+    .dojTableToolbar.sapMTB {
+        align-items: flex-start;
+    }
+
+    .dojLegend {
+        justify-content: flex-end;
+    }
+}
+
+/* ================================================================
+   ESCRITORIO REDUCIDO
+   ================================================================ */
+
+@media screen and (max-width: 1180px) {
+
+    .dojFiltersBar {
+        grid-template-columns:
+            repeat(5, minmax(8rem, 1fr));
+    }
+
+    .dojFilterActions {
+        grid-column: 5;
+        justify-self: end;
+    }
+
+    .dojKpiCard {
+        flex-basis: calc((100% - 1.4rem) / 3);
+        min-width: 12rem;
+    }
+}
+
+/* ================================================================
+   TABLET
+   ================================================================ */
+
+@media screen and (max-width: 900px) {
+
+    .dojDashboard {
+        margin: 0.65rem;
+        padding: 0.85rem;
+    }
+
+    .dojFiltersBar {
+        grid-template-columns:
+            repeat(3, minmax(8rem, 1fr));
+    }
+
+    .dojFilterActions {
+        grid-column: auto;
+        width: 100% !important;
+        justify-self: stretch;
+    }
+
+    .dojKpiCard {
+        flex-basis: calc((100% - 0.7rem) / 2);
+        min-width: 14rem;
+    }
+
+    .dojTableToolbar.sapMTB {
+        flex-wrap: wrap;
+    }
+
+    .dojTableTitleBox {
+        min-width: 100%;
+        margin-bottom: 0.35rem;
+    }
+
+    .dojLegend {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .dojTableCard {
+        overflow-x: auto;
+    }
+
+    .dojOperationsTable {
+        min-width: 68rem;
+    }
+
+    .dojTableFooter {
+        min-width: 68rem;
+    }
+}
+
+/* ================================================================
+   TELÉFONO
+   ================================================================ */
+
+@media screen and (max-width: 600px) {
+
+    .dojDashboard {
+        margin: 0.4rem;
+        padding: 0.75rem;
+
+        border-radius: 0.75rem;
+    }
+
+    .dojMainTitle.sapMTitle {
+        font-size: 1.15rem !important;
+    }
+
+    .dojFiltersBar {
+        grid-template-columns:
+            repeat(2, minmax(7rem, 1fr));
+    }
+
+    .dojFilterActions {
+        grid-column: 1 / -1;
+
+        width: 100% !important;
+        justify-content: flex-end !important;
+    }
+
+    .dojKpiCard {
+        flex-basis: 100%;
+        min-width: 100%;
+    }
+
+    .dojLegend {
+        gap: 0.45rem 0.8rem;
+    }
+
+    .dojTableFooter {
+        align-items: flex-start !important;
+        gap: 0.45rem;
+    }
+
+    .dojPagination {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

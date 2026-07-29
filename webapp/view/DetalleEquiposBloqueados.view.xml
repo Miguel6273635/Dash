@@ -1,0 +1,992 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleEquiposBloqueados"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:m="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <m:Page
+        id="detalleEquiposBloqueadosPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="detalleEquiposBloqueadosPage">
+
+        <m:content>
+            <m:VBox width="100%" class="blockedDashboardShell">
+
+                <!-- =====================================================
+                     CABECERA
+                     ===================================================== -->
+                <m:HBox
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                    alignItems="Start"
+                    class="blockedPageHeader">
+
+                    <m:VBox class="blockedTitleGroup">
+
+                        <m:HBox
+                            alignItems="Center"
+                            class="blockedBreadcrumbs">
+
+                            <m:Link
+                                text="Equipos bloqueados"
+                                press=".onBackToBlockedEquipment"
+                                class="blockedBreadcrumbLink" />
+
+                            <core:Icon
+                                src="sap-icon://slim-arrow-right"
+                                size="0.62rem"
+                                class="blockedBreadcrumbArrow" />
+
+                            <m:Text
+                                text="Listado de equipos bloqueados"
+                                class="blockedBreadcrumbCurrent" />
+
+                        </m:HBox>
+
+                        <m:Title
+                            text="Detalle de Equipos Bloqueados"
+                            level="H1"
+                            class="blockedPageTitle" />
+
+                    </m:VBox>
+
+                    <m:HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="blockedApplyShell">
+
+                        <m:Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="blockedApplyButton" />
+
+                    </m:HBox>
+
+                </m:HBox>
+
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
+                <m:FlexBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="blockedFilterGrid">
+
+                    <m:VBox class="blockedFilterCard blockedFilterPeriod">
+
+                        <m:Label
+                            text="Periodo"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/periodo}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item
+                                key="Personalizado"
+                                text="Personalizado" />
+
+                            <core:Item
+                                key="Semana actual"
+                                text="Semana actual" />
+
+                            <core:Item
+                                key="Mes actual"
+                                text="Mes actual" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard blockedFilterDate">
+
+                        <m:Label
+                            text="Fecha desde"
+                            class="blockedFilterLabel" />
+
+                        <m:DatePicker
+                            value="{dashboard>/filters/fechaDesde}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl" />
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard blockedFilterDate">
+
+                        <m:Label
+                            text="Fecha hasta"
+                            class="blockedFilterLabel" />
+
+                        <m:DatePicker
+                            value="{dashboard>/filters/fechaHasta}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl" />
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard">
+
+                        <m:Label
+                            text="Zona"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/zona}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todas" text="Todas" />
+                            <core:Item key="Centro" text="Centro" />
+                            <core:Item key="CDMX Sur" text="CDMX Sur" />
+                            <core:Item key="Occidente" text="Occidente" />
+                            <core:Item key="Norte" text="Norte" />
+                            <core:Item
+                                key="CDMX Poniente"
+                                text="CDMX Poniente" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard">
+
+                        <m:Label
+                            text="Cliente"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/cliente}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todos" text="Todos" />
+
+                            <core:Item
+                                key="Torre Reforma"
+                                text="Torre Reforma" />
+
+                            <core:Item
+                                key="Hospital Ángeles Pedregal"
+                                text="Hospital Ángeles Pedregal" />
+
+                            <core:Item
+                                key="Torre Mayor"
+                                text="Torre Mayor" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard">
+
+                        <m:Label
+                            text="Estatus de bloqueo"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/estatusBloqueo}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todos" text="Todos" />
+                            <core:Item key="Bloqueado" text="Bloqueado" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard">
+
+                        <m:Label
+                            text="Supervisor"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/supervisor}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todos" text="Todos" />
+
+                            <core:Item
+                                key="Zona Centro"
+                                text="Zona Centro" />
+
+                            <core:Item
+                                key="Zona Sur"
+                                text="Zona Sur" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard">
+
+                        <m:Label
+                            text="Responsable"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/responsable}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todos" text="Todos" />
+
+                            <core:Item
+                                key="Juan Carlos Pérez"
+                                text="Juan Carlos Pérez" />
+
+                            <core:Item
+                                key="María González"
+                                text="María González" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard blockedFilterSearch">
+
+                        <m:Label
+                            text="Equipo / Elevador"
+                            class="blockedFilterLabel" />
+
+                        <m:SearchField
+                            value="{dashboard>/filters/busqueda}"
+                            placeholder="Buscar"
+                            liveChange=".onEquipmentSearch"
+                            search=".onEquipmentSearch"
+                            width="100%"
+                            class="blockedSearchControl" />
+
+                    </m:VBox>
+
+                    <m:VBox class="blockedFilterCard blockedFilterPriority">
+
+                        <m:Label
+                            text="Prioridad desbloqueo"
+                            class="blockedFilterLabel" />
+
+                        <m:Select
+                            selectedKey="{dashboard>/filters/prioridad}"
+                            change=".onFilterChange"
+                            width="100%"
+                            class="blockedFilterControl">
+
+                            <core:Item key="Todas" text="Todas" />
+                            <core:Item key="Crítica" text="Crítica" />
+                            <core:Item key="Alta" text="Alta" />
+                            <core:Item key="Media" text="Media" />
+
+                        </m:Select>
+
+                    </m:VBox>
+
+                </m:FlexBox>
+
+                <!-- =====================================================
+                     KPIS
+                     ===================================================== -->
+                <m:FlexBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="blockedKpiGrid">
+
+                    <m:HBox
+                        alignItems="Center"
+                        class="blockedKpiCard blockedKpiBlue">
+
+                        <m:VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="blockedKpiIconCircle blockedKpiIconBlue">
+
+                            <core:Icon
+                                src="sap-icon://building"
+                                size="1.8rem" />
+
+                        </m:VBox>
+
+                        <m:VBox
+                            justifyContent="Center"
+                            class="blockedKpiTextGroup">
+
+                            <m:Text
+                                text="Equipos filtrados"
+                                class="blockedKpiLabel" />
+
+                            <m:ObjectNumber
+                                number="{dashboard>/kpis/equiposFiltrados}"
+                                class="blockedKpiValue" />
+
+                        </m:VBox>
+
+                    </m:HBox>
+
+                    <m:HBox
+                        alignItems="Center"
+                        class="blockedKpiCard blockedKpiRed">
+
+                        <m:VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="blockedKpiIconCircle blockedKpiIconRed">
+
+                            <core:Icon
+                                src="sap-icon://message-warning"
+                                size="1.8rem" />
+
+                        </m:VBox>
+
+                        <m:VBox
+                            justifyContent="Center"
+                            class="blockedKpiTextGroup">
+
+                            <m:Text
+                                text="Críticos"
+                                class="blockedKpiLabel" />
+
+                            <m:ObjectNumber
+                                number="{dashboard>/kpis/criticos}"
+                                class="blockedKpiValue" />
+
+                        </m:VBox>
+
+                    </m:HBox>
+
+                    <m:HBox
+                        alignItems="Center"
+                        class="blockedKpiCard blockedKpiOrange">
+
+                        <m:VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="blockedKpiIconCircle blockedKpiIconOrange">
+
+                            <core:Icon
+                                src="sap-icon://calendar"
+                                size="1.8rem" />
+
+                        </m:VBox>
+
+                        <m:VBox
+                            justifyContent="Center"
+                            class="blockedKpiTextGroup">
+
+                            <m:Text
+                                text="&gt; 30 días"
+                                class="blockedKpiLabel" />
+
+                            <m:ObjectNumber
+                                number="{dashboard>/kpis/mayoresTreintaDias}"
+                                class="blockedKpiValue" />
+
+                        </m:VBox>
+
+                    </m:HBox>
+
+                    <m:HBox
+                        alignItems="Center"
+                        class="blockedKpiCard blockedKpiBlue">
+
+                        <m:VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="blockedKpiIconCircle blockedKpiIconBlue">
+
+                            <core:Icon
+                                src="sap-icon://history"
+                                size="1.8rem" />
+
+                        </m:VBox>
+
+                        <m:VBox
+                            justifyContent="Center"
+                            class="blockedKpiTextGroup">
+
+                            <m:Text
+                                text="Pendientes abiertos"
+                                class="blockedKpiLabel" />
+
+                            <m:ObjectNumber
+                                number="{dashboard>/kpis/pendientesAbiertos}"
+                                class="blockedKpiValue" />
+
+                        </m:VBox>
+
+                    </m:HBox>
+
+                </m:FlexBox>
+
+                <!-- =====================================================
+                     TABLA
+                     ===================================================== -->
+                <m:VBox
+                    width="100%"
+                    class="blockedTableCard">
+
+                    <m:HBox
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Start"
+                        class="blockedTableHeader">
+
+                        <m:VBox class="blockedTableHeadingGroup">
+
+                            <m:Title
+                                text="Listado de equipos bloqueados"
+                                level="H2"
+                                class="blockedTableTitle" />
+
+                            <m:HBox
+                                wrap="Wrap"
+                                alignItems="Center"
+                                class="blockedFilterChips">
+
+                                <m:HBox
+                                    alignItems="Center"
+                                    class="blockedChip">
+
+                                    <m:Text
+                                        text="Origen: KPI Equipos críticos"
+                                        class="blockedChipText" />
+
+                                    <m:Button
+                                        icon="sap-icon://decline"
+                                        type="Transparent"
+                                        tooltip="Quitar filtro de origen"
+                                        press=".onRemoveOriginChip"
+                                        class="blockedChipClose" />
+
+                                </m:HBox>
+
+                                <m:HBox
+                                    alignItems="Center"
+                                    class="blockedChip">
+
+                                    <m:Text
+                                        text="Filtro aplicado: Prioridad = Crítica"
+                                        class="blockedChipText" />
+
+                                    <m:Button
+                                        icon="sap-icon://decline"
+                                        type="Transparent"
+                                        tooltip="Quitar filtro de prioridad"
+                                        press=".onRemovePriorityChip"
+                                        class="blockedChipClose" />
+
+                                </m:HBox>
+
+                            </m:HBox>
+
+                        </m:VBox>
+
+                        <m:OverflowToolbar
+                            design="Transparent"
+                            class="blockedTableActions">
+
+                            <m:ToolbarSpacer />
+
+                            <m:Button
+                                icon="sap-icon://search"
+                                type="Transparent"
+                                tooltip="Buscar"
+                                press=".onTableAction" />
+
+                            <m:Button
+                                icon="sap-icon://list"
+                                type="Transparent"
+                                tooltip="Ordenar"
+                                press=".onTableAction" />
+
+                            <m:Button
+                                icon="sap-icon://filter"
+                                type="Transparent"
+                                tooltip="Filtrar"
+                                press=".onTableAction" />
+
+                            <m:Button
+                                icon="sap-icon://table-column"
+                                type="Transparent"
+                                tooltip="Columnas"
+                                press=".onTableAction" />
+
+                            <m:Button
+                                icon="sap-icon://action-settings"
+                                type="Transparent"
+                                tooltip="Configuración"
+                                press=".onTableAction" />
+
+                            <m:Button
+                                icon="sap-icon://slim-arrow-down"
+                                type="Transparent"
+                                tooltip="Más opciones"
+                                press=".onTableAction" />
+
+                        </m:OverflowToolbar>
+
+                    </m:HBox>
+
+                     <m:VBox
+    width="100%"
+    class="blockedTableWrapper">
+
+    <m:Table
+        id="blockedEquipmentTable"
+        width="100%"
+        fixedLayout="true"
+        alternateRowColors="false"
+        mode="None"
+        inset="false"
+        items="{dashboard>/rows}"
+        class="blockedEquipmentTable">
+                 <m:columns>
+
+    <m:Column width="9%">
+
+        <m:HBox
+            alignItems="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Equipo / Elevador" />
+
+            <core:Icon
+                src="sap-icon://sort"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column width="9%">
+
+        <m:Text
+            text="Cliente"
+            class="blockedColumnHeaderText" />
+
+    </m:Column>
+
+    <m:Column width="6%">
+
+        <m:Text
+            text="Zona"
+            class="blockedColumnHeaderText" />
+
+    </m:Column>
+
+    <m:Column width="8%">
+
+        <m:HBox
+            alignItems="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Estatus de bloqueo" />
+
+            <core:Icon
+                src="sap-icon://filter"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column width="10%">
+
+        <m:Text
+            text="Motivo de bloqueo"
+            class="blockedColumnHeaderText" />
+
+    </m:Column>
+
+    <m:Column width="9%">
+
+        <m:HBox
+            alignItems="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Estado gestión" />
+
+            <core:Icon
+                src="sap-icon://filter"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column
+        width="7%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Fecha de bloqueo" />
+
+            <core:Icon
+                src="sap-icon://sort"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column
+        width="5%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Días bloqueado" />
+
+            <core:Icon
+                src="sap-icon://sort"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column
+        width="5%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Órdenes afectadas" />
+
+            <core:Icon
+                src="sap-icon://sort"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column width="8%">
+
+        <m:Text
+            text="Responsable"
+            class="blockedColumnHeaderText" />
+
+    </m:Column>
+
+    <m:Column
+        width="5.5%"
+        hAlign="Center">
+
+        <m:Text
+            text="Próxima acción"
+            class="blockedColumnHeaderText" />
+
+    </m:Column>
+
+    <m:Column
+        width="7.5%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Fecha compromiso" />
+
+            <core:Icon
+                src="sap-icon://sort"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column
+        width="6.5%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Prioridad desbloqueo" />
+
+            <core:Icon
+                src="sap-icon://filter"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+    <m:Column
+        width="4.5%"
+        hAlign="Center">
+
+        <m:HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            class="blockedColumnHeader">
+
+            <m:Text text="Estado" />
+
+            <core:Icon
+                src="sap-icon://filter"
+                size="0.52rem" />
+
+        </m:HBox>
+
+    </m:Column>
+
+</m:columns>
+
+                            <m:items>
+
+                                <m:ColumnListItem
+                                    type="Inactive"
+                                    vAlign="Middle"
+                                    class="blockedDataRow">
+
+                                    <m:cells>
+
+                                        <m:HBox
+                                            alignItems="Center"
+                                            justifyContent="SpaceBetween"
+                                            class="blockedEquipmentCell">
+
+                                            <m:Link
+                                                text="{dashboard>equipo}"
+                                                press=".onOpenEquipment"
+                                                class="blockedEquipmentLink" />
+
+                                            <m:Button
+                                                icon="sap-icon://slim-arrow-right"
+                                                type="Transparent"
+                                                tooltip="Ver detalle"
+                                                press=".onOpenEquipment"
+                                                class="blockedRowArrow" />
+
+                                        </m:HBox>
+
+                                        <m:Text
+                                            text="{dashboard>cliente}"
+                                            wrapping="true"
+                                            class="blockedCellText" />
+
+                                        <m:Text
+                                            text="{dashboard>zona}"
+                                            wrapping="true"
+                                            class="blockedCellText" />
+
+                                        <m:ObjectStatus
+                                            text="{dashboard>estatusBloqueo}"
+                                            state="Error"
+                                            class="blockedStatusPill blockedStatusPillError" />
+
+                                        <m:Text
+                                            text="{dashboard>motivoBloqueo}"
+                                            wrapping="true"
+                                            class="blockedCellText" />
+
+                                        <m:ObjectStatus
+                                            text="{dashboard>estadoGestion}"
+                                            state="{dashboard>estadoGestionState}"
+                                            class="blockedStatusPill blockedManagementPill" />
+
+                                        <m:Text
+                                            text="{dashboard>fechaBloqueo}"
+                                            textAlign="Center"
+                                            class="blockedCellText blockedCenteredText" />
+
+                                        <m:Text
+                                            text="{dashboard>diasBloqueado}"
+                                            textAlign="Center"
+                                            class="blockedDaysValue" />
+
+                                        <m:Link
+                                            text="{dashboard>ordenesAfectadas}"
+                                            press=".onOpenAffectedOrders"
+                                            class="blockedOrdersLink" />
+
+                                        <m:Text
+                                            text="{dashboard>responsable}"
+                                            wrapping="true"
+                                            class="blockedCellText" />
+
+                                        <m:Button
+                                            icon="sap-icon://slim-arrow-right"
+                                            type="Transparent"
+                                            tooltip="Ver próxima acción"
+                                            press=".onOpenNextAction"
+                                            class="blockedNextActionButton" />
+
+                                        <m:Text
+                                            text="{dashboard>fechaCompromiso}"
+                                            textAlign="Center"
+                                            class="blockedCellText blockedCenteredText" />
+
+                                        <m:ObjectStatus
+                                            text="{dashboard>prioridadDesbloqueo}"
+                                            state="Error"
+                                            class="blockedStatusPill blockedPriorityPill" />
+
+                                        <m:ObjectStatus
+                                            text="{dashboard>estado}"
+                                            state="{dashboard>estadoState}"
+                                            class="blockedStatusPill blockedFinalStatePill" />
+
+                                    </m:cells>
+
+                                </m:ColumnListItem>
+
+                            </m:items>
+                          </m:Table>
+
+                         </m:VBox>
+
+                    <!-- =================================================
+                         PAGINACIÓN
+                         ================================================= -->
+                    <m:HBox
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="blockedPaginationBar">
+
+                        <m:Text
+                            text="{dashboard>/pagination/rangeText}"
+                            class="blockedPaginationInfo" />
+
+                        <m:HBox
+                            alignItems="Center"
+                            class="blockedPaginationControls">
+
+                            <m:Text
+                                text="Registros por página"
+                                class="blockedRowsLabel" />
+
+                            <m:Select
+                                selectedKey="{dashboard>/pagination/pageSize}"
+                                change=".onPageSizeChange"
+                                class="blockedRowsSelect">
+
+                                <core:Item key="20" text="20" />
+                                <core:Item key="40" text="40" />
+                                <core:Item key="60" text="60" />
+
+                            </m:Select>
+
+                            <m:Button
+                                icon="sap-icon://media-rewind"
+                                type="Transparent"
+                                tooltip="Primera página"
+                                press=".onFirstPage"
+                                class="blockedPaginationButton" />
+
+                            <m:Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                tooltip="Página anterior"
+                                press=".onPreviousPage"
+                                class="blockedPaginationButton" />
+
+                            <m:Button
+                                text="1"
+                                type="{= ${dashboard>/pagination/currentPage} === 1 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Button
+                                text="2"
+                                type="{= ${dashboard>/pagination/currentPage} === 2 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Button
+                                text="3"
+                                type="{= ${dashboard>/pagination/currentPage} === 3 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Button
+                                text="4"
+                                type="{= ${dashboard>/pagination/currentPage} === 4 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Button
+                                text="5"
+                                type="{= ${dashboard>/pagination/currentPage} === 5 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Text
+                                text="…"
+                                class="blockedPaginationDots" />
+
+                            <m:Button
+                                text="7"
+                                type="{= ${dashboard>/pagination/currentPage} === 7 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="blockedPageNumber" />
+
+                            <m:Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                tooltip="Página siguiente"
+                                press=".onNextPage"
+                                class="blockedPaginationButton" />
+
+                            <m:Button
+                                icon="sap-icon://media-forward"
+                                type="Transparent"
+                                tooltip="Última página"
+                                press=".onLastPage"
+                                class="blockedPaginationButton" />
+
+                        </m:HBox>
+
+                    </m:HBox>
+
+                </m:VBox>
+
+            </m:VBox>
+
+        </m:content>
+
+    </m:Page>
+
+</mvc:View>

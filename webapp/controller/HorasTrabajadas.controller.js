@@ -8,270 +8,58 @@ sap.ui.define([
     return Controller.extend("mantenimiento.controller.HorasTrabajadas", {
 
         onInit: function () {
-            var oData = {
-                filtros: {
-                    periodo: "mayo2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
-                    zona: "todas",
-                    supervisor: "todos",
-                    tipoOrden: "todos",
-                    turno: "todos",
-                    mecanico: "todos",
-                    estadoOrden: "todos"
-                },
-
-                kpis: {
-                    capacidadComprometida: "92.1%",
-                    capacidadComprometidaValor: 92.1,
-                    margenCapacidad: "+500 h",
-                    margenCapacidadValor: 82,
-                    totalHorasExtra: "+360 h",
-                    utilizacionProyectada: "98%"
-                },
-
-                graficas: {
-                    capacidadCarga: [
-                        { mes: "Ene", capacidadDisponible: 5000, horasProgramadas: 4300, horasReales: 3500 },
-                        { mes: "Feb", capacidadDisponible: 5400, horasProgramadas: 4700, horasReales: 3900 },
-                        { mes: "Mar", capacidadDisponible: 5600, horasProgramadas: 4800, horasReales: 3900 },
-                        { mes: "Abr", capacidadDisponible: 5900, horasProgramadas: 5100, horasReales: 4550 },
-                        { mes: "May", capacidadDisponible: 6200, horasProgramadas: 5500, horasReales: 5000 },
-                        { mes: "Jun", capacidadDisponible: 6400, horasProgramadas: 5900, horasReales: 5342 }
-                    ],
-
-                    utilizacionTurno: [
-                        { mes: "Ene", diurno: 72, nocturno: 42, finSemana: 109 },
-                        { mes: "Feb", diurno: 78, nocturno: 45, finSemana: 112 },
-                        { mes: "Mar", diurno: 74, nocturno: 44, finSemana: 108 },
-                        { mes: "Abr", diurno: 84.9, nocturno: 54.1, finSemana: 117.4 },
-                        { mes: "May", diurno: 80, nocturno: 46, finSemana: 116 },
-                        { mes: "Jun", diurno: 82, nocturno: 48, finSemana: 112 }
-                    ],
-
-                    utilizacionResumen: [
-                        {
-                            turno: "Diurno",
-                            valor: 84.9,
-                            valorTexto: "84.9%",
-                            icono: "sap-icon://light-mode",
-                            estado: "Success"
-                        },
-                        {
-                            turno: "Nocturno",
-                            valor: 95.1,
-                            valorTexto: "95.1%",
-                            icono: "sap-icon://lateness",
-                            estado: "Warning"
-                        },
-                        {
-                            turno: "Fin de semana",
-                            valor: 117.4,
-                            valorTexto: "117.4%",
-                            icono: "sap-icon://calendar",
-                            estado: "Error"
-                        }
-                    ],
-
-                    horasTipoOrden: [
-                        {
-                            tipo: "Implementación\nplaneada",
-                            horasProgramadas: 3100,
-                            horasReales: 2950,
-                            variacion: -4.8,
-                            variacionTexto: "-4.8%"
-                        },
-                        {
-                            tipo: "Reparación\n(correctiva)",
-                            horasProgramadas: 1700,
-                            horasReales: 1900,
-                            variacion: 11.8,
-                            variacionTexto: "+11.8%"
-                        },
-                        {
-                            tipo: "Call Center",
-                            horasProgramadas: 692,
-                            horasReales: 620,
-                            variacion: 11.3,
-                            variacionTexto: "+11.3%"
-                        }
-                    ],
-
-                    capacidadZona: [
-                        { zona: "Norte", utilizacion: 101.3, utilizacionTexto: "101.3%" },
-                        { zona: "Centro", utilizacion: 81.5, utilizacionTexto: "81.5%" },
-                        { zona: "Sur", utilizacion: 85.8, utilizacionTexto: "85.8%" },
-                        { zona: "Este", utilizacion: 64.5, utilizacionTexto: "64.5%" },
-                        { zona: "Oeste", utilizacion: 48.3, utilizacionTexto: "48.3%" }
-                    ],
-
-                    causasDesviacion: [
-                        { causa: "Reparación compleja", horas: 120, horasTexto: "+120 h", porcentaje: 33, porcentajeTexto: "33%" },
-                        { causa: "Falta de refacción durante servicio", horas: 80, horasTexto: "+80 h", porcentaje: 22, porcentajeTexto: "22%" },
-                        { causa: "Reproceso", horas: 65, horasTexto: "+65 h", porcentaje: 18, porcentajeTexto: "18%" },
-                        { causa: "Acceso tardío del cliente", horas: 40, horasTexto: "+40 h", porcentaje: 11, porcentajeTexto: "11%" },
-                        { causa: "Diagnóstico adicional", horas: 35, horasTexto: "+35 h", porcentaje: 10, porcentajeTexto: "10%" },
-                        { causa: "Otros", horas: 20, horasTexto: "+20 h", porcentaje: 6, porcentajeTexto: "6%" }
-                    ],
-
-                    proyeccionCierre: [
-                        { fecha: "01 May", utilizacion: 62 },
-                        { fecha: "04 May", utilizacion: 78 },
-                        { fecha: "08 May", utilizacion: 71 },
-                        { fecha: "11 May", utilizacion: 88 },
-                        { fecha: "15 May", utilizacion: 84 },
-                        { fecha: "18 May", utilizacion: 94 },
-                        { fecha: "22 May", utilizacion: 98 },
-                        { fecha: "26 May", utilizacion: 104 },
-                        { fecha: "31 May", utilizacion: 112 }
-                    ]
-                }
-            };
-
-            var oModel = new JSONModel(oData);
+            var oModel = new JSONModel(this._getMockData());
+            oModel.setSizeLimit(500);
             this.getView().setModel(oModel, "horasModel");
         },
 
-        onAfterRendering: function () {
-            var that = this;
-
-            setTimeout(function () {
-                that._configurarGraficas();
-            }, 300);
-        },
-
-        _configurarGraficas: function () {
-            this._configurarLinea(
-                "vfCapacidadCarga",
-                ["#2563EB", "#16A34A", "#6D28D9"],
-                "Horas hombre",
-                0,
-                8000
-            );
-
-            this._configurarLinea(
-                "vfHorasTipoOrden",
-                ["#2563EB", "#7C3AED"],
-                "Horas hombre",
-                0,
-                4000
-            );
-
-            this._configurarLinea(
-                "vfProyeccionCierre",
-                ["#3B82F6"],
-                "Utilización (%)",
-                0,
-                150
-            );
-        },
-
-        _configurarLinea: function (sId, aColors, sAxisTitle, iMin, iMax) {
-            var oChart = this.byId(sId);
-
-            if (!oChart) {
-                return;
-            }
-
-            oChart.setVizProperties({
-                plotArea: {
-                    colorPalette: aColors,
-                    drawingEffect: "normal",
-                    marker: {
-                        visible: true,
-                        size: 4
-                    },
-                    dataLabel: {
-                        visible: false
-                    },
-                    line: {
-                        width: 2
-                    }
-                },
-                legend: {
-                    visible: false
-                },
-                title: {
-                    visible: false
-                },
-                valueAxis: {
-                    title: {
-                        visible: true,
-                        text: sAxisTitle
-                    },
-                    label: {
-                        style: {
-                            color: "#64748B",
-                            fontSize: "10px"
-                        }
-                    },
-                    scale: {
-                        fixedRange: true,
-                        minValue: iMin,
-                        maxValue: iMax
-                    },
-                    gridline: {
-                        visible: true
-                    }
-                },
-                categoryAxis: {
-                    title: {
-                        visible: false
-                    },
-                    label: {
-                        style: {
-                            color: "#334155",
-                            fontSize: "10px"
-                        }
-                    }
-                },
-                interaction: {
-                    selectability: {
-                        mode: "single"
-                    }
-                },
-                tooltip: {
-                    visible: true
-                },
-                background: {
-                    color: "transparent"
-                }
-            });
-        },
-
-        formatUtilizacionState: function (nValue) {
-            var n = Number(nValue);
-
-            if (n >= 100) {
-                return "Error";
-            }
-
-            if (n >= 90) {
-                return "Warning";
-            }
-
-            if (n < 50) {
-                return "None";
-            }
-
-            return "Success";
-        },
-
         onAplicarFiltros: function () {
-            MessageToast.show("Filtros aplicados correctamente");
+            var oModel = this.getView().getModel("horasModel");
+            var oFiltros = oModel.getProperty("/filtros");
+            MessageToast.show("Filtros aplicados: " + oFiltros.fechaDesde + " - " + oFiltros.fechaHasta);
         },
 
         onVerDetalleTipoOrden: function () {
-            MessageToast.show("Detalle por tipo de orden");
+            this._navToIfExists("RouteDetalleHorasTipoOrden", "Ruta no registrada.");
         },
 
         onVerDetalleZona: function () {
-            MessageToast.show("Detalle por zona");
+            this._navToIfExists("RouteDetalleCapacidadZona", "Ruta no registrada.");
         },
 
         onVerDetalleCausa: function () {
-            MessageToast.show("Detalle por causa");
-        }
+            this._navToIfExists("RouteDetalleDesviacionHoras", "Ruta no registrada.");
+        },
 
+        _navToIfExists: function (sRoute, sFallbackMessage) {
+            var oRouter = this.getOwnerComponent && this.getOwnerComponent().getRouter();
+            if (oRouter && oRouter.getRoute && oRouter.getRoute(sRoute)) {
+                oRouter.navTo(sRoute);
+                return;
+            }
+            MessageToast.show(sFallbackMessage);
+        },
+
+        _getMockData: function () {
+            return {
+                filtros: { periodo: "mayo2024", fechaDesde: "01/05/2024", fechaHasta: "31/05/2024", zona: "todas", supervisor: "todos", tipoOrden: "todos", turno: "todos", mecanico: "todos", estadoOrden: "todos" },
+                kpis: { capacidadComprometida: "92.1%", capacidadComprometidaValor: 92.1, margenCapacidad: "+500 h", margenCapacidadValor: 82, totalHorasExtra: "+360 h", utilizacionProyectada: "98%" },
+                graficas: {
+                    utilizacionResumen: [
+                        { turno: "Diurno", valor: 84.9, valorTexto: "84.9%", icono: "sap-icon://light-mode", estado: "Success" },
+                        { turno: "Nocturno", valor: 95.1, valorTexto: "95.1%", icono: "sap-icon://lateness", estado: "Warning" },
+                        { turno: "Fin de semana", valor: 117.4, valorTexto: "117.4%", icono: "sap-icon://calendar", estado: "Error" }
+                    ],
+                    causasDesviacion: [
+                        { causa: "Reparación compleja", horasTexto: "+120 h", porcentaje: 33, porcentajeTexto: "33%" },
+                        { causa: "Falta de refacción durante servicio", horasTexto: "+80 h", porcentaje: 22, porcentajeTexto: "22%" },
+                        { causa: "Reproceso", horasTexto: "+65 h", porcentaje: 18, porcentajeTexto: "18%" },
+                        { causa: "Acceso tardío del cliente", horasTexto: "+40 h", porcentaje: 11, porcentajeTexto: "11%" },
+                        { causa: "Diagnóstico adicional", horasTexto: "+35 h", porcentaje: 10, porcentajeTexto: "10%" },
+                        { causa: "Otros", horasTexto: "+20 h", porcentaje: 6, porcentajeTexto: "6%" }
+                    ]
+                }
+            };
+        }
     });
 });

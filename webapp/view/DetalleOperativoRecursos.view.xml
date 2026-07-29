@@ -1,0 +1,861 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleOperativoRecursos"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+
+    <Page
+        id="detalleOperativoRecursosPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="detalleOperativoPage">
+
+        <content>
+
+            <VBox
+                width="100%"
+                class="detalleOperativoScreen">
+
+                <!-- ===================================================== -->
+                <!-- TÍTULO                                                -->
+                <!-- ===================================================== -->
+
+                <Title
+                    text="Detalle operativo de recursos"
+                    level="H1"
+                    class="screenTitle"/>
+
+                <!-- ===================================================== -->
+                <!-- INFORMACIÓN DEL SUPERVISOR                            -->
+                <!-- ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Center"
+                    class="supervisorHeader">
+
+                    <HBox
+                        alignItems="Center"
+                        class="supervisorInformation">
+
+                        <Avatar
+                            src="sap-icon://employee"
+                            displayShape="Circle"
+                            displaySize="Custom"
+                            customDisplaySize="3.35rem"
+                            customFontSize="1.5rem"
+                            class="supervisorAvatar"/>
+
+                        <VBox class="supervisorTextContainer">
+
+                            <HBox
+                                alignItems="Center"
+                                class="supervisorNameRow">
+
+                                <Text
+                                    text="Supervisor"
+                                    class="supervisorLabel"/>
+
+                                <Text
+                                    text="{detalle>/supervisor/name}"
+                                    class="supervisorName"/>
+
+                            </HBox>
+
+                            <HBox
+                                alignItems="Center"
+                                class="supervisorMetadata">
+
+                                <Text
+                                    text="Zona:"
+                                    class="metadataLabel"/>
+
+                                <Text
+                                    text="{detalle>/supervisor/zone}"
+                                    class="metadataValue"/>
+
+                                <Text
+                                    text="|"
+                                    class="metadataSeparator"/>
+
+                                <Text
+                                    text="Turno:"
+                                    class="metadataLabel"/>
+
+                                <Text
+                                    text="{detalle>/supervisor/shift}"
+                                    class="metadataValue"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </HBox>
+
+                </HBox>
+
+                <!-- ===================================================== -->
+                <!-- FILTROS                                               -->
+                <!-- ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    wrap="Wrap"
+                    alignItems="End"
+                    class="filtersRow">
+
+                    <!-- Zona -->
+
+                    <VBox class="filterCard">
+
+                        <Label
+                            text="Zona"
+                            class="filterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{detalle>/filters/zone}"
+                            items="{
+                                path: 'detalle>/filterOptions/zones',
+                                templateShareable: false
+                            }"
+                            class="filterSelect">
+
+                            <core:Item
+                                key="{detalle>key}"
+                                text="{detalle>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Tipo de recurso -->
+
+                    <VBox class="filterCard filterCardWide">
+
+                        <Label
+                            text="Tipo de recurso"
+                            class="filterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{detalle>/filters/resourceType}"
+                            items="{
+                                path: 'detalle>/filterOptions/resourceTypes',
+                                templateShareable: false
+                            }"
+                            class="filterSelect">
+
+                            <core:Item
+                                key="{detalle>key}"
+                                text="{detalle>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Turno -->
+
+                    <VBox class="filterCard filterCardShift">
+
+                        <Label
+                            text="Turno"
+                            class="filterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{detalle>/filters/shift}"
+                            items="{
+                                path: 'detalle>/filterOptions/shifts',
+                                templateShareable: false
+                            }"
+                            class="filterSelect">
+
+                            <core:Item
+                                key="{detalle>key}"
+                                text="{detalle>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Estatus -->
+
+                    <VBox class="filterCard">
+
+                        <Label
+                            text="Estatus"
+                            class="filterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{detalle>/filters/status}"
+                            items="{
+                                path: 'detalle>/filterOptions/statuses',
+                                templateShareable: false
+                            }"
+                            class="filterSelect">
+
+                            <core:Item
+                                key="{detalle>key}"
+                                text="{detalle>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Búsqueda -->
+
+                    <VBox class="filterCard filterCardSearch">
+
+                        <Label
+                            text="Buscar recurso"
+                            class="filterLabel"/>
+
+                        <SearchField
+                            width="100%"
+                            value="{detalle>/filters/search}"
+                            placeholder="Buscar"
+                            liveChange=".onSearch"
+                            search=".onSearch"
+                            class="resourceSearchField"/>
+
+                    </VBox>
+
+                    <!-- Aplicar filtros -->
+
+                    <VBox
+                        justifyContent="Center"
+                        class="applyFiltersButtonBox">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="applyFiltersButton"/>
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- ===================================================== -->
+                <!-- KPIS                                                  -->
+                <!-- ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    wrap="Wrap"
+                    class="kpisRow">
+
+                    <!-- Recursos totales -->
+
+                    <VBox class="kpiCard kpiCardTotal">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="kpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="kpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://group"
+                                    class="kpiIcon"/>
+
+                            </VBox>
+
+                            <VBox class="kpiInformation">
+
+                                <Text
+                                    text="Recursos totales"
+                                    class="kpiTitle"/>
+
+                                <Text
+                                    text="{detalle>/kpis/total/count}"
+                                    class="kpiValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/total/description}"
+                                    class="kpiDescription"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Bajo -->
+
+                    <VBox class="kpiCard kpiCardLow">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="kpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="kpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://message-success"
+                                    class="kpiIcon"/>
+
+                            </VBox>
+
+                            <VBox class="kpiInformation">
+
+                                <Text
+                                    text="Bajo (0%-70%)"
+                                    class="kpiTitle"/>
+
+                                <Text
+                                    text="{detalle>/kpis/low/count}"
+                                    class="kpiValue"/>
+
+                                <Text
+                                    text="{= ${detalle>/kpis/low/percent} + '% del total' }"
+                                    class="kpiDescription"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Normal -->
+
+                    <VBox class="kpiCard kpiCardNormal">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="kpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="kpiIconCircle">
+
+                                <Text
+                                    text="≈"
+                                    class="kpiWaveIcon"/>
+
+                            </VBox>
+
+                            <VBox class="kpiInformation">
+
+                                <Text
+                                    text="Normal (71%-100%)"
+                                    class="kpiTitle"/>
+
+                                <Text
+                                    text="{detalle>/kpis/normal/count}"
+                                    class="kpiValue"/>
+
+                                <Text
+                                    text="{= ${detalle>/kpis/normal/percent} + '% del total' }"
+                                    class="kpiDescription"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Alto -->
+
+                    <VBox class="kpiCard kpiCardHigh">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="kpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="kpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://trend-up"
+                                    class="kpiIcon"/>
+
+                            </VBox>
+
+                            <VBox class="kpiInformation">
+
+                                <Text
+                                    text="Alto (101%-120%)"
+                                    class="kpiTitle"/>
+
+                                <Text
+                                    text="{detalle>/kpis/high/count}"
+                                    class="kpiValue"/>
+
+                                <Text
+                                    text="{= ${detalle>/kpis/high/percent} + '% del total' }"
+                                    class="kpiDescription"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Crítico -->
+
+                    <VBox class="kpiCard kpiCardCritical">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="kpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="kpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://warning2"
+                                    class="kpiIcon"/>
+
+                            </VBox>
+
+                            <VBox class="kpiInformation">
+
+                                <Text
+                                    text="Crítico (&gt;120%)"
+                                    class="kpiTitle"/>
+
+                                <Text
+                                    text="{detalle>/kpis/critical/count}"
+                                    class="kpiValue"/>
+
+                                <Text
+                                    text="{= ${detalle>/kpis/critical/percent} + '% del total' }"
+                                    class="kpiDescription"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- ===================================================== -->
+                <!-- CARD DE TABLA                                         -->
+                <!-- ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="resourcesCard">
+
+                    <!-- Cabecera de tabla -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="resourcesCardHeader">
+
+                        <VBox>
+
+                            <Title
+                                text="{= 'Recursos (' + ${detalle>/totalFiltered} + ')' }"
+                                level="H3"
+                                class="resourcesTitle"/>
+
+                            <Text
+                                text="Resumen de recursos disponibles y su nivel de utilización actual."
+                                class="resourcesSubtitle"/>
+
+                        </VBox>
+
+                        <Button
+                            icon="sap-icon://filter"
+                            type="Transparent"
+                            tooltip="Opciones de filtrado"
+                            press=".onTableFilter"
+                            class="tableFilterButton"/>
+
+                    </HBox>
+
+                    <!-- Tabla -->
+
+                    <Table
+                        id="resourcesTable"
+                        width="100%"
+                        fixedLayout="true"
+                        inset="false"
+                        mode="None"
+                        growing="false"
+                        showSeparators="Inner"
+                        noDataText="No se encontraron recursos"
+                        items="{
+                            path: 'detalle>/pageItems',
+                            templateShareable: false
+                        }"
+                        class="resourcesTable">
+
+                        <columns>
+
+                            <Column width="13%">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        class="columnHeader">
+                                        <Text
+                                            text="Recurso"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column width="9%">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        class="columnHeader">
+                                        <Text
+                                            text="Tipo de recurso"
+                                            wrapping="true"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column width="9%">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        class="columnHeader">
+                                        <Text
+                                            text="Zona"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column width="8%">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        class="columnHeader">
+                                        <Text
+                                            text="Turno"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="10%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Capacidad disponible (hrs)"
+                                            textAlign="Center"
+                                            wrapping="true"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="10%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Carga programada (hrs)"
+                                            textAlign="Center"
+                                            wrapping="true"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="8%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Utilización (%)"
+                                            textAlign="Center"
+                                            wrapping="true"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="8%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Estatus"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="7%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Órdenes asignadas"
+                                            textAlign="Center"
+                                            wrapping="true"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="7%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Operaciones"
+                                            class="columnHeaderText"/>
+                                        <core:Icon
+                                            src="sap-icon://sort"
+                                            class="columnSortIcon"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                            <Column
+                                width="11%"
+                                hAlign="Center">
+                                <header>
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="columnHeader columnHeaderCentered">
+                                        <Text
+                                            text="Acciones"
+                                            class="columnHeaderText"/>
+                                    </HBox>
+                                </header>
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Inactive"
+                                vAlign="Middle"
+                                class="resourceTableRow">
+
+                                <cells>
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="resourceNameCell">
+
+                                        <core:Icon
+                                            src="sap-icon://employee"
+                                            class="resourceNameIcon"/>
+
+                                        <Text
+                                            text="{detalle>name}"
+                                            wrapping="false"
+                                            class="resourceName"/>
+
+                                    </HBox>
+
+                                    <Text
+                                        text="{detalle>resourceType}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText"/>
+
+                                    <Text
+                                        text="{detalle>zone}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText"/>
+
+                                    <Text
+                                        text="{detalle>shift}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText"/>
+
+                                    <Text
+                                        text="{detalle>availableCapacity}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText numericCell"/>
+
+                                    <Text
+                                        text="{detalle>scheduledLoad}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText numericCell"/>
+
+                                    <ObjectStatus
+                                        text="{detalle>utilizationText}"
+                                        state="{detalle>utilizationState}"
+                                        class="utilizationValue"/>
+
+                                    <ObjectStatus
+                                        text="{detalle>status}"
+                                        state="{detalle>statusState}"
+                                        class="resourceStatus">
+
+                                        <customData>
+
+                                            <core:CustomData
+                                                key="status"
+                                                value="{detalle>statusKey}"
+                                                writeToDom="true"/>
+
+                                        </customData>
+
+                                    </ObjectStatus>
+
+                                    <Text
+                                        text="{detalle>assignedOrders}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText numericCell"/>
+
+                                    <Text
+                                        text="{detalle>operations}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="tableCellText numericCell"/>
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="actionButtons">
+
+                                        <Button
+                                            text="Ver detalle"
+                                            type="Transparent"
+                                            press=".onViewDetail"
+                                            class="viewDetailButton"/>
+
+                                    </HBox>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                    <!-- Pie y paginación -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="resourcesFooter">
+
+                        <Text
+                            text="{detalle>/showingText}"
+                            class="showingResourcesText"/>
+
+                        <HBox
+                            alignItems="Center"
+                            class="paginationContainer">
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="{= ${detalle>/currentPage} > 1 }"
+                                press=".onPreviousPage"
+                                class="paginationArrow"/>
+
+                            <Button
+                                text="{detalle>/currentPage}"
+                                type="Emphasized"
+                                class="paginationCurrentPage"/>
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="{= ${detalle>/currentPage} &lt; ${detalle>/totalPages} }"
+                                press=".onNextPage"
+                                class="paginationArrow"/>
+
+                        </HBox>
+
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

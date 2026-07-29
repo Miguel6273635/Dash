@@ -1,0 +1,1038 @@
+/* ================================================================ */
+/* FICHA DEL EQUIPO BLOQUEADO                                        */
+/* Estilos exclusivos de la pantalla                                 */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage {
+    background: #f7f8fa !important;
+}
+
+.fichaEquipoBloqueadoPage .sapMPage,
+.fichaEquipoBloqueadoPage .sapMPageBgStandard,
+.fichaEquipoBloqueadoPage .sapMPageScroll {
+    background: #f7f8fa !important;
+}
+
+.fichaEquipoBloqueadoPage .sapMPageScroll {
+    box-sizing: border-box;
+}
+
+
+/* ================================================================ */
+/* CONTENEDOR PRINCIPAL                                              */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .fichaEquipoBloqueadoContent {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 0.75rem 0.9rem 1rem;
+}
+
+
+/* ================================================================ */
+/* ENCABEZADO                                                        */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debPageHeader {
+    margin-bottom: 0.7rem;
+}
+
+.fichaEquipoBloqueadoPage .debPageTitle {
+    margin: 0 !important;
+    color: #1f2937 !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+}
+
+.fichaEquipoBloqueadoPage .debPageSubtitle {
+    display: block;
+    margin-top: 0.12rem;
+    color: #687386 !important;
+    font-size: 0.72rem !important;
+    font-weight: 400;
+    line-height: 1.35;
+}
+
+
+/* ================================================================ */
+/* GRID DE KPIs                                                      */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debKpiGrid {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.7rem;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.fichaEquipoBloqueadoPage .debKpiGrid > * {
+    min-width: 0;
+}
+
+.fichaEquipoBloqueadoPage .debKpiCard {
+    --deb-accent: #2563eb;
+    --deb-accent-rgb: 37, 99, 235;
+
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 4.2rem;
+    overflow: hidden;
+
+    border: 1px solid #e8ebef;
+    border-left: 0.2rem solid var(--deb-accent);
+    border-radius: 0.42rem;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(var(--deb-accent-rgb), 0.13) 0%,
+            rgba(var(--deb-accent-rgb), 0.06) 31%,
+            rgba(var(--deb-accent-rgb), 0.015) 67%,
+            #ffffff 100%
+        );
+
+    box-shadow:
+        0 0.08rem 0.25rem rgba(15, 23, 42, 0.04),
+        0 0.02rem 0.08rem rgba(15, 23, 42, 0.03);
+}
+
+.fichaEquipoBloqueadoPage .debKpiCard::after {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: "";
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 38%,
+            rgba(255, 255, 255, 0.72) 100%
+        );
+}
+
+.fichaEquipoBloqueadoPage .debKpiCardContent {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 4.15rem;
+    padding: 0.58rem 0.68rem;
+}
+
+.fichaEquipoBloqueadoPage .debKpiIconContainer {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.6rem;
+
+    border: 1px solid rgba(var(--deb-accent-rgb), 0.13);
+    border-radius: 50%;
+
+    background: rgba(var(--deb-accent-rgb), 0.08);
+
+    box-shadow:
+        0 0 0 0.18rem rgba(var(--deb-accent-rgb), 0.025);
+}
+
+.fichaEquipoBloqueadoPage .debKpiIcon {
+    color: var(--deb-accent) !important;
+    font-size: 1.08rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debKpiTextContainer {
+    min-width: 0;
+    justify-content: center;
+}
+
+.fichaEquipoBloqueadoPage .debKpiValue {
+    display: block;
+    max-width: 100%;
+
+    color: var(--deb-accent) !important;
+    font-size: 1.04rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fichaEquipoBloqueadoPage .debKpiStatusValue {
+    font-size: 0.81rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debKpiDateValue {
+    font-size: 0.92rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debKpiLabel {
+    display: block;
+    max-width: 100%;
+    margin-top: 0.24rem;
+
+    color: #697386 !important;
+    font-size: 0.58rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ================================================================ */
+/* COLORES DE KPIs                                                   */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debKpiRed {
+    --deb-accent: #ef4444;
+    --deb-accent-rgb: 239, 68, 68;
+}
+
+.fichaEquipoBloqueadoPage .debKpiOrange {
+    --deb-accent: #f97316;
+    --deb-accent-rgb: 249, 115, 22;
+}
+
+.fichaEquipoBloqueadoPage .debKpiBlue {
+    --deb-accent: #2563eb;
+    --deb-accent-rgb: 37, 99, 235;
+}
+
+.fichaEquipoBloqueadoPage .debKpiPurple {
+    --deb-accent: #7c3aed;
+    --deb-accent-rgb: 124, 58, 237;
+}
+
+
+/* ================================================================ */
+/* GRIDS DE CONTENIDO                                                */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debTopGrid {
+    display: grid !important;
+    grid-template-columns: 31fr 27fr 42fr;
+    align-items: stretch;
+    gap: 0.7rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.fichaEquipoBloqueadoPage .debBottomGrid {
+    display: grid !important;
+    grid-template-columns: 43fr 57fr;
+    align-items: stretch;
+    gap: 0.7rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.fichaEquipoBloqueadoPage .debTopGrid > *,
+.fichaEquipoBloqueadoPage .debBottomGrid > * {
+    min-width: 0;
+    margin: 0 !important;
+}
+
+
+/* ================================================================ */
+/* CARDS / PANELES                                                   */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debPanel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+
+    border: 1px solid #e9edf1;
+    border-radius: 0.5rem;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0.08rem 0.28rem rgba(15, 23, 42, 0.035),
+        0 0.02rem 0.08rem rgba(15, 23, 42, 0.025);
+}
+
+
+/* ================================================================ */
+/* CABECERA DE PANELES                                               */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debPanelHeader {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.2rem;
+    padding: 0.55rem 0.65rem 0.42rem;
+}
+
+.fichaEquipoBloqueadoPage .debHistoryHeader {
+    padding-bottom: 0.32rem;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIcon {
+    flex: 0 0 auto;
+    width: 1.22rem;
+    height: 1.22rem;
+    margin-right: 0.42rem;
+    border-radius: 50%;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIcon .sapUiIcon {
+    font-size: 0.67rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconBlue {
+    background: #eaf2ff;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconBlue .sapUiIcon {
+    color: #3478f6 !important;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconOrange {
+    background: #fff3e7;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconOrange .sapUiIcon {
+    color: #f59e42 !important;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconCyan {
+    background: #e7f8f7;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconCyan .sapUiIcon {
+    color: #3bb6ad !important;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconPurple {
+    background: #f1eaff;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconPurple .sapUiIcon {
+    color: #8b5cf6 !important;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconRed {
+    background: #ffecec;
+}
+
+.fichaEquipoBloqueadoPage .debSectionIconRed .sapUiIcon {
+    color: #ef5350 !important;
+}
+
+.fichaEquipoBloqueadoPage .debPanelTitle {
+    margin: 0 !important;
+    color: #2c3442 !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+}
+
+.fichaEquipoBloqueadoPage .debPanelSubtitle {
+    display: block;
+    margin-top: 0.05rem;
+    color: #8590a2 !important;
+    font-size: 0.52rem !important;
+    line-height: 1.25 !important;
+}
+
+
+/* ================================================================ */
+/* DATOS GENERALES                                                   */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debInfoTable {
+    box-sizing: border-box;
+    margin: 0 0.55rem 0.55rem;
+    overflow: hidden;
+
+    border: 1px solid #edf0f3;
+    border-radius: 0.42rem;
+
+    background: #ffffff;
+}
+
+.fichaEquipoBloqueadoPage .debInfoRow {
+    box-sizing: border-box;
+    min-height: 1.58rem;
+    padding: 0.34rem 0.55rem;
+
+    border-bottom: 1px solid #eef1f4;
+}
+
+.fichaEquipoBloqueadoPage .debInfoRowLast {
+    border-bottom: 0;
+}
+
+.fichaEquipoBloqueadoPage .debInfoGroupStart {
+    margin-top: 0.15rem;
+    border-top: 1px solid #e4e8ed;
+}
+
+.fichaEquipoBloqueadoPage .debInfoLabel {
+    flex: 0 0 50%;
+    box-sizing: border-box;
+    padding-right: 0.45rem;
+
+    color: #697386 !important;
+    font-size: 0.56rem !important;
+    font-weight: 500 !important;
+    line-height: 1.35 !important;
+}
+
+.fichaEquipoBloqueadoPage .debInfoValue {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    color: #354052 !important;
+    font-size: 0.56rem !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+}
+
+
+/* ================================================================ */
+/* INFORMACIÓN DEL BLOQUEO                                           */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debBlockInformation {
+    box-sizing: border-box;
+    padding: 0.05rem 0.72rem 0.58rem;
+}
+
+.fichaEquipoBloqueadoPage .debBlockInfoRow {
+    box-sizing: border-box;
+    min-height: 1.65rem;
+    padding: 0.35rem 0;
+}
+
+.fichaEquipoBloqueadoPage .debBlockInfoSeparator {
+    margin-top: 0.2rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid #eceff3;
+}
+
+.fichaEquipoBloqueadoPage .debBlockInfoObservation {
+    align-items: flex-start;
+}
+
+.fichaEquipoBloqueadoPage .debBlockInfoLabel {
+    flex: 0 0 46%;
+    box-sizing: border-box;
+    padding-right: 0.45rem;
+
+    color: #697386 !important;
+    font-size: 0.56rem !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+}
+
+.fichaEquipoBloqueadoPage .debBlockInfoValue {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    color: #364152 !important;
+    font-size: 0.56rem !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+}
+
+
+/* ================================================================ */
+/* TABLAS                                                            */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debTable {
+    box-sizing: border-box;
+    width: auto !important;
+    max-width: calc(100% - 1.04rem);
+    margin: 0 0.52rem;
+    overflow: hidden;
+
+    border: 1px solid #edf0f3;
+    border-radius: 0.42rem;
+
+    background: #ffffff;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTbl {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTblHeader {
+    height: auto;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTblHeaderCell {
+    box-sizing: border-box;
+    height: 1.62rem;
+    padding: 0.31rem 0.38rem !important;
+
+    border-top: 0 !important;
+    border-bottom: 1px solid #e5e9ee !important;
+
+    background: #f3f5f7 !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debTable
+    .sapMListTblHeaderCell:first-child {
+    border-top-left-radius: 0.4rem;
+}
+
+.fichaEquipoBloqueadoPage
+    .debTable
+    .sapMListTblHeaderCell:last-child {
+    border-top-right-radius: 0.4rem;
+}
+
+.fichaEquipoBloqueadoPage .debColumnHeader {
+    display: block;
+    width: 100%;
+
+    color: #536074 !important;
+    font-size: 0.5rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMLIB {
+    min-height: 1.68rem !important;
+    background: #ffffff !important;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTblRow {
+    height: 1.68rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTblRow:hover {
+    background: #fafbfd !important;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMListTblCell {
+    box-sizing: border-box;
+    height: 1.68rem !important;
+    padding: 0.27rem 0.38rem !important;
+
+    border-bottom-color: #edf0f3 !important;
+    vertical-align: middle !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debTable
+    .sapMListTblRow:last-child
+    .sapMListTblCell {
+    border-bottom: 0 !important;
+}
+
+.fichaEquipoBloqueadoPage .debTableText {
+    display: block;
+    max-width: 100%;
+
+    color: #485467 !important;
+    font-size: 0.5rem !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fichaEquipoBloqueadoPage .debOrderLink {
+    display: inline-block;
+    max-width: 100%;
+
+    color: #2f75e8 !important;
+    font-size: 0.51rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fichaEquipoBloqueadoPage .debOrderLink:hover {
+    color: #165dcc !important;
+    text-decoration: none !important;
+}
+
+
+/* ================================================================ */
+/* QUITA SELECCIÓN VISUAL EN TABLAS                                  */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debTable .sapMLIBFocusable:focus {
+    outline: none !important;
+}
+
+.fichaEquipoBloqueadoPage .debTable .sapMLIB:focus::before,
+.fichaEquipoBloqueadoPage .debTable .sapMLIB:focus::after {
+    display: none !important;
+}
+
+
+/* ================================================================ */
+/* RESPONSABLE / USUARIO                                             */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debResponsibleCell {
+    width: 100%;
+    min-width: 0;
+}
+
+.fichaEquipoBloqueadoPage .debResponsibleIcon {
+    flex: 0 0 auto;
+    margin-right: 0.28rem;
+    color: #4d91f2 !important;
+    font-size: 0.62rem !important;
+}
+
+
+/* ================================================================ */
+/* PÍLDORAS DE ESTADO                                                */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debPill {
+    display: inline-block !important;
+    box-sizing: border-box;
+    min-width: 3.25rem;
+    max-width: 100%;
+    padding: 0.13rem 0.34rem;
+
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+
+    font-size: 0.46rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Abierta */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="open"] {
+    color: #e05252 !important;
+    border-color: #fde1e1;
+    background: #fff0f0;
+}
+
+
+/* Bloqueado */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="blocked"] {
+    color: #e14c4c !important;
+    border-color: #ffdede;
+    background: #ffeded;
+}
+
+
+/* Programada / Abierto */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="scheduled"] {
+    color: #3477d7 !important;
+    border-color: #dceafd;
+    background: #edf5ff;
+}
+
+
+/* En proceso */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="process"] {
+    color: #e68a22 !important;
+    border-color: #fde8cf;
+    background: #fff4e6;
+}
+
+
+/* En revisión */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="review"] {
+    color: #e6962f !important;
+    border-color: #fce9ca;
+    background: #fff7e8;
+}
+
+
+/* En análisis */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="analysis"] {
+    color: #3477d7 !important;
+    border-color: #dceafd;
+    background: #edf5ff;
+}
+
+
+/* Pendiente */
+
+.fichaEquipoBloqueadoPage
+    .debPill[data-pilltype="pending"] {
+    color: #7c8797 !important;
+    border-color: #e7e9ed;
+    background: #f4f5f7;
+}
+
+
+/* ================================================================ */
+/* IMPACTO                                                           */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debImpactPill {
+    box-sizing: border-box;
+    min-width: 2.75rem;
+    padding: 0.11rem 0.28rem;
+
+    border: 1px solid transparent;
+    border-radius: 0.24rem;
+}
+
+.fichaEquipoBloqueadoPage .debImpactIcon {
+    margin-right: 0.17rem;
+    font-size: 0.43rem !important;
+}
+
+.fichaEquipoBloqueadoPage .debImpactText {
+    font-size: 0.45rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+}
+
+
+/* Impacto alto */
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="high"] {
+    border-color: #fde0e0;
+    background: #fff0f0;
+}
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="high"]
+    .sapUiIcon,
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="high"]
+    .debImpactText {
+    color: #e75454 !important;
+}
+
+
+/* Impacto medio */
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="medium"] {
+    border-color: #fde6ca;
+    background: #fff4e6;
+}
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="medium"]
+    .sapUiIcon,
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="medium"]
+    .debImpactText {
+    color: #e58c28 !important;
+}
+
+
+/* Impacto bajo */
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="low"] {
+    border-color: #d9f0df;
+    background: #edf9f0;
+}
+
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="low"]
+    .sapUiIcon,
+.fichaEquipoBloqueadoPage
+    .debImpactPill[data-impacttype="low"]
+    .debImpactText {
+    color: #3ba466 !important;
+}
+
+
+/* ================================================================ */
+/* PRIORIDAD                                                         */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debPriorityPill {
+    display: inline-block !important;
+    box-sizing: border-box;
+    min-width: 2.55rem;
+    padding: 0.13rem 0.32rem;
+
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+
+    font-size: 0.45rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fichaEquipoBloqueadoPage
+    .debPriorityPill[data-prioritytype="high"] {
+    color: #e15252 !important;
+    border-color: #fde0e0;
+    background: #fff0f0;
+}
+
+.fichaEquipoBloqueadoPage
+    .debPriorityPill[data-prioritytype="medium"] {
+    color: #e58b27 !important;
+    border-color: #fde6ca;
+    background: #fff4e6;
+}
+
+
+/* ================================================================ */
+/* HISTORIAL                                                         */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debHistoryAction {
+    width: 100%;
+    min-width: 0;
+}
+
+.fichaEquipoBloqueadoPage .debHistoryBullet {
+    flex: 0 0 auto;
+    margin-right: 0.3rem;
+    font-size: 0.68rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debHistoryBullet[data-bulletcolor="orange"] {
+    color: #f59e42 !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debHistoryBullet[data-bulletcolor="blue"] {
+    color: #3b82f6 !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debHistoryBullet[data-bulletcolor="gray"] {
+    color: #a4acb8 !important;
+}
+
+.fichaEquipoBloqueadoPage .debHistoryActionText {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    color: #485467 !important;
+    font-size: 0.49rem !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+}
+
+
+/* ================================================================ */
+/* BOTONES INFERIORES                                                */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debFooterButton {
+    align-self: stretch;
+    box-sizing: border-box;
+    width: calc(100% - 1.04rem);
+    height: 2rem;
+    min-height: 2rem;
+    margin: 0.15rem 0.52rem 0.22rem;
+    padding: 0 !important;
+}
+
+.fichaEquipoBloqueadoPage .debFooterButton .sapMBtnInner {
+    display: flex !important;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0 !important;
+    height: 1.85rem !important;
+    padding: 0 0.2rem !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fichaEquipoBloqueadoPage .debFooterButton .sapMBtnContent {
+    color: #2f75e8 !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    line-height: 1.85rem !important;
+    text-align: left !important;
+}
+
+.fichaEquipoBloqueadoPage .debFooterButton .sapMBtnIcon {
+    margin: 0 !important;
+    color: #2f75e8 !important;
+    font-size: 0.63rem !important;
+    line-height: 1.85rem !important;
+}
+
+.fichaEquipoBloqueadoPage
+    .debFooterButton:hover
+    .sapMBtnInner {
+    background: #f6f9fe !important;
+}
+
+
+/* ================================================================ */
+/* AJUSTES DE ALTURA ENTRE CARDS                                     */
+/* ================================================================ */
+
+.fichaEquipoBloqueadoPage .debGeneralPanel,
+.fichaEquipoBloqueadoPage .debBlockPanel,
+.fichaEquipoBloqueadoPage .debOrdersPanel {
+    min-height: 12.6rem;
+}
+
+.fichaEquipoBloqueadoPage .debPendingPanel,
+.fichaEquipoBloqueadoPage .debHistoryPanel {
+    min-height: 12rem;
+}
+
+
+/* ================================================================ */
+/* RESPONSIVE                                                        */
+/* ================================================================ */
+
+@media (max-width: 75rem) {
+
+    .fichaEquipoBloqueadoPage .debKpiGrid {
+        gap: 0.5rem;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiCardContent {
+        padding-right: 0.45rem;
+        padding-left: 0.48rem;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiIconContainer {
+        width: 1.8rem;
+        height: 1.8rem;
+        margin-right: 0.42rem;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiIcon {
+        font-size: 0.96rem !important;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiValue {
+        font-size: 0.92rem !important;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiStatusValue {
+        font-size: 0.72rem !important;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiDateValue {
+        font-size: 0.79rem !important;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiLabel {
+        font-size: 0.52rem !important;
+    }
+}
+
+
+@media (max-width: 58rem) {
+
+    .fichaEquipoBloqueadoPage .debKpiGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .fichaEquipoBloqueadoPage .debTopGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fichaEquipoBloqueadoPage .debOrdersPanel {
+        grid-column: 1 / -1;
+    }
+
+    .fichaEquipoBloqueadoPage .debBottomGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+
+@media (max-width: 42rem) {
+
+    .fichaEquipoBloqueadoPage .fichaEquipoBloqueadoContent {
+        padding: 0.65rem;
+    }
+
+    .fichaEquipoBloqueadoPage .debPageTitle {
+        font-size: 1.05rem !important;
+    }
+
+    .fichaEquipoBloqueadoPage .debKpiGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fichaEquipoBloqueadoPage .debTopGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .fichaEquipoBloqueadoPage .debOrdersPanel {
+        grid-column: auto;
+    }
+
+    .fichaEquipoBloqueadoPage .debGeneralPanel,
+    .fichaEquipoBloqueadoPage .debBlockPanel,
+    .fichaEquipoBloqueadoPage .debOrdersPanel,
+    .fichaEquipoBloqueadoPage .debPendingPanel,
+    .fichaEquipoBloqueadoPage .debHistoryPanel {
+        min-height: auto;
+    }
+}
+
+
+@media (max-width: 30rem) {
+
+    .fichaEquipoBloqueadoPage .debKpiGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

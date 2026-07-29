@@ -1,0 +1,999 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleUtilizacionTurno"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="detalleUtilizacionTurnoPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="dutPage">
+
+        <content>
+
+            <VBox class="dutMainContainer">
+
+                <!-- ===================================================== -->
+                <!-- CABECERA                                              -->
+                <!-- ===================================================== -->
+
+                <VBox class="dutHeaderBlock">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutTitleRow">
+
+                        <Title
+                            text="Detalle de utilización por turno"
+                            level="H1"
+                            class="dutMainTitle"/>
+
+                        <core:Icon
+                            src="sap-icon://hint"
+                            tooltip="Análisis de capacidad disponible y utilización por turno"
+                            class="dutTitleInfoIcon"/>
+
+                    </HBox>
+
+                    <Text
+                        text="Análisis de la capacidad disponible y la utilización de horas por turno."
+                        class="dutSubtitle"/>
+
+                </VBox>
+
+                <!-- ===================================================== -->
+                <!-- FILTROS                                               -->
+                <!-- ===================================================== -->
+
+                <FlexBox
+                    wrap="Wrap"
+                    alignItems="Stretch"
+                    class="dutFiltersContainer">
+
+                    <VBox class="dutFilterCard dutFilterPeriodo">
+
+                        <Label
+                            text="Periodo"
+                            class="dutFilterLabel"/>
+
+                        <Select
+                            id="periodoSelect"
+                            width="100%"
+                            selectedKey="{detalleTurno>/filtros/periodo}"
+                            items="{detalleTurno>/catalogos/periodos}"
+                            class="dutBorderlessSelect">
+
+                            <core:Item
+                                key="{detalleTurno>key}"
+                                text="{detalleTurno>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="dutFilterCard dutFilterFecha">
+
+                        <Label
+                            text="Fecha desde"
+                            class="dutFilterLabel"/>
+
+                        <DatePicker
+                            id="fechaDesdeDatePicker"
+                            width="100%"
+                            value="{detalleTurno>/filtros/fechaDesde}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dutBorderlessDatePicker"/>
+
+                    </VBox>
+
+                    <VBox class="dutFilterCard dutFilterFecha">
+
+                        <Label
+                            text="Fecha hasta"
+                            class="dutFilterLabel"/>
+
+                        <DatePicker
+                            id="fechaHastaDatePicker"
+                            width="100%"
+                            value="{detalleTurno>/filtros/fechaHasta}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dutBorderlessDatePicker"/>
+
+                    </VBox>
+
+                    <VBox class="dutFilterCard dutFilterZona">
+
+                        <Label
+                            text="Zona"
+                            class="dutFilterLabel"/>
+
+                        <Select
+                            id="zonaSelect"
+                            width="100%"
+                            selectedKey="{detalleTurno>/filtros/zona}"
+                            items="{detalleTurno>/catalogos/zonas}"
+                            class="dutBorderlessSelect">
+
+                            <core:Item
+                                key="{detalleTurno>key}"
+                                text="{detalleTurno>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="dutFilterCard dutFilterSupervisor">
+
+                        <Label
+                            text="Supervisor"
+                            class="dutFilterLabel"/>
+
+                        <Select
+                            id="supervisorSelect"
+                            width="100%"
+                            selectedKey="{detalleTurno>/filtros/supervisor}"
+                            items="{detalleTurno>/catalogos/supervisores}"
+                            class="dutBorderlessSelect">
+
+                            <core:Item
+                                key="{detalleTurno>key}"
+                                text="{detalleTurno>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="dutFilterCard dutFilterMecanico">
+
+                        <Label
+                            text="Mecánico / Cuadrilla"
+                            class="dutFilterLabel"/>
+
+                        <Select
+                            id="mecanicoSelect"
+                            width="100%"
+                            selectedKey="{detalleTurno>/filtros/mecanico}"
+                            items="{detalleTurno>/catalogos/mecanicos}"
+                            class="dutBorderlessSelect">
+
+                            <core:Item
+                                key="{detalleTurno>key}"
+                                text="{detalleTurno>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <Button
+                        id="aplicarFiltrosButton"
+                        text="Aplicar filtros"
+                        icon="sap-icon://filter"
+                        type="Emphasized"
+                        press=".onAplicarFiltros"
+                        class="dutApplyButton"/>
+
+                </FlexBox>
+
+                <!-- ===================================================== -->
+                <!-- KPI                                                   -->
+                <!-- ===================================================== -->
+
+                <FlexBox
+                    wrap="Wrap"
+                    class="dutKpiContainer">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutKpiCard dutKpiPurple">
+
+                        <VBox
+                            justifyContent="Center"
+                            alignItems="Center"
+                            class="dutKpiIconCircle dutKpiIconPurple">
+
+                            <core:Icon
+                                src="sap-icon://history"
+                                class="dutKpiIcon"/>
+
+                        </VBox>
+
+                        <VBox class="dutKpiTextBlock">
+
+                            <Text
+                                text="Utilización general"
+                                class="dutKpiLabel"/>
+
+                            <ObjectNumber
+                                number="{detalleTurno>/kpis/utilizacionGeneral/valor}"
+                                class="dutKpiValue dutPurpleValue"/>
+
+                            <Text
+                                text="{detalleTurno>/kpis/utilizacionGeneral/detalle}"
+                                class="dutKpiDetail"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutKpiCard dutKpiRed">
+
+                        <VBox
+                            justifyContent="Center"
+                            alignItems="Center"
+                            class="dutKpiIconCircle dutKpiIconRed">
+
+                            <core:Icon
+                                src="sap-icon://performance"
+                                class="dutKpiIcon"/>
+
+                        </VBox>
+
+                        <VBox class="dutKpiTextBlock">
+
+                            <Text
+                                text="Turno más saturado"
+                                class="dutKpiLabel"/>
+
+                            <Text
+                                text="{detalleTurno>/kpis/turnoSaturado/valor}"
+                                class="dutKpiValueText dutRedValue"/>
+
+                            <Text
+                                text="{detalleTurno>/kpis/turnoSaturado/detalle}"
+                                class="dutKpiDetail"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutKpiCard dutKpiOrange">
+
+                        <VBox
+                            justifyContent="Center"
+                            alignItems="Center"
+                            class="dutKpiIconCircle dutKpiIconOrange">
+
+                            <core:Icon
+                                src="sap-icon://group"
+                                class="dutKpiIcon"/>
+
+                        </VBox>
+
+                        <VBox class="dutKpiTextBlock">
+
+                            <Text
+                                text="Turnos sobre capacidad"
+                                class="dutKpiLabel"/>
+
+                            <ObjectNumber
+                                number="{detalleTurno>/kpis/sobreCapacidad/valor}"
+                                class="dutKpiValue dutOrangeValue"/>
+
+                            <Text
+                                text="{detalleTurno>/kpis/sobreCapacidad/detalle}"
+                                class="dutKpiDetail"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutKpiCard dutKpiYellow">
+
+                        <VBox
+                            justifyContent="Center"
+                            alignItems="Center"
+                            class="dutKpiIconCircle dutKpiIconYellow">
+
+                            <core:Icon
+                                src="sap-icon://warning2"
+                                class="dutKpiIcon"/>
+
+                        </VBox>
+
+                        <VBox class="dutKpiTextBlock">
+
+                            <Text
+                                text="Turnos cerca de saturación"
+                                class="dutKpiLabel"/>
+
+                            <ObjectNumber
+                                number="{detalleTurno>/kpis/cercaSaturacion/valor}"
+                                class="dutKpiValue dutYellowValue"/>
+
+                            <Text
+                                text="{detalleTurno>/kpis/cercaSaturacion/detalle}"
+                                class="dutKpiDetail"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                </FlexBox>
+
+                <!-- ===================================================== -->
+                <!-- RESUMEN POR TURNO                                     -->
+                <!-- ===================================================== -->
+
+                <VBox class="dutSummaryCard">
+
+                    <HBox
+                        alignItems="Center"
+                        class="dutSummaryHeader">
+
+                        <VBox
+                            justifyContent="Center"
+                            alignItems="Center"
+                            class="dutSummaryHeaderIconBox">
+
+                            <core:Icon
+                                src="sap-icon://business-objects-experience"
+                                class="dutSummaryHeaderIcon"/>
+
+                        </VBox>
+
+                        <Title
+                            text="Resumen por turno"
+                            level="H3"
+                            class="dutSummaryTitle"/>
+
+                    </HBox>
+
+                    <ScrollContainer
+                        horizontal="true"
+                        vertical="false"
+                        width="100%"
+                        class="dutSummaryScroll">
+
+                        <VBox class="dutSummaryTableFrame">
+
+                            <Table
+                                id="resumenTurnosTable"
+                                width="100%"
+                                fixedLayout="true"
+                                inset="false"
+                                showSeparators="None"
+                                items="{detalleTurno>/resumenTurnos}"
+                                itemPress=".onSeleccionarTurno"
+                                class="dutSummaryTable">
+
+                                <columns>
+
+                                    <Column
+                                        width="9rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Turno"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="10rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Capacidad disponible (h)"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="10rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Horas programadas (h)"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="8.5rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Horas reales (h)"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="15rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Utilización (real / capacidad)"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="7rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Margen (h)"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                    <Column
+                                        width="11rem"
+                                        hAlign="Center">
+
+                                        <Text
+                                            text="Estado"
+                                            class="dutSummaryColumnHeader"/>
+
+                                    </Column>
+
+                                </columns>
+
+                                <items>
+
+                                    <ColumnListItem
+                                        type="{= ${detalleTurno>esTotal} ? 'Inactive' : 'Active' }"
+                                        vAlign="Middle"
+                                        class="{= ${detalleTurno>esTotal} ? 'dutSummaryTotalRow' : 'dutSummaryDataRow' }">
+
+                                        <cells>
+
+                                            <!-- 1. Turno -->
+                                            <Text
+                                                text="{detalleTurno>turno}"
+                                                textAlign="Center"
+                                                width="100%"
+                                                class="dutSummaryTurnoText"/>
+
+                                            <!-- 2. Capacidad -->
+                                            <Text
+                                                text="{detalleTurno>capacidad}"
+                                                textAlign="Center"
+                                                width="100%"
+                                                class="dutSummaryNumberText"/>
+
+                                            <!-- 3. Horas programadas -->
+                                            <Text
+                                                text="{detalleTurno>horasProgramadas}"
+                                                textAlign="Center"
+                                                width="100%"
+                                                class="dutSummaryNumberText"/>
+
+                                            <!-- 4. Horas reales -->
+                                            <Text
+                                                text="{detalleTurno>horasReales}"
+                                                textAlign="Center"
+                                                width="100%"
+                                                class="dutSummaryNumberText"/>
+
+                                            <!-- 5. Utilización -->
+                                            <HBox
+                                                justifyContent="Center"
+                                                alignItems="Center"
+                                                width="100%"
+                                                class="dutSummaryUtilizationCell">
+
+                                                <VBox
+                                                    justifyContent="Center"
+                                                    alignItems="End"
+                                                    class="dutSummaryPercentageContainer">
+
+                                                    <Text
+                                                        text="{detalleTurno>utilizacion}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'normal' }"
+                                                        class="dutSummaryUtilizationValue dutSummaryUtilizationValueNormal"/>
+
+                                                    <Text
+                                                        text="{detalleTurno>utilizacion}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'warning' }"
+                                                        class="dutSummaryUtilizationValue dutSummaryUtilizationValueWarning"/>
+
+                                                    <Text
+                                                        text="{detalleTurno>utilizacion}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'error' }"
+                                                        class="dutSummaryUtilizationValue dutSummaryUtilizationValueError"/>
+
+                                                </VBox>
+
+                                                <HBox
+                                                    alignItems="Center"
+                                                    class="dutSummaryChartTrack">
+
+                                                    <HBox
+                                                        width="{detalleTurno>anchoBarra}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'normal' }"
+                                                        class="dutSummaryChartFill dutSummaryChartFillNormal"/>
+
+                                                    <HBox
+                                                        width="{detalleTurno>anchoBarra}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'warning' }"
+                                                        class="dutSummaryChartFill dutSummaryChartFillWarning"/>
+
+                                                    <HBox
+                                                        width="{detalleTurno>anchoBarra}"
+                                                        visible="{= ${detalleTurno>estadoKey} === 'error' }"
+                                                        class="dutSummaryChartFill dutSummaryChartFillError"/>
+
+                                                </HBox>
+
+                                            </HBox>
+
+                                            <!-- 6. Margen -->
+                                            <VBox
+                                                justifyContent="Center"
+                                                alignItems="Center"
+                                                width="100%"
+                                                class="dutSummaryMarginContainer">
+
+                                                <Text
+                                                    text="{detalleTurno>margen}"
+                                                    visible="{= ${detalleTurno>margenState} === 'Success' }"
+                                                    class="dutSummaryMarginText dutSummaryMarginSuccess"/>
+
+                                                <Text
+                                                    text="{detalleTurno>margen}"
+                                                    visible="{= ${detalleTurno>margenState} === 'Warning' }"
+                                                    class="dutSummaryMarginText dutSummaryMarginWarning"/>
+
+                                                <Text
+                                                    text="{detalleTurno>margen}"
+                                                    visible="{= ${detalleTurno>margenState} === 'Error' }"
+                                                    class="dutSummaryMarginText dutSummaryMarginError"/>
+
+                                            </VBox>
+
+                                            <!-- 7. Estado -->
+                                            <VBox
+                                                justifyContent="Center"
+                                                alignItems="Center"
+                                                width="100%"
+                                                class="dutSummaryStatusCell">
+
+                                                <!-- Estado normal -->
+                                                <HBox
+                                                    justifyContent="Center"
+                                                    alignItems="Center"
+                                                    visible="{=
+                                                        !${detalleTurno>esTotal}
+                                                        &amp;&amp;
+                                                        ${detalleTurno>estadoKey} === 'normal'
+                                                    }"
+                                                    class="dutSummaryStatusPill dutSummaryStatusPillNormal">
+
+                                                    <core:Icon
+                                                        src="sap-icon://circle-task-2"
+                                                        class="dutSummaryStatusDot dutSummaryStatusDotNormal"/>
+
+                                                    <Text
+                                                        text="{detalleTurno>estado}"
+                                                        class="dutSummaryStatusText dutSummaryStatusTextNormal"/>
+
+                                                </HBox>
+
+                                                <!-- Estado warning -->
+                                                <HBox
+                                                    justifyContent="Center"
+                                                    alignItems="Center"
+                                                    visible="{=
+                                                        !${detalleTurno>esTotal}
+                                                        &amp;&amp;
+                                                        ${detalleTurno>estadoKey} === 'warning'
+                                                    }"
+                                                    class="dutSummaryStatusPill dutSummaryStatusPillWarning">
+
+                                                    <core:Icon
+                                                        src="sap-icon://circle-task-2"
+                                                        class="dutSummaryStatusDot dutSummaryStatusDotWarning"/>
+
+                                                    <Text
+                                                        text="{detalleTurno>estado}"
+                                                        class="dutSummaryStatusText dutSummaryStatusTextWarning"/>
+
+                                                </HBox>
+
+                                                <!-- Estado error -->
+                                                <HBox
+                                                    justifyContent="Center"
+                                                    alignItems="Center"
+                                                    visible="{=
+                                                        !${detalleTurno>esTotal}
+                                                        &amp;&amp;
+                                                        ${detalleTurno>estadoKey} === 'error'
+                                                    }"
+                                                    class="dutSummaryStatusPill dutSummaryStatusPillError">
+
+                                                    <core:Icon
+                                                        src="sap-icon://circle-task-2"
+                                                        class="dutSummaryStatusDot dutSummaryStatusDotError"/>
+
+                                                    <Text
+                                                        text="{detalleTurno>estado}"
+                                                        class="dutSummaryStatusText dutSummaryStatusTextError"/>
+
+                                                </HBox>
+
+                                                <!-- Fila total -->
+                                                <Text
+                                                    text="-"
+                                                    visible="{detalleTurno>esTotal}"
+                                                    textAlign="Center"
+                                                    width="100%"
+                                                    class="dutSummaryTotalStatus"/>
+
+                                            </VBox>
+
+                                        </cells>
+
+                                    </ColumnListItem>
+
+                                </items>
+
+                            </Table>
+
+                        </VBox>
+
+                    </ScrollContainer>
+
+                </VBox>
+
+                <!-- ===================================================== -->
+                <!-- ÓRDENES ASOCIADAS                                     -->
+                <!-- ===================================================== -->
+
+                <VBox class="dutSectionCard dutOrdersSection">
+
+                    <FlexBox
+                        wrap="Wrap"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dutOrdersHeader">
+
+                        <HBox
+                            alignItems="Center"
+                            wrap="Wrap"
+                            class="dutOrdersTitleGroup">
+
+                            <VBox
+                                justifyContent="Center"
+                                alignItems="Center"
+                                class="dutSectionIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://document-text"
+                                    class="dutSectionIcon"/>
+
+                            </VBox>
+
+                            <Title
+                                text="Órdenes asociadas al turno seleccionado"
+                                level="H3"
+                                class="dutSectionTitle"/>
+
+                            <HBox
+                                alignItems="Center"
+                                visible="{= !!${detalleTurno>/turnoSeleccionado} }"
+                                class="dutSelectedShiftTag">
+
+                                <Text
+                                    text="Turno: {detalleTurno>/turnoSeleccionado}"
+                                    class="dutSelectedShiftText"/>
+
+                                <Button
+                                    icon="sap-icon://decline"
+                                    type="Transparent"
+                                    tooltip="Limpiar selección"
+                                    press=".onLimpiarTurno"
+                                    class="dutTagCloseButton"/>
+
+                            </HBox>
+
+                        </HBox>
+
+                        <HBox
+                            alignItems="Center"
+                            class="dutTableActions">
+
+                            <SearchField
+                                id="ordenSearchField"
+                                width="18rem"
+                                placeholder="Buscar OT, cliente, elevador..."
+                                liveChange=".onBuscarOrden"
+                                search=".onBuscarOrden"
+                                class="dutSearchField"/>
+
+                            <Button
+                                text="Columnas"
+                                icon="sap-icon://table-column"
+                                type="Transparent"
+                                press=".onColumnas"
+                                class="dutSecondaryActionButton"/>
+
+                            <Button
+                                icon="sap-icon://action-settings"
+                                type="Transparent"
+                                tooltip="Configuración"
+                                press=".onConfiguracion"
+                                class="dutIconActionButton"/>
+
+                        </HBox>
+
+                    </FlexBox>
+
+                    <ScrollContainer
+                        horizontal="true"
+                        vertical="false"
+                        width="100%"
+                        class="dutTableScroll">
+
+                        <Table
+                            id="ordenesTable"
+                            width="100%"
+                            fixedLayout="true"
+                            inset="false"
+                            showSeparators="Inner"
+                            noDataText="No existen órdenes para los filtros seleccionados"
+                            items="{detalleTurno>/ordenesPaginadas}"
+                            class="dutTable dutOrdersTable">
+
+                            <columns>
+
+                                <Column width="7.4rem">
+                                    <Text
+                                        text="OT"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column width="9.2rem">
+                                    <Text
+                                        text="Cliente"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column width="7.5rem">
+                                    <Text
+                                        text="Elevador"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column width="5.8rem">
+                                    <Text
+                                        text="Zona"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column width="11rem">
+                                    <Text
+                                        text="Tipo de OT"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column width="8.5rem">
+                                    <Text
+                                        text="Responsable"
+                                        class="dutColumnHeader"/>
+                                </Column>
+
+                                <Column
+                                    width="6rem"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Horas plan."
+                                        class="dutColumnHeader"/>
+
+                                </Column>
+
+                                <Column
+                                    width="6rem"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Horas real."
+                                        class="dutColumnHeader"/>
+
+                                </Column>
+
+                                <Column
+                                    width="6.5rem"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Variación (h)"
+                                        class="dutColumnHeader"/>
+
+                                </Column>
+
+                                <Column
+                                    width="7rem"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Variación (%)"
+                                        class="dutColumnHeader"/>
+
+                                </Column>
+
+                                <Column
+                                    width="10rem"
+                                    hAlign="Begin">
+
+                                    <Text
+                                        text="Estado"
+                                        class="dutColumnHeader"/>
+
+                                </Column>
+
+                            </columns>
+
+                            <items>
+
+                                <ColumnListItem vAlign="Middle">
+
+                                    <cells>
+
+                                        <Link
+                                            text="{detalleTurno>ot}"
+                                            press=".onVerOrden"
+                                            class="dutOrderLink"/>
+
+                                        <Text
+                                            text="{detalleTurno>cliente}"
+                                            wrapping="false"
+                                            tooltip="{detalleTurno>cliente}"
+                                            class="dutCellText"/>
+
+                                        <Text
+                                            text="{detalleTurno>elevador}"
+                                            wrapping="false"
+                                            tooltip="{detalleTurno>elevador}"
+                                            class="dutCellText"/>
+
+                                        <Text
+                                            text="{detalleTurno>zona}"
+                                            wrapping="false"
+                                            class="dutCellText"/>
+
+                                        <Text
+                                            text="{detalleTurno>tipoOt}"
+                                            wrapping="false"
+                                            tooltip="{detalleTurno>tipoOt}"
+                                            class="dutCellText"/>
+
+                                        <Text
+                                            text="{detalleTurno>responsable}"
+                                            wrapping="false"
+                                            tooltip="{detalleTurno>responsable}"
+                                            class="dutCellText"/>
+
+                                        <Text
+                                            text="{detalleTurno>horasPlan}"
+                                            textAlign="Center"
+                                            width="100%"
+                                            class="dutCenteredCell"/>
+
+                                        <Text
+                                            text="{detalleTurno>horasReal}"
+                                            textAlign="Center"
+                                            width="100%"
+                                            class="dutCenteredCell"/>
+
+                                        <ObjectStatus
+                                            text="{detalleTurno>variacionHoras}"
+                                            state="{detalleTurno>variacionState}"
+                                            class="dutVariationValue"/>
+
+                                        <ObjectStatus
+                                            text="{detalleTurno>variacionPorcentaje}"
+                                            state="{detalleTurno>variacionState}"
+                                            class="dutVariationValue"/>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="dutOrderStatus">
+
+                                            <core:Icon
+                                                src="sap-icon://circle-task-2"
+                                                color="{detalleTurno>statusColor}"
+                                                class="dutStatusDot"/>
+
+                                            <Text
+                                                text="{detalleTurno>estado}"
+                                                wrapping="false"
+                                                class="dutStatusText"/>
+
+                                        </HBox>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </ScrollContainer>
+
+                    <FlexBox
+                        wrap="Wrap"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dutTableFooter">
+
+                        <Text
+                            text="{detalleTurno>/pagination/resultText}"
+                            class="dutResultCount"/>
+
+                        <HBox
+                            alignItems="Center"
+                            class="dutPaginationContainer">
+
+                            <Select
+                                width="8rem"
+                                selectedKey="{detalleTurno>/pagination/pageSize}"
+                                change=".onCambiarTamanoPagina"
+                                class="dutPageSizeSelect">
+
+                                <core:Item
+                                    key="5"
+                                    text="5 por página"/>
+
+                                <core:Item
+                                    key="10"
+                                    text="10 por página"/>
+
+                                <core:Item
+                                    key="15"
+                                    text="15 por página"/>
+
+                            </Select>
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="{detalleTurno>/pagination/hasPrevious}"
+                                press=".onPaginaAnterior"
+                                class="dutPaginationArrow"/>
+
+                            <Button
+                                text="1"
+                                type="{= ${detalleTurno>/pagination/currentPage} === 1 ? 'Emphasized' : 'Transparent' }"
+                                press=".onIrPaginaUno"
+                                class="dutPageButton"/>
+
+                            <Button
+                                text="2"
+                                visible="{detalleTurno>/pagination/showPageTwo}"
+                                type="{= ${detalleTurno>/pagination/currentPage} === 2 ? 'Emphasized' : 'Transparent' }"
+                                press=".onIrPaginaDos"
+                                class="dutPageButton"/>
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="{detalleTurno>/pagination/hasNext}"
+                                press=".onPaginaSiguiente"
+                                class="dutPaginationArrow"/>
+
+                        </HBox>
+
+                    </FlexBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

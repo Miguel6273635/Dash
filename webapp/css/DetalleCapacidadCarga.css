@@ -1,6 +1,6 @@
 /* ========================================================= */
 /* Detalle de capacidad vs carga programada                  */
-/* ========================================================= */
+/* ========================================================= */   
 
 .dccPage {
     background: #f7faff !important;
@@ -14,7 +14,9 @@
     background: linear-gradient(180deg, #f8fbff 0%, #f5f8fc 100%);
 }
 
-/* Header */
+/* ========================================================= */
+/* Header                                                    */
+/* ========================================================= */
 
 .dccHeader {
     margin-bottom: 0.85rem;
@@ -82,6 +84,9 @@
 .dccFilterControl .sapMInputBaseIcon {
     color: #52708f !important;
 }
+
+/* Botón aplicar filtros */
+
 .dccApplyButton {
     width: 10.8rem;
     height: 4.45rem;
@@ -124,11 +129,6 @@
     color: #ffffff !important;
 }
 
-.dccApplyButton .sapMBtnIcon,
-.dccApplyButton .sapMBtnContent {
-    color: #ffffff !important;
-}
-
 /* ========================================================= */
 /* KPI cards                                                 */
 /* ========================================================= */
@@ -156,9 +156,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 0.28rem;
+    width: 0.35rem;
     height: 100%;
+    border-radius: 0.9rem 0 0 0.9rem;
 }
+
 .dccKpiBlue {
     background: linear-gradient(90deg, #eaf3ff 0%, #f7fbff 48%, #ffffff 100%);
 }
@@ -178,6 +180,7 @@
 .dccKpiRed {
     background: linear-gradient(90deg, #ffecec 0%, #fff7f7 48%, #ffffff 100%);
 }
+
 .dccKpiBlue::before {
     background: #1d7cf2;
 }
@@ -316,7 +319,7 @@
 .dccSummaryCard {
     flex: 1.55;
     min-height: 13.8rem;
-    padding: 0.95rem;
+    padding: 1rem 1.05rem !important;
 }
 
 .dccCardHeader {
@@ -451,45 +454,8 @@
 }
 
 /* ========================================================= */
-/* Tabla resumen                                             */
+/* Resumen por turno                                         */
 /* ========================================================= */
-
-.dccSummaryTable {
-    border-radius: 0.75rem;
-    overflow: hidden;
-}
-
-.dccSummaryTable .sapMListTblHeaderCell {
-    background: #f6f9fd !important;
-    border-bottom: 1px solid #e6edf7 !important;
-}
-
-.dccSummaryTable .sapMColumnHeader {
-    color: #55708e !important;
-    font-size: 0.64rem !important;
-    font-weight: 900 !important;
-}
-
-.dccSummaryTable .sapMListTblCell {
-    padding-top: 0.48rem !important;
-    padding-bottom: 0.48rem !important;
-    border-bottom: 1px solid #eff4fa !important;
-    color: #2e465f !important;
-    font-size: 0.68rem !important;
-}
-
-.dccTurnIcon {
-    color: #0d6efd !important;
-    font-size: 0.85rem !important;
-    margin-right: 0.45rem;
-}
-/* ========================================================= */
-/* Resumen por turno - estilo igual al diseño original       */
-/* ========================================================= */
-
-.dccSummaryCard {
-    padding: 1rem 1.05rem !important;
-}
 
 .dccSummaryTable {
     border-radius: 0.75rem;
@@ -497,61 +463,80 @@
     border: none !important;
 }
 
-/* Header de la tabla */
 .dccSummaryTable .sapMListTblHeaderCell {
-    background: #f5f8fc !important;
+    background: #f4f7fb !important;
     border-bottom: 1px solid #e2eaf4 !important;
-    padding-top: 0.65rem !important;
-    padding-bottom: 0.65rem !important;
+    padding-top: 0.62rem !important;
+    padding-bottom: 0.62rem !important;
 }
 
 .dccSummaryTable .sapMColumnHeader {
     color: #4f6682 !important;
-    font-size: 0.66rem !important;
-    font-weight: 800 !important;
+    font-size: 0.64rem !important;
+    font-weight: 900 !important;
 }
 
-/* Filas */
 .dccSummaryTable .sapMListTblRow {
-    height: 2.55rem !important;
+    height: 2.45rem !important;
 }
 
 .dccSummaryTable .sapMListTblCell {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
+    padding-top: 0.42rem !important;
+    padding-bottom: 0.42rem !important;
     border-bottom: 1px solid #edf2f8 !important;
     background: #ffffff !important;
 }
 
-/* Textos generales */
-.dccSummaryTurnText,
-.dccSummaryNumber {
+.dccSummaryTable .sapMListTblRow:last-child .sapMListTblCell {
+    background: #f7f9fc !important;
+    border-bottom: none !important;
+}
+
+.dccSummaryTable .sapMListTblRow:last-child .sapMText,
+.dccSummaryTable .sapMListTblRow:last-child .sapMObjStatusText {
+    font-weight: 900 !important;
+    color: #2f4965 !important;
+}
+
+.dccTurnCell {
+    gap: 0.42rem;
+}
+
+.dccTurnIcon {
+    font-size: 0.9rem !important;
+    width: 1rem;
+    min-width: 1rem;
+    margin-right: 0.15rem;
+}
+
+.dccSummaryTurnText {
     color: #334e6b !important;
-    font-size: 0.68rem !important;
+    font-size: 0.66rem !important;
     font-weight: 800 !important;
 }
 
-/* Quitar estilo tipo píldora de ObjectStatus */
+.dccSummaryNumber {
+    color: #334e6b !important;
+    font-size: 0.66rem !important;
+    font-weight: 900 !important;
+}
+
 .dccSummaryTable .sapMObjStatus {
     background: transparent !important;
+    background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     min-height: auto !important;
+    border-radius: 0 !important;
 }
 
-.dccSummaryTable .sapMObjStatus .sapMObjStatusText {
-    font-size: 0.66rem !important;
+.dccSummaryTable .sapMObjStatusText {
+    font-size: 0.64rem !important;
     font-weight: 900 !important;
     line-height: 1.2 !important;
 }
 
-.dccSummaryTable .sapMObjStatus .sapMObjStatusIcon {
-    font-size: 0.55rem !important;
-    margin-right: 0.35rem !important;
-}
-
-/* Utilización: solo texto de color */
 .dccUtilizacionText.sapMObjStatusSuccess .sapMObjStatusText {
     color: #16a34a !important;
 }
@@ -564,35 +549,35 @@
     color: #ef4444 !important;
 }
 
-/* Estado: círculo + texto */
-.dccEstadoText.sapMObjStatusSuccess .sapMObjStatusIcon,
-.dccEstadoText.sapMObjStatusSuccess .sapMObjStatusText {
+.dccEstadoCell {
+    gap: 0.35rem;
+}
+
+.dccEstadoCircle {
+    font-size: 0.38rem !important;
+    width: 0.38rem !important;
+    min-width: 0.38rem !important;
+    height: 0.38rem !important;
+    line-height: 0.38rem !important;
+    margin-right: 0.15rem;
+}
+
+.dccEstadoInlineText.sapMObjStatusSuccess .sapMObjStatusText {
     color: #16a34a !important;
 }
 
-.dccEstadoText.sapMObjStatusWarning .sapMObjStatusIcon,
-.dccEstadoText.sapMObjStatusWarning .sapMObjStatusText {
+.dccEstadoInlineText.sapMObjStatusWarning .sapMObjStatusText {
     color: #f59e0b !important;
 }
 
-.dccEstadoText.sapMObjStatusError .sapMObjStatusIcon,
-.dccEstadoText.sapMObjStatusError .sapMObjStatusText {
+.dccEstadoInlineText.sapMObjStatusError .sapMObjStatusText {
     color: #ef4444 !important;
 }
 
-.dccEstadoText.sapMObjStatusNone .sapMObjStatusText {
+.dccEstadoInlineText.sapMObjStatusNone .sapMObjStatusText {
     color: #64748b !important;
 }
 
-/* Ocultar fondo residual si el tema SAP intenta pintar cápsulas */
-.dccSummaryTable .sapMObjStatusInverted,
-.dccSummaryTable .sapMObjStatusIndication01,
-.dccSummaryTable .sapMObjStatusIndication02,
-.dccSummaryTable .sapMObjStatusIndication03,
-.dccSummaryTable .sapMObjStatusIndication04 {
-    background: transparent !important;
-    border: none !important;
-}
 /* ========================================================= */
 /* Tabla detalle                                             */
 /* ========================================================= */
@@ -602,11 +587,27 @@
 }
 
 .dccDetailHeader {
+    width: 100% !important;
     margin-bottom: 0.6rem;
     gap: 0.45rem;
 }
 
+.dccDetailTitleBox {
+    flex-shrink: 0;
+}
+
+.dccDetailActions {
+    gap: 0.45rem;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+.dccSearch {
+    height: 2rem;
+}
+
 .dccSearch .sapMInputBaseContentWrapper {
+    height: 2rem !important;
     border: 1px solid #e3ebf5 !important;
     border-radius: 0.55rem !important;
     background: #ffffff !important;
@@ -614,20 +615,25 @@
 }
 
 .dccSearch .sapMInputBaseInner {
-    font-size: 0.68rem !important;
+    height: 2rem !important;
+    font-size: 0.64rem !important;
+    color: #52677f !important;
 }
 
 .dccActionButton .sapMBtnInner {
+    height: 2rem !important;
+    min-height: 2rem !important;
     border: 1px solid #e3ebf5 !important;
     border-radius: 0.55rem !important;
     background: #ffffff !important;
     color: #31506f !important;
-    font-size: 0.68rem !important;
+    font-size: 0.64rem !important;
     font-weight: 800 !important;
 }
 
 .dccActionButton .sapMBtnIcon {
     color: #31506f !important;
+    font-size: 0.75rem !important;
 }
 
 .dccDetailTable {
@@ -637,38 +643,135 @@
 }
 
 .dccDetailTable .sapMListTblHeaderCell {
-    background: #f6f9fd !important;
-    border-bottom: 1px solid #e6edf7 !important;
+    background: #f5f8fc !important;
+    border-bottom: 1px solid #e4ebf5 !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
 }
 
 .dccDetailTable .sapMColumnHeader {
-    color: #55708e !important;
-    font-size: 0.62rem !important;
+    color: #4f6682 !important;
+    font-size: 0.58rem !important;
     font-weight: 900 !important;
+}
+
+.dccDetailTable .sapMListTblRow {
+    height: 2rem !important;
 }
 
 .dccDetailTable .sapMListTblCell {
-    padding-top: 0.38rem !important;
-    padding-bottom: 0.38rem !important;
+    padding-top: 0.28rem !important;
+    padding-bottom: 0.28rem !important;
     border-bottom: 1px solid #eff4fa !important;
-    color: #2e465f !important;
-    font-size: 0.64rem !important;
+    background: #ffffff !important;
 }
 
-.dccDetailTable .sapMText,
-.dccSummaryTable .sapMText {
-    font-size: 0.66rem !important;
-    color: #2e465f !important;
-    font-weight: 700 !important;
+.dccDetailText,
+.dccDetailNumber {
+    color: #2f4965 !important;
+    font-size: 0.6rem !important;
+    font-weight: 800 !important;
 }
 
+.dccDetailNumber {
+    text-align: right !important;
+}
+
+/* Quitar píldoras de ObjectStatus en detalle */
+
+.dccDetailTable .sapMObjStatus,
 .dccDetailTable .sapMObjStatusText,
-.dccSummaryTable .sapMObjStatusText {
-    font-size: 0.64rem !important;
-    font-weight: 900 !important;
+.dccDetailTable .sapMObjStatusIcon,
+.dccDetailTable .dccDetailStatusText,
+.dccDetailTable .dccDetailEstadoText {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    border-radius: 0 !important;
 }
 
-/* Footer tabla */
+.dccDetailTable .sapMObjStatusText {
+    font-size: 0.6rem !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+}
+
+.dccDetailStatusText.sapMObjStatusSuccess .sapMObjStatusText,
+.dccDetailStatusText .sapMObjStatusSuccess {
+    color: #16a34a !important;
+}
+
+.dccDetailStatusText.sapMObjStatusWarning .sapMObjStatusText,
+.dccDetailStatusText .sapMObjStatusWarning {
+    color: #f59e0b !important;
+}
+
+.dccDetailStatusText.sapMObjStatusError .sapMObjStatusText,
+.dccDetailStatusText .sapMObjStatusError {
+    color: #ef4444 !important;
+}
+
+.dccDetailStatusText.sapMObjStatusNone .sapMObjStatusText,
+.dccDetailStatusText .sapMObjStatusNone {
+    color: #2f4965 !important;
+}
+
+.dccDetailEstadoCell {
+    gap: 0.28rem;
+}
+
+.dccDetailEstadoDot {
+    font-size: 0.32rem !important;
+    width: 0.32rem !important;
+    min-width: 0.32rem !important;
+    height: 0.32rem !important;
+    line-height: 0.32rem !important;
+    margin-right: 0.1rem;
+}
+
+.dccDetailEstadoText.sapMObjStatusSuccess .sapMObjStatusText,
+.dccDetailEstadoText .sapMObjStatusSuccess {
+    color: #16a34a !important;
+}
+
+.dccDetailEstadoText.sapMObjStatusWarning .sapMObjStatusText,
+.dccDetailEstadoText .sapMObjStatusWarning {
+    color: #f59e0b !important;
+}
+
+.dccDetailEstadoText.sapMObjStatusError .sapMObjStatusText,
+.dccDetailEstadoText .sapMObjStatusError {
+    color: #ef4444 !important;
+}
+
+.dccDetailEstadoText.sapMObjStatusNone .sapMObjStatusText,
+.dccDetailEstadoText .sapMObjStatusNone {
+    color: #64748b !important;
+}
+
+.dccDetailTable .sapMObjStatusInverted,
+.dccDetailTable .sapMObjStatusIndication01,
+.dccDetailTable .sapMObjStatusIndication02,
+.dccDetailTable .sapMObjStatusIndication03,
+.dccDetailTable .sapMObjStatusIndication04,
+.dccSummaryTable .sapMObjStatusInverted,
+.dccSummaryTable .sapMObjStatusIndication01,
+.dccSummaryTable .sapMObjStatusIndication02,
+.dccSummaryTable .sapMObjStatusIndication03,
+.dccSummaryTable .sapMObjStatusIndication04 {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ========================================================= */
+/* Footer tabla                                              */
+/* ========================================================= */
 
 .dccTableFooter {
     margin-top: 0.75rem;
@@ -743,6 +846,12 @@
 
     .dccDetailHeader {
         flex-wrap: wrap;
+    }
+
+    .dccDetailActions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
     }
 
     .dccSearch {

@@ -211,53 +211,83 @@
                             class="dccSummaryTable"
                             fixedLayout="false"
                             inset="false">
+ <columns>
+    <Column width="8rem">
+        <Text text="Turno" />
+    </Column>
 
-                            <columns>
-                                <Column>
-                                    <Text text="Turno" />
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Capacidad disponible" />
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Horas programadas" />
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Horas reales" />
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Utilización real / capacidad" />
-                                </Column>
-                                <Column>
-                                    <Text text="Estado" />
-                                </Column>
-                            </columns>
+    <Column width="8rem" hAlign="Center">
+        <Text text="Capacidad disponible" />
+    </Column>
 
-                       <items>
-    <ColumnListItem>
-        <cells>
-            <!-- Turno sin ícono -->
-            <Text text="{turno}" class="dccSummaryTurnText" />
+    <Column width="8rem" hAlign="Center">
+        <Text text="Horas programadas" />
+    </Column>
 
-            <Text text="{capacidad}" textAlign="End" class="dccSummaryNumber" />
-            <Text text="{programadas}" textAlign="End" class="dccSummaryNumber" />
-            <Text text="{reales}" textAlign="End" class="dccSummaryNumber" />
+    <Column width="8rem" hAlign="Center">
+        <Text text="Horas reales" />
+    </Column>
 
-            <!-- Utilización como texto de color, sin píldora -->
-            <ObjectStatus
-                text="{utilizacion}"
-                state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}"
-                class="dccUtilizacionText" />
+    <Column width="10rem" hAlign="Center">
+        <Text text="Utilización real / capacidad" />
+    </Column>
 
-            <!-- Estado con círculo de color + texto, sin píldora -->
-            <ObjectStatus
-                text="{estado}"
-                state="{path: 'estado', formatter: '.formatEstadoState'}"
-                icon="{path: 'estado', formatter: '.formatEstadoCircleIcon'}"
-                class="dccEstadoText" />
-        </cells>
-    </ColumnListItem>
-</items>
+    <Column width="10rem" hAlign="Begin">
+        <Text text="Estado" />
+    </Column>
+</columns>
+
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+
+                                        <HBox alignItems="Center" class="dccTurnCell">
+                                            <core:Icon
+                                                src="{icon}"
+                                                color="{path: 'turno', formatter: '.formatTurnoIconColor'}"
+                                                class="dccTurnIcon" />
+
+                                            <Text
+                                                text="{turno}"
+                                                class="dccSummaryTurnText" />
+                                        </HBox>
+
+                                        <Text
+                                            text="{capacidad}"
+                                            textAlign="End"
+                                            class="dccSummaryNumber" />
+
+                                        <Text
+                                            text="{programadas}"
+                                            textAlign="End"
+                                            class="dccSummaryNumber" />
+
+                                        <Text
+                                            text="{reales}"
+                                            textAlign="End"
+                                            class="dccSummaryNumber" />
+
+                                        <ObjectStatus
+                                            text="{utilizacion}"
+                                            state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}"
+                                            class="dccUtilizacionText" />
+
+                                        <HBox alignItems="Center" class="dccEstadoCell">
+                                            <core:Icon
+                                                src="sap-icon://circle-task-2"
+                                                visible="{path: 'estado', formatter: '.formatEstadoCircleVisible'}"
+                                                color="{path: 'estado', formatter: '.formatEstadoColor'}"
+                                                class="dccEstadoCircle" />
+
+                                            <ObjectStatus
+                                                text="{estado}"
+                                                state="{path: 'estado', formatter: '.formatEstadoState'}"
+                                                class="dccEstadoInlineText" />
+                                        </HBox>
+
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
                         </Table>
                     </VBox>
 
@@ -266,34 +296,36 @@
                 <!-- Detalle por zona y turno -->
                 <VBox class="dccCard dccTableCard">
 
-                    <HBox class="dccDetailHeader" alignItems="Center">
-                        <HBox alignItems="Center">
+                    <HBox class="dccDetailHeader" alignItems="Center" width="100%">
+                        <HBox alignItems="Center" class="dccDetailTitleBox">
                             <Title text="Detalle por zona y turno" level="H3" class="dccCardTitle" />
                             <core:Icon src="sap-icon://hint" class="dccHintIcon" />
                         </HBox>
 
                         <ToolbarSpacer />
 
-                        <SearchField
-                            width="16rem"
-                            placeholder="Buscar zona, turno..."
-                            search=".onSearch"
-                            liveChange=".onSearch"
-                            class="dccSearch" />
+                        <HBox alignItems="Center" justifyContent="End" class="dccDetailActions">
+                            <SearchField
+                                width="15rem"
+                                placeholder="Buscar zona, turno..."
+                                search=".onSearch"
+                                liveChange=".onSearch"
+                                class="dccSearch" />
 
-                        <Button
-                            text="Columnas"
-                            icon="sap-icon://table-column"
-                            type="Transparent"
-                            press=".onColumns"
-                            class="dccActionButton" />
+                            <Button
+                                text="Columnas"
+                                icon="sap-icon://table-column"
+                                type="Transparent"
+                                press=".onColumns"
+                                class="dccActionButton" />
 
-                        <Button
-                            text="Exportar"
-                            icon="sap-icon://excel-attachment"
-                            type="Transparent"
-                            press=".onExport"
-                            class="dccActionButton" />
+                            <Button
+                                text="Exportar"
+                                icon="sap-icon://excel-attachment"
+                                type="Transparent"
+                                press=".onExport"
+                                class="dccActionButton" />
+                        </HBox>
                     </HBox>
 
                     <Table
@@ -348,33 +380,45 @@
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{zona}" />
-                                    <Text text="{turno}" />
+                                    <Text text="{zona}" class="dccDetailText" />
+                                    <Text text="{turno}" class="dccDetailText" />
 
-                                    <Text text="{capacidad}" textAlign="End" />
-                                    <Text text="{programadas}" textAlign="End" />
-                                    <Text text="{reales}" textAlign="End" />
+                                    <Text text="{capacidad}" textAlign="End" class="dccDetailNumber" />
+                                    <Text text="{programadas}" textAlign="End" class="dccDetailNumber" />
+                                    <Text text="{reales}" textAlign="End" class="dccDetailNumber" />
 
                                     <ObjectStatus
                                         text="{margen}"
-                                        state="{path: 'margen', formatter: '.formatMargenState'}" />
+                                        state="{path: 'margen', formatter: '.formatMargenState'}"
+                                        class="dccDetailStatusText" />
 
                                     <ObjectStatus
                                         text="{utilizacion}"
-                                        state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}" />
+                                        state="{path: 'utilizacion', formatter: '.formatUtilizacionState'}"
+                                        class="dccDetailStatusText" />
 
                                     <ObjectStatus
                                         text="{variacionProgH}"
-                                        state="{path: 'variacionProgH', formatter: '.formatTrendState'}" />
+                                        state="{path: 'variacionProgH', formatter: '.formatTrendState'}"
+                                        class="dccDetailStatusText" />
 
                                     <ObjectStatus
                                         text="{variacionProgP}"
-                                        state="{path: 'variacionProgP', formatter: '.formatTrendState'}" />
+                                        state="{path: 'variacionProgP', formatter: '.formatTrendState'}"
+                                        class="dccDetailStatusText" />
 
-                                    <ObjectStatus
-                                        text="{estado}"
-                                        state="{path: 'estado', formatter: '.formatEstadoState'}"
-                                        icon="{path: 'estado', formatter: '.formatEstadoIcon'}" />
+                                    <HBox alignItems="Center" class="dccDetailEstadoCell">
+                                        <core:Icon
+                                            src="sap-icon://circle-task-2"
+                                            visible="{path: 'estado', formatter: '.formatEstadoCircleVisible'}"
+                                            color="{path: 'estado', formatter: '.formatEstadoColor'}"
+                                            class="dccDetailEstadoDot" />
+
+                                        <ObjectStatus
+                                            text="{estado}"
+                                            state="{path: 'estado', formatter: '.formatEstadoState'}"
+                                            class="dccDetailEstadoText" />
+                                    </HBox>
                                 </cells>
                             </ColumnListItem>
                         </items>

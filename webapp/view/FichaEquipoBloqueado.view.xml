@@ -1,0 +1,1003 @@
+<mvc:View
+    controllerName="mantenimiento.controller.FichaEquipoBloqueado"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="fichaEquipoBloqueadoPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="fichaEquipoBloqueadoPage">
+
+        <content>
+
+            <VBox
+                width="100%"
+                class="fichaEquipoBloqueadoContent">
+
+                <!-- ====================================================== -->
+                <!-- ENCABEZADO -->
+                <!-- ====================================================== -->
+
+                <VBox class="debPageHeader">
+
+                    <Title
+                        text="{= 'Detalle del equipo bloqueado: ' + ${detalle>/equipment/id} }"
+                        level="H1"
+                        class="debPageTitle"/>
+
+                    <Text
+                        text="Consulta integral del equipo, bloqueo, órdenes afectadas, pendientes y seguimiento."
+                        class="debPageSubtitle"/>
+
+                </VBox>
+
+                <!-- ====================================================== -->
+                <!-- KPIs -->
+                <!-- ====================================================== -->
+
+                <VBox class="debKpiGrid">
+
+                    <!-- KPI 1 -->
+                    <VBox class="debKpiCard debKpiRed">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://locked"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/blockStatus/value}"
+                                    wrapping="false"
+                                    class="debKpiValue debKpiStatusValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/blockStatus/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- KPI 2 -->
+                    <VBox class="debKpiCard debKpiOrange">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://appointment-2"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/blockedDays/value}"
+                                    wrapping="false"
+                                    class="debKpiValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/blockedDays/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- KPI 3 -->
+                    <VBox class="debKpiCard debKpiBlue">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://activity-items"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/affectedOrders/value}"
+                                    wrapping="false"
+                                    class="debKpiValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/affectedOrders/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- KPI 4 -->
+                    <VBox class="debKpiCard debKpiPurple">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://history"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/pendingUnlock/value}"
+                                    wrapping="false"
+                                    class="debKpiValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/pendingUnlock/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- KPI 5 -->
+                    <VBox class="debKpiCard debKpiRed">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://flag"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/priority/value}"
+                                    wrapping="false"
+                                    class="debKpiValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/priority/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- KPI 6 -->
+                    <VBox class="debKpiCard debKpiBlue">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="debKpiCardContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debKpiIconContainer">
+
+                                <core:Icon
+                                    src="sap-icon://appointment-2"
+                                    class="debKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="debKpiTextContainer">
+
+                                <Text
+                                    text="{detalle>/kpis/commitmentDate/value}"
+                                    wrapping="false"
+                                    class="debKpiValue debKpiDateValue"/>
+
+                                <Text
+                                    text="{detalle>/kpis/commitmentDate/label}"
+                                    wrapping="false"
+                                    class="debKpiLabel"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- ====================================================== -->
+                <!-- PRIMERA FILA -->
+                <!-- ====================================================== -->
+
+                <VBox class="debTopGrid">
+
+                    <!-- ================================================== -->
+                    <!-- DATOS GENERALES -->
+                    <!-- ================================================== -->
+
+                    <VBox class="debPanel debGeneralPanel">
+
+                        <HBox
+                            alignItems="Center"
+                            class="debPanelHeader">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debSectionIcon debSectionIconBlue">
+
+                                <core:Icon src="sap-icon://hint"/>
+
+                            </HBox>
+
+                            <Title
+                                text="Datos generales del equipo"
+                                level="H3"
+                                class="debPanelTitle"/>
+
+                        </HBox>
+
+                        <VBox class="debInfoTable">
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Equipo / Elevador"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/id}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Cliente"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/client}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Zona"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/zone}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Supervisor"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/supervisor}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow debInfoGroupStart">
+
+                                <Text
+                                    text="Sitio"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/site}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Dirección"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/address}"
+                                    wrapping="true"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow">
+
+                                <Text
+                                    text="Tipo de equipo"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/type}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debInfoRow debInfoRowLast">
+
+                                <Text
+                                    text="Modelo"
+                                    class="debInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/equipment/model}"
+                                    class="debInfoValue"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- ================================================== -->
+                    <!-- INFORMACIÓN DEL BLOQUEO -->
+                    <!-- ================================================== -->
+
+                    <VBox class="debPanel debBlockPanel">
+
+                        <HBox
+                            alignItems="Center"
+                            class="debPanelHeader">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debSectionIcon debSectionIconOrange">
+
+                                <core:Icon src="sap-icon://locked"/>
+
+                            </HBox>
+
+                            <Title
+                                text="Información del bloqueo"
+                                level="H3"
+                                class="debPanelTitle"/>
+
+                        </HBox>
+
+                        <VBox class="debBlockInformation">
+
+                            <HBox class="debBlockInfoRow">
+
+                                <Text
+                                    text="Motivo de bloqueo"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/reason}"
+                                    wrapping="true"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow">
+
+                                <Text
+                                    text="Estado de gestión"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/managementStatus}"
+                                    class="debPill">
+
+                                    <customData>
+                                        <core:CustomData
+                                            key="pilltype"
+                                            value="review"
+                                            writeToDom="true"/>
+                                    </customData>
+
+                                </Text>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow">
+
+                                <Text
+                                    text="Fecha de bloqueo"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/blockDate}"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow">
+
+                                <Text
+                                    text="Responsable"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/responsible}"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow debBlockInfoSeparator">
+
+                                <Text
+                                    text="Próxima acción"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/nextAction}"
+                                    wrapping="true"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow">
+
+                                <Text
+                                    text="Fecha compromiso"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/commitmentDate}"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                            <HBox class="debBlockInfoRow debBlockInfoObservation">
+
+                                <Text
+                                    text="Observación general"
+                                    class="debBlockInfoLabel"/>
+
+                                <Text
+                                    text="{detalle>/blockInformation/observation}"
+                                    wrapping="true"
+                                    class="debBlockInfoValue"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- ================================================== -->
+                    <!-- ÓRDENES AFECTADAS -->
+                    <!-- ================================================== -->
+
+                    <VBox class="debPanel debOrdersPanel">
+
+                        <HBox
+                            alignItems="Center"
+                            class="debPanelHeader">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debSectionIcon debSectionIconCyan">
+
+                                <core:Icon src="sap-icon://list"/>
+
+                            </HBox>
+
+                            <Title
+                                text="Órdenes afectadas del equipo"
+                                level="H3"
+                                class="debPanelTitle"/>
+
+                        </HBox>
+
+                        <Table
+                            id="ordersTable"
+                            width="100%"
+                            inset="false"
+                            fixedLayout="true"
+                            growing="false"
+                            showSeparators="Inner"
+                            items="{detalle>/orders}"
+                            class="debTable debOrdersTable">
+
+                            <columns>
+
+                                <Column width="18%">
+                                    <Text
+                                        text="Orden"
+                                        wrapping="false"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="26%">
+                                    <Text
+                                        text="Tipo de orden"
+                                        wrapping="false"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="19%">
+                                    <Text
+                                        text="Estatus"
+                                        wrapping="false"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text
+                                        text="Fecha"
+                                        wrapping="false"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column
+                                    width="19%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Impacto"
+                                        wrapping="false"
+                                        class="debColumnHeader"/>
+
+                                </Column>
+
+                            </columns>
+
+                            <items>
+
+                                <ColumnListItem
+                                    type="Inactive"
+                                    vAlign="Middle">
+
+                                    <cells>
+
+                                        <Link
+                                            text="{detalle>order}"
+                                            press=".onOrderPress"
+                                            class="debOrderLink"/>
+
+                                        <Text
+                                            text="{detalle>orderType}"
+                                            wrapping="false"
+                                            class="debTableText"/>
+
+                                        <Text
+                                            text="{detalle>status}"
+                                            wrapping="false"
+                                            class="debPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="pilltype"
+                                                    value="{detalle>statusKey}"
+                                                    writeToDom="true"/>
+                                            </customData>
+
+                                        </Text>
+
+                                        <Text
+                                            text="{detalle>date}"
+                                            wrapping="false"
+                                            class="debTableText"/>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="debImpactPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="impacttype"
+                                                    value="{detalle>impactKey}"
+                                                    writeToDom="true"/>
+                                            </customData>
+
+                                            <core:Icon
+                                                src="{detalle>impactIcon}"
+                                                class="debImpactIcon"/>
+
+                                            <Text
+                                                text="{detalle>impact}"
+                                                wrapping="false"
+                                                class="debImpactText"/>
+
+                                        </HBox>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                        <Button
+                            text="Ver todas las órdenes afectadas"
+                            type="Transparent"
+                            icon="sap-icon://slim-arrow-right"
+                            iconFirst="false"
+                            press=".onViewAllOrders"
+                            class="debFooterButton"/>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- ====================================================== -->
+                <!-- SEGUNDA FILA -->
+                <!-- ====================================================== -->
+
+                <VBox class="debBottomGrid">
+
+                    <!-- ================================================== -->
+                    <!-- PENDIENTES -->
+                    <!-- ================================================== -->
+
+                    <VBox class="debPanel debPendingPanel">
+
+                        <HBox
+                            alignItems="Center"
+                            class="debPanelHeader">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debSectionIcon debSectionIconPurple">
+
+                                <core:Icon src="sap-icon://history"/>
+
+                            </HBox>
+
+                            <Title
+                                text="Pendientes de desbloqueo"
+                                level="H3"
+                                class="debPanelTitle"/>
+
+                        </HBox>
+
+                        <Table
+                            id="pendingTable"
+                            width="100%"
+                            inset="false"
+                            fixedLayout="true"
+                            growing="false"
+                            showSeparators="Inner"
+                            items="{detalle>/pendingItems}"
+                            class="debTable debPendingTable">
+
+                            <columns>
+
+                                <Column width="26%">
+                                    <Text
+                                        text="Pendiente"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="24%">
+                                    <Text
+                                        text="Responsable"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text
+                                        text="Estado"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text
+                                        text="Fecha compromiso"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column
+                                    width="14%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Prioridad"
+                                        class="debColumnHeader"/>
+
+                                </Column>
+
+                            </columns>
+
+                            <items>
+
+                                <ColumnListItem
+                                    type="Inactive"
+                                    vAlign="Middle">
+
+                                    <cells>
+
+                                        <Text
+                                            text="{detalle>pending}"
+                                            wrapping="false"
+                                            class="debTableText"/>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="debResponsibleCell">
+
+                                            <core:Icon
+                                                src="sap-icon://person-placeholder"
+                                                class="debResponsibleIcon"/>
+
+                                            <Text
+                                                text="{detalle>responsible}"
+                                                wrapping="false"
+                                                class="debTableText"/>
+
+                                        </HBox>
+
+                                        <Text
+                                            text="{detalle>status}"
+                                            wrapping="false"
+                                            class="debPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="pilltype"
+                                                    value="{detalle>statusKey}"
+                                                    writeToDom="true"/>
+                                            </customData>
+
+                                        </Text>
+
+                                        <Text
+                                            text="{detalle>commitmentDate}"
+                                            wrapping="false"
+                                            class="debTableText"/>
+
+                                        <Text
+                                            text="{detalle>priority}"
+                                            wrapping="false"
+                                            class="debPriorityPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="prioritytype"
+                                                    value="{detalle>priorityKey}"
+                                                    writeToDom="true"/>
+                                            </customData>
+
+                                        </Text>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                        <Button
+                            text="Ver todos los pendientes"
+                            type="Transparent"
+                            icon="sap-icon://slim-arrow-right"
+                            iconFirst="false"
+                            press=".onViewAllPending"
+                            class="debFooterButton"/>
+
+                    </VBox>
+
+                    <!-- ================================================== -->
+                    <!-- HISTORIAL -->
+                    <!-- ================================================== -->
+
+                    <VBox class="debPanel debHistoryPanel">
+
+                        <HBox
+                            alignItems="Center"
+                            class="debPanelHeader debHistoryHeader">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="debSectionIcon debSectionIconRed">
+
+                                <core:Icon src="sap-icon://synchronize"/>
+
+                            </HBox>
+
+                            <VBox>
+
+                                <Title
+                                    text="Historial y seguimiento"
+                                    level="H3"
+                                    class="debPanelTitle"/>
+
+                                <Text
+                                    text="Consulta las acciones y el estado actual de cada seguimiento."
+                                    class="debPanelSubtitle"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <Table
+                            id="historyTable"
+                            width="100%"
+                            inset="false"
+                            fixedLayout="true"
+                            growing="false"
+                            showSeparators="Inner"
+                            items="{detalle>/history}"
+                            class="debTable debHistoryTable">
+
+                            <columns>
+
+                                <Column width="20%">
+                                    <Text
+                                        text="Fecha"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="20%">
+                                    <Text
+                                        text="Usuario"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="42%">
+                                    <Text
+                                        text="Acción / seguimiento"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text
+                                        text="Estado resultante"
+                                        class="debColumnHeader"/>
+                                </Column>
+
+                            </columns>
+
+                            <items>
+
+                                <ColumnListItem
+                                    type="Inactive"
+                                    vAlign="Middle">
+
+                                    <cells>
+
+                                        <Text
+                                            text="{detalle>date}"
+                                            wrapping="false"
+                                            class="debTableText"/>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="debResponsibleCell">
+
+                                            <core:Icon
+                                                src="sap-icon://person-placeholder"
+                                                class="debResponsibleIcon"/>
+
+                                            <Text
+                                                text="{detalle>user}"
+                                                wrapping="false"
+                                                class="debTableText"/>
+
+                                        </HBox>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="debHistoryAction">
+
+                                            <Text
+                                                text="•"
+                                                class="debHistoryBullet">
+
+                                                <customData>
+                                                    <core:CustomData
+                                                        key="bulletcolor"
+                                                        value="{detalle>bulletColor}"
+                                                        writeToDom="true"/>
+                                                </customData>
+
+                                            </Text>
+
+                                            <Text
+                                                text="{detalle>action}"
+                                                wrapping="true"
+                                                class="debHistoryActionText"/>
+
+                                        </HBox>
+
+                                        <Text
+                                            text="{detalle>resultStatus}"
+                                            wrapping="false"
+                                            class="debPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="pilltype"
+                                                    value="{detalle>resultStatusKey}"
+                                                    writeToDom="true"/>
+                                            </customData>
+
+                                        </Text>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

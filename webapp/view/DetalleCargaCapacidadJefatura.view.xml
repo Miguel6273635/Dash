@@ -1,0 +1,1340 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    controllerName="mantenimiento.controller.DetalleCargaCapacidadJefatura"
+    displayBlock="true">
+
+    <Page
+        showHeader="false"
+        enableScrolling="true"
+        backgroundDesign="Transparent"
+        class="jefPage">
+
+        <content>
+
+            <VBox class="jefDashboard">
+
+                <!-- =====================================================
+                     ENCABEZADO
+                     ===================================================== -->
+
+                <HBox
+                    class="jefBreadcrumb"
+                    alignItems="Center">
+
+                    <Link
+                        text="Vista Jefatura"
+                        press=".onBackToJefatura"/>
+
+                    <core:Icon
+                        src="sap-icon://navigation-right-arrow"/>
+
+                    <Text
+                        text="Detalle de carga, capacidad, órdenes y materiales de Jefatura"/>
+
+                </HBox>
+
+                <Title
+                    text="Detalle de carga, capacidad, órdenes y materiales de Jefatura"
+                    level="H1"
+                    class="jefPageTitle"/>
+
+                <Text
+                    text="Consulta consolidada por supervisor. Seleccione un supervisor para ver el detalle de recursos."
+                    visible="{= ${view>/activeTab} === 'carga' }"
+                    class="jefPageSubtitle"/>
+
+                <Text
+                    text="Consulta consolidada por jefatura. Seleccione un supervisor para ver el detalle de materiales."
+                    visible="{= ${view>/activeTab} === 'materiales' }"
+                    class="jefPageSubtitle"/>
+
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
+
+                <FlexBox
+                    wrap="Wrap"
+                    alignItems="Stretch"
+                    class="jefFilterCardsRow">
+
+                    <VBox class="jefFilterCard jefFilterPeriod">
+
+                        <Label text="Periodo"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/period}">
+
+                            <items>
+                                <core:Item
+                                    key="2025-06"
+                                    text="Junio 2025"/>
+
+                                <core:Item
+                                    key="2025-05"
+                                    text="Mayo 2025"/>
+
+                                <core:Item
+                                    key="2025-04"
+                                    text="Abril 2025"/>
+                            </items>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterDate">
+
+                        <Label text="Fecha desde"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{view>/filters/from}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"/>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterDate">
+
+                        <Label text="Fecha hasta"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{view>/filters/to}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"/>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterManagement">
+
+                        <Label text="Jefatura"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/management}">
+
+                            <items>
+                                <core:Item
+                                    key="J01"
+                                    text="J01 - Jefatura Norte"/>
+
+                                <core:Item
+                                    key="J02"
+                                    text="J02 - Jefatura Centro"/>
+
+                                <core:Item
+                                    key="J03"
+                                    text="J03 - Jefatura Sur"/>
+                            </items>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterCompact">
+
+                        <Label text="Supervisor"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/supervisor}">
+
+                            <items>
+                                <core:Item
+                                    key="ALL"
+                                    text="Todos"/>
+
+                                <core:Item
+                                    key="SR"
+                                    text="Sergio Ramírez"/>
+
+                                <core:Item
+                                    key="MG"
+                                    text="María Gómez"/>
+
+                                <core:Item
+                                    key="CL"
+                                    text="Carlos López"/>
+                            </items>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterCompact">
+
+                        <Label text="Turno"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/shift}">
+
+                            <items>
+                                <core:Item
+                                    key="ALL"
+                                    text="Todos"/>
+
+                                <core:Item
+                                    key="M"
+                                    text="Matutino"/>
+
+                                <core:Item
+                                    key="V"
+                                    text="Vespertino"/>
+
+                                <core:Item
+                                    key="N"
+                                    text="Nocturno"/>
+                            </items>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox class="jefFilterCard jefFilterService">
+
+                        <Label text="Tipo de servicio"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/service}">
+
+                            <items>
+                                <core:Item
+                                    key="ALL"
+                                    text="Todos"/>
+
+                                <core:Item
+                                    key="PREV"
+                                    text="Preventivo"/>
+
+                                <core:Item
+                                    key="CORR"
+                                    text="Correctivo"/>
+
+                                <core:Item
+                                    key="EMER"
+                                    text="Emergencia"/>
+                            </items>
+
+                        </Select>
+
+                    </VBox>
+
+                    <VBox
+                        class="jefFilterActionWrap"
+                        justifyContent="Center">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="jefApplyButton"/>
+
+                    </VBox>
+
+                </FlexBox>
+
+                <!-- =====================================================
+                     CARGA Y CAPACIDAD POR SUPERVISOR
+                     ===================================================== -->
+
+                <VBox visible="{= ${view>/activeTab} === 'carga' }">
+
+                    <FlexBox
+                        wrap="Wrap"
+                        class="jefKpiRow jefKpiRowSeven">
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneBlue"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://group"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Supervisores"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="8"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneCyan"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://employee"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Recursos"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="92"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneGreen"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://history"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Capacidad disponible"
+                                    wrapping="true"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="6,880"
+                                    unit="h"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneOrange"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://appointment-2"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Carga programada"
+                                    wrapping="true"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="6,305"
+                                    unit="h"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient tonePurple"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://performance"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Utilización promedio"
+                                    wrapping="true"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="92%"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneRed"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://task"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Órdenes activas"
+                                    wrapping="true"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="136"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardGradient toneTeal"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://bar-chart"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Movimientos de material"
+                                    wrapping="true"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="2,318"
+                                    class="jefKpiValue"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </FlexBox>
+
+                    <VBox class="jefMainCard">
+
+                        <HBox class="jefTabs jefTabsInsideCard">
+
+                            <Button
+                                id="tabCargaInCard"
+                                text="Carga y capacidad por supervisor"
+                                type="Transparent"
+                                press=".onShowCarga"
+                                class="jefTabButton jefTabActive"/>
+
+                            <Button
+                                id="tabMaterialesInCard"
+                                text="Consumo de materiales por supervisor"
+                                type="Transparent"
+                                press=".onShowMateriales"
+                                class="jefTabButton"/>
+
+                        </HBox>
+
+                        <VBox class="jefTableFrame">
+
+                            <Table
+                                id="cargaTable"
+                                width="100%"
+                                fixedLayout="true"
+                                growing="false"
+                                inset="false"
+                                items="{view>/loadRows}"
+                                class="jefDataTable">
+
+                                <columns>
+
+                                    <Column width="13%">
+                                        <header>
+                                            <HBox class="jefHeaderCell">
+                                                <Text text="Supervisor"/>
+                                                <core:Icon src="sap-icon://sort"/>
+                                            </HBox>
+                                        </header>
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+                                                <Text text="Recursos"/>
+                                                <core:Icon src="sap-icon://sort"/>
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="13%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text
+                                                    text="Capacidad disponible (h)"
+                                                    wrapping="true"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="13%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text
+                                                    text="Carga programada (h)"
+                                                    wrapping="true"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="14%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text text="Utilización (%)"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="9%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text
+                                                    text="Órdenes activas"
+                                                    wrapping="true"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="12%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text
+                                                    text="Recursos sobre capacidad"
+                                                    wrapping="true"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="9%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <HBox class="jefHeaderCell jefHeaderCenter">
+
+                                                <Text text="Estatus"/>
+
+                                                <core:Icon src="sap-icon://sort"/>
+
+                                            </HBox>
+                                        </header>
+
+                                    </Column>
+
+                                    <Column
+                                        width="9%"
+                                        hAlign="Center">
+
+                                        <header>
+                                            <Text
+                                                text="Acción"
+                                                class="jefActionHeader"/>
+                                        </header>
+
+                                    </Column>
+
+                                </columns>
+
+                                <items>
+
+                                    <ColumnListItem vAlign="Middle">
+
+                                        <cells>
+
+                                            <Link
+                                                text="{view>supervisor}"
+                                                press=".onSupervisorPress"
+                                                class="jefSupervisorLink"/>
+
+                                            <Text
+                                                text="{view>resources}"
+                                                textAlign="Center"/>
+
+                                            <Text
+                                                text="{view>available}"
+                                                textAlign="Center"/>
+
+                                            <Text
+                                                text="{view>scheduled}"
+                                                textAlign="Center"/>
+
+                                            <HBox
+                                                class="jefUtilCell"
+                                                alignItems="Center"
+                                                justifyContent="Center">
+
+                                                <Text
+                                                    text="{= ${view>utilization} + '%' }"
+                                                    class="jefUtilText"/>
+
+                                                <HBox
+                                                    class="jefUtilTrack"
+                                                    alignItems="Center">
+
+                                                    <HBox
+                                                        width="{= ${view>utilPercent} + '%' }"
+                                                        class="jefUtilFill">
+
+                                                        <customData>
+                                                            <core:CustomData
+                                                                key="state"
+                                                                value="{view>utilState}"
+                                                                writeToDom="true"/>
+                                                        </customData>
+
+                                                    </HBox>
+
+                                                </HBox>
+
+                                            </HBox>
+
+                                            <Text
+                                                text="{view>activeOrders}"
+                                                textAlign="Center"/>
+
+                                            <Text
+                                                text="{view>overCapacity}"
+                                                textAlign="Center"/>
+
+                                            <ObjectStatus
+                                                text="{view>status}"
+                                                state="{view>statusState}"
+                                                class="jefStatusPill"/>
+
+                                            <Button
+                                                text="Ver recursos"
+                                                icon="sap-icon://navigation-right-arrow"
+                                                iconFirst="false"
+                                                type="Transparent"
+                                                press=".onViewResources"
+                                                class="jefActionButton"/>
+
+                                        </cells>
+
+                                    </ColumnListItem>
+
+                                </items>
+
+                            </Table>
+
+                        </VBox>
+
+                        <HBox
+                            class="jefTableFooter"
+                            justifyContent="SpaceBetween"
+                            alignItems="Center">
+
+                            <HBox
+                                class="jefRowsPerPage"
+                                alignItems="Center">
+
+                                <Text text="Mostrar"/>
+
+                                <Select
+                                    selectedKey="{view>/pageSize}"
+                                    change=".onPageSizeChange">
+
+                                    <items>
+                                        <core:Item
+                                            key="10"
+                                            text="10"/>
+
+                                        <core:Item
+                                            key="20"
+                                            text="20"/>
+
+                                        <core:Item
+                                            key="50"
+                                            text="50"/>
+                                    </items>
+
+                                </Select>
+
+                                <Text text="por página"/>
+
+                            </HBox>
+
+                            <Text
+                                text="1 - 8 de 8 registros"
+                                class="jefRecordCount"/>
+
+                            <HBox class="jefPagination">
+
+                                <Button
+                                    icon="sap-icon://media-rewind"
+                                    type="Transparent"
+                                    press=".onFirstPage"/>
+
+                                <Button
+                                    icon="sap-icon://navigation-left-arrow"
+                                    type="Transparent"
+                                    press=".onPreviousPage"/>
+
+                                <Button
+                                    text="1"
+                                    type="Emphasized"/>
+
+                                <Button
+                                    icon="sap-icon://navigation-right-arrow"
+                                    type="Transparent"
+                                    press=".onNextPage"/>
+
+                                <Button
+                                    icon="sap-icon://media-forward"
+                                    type="Transparent"
+                                    press=".onLastPage"/>
+
+                            </HBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- =====================================================
+                     CONSUMO DE MATERIALES POR SUPERVISOR
+                     ===================================================== -->
+
+                <VBox visible="{= ${view>/activeTab} === 'materiales' }">
+
+                    <HBox class="jefTabs jefTabsMaterialTop">
+
+                        <Button
+                            id="tabCargaTop"
+                            text="Carga y capacidad por supervisor"
+                            type="Transparent"
+                            press=".onShowCarga"
+                            class="jefTabButton"/>
+
+                        <Button
+                            id="tabMaterialesTop"
+                            text="Consumo de materiales por supervisor"
+                            type="Transparent"
+                            press=".onShowMateriales"
+                            class="jefTabButton jefTabActive"/>
+
+                    </HBox>
+
+                    <FlexBox
+                        wrap="Wrap"
+                        class="jefKpiRow jefKpiRowFive">
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardHorizontal toneBlue"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://document-text"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Órdenes con consumo de material"
+                                    class="jefKpiTitle"
+                                    wrapping="true"/>
+
+                                <ObjectNumber
+                                    number="236"
+                                    class="jefKpiValue"/>
+
+                                <Text
+                                    text="Total en el periodo"
+                                    class="jefKpiNote"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardHorizontal toneGreen"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://product"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Materiales utilizados"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="78"
+                                    class="jefKpiValue"/>
+
+                                <Text
+                                    text="Materiales distintos"
+                                    class="jefKpiNote"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardHorizontal toneOrange"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://warning"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Materiales críticos"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="14"
+                                    class="jefKpiValue"/>
+
+                                <Text
+                                    text="5% del total"
+                                    class="jefKpiNote"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardHorizontal tonePurple"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://drop"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Material más consumido"
+                                    class="jefKpiTitle"/>
+
+                                <Text
+                                    text="Aceite hidráulico ISO 68"
+                                    class="jefKpiSubline"/>
+
+                                <ObjectNumber
+                                    number="4,320"
+                                    unit="L"
+                                    class="jefKpiValue"/>
+
+                                <Text
+                                    text="Total consumido"
+                                    class="jefKpiNote"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                        <HBox
+                            class="jefKpiCard jefKpiCardHorizontal toneTeal"
+                            alignItems="Center">
+
+                            <VBox class="jefKpiIconCircle">
+                                <core:Icon src="sap-icon://trend-up"/>
+                            </VBox>
+
+                            <VBox class="jefKpiTextBlock">
+
+                                <Text
+                                    text="Variación vs plan"
+                                    class="jefKpiTitle"/>
+
+                                <ObjectNumber
+                                    number="-3.8%"
+                                    class="jefKpiValue"/>
+
+                                <Text
+                                    text="Por debajo del plan"
+                                    class="jefKpiNote jefPositiveNote"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </FlexBox>
+
+                    <HBox
+                        class="jefMaterialContent"
+                        alignItems="Stretch">
+
+                        <!-- TABLA DE MATERIALES -->
+
+                        <VBox class="jefMaterialTableCard">
+
+                            <VBox class="jefTableFrame jefMaterialTableFrame">
+
+                                <Table
+                                    id="materialTable"
+                                    width="100%"
+                                    fixedLayout="true"
+                                    growing="false"
+                                    inset="false"
+                                    items="{view>/materialRows}"
+                                    class="jefDataTable jefMaterialTable">
+
+                                    <columns>
+
+                                        <Column width="15%">
+                                            <header>
+                                                <HBox class="jefHeaderCell">
+                                                    <Text text="Supervisor"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="7%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text
+                                                        text="Recursos asignados"
+                                                        wrapping="true"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column width="14%">
+                                            <header>
+                                                <HBox class="jefHeaderCell">
+                                                    <Text
+                                                        text="Categoría principal"
+                                                        wrapping="true"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column width="18%">
+                                            <header>
+                                                <HBox class="jefHeaderCell">
+                                                    <Text
+                                                        text="Material más consumido"
+                                                        wrapping="true"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="9%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text
+                                                        text="Consumo real"
+                                                        wrapping="true"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="8%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text text="Plan"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="8%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text text="Variación"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="8%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text
+                                                        text="Órdenes con consumo"
+                                                        wrapping="true"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="10%"
+                                            hAlign="Center">
+                                            <header>
+                                                <HBox class="jefHeaderCell jefHeaderCenter">
+                                                    <Text text="Estatus"/>
+                                                    <core:Icon src="sap-icon://sort"/>
+                                                </HBox>
+                                            </header>
+                                        </Column>
+
+                                        <Column
+                                            width="3%"
+                                            hAlign="Center">
+                                            <header>
+                                                <Text text=""/>
+                                            </header>
+                                        </Column>
+
+                                    </columns>
+
+                                    <items>
+
+                                        <ColumnListItem vAlign="Middle">
+
+                                            <cells>
+
+                                                <HBox
+                                                    class="jefSupervisorCell"
+                                                    alignItems="Center">
+
+                                                    <core:Icon
+                                                        src="sap-icon://person-placeholder"/>
+
+                                                    <Link
+                                                        text="{view>supervisor}"
+                                                        press=".onSupervisorPress"
+                                                        class="jefSupervisorLink"/>
+
+                                                </HBox>
+
+                                                <Text
+                                                    text="{view>resources}"
+                                                    textAlign="Center"/>
+
+                                                <HBox
+                                                    class="jefCategoryCell"
+                                                    alignItems="Center">
+
+                                                    <customData>
+                                                        <core:CustomData
+                                                            key="category"
+                                                            value="{view>category}"
+                                                            writeToDom="true"/>
+                                                    </customData>
+
+                                                    <core:Icon
+                                                        src="{view>categoryIcon}"/>
+
+                                                    <Text
+                                                        text="{view>category}"
+                                                        wrapping="false"/>
+
+                                                </HBox>
+
+                                                <Text
+                                                    text="{view>material}"
+                                                    wrapping="true"/>
+
+                                                <Text
+                                                    text="{view>actual}"
+                                                    textAlign="Center"/>
+
+                                                <Text
+                                                    text="{view>plan}"
+                                                    textAlign="Center"/>
+
+                                                <ObjectNumber
+                                                    number="{view>variation}"
+                                                    state="{view>variationState}"
+                                                    class="jefVariationNumber"/>
+
+                                                <Text
+                                                    text="{view>orders}"
+                                                    textAlign="Center"/>
+
+                                                <ObjectStatus
+                                                    text="{view>status}"
+                                                    state="{view>statusState}"
+                                                    class="jefStatusPill"/>
+
+                                                <Button
+                                                    icon="sap-icon://navigation-right-arrow"
+                                                    type="Transparent"
+                                                    press=".onViewMaterialDetail"
+                                                    class="jefChevronButton"/>
+
+                                            </cells>
+
+                                        </ColumnListItem>
+
+                                    </items>
+
+                                </Table>
+
+                            </VBox>
+
+                            <HBox
+                                class="jefTableFooter"
+                                justifyContent="SpaceBetween"
+                                alignItems="Center">
+
+                                <HBox
+                                    class="jefRowsPerPage"
+                                    alignItems="Center">
+
+                                    <Text text="Mostrar"/>
+
+                                    <Select
+                                        selectedKey="{view>/pageSize}"
+                                        change=".onPageSizeChange">
+
+                                        <items>
+                                            <core:Item
+                                                key="10"
+                                                text="10"/>
+
+                                            <core:Item
+                                                key="20"
+                                                text="20"/>
+
+                                            <core:Item
+                                                key="50"
+                                                text="50"/>
+                                        </items>
+
+                                    </Select>
+
+                                    <Text text="por página"/>
+
+                                </HBox>
+
+                                <Text
+                                    text="1 - 6 de 6 registros"
+                                    class="jefRecordCount"/>
+
+                                <HBox class="jefPagination">
+
+                                    <Button
+                                        icon="sap-icon://media-rewind"
+                                        type="Transparent"
+                                        press=".onFirstPage"/>
+
+                                    <Button
+                                        icon="sap-icon://navigation-left-arrow"
+                                        type="Transparent"
+                                        press=".onPreviousPage"/>
+
+                                    <Button
+                                        text="1"
+                                        type="Emphasized"/>
+
+                                    <Button
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        press=".onNextPage"/>
+
+                                    <Button
+                                        icon="sap-icon://media-forward"
+                                        type="Transparent"
+                                        press=".onLastPage"/>
+
+                                </HBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                        <!-- PARTICIPACIÓN POR CATEGORÍA -->
+
+                        <VBox class="jefParticipationCard">
+
+                            <HBox
+                                class="jefParticipationHeader"
+                                justifyContent="SpaceBetween"
+                                alignItems="Center">
+
+                                <Title
+                                    text="Participación por categoría"
+                                    level="H3"/>
+
+                                <core:Icon src="sap-icon://hint"/>
+
+                            </HBox>
+
+                            <HBox
+                                class="jefParticipationColumns"
+                                width="100%"
+                                alignItems="Center">
+
+                                <Text
+                                    text="Categoría"
+                                    width="46%"
+                                    wrapping="false"/>
+
+                                <Text
+                                    text="Consumo real"
+                                    width="31%"
+                                    textAlign="End"
+                                    wrapping="false"/>
+
+                                <Text
+                                    text="Participación"
+                                    width="23%"
+                                    textAlign="End"
+                                    wrapping="false"/>
+
+                            </HBox>
+
+                            <VBox items="{view>/participation}">
+
+                                <items>
+
+                                    <VBox class="jefParticipationRow">
+
+                                        <HBox
+                                            class="jefParticipationTopRow"
+                                            width="100%"
+                                            alignItems="Center">
+
+                                            <HBox
+                                                class="jefParticipationName"
+                                                width="46%"
+                                                alignItems="Center">
+
+                                                <customData>
+                                                    <core:CustomData
+                                                        key="category"
+                                                        value="{view>category}"
+                                                        writeToDom="true"/>
+                                                </customData>
+
+                                                <core:Icon src="{view>icon}"/>
+
+                                                <Text
+                                                    text="{view>category}"
+                                                    wrapping="false"/>
+
+                                            </HBox>
+
+                                            <Text
+                                                text="{view>consumption}"
+                                                width="31%"
+                                                textAlign="End"
+                                                wrapping="false"
+                                                class="jefParticipationConsumption"/>
+
+                                            <Text
+                                                text="{view>share}"
+                                                width="23%"
+                                                textAlign="End"
+                                                wrapping="false"
+                                                class="jefParticipationShare"/>
+
+                                        </HBox>
+
+                                        <HBox
+                                            class="jefParticipationTrack"
+                                            alignItems="Center">
+
+                                            <HBox
+                                                width="{= ${view>percent} + '%' }"
+                                                class="jefParticipationFill"/>
+
+                                        </HBox>
+
+                                    </VBox>
+
+                                </items>
+
+                            </VBox>
+
+                            <HBox
+                                class="jefParticipationTotal"
+                                justifyContent="SpaceBetween"
+                                alignItems="Center">
+
+                                <Text text="Total"/>
+
+                                <Text text="100%"/>
+
+                            </HBox>
+
+                            <VBox class="jefParticipationSpacer"/>
+
+                            <Button
+                                text="Ver reporte de materiales"
+                                icon="sap-icon://navigation-right-arrow"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onMaterialReport"
+                                class="jefReportButton"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

@@ -1,0 +1,546 @@
+/* ================================================================
+   APP SHELL Y MENÚ LATERAL SUPERPUESTO
+   Archivo: webapp/css/App.css
+
+   Este archivo controla únicamente la estructura global:
+   - ToolPage
+   - ToolHeader
+   - SideNavigation
+   - Área principal
+
+   No modifica filtros, KPIs, tablas ni cards.
+   ================================================================ */
+
+.appToolPage {
+    --app-side-collapsed-width: 3.25rem;
+    --app-side-expanded-width: 19rem;
+
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* ================================================================
+   HEADER
+   Ocupa siempre todo el ancho disponible.
+   ================================================================ */
+
+.appToolPage .sapTntToolPageHeaderWrapper,
+.appToolPage .sapTntToolPageHeader,
+.appToolPage .sapTntToolHeader {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+/* ================================================================
+   CONTENEDOR DE MENÚ Y CONTENIDO
+   ================================================================ */
+
+.appToolPage .sapTntToolPageContentWrapper {
+    position: relative !important;
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* ================================================================
+   MENÚ LATERAL
+   ================================================================ */
+
+/*
+ * El aside queda fuera del flujo del dashboard.
+ * Al expandirse, se coloca encima del contenido y no lo comprime.
+ */
+.appToolPage .sapTntToolPageAside {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: 30 !important;
+
+    display: flex !important;
+
+    width: var(
+        --app-side-collapsed-width
+    ) !important;
+
+    min-width: var(
+        --app-side-collapsed-width
+    ) !important;
+
+    max-width: var(
+        --app-side-collapsed-width
+    ) !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+    border-right: 1px solid #dfe6ef !important;
+    box-shadow: none !important;
+
+    transform: none !important;
+
+    transition:
+        width 180ms ease,
+        min-width 180ms ease,
+        max-width 180ms ease,
+        box-shadow 180ms ease !important;
+}
+
+.appToolPage.appSideNavExpanded
+.sapTntToolPageAside {
+    width: var(
+        --app-side-expanded-width
+    ) !important;
+
+    min-width: var(
+        --app-side-expanded-width
+    ) !important;
+
+    max-width: var(
+        --app-side-expanded-width
+    ) !important;
+
+    box-shadow:
+        7px 0 20px
+        rgba(25, 45, 76, 0.16) !important;
+}
+
+/*
+ * SideNavigation utiliza todo el ancho del panel.
+ */
+.appToolPage .sapTntToolPageAsideContent,
+.appToolPage .appSideNavigation,
+.appToolPage .sapTntSideNavigation {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+}
+
+.appToolPage.appSideNavExpanded
+.appSideNavigation,
+.appToolPage.appSideNavExpanded
+.sapTntSideNavigation {
+    width: var(
+        --app-side-expanded-width
+    ) !important;
+
+    max-width: var(
+        --app-side-expanded-width
+    ) !important;
+}
+
+/* ================================================================
+   CONTENIDO PRINCIPAL
+   ================================================================ */
+
+/*
+ * El contenido se posiciona entre la barra compacta y el borde
+ * derecho. No utiliza margin-left ni un ancho calculado adicional,
+ * por lo que no deja espacios vacíos a los costados.
+ */
+.appToolPage .sapTntToolPageMain {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    left: var(
+        --app-side-collapsed-width
+    ) !important;
+
+    display: flex !important;
+    flex: none !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+
+    transform: none !important;
+    transition: none !important;
+}
+
+/*
+ * El estado abierto no modifica las medidas del dashboard.
+ */
+.appToolPage.appSideNavExpanded
+.sapTntToolPageMain {
+    right: 0 !important;
+
+    left: var(
+        --app-side-collapsed-width
+    ) !important;
+
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+/* Contenedores internos del contenido */
+.appToolPage .sapTntToolPageMainContent,
+.appToolPage .sapTntToolPageMainContentWrapper,
+.appToolPage .sapTntToolPageMain .sapMApp {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ================================================================
+   PRESENTACIÓN DEL MENÚ
+   ================================================================ */
+
+.appToolPage .appSideNavigation {
+    border-right: 0 !important;
+}
+
+.appToolPage:not(.appSideNavExpanded)
+.sapTntToolPageAside {
+    box-shadow: none !important;
+}
+
+.appToolPage .sideSectionTitle {
+    pointer-events: none;
+}
+
+.appToolPage .sideSecondTitle {
+    margin-top: 0.35rem;
+}
+
+/* ================================================================
+   ETIQUETAS AL PASAR EL MOUSE EN MENÚ CONTRAÍDO
+   Conserva el formato visual anterior y solo corrige la posición.
+   ================================================================ */
+
+/*
+ * En modo contraído se permite que el texto salga del ancho
+ * compacto de la navegación.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntToolPageAside,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntToolPageAsideContent,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntSideNavigation,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntSideNavigationFlexible,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntSideNavigationFlexibleContent,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNL.sapTntNLCollapsed {
+    overflow: visible !important;
+}
+
+/*
+ * La fila sirve como referencia para que el texto aparezca
+ * siempre después del icono, también en opciones con submenú.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLI,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLI
+[tabindex] {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/*
+ * Conserva el formato de etiqueta que genera SAPUI5.
+ * Solo modifica posición, ancho y nivel de superposición.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLI
+[tabindex]:hover
+.sapTntNLIText {
+    position: absolute !important;
+    top: 50% !important;
+    left: calc(
+        var(--app-side-collapsed-width) + 0.15rem
+    ) !important;
+    z-index: 120 !important;
+
+    display: block !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: 18rem !important;
+
+    margin: 0 !important;
+    overflow: visible !important;
+
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+}
+
+/*
+ * La opción activa queda sobre el dashboard.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLI
+[tabindex]:hover {
+    z-index: 119 !important;
+}
+
+/*
+ * En la barra contraída se oculta la flecha de expansión.
+ * El ancho disponible es reducido y la flecha puede montarse
+ * sobre el icono principal. Al abrir el menú, SAPUI5 vuelve
+ * a mostrarla normalmente junto al texto.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLIExpandIcon,
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLIExpandIconMirror {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/*
+ * Mantiene centrado el icono principal dentro de la barra
+ * contraída, incluso en elementos que contienen submenús.
+ */
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLCollapsed
+.sapTntNLIIcon {
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+@media screen and (max-width: 900px) {
+    .appToolPage {
+        --app-side-expanded-width:
+            min(
+                18rem,
+                calc(100vw - 3rem)
+            );
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .appToolPage {
+        --app-side-expanded-width:
+            calc(100vw - 3rem);
+    }
+}
+
+
+/* ================================================================
+   SELECCIÓN ROJA NATIVA DEL MENÚ
+   No requiere cambios en App.controller.js.
+   Utiliza la clase de selección estándar de SAPUI5.
+   ================================================================ */
+
+.appToolPage {
+    --app-menu-red: #c8102e;
+    --app-menu-red-dark: #9f0b23;
+    --app-menu-red-soft: #fff0f3;
+    --app-menu-red-hover: #fde7ec;
+}
+
+/* ---------------------------------------------------------------
+   FILA SELECCIONADA
+   --------------------------------------------------------------- */
+
+.appToolPage
+.sapTntNLI.sapTntNLISelected
+> .sapTntNLIItem,
+
+.appToolPage
+.sapTntNLI.sapTntNLISelected
+> [tabindex],
+
+.appToolPage
+.sapTntNLI.sapTntNLISelected
+> div:first-child {
+    position: relative !important;
+    background: var(--app-menu-red-soft) !important;
+    border-radius: 0.38rem !important;
+    box-shadow:
+        inset 0.22rem 0 0
+        var(--app-menu-red) !important;
+}
+
+/* Texto e iconos de la opción seleccionada */
+.appToolPage
+.sapTntNLI.sapTntNLISelected
+.sapTntNLIText,
+
+.appToolPage
+.sapTntNLI.sapTntNLISelected
+.sapUiIcon {
+    color: var(--app-menu-red-dark) !important;
+    font-weight: 600 !important;
+}
+
+/* ---------------------------------------------------------------
+   MÓDULO PADRE CUANDO CONTIENE UN SUBMENÚ SELECCIONADO
+   --------------------------------------------------------------- */
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> .sapTntNLIItem,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> [tabindex],
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> div:first-child {
+    background: var(--app-menu-red) !important;
+    border-radius: 0.4rem !important;
+    box-shadow:
+        0 0.15rem 0.45rem
+        rgba(200, 16, 46, 0.18) !important;
+}
+
+/* Texto, icono y flecha del padre activo */
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> .sapTntNLIItem
+.sapTntNLIText,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> .sapTntNLIItem
+.sapUiIcon,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> [tabindex]
+.sapTntNLIText,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> [tabindex]
+.sapUiIcon,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> div:first-child
+.sapTntNLIText,
+
+.appToolPage
+.sapTntNLI:has(.sapTntNLI.sapTntNLISelected)
+> div:first-child
+.sapUiIcon {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* ---------------------------------------------------------------
+   OPCIÓN PRINCIPAL SELECCIONADA SIN HIJOS
+   --------------------------------------------------------------- */
+
+.appToolPage
+.sapTntNL
+> .sapTntNLI.sapTntNLISelected
+> .sapTntNLIItem,
+
+.appToolPage
+.sapTntNL
+> .sapTntNLI.sapTntNLISelected
+> [tabindex],
+
+.appToolPage
+.sapTntNL
+> .sapTntNLI.sapTntNLISelected
+> div:first-child {
+    background: var(--app-menu-red) !important;
+    box-shadow: none !important;
+}
+
+.appToolPage
+.sapTntNL
+> .sapTntNLI.sapTntNLISelected
+.sapTntNLIText,
+
+.appToolPage
+.sapTntNL
+> .sapTntNLI.sapTntNLISelected
+.sapUiIcon {
+    color: #ffffff !important;
+}
+
+/* ---------------------------------------------------------------
+   HOVER
+   --------------------------------------------------------------- */
+
+.appToolPage.appSideNavExpanded
+.sapTntNLI:not(.sapTntNLISelected)
+> .sapTntNLIItem:hover,
+
+.appToolPage.appSideNavExpanded
+.sapTntNLI:not(.sapTntNLISelected)
+> [tabindex]:hover {
+    background: var(--app-menu-red-hover) !important;
+}
+
+/* ---------------------------------------------------------------
+   MENÚ CONTRAÍDO
+   --------------------------------------------------------------- */
+
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLI.sapTntNLISelected
+> .sapTntNLIItem,
+
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLI.sapTntNLISelected
+> [tabindex] {
+    background: var(--app-menu-red) !important;
+    border-radius: 0.4rem !important;
+    box-shadow: none !important;
+}
+
+.appToolPage:not(.appSideNavExpanded)
+.sapTntNLI.sapTntNLISelected
+.sapUiIcon {
+    color: #ffffff !important;
+}

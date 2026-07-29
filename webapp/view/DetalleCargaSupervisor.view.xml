@@ -1,0 +1,1138 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleCargaSupervisor"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    height="100%">
+
+    <Page
+        id="pageDetalleCargaSupervisor"
+        showHeader="false"
+        enableScrolling="true"
+        class="dcsPage">
+
+        <content>
+            <VBox
+                width="100%"
+                class="dcsShell">
+
+                <!-- =====================================================
+                     ENCABEZADO
+                     ===================================================== -->
+                <HBox
+                    alignItems="Center"
+                    wrap="Wrap"
+                    class="dcsBreadcrumb">
+
+                    <Link
+                        text="Vista Supervisor"
+                        press=".onBackToSupervisor"
+                        class="dcsBreadcrumbLink"/>
+
+                    <core:Icon
+                        src="sap-icon://navigation-right-arrow"
+                        size="0.65rem"
+                        class="dcsBreadcrumbIcon"/>
+
+                    <Text
+                        text="Detalle de carga, órdenes y materiales de Supervisor"
+                        class="dcsBreadcrumbCurrent"/>
+                </HBox>
+
+                <Title
+                    text="Detalle de carga, órdenes y materiales de Supervisor"
+                    level="H1"
+                    class="dcsPageTitle"/>
+
+                <Text
+                    text="Consulta consolidada por recurso. Seleccione un recurso para ver su detalle de órdenes y materiales."
+                    class="dcsPageSubtitle"/>
+
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
+                <FlexBox
+                    width="100%"
+                    wrap="Wrap"
+                    renderType="Div"
+                    class="dcsFiltersGrid">
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Periodo"
+                            labelFor="selPeriodo"
+                            class="dcsFilterLabel"/>
+
+                        <Select
+                            id="selPeriodo"
+                            width="100%"
+                            selectedKey="{/filters/periodo}"
+                            items="{
+                                path: '/periodos',
+                                templateShareable: false
+                            }"
+                            class="dcsFilterInnerControl">
+
+                            <core:Item
+                                key="{key}"
+                                text="{text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Fecha desde"
+                            labelFor="dpFechaDesde"
+                            class="dcsFilterLabel"/>
+
+                        <DatePicker
+                            id="dpFechaDesde"
+                            width="100%"
+                            value="{/filters/fechaDesde}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dcsFilterInnerControl"/>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Fecha hasta"
+                            labelFor="dpFechaHasta"
+                            class="dcsFilterLabel"/>
+
+                        <DatePicker
+                            id="dpFechaHasta"
+                            width="100%"
+                            value="{/filters/fechaHasta}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dcsFilterInnerControl"/>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Gerencia"
+                            labelFor="selGerencia"
+                            class="dcsFilterLabel"/>
+
+                        <Select
+                            id="selGerencia"
+                            width="100%"
+                            selectedKey="{/filters/gerencia}"
+                            items="{
+                                path: '/gerencias',
+                                templateShareable: false
+                            }"
+                            class="dcsFilterInnerControl">
+
+                            <core:Item
+                                key="{key}"
+                                text="{text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Jefatura"
+                            labelFor="selJefatura"
+                            class="dcsFilterLabel"/>
+
+                        <Select
+                            id="selJefatura"
+                            width="100%"
+                            selectedKey="{/filters/jefatura}"
+                            items="{
+                                path: '/jefaturas',
+                                templateShareable: false
+                            }"
+                            class="dcsFilterInnerControl">
+
+                            <core:Item
+                                key="{key}"
+                                text="{text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Supervisor"
+                            labelFor="selSupervisor"
+                            class="dcsFilterLabel"/>
+
+                        <Select
+                            id="selSupervisor"
+                            width="100%"
+                            selectedKey="{/filters/supervisor}"
+                            items="{
+                                path: '/supervisores',
+                                templateShareable: false
+                            }"
+                            class="dcsFilterInnerControl">
+
+                            <core:Item
+                                key="{key}"
+                                text="{text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dcsFilterItemCard">
+                        <Label
+                            text="Tipo de servicio"
+                            labelFor="selTipoServicio"
+                            class="dcsFilterLabel"/>
+
+                        <Select
+                            id="selTipoServicio"
+                            width="100%"
+                            selectedKey="{/filters/tipoServicio}"
+                            items="{
+                                path: '/tiposServicio',
+                                templateShareable: false
+                            }"
+                            class="dcsFilterInnerControl">
+
+                            <core:Item
+                                key="{key}"
+                                text="{text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="dcsFilterActionWrap">
+                        <Label
+                            text="Acción"
+                            class="dcsFilterLabel dcsFilterGhostLabel"/>
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="dcsApplyFilterButton"/>
+                    </VBox>
+                </FlexBox>
+
+                <!-- =====================================================
+                     KPI CARDS - CARGA Y CAPACIDAD
+                     ===================================================== -->
+                <FlexBox
+                    width="100%"
+                    wrap="Wrap"
+                    renderType="Div"
+                    class="dcsKpiRow"
+                    visible="{= ${view>/activeTab} === 'carga' }">
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiBlue">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://group" size="1.75rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Recursos asignados" class="dcsKpiLabel"/>
+                            <Text text="{/summary/recursosAsignados}" class="dcsKpiValue"/>
+                            <Text text="Mecánicos y ayudantes" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiGreen">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://history" size="1.7rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Capacidad disponible" class="dcsKpiLabel"/>
+                            <Text text="{/summary/capacidadDisponible}" class="dcsKpiValue"/>
+                            <Text text="Total disponible" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiPurple">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://appointment-2" size="1.7rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Carga programada" class="dcsKpiLabel"/>
+                            <Text text="{/summary/cargaProgramada}" class="dcsKpiValue"/>
+                            <Text text="Total asignado" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiOrange">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://pie-chart" size="1.7rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Utilización promedio" class="dcsKpiLabel"/>
+                            <Text text="{/summary/utilizacionPromedio}" class="dcsKpiValue"/>
+                            <Text text="Carga / Capacidad" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiPink">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://document-text" size="1.65rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Órdenes activas" class="dcsKpiLabel"/>
+                            <Text text="{/summary/ordenesActivas}" class="dcsKpiValue"/>
+                            <Text text="Órdenes en proceso" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiRed">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://warning2" size="1.7rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Órdenes críticas" class="dcsKpiLabel"/>
+                            <Text text="{/summary/ordenesCriticas}" class="dcsKpiValue"/>
+                            <Text text="Requieren atención" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+                </FlexBox>
+
+                <!-- =====================================================
+                     KPI CARDS - CONSUMO DE MATERIALES
+                     ===================================================== -->
+                <FlexBox
+                    width="100%"
+                    wrap="Wrap"
+                    renderType="Div"
+                    class="dcsKpiRow dcsKpiRowMaterials"
+                    visible="{= ${view>/activeTab} === 'materiales' }">
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiBlue">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://inventory" size="1.6rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Órdenes con consumo de material" class="dcsKpiLabel"/>
+                            <Text text="{/materialsSummary/ordenesConConsumo}" class="dcsKpiValue"/>
+                            <Text text="Órdenes" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiGreen">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://product" size="1.6rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Materiales utilizados" class="dcsKpiLabel"/>
+                            <Text text="{/materialsSummary/materialesUtilizados}" class="dcsKpiValue"/>
+                            <Text text="Materiales distintos" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiOrange">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://warning2" size="1.6rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Materiales críticos" class="dcsKpiLabel"/>
+                            <Text text="{/materialsSummary/materialesCriticos}" class="dcsKpiValue"/>
+                            <Text text="Requieren atención" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiPurple">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://measure" size="1.6rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Material con mayor consumo" class="dcsKpiLabel"/>
+                            <Text text="{/materialsSummary/materialTopNombre}" class="dcsKpiCaption"/>
+                            <Text text="{/materialsSummary/materialTopCantidad}" class="dcsKpiValue"/>
+                            <Text text="{/materialsSummary/materialTopCategoria}" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignItems="Center" class="dcsKpiCard dcsKpiTeal">
+                        <HBox alignItems="Center" justifyContent="Center" class="dcsKpiIconWrap">
+                            <core:Icon src="sap-icon://compare-2" size="1.6rem" class="dcsKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsKpiContent">
+                            <Text text="Variación vs plan (general)" class="dcsKpiLabel"/>
+                            <Text text="{/materialsSummary/variacionGeneral}" class="dcsKpiValue"/>
+                            <Text text="Sobre el plan" class="dcsKpiCaption"/>
+                        </VBox>
+                    </HBox>
+                </FlexBox>
+
+                <!-- =====================================================
+                     CONTENIDO PRINCIPAL
+                     ===================================================== -->
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    renderType="Div"
+                    class="dcsMainGrid">
+
+                    <!-- =================================================
+                         CARD DE TABLAS
+                         ================================================= -->
+                    <VBox class="dcsTableCard">
+
+                        <HBox
+                            alignItems="End"
+                            class="dcsTabsHeader">
+
+                            <Button
+                                id="btnTabCarga"
+                                text="Carga y capacidad por recurso"
+                                type="Transparent"
+                                press=".onTabPress"
+                                class="dcsTabButton dcsTabActive">
+
+                                <customData>
+                                    <core:CustomData key="tab" value="carga"/>
+                                </customData>
+                            </Button>
+
+                            <Button
+                                id="btnTabMateriales"
+                                text="Consumo de materiales por recurso"
+                                type="Transparent"
+                                press=".onTabPress"
+                                class="dcsTabButton">
+
+                                <customData>
+                                    <core:CustomData key="tab" value="materiales"/>
+                                </customData>
+                            </Button>
+                        </HBox>
+
+                        <!-- =============================================
+                             TAB CARGA Y CAPACIDAD
+                             ============================================= -->
+                        <VBox
+                            width="100%"
+                            visible="{= ${view>/activeTab} === 'carga' }"
+                            class="dcsTabContent">
+
+                            <Table
+                                id="tblRecursos"
+                                width="100%"
+                                fixedLayout="true"
+                                inset="false"
+                                showSeparators="Inner"
+                                items="{
+                                    path: '/resources',
+                                    templateShareable: false
+                                }"
+                                class="dcsDataTable">
+
+                                <columns>
+                                    <Column width="18%">
+                                        <Text text="Recurso"/>
+                                    </Column>
+
+                                    <Column width="9%">
+                                        <Text text="Tipo de recurso"/>
+                                    </Column>
+
+                                    <Column width="10%" hAlign="Center">
+                                        <Text text="Capacidad disponible (h)" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="10%" hAlign="Center">
+                                        <Text text="Carga programada (h)" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="13%" hAlign="Center">
+                                        <Text text="Utilización (%)" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="7%" hAlign="Center">
+                                        <Text text="Órdenes activas" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="6%" hAlign="Center">
+                                        <Text text="OT críticas" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="11%" hAlign="Center">
+                                        <Text text="Tipo de servicio dominante" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="8%" hAlign="Center">
+                                        <Text text="Estatus" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="8%" hAlign="Center">
+                                        <Text text="Acción" textAlign="Center"/>
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem
+                                        vAlign="Middle"
+                                        type="Inactive">
+
+                                        <cells>
+                                            <HBox
+                                                alignItems="Center"
+                                                class="dcsResourceCell">
+
+                                                <core:Icon
+                                                    src="sap-icon://person-placeholder"
+                                                    size="0.8rem"
+                                                    class="dcsResourceIcon"/>
+
+                                                <Link
+                                                    text="{nombre}"
+                                                    tooltip="{nombre}"
+                                                    press=".onOpenOrders"
+                                                    class="dcsResourceLink"/>
+                                            </HBox>
+
+                                            <Text text="{tipoRecurso}" class="dcsTableText"/>
+                                            <Text text="{capacidad}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{carga}" textAlign="Center" class="dcsTableText"/>
+
+                                            <HBox
+                                                width="100%"
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="dcsUtilizationCell">
+
+                                                <Text
+                                                    text="{utilizacion}%"
+                                                    class="dcsUtilizationText"/>
+
+                                                <HBox
+                                                    alignItems="Center"
+                                                    class="dcsUtilTrack">
+
+                                                    <HBox
+                                                        visible="{= ${utilizacion} >= 90 }"
+                                                        width="{= ${utilizacion} + '%' }"
+                                                        class="dcsUtilFill dcsUtilFillError"/>
+
+                                                    <HBox
+                                                        visible="{= ${utilizacion} >= 80 &amp;&amp; ${utilizacion} &lt; 90 }"
+                                                        width="{= ${utilizacion} + '%' }"
+                                                        class="dcsUtilFill dcsUtilFillWarning"/>
+
+                                                    <HBox
+                                                        visible="{= ${utilizacion} &lt; 80 }"
+                                                        width="{= ${utilizacion} + '%' }"
+                                                        class="dcsUtilFill dcsUtilFillSuccess"/>
+                                                </HBox>
+                                            </HBox>
+
+                                            <Text text="{ordenes}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{criticas}" textAlign="Center" class="dcsTableText"/>
+
+                                            <ObjectStatus
+                                                text="{servicio}"
+                                                state="{
+                                                    path: 'servicio',
+                                                    formatter: '.formatServiceState'
+                                                }"
+                                                class="dcsPill"/>
+
+                                            <ObjectStatus
+                                                text="{estatus}"
+                                                state="{
+                                                    path: 'estatus',
+                                                    formatter: '.formatStatusState'
+                                                }"
+                                                class="dcsPill"/>
+
+                                            <Link
+                                                text="Ver órdenes"
+                                                press=".onOpenOrders"
+                                                class="dcsActionLink"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <FlexBox
+                                width="100%"
+                                wrap="Wrap"
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                renderType="Div"
+                                class="dcsPaginationBar">
+
+                                <HBox alignItems="Center" class="dcsPageSizeArea">
+                                    <Text text="Mostrar" class="dcsPaginationText"/>
+
+                                    <Select
+                                        width="4rem"
+                                        selectedKey="{/pagination/pageSize}"
+                                        change=".onPageSizeChange"
+                                        class="dcsPageSizeSelect">
+
+                                        <items>
+                                            <core:Item key="5" text="5"/>
+                                            <core:Item key="10" text="10"/>
+                                            <core:Item key="20" text="20"/>
+                                        </items>
+                                    </Select>
+
+                                    <Text text="por página" class="dcsPaginationText"/>
+                                </HBox>
+
+                                <Text
+                                    text="{/pagination/label}"
+                                    class="dcsPaginationCounter"/>
+
+                                <HBox alignItems="Center" class="dcsPaginationButtons">
+                                    <Button
+                                        icon="sap-icon://media-rewind"
+                                        type="Transparent"
+                                        tooltip="Primera página"
+                                        enabled="{= ${/pagination/page} > 1 }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="first"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://navigation-left-arrow"
+                                        type="Transparent"
+                                        tooltip="Página anterior"
+                                        enabled="{= ${/pagination/page} > 1 }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="previous"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        text="1"
+                                        type="{= ${/pagination/page} === 1 ? 'Emphasized' : 'Transparent' }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton dcsNumberButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="page1"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        text="2"
+                                        visible="{= ${/pagination/totalPages} >= 2 }"
+                                        type="{= ${/pagination/page} === 2 ? 'Emphasized' : 'Transparent' }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton dcsNumberButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="page2"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        tooltip="Página siguiente"
+                                        enabled="{= ${/pagination/page} &lt; ${/pagination/totalPages} }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="next"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://media-forward"
+                                        type="Transparent"
+                                        tooltip="Última página"
+                                        enabled="{= ${/pagination/page} &lt; ${/pagination/totalPages} }"
+                                        press=".onPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="last"/>
+                                        </customData>
+                                    </Button>
+                                </HBox>
+                            </FlexBox>
+                        </VBox>
+
+                        <!-- =============================================
+                             TAB CONSUMO DE MATERIALES
+                             ============================================= -->
+                        <VBox
+                            width="100%"
+                            visible="{= ${view>/activeTab} === 'materiales' }"
+                            class="dcsTabContent">
+
+                            <Table
+                                id="tblMateriales"
+                                width="100%"
+                                fixedLayout="true"
+                                inset="false"
+                                showSeparators="Inner"
+                                items="{
+                                    path: '/materialsByResource',
+                                    templateShareable: false
+                                }"
+                                class="dcsDataTable dcsMaterialsTable dcsMaterialsResourceTable">
+
+                                <columns>
+                                    <Column width="16%">
+                                        <Text text="Recurso"/>
+                                    </Column>
+
+                                    <Column width="8%">
+                                        <Text text="Tipo de recurso"/>
+                                    </Column>
+
+                                    <Column width="7%" hAlign="Center">
+                                        <Text text="Órdenes con consumo" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="10%">
+                                        <Text text="Categoría principal"/>
+                                    </Column>
+
+                                    <Column width="16%">
+                                        <Text text="Material más consumido"/>
+                                    </Column>
+
+                                    <Column width="7%" hAlign="Center">
+                                        <Text text="Consumo real" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="5%" hAlign="Center">
+                                        <Text text="Unidad" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="6%" hAlign="Center">
+                                        <Text text="Plan" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="5%" hAlign="Center">
+                                        <Text text="Unidad plan" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="7%" hAlign="Center">
+                                        <Text text="Variación" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="7%" hAlign="Center">
+                                        <Text text="Estatus" textAlign="Center"/>
+                                    </Column>
+
+                                    <Column width="6%" hAlign="Center">
+                                        <Text text="Acción" textAlign="Center"/>
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem
+                                        vAlign="Middle"
+                                        type="Inactive">
+
+                                        <cells>
+                                            <HBox
+                                                alignItems="Center"
+                                                class="dcsResourceCell">
+
+                                                <core:Icon
+                                                    src="sap-icon://person-placeholder"
+                                                    size="0.8rem"
+                                                    class="dcsResourceIcon"/>
+
+                                                <Link
+                                                    text="{recurso}"
+                                                    tooltip="{recurso}"
+                                                    press=".onOpenMaterialResources"
+                                                    class="dcsResourceLink"/>
+                                            </HBox>
+
+                                            <Text text="{tipoRecurso}" class="dcsTableText"/>
+                                            <Text text="{ordenesConsumo}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{categoriaPrincipal}" class="dcsTableText"/>
+                                            <Text text="{materialTop}" class="dcsTableText"/>
+                                            <Text text="{consumoReal}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{unidad}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{plan}" textAlign="Center" class="dcsTableText"/>
+                                            <Text text="{unidadPlan}" textAlign="Center" class="dcsTableText"/>
+
+                                            <ObjectStatus
+                                                text="{variacion}"
+                                                state="{
+                                                    path: 'variacionState',
+                                                    formatter: '.formatVariationState'
+                                                }"
+                                                class="dcsVariationText"/>
+
+                                            <ObjectStatus
+                                                text="{estatus}"
+                                                state="{
+                                                    path: 'estatusMaterial',
+                                                    formatter: '.formatMaterialStatusState'
+                                                }"
+                                                class="dcsPill"/>
+
+                                            <Link
+                                                text="Ver recursos"
+                                                press=".onOpenMaterialResources"
+                                                class="dcsActionLink"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <FlexBox
+                                width="100%"
+                                wrap="Wrap"
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                renderType="Div"
+                                class="dcsPaginationBar">
+
+                                <HBox alignItems="Center" class="dcsPageSizeArea">
+                                    <Text text="Mostrar" class="dcsPaginationText"/>
+
+                                    <Select
+                                        width="3.5rem"
+                                        selectedKey="{/materialsPagination/pageSize}"
+                                        change=".onMaterialsPageSizeChange"
+                                        class="dcsPageSizeSelect">
+
+                                        <items>
+                                            <core:Item key="5" text="5"/>
+                                            <core:Item key="10" text="10"/>
+                                            <core:Item key="20" text="20"/>
+                                        </items>
+                                    </Select>
+
+                                    <Text text="por página" class="dcsPaginationText"/>
+                                </HBox>
+
+                                <Text
+                                    text="{/materialsPagination/label}"
+                                    class="dcsPaginationCounter"/>
+
+                                <HBox alignItems="Center" class="dcsPaginationButtons">
+                                    <Button
+                                        icon="sap-icon://media-rewind"
+                                        type="Transparent"
+                                        tooltip="Primera página"
+                                        enabled="{= ${/materialsPagination/page} > 1 }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="first"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://navigation-left-arrow"
+                                        type="Transparent"
+                                        tooltip="Página anterior"
+                                        enabled="{= ${/materialsPagination/page} > 1 }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="previous"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        text="1"
+                                        type="{= ${/materialsPagination/page} === 1 ? 'Emphasized' : 'Transparent' }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton dcsNumberButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="page1"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        text="2"
+                                        visible="{= ${/materialsPagination/totalPages} >= 2 }"
+                                        type="{= ${/materialsPagination/page} === 2 ? 'Emphasized' : 'Transparent' }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton dcsNumberButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="page2"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        tooltip="Página siguiente"
+                                        enabled="{= ${/materialsPagination/page} &lt; ${/materialsPagination/totalPages} }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="next"/>
+                                        </customData>
+                                    </Button>
+
+                                    <Button
+                                        icon="sap-icon://media-forward"
+                                        type="Transparent"
+                                        tooltip="Última página"
+                                        enabled="{= ${/materialsPagination/page} &lt; ${/materialsPagination/totalPages} }"
+                                        press=".onMaterialsPaginationPress"
+                                        class="dcsPaginationButton">
+
+                                        <customData>
+                                            <core:CustomData key="action" value="last"/>
+                                        </customData>
+                                    </Button>
+                                </HBox>
+                            </FlexBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- =================================================
+                         RESUMEN DE CARGA
+                         ================================================= -->
+                    <VBox
+                        class="dcsSummaryCard"
+                        visible="{= ${view>/activeTab} === 'carga' }">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween"
+                            class="dcsSummaryHeader">
+
+                            <Title
+                                text="Resumen del supervisor"
+                                level="H3"
+                                class="dcsSummaryTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                size="0.9rem"
+                                tooltip="Resumen consolidado del supervisor"
+                                class="dcsSummaryInfoIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsSummaryValues">
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Recursos asignados" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/recursosAsignados}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Capacidad disponible" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/capacidadDisponible}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Carga programada" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/cargaProgramada}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Utilización promedio" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/utilizacionPromedio}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Órdenes activas" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/ordenesActivas}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Órdenes críticas" class="dcsSummaryLabel"/>
+                                <Text text="{/summary/ordenesCriticas}" class="dcsSummaryValue"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="dcsPressureSection">
+                            <Title
+                                text="Presión por tipo de servicio"
+                                level="H4"
+                                class="dcsPressureTitle"/>
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                class="dcsChartArea">
+
+                                <html:div class="dcsDonutChart">
+                                    <html:div class="dcsDonutCenter"></html:div>
+                                </html:div>
+
+                                <VBox class="dcsChartLegend">
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendBlue"></html:span>
+                                        <Text text="Correctivo" class="dcsLegendLabel"/>
+                                        <Text text="55% (392 h)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendGreen"></html:span>
+                                        <Text text="Planeado" class="dcsLegendLabel"/>
+                                        <Text text="30% (214 h)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendOrange"></html:span>
+                                        <Text text="Call Center" class="dcsLegendLabel"/>
+                                        <Text text="15% (107 h)" class="dcsLegendValue"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <Button
+                            text="Ver reporte de carga y capacidad"
+                            icon="sap-icon://navigation-right-arrow"
+                            iconFirst="false"
+                            type="Transparent"
+                            press=".onOpenCapacityReport"
+                            class="dcsReportButton"/>
+                    </VBox>
+
+                    <!-- =================================================
+                         RESUMEN DE MATERIALES
+                         ================================================= -->
+                    <VBox
+                        class="dcsSummaryCard dcsMaterialSummaryCard"
+                        visible="{= ${view>/activeTab} === 'materiales' }">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween"
+                            class="dcsSummaryHeader">
+
+                            <Title
+                                text="Consumo por categoría de material"
+                                level="H3"
+                                class="dcsSummaryTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                size="0.9rem"
+                                tooltip="Resumen de consumo de materiales"
+                                class="dcsSummaryInfoIcon"/>
+                        </HBox>
+
+                        <VBox class="dcsSummaryValues">
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Lubricantes" class="dcsSummaryLabel"/>
+                                <Text text="{/materialsCategorySummary/lubricantes}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Refacciones" class="dcsSummaryLabel"/>
+                                <Text text="{/materialsCategorySummary/refacciones}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Grasas" class="dcsSummaryLabel"/>
+                                <Text text="{/materialsCategorySummary/grasas}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Consumibles" class="dcsSummaryLabel"/>
+                                <Text text="{/materialsCategorySummary/consumibles}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Herramientas" class="dcsSummaryLabel"/>
+                                <Text text="{/materialsCategorySummary/herramientas}" class="dcsSummaryValue"/>
+                            </HBox>
+
+                            <HBox justifyContent="SpaceBetween" class="dcsSummaryRow">
+                                <Text text="Materiales críticos" class="dcsSummaryLabel"/>
+                                <Text
+                                    text="{/materialsCategorySummary/materialesCriticos}"
+                                    class="dcsSummaryValue dcsSummaryValueRed"/>
+                            </HBox>
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                class="dcsSummaryRow dcsSummaryRowTotal">
+
+                                <Text
+                                    text="Total de registros de consumo"
+                                    class="dcsSummaryLabel"/>
+
+                                <Text
+                                    text="{/materialsCategorySummary/totalRegistros}"
+                                    class="dcsSummaryValue"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox class="dcsPressureSection">
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                class="dcsChartArea">
+
+                                <html:div class="dcsDonutChart dcsDonutChartMaterials">
+                                    <html:div class="dcsDonutCenter"></html:div>
+                                </html:div>
+
+                                <VBox class="dcsChartLegend">
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendBlue"></html:span>
+                                        <Text text="Lubricantes" class="dcsLegendLabel"/>
+                                        <Text text="57% (1,125 L)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendGreen"></html:span>
+                                        <Text text="Refacciones" class="dcsLegendLabel"/>
+                                        <Text text="21% (420 pzas)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendOrange"></html:span>
+                                        <Text text="Grasas" class="dcsLegendLabel"/>
+                                        <Text text="11% (210 kg)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendTeal"></html:span>
+                                        <Text text="Consumibles" class="dcsLegendLabel"/>
+                                        <Text text="8% (160 pares)" class="dcsLegendValue"/>
+                                    </HBox>
+
+                                    <HBox alignItems="Center" class="dcsLegendRow">
+                                        <html:span class="dcsLegendDot dcsLegendPurple"></html:span>
+                                        <Text text="Herramientas" class="dcsLegendLabel"/>
+                                        <Text text="3% (48 pzas)" class="dcsLegendValue"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <Button
+                            text="Ver detalle de materiales"
+                            icon="sap-icon://navigation-right-arrow"
+                            iconFirst="false"
+                            type="Transparent"
+                            press=".onOpenMaterialsReport"
+                            class="dcsReportButton"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

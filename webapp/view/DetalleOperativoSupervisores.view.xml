@@ -1,0 +1,1068 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleOperativoSupervisores"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Page
+        id="detalleOperativoSupervisoresPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="dosPage">
+
+        <content>
+
+            <VBox
+                width="100%"
+                class="dosRoot">
+
+                <!-- ===================================================== -->
+                <!-- TÍTULO DE LA PANTALLA                                 -->
+                <!-- ===================================================== -->
+
+                <VBox class="dosScreenHeader">
+
+                    <Title
+                        text="Detalle operativo de supervisores"
+                        level="H1"
+                        class="dosMainTitle"/>
+
+                    <Text
+                        text="Análisis operativo de los supervisores bajo la jefatura seleccionada."
+                        class="dosMainSubtitle"/>
+
+                </VBox>
+
+                <!-- ===================================================== -->
+                <!-- FILTROS                                               -->
+                <!-- ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="dosFiltersGrid">
+
+                    <!-- Periodo -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterPeriod">
+
+                        <Label
+                            text="Periodo"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/period}"
+                            items="{screen>/periods}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Fecha desde -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterDate">
+
+                        <Label
+                            text="Fecha desde"
+                            class="dosFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{screen>/filters/dateFrom}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dosFilterControl"/>
+
+                    </VBox>
+
+                    <!-- Fecha hasta -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterDate">
+
+                        <Label
+                            text="Fecha hasta"
+                            class="dosFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{screen>/filters/dateTo}"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd/MM/yyyy"
+                            class="dosFilterControl"/>
+
+                    </VBox>
+
+                    <!-- Gerencia -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterManagement">
+
+                        <Label
+                            text="Gerencia"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/management}"
+                            items="{screen>/managements}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Jefatura -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterHeadquarters">
+
+                        <Label
+                            text="Jefatura"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/headquarters}"
+                            items="{screen>/headquarters}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Supervisor -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterSupervisor">
+
+                        <Label
+                            text="Supervisor"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/supervisor}"
+                            items="{screen>/supervisorOptions}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Turno -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterSmall dosFilterShift">
+
+                        <Label
+                            text="Turno"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/shift}"
+                            items="{screen>/shifts}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Tipo de servicio -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterMedium">
+
+                        <Label
+                            text="Tipo de servicio"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/serviceType}"
+                            items="{screen>/serviceTypes}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Tipo de recurso -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterMedium">
+
+                        <Label
+                            text="Tipo de recurso"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/resourceType}"
+                            items="{screen>/resourceTypes}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Zona -->
+
+                    <VBox
+                        class="dosFilterCard dosFilterSmall dosFilterZone">
+
+                        <Label
+                            text="Zona"
+                            class="dosFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{screen>/filters/zone}"
+                            items="{screen>/zones}"
+                            class="dosFilterControl">
+
+                            <core:Item
+                                key="{screen>key}"
+                                text="{screen>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+                    <!-- Botón aplicar filtros -->
+
+                    <VBox
+                        justifyContent="Center"
+                        alignItems="Stretch"
+                        class="dosFilterButtonContainer">
+
+                        <Button
+                            width="100%"
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="dosApplyButton"/>
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- ===================================================== -->
+                <!-- TARJETAS KPI                                          -->
+                <!-- ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    wrap="Wrap"
+                    alignItems="Stretch"
+                    class="dosKpiRow">
+
+                    <!-- Supervisores activos -->
+
+                    <VBox class="dosKpiCard dosKpiBlue">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://group"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Supervisores activos"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/activeSupervisors/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="Total supervisores"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Recursos totales -->
+
+                    <VBox class="dosKpiCard dosKpiPurple">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://group"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Recursos totales"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/totalResources/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="Mecánicos y ayudantes"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Capacidad disponible -->
+
+                    <VBox class="dosKpiCard dosKpiGreen">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://history"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Capacidad disponible"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/availableCapacity/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="Total disponible"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Carga programada -->
+
+                    <VBox class="dosKpiCard dosKpiOrange">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://task"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Carga programada"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/programmedLoad/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="Total programada"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Utilización promedio -->
+
+                    <VBox class="dosKpiCard dosKpiRed">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://line-chart"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Utilización promedio"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/averageUtilization/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="Dentro del rango normal"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Cumplimiento operativo -->
+
+                    <VBox class="dosKpiCard dosKpiTeal">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="dosKpiMainContent">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dosKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://target-group"
+                                    class="dosKpiIcon"/>
+
+                            </HBox>
+
+                            <VBox class="dosKpiInformation">
+
+                                <Text
+                                    text="Cumplimiento operativo"
+                                    class="dosKpiTitle"/>
+
+                                <Text
+                                    text="{screen>/kpis/operationalCompliance/value}"
+                                    class="dosKpiValue"/>
+
+                                <Text
+                                    text="PP por debajo de la meta"
+                                    class="dosKpiFooterText"/>
+
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- ===================================================== -->
+                <!-- TABLA                                                 -->
+                <!-- ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="dosTableCard">
+
+                    <!-- Encabezado de la tabla -->
+
+                    <HBox
+                        width="100%"
+                        wrap="NoWrap"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dosTableToolbar">
+
+                        <HBox
+                            alignItems="Center"
+                            class="dosTableTitleContainer">
+
+                            <Title
+                                text="Desempeño operativo por supervisor"
+                                level="H2"
+                                class="dosTableTitle"/>
+
+                        </HBox>
+
+                        <!-- Leyenda -->
+
+                        <HBox
+                            wrap="Wrap"
+                            alignItems="Center"
+                            class="dosLegend">
+
+                            <HBox
+                                alignItems="Center"
+                                class="dosLegendItem">
+
+                                <Text
+                                    text="●"
+                                    class="dosLegendDot dosLegendDotBlue"/>
+
+                                <Text
+                                    text="Bajo (0 - 70%)"
+                                    class="dosLegendText"/>
+
+                            </HBox>
+
+                            <HBox
+                                alignItems="Center"
+                                class="dosLegendItem">
+
+                                <Text
+                                    text="●"
+                                    class="dosLegendDot dosLegendDotGreen"/>
+
+                                <Text
+                                    text="Normal (71 - 100%)"
+                                    class="dosLegendText"/>
+
+                            </HBox>
+
+                            <HBox
+                                alignItems="Center"
+                                class="dosLegendItem">
+
+                                <Text
+                                    text="●"
+                                    class="dosLegendDot dosLegendDotOrange"/>
+
+                                <Text
+                                    text="Alto (101 - 120%)"
+                                    class="dosLegendText"/>
+
+                            </HBox>
+
+                            <HBox
+                                alignItems="Center"
+                                class="dosLegendItem">
+
+                                <Text
+                                    text="●"
+                                    class="dosLegendDot dosLegendDotRed"/>
+
+                                <Text
+                                    text="Crítico (&gt;120%)"
+                                    class="dosLegendText"/>
+
+                            </HBox>
+
+                        </HBox>
+
+                    </HBox>
+
+                    <!-- Tabla de supervisores -->
+
+                    <Table
+                        id="supervisorsTable"
+                        width="100%"
+                        inset="false"
+                        fixedLayout="true"
+                        mode="None"
+                        growing="false"
+                        noDataText="No existen supervisores para los filtros seleccionados."
+                        items="{screen>/pageItems}"
+                        updateFinished=".onTableUpdateFinished"
+                        class="dosDataTable">
+
+                        <columns>
+
+                            <Column
+                                width="13%"
+                                hAlign="Center">
+                                <Text
+                                    text="Supervisor"
+                                    wrapping="true"
+                                    class="dosColumnHeader"/>
+                            </Column>
+
+                            <Column
+                                width="10%"
+                                hAlign="Center">
+                                <Text
+                                    text="Jefe responsable"
+                                    wrapping="true"
+                                    class="dosColumnHeader"/>
+                            </Column>
+
+                            <Column
+                                width="6.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Recursos asignados"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="7.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Capacidad disponible (h)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="7.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Carga programada (h)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="6.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Utilización (%)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="9%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Estatus utilización"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="7.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Recursos sobre capacidad"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="8.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Cumplimiento operativo (%)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="5.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Meta (%)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="7.5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Diferencia vs meta (pp)"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                            <Column
+                                width="11%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Acción"
+                                    wrapping="true"
+                                    textAlign="Center"
+                                    class="dosColumnHeader"/>
+
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                vAlign="Middle"
+                                type="Inactive"
+                                class="dosTableRow">
+
+                                <cells>
+
+                                    <!-- Supervisor -->
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <Link
+                                            text="{screen>supervisor}"
+                                            visible="{= !${screen>isTotal} }"
+                                            press=".onViewSupervisor"
+                                            class="dosSupervisorLink"/>
+
+                                        <Text
+                                            text="{screen>supervisor}"
+                                            visible="{screen>isTotal}"
+                                            wrapping="false"
+                                            class="dosTotalText"/>
+
+                                    </HBox>
+
+                                    <!-- Jefe responsable -->
+
+                                    <Text
+                                        text="{screen>manager}"
+                                        textAlign="Center"
+                                        wrapping="true"
+                                        class="dosCellText"/>
+
+                                    <!-- Recursos asignados -->
+
+                                    <Text
+                                        text="{screen>resourcesDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Capacidad disponible -->
+
+                                    <Text
+                                        text="{screen>capacityDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Carga programada -->
+
+                                    <Text
+                                        text="{screen>loadDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Utilización -->
+
+                                    <Text
+                                        text="{screen>utilizationDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Estatus de utilización -->
+
+                                    <HBox
+                                        width="100%"
+                                        justifyContent="Center"
+                                        alignItems="Center"
+                                        class="dosStatusCell">
+
+                                        <Text
+                                            text="{screen>status}"
+                                            visible="{= !${screen>isTotal} &amp;&amp; ${screen>statusState} === 'Success' }"
+                                            wrapping="false"
+                                            class="dosStatusPill dosStatusNormal"/>
+
+                                        <Text
+                                            text="{screen>status}"
+                                            visible="{= !${screen>isTotal} &amp;&amp; ${screen>statusState} === 'Warning' }"
+                                            wrapping="false"
+                                            class="dosStatusPill dosStatusHigh"/>
+
+                                        <Text
+                                            text="{screen>status}"
+                                            visible="{= !${screen>isTotal} &amp;&amp; ${screen>statusState} === 'Information' }"
+                                            wrapping="false"
+                                            class="dosStatusPill dosStatusLow"/>
+
+                                        <Text
+                                            text="{screen>status}"
+                                            visible="{= !${screen>isTotal} &amp;&amp; ${screen>statusState} === 'Error' }"
+                                            wrapping="false"
+                                            class="dosStatusPill dosStatusCritical"/>
+
+                                        <Text
+                                            text="—"
+                                            visible="{screen>isTotal}"
+                                            textAlign="Center"
+                                            wrapping="false"
+                                            class="dosCellText"/>
+
+                                    </HBox>
+
+                                    <!-- Recursos sobre capacidad -->
+
+                                    <Text
+                                        text="{screen>overCapacityDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Cumplimiento operativo -->
+
+                                    <Text
+                                        text="{screen>complianceDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Meta -->
+
+                                    <Text
+                                        text="{screen>goalDisplay}"
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="dosCellText"/>
+
+                                    <!-- Diferencia vs meta: texto sin píldora -->
+
+                                    <HBox
+                                        width="100%"
+                                        justifyContent="Center"
+                                        alignItems="Center"
+                                        class="dosDifferenceCell">
+
+                                        <Text
+                                            text="{screen>differenceDisplay}"
+                                            visible="{= ${screen>difference} &gt; 0 }"
+                                            textAlign="Center"
+                                            wrapping="false"
+                                            class="dosDifferenceText dosDifferencePositive"/>
+
+                                        <Text
+                                            text="{screen>differenceDisplay}"
+                                            visible="{= ${screen>difference} &lt; 0 }"
+                                            textAlign="Center"
+                                            wrapping="false"
+                                            class="dosDifferenceText dosDifferenceNegative"/>
+
+                                        <Text
+                                            text="{screen>differenceDisplay}"
+                                            visible="{= ${screen>difference} === 0 }"
+                                            textAlign="Center"
+                                            wrapping="false"
+                                            class="dosDifferenceText dosDifferenceNeutral"/>
+
+                                    </HBox>
+
+                                    <!-- Acción -->
+
+                                    <HBox
+                                        width="100%"
+                                        justifyContent="Center"
+                                        alignItems="Center"
+                                        class="dosActionCell">
+
+                                        <Button
+                                            text="Ver supervisor"
+                                            type="Transparent"
+                                            visible="{= !${screen>isTotal} }"
+                                            press=".onViewSupervisor"
+                                            class="dosViewSupervisorButton"/>
+
+                                        <Text
+                                            text="—"
+                                            visible="{screen>isTotal}"
+                                            textAlign="Center"
+                                            wrapping="false"
+                                            class="dosCellText"/>
+
+                                    </HBox>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                    <!-- ================================================= -->
+                    <!-- PIE DE TABLA                                      -->
+                    <!-- ================================================= -->
+
+                    <HBox
+                        width="100%"
+                        wrap="Wrap"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dosTableFooter">
+
+                        <HBox
+                            alignItems="Center"
+                            class="dosUpdateInformation">
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="dosInformationIcon"/>
+
+                            <Text
+                                text="Los datos se actualizan cada 15 minutos"
+                                class="dosInformationText"/>
+
+                        </HBox>
+
+                        <HBox
+                            alignItems="Center"
+                            class="dosPagination">
+
+                            <Text
+                                text="{screen>/paging/rangeText}"
+                                class="dosPaginationRange"/>
+
+                            <Button
+                                icon="sap-icon://media-rewind"
+                                type="Transparent"
+                                enabled="{= ${screen>/paging/currentPage} &gt; 1 }"
+                                press=".onFirstPage"
+                                tooltip="Primera página"
+                                class="dosPaginationArrow"/>
+
+                            <Button
+                                icon="sap-icon://slim-arrow-left"
+                                type="Transparent"
+                                enabled="{= ${screen>/paging/currentPage} &gt; 1 }"
+                                press=".onPreviousPage"
+                                tooltip="Página anterior"
+                                class="dosPaginationArrow"/>
+
+                            <Button
+                                text="{screen>/paging/currentPage}"
+                                type="Emphasized"
+                                class="dosCurrentPageButton"/>
+
+                            <Button
+                                icon="sap-icon://slim-arrow-right"
+                                type="Transparent"
+                                enabled="{= ${screen>/paging/currentPage} &lt; ${screen>/paging/totalPages} }"
+                                press=".onNextPage"
+                                tooltip="Página siguiente"
+                                class="dosPaginationArrow"/>
+
+                            <Button
+                                icon="sap-icon://media-forward"
+                                type="Transparent"
+                                enabled="{= ${screen>/paging/currentPage} &lt; ${screen>/paging/totalPages} }"
+                                press=".onLastPage"
+                                tooltip="Última página"
+                                class="dosPaginationArrow"/>
+
+                        </HBox>
+
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

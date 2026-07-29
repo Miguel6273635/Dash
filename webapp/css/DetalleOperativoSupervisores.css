@@ -1,0 +1,1114 @@
+/* ================================================================
+   PANTALLA: DETALLE OPERATIVO DE SUPERVISORES
+   Prefijo exclusivo: dos
+   ================================================================ */
+
+
+/* ================================================================
+   PÁGINA
+   ================================================================ */
+
+.dosPage,
+.dosPage.sapMPage,
+.dosPage .sapMPage,
+.dosPage .sapMPageBgStandard,
+.dosPage .sapMPageEnableScrolling,
+.dosPage .sapMPageScroll {
+    background: #f7f9fc !important;
+}
+
+.dosPage .sapMPageEnableScrolling {
+    overflow-x: hidden;
+}
+
+.dosRoot {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1440px;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 12px 12px 8px;
+    color: #15243d;
+}
+
+.dosRoot,
+.dosRoot * {
+    box-sizing: border-box;
+}
+
+
+/* ================================================================
+   ENCABEZADO
+   ================================================================ */
+
+.dosScreenHeader {
+    margin: 0 8px 8px;
+    padding-top: 1px;
+    border-top: 1px solid #dce4ef;
+}
+
+.dosMainTitle.sapMTitle {
+    margin: 9px 0 0 !important;
+    color: #13214a !important;
+    font-size: 1.72rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em;
+}
+
+.dosMainSubtitle.sapMText {
+    margin-top: 3px !important;
+    color: #65748b !important;
+    font-size: 0.73rem !important;
+    line-height: 1.15 !important;
+}
+
+
+/* ================================================================
+   FILTROS
+   Una sola fila en escritorio. Los anchos mínimos reservan espacio
+   para Gerencia, Jefatura y Supervisor sin cortar el valor.
+   ================================================================ */
+
+.dosFiltersGrid.sapMHBox {
+    display: grid !important;
+    grid-template-columns:
+        minmax(82px, 0.78fr)
+        minmax(102px, 0.92fr)
+        minmax(102px, 0.92fr)
+        minmax(145px, 1.35fr)
+        minmax(175px, 1.55fr)
+        minmax(125px, 1.05fr)
+        minmax(78px, 0.72fr)
+        minmax(105px, 0.95fr)
+        minmax(105px, 0.95fr)
+        minmax(72px, 0.68fr)
+        minmax(118px, 0.92fr);
+    grid-auto-flow: column;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    padding: 0 1px;
+    align-items: end !important;
+}
+
+.dosFilterCard {
+    width: auto !important;
+    min-width: 0;
+    height: 54px;
+    min-height: 54px;
+    padding: 7px 9px 5px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e3e9f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 7px rgba(25, 45, 79, 0.05);
+}
+
+.dosFilterPeriod,
+.dosFilterDate,
+.dosFilterManagement,
+.dosFilterHeadquarters,
+.dosFilterSupervisor,
+.dosFilterShift,
+.dosFilterMedium,
+.dosFilterZone {
+    grid-column: auto;
+}
+
+.dosFilterLabel.sapMLabel {
+    display: block;
+    height: 14px;
+    margin-bottom: 1px;
+    color: #78869a !important;
+    font-size: 0.59rem !important;
+    font-weight: 600 !important;
+    line-height: 14px !important;
+    white-space: nowrap;
+}
+
+
+/* ================================================================
+   CONTROLES DE FILTRO
+   ================================================================ */
+
+.dosFilterControl.sapMSlt,
+.dosFilterControl .sapMInputBaseContentWrapper {
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.dosFilterControl.sapMSlt:hover,
+.dosFilterControl.sapMSlt.sapMSltPressed,
+.dosFilterControl .sapMInputBaseContentWrapper:hover,
+.dosFilterControl.sapMInputBaseFocused .sapMInputBaseContentWrapper {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.dosFilterControl.sapMSlt .sapMSltLabel {
+    height: 1.62rem !important;
+    padding: 0 1.55rem 0 0 !important;
+    overflow: hidden !important;
+    color: #1e2e4c !important;
+    font-size: 0.61rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dosFilterControl.sapMSlt .sapMSltArrow {
+    width: 1.3rem !important;
+    height: 1.62rem !important;
+    color: #0a6ff5 !important;
+    font-size: 0.68rem !important;
+    line-height: 1.62rem !important;
+}
+
+.dosFilterControl.sapMInputBase {
+    width: 100% !important;
+    height: 1.62rem !important;
+}
+
+.dosFilterControl .sapMInputBaseInner {
+    height: 1.62rem !important;
+    padding: 0 1.65rem 0 0 !important;
+    color: #1e2e4c !important;
+    background: transparent !important;
+    font-size: 0.61rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
+}
+
+.dosFilterControl .sapMInputBaseIconContainer,
+.dosFilterControl .sapMInputBaseIcon {
+    width: 1.35rem !important;
+    min-width: 1.35rem !important;
+    height: 1.62rem !important;
+    color: #0a6ff5 !important;
+    font-size: 0.7rem !important;
+    line-height: 1.62rem !important;
+}
+
+.dosFilterControl.sapMSlt::before,
+.dosFilterControl.sapMSlt::after,
+.dosFilterControl .sapMInputBaseContentWrapper::before,
+.dosFilterControl .sapMInputBaseContentWrapper::after {
+    display: none !important;
+}
+
+
+/* ================================================================
+   BOTÓN APLICAR FILTROS
+   ================================================================ */
+
+.dosFilterButtonContainer {
+    grid-column: auto;
+    width: auto !important;
+    min-width: 0;
+    height: 54px;
+    min-height: 54px;
+    padding: 0 1px 1px 2px;
+    justify-content: center !important;
+    background: transparent !important;
+}
+
+.dosApplyButton {
+    width: 100% !important;
+    height: 1.95rem !important;
+    margin: 0 !important;
+}
+
+.dosApplyButton .sapMBtnInner {
+    width: 100% !important;
+    min-width: 110px !important;
+    height: 1.95rem !important;
+    min-height: 1.95rem !important;
+    padding: 0 0.8rem !important;
+    background: #0a6ff5 !important;
+    border: 0 !important;
+    border-radius: 5px !important;
+    box-shadow: 0 3px 8px rgba(10, 111, 245, 0.24) !important;
+}
+
+.dosApplyButton .sapMBtnContent,
+.dosApplyButton .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+    line-height: 1.95rem !important;
+}
+
+.dosApplyButton .sapMBtnIcon {
+    font-size: 0.72rem !important;
+}
+
+.dosApplyButton:hover .sapMBtnInner {
+    background: #0867e3 !important;
+}
+
+.dosApplyButton .sapMBtnInner::after,
+.dosApplyButton .sapMBtnInner:focus::after,
+.dosApplyButton .sapMFocusable:focus::after {
+    display: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+
+/* ================================================================
+   KPIS
+   ================================================================ */
+
+.dosKpiRow.sapMHBox {
+    display: flex !important;
+    gap: 9px;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.dosKpiCard {
+    --dos-kpi-color: #2e8cff;
+    --dos-kpi-rgb: 46, 140, 255;
+
+    position: relative;
+    flex: 1 1 135px;
+    width: auto !important;
+    min-width: 128px;
+    min-height: 76px;
+    padding: 10px 9px 10px 12px;
+    overflow: hidden;
+    background: linear-gradient(
+        90deg,
+        rgba(var(--dos-kpi-rgb), 0.20) 0%,
+        rgba(var(--dos-kpi-rgb), 0.11) 22%,
+        rgba(var(--dos-kpi-rgb), 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+    border: 1px solid rgba(var(--dos-kpi-rgb), 0.18);
+    border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06);
+}
+
+.dosKpiCard::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: var(--dos-kpi-color);
+    border-radius: 8px 0 0 8px;
+    content: "";
+}
+
+.dosKpiBlue {
+    --dos-kpi-color: #2e8cff;
+    --dos-kpi-rgb: 46, 140, 255;
+}
+
+.dosKpiPurple {
+    --dos-kpi-color: #9857d8;
+    --dos-kpi-rgb: 152, 87, 216;
+}
+
+.dosKpiGreen {
+    --dos-kpi-color: #63bf42;
+    --dos-kpi-rgb: 99, 191, 66;
+}
+
+.dosKpiOrange {
+    --dos-kpi-color: #ff9e31;
+    --dos-kpi-rgb: 255, 158, 49;
+}
+
+.dosKpiRed {
+    --dos-kpi-color: #ff4d53;
+    --dos-kpi-rgb: 255, 77, 83;
+}
+
+.dosKpiTeal {
+    --dos-kpi-color: #1bc6c8;
+    --dos-kpi-rgb: 27, 198, 200;
+}
+
+.dosKpiMainContent {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 54px;
+}
+
+.dosKpiIconCircle {
+    flex: 0 0 43px;
+    width: 43px !important;
+    height: 43px !important;
+    min-width: 43px !important;
+    margin-right: 8px;
+    background: rgba(var(--dos-kpi-rgb), 0.13);
+    border: 0;
+    border-radius: 50%;
+}
+
+.dosKpiIcon {
+    color: var(--dos-kpi-color) !important;
+    font-size: 1.28rem !important;
+}
+
+.dosKpiInformation {
+    min-width: 0;
+}
+
+.dosKpiTitle.sapMText {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    color: #43516a !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dosKpiValue.sapMText {
+    display: block;
+    margin-top: 2px !important;
+    color: var(--dos-kpi-color) !important;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+    white-space: nowrap;
+}
+
+.dosKpiFooterText.sapMText {
+    display: block;
+    width: 100%;
+    margin-top: 3px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    color: #6f7c8f !important;
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ================================================================ */
+/* CARD PRINCIPAL DE LA TABLA                                       */
+/* ================================================================ */
+
+.dosTableCard {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.65rem 0.65rem 0.55rem;
+    background: #ffffff;
+    border: 1px solid #e4e9f0;
+    border-radius: 0.7rem;
+    box-shadow: 0 0.1rem 0.4rem rgba(30, 45, 70, 0.05);
+}
+
+.dosTableToolbar {
+    box-sizing: border-box;
+    min-height: 2.05rem;
+    padding: 0 0.35rem 0.45rem;
+    gap: 0.65rem;
+}
+
+.dosTableTitleContainer {
+    gap: 0;
+}
+
+
+.dosTableTitle {
+    color: #1b2740 !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+}
+
+/* ================================================================ */
+/* LEYENDA                                                          */
+/* ================================================================ */
+
+.dosLegend {
+    gap: 0.75rem;
+}
+
+.dosLegendItem {
+    gap: 0.35rem;
+}
+
+.dosLegendDot {
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+}
+
+.dosLegendDotBlue {
+    color: #087cef !important;
+}
+
+.dosLegendDotGreen {
+    color: #19a743 !important;
+}
+
+.dosLegendDotOrange {
+    color: #f18c09 !important;
+}
+
+.dosLegendDotRed {
+    color: #e93047 !important;
+}
+
+.dosLegendText {
+    color: #33415a !important;
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+}
+
+/* ================================================================ */
+/* TABLA                                                            */
+/* ================================================================ */
+
+.dosDataTable {
+    width: 100% !important;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e5e9f0;
+    border-radius: 0.65rem;
+}
+
+.dosDataTable .sapMListTbl {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+.dosDataTable .sapMListTblHeader {
+    background: #f7f9fc !important;
+}
+
+.dosDataTable .sapMListTblHeaderCell {
+    box-sizing: border-box;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    padding: 0.3rem 0.32rem !important;
+    vertical-align: middle !important;
+    background: #f7f9fc !important;
+    border-right: 1px solid #e9edf3 !important;
+    border-bottom: 1px solid #e2e7ee !important;
+}
+
+.dosDataTable .sapMListTblHeaderCell:first-child {
+    border-top-left-radius: 0.62rem;
+}
+
+.dosDataTable .sapMListTblHeaderCell:last-child {
+    border-top-right-radius: 0.62rem;
+    border-right: none !important;
+}
+
+.dosDataTable .sapMListTblHeaderCell,
+.dosDataTable .sapMListTblCell {
+    text-align: center !important;
+}
+
+.dosColumnHeader {
+    display: block !important;
+    width: 100% !important;
+    color: #39465e !important;
+    font-size: 0.57rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+}
+
+.dosTableRow {
+    min-height: 2.35rem !important;
+    background: #ffffff !important;
+}
+
+.dosDataTable .sapMListTblRow {
+    height: 2.35rem !important;
+    min-height: 2.35rem !important;
+}
+
+.dosDataTable .sapMListTblCell {
+    box-sizing: border-box;
+    height: 2.35rem !important;
+    min-height: 2.35rem !important;
+    padding: 0.26rem 0.32rem !important;
+    vertical-align: middle !important;
+    background: inherit;
+    border-right: 1px solid #edf0f4 !important;
+    border-bottom: 1px solid #e8ecf1 !important;
+}
+
+.dosDataTable .sapMListTblCell:last-child {
+    border-right: none !important;
+}
+
+.dosDataTable .sapMListTblRow:last-child .sapMListTblCell {
+    border-bottom: none !important;
+}
+
+.dosCellText {
+    display: block !important;
+    width: 100% !important;
+    color: #2f3b53 !important;
+    font-size: 0.61rem !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+}
+
+.dosSupervisorLink {
+    display: block !important;
+    width: 100% !important;
+    color: #087cef !important;
+    font-size: 0.62rem !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+}
+
+.dosSupervisorLink:hover {
+    color: #0069cd !important;
+    text-decoration: none !important;
+}
+
+.dosTotalText {
+    display: block !important;
+    width: 100% !important;
+    color: #28354d !important;
+    text-align: center !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+}
+
+/* ================================================================ */
+/* CELDA Y PÍLDORAS DE ESTATUS                                      */
+/* ================================================================ */
+
+.dosStatusCell {
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.dosStatusPill {
+    box-sizing: border-box;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 4.25rem !important;
+    min-width: 4.25rem !important;
+    max-width: 100% !important;
+    min-height: 1.2rem;
+    padding: 0.12rem 0.4rem !important;
+    overflow: hidden;
+    border-radius: 0.3rem;
+    font-size: 0.56rem !important;
+    font-weight: 700 !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+}
+
+.dosStatusNormal {
+    color: #19933c !important;
+    background: #eaf8ed !important;
+    border: 1px solid #d5eedb !important;
+}
+
+.dosStatusHigh {
+    color: #e4860c !important;
+    background: #fff3e5 !important;
+    border: 1px solid #f7dfbc !important;
+}
+
+.dosStatusLow {
+    color: #1671c7 !important;
+    background: #e8f3ff !important;
+    border: 1px solid #d5e8fb !important;
+}
+
+.dosStatusCritical {
+    color: #d9364b !important;
+    background: #ffe9ed !important;
+    border: 1px solid #f6d4da !important;
+}
+
+/* ================================================================ */
+/* DIFERENCIA CONTRA META: SOLO TEXTO                               */
+/* ================================================================ */
+
+.dosDifferenceCell {
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.dosDifferenceText {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    color: #68758b !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 0.61rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.dosDifferencePositive {
+    color: #22a144 !important;
+}
+
+.dosDifferenceNegative {
+    color: #e4384f !important;
+}
+
+.dosDifferenceNeutral {
+    color: #68758b !important;
+}
+
+/* ================================================================ */
+/* CELDA DE ACCIÓN                                                  */
+/* ================================================================ */
+
+.dosActionCell {
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: visible;
+}
+
+/* ================================================================
+   ACCIÓN VER SUPERVISOR COMO TEXTO AZUL
+   ================================================================ */
+
+.dosViewSupervisorButton {
+    width: auto !important;
+    max-width: none !important;
+    height: 1.45rem !important;
+    margin: 0 !important;
+}
+
+.dosViewSupervisorButton .sapMBtnInner {
+    width: auto !important;
+    min-width: auto !important;
+    height: 1.45rem !important;
+    min-height: 1.45rem !important;
+    padding: 0 0.15rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.dosViewSupervisorButton .sapMBtnContent {
+    overflow: visible !important;
+    color: #0a6ed1 !important;
+    font-size: 0.53rem !important;
+    font-weight: 700 !important;
+    line-height: 1.45rem !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+}
+
+.dosViewSupervisorButton:hover .sapMBtnInner,
+.dosViewSupervisorButton:active .sapMBtnInner {
+    background: transparent !important;
+    border: 0 !important;
+}
+
+.dosViewSupervisorButton:hover .sapMBtnContent {
+    color: #085caf !important;
+    text-decoration: underline;
+}
+
+.dosViewSupervisorButton .sapMBtnInner::after,
+.dosViewSupervisorButton .sapMBtnInner:focus::after,
+.dosViewSupervisorButton .sapMFocusable:focus::after {
+    display: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+
+/* ================================================================
+   FILA TOTAL
+   Todo el contenido utiliza azul oscuro exclusivo para el resumen.
+   ================================================================ */
+
+.dosTotalRow {
+    background: #f2f4f7 !important;
+}
+
+.dosTotalRow .sapMListTblCell {
+    background: #f2f4f7 !important;
+    border-top: 1px solid #d9e0e8 !important;
+}
+
+.dosTotalRow .sapMText,
+.dosTotalRow .sapMLabel,
+.dosTotalRow .sapMLnk,
+.dosTotalRow .dosDifferenceText,
+.dosTotalRow .dosDifferencePositive,
+.dosTotalRow .dosDifferenceNegative,
+.dosTotalRow .dosDifferenceNeutral {
+    color: #244c74 !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+}
+
+
+/* ================================================================ */
+/* PIE DE TABLA                                                     */
+/* ================================================================ */
+
+.dosTableFooter {
+    width: 100%;
+    min-height: 2.65rem;
+    margin-top: 0.08rem;
+    padding: 0.48rem 0.35rem 0.25rem;
+    align-items: center !important;
+    flex-shrink: 0;
+    gap: 0.75rem;
+}
+
+.dosUpdateInformation {
+    min-height: 1.75rem;
+    align-items: center !important;
+    gap: 0.45rem;
+}
+
+.dosInformationIcon {
+    color: #3f92e9 !important;
+    font-size: 0.92rem !important;
+}
+
+.dosInformationText {
+    color: #68758b !important;
+    font-size: 0.61rem !important;
+    font-weight: 500 !important;
+}
+
+.dosPagination {
+    min-height: 1.75rem;
+    align-items: center !important;
+    gap: 0.25rem;
+}
+
+.dosPaginationRange {
+    margin-right: 0.5rem !important;
+    color: #546078 !important;
+    font-size: 0.65rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+}
+
+.dosPaginationArrow {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+}
+
+.dosPaginationArrow .sapMBtnInner {
+    min-width: 1.75rem !important;
+    height: 1.75rem !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.dosPaginationArrow .sapMBtnIcon {
+    color: #78859b !important;
+    font-size: 0.7rem !important;
+    line-height: 1.65rem !important;
+}
+
+.dosCurrentPageButton {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+}
+
+.dosCurrentPageButton .sapMBtnInner {
+    min-width: 1.75rem !important;
+    height: 1.75rem !important;
+    padding: 0 !important;
+    background: #0878ed !important;
+    border: 1px solid #0878ed !important;
+    border-radius: 0.35rem !important;
+}
+
+.dosCurrentPageButton .sapMBtnContent {
+    color: #ffffff !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    line-height: 1.65rem !important;
+}
+
+.dosCurrentPageButton .sapMBtnInner::after {
+    display: none !important;
+}
+
+
+/* ================================================================
+   AJUSTE ADAPTATIVO DE ALTURA
+   El controller calcula el número de registros. En escritorio,
+   el scroll vertical de la página se elimina cuando el contenido cabe.
+   ================================================================ */
+
+@media screen and (min-width: 1181px) {
+
+    .dosPage .sapMPageEnableScrolling,
+    .dosPage .sapMPageScroll {
+        overflow-y: hidden !important;
+    }
+}
+
+
+/* ================================================================
+   ESCRITORIO DE POCA ALTURA
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (max-height: 680px) {
+
+    .dosRoot {
+        padding-top: 8px;
+        padding-bottom: 4px;
+    }
+
+    .dosScreenHeader {
+        margin-bottom: 5px;
+    }
+
+    .dosMainTitle.sapMTitle {
+        margin-top: 5px !important;
+        font-size: 1.58rem !important;
+    }
+
+    .dosMainSubtitle.sapMText {
+        margin-top: 2px !important;
+    }
+
+    .dosFiltersGrid.sapMHBox {
+        row-gap: 7px;
+        column-gap: 4px;
+    }
+
+    .dosApplyButton .sapMBtnInner {
+        min-width: 104px !important;
+        padding-right: 0.55rem !important;
+        padding-left: 0.55rem !important;
+    }
+
+    .dosFilterCard,
+    .dosFilterButtonContainer {
+        height: 51px;
+        min-height: 51px;
+    }
+
+    .dosKpiRow.sapMHBox {
+        margin-top: 7px;
+        margin-bottom: 7px;
+    }
+
+    .dosKpiCard {
+        min-height: 70px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .dosKpiMainContent {
+        min-height: 50px;
+    }
+
+    .dosKpiIconCircle {
+        flex-basis: 40px;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+    }
+
+    .dosTableCard {
+        padding-top: 0.5rem;
+        padding-bottom: 0.18rem;
+    }
+
+    .dosTableToolbar {
+        min-height: 1.85rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .dosDataTable .sapMListTblHeaderCell {
+        height: 2.45rem !important;
+        min-height: 2.45rem !important;
+    }
+
+    .dosDataTable .sapMListTblRow,
+    .dosDataTable .sapMListTblCell,
+    .dosTableRow {
+        height: 2.1rem !important;
+        min-height: 2.1rem !important;
+    }
+
+    .dosTableCard {
+        padding-bottom: 0.35rem;
+    }
+
+    .dosTableFooter {
+        min-height: 2.25rem;
+        padding: 0.3rem 0.35rem 0.18rem;
+    }
+}
+
+
+/* ================================================================
+   PANTALLAS MEDIANAS
+   ================================================================ */
+
+@media screen and (max-width: 1180px) {
+
+    .dosRoot {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .dosFiltersGrid.sapMHBox {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-auto-flow: row;
+    }
+
+    .dosFilterPeriod,
+    .dosFilterDate,
+    .dosFilterShift,
+    .dosFilterMedium,
+    .dosFilterZone,
+    .dosFilterButtonContainer {
+        grid-column: span 2;
+    }
+
+    .dosFilterManagement,
+    .dosFilterHeadquarters,
+    .dosFilterSupervisor {
+        grid-column: span 3;
+    }
+
+    .dosKpiCard {
+        flex: 1 1 calc(33.333% - 9px);
+        min-width: 180px;
+    }
+
+    .dosTableCard {
+        overflow-x: auto;
+    }
+
+    .dosDataTable {
+        min-width: 72rem;
+    }
+}
+
+
+/* ================================================================
+   TABLET
+   ================================================================ */
+
+@media screen and (max-width: 760px) {
+
+    .dosFiltersGrid.sapMHBox {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dosFilterPeriod,
+    .dosFilterDate,
+    .dosFilterManagement,
+    .dosFilterHeadquarters,
+    .dosFilterSupervisor,
+    .dosFilterShift,
+    .dosFilterMedium,
+    .dosFilterZone,
+    .dosFilterButtonContainer {
+        grid-column: span 1;
+    }
+
+    .dosKpiCard {
+        flex: 1 1 calc(50% - 9px);
+        min-width: 145px;
+    }
+
+    .dosTableToolbar,
+    .dosTableFooter {
+        align-items: flex-start !important;
+    }
+
+    .dosLegend {
+        margin-top: 0.3rem;
+    }
+}
+
+
+/* ================================================================
+   MÓVIL
+   ================================================================ */
+
+@media screen and (max-width: 480px) {
+
+    .dosRoot {
+        padding: 10px 7px 14px;
+    }
+
+    .dosMainTitle.sapMTitle {
+        font-size: 1.35rem !important;
+    }
+
+    .dosFiltersGrid.sapMHBox {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dosFilterPeriod,
+    .dosFilterDate,
+    .dosFilterManagement,
+    .dosFilterHeadquarters,
+    .dosFilterSupervisor,
+    .dosFilterShift,
+    .dosFilterMedium,
+    .dosFilterZone,
+    .dosFilterButtonContainer {
+        grid-column: span 1;
+    }
+
+    .dosApplyButton,
+    .dosApplyButton .sapMBtnInner {
+        width: 100% !important;
+    }
+
+    .dosKpiCard {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .dosLegend {
+        gap: 0.55rem;
+    }
+
+    .dosInformationText {
+        white-space: normal !important;
+    }
+}

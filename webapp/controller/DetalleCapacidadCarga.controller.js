@@ -354,6 +354,48 @@ sap.ui.define([
                 });
         },
 
+        /* ========================================================= */
+        /* Formatters - Resumen por turno                            */
+        /* ========================================================= */
+
+        formatTurnoIconColor: function (sTurno) {
+            switch (sTurno) {
+                case "Diurno":
+                    return "#f59e0b";
+                case "Nocturno":
+                    return "#2563eb";
+                case "Fin de semana":
+                    return "#0d6efd";
+                case "Total":
+                    return "#2563eb";
+                default:
+                    return "#64748b";
+            }
+        },
+
+        formatEstadoColor: function (sEstado) {
+            switch (sEstado) {
+                case "Normal":
+                    return "#16a34a";
+                case "Cerca de saturación":
+                    return "#f59e0b";
+                case "Sobrecargado":
+                    return "#ef4444";
+                default:
+                    return "#64748b";
+            }
+        },
+
+        formatEstadoCircleVisible: function (sEstado) {
+            return sEstado === "Normal" ||
+                sEstado === "Cerca de saturación" ||
+                sEstado === "Sobrecargado";
+        },
+
+        /* ========================================================= */
+        /* Formatters generales                                      */
+        /* ========================================================= */
+
         formatUtilizacionState: function (sValue) {
             var fValue = this._parsePercent(sValue);
 
@@ -421,13 +463,6 @@ sap.ui.define([
                     return "";
             }
         },
-        formatEstadoCircleIcon: function (sEstado) {
-    if (sEstado === "Normal" || sEstado === "Cerca de saturación" || sEstado === "Sobrecargado") {
-        return "sap-icon://circle-task-2";
-    }
-
-    return "";
-},
 
         _parsePercent: function (sValue) {
             if (!sValue) {

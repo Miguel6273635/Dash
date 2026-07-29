@@ -42,8 +42,7 @@
         "sap.viz": {},
         "sap.tnt": {},
         "sap.f": {},
-        "sap.ui.layout": {},
-        "sap.suite.ui.microchart": {}
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
@@ -84,6 +83,9 @@
         },
         {
           "uri": "css/ConsumoMateriales.css"
+        },
+        {
+          "uri": "css/HorasTrabajadas.css"
         },
         {
           "uri": "css/ConsumoRealVsPlanCategoria.css"
@@ -135,6 +137,60 @@
         },
         {
           "uri": "css/DetalleCapacidadCarga.css"
+        },
+        {
+          "uri": "css/DetalleUtilizacionTurno.css"
+        },
+        {
+          "uri": "css/EquiposBloqueados.css"
+        },
+        {
+          "uri": "css/ListadoOrdenesAfectadas.css"
+        },
+        {
+          "uri": "css/PendientesDesbloqueo.css"
+        },
+        {
+          "uri": "css/DetalleEquiposBloqueados.css"
+        },
+        {
+          "uri": "css/DetalleOrdenAfectada.css"
+        },
+        {
+          "uri": "css/FichaEquipoBloqueado.css"
+        },
+        {
+          "uri": "css/DetalleOperativoRecursos.css"
+        },
+        {
+          "uri": "css/DetalleOperativoSupervisores.css"
+        },
+        {
+          "uri": "css/VistaJefatura.css"
+        },
+        {
+          "uri": "css/VistaSupervisor.css"
+        },
+        {
+          "uri": "css/VistaDireccion.css"
+        },
+        {
+          "uri": "css/DetalleOperativoJefaturas.css"
+        },
+        {
+          "uri": "css/DetalleCargaCapacidadJefatura.css"
+        },
+        {
+          "uri": "css/DetalleGerencia.css"
+        },
+        {
+          "uri": "css/DetalleCargaSupervisor.css"
+        },
+        {
+          "uri": "css/Mantenimiento.css"
+        },
+        {
+          "uri": "css/App.css"
         }
       ]
     },
@@ -154,6 +210,13 @@
           "pattern": ":?query:",
           "target": [
             "TargetAnalisisFallas"
+          ]
+        },
+        {
+          "name": "RouteHorasTrabajadas",
+          "pattern": "horas-trabajadas",
+          "target": [
+            "TargetHorasTrabajadas"
           ]
         },
         {
@@ -192,13 +255,6 @@
           ]
         },
         {
-          "name": "RouteHorasTrabajadas",
-          "pattern": "horas-trabajadas",
-          "target": [
-            "TargetHorasTrabajadas"
-          ]
-        },
-        {
           "name": "RouteMecanicos",
           "pattern": "mecanicos",
           "target": [
@@ -228,7 +284,7 @@
         },
         {
           "name": "RouteDetalleResponsable",
-          "pattern": "detalle-responsable/{responsableId}",
+          "pattern": "detalle-responsable/:responsableId:",
           "target": [
             "TargetDetalleResponsable"
           ]
@@ -346,12 +402,118 @@
           ]
         },
         {
-  "name": "RouteDetalleCapacidadCarga",
-  "pattern": "detalle-capacidad-carga",
-  "target": [
-    "TargetDetalleCapacidadCarga"
-  ]
-}
+          "name": "RouteDetalleCapacidadCarga",
+          "pattern": "detalle-capacidad-carga",
+          "target": [
+            "TargetDetalleCapacidadCarga"
+          ]
+        },
+        {
+          "name": "RouteDetalleUtilizacionTurno",
+          "pattern": "detalle-utilizacion-turno",
+          "target": [
+            "TargetDetalleUtilizacionTurno"
+          ]
+        },
+        {
+          "name": "RouteEquiposBloqueados",
+          "pattern": "equipos-bloqueados",
+          "target": [
+            "TargetEquiposBloqueados"
+          ]
+        },
+        {
+          "name": "RouteListadoOrdenesAfectadas",
+          "pattern": "listado-ordenes-afectadas",
+          "target": [
+            "TargetListadoOrdenesAfectadas"
+          ]
+        },
+        {
+          "name": "RoutePendientesDesbloqueo",
+          "pattern": "pendientes-desbloqueo",
+          "target": [
+            "TargetPendientesDesbloqueo"
+          ]
+        },
+        {
+          "name": "RouteDetalleEquiposBloqueados",
+          "pattern": "detalle-equipos-bloqueados",
+          "target": [
+            "TargetDetalleEquiposBloqueados"
+          ]
+        },
+        {
+          "name": "RouteDetalleOrdenAfectada",
+          "pattern": "detalle-orden-afectada",
+          "target": [
+            "TargetDetalleOrdenAfectada"
+          ]
+        },
+        {
+          "name": "RouteFichaEquipoBloqueado",
+          "pattern": "ficha-equipo-bloqueado",
+          "target": [
+            "TargetFichaEquipoBloqueado"
+          ]
+        },
+        {
+          "name": "RouteDetalleOperativoRecursos",
+          "pattern": "detalle-operativo-recursos",
+          "target": [
+            "TargetDetalleOperativoRecursos"
+          ]
+        },
+        {
+          "name": "RouteDetalleOperativoSupervisores",
+          "pattern": "detalle-operativo-supervisores",
+          "target": [
+            "TargetDetalleOperativoSupervisores"
+          ]
+        },
+        {
+          "name": "RouteVistaJefatura",
+          "pattern": "vista-jefatura",
+          "target": [
+            "TargetVistaJefatura"
+          ]
+        },
+        {
+          "name": "RouteVistaDireccion",
+          "pattern": "vista-direccion",
+          "target": [
+            "TargetVistaDireccion"
+          ]
+        },
+        {
+          "name": "RouteVistaSupervisor",
+          "pattern": "vista-supervisor",
+          "target": [
+            "TargetVistaSupervisor"
+          ]
+        },
+        {
+          "name": "RouteDetalleOperativoJefaturas",
+          "pattern": "detalle-operativo-jefaturas",
+          "target": [
+            "TargetDetalleOperativoJefaturas"
+          ]
+        },
+        {
+          "name": "RouteDetalleCargaCapacidadJefatura",
+          "pattern": "detalleCargaCapacidadJefatura",
+          "target": "TargetDetalleCargaCapacidadJefatura"
+        },
+        {
+          "name": "RouteDetalleGerencia",
+          "pattern": "detalle-gerencia",
+          "target": "TargetDetalleGerencia"
+        },
+        {
+          "name": "RouteDetalleCargaSupervisor",
+          "pattern": "detalle-carga-supervisor",
+          "target": "TargetDetalleCargaSupervisor"
+        }
       ],
       "targets": {
         "TargetAnalisisFallas": {
@@ -497,10 +659,121 @@
           "viewName": "DetalleDesviacionHoras"
         },
         "TargetDetalleCapacidadCarga": {
-  "viewName": "DetalleCapacidadCarga",
-  "viewId": "DetalleCapacidadCarga",
-  "viewLevel": 1
-}
+          "viewType": "XML",
+          "viewName": "DetalleCapacidadCarga",
+          "viewId": "DetalleCapacidadCarga",
+          "viewLevel": 1
+        },
+        "TargetDetalleUtilizacionTurno": {
+          "viewType": "XML",
+          "viewName": "DetalleUtilizacionTurno",
+          "viewId": "DetalleUtilizacionTurno",
+          "viewLevel": 1
+        },
+        "TargetEquiposBloqueados": {
+          "viewType": "XML",
+          "viewId": "EquiposBloqueados",
+          "viewName": "EquiposBloqueados",
+          "viewLevel": 1
+        },
+        "TargetListadoOrdenesAfectadas": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListadoOrdenesAfectadas",
+          "viewName": "ListadoOrdenesAfectadas"
+        },
+        "TargetPendientesDesbloqueo": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "PendientesDesbloqueo",
+          "viewName": "PendientesDesbloqueo"
+        },
+        "TargetDetalleEquiposBloqueados": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleEquiposBloqueados",
+          "viewName": "DetalleEquiposBloqueados"
+        },
+        "TargetDetalleOrdenAfectada": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleOrdenAfectada",
+          "viewName": "DetalleOrdenAfectada"
+        },
+        "TargetFichaEquipoBloqueado": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "FichaEquipoBloqueado",
+          "viewName": "FichaEquipoBloqueado",
+          "viewLevel": 1
+        },
+        "TargetDetalleOperativoRecursos": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleOperativoRecursos",
+          "viewName": "DetalleOperativoRecursos"
+        },
+        "TargetDetalleOperativoSupervisores": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleOperativoSupervisores",
+          "viewName": "DetalleOperativoSupervisores",
+          "viewLevel": 2
+        },
+        "TargetVistaJefatura": {
+          "viewType": "XML",
+          "viewId": "VistaJefatura",
+          "viewName": "VistaJefatura"
+        },
+        "TargetVistaSupervisor": {
+          "viewType": "XML",
+          "viewId": "VistaSupervisor",
+          "viewName": "VistaSupervisor"
+        },
+        "TargetVistaDireccion": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "VistaDireccion",
+          "viewName": "VistaDireccion"
+        },
+        "TargetDetalleOperativoJefaturas": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleOperativoJefaturas",
+          "viewName": "DetalleOperativoJefaturas"
+        },
+        "TargetDetalleCargaCapacidadJefatura": {
+          "viewType": "XML",
+          "viewId": "DetalleCargaCapacidadJefatura",
+          "viewName": "DetalleCargaCapacidadJefatura",
+          "transition": "slide",
+          "clearControlAggregation": false
+        },
+        "TargetDetalleGerencia": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleGerencia",
+          "viewName": "DetalleGerencia",
+          "viewLevel": 2
+        },
+        "TargetDetalleCargaSupervisor": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "DetalleCargaSupervisor",
+          "viewName": "DetalleCargaSupervisor",
+          "viewLevel": 2
+        }
       }
     },
     "rootView": {

@@ -1,209 +1,128 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller",
-  "sap/ui/model/json/JSONModel",
-  "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
-  "use strict";
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast",
+    "sap/ui/core/UIComponent"
+], function (Controller, JSONModel, MessageToast, UIComponent) {
+    "use strict";
 
-  return Controller.extend("mantenimiento.controller.Mantenimiento", {
+    return Controller.extend("mantenimiento.controller.Mantenimiento", {
 
-    onInit: function () {
-      const oMockData = this._getMockDashboardData();
+        onInit: function () {
+            var oModel = new JSONModel(this._getMockDashboardData());
 
-      this.getView().setModel(new JSONModel(oMockData), "dash");
-
-      this._configurarGraficas();
-
-      console.group("DASHBOARD MANTENIMIENTO - JSON RECIBIDO MOCK");
-      console.log(JSON.stringify(oMockData, null, 2));
-      console.groupEnd();
-    },
-
-    onAfterRendering: function () {
-      this._activarCardsComoBotones();
-    },
-
-    _activarCardsComoBotones: function () {
-      const aCards = [
-        { id: "cardPlantilla", section: "plantilla" },
-        { id: "cardTiempo", section: "tiempo" },
-        { id: "cardMateriales", section: "materiales" },
-        { id: "cardEficiencia", section: "eficiencia" },
-        { id: "cardEstatus", section: "estatus" },
-        { id: "cardCostos", section: "costos" },
-        { id: "cardOrdenes", section: "ordenes" }
-      ];
-
-      aCards.forEach((oItem) => {
-        const oCard = this.byId(oItem.id);
-
-        if (oCard && !oCard.data("clickActivo")) {
-          oCard.attachBrowserEvent("click", () => {
-            this._irADetalle(oItem.section);
-          });
-
-          oCard.data("clickActivo", true);
-        }
-      });
-    },
-
-    _irADetalle: function (sSection) {
-      console.log("CLICK CARD:", sSection);
-
-      const oDetalleRequest = {
-        dashboard: "MANTENIMIENTO",
-        tipoConsulta: "DETALLE",
-        seccion: sSection,
-        filtros: {
-          fechaInicio: this.byId("dpInicio").getValue() || null,
-          fechaFin: this.byId("dpFin").getValue() || null,
-          sociedad: "MX01",
-          centro: "SERVICIO"
-        }
-      };
-
-      console.group("JSON DETALLE QUE SE MANDARÍA AL BACKEND / SAP");
-      console.log(JSON.stringify(oDetalleRequest, null, 2));
-      console.groupEnd();
-
-      const oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-
-      if (!oRouter) {
-        MessageToast.show("No se encontró el router");
-        return;
-      }
-
-      oRouter.navTo("MantenimientoDetalle", {
-        section: sSection
-      });
-    },
-
-    _configurarGraficas: function () {
-      const aCharts = [
-        "chartPlantilla",
-        "chartTiempo",
-        "chartMateriales",
-        "chartEficiencia",
-        "chartEstatus",
-        "chartCostos",
-        "chartOrdenes"
-      ];
-
-      aCharts.forEach((sId) => {
-        const oChart = this.byId(sId);
-
-        if (oChart) {
-          oChart.setVizProperties({
-            plotArea: {
-              dataLabel: {
-                visible: true
-              }
-            },
-            legend: {
-              visible: true
-            },
-            title: {
-              visible: false
-            },
-            valueAxis: {
-              title: {
-                visible: false
-              }
-            },
-            categoryAxis: {
-              title: {
-                visible: false
-              }
-            }
-          });
-        }
-      });
-    },
-
-    onActualizar: function () {
-      const sFechaInicio = this.byId("dpInicio").getValue();
-      const sFechaFin = this.byId("dpFin").getValue();
-
-      const oRequestJson = {
-        dashboard: "MANTENIMIENTO",
-        tipoConsulta: "GENERAL",
-        filtros: {
-          fechaInicio: sFechaInicio || null,
-          fechaFin: sFechaFin || null,
-          sociedad: "MX01",
-          centro: "SERVICIO"
-        }
-      };
-
-      console.group("JSON GENERAL QUE SE MANDARÍA AL BACKEND / SAP");
-      console.log(JSON.stringify(oRequestJson, null, 2));
-      console.groupEnd();
-
-      MessageToast.show("Dashboard actualizado con datos mock");
-    },
-
-    _getMockDashboardData: function () {
-      return {
-        kpis: {
-          ordenesAbiertas: 82,
-          ordenesCerradas: 156,
-          eficienciaPromedio: 87,
-          costoReal: 248500
+            oModel.setSizeLimit(200);
+            this.getView().setModel(oModel, "dash");
         },
 
-        plantilla: [
-          { tipo: "Mecánicos", cantidad: 45 },
-          { tipo: "Supervisores", cantidad: 8 },
-          { tipo: "Zona Norte", cantidad: 15 },
-          { tipo: "Zona Centro", cantidad: 20 },
-          { tipo: "Zona Sur", cantidad: 18 }
-        ],
+        onFilterChange: function () {
+            var oRequest = this._buildDashboardRequest();
 
-        tiempoHoras: [
-          { concepto: "Por servicio", horas: 320 },
-          { concepto: "Turno", horas: 480 },
-          { concepto: "Planeado", horas: 410 },
-          { concepto: "Real", horas: 455 }
-        ],
+            console.group(
+                "DASHBOARD EJECUTIVO DE MANTENIMIENTO - FILTROS"
+            );
+            console.log(JSON.stringify(oRequest, null, 2));
+            console.groupEnd();
+        },
 
-        materiales: [
-          { material: "Aceite", cantidad: 120 },
-          { material: "Grasa", cantidad: 85 },
-          { material: "Filtros", cantidad: 60 },
-          { material: "Tornillería", cantidad: 140 },
-          { material: "Consumibles", cantidad: 210 }
-        ],
+        onActualizar: function () {
+            this.onFilterChange();
+            MessageToast.show("Dashboard actualizado");
+        },
 
-        eficiencia: [
-          { mecanico: "Mecánico 1", porcentaje: 92 },
-          { mecanico: "Mecánico 2", porcentaje: 85 },
-          { mecanico: "Mecánico 3", porcentaje: 78 },
-          { mecanico: "Mecánico 4", porcentaje: 96 },
-          { mecanico: "Mecánico 5", porcentaje: 88 }
-        ],
+        onVerDetalle: function (oEvent) {
+            var sSection =
+                oEvent.getSource().data("section") || "general";
 
-        estatusOrdenes: [
-          { estatus: "Pendientes", total: 82 },
-          { estatus: "En proceso", total: 47 },
-          { estatus: "Pendientes firma", total: 34 },
-          { estatus: "Cerradas", total: 156 }
-        ],
+            var oRouter =
+                UIComponent.getRouterFor(this);
 
-        costos: [
-          { mes: "Enero", planeado: 120000, real: 135000, facturado: 145000 },
-          { mes: "Febrero", planeado: 140000, real: 132000, facturado: 150000 },
-          { mes: "Marzo", planeado: 160000, real: 170000, facturado: 180000 },
-          { mes: "Abril", planeado: 155000, real: 148000, facturado: 165000 }
-        ],
+            console.log(
+                "Detalle solicitado:",
+                sSection
+            );
 
-        ordenes: [
-          { tipo: "Preventivas", total: 120 },
-          { tipo: "Correctivas", total: 38 },
-          { tipo: "No mantenimiento", total: 12 },
-          { tipo: "Reprogramadas", total: 25 }
-        ]
-      };
-    }
+            if (!oRouter) {
+                MessageToast.show(
+                    "No se encontró el router de la aplicación"
+                );
+                return;
+            }
 
-  });
+            /*
+             * Habilitar cuando exista la ruta de detalle:
+             *
+             * oRouter.navTo("MantenimientoDetalle", {
+             *     section: sSection
+             * });
+             */
+
+            MessageToast.show(
+                "Detalle seleccionado: " + sSection
+            );
+        },
+
+        _buildDashboardRequest: function () {
+            return {
+                dashboard: "MANTENIMIENTO",
+                tipoConsulta: "GENERAL",
+
+                filtros: {
+                    periodo:
+                        this.byId("slPeriodo")
+                            .getSelectedKey() || null,
+
+                    fechaInicio:
+                        this.byId("dpInicio")
+                            .getValue() || null,
+
+                    fechaFin:
+                        this.byId("dpFin")
+                            .getValue() || null,
+
+                    zona:
+                        this.byId("slZona")
+                            .getSelectedKey() || null,
+
+                    supervisor:
+                        this.byId("slSupervisor")
+                            .getSelectedKey() || null,
+
+                    tipoOrden:
+                        this.byId("slTipoOrden")
+                            .getSelectedKey() || null,
+
+                    turno:
+                        this.byId("slTurno")
+                            .getSelectedKey() || null
+                }
+            };
+        },
+
+        _getMockDashboardData: function () {
+            return {
+                summary: {
+                    compliance: "94.8",
+                    deviation: "6.4",
+                    executed: 398,
+                    planned: 420,
+                    forecast: "96.1",
+                    forecastExecuted: 404,
+                    nonExecuted: 22,
+                    nonExecutedPercent: "5.2",
+                    blockedOrders: 18
+                },
+
+                capacity: {
+                    mechanics: 76,
+                    workdays: 21,
+                    availableHours: "6,400",
+                    scheduledHours: "5,900",
+                    usedHours: "5,842",
+                    committedPercent: "92.1",
+                    availableMargin: 500
+                }
+            };
+        }
+    });
 });

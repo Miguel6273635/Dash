@@ -1,0 +1,1152 @@
+<mvc:View
+    controllerName="mantenimiento.controller.DetalleOrdenAfectada"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <Page
+        id="detalleOrdenAfectadaPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="doaPage">
+
+        <content>
+            <VBox class="doaShell">
+
+                <!-- ====================================================== -->
+                <!-- TÍTULO                                                 -->
+                <!-- ====================================================== -->
+
+                <VBox class="doaHeader">
+                    <Title
+                        text="Detalle de orden afectada: OT-245678"
+                        level="H1"
+                        class="doaMainTitle"/>
+
+                    <Text
+                        text="Consulta integral de la orden PM impactada por un equipo/elevador bloqueado."
+                        class="doaSubtitle"/>
+                </VBox>
+
+                <!-- ====================================================== -->
+                <!-- FILTROS                                                -->
+                <!-- ====================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="doaFiltersRow">
+
+                    <VBox class="doaFilterCard doaFilterPeriod">
+                        <Label
+                            text="Periodo"
+                            class="doaFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{/filters/period}"
+                            class="doaFilterControl">
+
+                            <items>
+                                <core:Item key="currentMonth" text="Mes actual"/>
+                                <core:Item key="previousMonth" text="Mes anterior"/>
+                                <core:Item key="currentQuarter" text="Trimestre actual"/>
+                                <core:Item key="custom" text="Personalizado"/>
+                            </items>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="doaFilterCard doaFilterDate">
+                        <Label
+                            text="Fecha desde"
+                            class="doaFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{/filters/dateFrom}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            class="doaFilterControl"/>
+                    </VBox>
+
+                    <VBox class="doaFilterCard doaFilterDate">
+                        <Label
+                            text="Fecha hasta"
+                            class="doaFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{/filters/dateTo}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            class="doaFilterControl"/>
+                    </VBox>
+
+                    <VBox class="doaFilterCard">
+                        <Label
+                            text="Tipo de orden"
+                            class="doaFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{/filters/orderType}"
+                            class="doaFilterControl">
+
+                            <items>
+                                <core:Item key="all" text="Todos"/>
+                                <core:Item key="preventive" text="Preventiva"/>
+                                <core:Item key="corrective" text="Correctiva"/>
+                                <core:Item key="emergency" text="Emergencia"/>
+                            </items>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="doaFilterCard">
+                        <Label
+                            text="Supervisor"
+                            class="doaFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{/filters/supervisor}"
+                            class="doaFilterControl">
+
+                            <items>
+                                <core:Item key="all" text="Todos"/>
+                                <core:Item key="ana" text="Ana Martínez"/>
+                                <core:Item key="carlos" text="Carlos Reng"/>
+                                <core:Item key="maria" text="María Gómez"/>
+                            </items>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="doaFilterCard">
+                        <Label
+                            text="Zona"
+                            class="doaFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{/filters/zone}"
+                            class="doaFilterControl">
+
+                            <items>
+                                <core:Item key="all" text="Todas"/>
+                                <core:Item key="north" text="Norte"/>
+                                <core:Item key="south" text="Sur"/>
+                                <core:Item key="central" text="Centro"/>
+                            </items>
+                        </Select>
+                    </VBox>
+
+                    <VBox
+                        justifyContent="Center"
+                        class="doaFilterAction">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="doaApplyButton"/>
+                    </VBox>
+                </HBox>
+
+                <!-- ====================================================== -->
+                <!-- KPIS                                                   -->
+                <!-- ====================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="doaKpiRow">
+
+                    <!-- Estado de la orden -->
+
+                    <HBox class="doaKpiCard doaKpiRed">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://shield"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Estatus de la orden"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/orderStatus}"
+                                class="doaKpiValue"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewOrderStatus"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Equipo asociado -->
+
+                    <HBox class="doaKpiCard doaKpiBlue">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://locked"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Equipo asociado"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/equipment}"
+                                class="doaKpiValue"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewEquipment"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Tipo de orden -->
+
+                    <HBox class="doaKpiCard doaKpiGreen">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://wrench"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Tipo de orden"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/orderType}"
+                                wrapping="true"
+                                class="doaKpiValue doaKpiValueSmall"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewOrderType"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Fecha compromiso -->
+
+                    <HBox class="doaKpiCard doaKpiAmber">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://calendar"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Fecha compromiso"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/commitmentDate}"
+                                class="doaKpiValue"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewCommitment"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Horas programadas -->
+
+                    <HBox class="doaKpiCard doaKpiPurple">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://history"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Horas programadas"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/plannedHours}"
+                                class="doaKpiValue"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewPlannedHours"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Horas reales -->
+
+                    <HBox class="doaKpiCard doaKpiRed">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://stopwatch"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Horas reales"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/actualHours}"
+                                class="doaKpiValue"/>
+
+                            <Text
+                                text="{/kpis/hourDeviation}"
+                                class="doaKpiDeviation"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewActualHours"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Responsable -->
+
+                    <HBox class="doaKpiCard doaKpiBlue">
+                        <VBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="doaKpiIconBox">
+
+                            <core:Icon
+                                src="sap-icon://person-placeholder"
+                                class="doaKpiIcon"/>
+                        </VBox>
+
+                        <VBox class="doaKpiContent">
+                            <Text
+                                text="Responsable / Supervisor"
+                                class="doaKpiLabel"/>
+
+                            <Text
+                                text="{/kpis/responsible}"
+                                wrapping="true"
+                                class="doaKpiValue doaKpiValueSmall"/>
+
+                            <Button
+                                text="Ver detalle"
+                                icon="sap-icon://arrow-right"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewResponsible"
+                                class="doaKpiDetailButton"/>
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- ====================================================== -->
+                <!-- PRIMERA FILA: RESUMEN + OPERACIONES                    -->
+                <!-- ====================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="doaTopContentRow">
+
+                    <!-- 1. Resumen de la orden -->
+
+                    <VBox class="doaSectionCard doaSummaryCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaSectionHeader">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaSectionIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://document-text"
+                                    class="doaSectionIcon"/>
+                            </VBox>
+
+                            <Title
+                                text="1. Resumen de la orden"
+                                level="H3"
+                                class="doaSectionTitle"/>
+                        </HBox>
+
+                        <HBox
+                            width="100%"
+                            alignItems="Stretch"
+                            class="doaSummaryColumns">
+
+                            <VBox class="doaSummaryColumn">
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Orden" class="doaInfoLabel"/>
+                                    <Link text="{/summary/order}" class="doaInfoLink"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Clase de orden" class="doaInfoLabel"/>
+                                    <Text text="{/summary/orderClass}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Estatus" class="doaInfoLabel"/>
+
+                                    <ObjectStatus
+                                        text="{/summary/status}"
+                                        state="Warning"
+                                        class="doaPill"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Prioridad" class="doaInfoLabel"/>
+
+                                    <ObjectStatus
+                                        text="{/summary/priority}"
+                                        state="Error"
+                                        class="doaPill"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Fecha creación" class="doaInfoLabel"/>
+                                    <Text text="{/summary/creationDate}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Fecha compromiso" class="doaInfoLabel"/>
+                                    <Text text="{/summary/commitmentDate}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Fin compromiso" class="doaInfoLabel"/>
+                                    <Text text="{/summary/commitmentEnd}" class="doaInfoValue"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox class="doaSummaryColumn doaSummaryColumnRight">
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Cliente" class="doaInfoLabel"/>
+                                    <Text text="{/summary/client}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Zona" class="doaInfoLabel"/>
+                                    <Text text="{/summary/zone}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Sitio" class="doaInfoLabel"/>
+                                    <Text text="{/summary/site}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Elevador" class="doaInfoLabel"/>
+                                    <Text text="{/summary/elevator}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Responsable" class="doaInfoLabel"/>
+                                    <Text text="{/summary/responsible}" class="doaInfoValue"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Equipo / Elevador" class="doaInfoLabel"/>
+                                    <Link text="{/summary/equipment}" class="doaInfoLink"/>
+                                </HBox>
+
+                                <HBox class="doaInfoRow">
+                                    <Text text="Activo relacionado" class="doaInfoLabel"/>
+                                    <Link text="{/summary/relatedAsset}" class="doaInfoLink"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+
+                        <HBox
+                            width="100%"
+                            justifyContent="End"
+                            class="doaCardFooter">
+
+                            <Button
+                                text="Ver equipo asociado"
+                                icon="sap-icon://navigation-right-arrow"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewAssociatedEquipment"
+                                class="doaFooterButton"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- 2. Operaciones de la orden -->
+
+                    <VBox class="doaSectionCard doaOperationsCard">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween"
+                            class="doaSectionHeader">
+
+                            <HBox alignItems="Center">
+
+                                <VBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="doaSectionIconBox doaSectionIconStrong">
+
+                                    <core:Icon
+                                        src="sap-icon://table-view"
+                                        class="doaSectionIcon"/>
+                                </VBox>
+
+                                <Title
+                                    text="2. Operaciones de la orden"
+                                    level="H3"
+                                    class="doaSectionTitle"/>
+                            </HBox>
+
+                            <Button
+                                text="Ver detalle de operaciones"
+                                icon="sap-icon://navigation-right-arrow"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewOperations"
+                                class="doaHeaderAction"/>
+                        </HBox>
+
+                        <Table
+                            width="100%"
+                            inset="false"
+                            fixedLayout="true"
+                            showSeparators="None"
+                            items="{/operations}"
+                            class="doaTable doaOperationsTable">
+
+                            <columns>
+                                <Column width="9%">
+                                    <Text text="Operación" wrapping="true"/>
+                                </Column>
+
+                                <Column width="19%">
+                                    <Text text="Descripción" wrapping="true"/>
+                                </Column>
+
+                                <Column width="16%">
+                                    <Text text="Centro de trabajo" wrapping="true"/>
+                                </Column>
+
+                                <Column width="18%">
+                                    <Text text="Recurso asignado" wrapping="true"/>
+                                </Column>
+
+                                <Column width="10%" hAlign="Center">
+                                    <Text text="Horas programadas" wrapping="true"/>
+                                </Column>
+
+                                <Column width="9%" hAlign="Center">
+                                    <Text text="Horas reales" wrapping="true"/>
+                                </Column>
+
+                                <Column width="11%" hAlign="Center">
+                                    <Text text="Estatus operación" wrapping="true"/>
+                                </Column>
+
+                                <Column width="8%" hAlign="Center">
+                                    <Text text="Impacto" wrapping="true"/>
+                                </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem vAlign="Middle">
+                                    <cells>
+                                        <Text text="{operation}" wrapping="false"/>
+                                        <Text text="{description}" wrapping="false"/>
+                                        <Text text="{workCenter}" wrapping="false"/>
+                                        <Text text="{resource}" wrapping="false"/>
+                                        <Text text="{plannedHours}" textAlign="Center"/>
+                                        <Text text="{actualHours}" textAlign="Center"/>
+
+                                        <ObjectStatus
+                                            text="{status}"
+                                            state="{statusState}"
+                                            class="doaPill"/>
+
+                                        <ObjectStatus
+                                            text="{impact}"
+                                            state="{impactState}"
+                                            class="doaPill"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </VBox>
+                </HBox>
+
+                <!-- ====================================================== -->
+                <!-- BLOQUE INFERIOR                                       -->
+                <!-- ====================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="doaWorkspace doaLowerWorkspace">
+
+                    <!-- COLUMNA IZQUIERDA -->
+
+                    <VBox class="doaMainColumn">
+
+                        <!-- Historial + Materiales -->
+
+                        <HBox
+                            width="100%"
+                            alignItems="Stretch"
+                            class="doaContentRow doaMiddleRow">
+
+                            <!-- 6. Historial de seguimientos -->
+
+                            <VBox class="doaSectionCard doaHistoryCard">
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="doaSectionHeader">
+
+                                    <VBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="doaSectionIconBox">
+
+                                        <core:Icon
+                                            src="sap-icon://process"
+                                            class="doaSectionIcon"/>
+                                    </VBox>
+
+                                    <Title
+                                        text="6. Historial de seguimientos"
+                                        level="H3"
+                                        class="doaSectionTitle"/>
+                                </HBox>
+
+                                <Table
+                                    width="100%"
+                                    inset="false"
+                                    fixedLayout="true"
+                                    showSeparators="None"
+                                    items="{/history}"
+                                    class="doaTable doaCompactTable">
+
+                                    <columns>
+                                        <Column width="18%">
+                                            <Text text="Fecha"/>
+                                        </Column>
+
+                                        <Column width="18%">
+                                            <Text text="Usuario"/>
+                                        </Column>
+
+                                        <Column width="19%">
+                                            <Text text="Acción"/>
+                                        </Column>
+
+                                        <Column width="31%">
+                                            <Text text="Comentario"/>
+                                        </Column>
+
+                                        <Column width="14%" hAlign="Center">
+                                            <Text text="Estatus"/>
+                                        </Column>
+                                    </columns>
+
+                                    <items>
+                                        <ColumnListItem vAlign="Middle">
+                                            <cells>
+                                                <Text text="{date}" wrapping="false"/>
+
+                                                <HBox
+                                                    alignItems="Center"
+                                                    class="doaUserCell">
+
+                                                    <core:Icon
+                                                        src="sap-icon://person-placeholder"
+                                                        class="doaMiniUserIcon"/>
+
+                                                    <Text
+                                                        text="{user}"
+                                                        wrapping="false"/>
+                                                </HBox>
+
+                                                <Text text="{action}" wrapping="false"/>
+                                                <Text text="{comment}" wrapping="false"/>
+
+                                                <ObjectStatus
+                                                    text="{status}"
+                                                    state="{statusState}"
+                                                    class="doaPill"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+
+                                <HBox
+                                    width="100%"
+                                    justifyContent="End"
+                                    class="doaCardFooter">
+
+                                    <Button
+                                        text="Ver historial completo"
+                                        icon="sap-icon://navigation-right-arrow"
+                                        iconFirst="false"
+                                        type="Transparent"
+                                        press=".onViewHistory"
+                                        class="doaFooterButton"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- 5. Materiales / pendientes -->
+
+                            <VBox class="doaSectionCard doaMaterialsCard">
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="doaSectionHeader">
+
+                                    <VBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="doaSectionIconBox">
+
+                                        <core:Icon
+                                            src="sap-icon://product"
+                                            class="doaSectionIcon"/>
+                                    </VBox>
+
+                                    <Title
+                                        text="5. Materiales / pendientes asociados"
+                                        level="H3"
+                                        class="doaSectionTitle"/>
+                                </HBox>
+
+                                <Table
+                                    width="100%"
+                                    inset="false"
+                                    fixedLayout="true"
+                                    showSeparators="None"
+                                    items="{/materials}"
+                                    class="doaTable doaCompactTable">
+
+                                    <columns>
+                                        <Column width="20%">
+                                            <Text text="Tipo"/>
+                                        </Column>
+
+                                        <Column width="28%">
+                                            <Text text="Descripción"/>
+                                        </Column>
+
+                                        <Column width="20%">
+                                            <Text text="Responsable"/>
+                                        </Column>
+
+                                        <Column width="18%">
+                                            <Text
+                                                text="Fecha compromiso"
+                                                wrapping="true"/>
+                                        </Column>
+
+                                        <Column width="14%" hAlign="Center">
+                                            <Text text="Estatus"/>
+                                        </Column>
+                                    </columns>
+
+                                    <items>
+                                        <ColumnListItem vAlign="Middle">
+                                            <cells>
+                                                <Text text="{type}" wrapping="false"/>
+                                                <Text text="{description}" wrapping="false"/>
+                                                <Text text="{responsible}" wrapping="false"/>
+                                                <Text text="{date}" wrapping="false"/>
+
+                                                <ObjectStatus
+                                                    text="{status}"
+                                                    state="{statusState}"
+                                                    class="doaPill"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+
+                                <HBox
+                                    width="100%"
+                                    justifyContent="End"
+                                    class="doaCardFooter">
+
+                                    <Button
+                                        text="Ver todos los pendientes"
+                                        icon="sap-icon://navigation-right-arrow"
+                                        iconFirst="false"
+                                        type="Transparent"
+                                        press=".onViewPending"
+                                        class="doaFooterButton"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+
+                        <!-- 4. Recursos y horas -->
+
+                        <VBox class="doaSectionCard doaResourcesCard">
+
+                            <HBox
+                                alignItems="Center"
+                                class="doaSectionHeader">
+
+                                <VBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="doaSectionIconBox doaSectionIconStrong">
+
+                                    <core:Icon
+                                        src="sap-icon://time-entry-request"
+                                        class="doaSectionIcon"/>
+                                </VBox>
+
+                                <Title
+                                    text="4. Recursos y horas"
+                                    level="H3"
+                                    class="doaSectionTitle"/>
+                            </HBox>
+
+                            <Table
+                                width="100%"
+                                inset="false"
+                                fixedLayout="true"
+                                showSeparators="None"
+                                items="{/resources}"
+                                class="doaTable doaResourcesTable">
+
+                                <columns>
+                                    <Column width="20%">
+                                        <Text text="Tipo de recurso"/>
+                                    </Column>
+
+                                    <Column width="17%" hAlign="Center">
+                                        <Text text="Recursos asignados"/>
+                                    </Column>
+
+                                    <Column width="18%" hAlign="Center">
+                                        <Text text="Horas programadas"/>
+                                    </Column>
+
+                                    <Column width="17%" hAlign="Center">
+                                        <Text text="Horas reales"/>
+                                    </Column>
+
+                                    <Column width="17%" hAlign="Center">
+                                        <Text text="Desviación"/>
+                                    </Column>
+
+                                    <Column width="11%" hAlign="Center">
+                                        <Text text="Utilización"/>
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem vAlign="Middle">
+                                        <cells>
+                                            <Text
+                                                text="{type}"
+                                                class="doaResourceType"/>
+
+                                            <Text
+                                                text="{assigned}"
+                                                textAlign="Center"/>
+
+                                            <Text
+                                                text="{plannedHours}"
+                                                textAlign="Center"/>
+
+                                            <Text
+                                                text="{actualHours}"
+                                                textAlign="Center"/>
+
+                                            <ObjectStatus
+                                                text="{deviation}"
+                                                state="Error"
+                                                class="doaDeviationPill"/>
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="doaUtilizationCell">
+
+                                                <ProgressIndicator
+                                                    width="6rem"
+                                                    percentValue="{utilizationBar}"
+                                                    displayValue=""
+                                                    state="Error"
+                                                    class="doaUtilizationBar"/>
+
+                                                <Text
+                                                    text="{utilization}"
+                                                    class="doaUtilizationValue"/>
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <HBox
+                                width="100%"
+                                justifyContent="End"
+                                class="doaCardFooter">
+
+                                <Button
+                                    text="Ver detalle de recursos"
+                                    icon="sap-icon://navigation-right-arrow"
+                                    iconFirst="false"
+                                    type="Transparent"
+                                    press=".onViewResources"
+                                    class="doaFooterButton"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- ================================================== -->
+                    <!-- 3. IMPACTO DEL BLOQUEO                             -->
+                    <!-- ================================================== -->
+
+                    <VBox class="doaSectionCard doaImpactCard">
+
+                        <HBox
+                            alignItems="Start"
+                            class="doaImpactHeader">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaSectionIconBox doaSectionIconStrong">
+
+                                <core:Icon
+                                    src="sap-icon://vertical-bar-chart"
+                                    class="doaSectionIcon"/>
+                            </VBox>
+
+                            <VBox>
+                                <Title
+                                    text="3. Impacto del bloqueo"
+                                    level="H3"
+                                    class="doaSectionTitle"/>
+
+                                <Text
+                                    text="Información clave sobre el impacto del bloqueo en la orden y su relación operativa."
+                                    wrapping="true"
+                                    class="doaImpactSubtitle"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Motivo de bloqueo -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaImpactMetric doaImpactMetricRed">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaImpactMetricIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://cancel"
+                                    class="doaImpactMetricIcon"/>
+                            </VBox>
+
+                            <VBox class="doaImpactMetricContent">
+                                <Text
+                                    text="Motivo de bloqueo"
+                                    class="doaImpactMetricLabel"/>
+
+                                <Text
+                                    text="{/impact/reason}"
+                                    wrapping="true"
+                                    class="doaImpactMetricValue"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Estatus del equipo -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaImpactMetric doaImpactMetricBlue">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaImpactMetricIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://locked"
+                                    class="doaImpactMetricIcon"/>
+                            </VBox>
+
+                            <VBox class="doaImpactMetricContent">
+                                <Text
+                                    text="Estatus de bloqueo del equipo"
+                                    class="doaImpactMetricLabel"/>
+
+                                <Text
+                                    text="{/impact/equipmentStatus}"
+                                    wrapping="true"
+                                    class="doaImpactMetricValue"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Estado de gestión -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaImpactMetric doaImpactMetricAmber">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaImpactMetricIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://shield"
+                                    class="doaImpactMetricIcon"/>
+                            </VBox>
+
+                            <VBox class="doaImpactMetricContent">
+                                <Text
+                                    text="Estado de gestión"
+                                    class="doaImpactMetricLabel"/>
+
+                                <Text
+                                    text="{/impact/managementStatus}"
+                                    wrapping="true"
+                                    class="doaImpactMetricValue"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Días bloqueado -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaImpactMetric doaImpactMetricBlue doaBlockedDaysCard">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="doaImpactMetricIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://calendar"
+                                    class="doaImpactMetricIcon"/>
+                            </VBox>
+
+                            <VBox class="doaImpactMetricContent">
+                                <Text
+                                    text="Días bloqueado"
+                                    class="doaImpactMetricLabel"/>
+
+                                <HBox alignItems="End">
+                                    <Text
+                                        text="{/impact/blockedDays}"
+                                        class="doaBlockedDaysValue"/>
+
+                                    <Text
+                                        text="días"
+                                        class="doaBlockedDaysUnit"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Aviso -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="doaImpactAlert">
+
+                            <core:Icon
+                                src="sap-icon://message-error"
+                                class="doaImpactAlertIcon"/>
+
+                            <Text
+                                text="La orden no puede avanzar o cerrarse debido al bloqueo vigente del equipo asociado."
+                                wrapping="true"
+                                class="doaImpactAlertText"/>
+                        </HBox>
+
+                        <!-- Acción -->
+
+                        <HBox
+                            width="100%"
+                            justifyContent="End"
+                            class="doaImpactFooter">
+
+                            <Button
+                                text="Ver equipo asociado"
+                                icon="sap-icon://navigation-right-arrow"
+                                iconFirst="false"
+                                type="Transparent"
+                                press=".onViewAssociatedEquipment"
+                                class="doaFooterButton"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

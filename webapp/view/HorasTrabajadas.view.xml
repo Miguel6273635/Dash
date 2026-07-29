@@ -1,284 +1,235 @@
-<mvc:View
-    controllerName="mantenimiento.controller.HorasTrabajadas"
+<mvc:View controllerName="mantenimiento.controller.HorasTrabajadas" displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:viz="sap.viz.ui5.controls"
-    xmlns:vizData="sap.viz.ui5.data"
-    xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
-
+    xmlns:core="sap.ui.core">
     <Page id="pageHorasTrabajadas" showHeader="false" class="HorasTrabajadas">
         <content>
-            <ScrollContainer height="100%" vertical="true" horizontal="false">
-                <VBox class="htwPageContainer">
-
-                    <!-- HEADER -->
-                    <HBox class="htwHeader" alignItems="Center">
-                        <VBox class="htwHeaderIcon">
-                            <core:Icon src="sap-icon://history"/>
+            <ScrollContainer id="scHorasTrabajadas" height="100%" width="100%" vertical="false" horizontal="false" class="htwScroll">
+                <VBox id="vbHorasPage" class="htwPageContainer sapUiSizeCompact">
+                    <!-- HEADER PRINCIPAL -->
+                    <HBox id="hbHorasHeader" class="htwHeader" alignItems="Center">
+                        <VBox id="vbHorasIcon" class="htwHeaderIcon" alignItems="Center" justifyContent="Center">
+                            <core:Icon id="icHorasHeader" src="sap-icon://history"/>
                         </VBox>
-
-                        <VBox>
-                            <Title text="Horas trabajadas" level="H1" class="htwMainTitle"/>
-                            <Text text="Análisis de capacidad, carga y utilización de horas" class="htwSubtitle"/>
+                        <VBox id="vbHorasHeaderText">
+                            <Title id="ttlHoras" text="Horas trabajadas" level="H1" class="htwMainTitle"/>
+                            <Text id="txtHorasSub" text="Análisis de capacidad, carga y utilización de horas" class="htwSubtitle"/>
                         </VBox>
                     </HBox>
-
                     <!-- FILTROS -->
-                  <HBox class="htwFiltersBar" alignItems="End" wrap="Wrap">
-
-                        <VBox class="htwFilterBox htwFilterPeriodo">
+                    <HBox id="hbHorasFilters" class="htwFiltersBar" alignItems="End" wrap="NoWrap">
+                        <VBox id="fbPeriodo" class="htwFilterBox htwFilterPeriodo">
                             <Label text="Periodo" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/periodo}">
-                                <items>
-                                    <core:Item key="mayo2024" text="Mayo 2024 (Mensual)"/>
-                                    <core:Item key="junio2024" text="Junio 2024 (Mensual)"/>
-                                </items>
+                                <core:Item key="mayo2024" text="Mayo 2024 (Mensual)"/>
+                                <core:Item key="junio2024" text="Junio 2024 (Mensual)"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterFecha">
+                        <VBox id="fbFechaDesde" class="htwFilterBox htwFilterFecha">
                             <Label text="Fecha desde" class="htwFilterLabel"/>
-                            <DatePicker
-                                value="{horasModel>/filtros/fechaDesde}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy"/>
+                            <DatePicker value="{horasModel>/filtros/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterFecha">
+                        <VBox id="fbFechaHasta" class="htwFilterBox htwFilterFecha">
                             <Label text="Fecha hasta" class="htwFilterLabel"/>
-                            <DatePicker
-                                value="{horasModel>/filtros/fechaHasta}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy"/>
+                            <DatePicker value="{horasModel>/filtros/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterZona">
+                        <VBox id="fbZona" class="htwFilterBox htwFilterSmall">
                             <Label text="Zona" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/zona}">
-                                <items>
-                                    <core:Item key="todas" text="Todas"/>
-                                    <core:Item key="norte" text="Norte"/>
-                                    <core:Item key="centro" text="Centro"/>
-                                    <core:Item key="sur" text="Sur"/>
-                                </items>
+                                <core:Item key="todas" text="Todas"/>
+                                <core:Item key="norte" text="Norte"/>
+                                <core:Item key="centro" text="Centro"/>
+                                <core:Item key="sur" text="Sur"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterSupervisor">
+                        <VBox id="fbSupervisor" class="htwFilterBox htwFilterSmall">
                             <Label text="Supervisor" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/supervisor}">
-                                <items>
-                                    <core:Item key="todos" text="Todos"/>
-                                    <core:Item key="sup1" text="Supervisor 1"/>
-                                    <core:Item key="sup2" text="Supervisor 2"/>
-                                </items>
+                                <core:Item key="todos" text="Todos"/>
+                                <core:Item key="sup1" text="Juan Pérez"/>
+                                <core:Item key="sup2" text="María López"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterTipoOrden">
+                        <VBox id="fbTipoOrden" class="htwFilterBox htwFilterSmall">
                             <Label text="Tipo de orden" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/tipoOrden}">
-                                <items>
-                                    <core:Item key="todos" text="Todos"/>
-                                    <core:Item key="implementacion" text="Implementación"/>
-                                    <core:Item key="reparacion" text="Reparación"/>
-                                    <core:Item key="callcenter" text="Call Center"/>
-                                </items>
+                                <core:Item key="todos" text="Todos"/>
+                                <core:Item key="implementacion" text="Implementación"/>
+                                <core:Item key="reparacion" text="Reparación"/>
+                                <core:Item key="callcenter" text="Call Center"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterTurno">
+                        <VBox id="fbTurno" class="htwFilterBox htwFilterSmall">
                             <Label text="Turno" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/turno}">
-                                <items>
-                                    <core:Item key="todos" text="Todos"/>
-                                    <core:Item key="diurno" text="Diurno"/>
-                                    <core:Item key="nocturno" text="Nocturno"/>
-                                </items>
+                                <core:Item key="todos" text="Todos"/>
+                                <core:Item key="diurno" text="Diurno"/>
+                                <core:Item key="nocturno" text="Nocturno"/>
+                                <core:Item key="finsemana" text="Fin de semana"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterMecanico">
+                        <VBox id="fbMecanico" class="htwFilterBox htwFilterSmall">
                             <Label text="Mecánico" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/mecanico}">
-                                <items>
-                                    <core:Item key="todos" text="Todos"/>
-                                    <core:Item key="mec1" text="Juan Pérez"/>
-                                    <core:Item key="mec2" text="Carlos Ruiz"/>
-                                </items>
+                                <core:Item key="todos" text="Todos"/>
+                                <core:Item key="mec1" text="Juan Pérez"/>
+                                <core:Item key="mec2" text="Carlos Ruiz"/>
                             </Select>
                         </VBox>
-
-                        <VBox class="htwFilterBox htwFilterEstado">
+                        <VBox id="fbEstado" class="htwFilterBox htwFilterEstado">
                             <Label text="Estado de orden" class="htwFilterLabel"/>
                             <Select selectedKey="{horasModel>/filtros/estadoOrden}">
-                                <items>
-                                    <core:Item key="todos" text="Todos"/>
-                                    <core:Item key="abierta" text="Abierta"/>
-                                    <core:Item key="cerrada" text="Cerrada"/>
-                                </items>
+                                <core:Item key="todos" text="Todos"/>
+                                <core:Item key="abierta" text="Abierta"/>
+                                <core:Item key="cerrada" text="Cerrada"/>
                             </Select>
                         </VBox>
-
-                        <Button
-                            text="Aplicar filtros"
-                            icon="sap-icon://filter"
-                            class="htwApplyButton"
-                            press=".onAplicarFiltros"/>
+                        <Button id="btnAplicarFiltros" text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" class="htwApplyButton" press=".onAplicarFiltros"/>
                     </HBox>
-
-                    <!-- KPI CARDS -->
-                    <HBox class="htwKpiWrapper" justifyContent="Center" alignItems="Center" wrap="Wrap">
-
-                        <VBox class="htwBigKpi htwPurpleKpi">
-                            <HBox alignItems="Center">
-                                <VBox class="htwKpiIcon htwKpiIconPurple">
+                    <!-- KPIS SUPERIORES -->
+                    <HBox id="hbKpis" class="htwKpiWrapper" alignItems="Center" justifyContent="SpaceBetween" wrap="NoWrap">
+                        <VBox id="cardCapacidadComprometida" class="htwBigKpi htwPurpleKpi">
+                            <HBox class="htwBigKpiInner" alignItems="Center">
+                                <VBox class="htwKpiIcon htwKpiIconPurple" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://group"/>
                                 </VBox>
-
                                 <VBox class="htwKpiContent">
                                     <Text text="Capacidad comprometida" class="htwKpiLabel"/>
                                     <Text text="{horasModel>/kpis/capacidadComprometida}" class="htwKpiNumber htwPurpleText"/>
                                     <Text text="Relación: horas programadas / capacidad disponible" class="htwKpiDescription"/>
-                                    <ProgressIndicator
-                                        percentValue="{horasModel>/kpis/capacidadComprometidaValor}"
-                                        displayValue=""
-                                        class="htwProgressPurple"/>
+                                    <HBox class="htwKpiProgressTrack">
+                                        <HBox class="htwKpiProgressFill htwKpiProgressPurpleFill" width="{= ${horasModel>/kpis/capacidadComprometidaValor} + '%' }"/>
+                                    </HBox>
                                 </VBox>
                             </HBox>
                         </VBox>
-
-                        <VBox class="htwBigKpi htwGreenKpi">
-                            <HBox alignItems="Center">
-                                <VBox class="htwKpiIcon htwKpiIconGreen">
+                        <VBox id="cardMargenCapacidad" class="htwBigKpi htwGreenKpi">
+                            <HBox class="htwBigKpiInner" alignItems="Center">
+                                <VBox class="htwKpiIcon htwKpiIconGreen" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://line-chart"/>
                                 </VBox>
-
                                 <VBox class="htwKpiContent">
                                     <Text text="Margen de capacidad" class="htwKpiLabel"/>
                                     <Text text="{horasModel>/kpis/margenCapacidad}" class="htwKpiNumber htwGreenText"/>
                                     <Text text="Horas disponibles para absorber carga adicional" class="htwKpiDescription"/>
-                                    <ProgressIndicator
-                                        percentValue="{horasModel>/kpis/margenCapacidadValor}"
-                                        displayValue=""
-                                        class="htwProgressGreen"/>
+                                    <HBox class="htwKpiProgressTrack">
+                                        <HBox class="htwKpiProgressFill htwKpiProgressGreenFill" width="{= ${horasModel>/kpis/margenCapacidadValor} + '%' }"/>
+                                    </HBox>
                                 </VBox>
                             </HBox>
                         </VBox>
-
                     </HBox>
-
-                    <!-- GRID DE CARDS -->
-                    <VBox class="htwDashboardGrid">
-
+                    <!-- DASHBOARD -->
+                    <VBox id="vbDashboardGrid" class="htwDashboardGrid">
                         <!-- FILA 1 -->
-                        <HBox class="htwCardsRow" wrap="Wrap">
-
-                            <!-- CARD 1: Capacidad vs carga -->
-                            <VBox class="htwCard htwCapacidadCargaCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+                        <HBox id="rowCards1" class="htwCardsRow" wrap="NoWrap">
+                            <!-- CARD 1: CAPACIDAD VS CARGA -->
+                            <!-- CARD 1: CAPACIDAD VS CARGA -->
+                            <VBox id="cardCapacidadCarga" class="htwCard htwCapacidadCargaCard htwDonutCleanCard">
+                                <HBox class="htwCardHeader htwDonutCleanHeader" justifyContent="Start" alignItems="Center">
                                     <Title text="Capacidad vs carga programada" level="H3" class="htwCardTitle"/>
-                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
+                                    <core:Icon id="icInfoCapacidadCarga" src="sap-icon://hint" class="htwDonutCleanTitleIcon"/>
                                 </HBox>
-
-                                <HBox class="htwLegendRow" wrap="Wrap">
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://less" class="htwBlueIcon"/>
-                                        <Text text="Capacidad disponible"/>
-                                    </HBox>
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://less" class="htwGreenIcon"/>
-                                        <Text text="Horas programadas"/>
-                                    </HBox>
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://less" class="htwPurpleIcon"/>
-                                        <Text text="Horas reales"/>
-                                    </HBox>
-                                </HBox>
-
-                                <viz:VizFrame
-                                    id="vfCapacidadCarga"
-                                    vizType="line"
-                                    width="100%"
-                                    height="205px"
-                                    uiConfig="{applicationSet:'fiori'}">
-                                    <viz:dataset>
-                                        <vizData:FlattenedDataset data="{horasModel>/graficas/capacidadCarga}">
-                                            <vizData:dimensions>
-                                                <vizData:DimensionDefinition name="Mes" value="{horasModel>mes}"/>
-                                            </vizData:dimensions>
-                                            <vizData:measures>
-                                                <vizData:MeasureDefinition name="Capacidad disponible" value="{horasModel>capacidadDisponible}"/>
-                                                <vizData:MeasureDefinition name="Horas programadas" value="{horasModel>horasProgramadas}"/>
-                                                <vizData:MeasureDefinition name="Horas reales" value="{horasModel>horasReales}"/>
-                                            </vizData:measures>
-                                        </vizData:FlattenedDataset>
-                                    </viz:dataset>
-                                    <viz:feeds>
-                                        <vizFeeds:FeedItem uid="valueAxis" type="Measure" values="Capacidad disponible,Horas programadas,Horas reales"/>
-                                        <vizFeeds:FeedItem uid="categoryAxis" type="Dimension" values="Mes"/>
-                                    </viz:feeds>
-                                </viz:VizFrame>
-
-                                <VBox class="htwCapacidadEndLabels">
-                                    <Text text="6,400 h" class="htwEndLabel htwBlueText"/>
-                                    <Text text="5,900 h" class="htwEndLabel htwGreenText"/>
-                                    <Text text="5,342 h" class="htwEndLabel htwPurpleText"/>
-                                </VBox>
-
-                                <HBox class="htwCardFooter htwCapacidadFooter" alignItems="Center">
-                                    <core:Icon src="sap-icon://history" class="htwPurpleIcon"/>
-                                    <Text text="La capacidad disponible cubre el 92.1% de las horas programadas."/>
-                                </HBox>
-                            </VBox>
-
-                            <!-- CARD 2: Utilización por turno como barras -->
-                            <VBox class="htwCard htwUtilizacionCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                    <VBox>
-                                        <Title text="Utilización por turno" level="H3" class="htwCardTitle"/>
-                                        <Text text="Resumen de utilización por turno" class="htwCardSubtitle"/>
+                                <HBox class="htwDonutCleanArea" alignItems="Center" justifyContent="Center">
+                                    <VBox class="htwDonutCleanSvgWrapper" alignItems="Center" justifyContent="Center">
+                                        <core:HTML sanitizeContent="false" content='&lt;svg class="htwDonutCleanSvg" viewBox="0 0 180 180"&gt;
+                    &lt;g transform="rotate(-90 90 90)"&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#ff9800" stroke-width="34" pathLength="100" stroke-dasharray="31.7 68.3" stroke-dashoffset="0"/&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#15b65c" stroke-width="34" pathLength="100" stroke-dasharray="34.3 65.7" stroke-dashoffset="-31.7"/&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#2196f3" stroke-width="34" pathLength="100" stroke-dasharray="31 69" stroke-dashoffset="-66"/&gt;
+                    &lt;/g&gt;
+                    &lt;circle cx="90" cy="90" r="37" fill="#ffffff"/&gt;
+                    &lt;text x="90" y="80" text-anchor="middle" class="htwDonutCleanCenterLabel"&gt;Total&lt;/text&gt;
+                    &lt;text x="90" y="102" text-anchor="middle" class="htwDonutCleanCenterValue"&gt;6,400 h&lt;/text&gt;
+                 &lt;text x="36" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.0%&lt;/text&gt;
+&lt;text x="145" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.7%&lt;/text&gt;
+&lt;text x="90" y="145" text-anchor="middle" class="htwDonutCleanPct"&gt;34.3%&lt;/text&gt;
+                &lt;/svg&gt;'/>
                                     </VBox>
-                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
-                                </HBox>
-
-                                <List
-                                    showSeparators="None"
-                                    class="htwTurnoList"
-                                    items="{horasModel>/graficas/utilizacionResumen}">
-                                    <CustomListItem>
-                                        <HBox class="htwTurnoRow" alignItems="Center">
-                                            <VBox class="htwTurnoIconBox">
-                                                <core:Icon src="{horasModel>icono}"/>
-                                                <customData>
-                                                    <core:CustomData key="estado" value="{horasModel>estado}" writeToDom="true"/>
-                                                </customData>
-                                            </VBox>
-
-                                            <VBox class="htwTurnoContent">
-                                                <HBox justifyContent="SpaceBetween" alignItems="Center">
-                                                    <Text text="{horasModel>turno}" class="htwTurnoName"/>
-                                                    <Text text="{horasModel>valorTexto}" class="htwTurnoValue">
-                                                        <customData>
-                                                            <core:CustomData key="estado" value="{horasModel>estado}" writeToDom="true"/>
-                                                        </customData>
-                                                    </Text>
-                                                </HBox>
-
-                                                <ProgressIndicator
-                                                    percentValue="{horasModel>valor}"
-                                                    displayValue=""
-                                                    state="{horasModel>estado}"
-                                                    class="htwTurnoProgress"/>
+                                    <VBox class="htwDonutCleanLegend" justifyContent="Center">
+                                        <HBox class="htwDonutCleanLegendItem" alignItems="Center">
+                                            <VBox class="htwDonutCleanDot htwDonutCleanDotOrange"/>
+                                            <VBox>
+                                                <Text text="Capacidad disponible" class="htwDonutCleanLegendTitle"/>
+                                                <Text text="6,400 h (34.3%)" class="htwDonutCleanLegendSub"/>
                                             </VBox>
                                         </HBox>
-                                    </CustomListItem>
-                                </List>
-
+                                        <HBox class="htwDonutCleanLegendItem" alignItems="Center">
+                                            <VBox class="htwDonutCleanDot htwDonutCleanDotGreen"/>
+                                            <VBox>
+                                                <Text text="Horas programadas" class="htwDonutCleanLegendTitle"/>
+                                                <Text text="5,900 h (31.7%)" class="htwDonutCleanLegendSub"/>
+                                            </VBox>
+                                        </HBox>
+                                        <HBox class="htwDonutCleanLegendItem" alignItems="Center">
+                                            <VBox class="htwDonutCleanDot htwDonutCleanDotBlue"/>
+                                            <VBox>
+                                                <Text text="Horas reales" class="htwDonutCleanLegendTitle"/>
+                                                <Text text="5,842 h (31.0%)" class="htwDonutCleanLegendSub"/>
+                                            </VBox>
+                                        </HBox>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                            <!-- CARD 2: UTILIZACIÓN POR TURNO -->
+                            <VBox id="cardUtilizacionTurno" class="htwCard htwUtilizacionCard">
+                                <HBox class="htwCardHeader htwTurnoHeader" alignItems="Center" justifyContent="Start">
+                                    <HBox class="htwTurnoTitleInlineRow" alignItems="Center">
+                                        <Title text="Utilización por turno" level="H3" class="htwCardTitle htwTurnoCardTitle" />
+                                        <core:Icon id="icInfoUtilizacionTurno" src="sap-icon://hint" class="htwTurnoInfoIcon" />
+                                        <Text text="Resumen de utilización por turno" class="htwTurnoInlineSubtitle" />
+                                    </HBox>
+                                </HBox>
+                                <VBox class="htwTurnoManualList">
+                                    <!-- DIURNO -->
+                                    <HBox class="htwTurnoManualRow" alignItems="Center">
+                                        <VBox class="htwTurnoIconBox htwTurnoIconSuccess" alignItems="Center" justifyContent="Center">
+                                            <core:Icon src="sap-icon://light-mode"/>
+                                        </VBox>
+                                        <VBox class="htwTurnoManualContent">
+                                            <Text text="Diurno" class="htwTurnoManualName"/>
+                                            <HBox class="htwTurnoManualBarLine" alignItems="Center">
+                                                <HBox class="htwTurnoManualTrack">
+                                                    <HBox class="htwTurnoManualFill htwTurnoFillSuccess" width="84.9%"/>
+                                                </HBox>
+                                                <Text text="84.9%" class="htwTurnoManualValue htwTurnoValueSuccess"/>
+                                            </HBox>
+                                        </VBox>
+                                    </HBox>
+                                    <!-- NOCTURNO -->
+                                    <HBox class="htwTurnoManualRow" alignItems="Center">
+                                        <VBox class="htwTurnoIconBox htwTurnoIconWarning" alignItems="Center" justifyContent="Center">
+                                            <core:Icon src="sap-icon://lateness"/>
+                                        </VBox>
+                                        <VBox class="htwTurnoManualContent">
+                                            <Text text="Nocturno" class="htwTurnoManualName"/>
+                                            <HBox class="htwTurnoManualBarLine" alignItems="Center">
+                                                <HBox class="htwTurnoManualTrack">
+                                                    <HBox class="htwTurnoManualFill htwTurnoFillWarning" width="95.1%"/>
+                                                </HBox>
+                                                <Text text="95.1%" class="htwTurnoManualValue htwTurnoValueWarning"/>
+                                            </HBox>
+                                        </VBox>
+                                    </HBox>
+                                    <!-- FIN DE SEMANA -->
+                                    <HBox class="htwTurnoManualRow" alignItems="Center">
+                                        <VBox class="htwTurnoIconBox htwTurnoIconError" alignItems="Center" justifyContent="Center">
+                                            <core:Icon src="sap-icon://appointment-2"/>
+                                        </VBox>
+                                        <VBox class="htwTurnoManualContent">
+                                            <Text text="Fin de semana" class="htwTurnoManualName"/>
+                                            <HBox class="htwTurnoManualBarLine" alignItems="Center">
+                                                <HBox class="htwTurnoManualTrack">
+                                                    <HBox class="htwTurnoManualFill htwTurnoFillError" width="100%"/>
+                                                </HBox>
+                                                <Text text="117.4%" class="htwTurnoManualValue htwTurnoValueError"/>
+                                            </HBox>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
                                 <HBox class="htwPromedioBox" justifyContent="SpaceBetween" alignItems="Center">
                                     <HBox alignItems="Center">
-                                        <VBox class="htwPromedioIcon">
+                                        <VBox class="htwPromedioIcon" alignItems="Center" justifyContent="Center">
                                             <core:Icon src="sap-icon://business-objects-experience"/>
                                         </VBox>
                                         <Text text="Promedio de utilización" class="htwPromedioLabel"/>
@@ -286,279 +237,236 @@
                                     <Text text="99.1%" class="htwPromedioValue"/>
                                 </HBox>
                             </VBox>
-
-                            <!-- CARD 3: Horas por tipo de orden -->
-                            <VBox class="htwCard htwTipoOrdenCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                    <Title text="Horas por tipo de orden (plan vs real)" level="H3" class="htwCardTitle"/>
-                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
+                            <!-- CARD 3: HORAS POR TIPO DE ORDEN -->
+                            <VBox id="cardHorasTipoOrden" class="htwCard htwTipoOrdenCard">
+                                <HBox class="htwTipoOrdenHeader" alignItems="Center" justifyContent="Start">
+                                    <Title text="Horas por tipo de orden (plan vs real)" level="H3" class="htwCardTitle htwTipoOrdenTitle"/>
+                                    <core:Icon id="icInfoHorasTipoOrden" src="sap-icon://hint" class="htwTipoOrdenInfoIcon"/>
                                 </HBox>
-
-                                <HBox class="htwLegendRow" wrap="Wrap">
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://less" class="htwBlueIcon"/>
-                                        <Text text="Horas programadas"/>
+                                <HBox class="htwTipoOrdenLegendRow" alignItems="Center" wrap="NoWrap">
+                                    <HBox class="htwTipoOrdenLegendItem" alignItems="Center">
+                                        <VBox class="htwTipoLegendLine htwTipoLegendBlue"/>
+                                        <Text text="Horas programadas" class="htwTipoLegendText"/>
                                     </HBox>
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://less" class="htwPurpleIcon"/>
-                                        <Text text="Horas reales"/>
+                                    <HBox class="htwTipoOrdenLegendItem" alignItems="Center">
+                                        <VBox class="htwTipoLegendLine htwTipoLegendPurple"/>
+                                        <Text text="Horas reales" class="htwTipoLegendText"/>
                                     </HBox>
-                                    <HBox class="htwLegendItem" alignItems="Center">
-                                        <core:Icon src="sap-icon://business-card" class="htwLightPurpleIcon"/>
-                                        <Text text="Variación (%)"/>
+                                    <HBox class="htwTipoOrdenLegendItem" alignItems="Center">
+                                        <VBox class="htwTipoLegendDashed"/>
+                                        <Text text="Variación (%)" class="htwTipoLegendText"/>
                                     </HBox>
                                 </HBox>
-
-                                <viz:VizFrame
-                                    id="vfHorasTipoOrden"
-                                    vizType="line"
-                                    width="100%"
-                                    height="235px"
-                                    uiConfig="{applicationSet:'fiori'}">
-                                    <viz:dataset>
-                                        <vizData:FlattenedDataset data="{horasModel>/graficas/horasTipoOrden}">
-                                            <vizData:dimensions>
-                                                <vizData:DimensionDefinition name="Tipo de orden" value="{horasModel>tipo}"/>
-                                            </vizData:dimensions>
-                                            <vizData:measures>
-                                                <vizData:MeasureDefinition name="Horas programadas" value="{horasModel>horasProgramadas}"/>
-                                                <vizData:MeasureDefinition name="Horas reales" value="{horasModel>horasReales}"/>
-                                            </vizData:measures>
-                                        </vizData:FlattenedDataset>
-                                    </viz:dataset>
-                                    <viz:feeds>
-                                        <vizFeeds:FeedItem uid="valueAxis" type="Measure" values="Horas programadas,Horas reales"/>
-                                        <vizFeeds:FeedItem uid="categoryAxis" type="Dimension" values="Tipo de orden"/>
-                                    </viz:feeds>
-                                </viz:VizFrame>
-
-                                <VBox class="htwTipoOrdenLabels">
-                                    <Text text="3,100 h" class="htwSmallChartLabel htwBlueText"/>
-                                    <Text text="2,950 h" class="htwSmallChartLabel htwBlueText"/>
-                                    <Text text="1,700 h" class="htwSmallChartLabel htwBlueText"/>
-                                    <Text text="692 h" class="htwSmallChartLabel htwBlueText"/>
-                                    <Text text="620 h" class="htwSmallChartLabel htwPurpleText"/>
+                                <VBox class="htwTipoOrdenChartBox">
+                                    <core:HTML id="htmlTipoOrdenChart" sanitizeContent="false" content='&lt;svg class="htwTipoSvg" viewBox="0 0 560 235" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"&gt;
+        &lt;!-- Texto Horas hombre como la referencia --&gt;
+        &lt;text x="62" y="28" class="htwTipoYAxisTitle"&gt;Horas hombre&lt;/text&gt;
+        &lt;!-- Grid --&gt;
+        &lt;line x1="62" y1="45" x2="525" y2="45" class="htwTipoGridLine"/&gt;
+        &lt;line x1="62" y1="78" x2="525" y2="78" class="htwTipoGridLine"/&gt;
+        &lt;line x1="62" y1="112" x2="525" y2="112" class="htwTipoGridLine"/&gt;
+        &lt;line x1="62" y1="146" x2="525" y2="146" class="htwTipoGridLine"/&gt;
+        &lt;line x1="62" y1="178" x2="525" y2="178" class="htwTipoAxisLine"/&gt;
+        &lt;!-- Eje Y --&gt;
+        &lt;text x="22" y="49" class="htwTipoAxisText"&gt;4K&lt;/text&gt;
+        &lt;text x="22" y="82" class="htwTipoAxisText"&gt;3K&lt;/text&gt;
+        &lt;text x="22" y="116" class="htwTipoAxisText"&gt;2K&lt;/text&gt;
+        &lt;text x="22" y="150" class="htwTipoAxisText"&gt;1K&lt;/text&gt;
+        &lt;text x="30" y="182" class="htwTipoAxisText"&gt;0&lt;/text&gt;
+        &lt;!-- Línea azul: Horas programadas --&gt;
+        &lt;polyline fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="110,80 210,88 285,125 320,122 440,160 500,152"/&gt;
+        &lt;!-- Línea morada: Horas reales --&gt;
+        &lt;polyline fill="none" stroke="#7c3aed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="110,95 210,105 285,140 320,140 440,172 500,165"/&gt;
+        &lt;!-- Puntos azules --&gt;
+        &lt;circle cx="110" cy="80" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="210" cy="88" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="285" cy="125" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="320" cy="122" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="440" cy="160" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="500" cy="152" r="4.4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;!-- Puntos morados --&gt;
+        &lt;circle cx="110" cy="95" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="210" cy="105" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="285" cy="140" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="320" cy="140" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="440" cy="172" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;circle cx="500" cy="165" r="4.4" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/&gt;
+        &lt;!-- Valores azules --&gt;
+        &lt;text x="92" y="66" class="htwTipoBlueText"&gt;3,100 h&lt;/text&gt;
+        &lt;text x="190" y="76" class="htwTipoBlueText"&gt;2,950 h&lt;/text&gt;
+        &lt;text x="345" y="125" class="htwTipoBlueText"&gt;1,700 h&lt;/text&gt;
+        &lt;text x="505" y="152" class="htwTipoBlueText"&gt;692 h&lt;/text&gt;
+        &lt;!-- Valores morados --&gt;
+        &lt;text x="94" y="113" class="htwTipoPurpleText"&gt;2,950 h&lt;/text&gt;
+        &lt;text x="300" y="158" class="htwTipoPurpleText"&gt;1,900 h&lt;/text&gt;
+        &lt;text x="505" y="174" class="htwTipoPurpleText"&gt;620 h&lt;/text&gt;
+        &lt;!-- Badges más pequeños --&gt;
+        &lt;rect x="220" y="126" rx="9" ry="9" width="48" height="18" class="htwTipoBadgeGreen"/&gt;
+        &lt;text x="232" y="139" class="htwTipoGreenText"&gt;-4.8%&lt;/text&gt;
+        &lt;rect x="328" y="102" rx="9" ry="9" width="54" height="18" class="htwTipoBadgeRed"/&gt;
+        &lt;text x="341" y="115" class="htwTipoRedText"&gt;+11.8%&lt;/text&gt;
+        &lt;rect x="462" y="118" rx="9" ry="9" width="56" height="18" class="htwTipoBadgeGreen"/&gt;
+        &lt;text x="475" y="131" class="htwTipoGreenText"&gt;+11.3%&lt;/text&gt;
+        &lt;!-- Etiquetas eje X --&gt;
+        &lt;text x="110" y="202" text-anchor="middle" class="htwTipoXAxisText"&gt;Implementación&lt;/text&gt;
+        &lt;text x="110" y="216" text-anchor="middle" class="htwTipoXAxisText"&gt;planeada&lt;/text&gt;
+        &lt;text x="285" y="202" text-anchor="middle" class="htwTipoXAxisText"&gt;Reparación&lt;/text&gt;
+        &lt;text x="285" y="216" text-anchor="middle" class="htwTipoXAxisText"&gt;(correctiva)&lt;/text&gt;
+        &lt;text x="472" y="210" text-anchor="middle" class="htwTipoXAxisText"&gt;Call Center&lt;/text&gt;
+    &lt;/svg&gt;'/>
                                 </VBox>
-
-                                <Link text="Ver detalles por tipo de orden" class="htwCardLink" press=".onVerDetalleTipoOrden"/>
+                                <Link text="Ver detalles por tipo de orden" class="htwCardLink htwTipoOrdenLink" press=".onVerDetalleTipoOrden"/>
                             </VBox>
-
                         </HBox>
-
                         <!-- FILA 2 -->
-                        <HBox class="htwCardsRow" wrap="Wrap">
-
-                            <!-- CARD 4: Capacidad por zona -->
-                            <VBox class="htwCard htwZonaCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                    <Title text="Capacidad por zona" level="H3" class="htwCardTitle"/>
-                                    <Button icon="sap-icon://overflow" type="Transparent" class="htwIconButton"/>
+                        <HBox id="rowCards2" class="htwCardsRow" wrap="NoWrap">
+                            <!-- CARD 4: CAPACIDAD POR ZONA -->
+                            <VBox id="cardCapacidadZona" class="htwCard htwZonaCard htwZonaV2Card">
+                                <!-- Header -->
+                                <HBox class="htwZonaV2Header" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center" class="htwZonaV2TitleRow">
+                                        <Title text="Capacidad por zona" level="H3" class="htwCardTitle htwZonaV2Title"/>
+                                        <core:Icon src="sap-icon://hint" class="htwZonaV2InfoIcon"/>
+                                    </HBox>
+                                    <Button icon="sap-icon://overflow" type="Transparent" class="htwZonaV2MenuButton"/>
                                 </HBox>
-
-                                <HBox class="htwAnalysisBox" alignItems="Start">
-                                    <core:Icon src="sap-icon://alert" class="htwBlueIcon"/>
-                                    <VBox class="sapUiTinyMarginBegin">
-                                        <Text text="Análisis" class="htwAnalysisTitle"/>
-                                        <Text text="La zona Oeste se encuentra por debajo del rango normal de utilización." class="htwAnalysisText"/>
-                                        <Link text="Ver detalle" class="htwCardLink"/>
+                                <!-- Caja de análisis arriba, ya no encima de la gráfica -->
+                                <HBox class="htwZonaV2Analysis" alignItems="Start">
+                                    <core:Icon src="sap-icon://alert" class="htwZonaV2AlertIcon"/>
+                                    <VBox class="htwZonaV2AnalysisTextBox">
+                                        <Text text="Análisis" class="htwZonaV2AnalysisTitle"/>
+                                        <Text text="Muestra de utilización en porcentaje por debajo del rango normal de utilización." class="htwZonaV2AnalysisText"/>
+                                        <Link text="Ver detalle" class="htwZonaV2AnalysisLink" press=".onVerDetalleZona"/>
                                     </VBox>
                                 </HBox>
-
-                                <HBox class="htwZoneChart" justifyContent="SpaceAround" alignItems="End">
-                                    <items>
-                                        <VBox class="htwZoneBarCol" alignItems="Center">
-                                            <Text text="101.3%" class="htwZoneValue htwRedText"/>
-                                            <VBox class="htwZoneTrack">
-                                                <VBox class="htwZoneMarker htwZoneMarkerRed"/>
-                                            </VBox>
-                                            <Text text="Norte" class="htwZoneLabel"/>
-                                        </VBox>
-
-                                        <VBox class="htwZoneBarCol" alignItems="Center">
-                                            <Text text="81.5%" class="htwZoneValue htwGreenText"/>
-                                            <VBox class="htwZoneTrack">
-                                                <VBox class="htwZoneMarker htwZoneMarkerGreen htwZoneMarkerMid"/>
-                                            </VBox>
-                                            <Text text="Centro" class="htwZoneLabel"/>
-                                        </VBox>
-
-                                        <VBox class="htwZoneBarCol" alignItems="Center">
-                                            <Text text="85.8%" class="htwZoneValue htwGreenText"/>
-                                            <VBox class="htwZoneTrack">
-                                                <VBox class="htwZoneMarker htwZoneMarkerGreen htwZoneMarkerMid"/>
-                                            </VBox>
-                                            <Text text="Sur" class="htwZoneLabel"/>
-                                        </VBox>
-
-                                        <VBox class="htwZoneBarCol" alignItems="Center">
-                                            <Text text="64.5%" class="htwZoneValue htwGreenText"/>
-                                            <VBox class="htwZoneTrack">
-                                                <VBox class="htwZoneMarker htwZoneMarkerGreen htwZoneMarkerLow"/>
-                                            </VBox>
-                                            <Text text="Este" class="htwZoneLabel"/>
-                                        </VBox>
-
-                                        <VBox class="htwZoneBarCol" alignItems="Center">
-                                            <Text text="48.3%" class="htwZoneValue htwGreenText"/>
-                                            <VBox class="htwZoneTrack">
-                                                <VBox class="htwZoneMarker htwZoneMarkerGreen htwZoneMarkerLowest"/>
-                                            </VBox>
-                                            <Text text="Oeste" class="htwZoneLabel"/>
-                                        </VBox>
-                                    </items>
-                                </HBox>
-
-                                <HBox class="htwZoneLegend" wrap="Wrap">
-                                    <HBox alignItems="Center">
-                                        <VBox class="htwLegendLine htwLegendGray"/>
-                                        <Text text="Normal (50-100%)"/>
+                                <!-- Gráfica -->
+                                <VBox class="htwZonaV2ChartBox">
+                                    <core:HTML id="htmlCapacidadZonaChart" sanitizeContent="false" content='&lt;svg class="htwZonaV2Svg" viewBox="0 0 500 112" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"&gt;
+    &lt;!-- Grid --&gt;
+    &lt;line x1="38" y1="10" x2="488" y2="10" class="htwZonaV2Grid"/&gt;
+    &lt;line x1="38" y1="34" x2="488" y2="34" class="htwZonaV2Grid"/&gt;
+    &lt;line x1="38" y1="58" x2="488" y2="58" class="htwZonaV2Grid"/&gt;
+    &lt;line x1="38" y1="84" x2="488" y2="84" class="htwZonaV2Base"/&gt;
+    &lt;!-- Eje Y --&gt;
+    &lt;text x="5" y="13" class="htwZonaV2AxisText"&gt;150%&lt;/text&gt;
+    &lt;text x="5" y="37" class="htwZonaV2AxisText"&gt;100%&lt;/text&gt;
+    &lt;text x="10" y="61" class="htwZonaV2AxisText"&gt;50%&lt;/text&gt;
+    &lt;text x="18" y="88" class="htwZonaV2AxisText"&gt;0%&lt;/text&gt;
+   &lt;!-- Norte --&gt;
+&lt;line x1="92" y1="17" x2="92" y2="79" class="htwZonaV2Track"/&gt;
+&lt;line x1="78" y1="35" x2="106" y2="35" class="htwZonaV2MarkerRed"/&gt;
+&lt;text x="112" y="35" dominant-baseline="middle" class="htwZonaV2ValueRed"&gt;101.3%&lt;/text&gt;
+&lt;text x="92" y="101" text-anchor="middle" class="htwZonaV2Label"&gt;Norte&lt;/text&gt;
+&lt;!-- Centro --&gt;
+&lt;line x1="190" y1="25" x2="190" y2="79" class="htwZonaV2Track"/&gt;
+&lt;line x1="176" y1="45" x2="204" y2="45" class="htwZonaV2MarkerGreen"/&gt;
+&lt;text x="210" y="45" dominant-baseline="middle" class="htwZonaV2ValueGreen"&gt;81.5%&lt;/text&gt;
+&lt;text x="190" y="101" text-anchor="middle" class="htwZonaV2Label"&gt;Centro&lt;/text&gt;
+&lt;!-- Sur --&gt;
+&lt;line x1="288" y1="22" x2="288" y2="79" class="htwZonaV2Track"/&gt;
+&lt;line x1="274" y1="42" x2="302" y2="42" class="htwZonaV2MarkerGreen"/&gt;
+&lt;text x="308" y="42" dominant-baseline="middle" class="htwZonaV2ValueGreen"&gt;85.8%&lt;/text&gt;
+&lt;text x="288" y="101" text-anchor="middle" class="htwZonaV2Label"&gt;Sur&lt;/text&gt;
+&lt;!-- Este --&gt;
+&lt;line x1="378" y1="32" x2="378" y2="79" class="htwZonaV2Track"/&gt;
+&lt;line x1="364" y1="56" x2="392" y2="56" class="htwZonaV2MarkerGreen"/&gt;
+&lt;text x="398" y="56" dominant-baseline="middle" class="htwZonaV2ValueGreen"&gt;64.5%&lt;/text&gt;
+&lt;text x="378" y="101" text-anchor="middle" class="htwZonaV2Label"&gt;Este&lt;/text&gt;
+&lt;!-- Oeste --&gt;
+&lt;line x1="468" y1="42" x2="468" y2="79" class="htwZonaV2Track"/&gt;
+&lt;line x1="454" y1="67" x2="482" y2="67" class="htwZonaV2MarkerGreen"/&gt;
+&lt;text x="488" y="67" dominant-baseline="middle" class="htwZonaV2ValueGreen"&gt;48.3%&lt;/text&gt;
+&lt;text x="468" y="101" text-anchor="middle" class="htwZonaV2Label"&gt;Oeste&lt;/text&gt;
+&lt;/svg&gt;'/>
+                                </VBox>
+                                <!-- Leyenda -->
+                                <HBox class="htwZonaLegendV3" alignItems="Center" justifyContent="Center" wrap="NoWrap">
+                                    <HBox class="htwZonaLegendV3Item" alignItems="Center">
+                                        <VBox class="htwZonaLegendV3Oval htwZonaLegendV3Gray"/>
+                                        <Text text="Normal (50-100%)" class="htwZonaLegendV3Text"/>
                                     </HBox>
-                                    <HBox alignItems="Center">
-                                        <VBox class="htwLegendLine htwLegendOrange"/>
-                                        <Text text="Cerca de saturación (90% - 120%)"/>
+                                    <HBox class="htwZonaLegendV3Item" alignItems="Center">
+                                        <VBox class="htwZonaLegendV3Oval htwZonaLegendV3Orange"/>
+                                        <Text text="Cerca de saturación (90% - 120%)" class="htwZonaLegendV3Text"/>
                                     </HBox>
-                                    <HBox alignItems="Center">
-                                        <VBox class="htwLegendLine htwLegendRed"/>
-                                        <Text text="Sobrecargado (&gt;120%)"/>
+                                    <HBox class="htwZonaLegendV3Item" alignItems="Center">
+                                        <VBox class="htwZonaLegendV3Oval htwZonaLegendV3Red"/>
+                                        <Text text="Sobrecargado (&gt;120%)" class="htwZonaLegendV3Text"/>
                                     </HBox>
                                 </HBox>
-
-                                <Link text="Ver detalle por zona" class="htwCardLink" press=".onVerDetalleZona"/>
+                                <HBox class="htwZonaV2BottomLinkWrap">
+                                    <Link text="Ver detalle por zona →" press=".onDetalleZona" class="htwZonaV2BottomLink" />
+                                </HBox>
                             </VBox>
-
-<!-- CARD 5: Causas -->
-<VBox class="htwCard htwCausasCardNew">
-
-    <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-        <Title text="Causas de desviación de horas" level="H3" class="htwCardTitle"/>
-        <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
-    </HBox>
-
-    <!-- ENCABEZADO -->
-    <HBox class="htwCauseNewHeader" alignItems="Center">
-        <Text text="Causa" wrapping="false" class="htwCauseNewHeaderText">
-            <layoutData>
-                <FlexItemData baseSize="42%" growFactor="0" shrinkFactor="0"/>
-            </layoutData>
-        </Text>
-
-        <Text text="" class="htwCauseNewHeaderText">
-            <layoutData>
-                <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
-            </layoutData>
-        </Text>
-
-        <Text text="Horas extra" wrapping="false" class="htwCauseNewHeaderText htwCauseNewRight">
-            <layoutData>
-                <FlexItemData baseSize="18%" growFactor="0" shrinkFactor="0"/>
-            </layoutData>
-        </Text>
-
-        <Text text="% del total" wrapping="false" class="htwCauseNewHeaderText htwCauseNewRight">
-            <layoutData>
-                <FlexItemData baseSize="16%" growFactor="0" shrinkFactor="0"/>
-            </layoutData>
-        </Text>
-    </HBox>
-
-    <!-- FILAS -->
-    <List
-        showSeparators="None"
-        class="htwCauseNewList"
-        items="{horasModel>/graficas/causasDesviacion}">
-
-        <CustomListItem>
-            <HBox class="htwCauseNewRow" alignItems="Center">
-
-                <Text
-                    text="{horasModel>causa}"
-                    wrapping="false"
-                    class="htwCauseNewName">
-                    <layoutData>
-                        <FlexItemData baseSize="42%" growFactor="0" shrinkFactor="0"/>
-                    </layoutData>
-                </Text>
-
-                <ProgressIndicator
-                    percentValue="{horasModel>porcentaje}"
-                    displayValue=""
-                    class="htwCauseNewBar">
-                    <layoutData>
-                        <FlexItemData baseSize="24%" growFactor="0" shrinkFactor="0"/>
-                    </layoutData>
-                </ProgressIndicator>
-
-                <Text
-                    text="{horasModel>horasTexto}"
-                    wrapping="false"
-                    class="htwCauseNewHours">
-                    <layoutData>
-                        <FlexItemData baseSize="18%" growFactor="0" shrinkFactor="0"/>
-                    </layoutData>
-                </Text>
-
-                <Text
-                    text="{horasModel>porcentajeTexto}"
-                    wrapping="false"
-                    class="htwCauseNewPercent">
-                    <layoutData>
-                        <FlexItemData baseSize="16%" growFactor="0" shrinkFactor="0"/>
-                    </layoutData>
-                </Text>
-
-            </HBox>
-        </CustomListItem>
-    </List>
-
-    <!-- TOTAL -->
-    <HBox class="htwTotalExtraBoxNew" justifyContent="SpaceBetween" alignItems="Center">
-        <HBox alignItems="Center">
-            <core:Icon src="sap-icon://sum" class="htwPurpleIcon htwSumIconNew"/>
-            <Text text="Total horas extra" class="htwTotalExtraTextNew"/>
-        </HBox>
-
-        <Text text="{horasModel>/kpis/totalHorasExtra}" class="htwTotalExtraValueNew"/>
-    </HBox>
-
-    <Link text="Ver detalle por causa" class="htwCardLink" press=".onVerDetalleCausa"/>
-
-</VBox>
-
-                            <!-- CARD 6: Proyección -->
-                            <VBox class="htwCard htwProyeccionCard">
+                            <!-- CARD 5: CAUSAS -->
+                            <VBox id="cardCausas" class="htwCard htwCausasCard">
+                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                    <Title text="Causas de desviación de horas" level="H3" class="htwCardTitle"/>
+                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
+                                </HBox>
+                                <HBox class="htwCauseHeader">
+                                    <Text text="Causa" class="htwCauseNameCol"/>
+                                    <Text text="" class="htwCauseBarCol"/>
+                                    <Text text="Horas extra" class="htwCauseHoursCol"/>
+                                    <Text text="% del total" class="htwCausePercentCol"/>
+                                </HBox>
+                                <List showSeparators="None" class="htwCauseList" items="{horasModel>/graficas/causasDesviacion}">
+                                    <CustomListItem>
+                                        <HBox class="htwCauseRow" alignItems="Center">
+                                            <Text text="{horasModel>causa}" class="htwCauseNameCol htwCauseName"/>
+                                            <ProgressIndicator percentValue="{horasModel>porcentaje}" displayValue="" class="htwCauseBar"/>
+                                            <Text text="{horasModel>horasTexto}" class="htwCauseHoursCol"/>
+                                            <Text text="{horasModel>porcentajeTexto}" class="htwCausePercentCol"/>
+                                        </HBox>
+                                    </CustomListItem>
+                                </List>
+                                <HBox class="htwTotalExtraBox" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://sum" class="htwPurpleIcon htwSumIcon"/>
+                                        <Text text="Total horas extra" class="htwTotalExtraText"/>
+                                    </HBox>
+                                    <Text text="{horasModel>/kpis/totalHorasExtra}" class="htwTotalExtraValue"/>
+                                </HBox>
+                                <Link text="Ver detalle por causa" class="htwCardLink" press=".onVerDetalleCausa"/>
+                            </VBox>
+                            <!-- CARD 6: PROYECCIÓN -->
+                            <VBox id="cardProyeccion" class="htwCard htwProyeccionCard">
                                 <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
                                     <Title text="Proyección de cierre de horas" level="H3" class="htwCardTitle"/>
                                     <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
                                 </HBox>
-
-                                <VBox class="htwProjectionText">
-                                    <Text text="Utilización proyectada al cierre" class="htwProjectionLabel"/>
-                                    <Text text="{horasModel>/kpis/utilizacionProyectada}" class="htwProjectionNumber"/>
-                                    <Text text="de utilización proyectada" class="htwProjectionSmall"/>
+                                <VBox class="htwProjectionContent">
+                                    <VBox class="htwProjectionText">
+                                        <Text text="Utilización proyectada al cierre" class="htwProjectionLabel"/>
+                                        <Text text="{horasModel>/kpis/utilizacionProyectada}" class="htwProjectionNumber"/>
+                                        <Text text="de utilización proyectada" class="htwProjectionSmall"/>
+                                    </VBox>
+                                    <VBox class="htwProjectionChartBox">
+                                        <core:HTML id="htmlProyeccionChart" sanitizeContent="false" content='&lt;svg class="htwProjectionSvg" viewBox="0 0 390 85" preserveAspectRatio="none"&gt;
+                                                &lt;line x1="50" y1="22" x2="370" y2="22" class="htwGridLine"/&gt;
+                                                &lt;line x1="50" y1="50" x2="370" y2="50" class="htwGridLine"/&gt;
+                                                &lt;line x1="50" y1="76" x2="370" y2="76" class="htwGridLine"/&gt;
+                                                &lt;text x="18" y="24" class="htwAxisText"&gt;150&lt;/text&gt;
+                                                &lt;text x="24" y="52" class="htwAxisText"&gt;100&lt;/text&gt;
+                                                &lt;text x="34" y="78" class="htwAxisText"&gt;0&lt;/text&gt;
+                                                &lt;polyline points="68,60 110,52 150,55 190,44 230,47 270,40 310,38 350,34" class="htwProjectionLine"/&gt;
+                                                &lt;polyline points="270,40 310,38 350,34 374,30" class="htwProjectionDashed"/&gt;
+                                                &lt;circle cx="68" cy="60" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="110" cy="52" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="150" cy="55" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="190" cy="44" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="230" cy="47" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="270" cy="40" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="310" cy="38" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;circle cx="350" cy="34" r="2.5" class="htwProjectionPoint"/&gt;
+                                                &lt;text x="58" y="82" class="htwXAxisText"&gt;01 May&lt;/text&gt;
+                                                &lt;text x="139" y="82" class="htwXAxisText"&gt;08 May&lt;/text&gt;
+                                                &lt;text x="221" y="82" class="htwXAxisText"&gt;15 May&lt;/text&gt;
+                                                &lt;text x="303" y="82" class="htwXAxisText"&gt;22 May&lt;/text&gt;
+                                                &lt;text x="352" y="82" class="htwXAxisText"&gt;31 May&lt;/text&gt;
+                                            &lt;/svg&gt;'/>
+                                    </VBox>
                                 </VBox>
-
-                                <viz:VizFrame
-                                    id="vfProyeccionCierre"
-                                    vizType="line"
-                                    width="100%"
-                                    height="170px"
-                                    uiConfig="{applicationSet:'fiori'}">
-                                    <viz:dataset>
-                                        <vizData:FlattenedDataset data="{horasModel>/graficas/proyeccionCierre}">
-                                            <vizData:dimensions>
-                                                <vizData:DimensionDefinition name="Fecha" value="{horasModel>fecha}"/>
-                                            </vizData:dimensions>
-                                            <vizData:measures>
-                                                <vizData:MeasureDefinition name="Utilización" value="{horasModel>utilizacion}"/>
-                                            </vizData:measures>
-                                        </vizData:FlattenedDataset>
-                                    </viz:dataset>
-                                    <viz:feeds>
-                                        <vizFeeds:FeedItem uid="valueAxis" type="Measure" values="Utilización"/>
-                                        <vizFeeds:FeedItem uid="categoryAxis" type="Dimension" values="Fecha"/>
-                                    </viz:feeds>
-                                </viz:VizFrame>
-
                                 <HBox class="htwProjectionAlerts" wrap="NoWrap">
                                     <VBox class="htwAlertBox htwRedAlert">
                                         <HBox alignItems="Center">
@@ -566,41 +474,35 @@
                                             <VBox class="sapUiTinyMarginBegin">
                                                 <Text text="Estado actual" class="htwAlertLabel"/>
                                                 <Text text="Fin de semana" class="htwAlertTitle htwRedText"/>
-                                                <Text text="122% de utilización promedio" class="htwAlertDesc"/>
+                                                <Text text="122% prom." class="htwAlertDesc"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
-
                                     <VBox class="htwAlertBox htwOrangeAlert">
                                         <HBox alignItems="Center">
                                             <core:Icon src="sap-icon://alert" class="htwOrangeIcon"/>
                                             <VBox class="sapUiTinyMarginBegin">
-                                                <Text text="Brecha proyectada" class="htwAlertLabel"/>
+                                                <Text text="Brecha" class="htwAlertLabel"/>
                                                 <Text text="250 h" class="htwAlertTitle htwOrangeText"/>
-                                                <Text text="de falta de horas para el cierre" class="htwAlertDesc"/>
+                                                <Text text="falta de horas" class="htwAlertDesc"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
-
                                     <VBox class="htwAlertBox htwGreenAlert">
                                         <HBox alignItems="Center">
                                             <core:Icon src="sap-icon://bar-chart" class="htwGreenIcon"/>
                                             <VBox class="sapUiTinyMarginBegin">
                                                 <Text text="Riesgo" class="htwAlertLabel"/>
                                                 <Text text="Alto" class="htwAlertTitle htwGreenText"/>
-                                                <Text text="Si no se corrigen cargas en semanas clave" class="htwAlertDesc"/>
+                                                <Text text="Semanas clave" class="htwAlertDesc"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
                                 </HBox>
-
                                 <Text text="Proyección basada en datos hasta el 31/05/2024" class="htwProjectionFooter"/>
                             </VBox>
-
                         </HBox>
-
                     </VBox>
-
                 </VBox>
             </ScrollContainer>
         </content>

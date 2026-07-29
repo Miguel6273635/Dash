@@ -1,0 +1,694 @@
+<mvc:View
+    controllerName="mantenimiento.controller.ListadoOrdenesAfectadas"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <Page
+        id="listadoOrdenesAfectadasPage"
+        class="loaPage"
+        showHeader="false"
+        enableScrolling="true">
+
+        <content>
+            <VBox
+                class="loaScreen"
+                width="100%"
+                busy="{view>/busy}">
+
+                <!-- Encabezado -->
+                <VBox class="loaHeaderBlock">
+                    <Title
+                        text="Listado de órdenes afectadas"
+                        level="H1"
+                        class="loaMainTitle" />
+
+                    <Text
+                        text="Consulta detallada de órdenes PM impactadas por equipos bloqueados."
+                        class="loaSubtitle" />
+                </VBox>
+
+                <!-- Filtros -->
+                <HBox
+                    class="loaFiltersRow"
+                    width="100%"
+                    alignItems="Center"
+                    justifyContent="SpaceBetween"
+                    wrap="NoWrap">
+
+                    <VBox class="loaFilterBox loaFilterPeriod">
+                        <Label
+                            text="Periodo"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/period}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/periods}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterDate">
+                        <Label
+                            text="Fecha desde"
+                            class="loaFilterLabel" />
+
+                        <DatePicker
+                            dateValue="{view>/filters/dateFrom}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd"
+                            class="loaFilterControl loaDateControl"
+                            width="100%" />
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterDate">
+                        <Label
+                            text="Fecha hasta"
+                            class="loaFilterLabel" />
+
+                        <DatePicker
+                            dateValue="{view>/filters/dateTo}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd"
+                            class="loaFilterControl loaDateControl"
+                            width="100%" />
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterSmall">
+                        <Label
+                            text="Zona"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/zone}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/zones}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterClient">
+                        <Label
+                            text="Cliente"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/client}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/clients}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterType">
+                        <Label
+                            text="Tipo de orden"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/orderType}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/orderTypes}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterStatus">
+                        <Label
+                            text="Estatus de orden"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/orderStatus}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/orderStatuses}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterSupervisor">
+                        <Label
+                            text="Supervisor"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/supervisor}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/supervisors}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="loaFilterBox loaFilterBlockStatus">
+                        <Label
+                            text="Estatus de bloqueo"
+                            class="loaFilterLabel" />
+
+                        <Select
+                            selectedKey="{view>/filters/blockStatus}"
+                            class="loaFilterControl loaFilterSelect"
+                            width="100%"
+                            items="{view>/catalogs/blockStatuses}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+                        </Select>
+                    </VBox>
+
+                    <Button
+                        text="Aplicar filtros"
+                        icon="sap-icon://filter"
+                        type="Emphasized"
+                        press=".onApplyFilters"
+                        class="loaApplyButton loaApplyButtonAligned" />
+                </HBox>
+
+                <HBox class="loaSectionDivider" />
+
+                <!-- KPI -->
+                <HBox
+                    class="loaKpiRow"
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                    alignItems="Stretch">
+
+                    <HBox
+                        class="loaKpiCard loaKpiOrange"
+                        alignItems="Center">
+
+                        <HBox
+                            class="loaKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://task"
+                                class="loaKpiIcon" />
+                        </HBox>
+
+                        <VBox class="loaKpiTextBlock">
+                            <ObjectNumber
+                                number="{view>/kpis/affected}"
+                                class="loaKpiNumber" />
+
+                            <Text
+                                text="Órdenes afectadas"
+                                class="loaKpiLabel" />
+
+                            <Text
+                                text="Total en el periodo"
+                                class="loaKpiCaption" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="loaKpiCard loaKpiRed"
+                        alignItems="Center">
+
+                        <HBox
+                            class="loaKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://appointment-2"
+                                class="loaKpiIcon" />
+                        </HBox>
+
+                        <VBox class="loaKpiTextBlock">
+                            <ObjectNumber
+                                number="{view>/kpis/overdue}"
+                                class="loaKpiNumber" />
+
+                            <Text
+                                text="Órdenes vencidas"
+                                class="loaKpiLabel" />
+
+                            <Text
+                                text="Con días vencidos"
+                                class="loaKpiCaption" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="loaKpiCard loaKpiBlue"
+                        alignItems="Center">
+
+                        <HBox
+                            class="loaKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://locked"
+                                class="loaKpiIcon" />
+                        </HBox>
+
+                        <VBox class="loaKpiTextBlock">
+                            <ObjectNumber
+                                number="{view>/kpis/blockedEquipment}"
+                                class="loaKpiNumber" />
+
+                            <Text
+                                text="Equipos bloqueados relacionados"
+                                class="loaKpiLabel" />
+
+                            <Text
+                                text="Con impacto en órdenes"
+                                class="loaKpiCaption" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="loaKpiCard loaKpiPurple"
+                        alignItems="Center">
+
+                        <HBox
+                            class="loaKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://warning2"
+                                class="loaKpiIcon" />
+                        </HBox>
+
+                        <VBox class="loaKpiTextBlock">
+                            <ObjectNumber
+                                number="{view>/kpis/highImpact}"
+                                class="loaKpiNumber" />
+
+                            <Text
+                                text="Impacto alto"
+                                class="loaKpiLabel" />
+
+                            <Text
+                                text="Órdenes con impacto alto"
+                                class="loaKpiCaption" />
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- Tabla -->
+                <VBox
+                    class="loaTableCard"
+                    width="100%">
+
+                    <HBox
+                        class="loaTableHeader"
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center">
+
+                        <Title
+                            text="Órdenes PM afectadas"
+                            level="H3"
+                            class="loaTableTitle" />
+
+                        <HBox
+                            class="loaTableDetailAction"
+                            alignItems="Center">
+
+                            <Link
+                                text="Ver detalle de orden"
+                                press=".onOpenOrderDetail"
+                                class="loaTableDetailLink" />
+
+                            <core:Icon
+                                src="sap-icon://action"
+                                class="loaTableDetailIcon" />
+                        </HBox>
+                    </HBox>
+
+                    <Table
+                        id="affectedOrdersTable"
+                        class="loaOrdersTable"
+                        width="100%"
+                        fixedLayout="true"
+                        inset="false"
+                        growing="false"
+                        showSeparators="Inner"
+                        noDataText="No se encontraron órdenes para los filtros seleccionados"
+                        items="{view>/visibleOrders}">
+
+                        <columns>
+                            <Column width="6%">
+                                <Text
+                                    text="Orden"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="7%">
+                                <Text
+                                    text="Tipo de orden"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="6%">
+                                <Text
+                                    text="Equipo / Elevador"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="9%">
+                                <Text
+                                    text="Cliente"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="4%">
+                                <Text
+                                    text="Zona"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column
+                                width="7%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Estatus de orden"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="6%">
+                                <Text
+                                    text="Fecha inicio"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="7%">
+                                <Text
+                                    text="Fecha compromiso"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column
+                                width="5%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Días vencidos"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="6%">
+                                <Text
+                                    text="Supervisor"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column width="6%">
+                                <Text
+                                    text="Recurso asignado"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column
+                                width="6%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Impacto del bloqueo"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column
+                                width="4%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Prioridad"
+                                    class="loaColumnHeader" />
+                            </Column>
+
+                            <Column
+                                width="7%"
+                                hAlign="Center">
+
+                                <Text
+                                    text="Estatus de bloqueo"
+                                    class="loaColumnHeader" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem
+                                type="Inactive"
+                                vAlign="Middle"
+                                class="loaOrderRow">
+
+                                <cells>
+                                    <HBox
+                                        alignItems="Center"
+                                        class="loaOrderCell">
+
+                                        <Link
+                                            text="{view>order}"
+                                            press=".onOrderPress"
+                                            class="loaOrderLink" />
+
+                                        <core:Icon
+                                            src="sap-icon://navigation-right-arrow"
+                                            class="loaOrderArrow" />
+                                    </HBox>
+
+                                    <Text
+                                        text="{view>orderType}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <Text
+                                        text="{view>equipment}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <Text
+                                        text="{view>client}"
+                                        wrapping="false"
+                                        class="loaCellText"
+                                        tooltip="{view>client}" />
+
+                                    <Text
+                                        text="{view>zone}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <HBox
+                                        class="loaPill loaOrderStatusPill"
+                                        justifyContent="Center"
+                                        alignItems="Center">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="statuscode"
+                                                value="{view>orderStatusCode}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{view>orderStatus}"
+                                            wrapping="false" />
+                                    </HBox>
+
+                                    <Text
+                                        text="{view>startDate}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <Text
+                                        text="{view>commitmentDate}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <ObjectNumber
+                                        number="{view>overdueDays}"
+                                        state="{= ${view>overdueDays} > 0 ? 'Error' : 'None' }"
+                                        class="loaOverdueNumber" />
+
+                                    <Text
+                                        text="{view>supervisor}"
+                                        wrapping="false"
+                                        class="loaCellText"
+                                        tooltip="{view>supervisor}" />
+
+                                    <Text
+                                        text="{view>assignedResource}"
+                                        wrapping="false"
+                                        class="loaCellText" />
+
+                                    <HBox
+                                        class="loaPill loaImpactPill"
+                                        justifyContent="Center"
+                                        alignItems="Center">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="impactcode"
+                                                value="{view>impactCode}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{view>impact}"
+                                            wrapping="false" />
+                                    </HBox>
+
+                                    <HBox
+                                        class="loaPill loaPriorityPill"
+                                        justifyContent="Center"
+                                        alignItems="Center">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="prioritycode"
+                                                value="{view>priorityCode}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{view>priority}"
+                                            wrapping="false" />
+                                    </HBox>
+
+                                    <HBox
+                                        class="loaPill loaBlockStatusPill"
+                                        justifyContent="Center"
+                                        alignItems="Center">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="blockcode"
+                                                value="{view>blockStatusCode}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{view>blockStatus}"
+                                            wrapping="false" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <!-- Pie y paginación -->
+                    <HBox
+                        class="loaTableFooter"
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center">
+
+                        <Text
+                            text="{view>/resultLabel}"
+                            class="loaResultText" />
+
+                        <HBox
+                            class="loaPagination"
+                            alignItems="Center">
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="{= ${view>/currentPage} > 1 }"
+                                press=".onPreviousPage"
+                                tooltip="Página anterior"
+                                class="loaPageArrow" />
+
+                            <Button
+                                text="1"
+                                type="{= ${view>/currentPage} === 1 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="loaPageButton">
+
+                                <customData>
+                                    <core:CustomData
+                                        key="page"
+                                        value="1" />
+                                </customData>
+                            </Button>
+
+                            <Button
+                                text="2"
+                                type="{= ${view>/currentPage} === 2 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="loaPageButton">
+
+                                <customData>
+                                    <core:CustomData
+                                        key="page"
+                                        value="2" />
+                                </customData>
+                            </Button>
+
+                            <Button
+                                text="3"
+                                type="{= ${view>/currentPage} === 3 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="loaPageButton">
+
+                                <customData>
+                                    <core:CustomData
+                                        key="page"
+                                        value="3" />
+                                </customData>
+                            </Button>
+
+                            <Text
+                                text="..."
+                                class="loaPaginationDots" />
+
+                            <Button
+                                text="10"
+                                type="{= ${view>/currentPage} === 10 ? 'Emphasized' : 'Transparent' }"
+                                press=".onPagePress"
+                                class="loaPageButton">
+
+                                <customData>
+                                    <core:CustomData
+                                        key="page"
+                                        value="10" />
+                                </customData>
+                            </Button>
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="{= ${view>/currentPage} &lt; 10 }"
+                                press=".onNextPage"
+                                tooltip="Página siguiente"
+                                class="loaPageArrow" />
+                        </HBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
