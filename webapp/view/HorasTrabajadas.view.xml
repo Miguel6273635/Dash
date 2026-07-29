@@ -4,14 +4,12 @@
     xmlns:core="sap.ui.core">
     <Page id="pageHorasTrabajadas" showHeader="false" class="HorasTrabajadas">
         <content>
-            <ScrollContainer id="scHorasTrabajadas" height="100%" width="100%" vertical="false" horizontal="false" class="htwScroll">
+            <ScrollContainer id="scHorasTrabajadas" height="100%" width="100%" vertical="true" horizontal="false" focusable="true" class="htwScroll">
                 <VBox id="vbHorasPage" class="htwPageContainer sapUiSizeCompact">
                     <!-- HEADER PRINCIPAL -->
-                    <HBox id="hbHorasHeader" class="htwHeader" alignItems="Center">
-                        <VBox id="vbHorasIcon" class="htwHeaderIcon" alignItems="Center" justifyContent="Center">
-                            <core:Icon id="icHorasHeader" src="sap-icon://history"/>
-                        </VBox>
-                        <VBox id="vbHorasHeaderText">
+                    <!-- HEADER PRINCIPAL -->
+                    <HBox id="hbHorasHeader" class="htwHeader htwHeaderNoIcon" alignItems="Center">
+                        <VBox id="vbHorasHeaderText" class="htwHeaderTextNoIcon">
                             <Title id="ttlHoras" text="Horas trabajadas" level="H1" class="htwMainTitle"/>
                             <Text id="txtHorasSub" text="Análisis de capacidad, carga y utilización de horas" class="htwSubtitle"/>
                         </VBox>
@@ -124,7 +122,6 @@
                         <!-- FILA 1 -->
                         <HBox id="rowCards1" class="htwCardsRow" wrap="NoWrap">
                             <!-- CARD 1: CAPACIDAD VS CARGA -->
-                            <!-- CARD 1: CAPACIDAD VS CARGA -->
                             <VBox id="cardCapacidadCarga" class="htwCard htwCapacidadCargaCard htwDonutCleanCard">
                                 <HBox class="htwCardHeader htwDonutCleanHeader" justifyContent="Start" alignItems="Center">
                                     <Title text="Capacidad vs carga programada" level="H3" class="htwCardTitle"/>
@@ -132,18 +129,18 @@
                                 </HBox>
                                 <HBox class="htwDonutCleanArea" alignItems="Center" justifyContent="Center">
                                     <VBox class="htwDonutCleanSvgWrapper" alignItems="Center" justifyContent="Center">
-                                        <core:HTML sanitizeContent="false" content='&lt;svg class="htwDonutCleanSvg" viewBox="0 0 180 180"&gt;
+                                        <core:HTML sanitizeContent="false" content='&lt;svg class="htwDonutCleanSvg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"&gt;
                     &lt;g transform="rotate(-90 90 90)"&gt;
-                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#ff9800" stroke-width="34" pathLength="100" stroke-dasharray="31.7 68.3" stroke-dashoffset="0"/&gt;
-                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#15b65c" stroke-width="34" pathLength="100" stroke-dasharray="34.3 65.7" stroke-dashoffset="-31.7"/&gt;
-                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#2196f3" stroke-width="34" pathLength="100" stroke-dasharray="31 69" stroke-dashoffset="-66"/&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#ff9800" stroke-width="34" stroke-linecap="butt" pathLength="100" stroke-dasharray="32.68 67.32" stroke-dashoffset="0"/&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#15b65c" stroke-width="34" stroke-linecap="butt" pathLength="100" stroke-dasharray="35.36 64.64" stroke-dashoffset="-32.68"/&gt;
+                        &lt;circle cx="90" cy="90" r="58" fill="none" stroke="#2196f3" stroke-width="34" stroke-linecap="butt" pathLength="100" stroke-dasharray="31.96 68.04" stroke-dashoffset="-68.04"/&gt;
                     &lt;/g&gt;
                     &lt;circle cx="90" cy="90" r="37" fill="#ffffff"/&gt;
                     &lt;text x="90" y="80" text-anchor="middle" class="htwDonutCleanCenterLabel"&gt;Total&lt;/text&gt;
                     &lt;text x="90" y="102" text-anchor="middle" class="htwDonutCleanCenterValue"&gt;6,400 h&lt;/text&gt;
-                 &lt;text x="36" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.0%&lt;/text&gt;
-&lt;text x="145" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.7%&lt;/text&gt;
-&lt;text x="90" y="145" text-anchor="middle" class="htwDonutCleanPct"&gt;34.3%&lt;/text&gt;
+                    &lt;text x="36" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.0%&lt;/text&gt;
+                    &lt;text x="145" y="90" text-anchor="middle" class="htwDonutCleanPct"&gt;31.7%&lt;/text&gt;
+                    &lt;text x="90" y="145" text-anchor="middle" class="htwDonutCleanPct"&gt;34.3%&lt;/text&gt;
                 &lt;/svg&gt;'/>
                                     </VBox>
                                     <VBox class="htwDonutCleanLegend" justifyContent="Center">
@@ -400,9 +397,9 @@
                             </VBox>
                             <!-- CARD 5: CAUSAS -->
                             <VBox id="cardCausas" class="htwCard htwCausasCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                    <Title text="Causas de desviación de horas" level="H3" class="htwCardTitle"/>
-                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
+                                <HBox class="htwCardHeader htwCausasHeader" justifyContent="Start" alignItems="Center">
+                                    <Title text="Causas de desviación de horas" level="H3" class="htwCardTitle htwCausasTitle"/>
+                                    <core:Icon id="icInfoCausasHoras" src="sap-icon://hint" class="htwCausasInfoIcon"/>
                                 </HBox>
                                 <HBox class="htwCauseHeader">
                                     <Text text="Causa" class="htwCauseNameCol"/>
@@ -414,7 +411,9 @@
                                     <CustomListItem>
                                         <HBox class="htwCauseRow" alignItems="Center">
                                             <Text text="{horasModel>causa}" class="htwCauseNameCol htwCauseName"/>
-                                            <ProgressIndicator percentValue="{horasModel>porcentaje}" displayValue="" class="htwCauseBar"/>
+                                            <HBox class="htwCauseManualTrack">
+                                                <HBox class="htwCauseManualFill" width="{= ${horasModel>porcentaje} + '%' }"/>
+                                            </HBox>
                                             <Text text="{horasModel>horasTexto}" class="htwCauseHoursCol"/>
                                             <Text text="{horasModel>porcentajeTexto}" class="htwCausePercentCol"/>
                                         </HBox>
@@ -430,75 +429,90 @@
                                 <Link text="Ver detalle por causa" class="htwCardLink" press=".onVerDetalleCausa"/>
                             </VBox>
                             <!-- CARD 6: PROYECCIÓN -->
-                            <VBox id="cardProyeccion" class="htwCard htwProyeccionCard">
-                                <HBox class="htwCardHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                    <Title text="Proyección de cierre de horas" level="H3" class="htwCardTitle"/>
-                                    <Button icon="sap-icon://hint" type="Transparent" class="htwIconButton"/>
+                            <VBox id="cardProyeccion" class="htwCard htwProyeccionCard htwProjectionCard">
+                                <!-- Encabezado -->
+                                <HBox class="htwCardHeader htwProyeccionHeader" alignItems="Center" justifyContent="Start">
+                                    <Title text="Proyección de cierre de horas" level="H3" class="htwCardTitle htwProyeccionTitle"/>
+                                    <core:Icon id="icInfoProyeccionHoras" src="sap-icon://hint" class="htwProyeccionInfoIcon"/>
                                 </HBox>
-                                <VBox class="htwProjectionContent">
-                                    <VBox class="htwProjectionText">
-                                        <Text text="Utilización proyectada al cierre" class="htwProjectionLabel"/>
-                                        <Text text="{horasModel>/kpis/utilizacionProyectada}" class="htwProjectionNumber"/>
-                                        <Text text="de utilización proyectada" class="htwProjectionSmall"/>
+                                <!-- Parte superior: 98% + gráfica -->
+                                <HBox class="htwProjectionTop" alignItems="Start" justifyContent="Start">
+                                    <!-- Lado izquierdo -->
+                                    <VBox class="htwProjectionMetricBox">
+                                        <Text text="Utilización proyectada al cierre" class="htwProjectionMiniLabel"/>
+                                        <Text text="98%" class="htwProjectionBigValue"/>
+                                        <Text text="de utilización proyectada" class="htwProjectionMiniDesc"/>
                                     </VBox>
+                                    <!-- Lado derecho: SVG CORRECTO DENTRO DE core:HTML -->
                                     <VBox class="htwProjectionChartBox">
-                                        <core:HTML id="htmlProyeccionChart" sanitizeContent="false" content='&lt;svg class="htwProjectionSvg" viewBox="0 0 390 85" preserveAspectRatio="none"&gt;
-                                                &lt;line x1="50" y1="22" x2="370" y2="22" class="htwGridLine"/&gt;
-                                                &lt;line x1="50" y1="50" x2="370" y2="50" class="htwGridLine"/&gt;
-                                                &lt;line x1="50" y1="76" x2="370" y2="76" class="htwGridLine"/&gt;
-                                                &lt;text x="18" y="24" class="htwAxisText"&gt;150&lt;/text&gt;
-                                                &lt;text x="24" y="52" class="htwAxisText"&gt;100&lt;/text&gt;
-                                                &lt;text x="34" y="78" class="htwAxisText"&gt;0&lt;/text&gt;
-                                                &lt;polyline points="68,60 110,52 150,55 190,44 230,47 270,40 310,38 350,34" class="htwProjectionLine"/&gt;
-                                                &lt;polyline points="270,40 310,38 350,34 374,30" class="htwProjectionDashed"/&gt;
-                                                &lt;circle cx="68" cy="60" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="110" cy="52" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="150" cy="55" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="190" cy="44" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="230" cy="47" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="270" cy="40" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="310" cy="38" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;circle cx="350" cy="34" r="2.5" class="htwProjectionPoint"/&gt;
-                                                &lt;text x="58" y="82" class="htwXAxisText"&gt;01 May&lt;/text&gt;
-                                                &lt;text x="139" y="82" class="htwXAxisText"&gt;08 May&lt;/text&gt;
-                                                &lt;text x="221" y="82" class="htwXAxisText"&gt;15 May&lt;/text&gt;
-                                                &lt;text x="303" y="82" class="htwXAxisText"&gt;22 May&lt;/text&gt;
-                                                &lt;text x="352" y="82" class="htwXAxisText"&gt;31 May&lt;/text&gt;
-                                            &lt;/svg&gt;'/>
+                                        <core:HTML id="htmlProyeccionChart" sanitizeContent="false" content='&lt;svg class="htwProjectionSvg" viewBox="0 0 620 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"&gt;
+                    &lt;!-- Líneas horizontales --&gt;
+                    &lt;line x1="40" y1="25" x2="600" y2="25" class="htwProjGrid"/&gt;
+                    &lt;line x1="40" y1="90" x2="600" y2="90" class="htwProjGrid"/&gt;
+                    &lt;line x1="40" y1="155" x2="600" y2="155" class="htwProjGrid"/&gt;
+                    &lt;!-- Etiquetas eje Y --&gt;
+                    &lt;text x="0" y="160" class="htwProjAxisText"&gt;0%&lt;/text&gt;
+                    &lt;text x="0" y="95" class="htwProjAxisText"&gt;50%&lt;/text&gt;
+                    &lt;text x="0" y="30" class="htwProjAxisText"&gt;150%&lt;/text&gt;
+                    &lt;!-- Línea real --&gt;
+                    &lt;polyline points="55,125 120,110 185,118 250,90 315,95 380,78 445,78 510,70" class="htwProjLineSolid"/&gt;
+                    &lt;!-- Línea proyectada --&gt;
+                    &lt;polyline points="510,70 555,62 600,58" class="htwProjLineDashed"/&gt;
+                    &lt;!-- Puntos --&gt;
+                    &lt;circle cx="55" cy="125" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="120" cy="110" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="185" cy="118" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="250" cy="90" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="315" cy="95" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="380" cy="78" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="445" cy="78" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;circle cx="510" cy="70" r="3.8" class="htwProjPoint"/&gt;
+                    &lt;!-- Fechas --&gt;
+                    &lt;text x="55" y="195" text-anchor="middle" class="htwProjDateText"&gt;01 May&lt;/text&gt;
+                    &lt;text x="185" y="195" text-anchor="middle" class="htwProjDateText"&gt;08 May&lt;/text&gt;
+                    &lt;text x="315" y="195" text-anchor="middle" class="htwProjDateText"&gt;15 May&lt;/text&gt;
+                    &lt;text x="445" y="195" text-anchor="middle" class="htwProjDateText"&gt;22 May&lt;/text&gt;
+                    &lt;text x="600" y="195" text-anchor="end" class="htwProjDateText"&gt;31 May&lt;/text&gt;
+                &lt;/svg&gt;'/>
                                     </VBox>
-                                </VBox>
+                                </HBox>
+                                <!-- Alertas inferiores -->
                                 <HBox class="htwProjectionAlerts" wrap="NoWrap">
-                                    <VBox class="htwAlertBox htwRedAlert">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://alert" class="htwRedIcon"/>
-                                            <VBox class="sapUiTinyMarginBegin">
+                                    <!-- Estado actual -->
+                                    <VBox class="htwAlertBox htwAlertBoxRed">
+                                        <HBox class="htwAlertContent" alignItems="Start">
+                                            <core:Icon src="sap-icon://alert" class="htwAlertIcon htwAlertIconRed"/>
+                                            <VBox class="htwAlertTextWrap">
                                                 <Text text="Estado actual" class="htwAlertLabel"/>
-                                                <Text text="Fin de semana" class="htwAlertTitle htwRedText"/>
-                                                <Text text="122% prom." class="htwAlertDesc"/>
+                                                <Text text="Fin de semana" class="htwAlertMain htwAlertMainRed"/>
+                                                <Text text="122% de utilización promedio" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
-                                    <VBox class="htwAlertBox htwOrangeAlert">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://alert" class="htwOrangeIcon"/>
-                                            <VBox class="sapUiTinyMarginBegin">
-                                                <Text text="Brecha" class="htwAlertLabel"/>
-                                                <Text text="250 h" class="htwAlertTitle htwOrangeText"/>
-                                                <Text text="falta de horas" class="htwAlertDesc"/>
+                                    <!-- Brecha -->
+                                    <VBox class="htwAlertBox htwAlertBoxOrange">
+                                        <HBox class="htwAlertContent" alignItems="Start">
+                                            <core:Icon src="sap-icon://alert" class="htwAlertIcon htwAlertIconOrange"/>
+                                            <VBox class="htwAlertTextWrap">
+                                                <Text text="Brecha proyectada" class="htwAlertLabel"/>
+                                                <Text text="250 h" class="htwAlertMain htwAlertMainOrange"/>
+                                                <Text text="de falta de horas para el cierre" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
-                                    <VBox class="htwAlertBox htwGreenAlert">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://bar-chart" class="htwGreenIcon"/>
-                                            <VBox class="sapUiTinyMarginBegin">
+                                    <!-- Riesgo -->
+                                    <VBox class="htwAlertBox htwAlertBoxGreen">
+                                        <HBox class="htwAlertContent" alignItems="Start">
+                                            <core:Icon src="sap-icon://bar-chart" class="htwAlertIcon htwAlertIconGreen"/>
+                                            <VBox class="htwAlertTextWrap">
                                                 <Text text="Riesgo" class="htwAlertLabel"/>
-                                                <Text text="Alto" class="htwAlertTitle htwGreenText"/>
-                                                <Text text="Semanas clave" class="htwAlertDesc"/>
+                                                <Text text="Alto" class="htwAlertMain htwAlertMainGreen"/>
+                                                <Text text="Si no se corrigen cargas en semanas clave" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
                                 </HBox>
+                                <!-- Pie -->
                                 <Text text="Proyección basada en datos hasta el 31/05/2024" class="htwProjectionFooter"/>
                             </VBox>
                         </HBox>
