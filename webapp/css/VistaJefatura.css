@@ -1376,7 +1376,7 @@
 
 @media screen and (min-width: 1181px) and (max-height: 720px) {
     .vjDashboard {
-        padding: 6px 8px 6px !important;
+        padding: 6px 8px 6px 18px !important;
     }
 
     .vjHeaderBlock {
@@ -2426,107 +2426,475 @@
 }
 
 /* ================================================================
-   AJUSTE PARA LAPTOP — CARD DE ACCIONES
-   Aprovecha toda la altura disponible sin alterar el monitor.
+   AJUSTE EXCLUSIVO PARA LAPTOP
+   1. La fila superior recupera mayor altura.
+   2. La card de materiales vuelve a una proporción menor.
+   3. Las tres acciones ocupan toda la altura disponible.
+   No modifica Presión por tipo de servicio ni Materiales internamente.
    ================================================================ */
 
 @media screen and (min-width: 1181px) and (min-height: 800px) {
 
+    /* Proporción vertical equivalente al diseño de referencia */
+    .vjRightTopRow {
+        flex: 1.35 1 0 !important;
+        min-height: 0 !important;
+    }
+
+    .vjMaterialsCard {
+        flex: 0.85 1 0 !important;
+        min-height: 0 !important;
+    }
+
+    /* Card de acciones: conserva exactamente su ancho y padding */
+    .vjActionsCard {
+        position: relative !important;
+        display: block !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: 0 10px !important;
+        overflow: hidden !important;
+    }
+
     /*
-     * La card usa todo el alto de la fila superior.
+     * El List se ancla únicamente en sentido vertical y respeta
+     * los 10 px laterales originales de la card.
      */
+    .vjActionsCard > .vjActionList {
+        position: absolute !important;
+        top: 0 !important;
+        right: 10px !important;
+        bottom: 0 !important;
+        left: 10px !important;
+
+        display: block !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /*
+     * Las tres microcards se reparten exactamente el alto total.
+     */
+    .vjActionsCard
+    > .vjActionList
+    > .sapMListUl {
+        display: grid !important;
+        grid-template-rows:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            ) !important;
+
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .vjActionsCard .vjActionItem {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        align-self: stretch !important;
+        overflow: hidden !important;
+    }
+
+    .vjActionsCard
+    .vjActionItem
+    .sapMLIBContent {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+    }
+
+    .vjActionsCard .vjActionContent {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        padding: 7px 2px !important;
+        align-items: center !important;
+        overflow: hidden !important;
+    }
+
+    /*
+     * Se restauran y conservan las proporciones originales:
+     * el crecimiento ocurre solo hacia abajo.
+     */
+    .vjActionsCard .vjActionIconBox {
+        flex: 0 0 39px !important;
+        width: 39px !important;
+        height: 39px !important;
+        margin-right: 9px !important;
+        border-radius: 9px !important;
+    }
+
+    .vjActionsCard .vjActionIcon {
+        font-size: 1.35rem !important;
+    }
+
+    .vjActionsCard .vjActionTitle.sapMText {
+        font-size: 0.66rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .vjActionsCard .vjActionSubtitle.sapMText {
+        margin-top: 3px !important;
+        font-size: 0.49rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .vjActionsCard .vjActionArrow {
+        flex: 0 0 auto !important;
+        margin-left: 7px !important;
+        font-size: 0.78rem !important;
+    }
+}
+
+/* ================================================================
+   AJUSTE FINAL — PRESIÓN POR SERVICIO Y MATERIALES EN LAPTOP
+   Solo ajusta el contenido interno de estas dos cards.
+   No modifica filtros, KPIs, acciones ni la estructura general.
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (min-height: 800px) {
+
+    /* ------------------------------------------------------------
+       PRESIÓN POR TIPO DE SERVICIO
+       El título queda arriba, el conjunto dona + microcards ocupa
+       el espacio central y el total permanece al pie.
+       ------------------------------------------------------------ */
+
+    .vjServiceCard {
+        display: grid !important;
+        grid-template-rows: auto minmax(0, 1fr) auto !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: 11px 10px 8px !important;
+        overflow: hidden !important;
+    }
+
+    .vjServiceCard > .vjSectionTitle {
+        grid-row: 1 !important;
+        margin: 0 !important;
+    }
+
+    .vjServiceCard .vjServiceContent {
+        grid-row: 2 !important;
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 8px 0 6px !important;
+        gap: 10px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: visible !important;
+    }
+
+    .vjServiceCard .vjDonutChart {
+        flex: 0 0 130px !important;
+        width: 130px !important;
+        height: 130px !important;
+        min-width: 130px !important;
+        min-height: 130px !important;
+        max-width: 130px !important;
+        max-height: 130px !important;
+    }
+
+    .vjServiceCard .vjDonutCenter {
+        width: 75px !important;
+        height: 75px !important;
+    }
+
+    .vjServiceCard .vjDonutText.sapMText {
+        width: 100% !important;
+        font-size: 0.57rem !important;
+        line-height: 1.12 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+    }
+
+    .vjServiceCard .vjServiceLegend {
+        display: flex !important;
+        flex: 0 0 160px !important;
+        flex-direction: column !important;
+        width: 160px !important;
+        min-width: 160px !important;
+        max-width: 160px !important;
+        height: 130px !important;
+        min-height: 130px !important;
+        gap: 6px !important;
+    }
+
+    .vjServiceCard .vjLegendRow {
+        flex: 1 1 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 4px 6px !important;
+    }
+
+    .vjServiceCard .vjLegendIconBox {
+        flex: 0 0 28px !important;
+        width: 28px !important;
+        height: 28px !important;
+        margin-right: 6px !important;
+    }
+
+    .vjServiceCard .vjLegendIcon {
+        font-size: 0.73rem !important;
+    }
+
+    .vjServiceCard .vjLegendLabel.sapMText {
+        font-size: 0.5rem !important;
+        line-height: 1.05 !important;
+        white-space: nowrap !important;
+    }
+
+    .vjServiceCard .vjLegendNumbers {
+        flex: 0 0 46px !important;
+        min-width: 46px !important;
+    }
+
+    .vjServiceCard .vjLegendValue.sapMText {
+        font-size: 0.74rem !important;
+    }
+
+    .vjServiceCard .vjLegendHours.sapMText {
+        margin-top: 3px !important;
+        font-size: 0.41rem !important;
+    }
+
+    .vjServiceCard .vjServiceTotal {
+        grid-row: 3 !important;
+        width: 100% !important;
+        min-height: 23px !important;
+        margin-top: 0 !important;
+        padding-top: 6px !important;
+        border-top: 1px solid #edf1f6 !important;
+        align-self: end !important;
+    }
+
+    .vjServiceCard .vjServiceTotalLabel.sapMText,
+    .vjServiceCard .vjServiceTotalValue.sapMText {
+        font-size: 0.45rem !important;
+    }
+
+    /* ------------------------------------------------------------
+       CONSUMO DE MATERIALES MÁS REPRESENTATIVO
+       Las cuatro microcards ocupan todo el alto disponible.
+       El contenido principal se centra y la barra con el estado
+       permanece alineada en la parte inferior.
+       ------------------------------------------------------------ */
+
+    .vjMaterialsCard {
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .vjMaterialsCard > .vjSectionTitle,
+    .vjMaterialsCard > .vjSectionSubtitle {
+        flex: 0 0 auto !important;
+    }
+
+    .vjMaterialsGrid {
+        display: flex !important;
+        flex: 1 1 0 !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        margin-top: 8px !important;
+        gap: 7px !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+    }
+
+    .vjMaterialTile {
+        display: flex !important;
+        flex: 1 1 0 !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: 8px 8px 7px !important;
+        overflow: hidden !important;
+    }
+
+    .vjMaterialMain {
+        display: flex !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+    }
+
+    .vjMaterialIconCircle {
+        flex: 0 0 33px !important;
+        width: 33px !important;
+        height: 33px !important;
+        margin-right: 7px !important;
+    }
+
+    .vjMaterialIcon {
+        font-size: 0.98rem !important;
+    }
+
+    .vjMaterialLubricants .vjMaterialIconCircle::before {
+        width: 17px !important;
+        height: 20px !important;
+    }
+
+    .vjMaterialLabel.sapMText {
+        font-size: 0.49rem !important;
+    }
+
+    .vjMaterialValue.sapMText {
+        margin-top: 2px !important;
+        font-size: 1rem !important;
+    }
+
+    .vjMaterialHelper.sapMText {
+        margin-top: 3px !important;
+        font-size: 0.43rem !important;
+    }
+
+    .vjMaterialBar {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        height: 4px !important;
+        margin-top: 8px !important;
+    }
+
+    .vjMaterialBarFill {
+        height: 4px !important;
+    }
+
+    .vjMaterialStatus {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        height: 22px !important;
+        margin-top: 6px !important;
+        padding: 0 7px !important;
+        align-items: center !important;
+    }
+
+    .vjStatusIcon {
+        font-size: 0.52rem !important;
+    }
+
+    .vjStatusText.sapMText {
+        font-size: 0.45rem !important;
+    }
+}
+
+/* ================================================================
+   CORRECCIÓN EXCLUSIVA — ALTURA DE LAS 3 ACCIONES
+   La causa era el elemento flex interno generado por SAPUI5.
+   Solo afecta la card de acciones; no toca ninguna otra card.
+   ================================================================ */
+
+@media screen and (min-width: 761px) {
+
     .vjActionsCard {
         display: flex !important;
         flex-direction: column !important;
         height: 100% !important;
         min-height: 0 !important;
-        padding:
-            0
-            12px !important;
+        padding: 0 10px !important;
         overflow: hidden !important;
     }
 
     /*
-     * La lista y su contenedor interno ocupan toda la card.
+     * SAPUI5 agrega la clase sapMFlexItem al List o lo coloca
+     * dentro de un elemento flex. Ambos casos quedan cubiertos.
      */
-    .vjActionsCard .vjActionList {
-        display: flex !important;
-        flex: 1 1 auto !important;
-        flex-direction: column !important;
+    .vjActionsCard > .sapMFlexItem,
+    .vjActionsCard > .vjActionList {
+        flex: 1 1 0 !important;
         width: 100% !important;
         height: 100% !important;
+        min-width: 0 !important;
         min-height: 0 !important;
     }
 
-    .vjActionsCard .vjActionList .sapMListUl {
-        display: flex !important;
-        flex: 1 1 auto !important;
-        flex-direction: column !important;
+    .vjActionsCard > .sapMFlexItem.vjActionList,
+    .vjActionsCard > .sapMFlexItem > .vjActionList,
+    .vjActionsCard > .vjActionList {
+        position: static !important;
+        inset: auto !important;
+        display: block !important;
         width: 100% !important;
         height: 100% !important;
+        min-width: 0 !important;
         min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
 
     /*
-     * Las tres acciones se reparten uniformemente el alto.
+     * El área útil completa se divide en tres filas iguales.
      */
-    .vjActionsCard .vjActionItem {
-        display: flex !important;
-        flex: 1 1 0 !important;
-        align-items: stretch !important;
+    .vjActionsCard .vjActionList > .sapMListUl {
+        display: grid !important;
+        grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
+        min-width: 0 !important;
         min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .vjActionsCard .vjActionItem {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
     }
 
     .vjActionsCard .vjActionItem .sapMLIBContent {
-        display: flex !important;
-        flex: 1 1 auto !important;
+        display: block !important;
         width: 100% !important;
         height: 100% !important;
+        min-width: 0 !important;
         min-height: 0 !important;
-    }
-
-    .vjActionsCard .vjActionContent {
-        flex: 1 1 auto !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        padding:
-            8px
-            2px !important;
-        align-items: center !important;
+        padding: 0 !important;
     }
 
     /*
-     * Se incrementan proporcionalmente los elementos internos
-     * para que la card no se vea vacía.
+     * Cada microcard crece verticalmente y centra su contenido.
+     * No se cambian anchos, iconos, textos ni flechas.
      */
-    .vjActionsCard .vjActionIconBox {
-        flex: 0 0 43px !important;
-        width: 43px !important;
-        height: 43px !important;
-        margin-right: 10px !important;
-        border-radius: 10px !important;
-    }
-
-    .vjActionsCard .vjActionIcon {
-        font-size: 1.42rem !important;
-    }
-
-    .vjActionsCard .vjActionTitle.sapMText {
-        font-size: 0.69rem !important;
-        line-height: 1.1 !important;
-    }
-
-    .vjActionsCard .vjActionSubtitle.sapMText {
-        margin-top: 4px !important;
-        font-size: 0.51rem !important;
-        line-height: 1.12 !important;
-    }
-
-    .vjActionsCard .vjActionArrow {
-        margin-left: 9px !important;
-        font-size: 0.82rem !important;
+    .vjActionsCard .vjActionContent {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        padding: clamp(8px, 1.25vh, 14px) 2px !important;
+        align-items: center !important;
+        overflow: hidden !important;
     }
 }

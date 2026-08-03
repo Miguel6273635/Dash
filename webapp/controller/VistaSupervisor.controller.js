@@ -15,7 +15,8 @@ sap.ui.define([
                         dateFrom: "01/05/2025",
                         dateTo: "31/05/2025",
                         supervisor: "SERGIO_RAMIREZ",
-                        shift: "ALL"
+                        shift: "ALL",
+                        dirty: false
                     },
 
                     kpis: {
@@ -30,70 +31,72 @@ sap.ui.define([
                         complianceGap: 7
                     },
 
-                    resources: [
-                        {
-                            name: "Juan Pérez",
-                            utilization: 132,
-                            resourceText: "2 recursos",
-                            level: "critical"
-                        },
-                        {
-                            name: "Ana Rodríguez",
-                            utilization: 116,
-                            resourceText: "1 recurso",
-                            level: "high"
-                        },
-                        {
-                            name: "Marco Chávez",
-                            utilization: 97,
-                            resourceText: "1 recurso",
-                            level: "normal"
-                        },
-                        {
-                            name: "Omar Campos",
-                            utilization: 65,
-                            resourceText: "1 recurso",
-                            level: "low"
-                        },
-                        {
-                            name: "Luis Herrera",
-                            utilization: 125,
-                            resourceText: "2 recursos",
-                            level: "critical"
-                        },
-                        {
-                            name: "Diego García",
-                            utilization: 108,
-                            resourceText: "2 recursos",
-                            level: "high"
-                        },
-                        {
-                            name: "José Vargas",
-                            utilization: 89,
-                            resourceText: "1 recurso",
-                            level: "normal"
-                        },
-                        {
-                            name: "Fernando López",
-                            utilization: 60,
-                            resourceText: "1 recurso",
-                            level: "low"
-                        },
-                        {
-                            name: "Guillermo Bautista",
-                            utilization: 78,
-                            resourceText: "1 recurso",
-                            level: "normal"
-                        },
-                        {
-                            name: "Ricardo Martínez",
-                            utilization: 50,
-                            resourceText: "1 recurso",
-                            level: "low"
-                        }
-                    ]
+                    utilization: {
+                        critical: [
+                            {
+                                name: "Juan Pérez",
+                                utilization: 132,
+                                resourceText: "2 recursos"
+                            },
+                            {
+                                name: "Luis Herrera",
+                                utilization: 125,
+                                resourceText: "2 recursos"
+                            }
+                        ],
+
+                        high: [
+                            {
+                                name: "Ana Rodríguez",
+                                utilization: 116,
+                                resourceText: "1 recurso"
+                            },
+                            {
+                                name: "Diego García",
+                                utilization: 108,
+                                resourceText: "2 recursos"
+                            }
+                        ],
+
+                        normal: [
+                            {
+                                name: "Marco Chávez",
+                                utilization: 97,
+                                resourceText: "1 recurso"
+                            },
+                            {
+                                name: "José Vargas",
+                                utilization: 89,
+                                resourceText: "1 recurso"
+                            },
+                            {
+                                name: "Guillermo Bautista",
+                                utilization: 78,
+                                resourceText: "1 recurso"
+                            }
+                        ],
+
+                        low: [
+                            {
+                                name: "Omar Campos",
+                                utilization: 65,
+                                resourceText: "1 recurso"
+                            },
+                            {
+                                name: "Fernando López",
+                                utilization: 60,
+                                resourceText: "1 recurso"
+                            },
+                            {
+                                name: "Ricardo Martínez",
+                                utilization: 50,
+                                resourceText: "1 recurso"
+                            }
+                        ]
+                    }
                 });
 
+                oViewModel.setDefaultBindingMode("TwoWay");
                 oViewModel.setSizeLimit(100);
 
                 this.getView().setModel(
@@ -103,12 +106,9 @@ sap.ui.define([
             },
 
             onFilterChange: function () {
-                /*
-                 * Los valores seleccionados se actualizan automáticamente
-                 * en el JSONModel mediante el binding.
-                 *
-                 * Aquí se pueden agregar validaciones adicionales.
-                 */
+                this.getView()
+                    .getModel("supervisor")
+                    .setProperty("/filters/dirty", true);
             },
 
             onApplyFilters: function () {
@@ -120,6 +120,8 @@ sap.ui.define([
                  *
                  * this._loadSupervisorDashboard(oFilters);
                  */
+
+                oModel.setProperty("/filters/dirty", false);
 
                 MessageToast.show(
                     "Filtros aplicados: " +

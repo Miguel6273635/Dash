@@ -1,210 +1,230 @@
-/* ========================================================================== */
-/* VISTA SUPERVISOR                                                           */
-/* ========================================================================== */
+/* ================================================================
+   VISTA SUPERVISOR
+   Estilos exclusivos de la vista VistaSupervisor
+   ================================================================ */
 
 .vistaSupervisorPage,
+.vistaSupervisorPage .sapMPage,
 .vistaSupervisorPage .sapMPageBgStandard,
-.vistaSupervisorPage .sapMPageEnableScrolling {
+.vistaSupervisorPage .sapMPageCont,
+.vistaSupervisorPage .sapMPageEnableScrolling,
+.vistaSupervisorPage .sapMPageScroll {
     background: #f7f9fc !important;
 }
 
-.vistaSupervisorPage .sapMPageScroll {
-    min-height: 100%;
-}
-
+.vistaSupervisorPage,
 .vistaSupervisorPage * {
     box-sizing: border-box;
 }
 
 .vsDashboard {
     width: 100%;
-    min-height: 100%;
-    padding: 16px 18px 18px;
+    max-width: 1440px;
+    height: 100%;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 16px 14px 18px;
+    overflow: hidden;
+    color: #15243d;
     font-family: "72", "72full", Arial, sans-serif;
 }
 
-/* ========================================================================== */
-/* ENCABEZADO                                                                 */
-/* ========================================================================== */
+/* ================================================================
+   ENCABEZADO
+   ================================================================ */
 
 .vsHeaderBlock {
-    margin-bottom: 10px;
+    flex: 0 0 auto;
+    padding: 2px 8px 10px;
+    border-top: 1px solid #dce4ef;
 }
 
 .vsPageTitle.sapMTitle {
-    margin: 0 !important;
-    color: #071c63 !important;
-    font-size: 1.75rem !important;
+    margin-top: 9px;
+    color: #13214a !important;
+    font-size: 1.72rem !important;
     font-weight: 800 !important;
     line-height: 1.05 !important;
-    letter-spacing: -0.03rem;
+    letter-spacing: -0.03em;
 }
 
 .vsPageSubtitle.sapMText {
-    margin-top: 2px;
-    color: #758096 !important;
-    font-size: 0.78rem !important;
-    font-weight: 500 !important;
+    margin-top: 3px;
+    color: #65748b !important;
+    font-size: 0.73rem !important;
+    line-height: 1.15;
 }
 
-/* ========================================================================== */
-/* FILTROS                                                                    */
-/* ========================================================================== */
+/* ================================================================
+   FILTROS
+   Mismo estándar visual de Vista Jefatura
+   ================================================================ */
 
-.vsFilterGrid {
+.vsFilterRow {
     display: grid !important;
     grid-template-columns:
-        minmax(110px, 1.05fr)
-        minmax(110px, 0.95fr)
-        minmax(110px, 0.95fr)
-        minmax(145px, 1.18fr)
-        minmax(100px, 0.95fr)
+        minmax(112px, 0.92fr)
+        minmax(130px, 1fr)
+        minmax(130px, 1fr)
+        minmax(170px, 1.25fr)
+        minmax(105px, 0.88fr)
         auto;
-    gap: 10px;
+    flex: 0 0 auto;
+    gap: 9px;
     width: 100%;
-    margin-bottom: 12px;
+    padding: 0 1px;
 }
 
-.vsFilterGrid > .sapMFlexItem {
+.vsFilterRow > .sapMFlexItem {
     min-width: 0;
 }
 
 .vsFilterCard {
-    min-height: 58px;
-    padding: 8px 10px 7px;
-    border: 1px solid #e6eaf1;
-    border-radius: 8px;
+    width: 100%;
+    min-width: 0;
+    height: 54px;
+    padding: 7px 10px 5px;
     background: #ffffff;
-    box-shadow: 0 1px 3px rgba(28, 45, 86, 0.05);
+    border: 1px solid #e3e9f2;
+    border-radius: 8px;
+    box-shadow: 0 2px 7px rgba(25, 45, 79, 0.05);
 }
 
 .vsFilterLabel.sapMLabel {
-    height: auto;
-    margin: 0 0 2px 1px;
-    color: #46516a;
-    font-size: 0.62rem;
-    font-weight: 700;
-    line-height: 1;
+    display: block;
+    height: 14px;
+    margin-bottom: 1px;
+    color: #78869a !important;
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+    line-height: 14px !important;
 }
 
 .vsFilterControl.sapMSlt,
-.vsFilterControl.sapMInputBase {
-    width: 100% !important;
-}
-
-.vsFilterCard .sapMSlt,
-.vsFilterCard .sapMInputBaseContentWrapper {
-    height: 2rem !important;
+.vsFilterControl .sapMInputBaseContentWrapper {
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+    background: transparent !important;
     border: 0 !important;
     border-radius: 0 !important;
-    background: transparent !important;
     box-shadow: none !important;
 }
 
-.vsFilterCard .sapMSlt:hover,
-.vsFilterCard .sapMSlt:focus,
-.vsFilterCard .sapMInputBaseContentWrapper:hover,
-.vsFilterCard .sapMInputBaseContentWrapper:focus-within {
+.vsFilterControl.sapMSlt:hover,
+.vsFilterControl.sapMSlt.sapMSltPressed,
+.vsFilterControl .sapMInputBaseContentWrapper:hover,
+.vsFilterControl.sapMInputBaseFocused
+.sapMInputBaseContentWrapper {
+    background: transparent !important;
     border: 0 !important;
-    background: transparent !important;
     box-shadow: none !important;
 }
 
-.vsFilterCard .sapMSltLabel,
-.vsFilterCard .sapMInputBaseInner {
-    height: 2rem !important;
-    padding-left: 0 !important;
-    color: #15223f !important;
-    font-size: 0.75rem !important;
-    font-weight: 600 !important;
-    line-height: 2rem !important;
+.vsFilterControl.sapMSlt .sapMSltLabel {
+    height: 1.62rem !important;
+    padding: 0 1.6rem 0 0 !important;
+    overflow: hidden;
+    color: #1e2e4c !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vsFilterControl.sapMSlt .sapMSltArrow {
+    width: 1.35rem;
+    height: 1.62rem;
+    color: #0a6ff5 !important;
+    line-height: 1.62rem;
+}
+
+.vsFilterControl .sapMInputBaseInner {
+    height: 1.62rem !important;
+    padding: 0 1.8rem 0 0 !important;
+    color: #1e2e4c !important;
     background: transparent !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
 }
 
-.vsFilterCard .sapMSltArrow,
-.vsFilterCard .sapMInputBaseIcon {
-    color: #344258 !important;
+.vsFilterControl .sapMInputBaseIconContainer,
+.vsFilterControl .sapMInputBaseIcon {
+    height: 1.62rem !important;
+    min-width: 1.45rem;
+    color: #0a6ff5 !important;
+    line-height: 1.62rem !important;
 }
 
-/* ========================================================================== */
-/* BOTÓN APLICAR FILTROS                                                      */
-/* ========================================================================== */
-
-.vsApplyButton.sapMBtn {
-    align-self: stretch;
-    display: flex !important;
-    align-items: flex-end !important;
-    height: 58px !important;
-    min-height: 58px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+.vsApplyButtonBox {
+    width: auto;
+    height: 54px;
+    padding: 0 1px 1px 2px;
 }
 
 .vsApplyButton .sapMBtnInner {
-    width: 100%;
-    height: 40px !important;
-    min-height: 40px !important;
-    margin: 0 !important;
-    padding: 0 16px !important;
+    min-width: 110px;
+    height: 1.95rem;
+    padding: 0 0.8rem;
     border: 0 !important;
-    border-radius: 7px !important;
-    background: linear-gradient(
-        135deg,
-        #1284ff 0%,
-        #0069e8 100%
-    ) !important;
-    box-shadow: 0 4px 10px rgba(0, 105, 232, 0.22);
+    border-radius: 5px;
+    background: #0a6ff5 !important;
+    box-shadow: 0 3px 8px rgba(10, 111, 245, 0.24);
 }
 
-.vsApplyButton .sapMBtnContent {
-    height: 40px !important;
+.vsApplyButton .sapMBtnContent,
+.vsApplyButton .sapMBtnIcon {
     color: #ffffff !important;
-    font-size: 0.75rem !important;
+    font-size: 0.63rem !important;
     font-weight: 700 !important;
-    line-height: 40px !important;
+    line-height: 1.95rem !important;
 }
 
 .vsApplyButton .sapMBtnIcon {
-    height: 40px !important;
-    color: #ffffff !important;
-    font-size: 0.8rem !important;
-    line-height: 40px !important;
+    font-size: 0.72rem !important;
 }
 
-.vsApplyButton .sapMBtnInner::after {
-    display: none !important;
+.vsApplyButton .sapMBtnInner::after,
+.vsApplyButton .sapMBtnInner:focus::after,
+.vsApplyButton .sapMFocusable:focus::after {
+    border: 0 !important;
+    outline: 0 !important;
 }
 
-/* ========================================================================== */
-/* KPI CARDS                                                                  */
-/* ========================================================================== */
+/* ================================================================
+   KPIs
+   Mismo patrón de degradado de Vista Jefatura
+   ================================================================ */
 
-.vsKpiGrid {
+.vsKpiRow {
     display: grid !important;
     grid-template-columns:
-        minmax(180px, 1.18fr)
+        minmax(210px, 1.25fr)
         minmax(150px, 1fr)
         minmax(150px, 1fr)
         minmax(150px, 1fr)
-        minmax(150px, 1fr);
-    gap: 10px;
+        minmax(175px, 1.08fr);
+    flex: 0 0 auto;
+    gap: 9px;
     width: 100%;
-    margin-bottom: 12px;
+    margin-top: 10px;
 }
 
-.vsKpiGrid > .sapMFlexItem {
+.vsKpiRow > .sapMFlexItem {
     min-width: 0;
 }
 
 .vsKpiCard {
     position: relative;
-    min-height: 112px;
+    min-width: 0;
+    min-height: 76px;
+    padding: 10px 9px 10px 12px;
     overflow: hidden;
-    padding: 12px 12px 10px;
-    border: 1px solid #e5e9f1;
-    border-radius: 9px;
     background: #ffffff;
-    box-shadow: 0 2px 7px rgba(24, 45, 82, 0.06);
+    border: 1px solid #e4eaf2;
+    border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06);
 }
 
 .vsKpiCard::before {
@@ -213,554 +233,603 @@
     bottom: 0;
     left: 0;
     width: 3px;
-    border-radius: 9px 0 0 9px;
+    border-radius: 8px 0 0 8px;
     content: "";
 }
 
-/* DEGRADADOS SUAVES */
-
-.vsKpiBlue {
-    background: linear-gradient(
-        90deg,
-        rgba(22, 119, 255, 0.12) 0%,
-        rgba(22, 119, 255, 0.05) 18%,
-        rgba(255, 255, 255, 1) 55%
-    ) !important;
-    border-color: rgba(22, 119, 255, 0.18);
-}
-
-.vsKpiGreen {
-    background: linear-gradient(
-        90deg,
-        rgba(39, 189, 76, 0.12) 0%,
-        rgba(39, 189, 76, 0.05) 18%,
-        rgba(255, 255, 255, 1) 55%
-    ) !important;
-    border-color: rgba(39, 189, 76, 0.18);
-}
-
-.vsKpiOrange {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 132, 26, 0.12) 0%,
-        rgba(255, 132, 26, 0.05) 18%,
-        rgba(255, 255, 255, 1) 55%
-    ) !important;
-    border-color: rgba(255, 132, 26, 0.18);
-}
-
-.vsKpiPurple {
-    background: linear-gradient(
-        90deg,
-        rgba(138, 63, 252, 0.12) 0%,
-        rgba(138, 63, 252, 0.05) 18%,
-        rgba(255, 255, 255, 1) 55%
-    ) !important;
-    border-color: rgba(138, 63, 252, 0.18);
-}
-
-.vsKpiRed {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 43, 62, 0.12) 0%,
-        rgba(255, 43, 62, 0.05) 18%,
-        rgba(255, 255, 255, 1) 55%
-    ) !important;
-    border-color: rgba(255, 43, 62, 0.18);
-}
-
-.vsKpiBlue::before {
-    background: #1677ff;
-}
-
-.vsKpiGreen::before {
-    background: #27bd4c;
-}
-
-.vsKpiOrange::before {
-    background: #ff841a;
-}
-
-.vsKpiPurple::before {
-    background: #8a3ffc;
-}
-
-.vsKpiRed::before {
-    background: #ff2b3e;
-}
-
-.vsKpiTitle.sapMText {
-    width: 100%;
-    margin-bottom: 8px;
-    color: #172650 !important;
-    font-size: 0.69rem !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-}
-
-.vsKpiAssignedBody,
-.vsKpiStandardBody,
-.vsComplianceBody {
-    width: 100%;
-    min-height: 45px;
-}
-
-/* KPI 1 CON SEPARACIÓN */
-
-.vsKpiAssignedBody {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 82px;
-    align-items: center;
-    gap: 10px;
-    padding: 0 4px;
-}
-
-.vsKpiMainValueGroup {
+.vsKpiContent {
     position: relative;
-    gap: 10px;
-    min-height: 48px;
-    padding-right: 12px;
-}
-
-.vsKpiMainValueGroup::after {
-    position: absolute;
-    top: 2px;
-    right: 0;
-    width: 1px;
-    height: 42px;
-    background: #e5eaf2;
-    content: "";
-}
-
-.vsKpiStandardBody {
-    justify-content: flex-start;
-    gap: 10px;
-    padding-left: 14px;
-}
-
-.vsComplianceBody {
-    justify-content: flex-start;
-    gap: 12px;
-    padding-left: 10px;
+    z-index: 1;
+    width: 100%;
+    min-height: 54px;
 }
 
 .vsKpiIconCircle {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    flex: 0 0 43px;
+    width: 43px;
+    height: 43px;
+    margin-right: 8px;
     border-radius: 50%;
 }
 
-.vsKpiIconBlue {
-    background: rgba(22, 119, 255, 0.14);
+.vsKpiIcon {
+    font-size: 1.28rem !important;
 }
 
-.vsKpiIconOrange {
-    background: rgba(255, 132, 26, 0.14);
+.vsKpiTextBlock {
+    min-width: 0;
 }
 
-.vsKpiIconPurple {
-    background: rgba(138, 63, 252, 0.14);
+.vsKpiLabel.sapMText {
+    width: 100%;
+    color: #43516a !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15;
 }
 
-.vsKpiIcon.sapUiIcon {
-    font-size: 1.4rem !important;
-}
-
-.vsKpiIconBlue .vsKpiIcon {
-    color: #1677ff !important;
-}
-
-.vsKpiIconOrange .vsKpiIcon {
-    color: #ff841a !important;
-}
-
-.vsKpiIconPurple .vsKpiIcon {
-    color: #8a3ffc !important;
+.vsKpiValueLine {
+    gap: 4px;
 }
 
 .vsKpiValue.sapMText {
-    color: #13285b !important;
-    font-size: 1.53rem !important;
+    margin-top: 2px;
+    font-size: 1.18rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
+    line-height: 1.05;
 }
 
 .vsKpiUnit.sapMText {
-    margin-left: -4px;
-    color: #13285b !important;
-    font-size: 1.25rem !important;
-    font-weight: 700 !important;
+    padding-bottom: 1px;
+    font-size: 0.92rem !important;
+    font-weight: 800 !important;
+    line-height: 1;
 }
 
-.vsKpiBreakdown {
-    min-width: 72px;
+.vsKpiHelper.sapMText,
+.vsKpiMeta.sapMText {
+    color: #6f7c8f !important;
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1;
+}
+
+.vsKpiHelper.sapMText {
+    margin-top: 3px;
+}
+
+.vsComplianceLine {
+    gap: 7px;
+}
+
+.vsKpiMeta.sapMText {
+    padding-top: 5px;
+    white-space: nowrap;
+}
+
+.vsKpiAlert.sapMText {
+    margin-top: 5px;
+    color: #f04b4f !important;
+    font-size: 0.44rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+}
+
+.vsAssignedBreakdown {
+    min-width: 84px;
+    margin-left: auto;
+    padding-left: 9px;
     gap: 5px;
+    border-left: 1px solid #e3e9f2;
 }
 
 .vsBreakdownRow {
     gap: 4px;
 }
 
-.vsBreakdownIcon.sapUiIcon {
-    width: 18px;
-    color: #08a8b9 !important;
-    font-size: 1rem !important;
+.vsBreakdownIcon {
+    width: 15px;
+    color: #11b6ba !important;
+    font-size: 0.78rem !important;
 }
 
 .vsBreakdownValue.sapMText {
-    color: #12275a !important;
-    font-size: 0.87rem !important;
+    min-width: 11px;
+    color: #1e2e4c !important;
+    font-size: 0.68rem !important;
     font-weight: 800 !important;
 }
 
 .vsBreakdownLabel.sapMText {
-    color: #69758a !important;
-    font-size: 0.58rem !important;
+    color: #6f7c8f !important;
+    font-size: 0.48rem !important;
     font-weight: 600 !important;
 }
 
-.vsKpiFooter.sapMText,
-.vsKpiTarget.sapMText {
-    display: block;
-    width: 100%;
-    margin-top: auto;
-    color: #6d778b !important;
-    font-size: 0.6rem !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-}
+/* KPI azul */
 
-.vsKpiTarget.sapMText {
-    margin-top: 1px;
-    color: #253457 !important;
-    font-weight: 800 !important;
-}
-
-/* ========================================================================== */
-/* CAPACIDAD DISPONIBLE                                                       */
-/* ========================================================================== */
-
-.vsCapacityRing {
-    position: relative;
-    width: 36px;
-    height: 36px;
-    border: 4px dotted #30bc4d;
-    border-radius: 50%;
-    background: #effbf1;
-}
-
-.vsCapacityRing::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 19px;
-    height: 19px;
-    border-radius: 50%;
-    background: #ffffff;
-    content: "";
-    transform: translate(-50%, -50%);
-}
-
-/* ========================================================================== */
-/* CUMPLIMIENTO OPERATIVO                                                     */
-/* ========================================================================== */
-
-.vsComplianceValue.sapMText {
-    color: #ff243a !important;
-    font-size: 1.55rem !important;
-    font-weight: 800 !important;
-}
-
-.vsGauge {
-    position: relative;
-    width: 43px;
-    height: 24px;
-    overflow: hidden;
-}
-
-.vsGauge::before {
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    width: 41px;
-    height: 41px;
-    border-radius: 50%;
-    background: conic-gradient(
-        from 270deg,
-        #ff243a 0deg 145deg,
-        #e9edf5 145deg 180deg,
-        transparent 180deg 360deg
+.vsKpiBlue {
+    background: linear-gradient(
+        90deg,
+        rgba(46, 140, 255, 0.20) 0%,
+        rgba(46, 140, 255, 0.11) 22%,
+        rgba(46, 140, 255, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
     );
-    content: "";
+    border-color: rgba(46, 140, 255, 0.18);
 }
 
-.vsGauge::after {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 27px;
-    height: 27px;
-    border-radius: 50%;
-    background: #ffffff;
-    content: "";
+.vsKpiBlue::before {
+    background: #2e8cff;
 }
 
-.vsGaugeNeedle {
-    position: absolute;
-    z-index: 3;
-    bottom: 3px;
-    left: 20px;
-    width: 16px;
-    height: 2px;
-    border-radius: 2px;
-    background: #1f2941;
-    transform: rotate(-32deg);
-    transform-origin: left center;
+.vsKpiBlue .vsKpiIconCircle {
+    background: rgba(46, 140, 255, 0.13);
 }
 
-.vsGaugePivot {
-    position: absolute;
-    z-index: 4;
-    bottom: 1px;
-    left: 18px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #1f2941;
+.vsKpiBlue .vsKpiIcon,
+.vsKpiBlue .vsKpiValue {
+    color: #1877e8 !important;
 }
 
-/* ========================================================================== */
-/* PANELES                                                                    */
-/* ========================================================================== */
+/* KPI verde */
 
-.vsMainGrid {
-    display: grid !important;
-    grid-template-columns:
-        minmax(390px, 0.82fr)
-        minmax(500px, 1.18fr);
-    gap: 12px;
-    width: 100%;
+.vsKpiGreen {
+    background: linear-gradient(
+        90deg,
+        rgba(99, 191, 66, 0.20) 0%,
+        rgba(99, 191, 66, 0.11) 22%,
+        rgba(99, 191, 66, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+    border-color: rgba(99, 191, 66, 0.18);
 }
 
-.vsMainGrid > .sapMFlexItem,
-.vsRightColumn > .sapMFlexItem {
-    min-width: 0;
+.vsKpiGreen::before {
+    background: #63bf42;
+}
+
+.vsKpiGreen .vsKpiIconCircle {
+    background: rgba(99, 191, 66, 0.13);
+}
+
+.vsKpiGreen .vsKpiIcon,
+.vsKpiGreen .vsKpiValue,
+.vsKpiGreen .vsKpiUnit {
+    color: #58b33a !important;
+}
+
+/* KPI naranja */
+
+.vsKpiOrange {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 158, 49, 0.22) 0%,
+        rgba(255, 158, 49, 0.12) 22%,
+        rgba(255, 158, 49, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+    border-color: rgba(255, 158, 49, 0.20);
+}
+
+.vsKpiOrange::before {
+    background: #ff9e31;
+}
+
+.vsKpiOrange .vsKpiIconCircle {
+    background: rgba(255, 158, 49, 0.14);
+}
+
+.vsKpiOrange .vsKpiIcon,
+.vsKpiOrange .vsKpiValue,
+.vsKpiOrange .vsKpiUnit {
+    color: #f28c1c !important;
+}
+
+/* KPI morada */
+
+.vsKpiPurple {
+    background: linear-gradient(
+        90deg,
+        rgba(138, 63, 252, 0.20) 0%,
+        rgba(138, 63, 252, 0.11) 22%,
+        rgba(138, 63, 252, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+    border-color: rgba(138, 63, 252, 0.18);
+}
+
+.vsKpiPurple::before {
+    background: #8a3ffc;
+}
+
+.vsKpiPurple .vsKpiIconCircle {
+    background: rgba(138, 63, 252, 0.13);
+}
+
+.vsKpiPurple .vsKpiIcon,
+.vsKpiPurple .vsKpiValue {
+    color: #8040e8 !important;
+}
+
+/* KPI roja */
+
+.vsKpiRed {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 77, 83, 0.20) 0%,
+        rgba(255, 77, 83, 0.11) 22%,
+        rgba(255, 77, 83, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+    border-color: rgba(255, 77, 83, 0.18);
+}
+
+.vsKpiRed::before {
+    background: #ff4d53;
+}
+
+.vsKpiRed .vsKpiIconCircle {
+    background: rgba(255, 77, 83, 0.13);
+}
+
+.vsKpiRed .vsKpiIcon,
+.vsKpiRed .vsKpiValue {
+    color: #ef3f47 !important;
+}
+
+/* ================================================================
+   ESTRUCTURA PRINCIPAL
+   La card izquierda conserva su proporción.
+   Las dos cards derechas utilizan todo el espacio horizontal libre.
+   ================================================================ */
+
+.vsMainRow {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    flex-direction: row !important;
+    gap: 10px;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin-top: 10px;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+}
+
+/*
+ * En sap.m.HBox los controles hijos son los flex-items reales.
+ * Se apunta directamente a cada columna y no a selectores genéricos.
+ */
+.vsMainRow > .vsLeftColumn.sapMFlexItem {
+    flex: 42 1 0% !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+}
+
+.vsMainRow > .vsRightColumn.sapMFlexItem {
+    flex: 58 1 0% !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+}
+
+.vsLeftColumn,
+.vsRightColumn {
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
 }
 
 .vsRightColumn {
-    gap: 12px;
-}
-
-.vsPanel {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e4e9f2;
-    border-radius: 9px;
-    background: #ffffff;
-    box-shadow: 0 2px 7px rgba(24, 45, 82, 0.06);
-}
-
-.vsPanelTitle.sapMTitle {
-    margin: 0 0 10px 0 !important;
-    color: #0d225e !important;
-    font-size: 0.95rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-}
-
-/* ========================================================================== */
-/* UTILIZACIÓN DE RECURSOS                                                    */
-/* ========================================================================== */
-
-.vsUtilizationPanel {
-    min-height: 314px;
-}
-
-.vsUtilizationLegend {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 7px;
-    margin-bottom: 10px;
+    grid-template-rows:
+        minmax(0, 1.35fr)
+        minmax(0, 0.75fr) !important;
+    gap: 10px;
+    width: 100% !important;
+    align-items: stretch !important;
 }
 
-.vsUtilizationLegend > .sapMFlexItem {
+.vsRightColumn > .sapMFlexItem {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+.vsPressureCard,
+.vsMaterialsCard {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+.vsCard {
+    width: 100%;
     min-width: 0;
-}
-
-.vsLegendCard {
-    min-height: 48px;
-    padding: 6px 7px 4px;
-    border: 1px solid #e8ebf1;
-    border-radius: 6px;
+    min-height: 0;
     background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.05);
 }
 
-.vsLegendIcon.sapUiIcon {
-    margin-right: 4px;
-    font-size: 0.8rem !important;
-}
-
-.vsLegendName.sapMText {
-    color: #1d2b4f !important;
-    font-size: 0.58rem !important;
+.vsSectionTitle.sapMTitle {
+    color: #1c2940 !important;
+    font-size: 0.78rem !important;
     font-weight: 800 !important;
+    line-height: 1.15;
 }
 
-.vsLegendCount.sapMText {
-    min-width: 15px;
-    height: 15px;
+.vsSectionSubtitle.sapMText {
+    margin-top: 1px;
+    color: #8792a3 !important;
+    font-size: 0.52rem !important;
+    line-height: 1.2;
+}
+
+/* ================================================================
+   UTILIZACIÓN DE RECURSOS
+   Mismo patrón visual de Vista Jefatura
+   ================================================================ */
+
+.vsUtilizationCard {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 12px 12px 10px;
+    overflow: hidden;
+}
+
+.vsUtilizationGrid {
+    display: flex !important;
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 0;
+    gap: 7px;
+    margin-top: 9px;
+    overflow: hidden;
+}
+
+.vsUtilColumn {
+    display: flex !important;
+    flex: 1 1 0;
+    flex-direction: column !important;
+    min-width: 0;
+    min-height: 0;
+}
+
+.vsUtilHeader {
+    flex: 0 0 auto;
+    min-height: 60px;
+    padding: 7px 7px 5px;
+    background: #ffffff;
+    border: 1px solid #edf1f6;
+    border-radius: 6px;
+}
+
+.vsUtilHeaderTop {
+    gap: 6px;
+}
+
+.vsUtilIconCircle {
+    flex: 0 0 31px;
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+}
+
+.vsUtilIcon {
+    font-size: 0.85rem !important;
+}
+
+.vsUtilTitle.sapMText {
+    font-size: 0.57rem !important;
+    font-weight: 800 !important;
+    line-height: 1;
+}
+
+.vsUtilBadge.sapMText {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    margin-left: 5px;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     color: #ffffff !important;
-    font-size: 0.53rem !important;
+    font-size: 0.48rem !important;
     font-weight: 800 !important;
-    line-height: 15px !important;
-    text-align: center !important;
+    line-height: 14px !important;
+    text-align: center;
 }
 
-.vsLegendRange.sapMText {
-    width: 100%;
-    margin-top: 1px;
-    font-size: 0.5rem !important;
+.vsUtilRange.sapMText {
+    margin-top: 3px;
+    font-size: 0.53rem !important;
     font-weight: 700 !important;
-    text-align: center !important;
+    line-height: 1;
 }
 
-.vsLegendLine {
+.vsUtilRule {
     width: 100%;
     height: 2px;
-    margin-top: 3px;
-    border-radius: 3px;
+    margin-top: 7px;
+    border-radius: 2px;
 }
 
-.vsLegendCritical .vsLegendIcon,
-.vsLegendCritical .vsLegendRange {
-    color: #ff3348 !important;
-}
-
-.vsLegendCritical .vsLegendCount,
-.vsLegendCritical .vsLegendLine {
-    background: #ff3348;
-}
-
-.vsLegendHigh .vsLegendIcon,
-.vsLegendHigh .vsLegendRange {
-    color: #ff8426 !important;
-}
-
-.vsLegendHigh .vsLegendCount,
-.vsLegendHigh .vsLegendLine {
-    background: #ff8426;
-}
-
-.vsLegendNormal .vsLegendIcon,
-.vsLegendNormal .vsLegendRange {
-    color: #f3b51b !important;
-}
-
-.vsLegendNormal .vsLegendCount,
-.vsLegendNormal .vsLegendLine {
-    background: #f3b51b;
-}
-
-.vsLegendLow .vsLegendIcon,
-.vsLegendLow .vsLegendRange {
-    color: #2eb85c !important;
-}
-
-.vsLegendLow .vsLegendCount,
-.vsLegendLow .vsLegendLine {
-    background: #2eb85c;
-}
-
-/* ========================================================================== */
-/* TARJETAS DE RECURSOS                                                       */
-/* ========================================================================== */
-
-.vsResourcesGrid {
-    gap: 8px;
+.vsResourceList {
+    display: grid !important;
+    flex: 1 1 0;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     width: 100%;
+    min-height: 0;
+    gap: 5px;
+    margin-top: 5px;
+    overflow: hidden;
 }
 
-.vsResourcesGrid > .sapMFlexItem {
-    width: calc(25% - 6px);
-    min-width: 92px;
-}
-
-.vsResourceCard {
-    min-height: 61px;
-    padding: 7px 8px 6px;
-    border: 1px solid #e8ebf2;
-    border-radius: 6px;
+.vsResourceTile {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 7px 8px 5px;
     background: #ffffff;
-    box-shadow: 0 1px 3px rgba(23, 43, 78, 0.04);
+    border: 1px solid #f0f3f7;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .vsResourceName.sapMText {
-    display: block;
     width: 100%;
     overflow: hidden;
-    color: #25304a !important;
-    font-size: 0.57rem !important;
+    color: #39465a !important;
+    font-size: 0.52rem !important;
     font-weight: 700 !important;
+    line-height: 1.1;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .vsResourcePercent.sapMText {
     margin-top: 2px;
-    font-size: 0.98rem !important;
+    font-size: 0.8rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
+    line-height: 1;
 }
 
-.vsResourceCountRow {
-    margin-top: 5px;
-    gap: 4px;
+.vsResourceLine {
+    gap: 3px;
+    margin-top: 3px;
 }
 
-.vsResourceCountIcon.sapUiIcon,
-.vsResourceCount.sapMText {
-    color: #647089 !important;
-    font-size: 0.52rem !important;
+.vsResourceIcon {
+    color: #8491a2 !important;
+    font-size: 0.48rem !important;
+}
+
+.vsResourceText.sapMText {
+    color: #8491a2 !important;
+    font-size: 0.46rem !important;
     font-weight: 600 !important;
+    line-height: 1;
 }
 
-.vsResourceCard[data-level="critical"] .vsResourcePercent {
-    color: #ff3348 !important;
+.vsUtilCritical .vsUtilIconCircle {
+    background: #fff0f1;
 }
 
-.vsResourceCard[data-level="high"] .vsResourcePercent {
-    color: #ff781f !important;
+.vsUtilCritical .vsUtilIcon,
+.vsUtilCritical .vsUtilTitle,
+.vsUtilCritical .vsUtilRange,
+.vsUtilCritical .vsResourcePercent {
+    color: #ef4148 !important;
 }
 
-.vsResourceCard[data-level="normal"] .vsResourcePercent {
-    color: #f1b318 !important;
+.vsUtilCritical .vsUtilBadge,
+.vsUtilCritical .vsUtilRule {
+    background: #ef4148;
 }
 
-.vsResourceCard[data-level="low"] .vsResourcePercent {
-    color: #29aa52 !important;
+.vsUtilHigh .vsUtilIconCircle {
+    background: #fff4e8;
 }
 
-/* ========================================================================== */
-/* PRESIÓN POR TIPO DE SERVICIO                                               */
-/* ========================================================================== */
+.vsUtilHigh .vsUtilIcon,
+.vsUtilHigh .vsUtilTitle,
+.vsUtilHigh .vsUtilRange,
+.vsUtilHigh .vsResourcePercent {
+    color: #ff7d1b !important;
+}
 
-.vsPressurePanel {
-    min-height: 194px;
+.vsUtilHigh .vsUtilBadge,
+.vsUtilHigh .vsUtilRule {
+    background: #ff7d1b;
+}
+
+.vsUtilNormal .vsUtilIconCircle {
+    background: #fff9e8;
+}
+
+.vsUtilNormal .vsUtilIcon,
+.vsUtilNormal .vsUtilTitle,
+.vsUtilNormal .vsUtilRange,
+.vsUtilNormal .vsResourcePercent {
+    color: #efb20a !important;
+}
+
+.vsUtilNormal .vsUtilBadge,
+.vsUtilNormal .vsUtilRule {
+    background: #efb20a;
+}
+
+.vsUtilLow .vsUtilIconCircle {
+    background: #edf8ef;
+}
+
+.vsUtilLow .vsUtilIcon,
+.vsUtilLow .vsUtilTitle,
+.vsUtilLow .vsUtilRange,
+.vsUtilLow .vsResourcePercent {
+    color: #31a84b !important;
+}
+
+.vsUtilLow .vsUtilBadge,
+.vsUtilLow .vsUtilRule {
+    background: #31a84b;
+}
+
+/* ================================================================
+   PRESIÓN POR TIPO DE SERVICIO
+   ================================================================ */
+
+.vsPressureCard {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100%;
+    min-height: 0;
+    padding: 11px 11px 8px;
+    overflow: hidden;
 }
 
 .vsPressureContent {
+    display: flex !important;
+    flex: 1 1 0;
     width: 100%;
-    padding: 0 14px 4px 4px;
-}
-
-.vsDonutColumn {
-    width: 46%;
+    min-height: 0;
+    gap: 28px;
+    padding: 4px 18px 4px;
+    overflow: hidden;
 }
 
 .vsDonut {
     position: relative;
+    flex: 0 0 142px;
     width: 142px;
     height: 142px;
     border-radius: 50%;
@@ -774,40 +843,35 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
-.vsDonut::before {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.vsDonutCenter {
     width: 78px;
     height: 78px;
-    border-radius: 50%;
     background: #ffffff;
-    content: "";
-    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(28, 48, 80, 0.1);
 }
 
-.vsDonutCenter {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-    width: 72px;
-    color: #26345e;
-    font-family: "72", Arial, sans-serif;
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.12;
+.vsDonutText.sapMText {
+    color: #26345e !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    line-height: 1.08;
     text-align: center;
-    transform: translate(-50%, -50%);
+    white-space: nowrap;
 }
 
 .vsServiceList {
-    width: 54%;
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column !important;
+    min-width: 230px;
+    max-width: 420px;
 }
 
 .vsServiceRow {
+    flex: 1 1 0;
     width: 100%;
-    min-height: 46px;
+    min-height: 42px;
     padding: 5px 0;
     border-bottom: 1px solid #eef1f6;
 }
@@ -821,34 +885,34 @@
 }
 
 .vsServiceIconCircle {
+    flex: 0 0 30px;
     width: 30px;
     height: 30px;
-    flex: 0 0 30px;
     border-radius: 50%;
+}
+
+.vsServiceIcon {
+    font-size: 1rem !important;
 }
 
 .vsServiceBlue {
     background: #e9f3ff;
 }
 
-.vsServiceRed {
-    background: #fff0f2;
-}
-
-.vsServicePurple {
-    background: #f3ebff;
-}
-
-.vsServiceIcon.sapUiIcon {
-    font-size: 1rem !important;
-}
-
 .vsServiceBlue .vsServiceIcon {
     color: #2788f5 !important;
 }
 
+.vsServiceRed {
+    background: #fff0f2;
+}
+
 .vsServiceRed .vsServiceIcon {
     color: #ff3a4f !important;
+}
+
+.vsServicePurple {
+    background: #f3ebff;
 }
 
 .vsServicePurple .vsServiceIcon {
@@ -857,130 +921,161 @@
 
 .vsServiceName.sapMText {
     color: #263456 !important;
-    font-size: 0.76rem !important;
+    font-size: 0.68rem !important;
     font-weight: 700 !important;
 }
 
 .vsServicePercent.sapMText {
     color: #172a5a !important;
-    font-size: 1rem !important;
+    font-size: 0.86rem !important;
     font-weight: 800 !important;
 }
 
 .vsServiceHours.sapMText {
     color: #7a8498 !important;
-    font-size: 0.64rem !important;
+    font-size: 0.53rem !important;
     font-weight: 600 !important;
 }
 
 .vsPressureFooter {
+    flex: 0 0 auto;
     width: 100%;
-    min-height: 26px;
-    margin-top: 2px;
-    padding-top: 7px;
+    min-height: 24px;
+    margin-top: 3px;
+    padding-top: 6px;
     border-top: 1px solid #eef1f5;
     gap: 5px;
 }
 
-.vsPressureFooterIcon.sapUiIcon,
+.vsPressureFooterIcon,
 .vsPressureFooterLabel.sapMText {
     color: #79849a !important;
-    font-size: 0.62rem !important;
+    font-size: 0.52rem !important;
     font-weight: 600 !important;
 }
 
 .vsPressureFooterValue.sapMText {
     color: #20325f !important;
-    font-size: 0.66rem !important;
+    font-size: 0.56rem !important;
     font-weight: 800 !important;
 }
 
-/* ========================================================================== */
-/* MATERIALES CON MAYOR CONSUMO                                               */
-/* ========================================================================== */
+/* ================================================================
+   MATERIALES CON MAYOR CONSUMO
+   ================================================================ */
 
-.vsMaterialsPanel {
-    min-height: 132px;
+.vsMaterialsCard {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100%;
+    min-height: 0;
+    padding: 10px 11px 9px;
+    overflow: hidden;
 }
 
 .vsMaterialsGrid {
     display: grid !important;
+    flex: 1 1 0;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
     width: 100%;
+    min-height: 0;
+    margin-top: 7px;
+    overflow: hidden;
 }
 
 .vsMaterialsGrid > .sapMFlexItem {
     min-width: 0;
+    min-height: 0;
 }
 
-.vsMaterialCard {
+.vsMaterialTile {
     position: relative;
-    min-height: 105px;
-    padding: 9px 8px 7px;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 7px 8px 6px;
     overflow: hidden;
+    background: #ffffff;
     border: 1px solid #e7eaf0;
     border-radius: 8px;
-    background: #ffffff;
     box-shadow: 0 2px 6px rgba(24, 45, 82, 0.06);
 }
 
 .vsMaterialIconCircle {
-    width: 40px;
-    height: 40px;
-    flex: 0 0 40px;
-    margin-bottom: 3px;
+    position: relative;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 2px;
     border-radius: 50%;
 }
 
-.vsMaterialIcon.sapUiIcon {
-    font-size: 1.45rem !important;
+.vsMaterialIcon {
+    font-size: 1.05rem !important;
 }
 
-.vsMaterialDropSvg {
-    display: block;
-    width: 23px;
-    height: 29px;
-    max-width: 23px;
-    max-height: 29px;
-    overflow: visible;
-    color: inherit;
-    pointer-events: none;
+.vsMaterialDropIcon {
+    opacity: 0 !important;
+}
+
+.vsMaterialDropCircle::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    content: "";
+    transform: translate(-50%, -50%);
+}
+
+.vsMaterialOrange .vsMaterialDropCircle::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='28' viewBox='0 0 24 28'%3E%3Cpath d='M12 2.5C9.7 6.1 5 11.4 5 17.1C5 21.9 8.1 25.5 12 25.5C15.9 25.5 19 21.9 19 17.1C19 11.4 14.3 6.1 12 2.5Z' fill='none' stroke='%23ff7d21' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.vsMaterialPurple .vsMaterialDropCircle::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='28' viewBox='0 0 24 28'%3E%3Cpath d='M12 2.5C9.7 6.1 5 11.4 5 17.1C5 21.9 8.1 25.5 12 25.5C15.9 25.5 19 21.9 19 17.1C19 11.4 14.3 6.1 12 2.5Z' fill='none' stroke='%238a3ffc' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .vsMaterialName.sapMText {
-    display: block;
     width: 100%;
     margin-top: 1px;
     color: #172650 !important;
-    font-size: 0.68rem !important;
+    font-size: 0.58rem !important;
     font-weight: 700 !important;
-    line-height: 1.1 !important;
-    text-align: center !important;
+    line-height: 1.1;
+    text-align: center;
 }
 
 .vsMaterialValueRow {
-    min-height: 25px;
-    margin-top: 3px;
+    min-height: 20px;
+    margin-top: 2px;
 }
 
 .vsMaterialValue.sapMText {
-    font-size: 1.35rem !important;
+    font-size: 1rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
+    line-height: 1;
 }
 
 .vsMaterialUnit.sapMText {
-    margin: 0 0 2px 5px;
+    margin: 0 0 1px 4px;
     color: #69758a !important;
-    font-size: 0.58rem !important;
+    font-size: 0.48rem !important;
     font-weight: 600 !important;
 }
 
 .vsMaterialLine {
     width: 58px;
     height: 3px;
-    margin-top: 6px;
+    margin-top: 5px;
     border-radius: 10px;
 }
 
@@ -989,12 +1084,6 @@
     background: #fff3e8;
 }
 
-.vsMaterialOrange .vsMaterialDropSvg {
-    color: #ff7d21;
-    filter: drop-shadow(0 1px 2px rgba(255, 125, 33, 0.18));
-}
-
-.vsMaterialOrange .vsMaterialIcon,
 .vsMaterialOrange .vsMaterialValue {
     color: #ff7d21 !important;
 }
@@ -1022,12 +1111,6 @@
     background: #f5efff;
 }
 
-.vsMaterialPurple .vsMaterialDropSvg {
-    color: #8a3ffc;
-    filter: drop-shadow(0 1px 2px rgba(138, 63, 252, 0.18));
-}
-
-.vsMaterialPurple .vsMaterialIcon,
 .vsMaterialPurple .vsMaterialValue {
     color: #8a3ffc !important;
 }
@@ -1050,62 +1133,505 @@
     background: #2eae55;
 }
 
-/* ========================================================================== */
-/* RESPONSIVE                                                                 */
-/* ========================================================================== */
+/* ================================================================
+   ESCRITORIO SIN SCROLL
+   ================================================================ */
 
-@media (max-width: 1180px) {
-    .vsFilterGrid {
-        grid-template-columns: repeat(3, 1fr);
+@media screen and (min-width: 761px) {
+    .vistaSupervisorPage,
+    .vistaSupervisorPage .sapMPage,
+    .vistaSupervisorPage .sapMPageCont,
+    .vistaSupervisorPage .sapMPageEnableScrolling,
+    .vistaSupervisorPage .sapMPageScroll {
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
     }
 
-    .vsApplyButton.sapMBtn {
-        width: 100%;
+    .vsDashboard {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+}
+
+/* ================================================================
+   MONITOR 1366 x 768 / ALTURA ÚTIL HASTA 720 px
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (max-height: 720px) {
+    .vsDashboard {
+        padding: 6px 8px 6px 18px;
     }
 
+    .vsHeaderBlock {
+        padding: 0 6px 3px;
+    }
+
+    .vsPageTitle.sapMTitle {
+        margin-top: 2px;
+        font-size: 1.38rem !important;
+        line-height: 1 !important;
+    }
+
+    .vsPageSubtitle.sapMText {
+        margin-top: 1px;
+        font-size: 0.62rem !important;
+    }
+
+    .vsFilterRow,
+    .vsKpiRow,
+    .vsMainRow,
+    .vsRightColumn {
+        gap: 6px;
+    }
+
+    .vsFilterCard,
+    .vsApplyButtonBox {
+        height: 48px;
+    }
+
+    .vsFilterCard {
+        padding: 4px 8px 3px;
+    }
+
+    .vsFilterLabel.sapMLabel {
+        height: 12px;
+        margin-bottom: 0;
+        font-size: 0.55rem !important;
+        line-height: 12px !important;
+    }
+
+    .vsFilterControl.sapMSlt,
+    .vsFilterControl .sapMInputBaseContentWrapper,
+    .vsFilterControl.sapMSlt .sapMSltLabel,
+    .vsFilterControl .sapMInputBaseInner,
+    .vsFilterControl .sapMInputBaseIconContainer,
+    .vsFilterControl .sapMInputBaseIcon {
+        height: 1.5rem !important;
+        min-height: 1.5rem !important;
+        line-height: 1.5rem !important;
+    }
+
+    .vsApplyButton .sapMBtnInner {
+        height: 1.82rem;
+    }
+
+    .vsApplyButton .sapMBtnContent,
+    .vsApplyButton .sapMBtnIcon {
+        line-height: 1.82rem !important;
+    }
+
+    .vsKpiRow,
+    .vsMainRow {
+        margin-top: 6px;
+    }
+
+    .vsKpiCard {
+        min-height: 62px;
+        padding: 5px 7px 5px 10px;
+    }
+
+    .vsKpiContent {
+        min-height: 46px;
+    }
+
+    .vsKpiIconCircle {
+        flex-basis: 35px;
+        width: 35px;
+        height: 35px;
+        margin-right: 6px;
+    }
+
+    .vsKpiIcon {
+        font-size: 1.04rem !important;
+    }
+
+    .vsKpiLabel.sapMText {
+        font-size: 0.55rem !important;
+    }
+
+    .vsKpiValue.sapMText {
+        font-size: 0.98rem !important;
+    }
+
+    .vsKpiUnit.sapMText {
+        font-size: 0.74rem !important;
+    }
+
+    .vsKpiHelper.sapMText,
+    .vsKpiMeta.sapMText {
+        font-size: 0.47rem !important;
+    }
+
+    .vsKpiAlert.sapMText {
+        margin-top: 2px;
+        font-size: 0.38rem !important;
+    }
+
+    .vsAssignedBreakdown {
+        min-width: 68px;
+        padding-left: 6px;
+        gap: 3px;
+    }
+
+    .vsBreakdownIcon {
+        width: 12px;
+        font-size: 0.61rem !important;
+    }
+
+    .vsBreakdownValue.sapMText {
+        font-size: 0.56rem !important;
+    }
+
+    .vsBreakdownLabel.sapMText {
+        font-size: 0.39rem !important;
+    }
+
+    .vsUtilizationCard {
+        padding: 7px 8px 6px;
+    }
+
+    .vsSectionTitle.sapMTitle {
+        font-size: 0.7rem !important;
+    }
+
+    .vsSectionSubtitle.sapMText {
+        font-size: 0.45rem !important;
+    }
+
+    .vsUtilizationGrid {
+        gap: 5px;
+        margin-top: 4px;
+    }
+
+    .vsUtilHeader {
+        min-height: 46px;
+        padding: 4px 5px 3px;
+    }
+
+    .vsUtilHeaderTop {
+        gap: 4px;
+    }
+
+    .vsUtilIconCircle {
+        flex-basis: 25px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .vsUtilIcon {
+        font-size: 0.72rem !important;
+    }
+
+    .vsUtilTitle.sapMText {
+        font-size: 0.51rem !important;
+    }
+
+    .vsUtilRange.sapMText {
+        margin-top: 2px;
+        font-size: 0.46rem !important;
+    }
+
+    .vsUtilRule {
+        margin-top: 4px;
+    }
+
+    .vsResourceList {
+        gap: 3px;
+        margin-top: 3px;
+    }
+
+    .vsResourceTile {
+        padding: 3px 6px 3px;
+    }
+
+    .vsResourceName.sapMText {
+        font-size: 0.47rem !important;
+    }
+
+    .vsResourcePercent.sapMText {
+        margin-top: 1px;
+        font-size: 0.68rem !important;
+    }
+
+    .vsResourceLine {
+        margin-top: 1px;
+    }
+
+    .vsResourceIcon,
+    .vsResourceText.sapMText {
+        font-size: 0.41rem !important;
+    }
+
+    .vsPressureCard {
+        padding: 6px 8px 5px;
+    }
+
+    .vsPressureContent {
+        gap: 16px;
+        padding: 2px 10px;
+    }
+
+    .vsDonut {
+        flex-basis: 112px;
+        width: 112px;
+        height: 112px;
+    }
+
+    .vsDonutCenter {
+        width: 65px;
+        height: 65px;
+    }
+
+    .vsDonutText.sapMText {
+        font-size: 0.5rem !important;
+    }
+
+    .vsServiceRow {
+        min-height: 34px;
+        padding: 2px 0;
+    }
+
+    .vsServiceIconCircle {
+        flex-basis: 24px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .vsServiceIcon {
+        font-size: 0.72rem !important;
+    }
+
+    .vsServiceName.sapMText {
+        font-size: 0.53rem !important;
+    }
+
+    .vsServicePercent.sapMText {
+        font-size: 0.68rem !important;
+    }
+
+    .vsServiceHours.sapMText {
+        font-size: 0.41rem !important;
+    }
+
+    .vsPressureFooter {
+        min-height: 18px;
+        margin-top: 2px;
+        padding-top: 4px;
+    }
+
+    .vsPressureFooterIcon,
+    .vsPressureFooterLabel.sapMText,
+    .vsPressureFooterValue.sapMText {
+        font-size: 0.42rem !important;
+    }
+
+    .vsMaterialsCard {
+        padding: 5px 7px 4px;
+    }
+
+    .vsMaterialsGrid {
+        gap: 5px;
+        margin-top: 3px;
+    }
+
+    .vsMaterialTile {
+        padding: 3px 5px 3px;
+    }
+
+    .vsMaterialIconCircle {
+        flex-basis: 25px;
+        width: 25px;
+        height: 25px;
+        margin-bottom: 1px;
+    }
+
+    .vsMaterialIcon {
+        font-size: 0.76rem !important;
+    }
+
+    .vsMaterialDropCircle::before {
+        width: 12px;
+        height: 15px;
+    }
+
+    .vsMaterialName.sapMText {
+        font-size: 0.43rem !important;
+    }
+
+    .vsMaterialValue.sapMText {
+        font-size: 0.76rem !important;
+    }
+
+    .vsMaterialUnit.sapMText {
+        font-size: 0.38rem !important;
+    }
+
+    .vsMaterialLine {
+        width: 44px;
+        height: 2px;
+        margin-top: 3px;
+    }
+}
+
+/* ================================================================
+   LAPTOP / PANTALLA ALTA DESDE 850 px
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (min-height: 850px) {
+    .vsDashboard {
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .vsMainRow {
+        margin-top: 10px;
+    }
+
+    .vsUtilizationCard {
+        padding-top: 14px;
+        padding-bottom: 12px;
+    }
+
+    .vsUtilizationGrid {
+        margin-top: 11px;
+    }
+
+    .vsResourceList {
+        gap: 7px;
+        margin-top: 7px;
+    }
+
+    .vsResourceTile {
+        padding-top: 9px;
+        padding-bottom: 7px;
+    }
+
+    .vsRightColumn {
+        gap: 10px;
+    }
+
+    .vsPressureCard {
+        padding-top: 13px;
+        padding-bottom: 10px;
+    }
+
+    .vsDonut {
+        flex-basis: 150px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .vsDonutCenter {
+        width: 84px;
+        height: 84px;
+    }
+
+    .vsServiceRow {
+        min-height: 47px;
+    }
+
+    .vsMaterialsCard {
+        padding-top: 12px;
+        padding-bottom: 11px;
+    }
+
+    .vsMaterialsGrid {
+        margin-top: 9px;
+    }
+
+    .vsMaterialTile {
+        padding-top: 9px;
+        padding-bottom: 8px;
+    }
+}
+
+/* ================================================================
+   TABLET Y MÓVIL
+   ================================================================ */
+
+@media screen and (max-width: 1180px) {
+    .vsFilterRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .vsApplyButtonBox,
+    .vsApplyButton,
     .vsApplyButton .sapMBtnInner {
         width: 100%;
     }
 
-    .vsKpiGrid {
-        grid-template-columns: repeat(3, 1fr);
+    .vsKpiRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .vsMainGrid {
-        grid-template-columns: 1fr;
+    .vsMainRow {
+        flex-direction: column !important;
+        overflow: visible;
+    }
+
+    .vsMainRow > .sapMFlexItem {
+        width: 100% !important;
+        height: auto !important;
+        flex: 0 0 auto !important;
+    }
+
+    .vsDashboard {
+        height: auto;
+        overflow: visible;
+    }
+
+    .vistaSupervisorPage .sapMPageCont,
+    .vistaSupervisorPage .sapMPageEnableScrolling,
+    .vistaSupervisorPage .sapMPageScroll {
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
     }
 }
 
-@media (max-width: 760px) {
+@media screen and (max-width: 760px) {
     .vsDashboard {
-        padding: 12px;
+        padding: 10px 7px 14px;
     }
 
-    .vsFilterGrid,
-    .vsKpiGrid {
+    .vsFilterRow,
+    .vsKpiRow {
         grid-template-columns: 1fr;
     }
 
-    .vsUtilizationLegend,
+    .vsUtilizationGrid,
     .vsMaterialsGrid {
-        grid-template-columns: repeat(2, 1fr);
+        flex-wrap: wrap !important;
     }
 
-    .vsResourcesGrid > .sapMFlexItem {
-        width: calc(50% - 4px);
+    .vsUtilColumn,
+    .vsMaterialTile {
+        flex: 1 1 calc(50% - 7px);
+        min-width: 145px;
     }
 
     .vsPressureContent {
-        flex-direction: column;
-        padding-right: 4px;
+        flex-direction: column !important;
     }
 
-    .vsDonutColumn,
     .vsServiceList {
         width: 100%;
+        max-width: none;
     }
+}
 
-    .vsDonutColumn {
-        margin-bottom: 10px;
+/* ================================================================
+   AJUSTE DE ESPACIADO EN MONITOR
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (max-height: 720px) {
+    .vsMainRow,
+    .vsRightColumn {
+        gap: 6px !important;
     }
 }

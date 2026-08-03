@@ -1,1903 +1,5116 @@
 /* ==========================================================================
-   CONSUMO DE MATERIALES
-   Archivo sugerido: webapp/css/ConsumoMateriales.css
+   DASHBOARD: CONSUMO DE MATERIALES
+   Ruta sugerida: webapp/css/ConsumoMateriales.css
    ========================================================================== */
 
-.ConsumoMateriales,
-.ConsumoMateriales .sapMPageBgStandard {
-    background: #F8FAFC !important;
+/* ---------- Variables visuales ---------- */
+.ConsumoMateriales {
+    --cm-bg: #f7f9fc;
+    --cm-card: #ffffff;
+    --cm-text: #14213d;
+    --cm-muted: #64748b;
+    --cm-border: #e3eaf3;
+    --cm-blue: #1677ff;
+    --cm-blue-dark: #0b5ed7;
+    --cm-green: #10b981;
+    --cm-orange: #ff7a00;
+    --cm-yellow: #f4b400;
+    --cm-red: #f43f5e;
+    --cm-purple: #6d28d9;
+    --cm-teal: #0f9f8f;
+    --cm-shadow: 0 5px 16px rgba(15, 23, 42, 0.065);
+    background: var(--cm-bg) !important;
+}
+
+.ConsumoMateriales.sapMPage,
+.ConsumoMateriales .sapMPageBgStandard,
+.ConsumoMateriales .sapMPageScroll,
+.ConsumoMateriales .sapMPageEnableScrolling {
+    background: var(--cm-bg) !important;
 }
 
 .ConsumoMateriales .cmPageContainer {
     width: 100% !important;
-    padding: 14px 18px 24px 18px !important;
+    max-width: 1900px !important;
+    margin: 0 auto !important;
+    padding: 14px 18px 26px !important;
     box-sizing: border-box !important;
-    background: #F8FAFC !important;
-    overflow-x: hidden !important;
+    background: var(--cm-bg) !important;
 }
 
-/* HEADER */
+/* ==========================================================================
+   ENCABEZADO
+   ========================================================================== */
 .ConsumoMateriales .cmHeader {
-    margin-bottom: 10px !important;
+    margin: 0 0 10px !important;
 }
 
 .ConsumoMateriales .cmMainTitle {
-    color: #172554 !important;
-    font-size: 30px !important;
+    color: var(--cm-text) !important;
+    font-size: 1.85rem !important;
     font-weight: 900 !important;
-    line-height: 34px !important;
-    letter-spacing: -0.4px !important;
+    line-height: 2rem !important;
+    letter-spacing: -0.035rem !important;
 }
 
 .ConsumoMateriales .cmSubtitle {
-    color: #64748B !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
+    color: var(--cm-muted) !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1rem !important;
 }
 
-/* FILTERS */
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
 .ConsumoMateriales .cmFiltersBar {
     width: 100% !important;
     display: grid !important;
-    grid-template-columns: 150px 142px 142px 130px 135px 145px 126px !important;
-    column-gap: 12px !important;
-    row-gap: 8px !important;
+    grid-template-columns: 1.05fr 1.12fr 1.12fr 0.9fr 0.95fr 1.05fr 132px !important;
+    gap: 10px !important;
     align-items: end !important;
-    margin-bottom: 14px !important;
-    box-sizing: border-box !important;
+    margin: 0 0 12px !important;
 }
 
-.ConsumoMateriales .cmFiltersBar > .sapMFlexItem {
-    min-width: 0 !important;
+.ConsumoMateriales .cmFiltersBar>.sapMFlexItem {
     width: 100% !important;
-    max-width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
 }
 
 .ConsumoMateriales .cmFilterBox {
     width: 100% !important;
     min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 .ConsumoMateriales .cmFilterLabel {
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    margin-bottom: 5px !important;
-    line-height: 12px !important;
+    color: #334155 !important;
+    font-size: 0.63rem !important;
+    font-weight: 800 !important;
+    line-height: 0.85rem !important;
+    margin: 0 0 4px 2px !important;
 }
 
 .ConsumoMateriales .cmFilterBox .sapMSlt,
 .ConsumoMateriales .cmFilterBox .sapMInputBase {
     width: 100% !important;
-    height: 42px !important;
     min-width: 0 !important;
+    height: 42px !important;
 }
 
 .ConsumoMateriales .cmFilterBox .sapMSlt,
 .ConsumoMateriales .cmFilterBox .sapMInputBaseContentWrapper {
     height: 42px !important;
+    min-height: 42px !important;
+    border: 1px solid #dce5f0 !important;
     border-radius: 8px !important;
-    border: 1px solid #DDE6F2 !important;
-    background: #FFFFFF !important;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+    background: #ffffff !important;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.045) !important;
+}
+
+.ConsumoMateriales .cmFilterBox .sapMSlt:hover,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseContentWrapper:hover {
+    border-color: #b9c9dd !important;
 }
 
 .ConsumoMateriales .cmFilterBox .sapMSltLabel,
 .ConsumoMateriales .cmFilterBox .sapMInputBaseInner {
-    color: #172554 !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    height: 42px !important;
-    line-height: 42px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    color: var(--cm-text) !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
     padding-left: 10px !important;
 }
 
+.ConsumoMateriales .cmFilterBox .sapMSltArrow,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseIcon {
+    color: #274472 !important;
+}
+
 .ConsumoMateriales .cmApplyButton {
-    width: 126px !important;
-    min-width: 126px !important;
-    max-width: 126px !important;
+    width: 132px !important;
+    min-width: 132px !important;
     height: 42px !important;
     margin: 0 !important;
-    padding: 0 !important;
-    align-self: end !important;
 }
 
 .ConsumoMateriales .cmApplyButton .sapMBtnInner {
-    width: 126px !important;
+    width: 100% !important;
     height: 42px !important;
+    min-height: 42px !important;
+    border: 0 !important;
     border-radius: 8px !important;
-    background: #2563EB !important;
-    border: none !important;
-    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22) !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    background: linear-gradient(180deg, #1787ff 0%, #066ce6 100%) !important;
+    box-shadow: 0 7px 15px rgba(22, 119, 255, 0.24) !important;
     text-shadow: none !important;
 }
 
 .ConsumoMateriales .cmApplyButton .sapMBtnContent,
 .ConsumoMateriales .cmApplyButton .sapMBtnIcon {
-    color: #FFFFFF !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
+    color: #ffffff !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
 }
 
-/* KPI */
-.ConsumoMateriales .cmKpiRow {
+.ConsumoMateriales .cmApplyButton:hover .sapMBtnInner {
+    background: linear-gradient(180deg, #0f7cf5 0%, #075fc9 100%) !important;
+}
+
+/* ==========================================================================
+   DISTRIBUCIÓN GENERAL DE FILAS
+   ========================================================================== */
+.ConsumoMateriales .cmKpiRow,
+.ConsumoMateriales .cmCardsRow {
     width: 100% !important;
-    display: flex !important;
-    gap: 12px !important;
-    margin-bottom: 12px !important;
-    flex-wrap: nowrap !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 11px !important;
+    align-items: stretch !important;
+    margin: 0 0 11px !important;
 }
 
-.ConsumoMateriales .cmKpiCard {
-    flex: 1 1 0 !important;
+.ConsumoMateriales .cmKpiRow>.sapMFlexItem,
+.ConsumoMateriales .cmCardsRow>.sapMFlexItem {
+    width: 100% !important;
     min-width: 0 !important;
-    height: 95px !important;
-    border-radius: 10px !important;
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.055) !important;
-    padding: 13px 18px !important;
+    max-width: none !important;
+}
+
+/* ==========================================================================
+   KPI
+   ========================================================================== */
+.ConsumoMateriales .cmKpiCard {
+    width: 100% !important;
+    height: 94px !important;
+    min-width: 0 !important;
+    padding: 12px 16px !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
+    border: 1px solid var(--cm-border) !important;
+    border-radius: 10px !important;
+    background: var(--cm-card) !important;
+    box-shadow: var(--cm-shadow) !important;
 }
 
 .ConsumoMateriales .cmKpiRed {
-    border-left: 5px solid #F43F5E !important;
-    background: linear-gradient(90deg, #FFF1F2 0%, #FFFFFF 100%) !important;
+    border-left: 5px solid var(--cm-red) !important;
+    background: linear-gradient(90deg, #fff1f4 0%, #ffffff 76%) !important;
 }
 
 .ConsumoMateriales .cmKpiOrange {
-    border-left: 5px solid #F97316 !important;
-    background: linear-gradient(90deg, #FFF7ED 0%, #FFFFFF 100%) !important;
+    border-left: 5px solid var(--cm-orange) !important;
+    background: linear-gradient(90deg, #fff8ed 0%, #ffffff 76%) !important;
 }
 
 .ConsumoMateriales .cmKpiPurple {
-    border-left: 5px solid #6D28D9 !important;
-    background: linear-gradient(90deg, #F5F3FF 0%, #FFFFFF 100%) !important;
+    border-left: 5px solid var(--cm-purple) !important;
+    background: linear-gradient(90deg, #f6f1ff 0%, #ffffff 76%) !important;
+}
+
+.ConsumoMateriales .cmKpiInner {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .ConsumoMateriales .cmKpiIcon {
-    width: 58px !important;
-    height: 58px !important;
-    min-width: 58px !important;
+    width: 57px !important;
+    height: 57px !important;
+    min-width: 57px !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-right: 14px !important;
+    margin-right: 13px !important;
 }
 
 .ConsumoMateriales .cmKpiIcon .sapUiIcon {
-    font-size: 2rem !important;
+    font-size: 1.85rem !important;
 }
 
 .ConsumoMateriales .cmKpiIconRed {
-    background: #FFE4E6 !important;
+    background: #ffe1e7 !important;
 }
 
 .ConsumoMateriales .cmKpiIconRed .sapUiIcon {
-    color: #F43F5E !important;
+    color: var(--cm-red) !important;
 }
 
 .ConsumoMateriales .cmKpiIconOrange {
-    background: #FFEDD5 !important;
+    background: #ffedd4 !important;
 }
 
 .ConsumoMateriales .cmKpiIconOrange .sapUiIcon {
-    color: #F97316 !important;
+    color: var(--cm-orange) !important;
 }
 
 .ConsumoMateriales .cmKpiIconPurple {
-    background: #EDE9FE !important;
+    background: #eee7ff !important;
 }
 
 .ConsumoMateriales .cmKpiIconPurple .sapUiIcon {
-    color: #6D28D9 !important;
+    color: var(--cm-purple) !important;
+}
+
+.ConsumoMateriales .cmKpiContent {
+    min-width: 0 !important;
+    justify-content: center !important;
 }
 
 .ConsumoMateriales .cmKpiLabel {
-    color: #172554 !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
+    color: #334155 !important;
+    font-size: 0.67rem !important;
+    font-weight: 800 !important;
+    line-height: 0.88rem !important;
 }
 
 .ConsumoMateriales .cmKpiNumber {
-    font-size: 28px !important;
+    font-size: 1.62rem !important;
     font-weight: 900 !important;
-    line-height: 30px !important;
+    line-height: 1.75rem !important;
+    letter-spacing: -0.02rem !important;
+}
+
+.ConsumoMateriales .cmKpiMaterialName {
+    max-width: 100% !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    line-height: 1.5rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 .ConsumoMateriales .cmKpiUnit,
 .ConsumoMateriales .cmKpiDelta {
-    font-size: 13px !important;
+    font-size: 0.78rem !important;
     font-weight: 900 !important;
+    line-height: 1rem !important;
 }
 
 .ConsumoMateriales .cmKpiDescription {
-    color: #64748B !important;
-    font-size: 10px !important;
-    line-height: 12px !important;
+    color: #718096 !important;
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+    line-height: 0.78rem !important;
 }
 
-/* CARDS */
-.ConsumoMateriales .cmCardsRow {
-    width: 100% !important;
-    display: flex !important;
-    gap: 12px !important;
-    margin-bottom: 12px !important;
-    align-items: stretch !important;
-    flex-wrap: nowrap !important;
-}
-
+/* ==========================================================================
+   CARDS
+   ========================================================================== */
 .ConsumoMateriales .cmCard {
-    flex: 1 1 0 !important;
+    width: 100% !important;
     min-width: 0 !important;
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.055) !important;
-    padding: 12px !important;
     box-sizing: border-box !important;
+    padding: 11px 12px !important;
     overflow: hidden !important;
+    border: 1px solid var(--cm-border) !important;
+    border-radius: 10px !important;
+    background: var(--cm-card) !important;
+    box-shadow: var(--cm-shadow) !important;
+}
+
+.ConsumoMateriales .cmPrimaryCard {
+    min-height: 276px !important;
 }
 
 .ConsumoMateriales .cmCardHeader {
-    margin-bottom: 8px !important;
+    width: 100% !important;
+    min-height: 24px !important;
+    margin: 0 0 5px !important;
 }
 
 .ConsumoMateriales .cmCardTitle {
-    color: #172554 !important;
-    font-size: 13px !important;
+    color: var(--cm-text) !important;
+    font-size: 0.78rem !important;
     font-weight: 900 !important;
+    line-height: 1rem !important;
 }
 
 .ConsumoMateriales .cmCardStrongText {
-    color: #172554 !important;
-    font-size: 11px !important;
+    color: var(--cm-text) !important;
+    font-size: 0.68rem !important;
     font-weight: 900 !important;
-    margin-bottom: 8px !important;
+    line-height: 0.9rem !important;
+    margin: 0 0 6px !important;
 }
 
-.ConsumoMateriales .cmIconButton .sapUiIcon,
-.ConsumoMateriales .cmSmallIconButton .sapUiIcon {
-    color: #94A3B8 !important;
-    font-size: 0.9rem !important;
+.ConsumoMateriales .cmSmallIconButton,
+.ConsumoMateriales .cmIconButton {
+    height: 24px !important;
+    min-width: 24px !important;
+    padding: 0 !important;
 }
 
-/* MATERIAL VS PLAN */
-.ConsumoMateriales .cmMaterialVsPlanCard {
-    min-height: 270px !important;
+.ConsumoMateriales .cmSmallIconButton .sapMBtnInner,
+.ConsumoMateriales .cmIconButton .sapMBtnInner {
+    min-width: 24px !important;
+    height: 24px !important;
+    border: 0 !important;
+    background: transparent !important;
 }
 
-.ConsumoMateriales .cmMaterialHeader,
-.ConsumoMateriales .cmMaterialRow {
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
+.ConsumoMateriales .cmSmallIconButton .sapUiIcon,
+.ConsumoMateriales .cmIconButton .sapUiIcon {
+    color: #64748b !important;
+    font-size: 0.78rem !important;
 }
 
+/* ==========================================================================
+   CARD: MATERIALES VS PLAN
+   ========================================================================== */
 .ConsumoMateriales .cmMaterialHeader {
-    margin-bottom: 4px !important;
+    width: 100% !important;
+    min-height: 20px !important;
+    margin: 2px 0 2px !important;
 }
 
-.ConsumoMateriales .cmHeaderText {
+.ConsumoMateriales .cmMaterialHeaderText {
     color: #475569 !important;
-    font-size: 9px !important;
+    font-size: 0.55rem !important;
     font-weight: 900 !important;
+    line-height: 0.72rem !important;
+    white-space: nowrap !important;
 }
 
-.ConsumoMateriales .cmMaterialRow {
-    height: 42px !important;
-}
-
-.ConsumoMateriales .cmMatNameCol {
-    flex: 0 0 33% !important;
-    width: 33% !important;
-    min-width: 0 !important;
-}
-
-.ConsumoMateriales .cmMatPlanCol {
-    flex: 0 0 24% !important;
-    width: 24% !important;
-    min-width: 0 !important;
-}
-
-.ConsumoMateriales .cmMatRealCol {
-    flex: 0 0 24% !important;
-    width: 24% !important;
-    min-width: 0 !important;
-}
-
-.ConsumoMateriales .cmMatVarCol {
-    flex: 0 0 19% !important;
-    width: 19% !important;
-    min-width: 0 !important;
+.ConsumoMateriales .cmTextRight {
+    display: block !important;
     text-align: right !important;
 }
 
+.ConsumoMateriales .cmMaterialList {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmMaterialList .sapMLIB,
+.ConsumoMateriales .cmMaterialList .sapMLIBContent {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmMaterialRow {
+    width: 100% !important;
+    height: 39px !important;
+    min-height: 39px !important;
+    padding: 1px 0 !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialNameBox {
+    height: 39px !important;
+    min-width: 0 !important;
+    padding-right: 7px !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialIcon,
+.ConsumoMateriales .cmMaterialEmoji {
+    width: 17px !important;
+    min-width: 17px !important;
+    max-width: 17px !important;
+    margin-right: 7px !important;
+    text-align: center !important;
+}
+
 .ConsumoMateriales .cmMaterialIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
+    color: #4285f4 !important;
+    font-size: 0.9rem !important;
+}
+
+.ConsumoMateriales .cmMaterialEmoji {
+    font-size: 0.9rem !important;
+    line-height: 1rem !important;
 }
 
 .ConsumoMateriales .cmMaterialName {
-    color: #172554 !important;
-    font-size: 9.5px !important;
+    min-width: 0 !important;
+    color: var(--cm-text) !important;
+    font-size: 0.58rem !important;
     font-weight: 800 !important;
-    line-height: 11px !important;
+    line-height: 0.7rem !important;
+}
+
+.ConsumoMateriales .cmMaterialMeasure {
+    height: 39px !important;
+    min-height: 39px !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    padding-right: 8px !important;
+    box-sizing: border-box !important;
 }
 
 .ConsumoMateriales .cmMaterialValue {
-    color: #172554 !important;
-    font-size: 9px !important;
+    color: var(--cm-text) !important;
+    font-size: 0.56rem !important;
     font-weight: 800 !important;
-    margin-bottom: 2px !important;
+    line-height: 0.7rem !important;
+    margin: 0 0 4px !important;
+    white-space: nowrap !important;
 }
 
-.ConsumoMateriales .cmPlanBar .sapMPI,
-.ConsumoMateriales .cmRealBar .sapMPI {
+.ConsumoMateriales .cmMaterialPlanBar,
+.ConsumoMateriales .cmMaterialRealBar {
+    width: 86px !important;
+    min-width: 86px !important;
     height: 5px !important;
-    border-radius: 10px !important;
-    background: #E5E7EB !important;
+    min-height: 5px !important;
+    margin: 0 !important;
 }
 
-.ConsumoMateriales .cmPlanBar .sapMPIBar {
-    background: #9CA3AF !important;
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPI,
+.ConsumoMateriales .cmMaterialRealBar .sapMPI {
+    height: 5px !important;
+    min-height: 5px !important;
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    overflow: hidden !important;
 }
 
-.ConsumoMateriales .cmRealBar .sapMPIBar {
-    background: #2563EB !important;
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI .sapMPIBar {
+    background: #8994a3 !important;
 }
 
-.ConsumoMateriales .cmVariationText {
-    font-size: 10px !important;
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI .sapMPIBar {
+    background: #1478f2 !important;
+}
+
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIText,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIText {
+    display: none !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation,
+.ConsumoMateriales .cmMiniVariationText {
+    color: var(--cm-text) !important;
+    font-size: 0.61rem !important;
     font-weight: 900 !important;
     white-space: nowrap !important;
 }
 
-.ConsumoMateriales .cmVariationText[data-estado="Error"],
-.ConsumoMateriales .cmVariationText[data-sap-ui-custom-estado="Error"],
+.ConsumoMateriales .cmMaterialVariation {
+    display: block !important;
+    height: 39px !important;
+    line-height: 39px !important;
+    text-align: right !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation[data-estado="Error"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Error"],
 .ConsumoMateriales .cmMiniVariationText[data-estado="Error"],
 .ConsumoMateriales .cmMiniVariationText[data-sap-ui-custom-estado="Error"] {
-    color: #EF4444 !important;
+    color: #ef4444 !important;
 }
 
-.ConsumoMateriales .cmVariationText[data-estado="Success"],
-.ConsumoMateriales .cmVariationText[data-sap-ui-custom-estado="Success"],
+.ConsumoMateriales .cmMaterialVariation[data-estado="Success"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Success"],
 .ConsumoMateriales .cmMiniVariationText[data-estado="Success"],
 .ConsumoMateriales .cmMiniVariationText[data-sap-ui-custom-estado="Success"] {
-    color: #10B981 !important;
+    color: #06a66a !important;
 }
 
-/* STACKED BAR */
-.ConsumoMateriales .cmTipoOrdenCard {
-    min-height: 270px !important;
-}
-
+/* ==========================================================================
+   CARD: CONSUMO POR TIPO DE ORDEN
+   ========================================================================== */
 .ConsumoMateriales .cmStackedBar {
     width: 100% !important;
-    height: 34px !important;
-    border-radius: 10px !important;
+    height: 31px !important;
+    min-height: 31px !important;
     overflow: hidden !important;
-    margin: 8px 0 10px 0 !important;
+    border-radius: 9px !important;
+    margin: 4px 0 7px !important;
 }
 
 .ConsumoMateriales .cmStackSegment {
-    height: 34px !important;
+    height: 31px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
 .ConsumoMateriales .cmStackBlue {
-    background: #2563EB !important;
+    background: #1677ff !important;
 }
 
 .ConsumoMateriales .cmStackGreen {
-    background: #10B981 !important;
+    background: #0fb58c !important;
 }
 
 .ConsumoMateriales .cmStackOrange {
-    background: #F97316 !important;
+    background: #ff7a00 !important;
 }
 
 .ConsumoMateriales .cmStackText {
-    color: #FFFFFF !important;
-    font-size: 13px !important;
+    color: #ffffff !important;
+    font-size: 0.72rem !important;
     font-weight: 900 !important;
 }
 
+.ConsumoMateriales .cmTipoOrdenList,
+.ConsumoMateriales .cmTipoOrdenList .sapMListUl {
+    width: 100% !important;
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenList .sapMLIB,
+.ConsumoMateriales .cmTipoOrdenList .sapMLIBContent {
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
 .ConsumoMateriales .cmTipoOrdenRow {
-    padding: 8px 0 !important;
-    border-bottom: 1px solid #F1F5F9 !important;
+    width: 100% !important;
+    min-height: 35px !important;
+    padding: 5px 1px !important;
+    box-sizing: border-box !important;
+    border-bottom: 1px solid #eef2f7 !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenLeft,
+.ConsumoMateriales .cmTipoOrdenRight {
+    min-width: 0 !important;
 }
 
 .ConsumoMateriales .cmDot,
 .ConsumoMateriales .cmLegendDot,
 .ConsumoMateriales .cmZoneDot {
-    width: 8px !important;
-    height: 8px !important;
-    min-width: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
+    min-width: 7px !important;
     border-radius: 50% !important;
-    margin-right: 8px !important;
+    margin-right: 6px !important;
 }
 
 .ConsumoMateriales .cmDot[data-estado="Blue"],
 .ConsumoMateriales .cmDot[data-sap-ui-custom-estado="Blue"] {
-    background: #2563EB !important;
+    background: var(--cm-blue) !important;
 }
 
 .ConsumoMateriales .cmDot[data-estado="Green"],
 .ConsumoMateriales .cmDot[data-sap-ui-custom-estado="Green"] {
-    background: #10B981 !important;
+    background: var(--cm-green) !important;
 }
 
 .ConsumoMateriales .cmDot[data-estado="Orange"],
 .ConsumoMateriales .cmDot[data-sap-ui-custom-estado="Orange"] {
-    background: #F97316 !important;
+    background: var(--cm-orange) !important;
 }
 
 .ConsumoMateriales .cmTipoOrdenName,
 .ConsumoMateriales .cmTipoOrdenValue,
 .ConsumoMateriales .cmTipoOrdenPercent {
-    color: #172554 !important;
-    font-size: 10px !important;
+    color: var(--cm-text) !important;
+    font-size: 0.6rem !important;
     font-weight: 800 !important;
+    line-height: 0.78rem !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenName {
+    max-width: 165px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 .ConsumoMateriales .cmTipoOrdenPercent {
-    margin-left: 12px !important;
+    min-width: 35px !important;
+    margin-left: 10px !important;
     color: #475569 !important;
+    text-align: right !important;
 }
 
-/* OT CHART */
-.ConsumoMateriales .cmOtFaltaMaterialCard {
-    min-height: 270px !important;
+/* ==========================================================================
+   CARD: OT AFECTADAS
+   ========================================================================== */
+.ConsumoMateriales .cmOtAnalysisBox {
+    width: 100% !important;
+    min-height: 35px !important;
+    padding: 5px 8px !important;
+    box-sizing: border-box !important;
+    border-radius: 7px !important;
+    background: #f7f9fc !important;
+    margin: 0 0 2px !important;
 }
 
-.ConsumoMateriales .cmAnalysisBox {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 7px !important;
-    margin-bottom: 3px !important;
+.ConsumoMateriales .cmOtAnalysisBox .sapUiIcon {
+    font-size: 0.8rem !important;
+    margin-top: 1px !important;
 }
 
-.ConsumoMateriales .cmAnalysisTitle {
-    color: #172554 !important;
-    font-size: 9px !important;
+.ConsumoMateriales .cmOtAnalysisTitle {
+    color: var(--cm-text) !important;
+    font-size: 0.5rem !important;
+    font-weight: 900 !important;
+    line-height: 0.6rem !important;
+}
+
+.ConsumoMateriales .cmOtAnalysisText {
+    color: var(--cm-muted) !important;
+    font-size: 0.49rem !important;
+    font-weight: 600 !important;
+    line-height: 0.61rem !important;
+}
+
+.ConsumoMateriales .cmOtChart {
+    width: 100% !important;
+    height: 112px !important;
+    min-height: 112px !important;
+    margin: 0 !important;
+}
+
+.ConsumoMateriales .cmOtChartBody {
+    width: 100% !important;
+    height: 112px !important;
+}
+
+.ConsumoMateriales .cmOtAxis {
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 91px !important;
+    padding-top: 1px !important;
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+}
+
+.ConsumoMateriales .cmOtAxisTitle,
+.ConsumoMateriales .cmOtAxisLabel {
+    color: #475569 !important;
+    font-size: 0.48rem !important;
+    font-weight: 700 !important;
+    line-height: 0.55rem !important;
+}
+
+.ConsumoMateriales .cmOtAxisTitle {
+    color: #334155 !important;
     font-weight: 900 !important;
 }
 
-.ConsumoMateriales .cmAnalysisText {
-    color: #64748B !important;
-    font-size: 8.5px !important;
-    line-height: 10px !important;
+.ConsumoMateriales .cmOtPlot {
+    width: calc(100% - 24px) !important;
+    height: 112px !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+    background:
+        linear-gradient(to bottom, rgba(226, 232, 240, 0.75) 1px, transparent 1px) 0 4px / 100% 15px repeat-y !important;
+}
+
+.ConsumoMateriales .cmOtColumn {
+    width: 24% !important;
+    height: 112px !important;
+    justify-content: flex-end !important;
+}
+
+.ConsumoMateriales .cmOtTrack {
+    --cm-point: 40px;
+    position: relative !important;
+    width: 44px !important;
+    height: 87px !important;
+    min-height: 87px !important;
+}
+
+.ConsumoMateriales .cmOtTrack12 {
+    --cm-point: 72px;
+}
+
+.ConsumoMateriales .cmOtTrack6 {
+    --cm-point: 43px;
+}
+
+.ConsumoMateriales .cmOtTrack5 {
+    --cm-point: 36px;
+}
+
+.ConsumoMateriales .cmOtTrack3 {
+    --cm-point: 23px;
+}
+
+.ConsumoMateriales .cmOtMarker {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: var(--cm-point) !important;
+    width: 24px !important;
+    height: 4px !important;
+    border-radius: 10px !important;
+    transform: translateX(-50%) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18) !important;
+}
+
+.ConsumoMateriales .cmOtMarker::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    width: 1px;
+    height: calc(var(--cm-point) - 2px);
+    transform: translateX(-50%);
+    background: rgba(148, 163, 184, 0.35);
+}
+
+.ConsumoMateriales .cmOtValue {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: calc(var(--cm-point) + 6px) !important;
+    transform: translateX(-50%) !important;
+    font-size: 0.59rem !important;
+    font-weight: 900 !important;
+    line-height: 0.7rem !important;
+}
+
+.ConsumoMateriales .cmOtMarkerRed {
+    background: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmOtMarkerOrange {
+    background: #f97316 !important;
+}
+
+.ConsumoMateriales .cmOtMarkerYellow {
+    background: #f4b400 !important;
+}
+
+.ConsumoMateriales .cmOtMarkerPurple {
+    background: #7c3aed !important;
+}
+
+.ConsumoMateriales .cmOtValueRed {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmOtValueOrange {
+    color: #f97316 !important;
+}
+
+.ConsumoMateriales .cmOtValueYellow {
+    color: #d79900 !important;
+}
+
+.ConsumoMateriales .cmOtValuePurple {
+    color: #7c3aed !important;
+}
+
+.ConsumoMateriales .cmOtLabel {
+    display: block !important;
+    width: 78px !important;
+    min-height: 20px !important;
+    color: #334155 !important;
+    font-size: 0.49rem !important;
+    font-weight: 800 !important;
+    line-height: 0.58rem !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.ConsumoMateriales .cmOtLabelTwo {
+    white-space: normal !important;
 }
 
 .ConsumoMateriales .cmOtLegend {
-    gap: 8px !important;
-    margin-top: 4px !important;
+    width: 100% !important;
+    display: flex !important;
+    gap: 3px 11px !important;
+    margin: 1px 0 0 !important;
 }
 
 .ConsumoMateriales .cmOtLegend .sapMText {
     color: #475569 !important;
-    font-size: 8.5px !important;
+    font-size: 0.48rem !important;
+    font-weight: 700 !important;
+    line-height: 0.6rem !important;
 }
 
-/* TABLE CARDS */
+.ConsumoMateriales .cmCardLink {
+    color: var(--cm-blue) !important;
+    font-size: 0.58rem !important;
+    font-weight: 900 !important;
+    margin-top: 4px !important;
+}
+
+/* ==========================================================================
+   FOOTERS INFORMATIVOS
+   ========================================================================== */
+.ConsumoMateriales .cmInfoFooter {
+    width: 100% !important;
+    min-height: 30px !important;
+    margin-top: auto !important;
+    padding: 6px 8px !important;
+    box-sizing: border-box !important;
+    border-radius: 7px !important;
+    background: #f5f8fd !important;
+}
+
+.ConsumoMateriales .cmInfoFooter .sapUiIcon {
+    min-width: 14px !important;
+    margin-right: 6px !important;
+    font-size: 0.75rem !important;
+}
+
+.ConsumoMateriales .cmInfoFooter .sapMText {
+    color: #3776cf !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    line-height: 0.65rem !important;
+}
+
+.ConsumoMateriales .cmInfoFooterGreen .sapMText {
+    color: #159269 !important;
+}
+
+.ConsumoMateriales .cmInfoFooterPurple .sapMText {
+    color: #7046bd !important;
+}
+
+/* ==========================================================================
+   TABLAS DE DETALLE
+   ========================================================================== */
 .ConsumoMateriales .cmTableCard {
-    min-height: 215px !important;
+    min-height: 220px !important;
     padding-bottom: 10px !important;
 }
 
 .ConsumoMateriales .cmCircleIcon {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
+    width: 27px !important;
+    height: 27px !important;
+    min-width: 27px !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-right: 8px !important;
+    margin-right: 7px !important;
+}
+
+.ConsumoMateriales .cmCircleIcon .sapUiIcon {
+    font-size: 0.82rem !important;
 }
 
 .ConsumoMateriales .cmCircleIconBlue {
-    background: #DBEAFE !important;
+    background: #e4f0ff !important;
 }
 
 .ConsumoMateriales .cmCircleIconBlue .sapUiIcon {
-    color: #2563EB !important;
+    color: var(--cm-blue) !important;
 }
 
 .ConsumoMateriales .cmCircleIconGreen {
-    background: #DCFCE7 !important;
+    background: #dcfce7 !important;
 }
 
 .ConsumoMateriales .cmCircleIconGreen .sapUiIcon {
-    color: #10B981 !important;
+    color: var(--cm-green) !important;
 }
 
 .ConsumoMateriales .cmCircleIconPurple {
-    background: #EDE9FE !important;
+    background: #eee7ff !important;
 }
 
 .ConsumoMateriales .cmCircleIconPurple .sapUiIcon {
-    color: #6D28D9 !important;
+    color: var(--cm-purple) !important;
 }
 
 .ConsumoMateriales .cmMiniTable {
-    border-radius: 8px !important;
+    width: 100% !important;
     overflow: hidden !important;
-    border: 1px solid #E2E8F0 !important;
+    border: 1px solid #e6ebf2 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+}
+
+.ConsumoMateriales .cmMiniTable .sapMListTbl {
+    width: 100% !important;
+    table-layout: fixed !important;
 }
 
 .ConsumoMateriales .cmMiniTable .sapMListTblHeader,
+.ConsumoMateriales .cmMiniTable .sapMListTblHeaderCell,
 .ConsumoMateriales .cmMiniTable .sapMListTbl th {
-    background: #F8FAFC !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    padding: 2px 5px !important;
+    background: #f8fafc !important;
+    border-color: #e8edf4 !important;
 }
 
 .ConsumoMateriales .cmMiniTable .sapMListTblHeader .sapMText,
+.ConsumoMateriales .cmMiniTable .sapMListTblHeaderCell .sapMText,
 .ConsumoMateriales .cmMiniTable .sapMListTbl th .sapMText {
-    color: #172554 !important;
-    font-size: 8.5px !important;
+    color: #334155 !important;
+    font-size: 0.5rem !important;
     font-weight: 900 !important;
+    line-height: 0.62rem !important;
+}
+
+.ConsumoMateriales .cmMiniTable .sapMListTblRow {
+    height: 25px !important;
+    min-height: 25px !important;
+}
+
+.ConsumoMateriales .cmMiniTable .sapMListTblCell {
+    height: 25px !important;
+    min-height: 25px !important;
+    padding: 2px 5px !important;
+    vertical-align: middle !important;
+    border-color: #eef2f6 !important;
 }
 
 .ConsumoMateriales .cmMiniTable .sapMListTblCell .sapMText {
-    color: #172554 !important;
-    font-size: 9px !important;
+    display: block !important;
+    max-width: 100% !important;
+    color: #27364f !important;
+    font-size: 0.5rem !important;
     font-weight: 700 !important;
+    line-height: 0.63rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-/* HEATMAP */
+/* ==========================================================================
+   HEATMAP
+   ========================================================================== */
 .ConsumoMateriales .cmHeatmapCard {
     width: 100% !important;
-    min-height: 235px !important;
+    min-height: 215px !important;
+    margin-bottom: 0 !important;
 }
 
 .ConsumoMateriales .cmHeatmapTitle {
-    margin-left: 8px !important;
+    margin-left: 7px !important;
 }
 
 .ConsumoMateriales .cmHeatmapTable {
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
+    width: 100% !important;
     overflow: hidden !important;
+    border: 1px solid #e4eaf2 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+}
+
+.ConsumoMateriales .cmHeatmapTable .sapMListTbl {
+    width: 100% !important;
+    table-layout: fixed !important;
 }
 
 .ConsumoMateriales .cmHeatmapTable .sapMListTblHeader,
+.ConsumoMateriales .cmHeatmapTable .sapMListTblHeaderCell,
 .ConsumoMateriales .cmHeatmapTable .sapMListTbl th {
-    background: #F8FAFC !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 3px 6px !important;
+    background: #f8fafc !important;
+    border: 0 !important;
 }
 
 .ConsumoMateriales .cmHeatmapTable .sapMListTblHeader .sapMText,
+.ConsumoMateriales .cmHeatmapTable .sapMListTblHeaderCell .sapMText,
 .ConsumoMateriales .cmHeatmapTable .sapMListTbl th .sapMText {
-    color: #172554 !important;
-    font-size: 10px !important;
+    display: block !important;
+    color: #283b5b !important;
+    font-size: 0.58rem !important;
     font-weight: 900 !important;
+    line-height: 0.68rem !important;
     text-align: center !important;
+    white-space: pre-line !important;
+}
+
+.ConsumoMateriales .cmHeatmapTable .sapMListTblRow,
+.ConsumoMateriales .cmHeatmapTable .sapMListTblCell {
+    height: 28px !important;
+    min-height: 28px !important;
+}
+
+.ConsumoMateriales .cmHeatmapTable .sapMListTblCell {
+    padding: 0 !important;
+    border: 0 !important;
+    vertical-align: middle !important;
 }
 
 .ConsumoMateriales .cmZonaNameCell {
-    padding-left: 10px !important;
+    height: 28px !important;
+    padding-left: 11px !important;
+    box-sizing: border-box !important;
 }
 
 .ConsumoMateriales .cmZoneDot[data-zona="norte"],
 .ConsumoMateriales .cmZoneDot[data-sap-ui-custom-zona="norte"] {
-    background: #EF4444 !important;
+    background: #ef4444 !important;
 }
 
 .ConsumoMateriales .cmZoneDot[data-zona="centro"],
 .ConsumoMateriales .cmZoneDot[data-sap-ui-custom-zona="centro"] {
-    background: #2563EB !important;
+    background: #2563eb !important;
 }
 
 .ConsumoMateriales .cmZoneDot[data-zona="sur"],
 .ConsumoMateriales .cmZoneDot[data-sap-ui-custom-zona="sur"] {
-    background: #84CC16 !important;
+    background: #84cc16 !important;
 }
 
 .ConsumoMateriales .cmZoneDot[data-zona="este"],
 .ConsumoMateriales .cmZoneDot[data-sap-ui-custom-zona="este"] {
-    background: #6D28D9 !important;
+    background: #7c3aed !important;
 }
 
 .ConsumoMateriales .cmZoneDot[data-zona="oeste"],
 .ConsumoMateriales .cmZoneDot[data-sap-ui-custom-zona="oeste"] {
-    background: #14B8A6 !important;
+    background: #0f9f8f !important;
 }
 
 .ConsumoMateriales .cmHeatmapZone,
 .ConsumoMateriales .cmHeatTotal {
-    color: #172554 !important;
-    font-size: 11px !important;
+    color: #233654 !important;
+    font-size: 0.61rem !important;
     font-weight: 900 !important;
+    line-height: 0.72rem !important;
+}
+
+.ConsumoMateriales .cmHeatTotal {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
 }
 
 .ConsumoMateriales .cmHeatCell {
     display: block !important;
-    text-align: center !important;
-    padding: 8px !important;
-    color: #172554 !important;
-    font-size: 11px !important;
+    width: 100% !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    box-sizing: border-box !important;
+    color: #20314d !important;
+    font-size: 0.61rem !important;
     font-weight: 900 !important;
+    text-align: center !important;
+    background: #f3f6f9 !important;
 }
 
-.ConsumoMateriales .cmHeatHigh {
-    background: linear-gradient(90deg, #F87171 0%, #F97316 100%) !important;
+
+/* Colores del heatmap con los mismos campos que ya existían en consumoZona.
+   Se usa zonaKey para no requerir propiedades adicionales en el modelo. */
+.ConsumoMateriales .cmHeatRefacciones[data-zona="norte"],
+.ConsumoMateriales .cmHeatRefacciones[data-sap-ui-custom-zona="norte"],
+.ConsumoMateriales .cmHeatConsumibles[data-zona="norte"],
+.ConsumoMateriales .cmHeatConsumibles[data-sap-ui-custom-zona="norte"],
+.ConsumoMateriales .cmHeatLubricantes[data-zona="norte"],
+.ConsumoMateriales .cmHeatLubricantes[data-sap-ui-custom-zona="norte"] {
+    background: linear-gradient(90deg, #ff5c5c 0%, #ff7753 100%) !important;
 }
 
-.ConsumoMateriales .cmHeatMediumHigh {
-    background: linear-gradient(90deg, #FB923C 0%, #FDE047 100%) !important;
+.ConsumoMateriales .cmHeatHerramientas[data-zona="norte"],
+.ConsumoMateriales .cmHeatHerramientas[data-sap-ui-custom-zona="norte"],
+.ConsumoMateriales .cmHeatRefacciones[data-zona="centro"],
+.ConsumoMateriales .cmHeatRefacciones[data-sap-ui-custom-zona="centro"],
+.ConsumoMateriales .cmHeatConsumibles[data-zona="centro"],
+.ConsumoMateriales .cmHeatConsumibles[data-sap-ui-custom-zona="centro"] {
+    background: linear-gradient(90deg, #ff9945 0%, #ffc458 100%) !important;
 }
 
-.ConsumoMateriales .cmHeatMedium {
-    background: linear-gradient(90deg, #FDE047 0%, #BEF264 100%) !important;
+.ConsumoMateriales .cmHeatLubricantes[data-zona="centro"],
+.ConsumoMateriales .cmHeatLubricantes[data-sap-ui-custom-zona="centro"] {
+    background: linear-gradient(90deg, #ff7753 0%, #ff9f45 100%) !important;
 }
 
-.ConsumoMateriales .cmHeatLow {
-    background: linear-gradient(90deg, #BEF264 0%, #86EFAC 100%) !important;
+.ConsumoMateriales .cmHeatHerramientas[data-zona="centro"],
+.ConsumoMateriales .cmHeatHerramientas[data-sap-ui-custom-zona="centro"] {
+    background: linear-gradient(90deg, #ffc458 0%, #ffd968 100%) !important;
+}
+
+.ConsumoMateriales .cmHeatRefacciones[data-zona="sur"],
+.ConsumoMateriales .cmHeatRefacciones[data-sap-ui-custom-zona="sur"] {
+    background: linear-gradient(90deg, #ffc458 0%, #ffe06b 100%) !important;
+}
+
+.ConsumoMateriales .cmHeatConsumibles[data-zona="sur"],
+.ConsumoMateriales .cmHeatConsumibles[data-sap-ui-custom-zona="sur"],
+.ConsumoMateriales .cmHeatLubricantes[data-zona="sur"],
+.ConsumoMateriales .cmHeatLubricantes[data-sap-ui-custom-zona="sur"],
+.ConsumoMateriales .cmHeatHerramientas[data-zona="sur"],
+.ConsumoMateriales .cmHeatHerramientas[data-sap-ui-custom-zona="sur"] {
+    background: linear-gradient(90deg, #ffe06b 0%, #d7ed7b 100%) !important;
+}
+
+.ConsumoMateriales .cmHeatRefacciones[data-zona="este"],
+.ConsumoMateriales .cmHeatRefacciones[data-sap-ui-custom-zona="este"],
+.ConsumoMateriales .cmHeatConsumibles[data-zona="este"],
+.ConsumoMateriales .cmHeatConsumibles[data-sap-ui-custom-zona="este"],
+.ConsumoMateriales .cmHeatLubricantes[data-zona="este"],
+.ConsumoMateriales .cmHeatLubricantes[data-sap-ui-custom-zona="este"],
+.ConsumoMateriales .cmHeatHerramientas[data-zona="este"],
+.ConsumoMateriales .cmHeatHerramientas[data-sap-ui-custom-zona="este"] {
+    background: linear-gradient(90deg, #c7e985 0%, #93dba0 100%) !important;
+}
+
+.ConsumoMateriales .cmHeatRefacciones[data-zona="oeste"],
+.ConsumoMateriales .cmHeatRefacciones[data-sap-ui-custom-zona="oeste"],
+.ConsumoMateriales .cmHeatConsumibles[data-zona="oeste"],
+.ConsumoMateriales .cmHeatConsumibles[data-sap-ui-custom-zona="oeste"],
+.ConsumoMateriales .cmHeatLubricantes[data-zona="oeste"],
+.ConsumoMateriales .cmHeatLubricantes[data-sap-ui-custom-zona="oeste"],
+.ConsumoMateriales .cmHeatHerramientas[data-zona="oeste"],
+.ConsumoMateriales .cmHeatHerramientas[data-sap-ui-custom-zona="oeste"] {
+    background: linear-gradient(90deg, #a8dfb0 0%, #79d0a2 100%) !important;
 }
 
 .ConsumoMateriales .cmHeatLegend {
-    gap: 55px !important;
-    margin-top: 14px !important;
+    width: 100% !important;
+    display: flex !important;
+    gap: 10px 42px !important;
+    margin-top: 9px !important;
 }
 
 .ConsumoMateriales .cmHeatLegend .sapMText {
-    color: #475569 !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
+    color: #536277 !important;
+    font-size: 0.55rem !important;
+    font-weight: 700 !important;
+    line-height: 0.68rem !important;
 }
 
-/* FOOTERS */
-.ConsumoMateriales .cmInfoFooter {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    margin-top: 8px !important;
-}
-
-.ConsumoMateriales .cmInfoFooter .sapMText {
-    color: #2563EB !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-}
-
-/* LINKS */
-.ConsumoMateriales .cmCardLink {
-    color: #2563EB !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    margin-top: 8px !important;
-}
-
-/* COLORS */
+/* ==========================================================================
+   COLORES UTILITARIOS
+   ========================================================================== */
 .ConsumoMateriales .cmBlueIcon,
 .ConsumoMateriales .cmBlueText {
-    color: #2563EB !important;
+    color: var(--cm-blue) !important;
 }
 
 .ConsumoMateriales .cmGreenIcon,
 .ConsumoMateriales .cmGreenText {
-    color: #10B981 !important;
-}
-
-.ConsumoMateriales .cmPurpleIcon,
-.ConsumoMateriales .cmPurpleText {
-    color: #6D28D9 !important;
+    color: var(--cm-green) !important;
 }
 
 .ConsumoMateriales .cmOrangeIcon,
 .ConsumoMateriales .cmOrangeText {
-    color: #F97316 !important;
+    color: var(--cm-orange) !important;
 }
 
 .ConsumoMateriales .cmRedIcon,
 .ConsumoMateriales .cmRedText {
-    color: #F43F5E !important;
+    color: var(--cm-red) !important;
+}
+
+.ConsumoMateriales .cmPurpleIcon,
+.ConsumoMateriales .cmPurpleText {
+    color: var(--cm-purple) !important;
 }
 
 .ConsumoMateriales .cmRedBg {
-    background: #EF4444 !important;
+    background: #ef4444 !important;
 }
 
 .ConsumoMateriales .cmOrangeBg {
-    background: #F97316 !important;
+    background: #f97316 !important;
 }
 
 .ConsumoMateriales .cmYellowBg {
-    background: #F59E0B !important;
+    background: #f4b400 !important;
 }
 
 .ConsumoMateriales .cmPurpleBg {
-    background: #6D28D9 !important;
+    background: #7c3aed !important;
 }
 
 .ConsumoMateriales .cmLightGreenBg {
-    background: #A3E635 !important;
+    background: #9ed64d !important;
 }
 
 .ConsumoMateriales .cmTealBg {
-    background: #14B8A6 !important;
+    background: #0f9f8f !important;
 }
 
-/* VIZ */
-.ConsumoMateriales .sapVizFrame,
-.ConsumoMateriales .v-m-root,
-.ConsumoMateriales .v-background-body {
-    background: transparent !important;
-    fill: transparent !important;
-}
-
-/* RESPONSIVE */
-@media screen and (max-width: 1350px) {
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media screen and (max-width: 1450px) {
     .ConsumoMateriales .cmFiltersBar {
-        grid-template-columns: 150px 142px 142px 130px !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
 
-    .ConsumoMateriales .cmCardsRow,
-    .ConsumoMateriales .cmKpiRow {
-        flex-wrap: wrap !important;
+    .ConsumoMateriales .cmApplyButton {
+        width: 100% !important;
+        min-width: 0 !important;
     }
 
-    .ConsumoMateriales .cmCard,
-    .ConsumoMateriales .cmKpiCard {
-        flex: 1 1 calc(50% - 12px) !important;
-        min-width: 360px !important;
+    .ConsumoMateriales .cmApplyButton .sapMBtnInner {
+        width: 100% !important;
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1180px) {
+
+    .ConsumoMateriales .cmKpiRow,
+    .ConsumoMateriales .cmCardsRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .ConsumoMateriales .cmCardsRowPrimary>.sapMFlexItem:last-child,
+    .ConsumoMateriales .cmCardsRowTables>.sapMFlexItem:last-child {
+        grid-column: 1 / -1 !important;
+    }
+
+    .ConsumoMateriales .cmHeatmapCard {
+        overflow-x: auto !important;
+    }
+
+    .ConsumoMateriales .cmHeatmapTable {
+        min-width: 780px !important;
+    }
+}
+
+@media screen and (max-width: 820px) {
+    .ConsumoMateriales .cmPageContainer {
+        padding: 12px !important;
+    }
+
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .ConsumoMateriales .cmKpiRow,
+    .ConsumoMateriales .cmCardsRow {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ConsumoMateriales .cmCardsRowPrimary>.sapMFlexItem:last-child,
+    .ConsumoMateriales .cmCardsRowTables>.sapMFlexItem:last-child {
+        grid-column: auto !important;
+    }
+
+    .ConsumoMateriales .cmKpiCard {
+        height: auto !important;
+        min-height: 94px !important;
+    }
+
+    .ConsumoMateriales .cmPrimaryCard,
+    .ConsumoMateriales .cmTableCard {
+        min-height: auto !important;
+    }
+}
+
+@media screen and (max-width: 520px) {
     .ConsumoMateriales .cmFiltersBar {
         grid-template-columns: 1fr !important;
     }
 
-    .ConsumoMateriales .cmCard,
-    .ConsumoMateriales .cmKpiCard {
-        flex: 1 1 100% !important;
-        min-width: 100% !important;
+    .ConsumoMateriales .cmMainTitle {
+        font-size: 1.5rem !important;
+        line-height: 1.7rem !important;
+    }
+
+    .ConsumoMateriales .cmKpiIcon {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+    }
+
+    .ConsumoMateriales .cmKpiIcon .sapUiIcon {
+        font-size: 1.45rem !important;
+    }
+
+    .ConsumoMateriales .cmMaterialPlanBar,
+    .ConsumoMateriales .cmMaterialRealBar {
+        width: 62px !important;
+        min-width: 62px !important;
+    }
+
+    .ConsumoMateriales .cmMaterialHeaderText,
+    .ConsumoMateriales .cmMaterialName,
+    .ConsumoMateriales .cmMaterialValue,
+    .ConsumoMateriales .cmMaterialVariation {
+        font-size: 0.49rem !important;
     }
 }
+
 /* ==========================================================================
-   CONSUMO MATERIALES - FIX CARD CONSUMO VS PLAN
+   AJUSTE FINAL: FILTROS COMPACTOS COMO EL DISEÑO DE REFERENCIA
+   Se agrega al final para reemplazar únicamente el diseño de los filtros.
    ========================================================================== */
 
-.ConsumoMateriales .cmMaterialVsPlanCardNew {
-    min-height: 270px !important;
-    padding: 12px !important;
+.ConsumoMateriales .cmFiltersBar {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        126px 150px 150px 116px 126px 142px 126px !important;
+    column-gap: 10px !important;
+    row-gap: 8px !important;
+    justify-content: start !important;
+    align-items: end !important;
+    margin: 0 0 11px !important;
+}
+
+.ConsumoMateriales .cmFiltersBar>.sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Cada filtro se convierte en una sola tarjeta compacta */
+.ConsumoMateriales .cmFilterBox {
+    width: 100% !important;
+    height: 58px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 7px 10px 5px !important;
+    box-sizing: border-box !important;
     overflow: hidden !important;
+    border: 1px solid #e1e8f2 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.055) !important;
+}
+
+/* Etiqueta dentro de la tarjeta */
+.ConsumoMateriales .cmFilterLabel {
+    display: block !important;
+    height: 13px !important;
+    min-height: 13px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #66758c !important;
+    font-size: 0.55rem !important;
+    font-weight: 800 !important;
+    line-height: 13px !important;
+}
+
+/* Altura compacta de Select y DatePicker */
+.ConsumoMateriales .cmFilterBox .sapMSlt,
+.ConsumoMateriales .cmFilterBox .sapMInputBase {
+    width: 100% !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+}
+
+/* El control ya no dibuja una segunda caja dentro de la tarjeta */
+.ConsumoMateriales .cmFilterBox .sapMSlt,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseContentWrapper {
+    height: 30px !important;
+    min-height: 30px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Texto principal del filtro */
+.ConsumoMateriales .cmFilterBox .sapMSltLabel,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseInner {
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 25px 0 0 !important;
+    color: #14213d !important;
+    background: transparent !important;
+    font-size: 0.66rem !important;
+    font-weight: 800 !important;
+    line-height: 30px !important;
+}
+
+/* Flecha de Select */
+.ConsumoMateriales .cmFilterBox .sapMSltArrow {
+    width: 25px !important;
+    height: 30px !important;
+    color: #173d73 !important;
+    font-size: 0.72rem !important;
+    line-height: 30px !important;
+}
+
+/* Icono de calendario */
+.ConsumoMateriales .cmFilterBox .sapMInputBaseIconContainer {
+    width: 26px !important;
+    height: 30px !important;
+}
+
+.ConsumoMateriales .cmFilterBox .sapMInputBaseIcon {
+    width: 26px !important;
+    height: 30px !important;
+    min-width: 26px !important;
+    color: #173d73 !important;
+    font-size: 0.82rem !important;
+    line-height: 30px !important;
+    background: transparent !important;
+}
+
+/* Hover y foco sobre la tarjeta completa */
+.ConsumoMateriales .cmFilterBox:hover {
+    border-color: #b9c8dc !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.075) !important;
+}
+
+.ConsumoMateriales .cmFilterBox:focus-within {
+    border-color: #1677ff !important;
+    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12) !important;
+}
+
+/* Botón con la misma altura de las tarjetas */
+.ConsumoMateriales .cmApplyButton {
+    width: 126px !important;
+    min-width: 126px !important;
+    max-width: 126px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: end !important;
+}
+
+.ConsumoMateriales .cmApplyButton .sapMBtnInner {
+    width: 100% !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: #1677ff !important;
+    box-shadow: 0 6px 14px rgba(22, 119, 255, 0.23) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-shadow: none !important;
+}
+
+.ConsumoMateriales .cmApplyButton .sapMBtnContent,
+.ConsumoMateriales .cmApplyButton .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.68rem !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmApplyButton:hover .sapMBtnInner {
+    background: #0b6ee8 !important;
+}
+
+/* Mantener una sola fila en escritorio y laptop */
+@media screen and (min-width: 1051px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns:
+            126px 150px 150px 116px 126px 142px 126px !important;
+    }
+}
+
+/* Tablet */
+@media screen and (max-width: 1050px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .ConsumoMateriales .cmApplyButton {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+}
+
+/* Pantalla pequeña */
+@media screen and (max-width: 720px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Celular */
+@media screen and (max-width: 460px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ==========================================================================
+   AJUSTE DEFINITIVO DE FILTROS
+   Referencia visual: vista "Horas trabajadas"
+   ========================================================================== */
+
+/* La fila vuelve a ocupar todo el ancho disponible */
+.ConsumoMateriales .cmFiltersBar {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        1.00fr 1.12fr 1.12fr 0.88fr 0.92fr 1.02fr 138px !important;
+    column-gap: 10px !important;
+    row-gap: 8px !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    margin: 0 0 11px !important;
+}
+
+/* Tarjeta compacta de cada filtro */
+.ConsumoMateriales .cmFilterBox {
+    width: 100% !important;
+    height: 62px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 7px 11px 5px !important;
+    box-sizing: border-box !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.045) !important;
+}
+
+/* Etiqueta dentro de la tarjeta */
+.ConsumoMateriales .cmFilterLabel {
+    height: 14px !important;
+    min-height: 14px !important;
+    margin: 0 !important;
+    color: #64748b !important;
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+    line-height: 14px !important;
+}
+
+/* Select y DatePicker sin una segunda caja interior */
+.ConsumoMateriales .cmFilterBox .sapMSlt,
+.ConsumoMateriales .cmFilterBox .sapMInputBase,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseContentWrapper {
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.ConsumoMateriales .cmFilterBox .sapMSltLabel,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseInner {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 28px 0 0 !important;
+    color: #14213d !important;
+    background: transparent !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    line-height: 34px !important;
+}
+
+/* Flecha e icono del calendario */
+.ConsumoMateriales .cmFilterBox .sapMSltArrow,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseIcon,
+.ConsumoMateriales .cmFilterBox .sapMInputBaseIconContainer {
+    width: 28px !important;
+    height: 34px !important;
+    min-width: 28px !important;
+    color: #15447f !important;
+    background: transparent !important;
+    font-size: 0.8rem !important;
+    line-height: 34px !important;
+}
+
+/* Botón más bajo, como en "Horas trabajadas" */
+.ConsumoMateriales .cmApplyButton {
+    width: 138px !important;
+    min-width: 138px !important;
+    max-width: 138px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: center !important;
+}
+
+.ConsumoMateriales .cmApplyButton .sapMBtnInner {
+    width: 100% !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: #1677ff !important;
+    box-shadow: 0 6px 14px rgba(22, 119, 255, 0.23) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-shadow: none !important;
+}
+
+.ConsumoMateriales .cmApplyButton .sapMBtnContent,
+.ConsumoMateriales .cmApplyButton .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.69rem !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmApplyButton:hover .sapMBtnInner {
+    background: #0b6ee8 !important;
+}
+
+/* Mantener una sola fila en escritorio */
+@media screen and (min-width: 1051px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns:
+            1.00fr 1.12fr 1.12fr 0.88fr 0.92fr 1.02fr 138px !important;
+    }
+}
+
+/* Tablet */
+@media screen and (max-width: 1050px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .ConsumoMateriales .cmApplyButton {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+}
+
+/* Pantalla pequeña */
+@media screen and (max-width: 720px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Celular */
+@media screen and (max-width: 460px) {
+    .ConsumoMateriales .cmFiltersBar {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Icono de caja del material crítico */
+.ConsumoMateriales .cmKpiIconOrange {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin-right: 13px !important;
+
+    border: 1px solid #ffedd5 !important;
+    border-radius: 50% !important;
+    background: #fff7ed !important;
+}
+
+.ConsumoMateriales .cmKpiIconOrange .sapUiIcon {
+    color: #ff8a00 !important;
+    font-size: 1.65rem !important;
+}
+
+.ConsumoMateriales .cmKpiDeltaRow {
+    display: flex !important;
+    align-items: baseline !important;
+}
+
+.ConsumoMateriales .cmKpiDeltaDescription {
+    margin-left: 5px !important;
+    color: #64748b !important;
+    font-size: 0.61rem !important;
+    font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   CORRECCIÓN FINAL: CONSUMO DE MATERIALES VS PLAN
+   ========================================================================== */
+
+/* Encabezado de la tarjeta */
+.ConsumoMateriales .cmMaterialCardTitleRow {
+    width: 100% !important;
+    min-height: 28px !important;
+    margin-bottom: 5px !important;
+}
+
+/* Icono de información junto al título */
+.ConsumoMateriales .cmMaterialTitleInfo {
+    width: 25px !important;
+    height: 25px !important;
+    min-width: 25px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin-right: 8px !important;
+
+    border-radius: 50% !important;
+    background: #eaf3ff !important;
+}
+
+.ConsumoMateriales .cmMaterialTitleInfo .sapUiIcon {
+    color: #1677ff !important;
+    font-size: 0.82rem !important;
+}
+
+/* Las mismas columnas para encabezado y filas */
+.ConsumoMateriales .cmMaterialHeader,
+.ConsumoMateriales .cmMaterialRow {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns:
+        minmax(0, 1.65fr) minmax(82px, 1fr) minmax(82px, 1fr) 62px !important;
+
+    column-gap: 12px !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Eliminar tamaños generados anteriormente por FlexBox */
+.ConsumoMateriales .cmMaterialHeader>.sapMFlexItem,
+.ConsumoMateriales .cmMaterialRow>.sapMFlexItem {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex-basis: auto !important;
 }
 
 /* Encabezado de columnas */
-.ConsumoMateriales .cmMaterialNewHeader {
+.ConsumoMateriales .cmMaterialHeader {
+    height: 24px !important;
+    min-height: 24px !important;
+    margin: 2px 0 3px !important;
+}
+
+.ConsumoMateriales .cmMaterialHeaderText {
+    display: block !important;
     width: 100% !important;
-    margin: 8px 0 6px 0 !important;
-    padding: 0 !important;
-}
 
-.ConsumoMateriales .cmMaterialNewHeaderText {
     color: #475569 !important;
-    font-size: 9px !important;
+    font-size: 0.55rem !important;
     font-weight: 900 !important;
-    line-height: 11px !important;
-    white-space: nowrap !important;
+    line-height: 24px !important;
 }
 
-.ConsumoMateriales .cmMaterialNewCenter {
+.ConsumoMateriales .cmMaterialHeaderCenter {
     text-align: center !important;
 }
 
-.ConsumoMateriales .cmMaterialNewRight {
-    text-align: right !important;
+/* Filas */
+.ConsumoMateriales .cmMaterialRow {
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 1px 0 !important;
 }
 
-/* Lista */
-.ConsumoMateriales .cmMaterialNewList {
+/* Nombre e icono */
+.ConsumoMateriales .cmMaterialNameBox {
     width: 100% !important;
+    height: 40px !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding-right: 4px !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialIcon {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    margin-right: 8px !important;
+
+    color: #4285f4 !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+}
+
+.ConsumoMateriales .cmMaterialName {
+    min-width: 0 !important;
+
+    color: #14213d !important;
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
+    line-height: 0.72rem !important;
+}
+
+/* =========================================================
+   GOTA AZUL - CARD "Consumo de materiales vs plan"
+   ========================================================= */
+.ConsumoMateriales .cmMaterialDrop {
+    position: relative !important;
+    display: inline-block !important;
+    flex: 0 0 18px !important;
+
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+
+    margin-right: 12px !important;
+    margin-left: 2px !important;
+
+    background: linear-gradient(180deg, #dbeeff 0%, #8fc2ff 50%, #5aa2ff 100%) !important;
+    border-radius: 60% 60% 70% 70% !important;
+
+    transform: rotate(45deg) !important;
+
+    box-shadow:
+        inset -2px -2px 4px rgba(255, 255, 255, 0.45),
+        inset 2px 2px 3px rgba(255, 255, 255, 0.15),
+        0 2px 8px rgba(90, 162, 255, 0.28) !important;
+}
+
+/* brillo de la gota */
+.ConsumoMateriales .cmMaterialDrop::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 3px !important;
+    left: 3px !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* evita que se deforme dentro del renglón */
+.ConsumoMateriales .cmMaterialNameBox .cmMaterialDrop {
+    align-self: center !important;
+}
+
+/* Plan y Real */
+.ConsumoMateriales .cmMaterialMeasure {
+    width: 100% !important;
+    height: 40px !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialValue {
+    width: 100% !important;
+
+    margin: 0 0 4px !important;
+
+    color: #14213d !important;
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+    line-height: 0.7rem !important;
+    white-space: nowrap !important;
+}
+
+/* Barras */
+.ConsumoMateriales .cmMaterialPlanBar,
+.ConsumoMateriales .cmMaterialRealBar {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 5px !important;
+    min-height: 5px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+/* Fondo de las barras */
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPI,
+.ConsumoMateriales .cmMaterialRealBar .sapMPI {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Barra gris de Plan */
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI .sapMPIBar {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #8d99a8 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Barra azul de Real */
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI .sapMPIBar {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #1677ff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Quitar textos y puntos de las barras */
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIText,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIText,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPITextLeft,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPITextRight,
+.ConsumoMateriales .cmMaterialRealBar .sapMPITextLeft,
+.ConsumoMateriales .cmMaterialRealBar .sapMPITextRight {
+    display: none !important;
+}
+
+/* Quitar marcadores o puntos generados por el tema */
+.ConsumoMateriales .cmMaterialPlanBar::before,
+.ConsumoMateriales .cmMaterialPlanBar::after,
+.ConsumoMateriales .cmMaterialRealBar::before,
+.ConsumoMateriales .cmMaterialRealBar::after,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar::before,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar::after,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar::before,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar::after,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBarRemaining::before,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBarRemaining::after,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBarRemaining::before,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBarRemaining::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Variación perfectamente centrada */
+.ConsumoMateriales .cmMaterialVariation {
+    width: 100% !important;
+    height: 40px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #14213d !important;
+    font-size: 0.61rem !important;
+    font-weight: 900 !important;
+    line-height: normal !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation[data-estado="Error"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Error"] {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation[data-estado="Success"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Success"] {
+    color: #06a66a !important;
+}
+
+/* Pie informativo */
+.ConsumoMateriales .cmMaterialInfoFooter {
+    min-height: 30px !important;
+    margin-top: auto !important;
+    padding: 6px 9px !important;
+    background: #f5f8fd !important;
+}
+
+.ConsumoMateriales .cmMaterialFooterText {
+    color: #3776cf !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   CORRECCIÓN FINAL: CONSUMO DE MATERIALES VS PLAN
+   ========================================================================== */
+
+/* Encabezado de la tarjeta */
+.ConsumoMateriales .cmMaterialCardTitleRow {
+    width: 100% !important;
+    min-height: 28px !important;
+    margin-bottom: 5px !important;
+}
+
+/* Icono de información junto al título */
+.ConsumoMateriales .cmMaterialTitleInfo {
+    width: 25px !important;
+    height: 25px !important;
+    min-width: 25px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin-right: 8px !important;
+
+    border-radius: 50% !important;
+    background: #eaf3ff !important;
+}
+
+.ConsumoMateriales .cmMaterialTitleInfo .sapUiIcon {
+    color: #1677ff !important;
+    font-size: 0.82rem !important;
+}
+
+/* Las mismas columnas para encabezado y filas */
+.ConsumoMateriales .cmMaterialHeader,
+.ConsumoMateriales .cmMaterialRow {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns:
+        minmax(0, 1.65fr) minmax(82px, 1fr) minmax(82px, 1fr) 62px !important;
+
+    column-gap: 12px !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Eliminar tamaños generados anteriormente por FlexBox */
+.ConsumoMateriales .cmMaterialHeader>.sapMFlexItem,
+.ConsumoMateriales .cmMaterialRow>.sapMFlexItem {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex-basis: auto !important;
+}
+
+/* Encabezado de columnas */
+.ConsumoMateriales .cmMaterialHeader {
+    height: 24px !important;
+    min-height: 24px !important;
+    margin: 2px 0 3px !important;
+}
+
+.ConsumoMateriales .cmMaterialHeaderText {
+    display: block !important;
+    width: 100% !important;
+
+    color: #475569 !important;
+    font-size: 0.55rem !important;
+    font-weight: 900 !important;
+    line-height: 24px !important;
+}
+
+.ConsumoMateriales .cmMaterialHeaderCenter {
+    text-align: center !important;
+}
+
+/* Filas */
+.ConsumoMateriales .cmMaterialRow {
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 1px 0 !important;
+}
+
+/* Nombre e icono */
+.ConsumoMateriales .cmMaterialNameBox {
+    width: 100% !important;
+    height: 40px !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding-right: 4px !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialIcon {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    margin-right: 8px !important;
+
+    color: #4285f4 !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+}
+
+.ConsumoMateriales .cmMaterialName {
+    min-width: 0 !important;
+
+    color: #14213d !important;
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
+    line-height: 0.72rem !important;
+}
+
+/* Gota personalizada, sin emoji */
+.ConsumoMateriales .cmMaterialDrop {
+    width: 13px !important;
+    height: 13px !important;
+    min-width: 13px !important;
+
+    margin-left: 2px !important;
+    margin-right: 11px !important;
+
+    border-radius: 50% 50% 50% 0 !important;
+    background: linear-gradient(135deg,
+            #9bdcff 0%,
+            #438dff 100%) !important;
+
+    transform: rotate(-45deg) !important;
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Plan y Real */
+.ConsumoMateriales .cmMaterialMeasure {
+    width: 100% !important;
+    height: 40px !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoMateriales .cmMaterialValue {
+    width: 100% !important;
+
+    margin: 0 0 4px !important;
+
+    color: #14213d !important;
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+    line-height: 0.7rem !important;
+    white-space: nowrap !important;
+}
+
+/* Barras */
+.ConsumoMateriales .cmMaterialPlanBar,
+.ConsumoMateriales .cmMaterialRealBar {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 5px !important;
+    min-height: 5px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+/* Fondo de las barras */
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPI,
+.ConsumoMateriales .cmMaterialRealBar .sapMPI {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Barra gris de Plan */
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialPlanBar.sapMPI .sapMPIBar {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #8d99a8 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Barra azul de Real */
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialRealBar.sapMPI .sapMPIBar {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #1677ff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Quitar textos y puntos de las barras */
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIText,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIText,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPITextLeft,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPITextRight,
+.ConsumoMateriales .cmMaterialRealBar .sapMPITextLeft,
+.ConsumoMateriales .cmMaterialRealBar .sapMPITextRight {
+    display: none !important;
+}
+
+/* Quitar marcadores o puntos generados por el tema */
+.ConsumoMateriales .cmMaterialPlanBar::before,
+.ConsumoMateriales .cmMaterialPlanBar::after,
+.ConsumoMateriales .cmMaterialRealBar::before,
+.ConsumoMateriales .cmMaterialRealBar::after,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar::before,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBar::after,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar::before,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBar::after,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBarRemaining::before,
+.ConsumoMateriales .cmMaterialPlanBar .sapMPIBarRemaining::after,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBarRemaining::before,
+.ConsumoMateriales .cmMaterialRealBar .sapMPIBarRemaining::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Variación perfectamente centrada */
+.ConsumoMateriales .cmMaterialVariation {
+    width: 100% !important;
+    height: 40px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #14213d !important;
+    font-size: 0.61rem !important;
+    font-weight: 900 !important;
+    line-height: normal !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation[data-estado="Error"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Error"] {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmMaterialVariation[data-estado="Success"],
+.ConsumoMateriales .cmMaterialVariation[data-sap-ui-custom-estado="Success"] {
+    color: #06a66a !important;
+}
+
+/* Pie informativo */
+.ConsumoMateriales .cmMaterialInfoFooter {
+    min-height: 30px !important;
+    margin-top: auto !important;
+    padding: 6px 9px !important;
+    background: #f5f8fd !important;
+}
+
+.ConsumoMateriales .cmMaterialFooterText {
+    color: #3776cf !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+}
+
+/* Encabezado: título a la izquierda e información a la derecha */
+.ConsumoMateriales .cmMaterialCardHeader {
+    width: 100% !important;
+    min-height: 28px !important;
+    margin-bottom: 5px !important;
+}
+
+/* Botón circular de información */
+.ConsumoMateriales .cmMaterialInfoButton {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoMateriales .cmMaterialNewList .sapMLIB {
-    border: none !important;
+.ConsumoMateriales .cmMaterialInfoButton .sapMBtnInner {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: #eaf3ff !important;
+}
+
+.ConsumoMateriales .cmMaterialInfoButton .sapMBtnIcon {
+    width: auto !important;
+    margin: 0 !important;
+
+    color: #1677ff !important;
+    font-size: 0.85rem !important;
+    line-height: 28px !important;
+}
+
+/* Recuadro que aparece debajo */
+.ConsumoMateriales .cmMaterialInfoFooter {
+    width: 100% !important;
+    min-height: 30px !important;
+
+    margin-top: 7px !important;
+    padding: 7px 10px !important;
+    box-sizing: border-box !important;
+
+    border-radius: 7px !important;
+    background: #f4f7fc !important;
+}
+
+.ConsumoMateriales .cmMaterialFooterText {
+    color: #3776cf !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   INFORMACIÓN DESPLEGABLE - MATERIALES VS PLAN
+   ========================================================================== */
+
+/* Encabezado */
+.ConsumoMateriales .cmMaterialCardHeader {
+    width: 100% !important;
+    min-height: 28px !important;
+    margin: 0 0 5px !important;
+}
+
+/* Botón de información */
+.ConsumoMateriales .cmMaterialInfoButton {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmMaterialInfoButton .sapMBtnInner {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 50% !important;
+
+    background: #eaf3ff !important;
+    box-shadow: none !important;
+}
+
+/* Icono azul */
+.ConsumoMateriales .cmMaterialInfoButton .sapMBtnIcon {
+    width: auto !important;
+    margin: 0 !important;
+
+    color: #1677ff !important;
+    font-size: 0.85rem !important;
+    line-height: 28px !important;
+}
+
+/* Hover */
+.ConsumoMateriales .cmMaterialInfoButton:hover .sapMBtnInner {
+    background: #dbeafe !important;
+}
+
+/* Recuadro desplegable */
+.ConsumoMateriales .cmMaterialInfoFooter {
+    width: 100% !important;
+    min-height: 30px !important;
+
+    margin-top: 7px !important;
+    padding: 7px 10px !important;
+    box-sizing: border-box !important;
+
+    border-radius: 7px !important;
+    background: #f4f7fc !important;
+}
+
+/* Texto informativo */
+.ConsumoMateriales .cmMaterialFooterText {
+    color: #3776cf !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    line-height: 0.68rem !important;
+}
+
+/* ==========================================================================
+   AJUSTE FINAL DE LA FILA PRINCIPAL
+   - Icono de información junto al título
+   - Información desplegable con icono y texto
+   - Aprovechar el espacio disponible dentro de las tarjetas
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. LAS TRES TARJETAS OCUPAN LA MISMA ALTURA
+   ========================================================================== */
+
+/*
+   Cada elemento de la cuadrícula se convierte en flex.
+   Esto permite que las tarjetas interiores ocupen toda la altura.
+*/
+.ConsumoMateriales .cmCardsRowPrimary>.sapMFlexItem {
+    display: flex !important;
+    min-width: 0 !important;
+}
+
+/*
+   Esta clase debe estar colocada en las tres tarjetas principales:
+
+   cmMaterialVsPlanCard
+   cmTipoOrdenCard
+   cmOtFaltaMaterialCard
+*/
+.ConsumoMateriales .cmFlexiblePrimaryCard {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 276px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ==========================================================================
+   2. ENCABEZADO: TÍTULO E ICONO JUNTOS
+   ========================================================================== */
+
+.ConsumoMateriales .cmMaterialCardHeader {
+    width: 100% !important;
+    height: 26px !important;
+    min-height: 26px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 5px !important;
+    padding: 0 !important;
+}
+
+/*
+   Evita que SAPUI5 mande el icono al extremo derecho.
+*/
+.ConsumoMateriales .cmMaterialCardHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/*
+   Icono azul delineado al lado del título.
+   Corresponde a:
+
+   <core:Icon
+       src="sap-icon://message-information"
+       class="cmMaterialHeaderInfoIcon"/>
+*/
+.ConsumoMateriales .cmMaterialHeaderInfoIcon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+
+    margin-left: 9px !important;
+    padding: 0 !important;
+
+    color: #1677ff !important;
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 50% !important;
+
+    font-size: 0.95rem !important;
+    line-height: 18px !important;
+    text-align: center !important;
+
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
+
+/*
+   Efecto al pasar el mouse.
+*/
+.ConsumoMateriales .cmMaterialHeaderInfoIcon:hover {
+    color: #0868d7 !important;
+    background: #eef5ff !important;
+}
+
+/*
+   Efecto cuando se selecciona con el teclado.
+*/
+.ConsumoMateriales .cmMaterialHeaderInfoIcon:focus {
+    outline: 2px solid rgba(22, 119, 255, 0.25) !important;
+    outline-offset: 2px !important;
+}
+
+
+/* ==========================================================================
+   3. LISTA DE MATERIALES
+   ========================================================================== */
+
+/*
+   La lista utiliza el espacio disponible entre el encabezado
+   y el mensaje desplegable.
+*/
+.ConsumoMateriales .cmMaterialList {
+    width: 100% !important;
+
+    flex: 1 1 auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+}
+
+/*
+   Evita espacio interno generado por SAPUI5.
+*/
+.ConsumoMateriales .cmMaterialList .sapMListUl,
+.ConsumoMateriales .cmMaterialList .sapMLIB,
+.ConsumoMateriales .cmMaterialList .sapMLIBContent {
+    width: 100% !important;
     padding: 0 !important;
     background: transparent !important;
 }
 
-.ConsumoMateriales .cmMaterialNewList .sapMLIBContent {
-    width: 100% !important;
-}
 
-/* Fila */
-.ConsumoMateriales .cmMaterialNewRow {
-    width: 100% !important;
-    min-height: 42px !important;
-    height: 42px !important;
-    padding: 3px 0 !important;
-    box-sizing: border-box !important;
-}
-
-/* Material */
-.ConsumoMateriales .cmMaterialNewNameBox {
-    min-width: 0 !important;
-    padding-right: 10px !important;
-    box-sizing: border-box !important;
-}
-
-.ConsumoMateriales .cmMaterialNewIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-    min-width: 16px !important;
-}
-
-.ConsumoMateriales .cmMaterialNewName {
-    color: #172554 !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
-}
-
-/* Columnas plan y real */
-.ConsumoMateriales .cmMaterialNewMeasure {
-    min-width: 0 !important;
-    padding-right: 12px !important;
-    box-sizing: border-box !important;
-}
-
-.ConsumoMateriales .cmMaterialNewValue {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
-    margin-bottom: 3px !important;
-    white-space: nowrap !important;
-}
-
-/* Barras */
-.ConsumoMateriales .cmMaterialNewPlanBar,
-.ConsumoMateriales .cmMaterialNewRealBar {
-    width: 100% !important;
-}
-
-.ConsumoMateriales .cmMaterialNewPlanBar .sapMPI,
-.ConsumoMateriales .cmMaterialNewRealBar .sapMPI {
-    height: 5px !important;
-    border-radius: 20px !important;
-    background: #E5E7EB !important;
-    overflow: hidden !important;
-}
-
-.ConsumoMateriales .cmMaterialNewPlanBar .sapMPIBar {
-    background: #9CA3AF !important;
-    border-radius: 20px !important;
-}
-
-.ConsumoMateriales .cmMaterialNewRealBar .sapMPIBar {
-    background: #2563EB !important;
-    border-radius: 20px !important;
-}
-
-/* Variación */
-.ConsumoMateriales .cmMaterialNewVariation {
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoMateriales .cmMaterialNewVariation[data-estado="Error"],
-.ConsumoMateriales .cmMaterialNewVariation[data-sap-ui-custom-estado="Error"] {
-    color: #EF4444 !important;
-}
-
-.ConsumoMateriales .cmMaterialNewVariation[data-estado="Success"],
-.ConsumoMateriales .cmMaterialNewVariation[data-sap-ui-custom-estado="Success"] {
-    color: #10B981 !important;
-}
-
-/* Footer */
-.ConsumoMateriales .cmMaterialNewFooter {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    margin-top: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialNewFooter .sapUiIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialNewFooter .sapMText {
-    color: #2563EB !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-}
 /* ==========================================================================
-   CONSUMO MATERIALES - CARD CONSUMO VS PLAN FINAL
+   4. INFORMACIÓN DESPLEGABLE
    ========================================================================== */
 
-.ConsumoMateriales .cmMaterialVsPlanCardFinal {
-    min-height: 270px !important;
-    padding: 12px !important;
-    overflow: hidden !important;
-}
+/*
+   Este bloque aparece únicamente cuando:
 
-/* Tabla limpia */
-.ConsumoMateriales .cmMaterialPlanTable {
+   materialesInfoVisible = true
+*/
+.ConsumoMateriales .cmMaterialInfoFooter {
     width: 100% !important;
-    border: none !important;
-    background: transparent !important;
-}
+    min-height: 30px !important;
 
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTbl {
-    border: none !important;
-    background: transparent !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblHeader,
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTbl th {
-    background: transparent !important;
-    border: none !important;
-    height: 24px !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblCell {
-    border: none !important;
-    padding: 4px 4px !important;
-    vertical-align: middle !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMLIB {
-    border: none !important;
-    background: transparent !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblRow {
-    height: 42px !important;
-}
-
-/* Headers */
-.ConsumoMateriales .cmMaterialTableHeader {
-    color: #475569 !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    line-height: 11px !important;
-    white-space: nowrap !important;
-}
-
-/* Material */
-.ConsumoMateriales .cmMaterialCell {
-    width: 100% !important;
-    min-width: 0 !important;
-}
-
-.ConsumoMateriales .cmMaterialTableIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-    min-width: 16px !important;
-}
-
-.ConsumoMateriales .cmMaterialTableEmojiIcon {
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-    min-width: 16px !important;
-    line-height: 16px !important;
-}
-
-.ConsumoMateriales .cmMaterialTableName {
-    color: #172554 !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
-}
-
-/* Plan y Real */
-.ConsumoMateriales .cmMaterialMeasureCell {
-    width: 100% !important;
-    min-width: 0 !important;
-    padding-right: 8px !important;
-    box-sizing: border-box !important;
-}
-
-.ConsumoMateriales .cmMaterialMeasureValue {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
-    margin-bottom: 3px !important;
-    white-space: nowrap !important;
-}
-
-/* Barras */
-.ConsumoMateriales .cmMaterialPlanBarFinal,
-.ConsumoMateriales .cmMaterialRealBarFinal {
-    width: 100% !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanBarFinal .sapMPI,
-.ConsumoMateriales .cmMaterialRealBarFinal .sapMPI {
-    height: 5px !important;
-    border-radius: 20px !important;
-    background: #E5E7EB !important;
-    overflow: hidden !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanBarFinal .sapMPIBar {
-    background: #9CA3AF !important;
-    border-radius: 20px !important;
-}
-
-.ConsumoMateriales .cmMaterialRealBarFinal .sapMPIBar {
-    background: #2563EB !important;
-    border-radius: 20px !important;
-}
-
-/* Variación */
-.ConsumoMateriales .cmMaterialVariationFinal {
-    display: block !important;
-    width: 100% !important;
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoMateriales .cmMaterialVariationFinal[data-estado="Error"],
-.ConsumoMateriales .cmMaterialVariationFinal[data-sap-ui-custom-estado="Error"] {
-    color: #EF4444 !important;
-}
-
-.ConsumoMateriales .cmMaterialVariationFinal[data-estado="Success"],
-.ConsumoMateriales .cmMaterialVariationFinal[data-sap-ui-custom-estado="Success"] {
-    color: #10B981 !important;
-}
-
-/* Footer */
-.ConsumoMateriales .cmMaterialFooterFinal {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    margin-top: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialFooterFinal .sapUiIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialFooterFinal .sapMText {
-    color: #2563EB !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-}
-/* ==========================================================================
-   CONSUMO MATERIALES - ALINEACIÓN FINAL CARD MATERIALES VS PLAN
-   ========================================================================== */
-
-.ConsumoMateriales .cmMaterialVsPlanCardFinal {
-    min-height: 270px !important;
-    padding: 12px 14px !important;
-}
-
-/* Tabla sin espacios raros */
-.ConsumoMateriales .cmMaterialPlanTable {
-    width: 100% !important;
-    table-layout: fixed !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTbl {
-    width: 100% !important;
-    table-layout: fixed !important;
-}
-
-/* Header más compacto y alineado */
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblHeader,
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTbl th {
-    height: 24px !important;
-    min-height: 24px !important;
-    padding: 0 4px !important;
-    background: transparent !important;
-    border: none !important;
-}
-
-.ConsumoMateriales .cmMaterialTableHeader {
-    color: #475569 !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    line-height: 11px !important;
-    white-space: nowrap !important;
-}
-
-/* Filas parejas */
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblRow {
-    height: 43px !important;
-    min-height: 43px !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblCell {
-    height: 43px !important;
-    min-height: 43px !important;
-    padding: 3px 4px !important;
-    vertical-align: middle !important;
-    border: none !important;
-}
-
-/* Contenido de cada celda centrado verticalmente */
-.ConsumoMateriales .cmMaterialPlanTable .sapMListTblCell > * {
-    vertical-align: middle !important;
-}
-
-/* Material alineado al centro de su fila */
-.ConsumoMateriales .cmMaterialCell {
-    height: 43px !important;
     display: flex !important;
     align-items: center !important;
-    width: 100% !important;
-    min-width: 0 !important;
+
+    flex: 0 0 auto !important;
+
+    margin: 6px 0 0 !important;
+    padding: 6px 9px !important;
+
+    box-sizing: border-box !important;
+
+    border: 0 !important;
+    border-radius: 7px !important;
+
+    background: #f4f7fc !important;
 }
 
-.ConsumoMateriales .cmMaterialTableIcon,
-.ConsumoMateriales .cmMaterialTableEmojiIcon {
-    width: 18px !important;
-    min-width: 18px !important;
-    max-width: 18px !important;
-    margin-right: 8px !important;
+/*
+   Icono situado a la izquierda del texto informativo.
+*/
+.ConsumoMateriales .cmMaterialFooterIcon {
+    width: 15px !important;
+    height: 15px !important;
+    min-width: 15px !important;
+
+    margin: 0 7px 0 0 !important;
+
+    color: #1677ff !important;
+    background: transparent !important;
+
+    font-size: 0.78rem !important;
+    line-height: 15px !important;
     text-align: center !important;
 }
 
-.ConsumoMateriales .cmMaterialTableIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
+/*
+   Texto situado al lado del icono.
+*/
+.ConsumoMateriales .cmMaterialFooterText {
+    display: block !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    color: #3776cf !important;
+
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    line-height: 0.68rem !important;
 }
 
-.ConsumoMateriales .cmMaterialTableEmojiIcon {
-    font-size: 1rem !important;
-    line-height: 18px !important;
-}
 
-.ConsumoMateriales .cmMaterialTableName {
-    color: #172554 !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
-    white-space: normal !important;
-}
+/* ==========================================================================
+   5. CONSUMO POR TIPO DE ORDEN
+   ========================================================================== */
 
-/* Plan y Real alineados igual */
-.ConsumoMateriales .cmMaterialMeasureCell {
-    height: 43px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
+/*
+   La lista crece y empuja su mensaje informativo hacia abajo.
+*/
+.ConsumoMateriales .cmTipoOrdenList {
     width: 100% !important;
-    padding-right: 8px !important;
+
+    flex: 1 1 auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenList .sapMListUl {
+    width: 100% !important;
+    background: transparent !important;
+}
+
+
+/* ==========================================================================
+   6. GRÁFICA DE OT AFECTADAS
+   ========================================================================== */
+
+/*
+   La gráfica aprovecha el espacio vertical disponible
+   dentro de su tarjeta.
+*/
+.ConsumoMateriales .cmOtChart {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 112px !important;
+
+    flex: 1 1 auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/*
+   El cuerpo de la gráfica ocupa toda la altura recibida.
+*/
+.ConsumoMateriales .cmOtChartBody {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 112px !important;
+}
+
+/*
+   Área donde se dibujan las líneas y valores.
+*/
+.ConsumoMateriales .cmOtPlot {
+    width: calc(100% - 24px) !important;
+    height: 100% !important;
+    min-height: 112px !important;
+
+    padding: 0 4px !important;
     box-sizing: border-box !important;
 }
 
-.ConsumoMateriales .cmMaterialMeasureValue {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 800 !important;
-    line-height: 10px !important;
-    margin-bottom: 5px !important;
-    white-space: nowrap !important;
-}
+/*
+   Cada columna también utiliza toda la altura.
+*/
+.ConsumoMateriales .cmOtColumn {
+    width: 24% !important;
+    height: 100% !important;
+    min-height: 112px !important;
 
-/* Barras del mismo tamaño */
-.ConsumoMateriales .cmMaterialPlanBarFinal,
-.ConsumoMateriales .cmMaterialRealBarFinal {
-    width: 82px !important;
-    max-width: 82px !important;
-    min-width: 82px !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanBarFinal .sapMPI,
-.ConsumoMateriales .cmMaterialRealBarFinal .sapMPI {
-    height: 5px !important;
-    border-radius: 20px !important;
-    background: #E5E7EB !important;
-    overflow: hidden !important;
-}
-
-.ConsumoMateriales .cmMaterialPlanBarFinal .sapMPIBar {
-    background: #9CA3AF !important;
-    border-radius: 20px !important;
-}
-
-.ConsumoMateriales .cmMaterialRealBarFinal .sapMPIBar {
-    background: #2563EB !important;
-    border-radius: 20px !important;
-}
-
-/* Variación centrada verticalmente en la fila */
-.ConsumoMateriales .cmMaterialVariationFinal {
-    display: flex !important;
-    align-items: center !important;
     justify-content: flex-end !important;
-    height: 43px !important;
-    width: 100% !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-    white-space: nowrap !important;
 }
 
-.ConsumoMateriales .cmMaterialVariationFinal[data-estado="Error"],
-.ConsumoMateriales .cmMaterialVariationFinal[data-sap-ui-custom-estado="Error"] {
-    color: #EF4444 !important;
-}
 
-.ConsumoMateriales .cmMaterialVariationFinal[data-estado="Success"],
-.ConsumoMateriales .cmMaterialVariationFinal[data-sap-ui-custom-estado="Success"] {
-    color: #10B981 !important;
-}
-
-/* Footer más pegado y alineado */
-.ConsumoMateriales .cmMaterialFooterFinal {
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 8px 10px !important;
-    margin-top: 8px !important;
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialFooterFinal .sapUiIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
-}
-
-.ConsumoMateriales .cmMaterialFooterFinal .sapMText {
-    color: #2563EB !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-}
 /* ==========================================================================
-   CONSUMO MATERIALES - CARD MATERIALES VS PLAN ALINEACIÓN EXACTA
+   7. MENSAJES INFERIORES DE LAS OTRAS TARJETAS
    ========================================================================== */
 
-.ConsumoMateriales .cmMaterialVsPlanCardExact {
-    min-height: 270px !important;
-    padding: 12px !important;
+/*
+   Mantiene los pies informativos abajo, pero sin producir
+   un espacio vacío innecesario.
+*/
+.ConsumoMateriales .cmTipoOrdenCard>.cmInfoFooter {
+    flex: 0 0 auto !important;
+    margin-top: 6px !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCard .cmCardLink {
+    flex: 0 0 auto !important;
+    margin-top: 4px !important;
+}
+
+
+/* ==========================================================================
+   8. AJUSTE RESPONSIVE
+   ========================================================================== */
+
+@media screen and (max-width: 820px) {
+
+    .ConsumoMateriales .cmFlexiblePrimaryCard {
+        height: auto !important;
+        min-height: 260px !important;
+    }
+
+    .ConsumoMateriales .cmOtChart,
+    .ConsumoMateriales .cmOtChartBody,
+    .ConsumoMateriales .cmOtPlot,
+    .ConsumoMateriales .cmOtColumn {
+        height: auto !important;
+        min-height: 112px !important;
+    }
+}
+
+/* =========================================================
+   ICONOS CARD CONSUMO MATERIALES VS PLAN
+   Engrane, cubo, gota y herramienta
+   ========================================================= */
+
+.ConsumoMateriales .cmMaterialIcon {
+    color: #4F8BFF !important;
+    font-size: 1.15rem !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+    line-height: 22px !important;
+    margin-right: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Gota azul hecha con CSS */
+.ConsumoMateriales .cmMaterialDrop {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-right: 12px !important;
+
+    background: linear-gradient(135deg, #D8ECFF 0%, #60A5FA 100%) !important;
+    border-radius: 50% 50% 55% 55% !important;
+
+    transform: rotate(45deg) !important;
+
+    box-shadow: 0 3px 8px rgba(96, 165, 250, 0.28) !important;
+}
+
+/* Asegura que la gota no se deforme dentro del HBox */
+.ConsumoMateriales .cmMaterialNameBox .cmMaterialDrop {
+    flex: 0 0 18px !important;
+}
+
+/* Ajuste del texto para que quede alineado con los iconos */
+.ConsumoMateriales .cmMaterialNameBox {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.ConsumoMateriales .cmMaterialName {
+    color: #172554 !important;
+    font-weight: 900 !important;
+}
+
+/* =========================================================
+   FIX FINAL - TODOS LOS MATERIALES USAN core:Icon
+   Se elimina la gota dibujada con CSS
+   ========================================================= */
+
+.ConsumoMateriales .cmMaterialDrop {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.ConsumoMateriales .cmMaterialDrop::before,
+.ConsumoMateriales .cmMaterialDrop::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Todos los iconos iguales */
+.ConsumoMateriales .cmMaterialIcon {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-right: 10px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #4F8BFF !important;
+    font-size: 1.15rem !important;
+    line-height: 22px !important;
+    text-align: center !important;
+}
+
+/* =========================================================
+   ICONOS DE FECHA - un poco más grandes y azules
+   ========================================================= */
+
+.HorasTrabajadas .sapMDatePicker .sapUiIcon,
+.HorasTrabajadas .sapMInputBaseIcon,
+.HorasTrabajadas .sapMInputBaseIconContainer .sapUiIcon {
+    color: #0A6FF5 !important;
+    font-size: 1.15rem !important;
+    /* un poco más grande */
+    font-weight: 600 !important;
+}
+
+/* área del icono para que se vea mejor centrado */
+.HorasTrabajadas .sapMInputBaseIconContainer {
+    width: 2.4rem !important;
+}
+
+/* si quieres que quede mejor alineado verticalmente */
+.HorasTrabajadas .sapMDatePicker .sapMInputBaseContentWrapper,
+.HorasTrabajadas .sapMInputBaseContentWrapper {
+    min-height: 2.75rem !important;
+}
+
+/* =========================================================
+   DATEPICKER - ICONO DE CALENDARIO AZUL Y MÁS GRANDE
+   Consumo de materiales
+   ========================================================= */
+
+/* Icono calendario dentro de Fecha desde / Fecha hasta */
+.ConsumoMateriales .cmFilterBox .sapMDatePicker .sapMInputBaseIcon,
+.ConsumoMateriales .cmFilterBox .sapMDatePicker .sapMInputBaseIconContainer .sapUiIcon,
+.ConsumoMateriales .cmFilterBox .sapMDatePicker .sapUiIcon {
+    color: #1677FF !important;
+    fill: #1677FF !important;
+
+    font-size: 3rem !important;
+    /* un poco más grande */
+    font-weight: 700 !important;
+
+    width: 28px !important;
+    height: 34px !important;
+    line-height: 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Contenedor del icono */
+.ConsumoMateriales .cmFilterBox .sapMDatePicker .sapMInputBaseIconContainer {
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 34px !important;
+}
+
+/* Evita que el icono quede muy pegado a la derecha */
+.ConsumoMateriales .cmFilterBox .sapMDatePicker .sapMInputBaseContentWrapper {
+    padding-right: 4px !important;
+}
+
+/* =========================================================
+   DATEPICKER FINAL - CALENDARIO AZUL Y UN POCO MÁS GRANDE
+   Solo Fecha desde / Fecha hasta
+   ========================================================= */
+
+/* Contenedor general del DatePicker */
+.ConsumoMateriales .cmDatePickerFilter {
+    width: 100% !important;
+}
+
+/* Contenedor del icono */
+.ConsumoMateriales .cmDatePickerFilter .sapMInputBaseIconContainer {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Elemento del icono */
+.ConsumoMateriales .cmDatePickerFilter .sapMInputBaseIcon {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+
+    line-height: 34px !important;
+
+    color: #1677FF !important;
+    fill: #1677FF !important;
+    background: transparent !important;
+
+    font-size: 1.08rem !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    transform: scale(1.12) !important;
+    transform-origin: center center !important;
+}
+
+/* Icono interno de SAPUI5 */
+.ConsumoMateriales .cmDatePickerFilter .sapMInputBaseIcon .sapUiIcon,
+.ConsumoMateriales .cmDatePickerFilter .sapUiIcon {
+    color: #1677FF !important;
+    fill: #1677FF !important;
+    font-size: 1.08rem !important;
+    line-height: 34px !important;
+}
+
+/* Cuando SAPUI5 dibuja el icono con ::before */
+.ConsumoMateriales .cmDatePickerFilter .sapMInputBaseIcon::before,
+.ConsumoMateriales .cmDatePickerFilter .sapUiIcon::before {
+    color: #1677FF !important;
+    font-size: 1.08rem !important;
+    line-height: 34px !important;
+}
+
+/* Para que no quede pegado a la derecha */
+.ConsumoMateriales .cmDatePickerFilter .sapMInputBaseContentWrapper {
+    padding-right: 4px !important;
+}
+
+/* =========================================================
+   CARD CONSUMO POR TIPO DE ORDEN - AJUSTE FINAL
+   Icono junto al título + contenido más grande
+   No cambia tamaño de card
+   ========================================================= */
+
+/* Header con título e icono juntos */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenHeader {
+    width: 100% !important;
+    height: 28px !important;
+    min-height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+}
+
+/* Evita que SAPUI5 mande el icono al extremo */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título un poquito más grande */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenTitle,
+.ConsumoMateriales .cmTipoOrdenCard .cmCardTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Icono de información al lado del título */
+.ConsumoMateriales .cmTipoOrdenTitleInfoIcon {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    height: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+
+    margin-left: 8px !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 0.95rem !important;
+    line-height: 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    cursor: pointer !important;
+}
+
+/* Total más visible */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenTotalText,
+.ConsumoMateriales .cmTipoOrdenCard .cmCardStrongText {
+    color: #14213d !important;
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
+    font-weight: 900 !important;
+
+    margin: 2px 0 10px 0 !important;
+}
+
+/* Barra más grande para ocupar mejor el espacio */
+.ConsumoMateriales .cmTipoOrdenCard .cmStackedBar,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenStackedBar {
+    width: 100% !important;
+
+    height: 39px !important;
+    min-height: 39px !important;
+    max-height: 39px !important;
+
+    border-radius: 10px !important;
+    overflow: hidden !important;
+
+    margin: 0 0 12px 0 !important;
+}
+
+/* Segmentos de la barra */
+.ConsumoMateriales .cmTipoOrdenCard .cmStackSegment {
+    height: 39px !important;
+    min-height: 39px !important;
+    max-height: 39px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Texto dentro de la barra */
+.ConsumoMateriales .cmTipoOrdenCard .cmStackText {
+    color: #ffffff !important;
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
+    font-weight: 900 !important;
+}
+
+/* Lista ocupa espacio disponible */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList {
+    width: 100% !important;
+
+    flex: 1 1 auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMListUl,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMLIB,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMLIBContent {
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+}
+
+/* Filas más grandes */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenRow {
+    width: 100% !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+
+    padding: 8px 0 !important;
+    box-sizing: border-box !important;
+
+    border-bottom: 1px solid #e8edf5 !important;
+}
+
+/* Punto de color más grande */
+.ConsumoMateriales .cmTipoOrdenCard .cmDot {
+    width: 9px !important;
+    min-width: 9px !important;
+    max-width: 9px !important;
+
+    height: 9px !important;
+    min-height: 9px !important;
+    max-height: 9px !important;
+
+    border-radius: 50% !important;
+
+    margin-right: 9px !important;
+}
+
+/* Texto de filas más grande */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenName,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenValue,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenPercent {
+    color: #14213d !important;
+
+    font-size: 0.70rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 850 !important;
+}
+
+/* Nombre del tipo */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenName {
+    max-width: 190px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Valor de la derecha */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenValue {
+    min-width: 96px !important;
+    text-align: right !important;
+}
+
+/* Porcentaje */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenPercent {
+    min-width: 42px !important;
+    margin-left: 12px !important;
+
+    color: #475569 !important;
+    text-align: right !important;
+}
+
+/* Footer sin icono, más limpio */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenFooter,
+.ConsumoMateriales .cmTipoOrdenCard>.cmInfoFooter {
+    width: 100% !important;
+
+    min-height: 38px !important;
+    height: 38px !important;
+
+    margin-top: 8px !important;
+    padding: 8px 12px !important;
+
+    border-radius: 8px !important;
+    background: #f3f7fd !important;
+
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Ocultar icono del footer si quedó en caché o si no lo borraste del XML */
+.ConsumoMateriales .cmTipoOrdenCard .cmInfoFooter .sapUiIcon {
+    display: none !important;
+}
+
+/* Texto del footer un poco más grande */
+.ConsumoMateriales .cmTipoOrdenCard .cmInfoFooter .sapMText {
+    color: #3776cf !important;
+
+    font-size: 0.60rem !important;
+    line-height: 0.78rem !important;
+    font-weight: 800 !important;
+}
+
+/* =========================================================
+   CARD CONSUMO POR TIPO DE ORDEN
+   Quitar footer informativo inferior
+   ========================================================= */
+
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenFooter,
+.ConsumoMateriales .cmTipoOrdenCard>.cmInfoFooter {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* La lista ocupa mejor el espacio disponible */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList {
+    flex: 1 1 auto !important;
+    margin-bottom: 0 !important;
+}
+
+/* =========================================================
+   CARD OT AFECTADAS POR FALTA DE MATERIAL - FINAL
+   Se ajusta como referencia sin cambiar tamaño de card
+   ========================================================= */
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal {
+    padding: 11px 12px 10px !important;
     overflow: hidden !important;
 }
 
 /* Header */
-.ConsumoMateriales .cmMatExactHeader {
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalHeader {
     width: 100% !important;
-    height: 22px !important;
-    min-height: 22px !important;
-    margin: 6px 0 4px 0 !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    margin: 0 0 4px 0 !important;
+    padding: 0 !important;
 }
 
-.ConsumoMateriales .cmMatExactHeaderText {
-    color: #475569 !important;
-    font-size: 9px !important;
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalTitleBox {
+    display: flex !important;
+    align-items: center !important;
+    min-width: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalTitle {
+    color: #14213d !important;
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
     font-weight: 900 !important;
-    line-height: 11px !important;
-    white-space: nowrap !important;
 }
 
-.ConsumoMateriales .cmMatExactRight {
-    text-align: right !important;
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoIcon {
+    width: 17px !important;
+    min-width: 17px !important;
+    height: 17px !important;
+    margin-left: 7px !important;
+    color: #1677ff !important;
+    font-size: 0.9rem !important;
+    line-height: 17px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
-/* List limpia */
-.ConsumoMateriales .cmMatExactList {
+/* Botón de tres puntos */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalMenuButton {
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalMenuButton .sapMBtnInner {
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalMenuButton .sapUiIcon {
+    color: #64748b !important;
+    font-size: 0.8rem !important;
+}
+
+/* Caja análisis compacta */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisBox {
+    width: 168px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 0 2px 0 !important;
+    padding: 6px 8px !important;
+
+    box-sizing: border-box !important;
+    border-radius: 7px !important;
+    background: #f6f9fd !important;
+
+    display: flex !important;
+    align-items: flex-start !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisIcon {
+    color: #1677ff !important;
+    font-size: 0.75rem !important;
+    width: 14px !important;
+    min-width: 14px !important;
+    margin: 1px 6px 0 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisTextBox {
+    min-width: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisTitle {
+    color: #14213d !important;
+    font-size: 0.49rem !important;
+    line-height: 0.58rem !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisText {
+    color: #64748b !important;
+    font-size: 0.47rem !important;
+    line-height: 0.58rem !important;
+    font-weight: 700 !important;
+}
+
+/* SVG */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvgHtml {
     width: 100% !important;
+    height: 132px !important;
+    min-height: 132px !important;
+    max-height: 132px !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvg {
+    width: 100% !important;
+    height: 132px !important;
+    display: block !important;
+    overflow: visible !important;
+}
+
+/* Líneas de gráfica */
+.ConsumoMateriales .cmOtSvgGrid {
+    stroke: #e8eef6 !important;
+    stroke-width: 1 !important;
+}
+
+.ConsumoMateriales .cmOtSvgAxis {
+    stroke: #d4deeb !important;
+    stroke-width: 1.2 !important;
+}
+
+.ConsumoMateriales .cmOtSvgVertical {
+    stroke: #cfd8e5 !important;
+    stroke-width: 4 !important;
+    stroke-linecap: round !important;
+    opacity: 0.7 !important;
+}
+
+/* Marcadores */
+.ConsumoMateriales .cmOtSvgMarkerRed,
+.ConsumoMateriales .cmOtSvgMarkerOrange,
+.ConsumoMateriales .cmOtSvgMarkerYellow,
+.ConsumoMateriales .cmOtSvgMarkerPurple {
+    stroke-width: 4.6 !important;
+    stroke-linecap: round !important;
+}
+
+.ConsumoMateriales .cmOtSvgMarkerRed {
+    stroke: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmOtSvgMarkerOrange {
+    stroke: #f97316 !important;
+}
+
+.ConsumoMateriales .cmOtSvgMarkerYellow {
+    stroke: #f4b400 !important;
+}
+
+.ConsumoMateriales .cmOtSvgMarkerPurple {
+    stroke: #7c3aed !important;
+}
+
+/* Textos SVG */
+.ConsumoMateriales .cmOtSvgAxisTitle,
+.ConsumoMateriales .cmOtSvgAxisLabel,
+.ConsumoMateriales .cmOtSvgLabel {
+    fill: #334155 !important;
+    font-family: "72", Arial, sans-serif !important;
+}
+
+.ConsumoMateriales .cmOtSvgAxisTitle {
+    font-size: 7px !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmOtSvgAxisLabel {
+    font-size: 7px !important;
+    font-weight: 800 !important;
+}
+
+.ConsumoMateriales .cmOtSvgLabel {
+    font-size: 7px !important;
+    font-weight: 850 !important;
+}
+
+.ConsumoMateriales .cmOtSvgValueRed,
+.ConsumoMateriales .cmOtSvgValueOrange,
+.ConsumoMateriales .cmOtSvgValueYellow,
+.ConsumoMateriales .cmOtSvgValuePurple {
+    font-family: "72", Arial, sans-serif !important;
+    font-size: 8.4px !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmOtSvgValueRed {
+    fill: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmOtSvgValueOrange {
+    fill: #f97316 !important;
+}
+
+.ConsumoMateriales .cmOtSvgValueYellow {
+    fill: #d79900 !important;
+}
+
+.ConsumoMateriales .cmOtSvgValuePurple {
+    fill: #7c3aed !important;
+}
+
+/* Leyenda */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLegend {
+    width: 100% !important;
+    display: flex !important;
+    gap: 5px 12px !important;
+    margin: 2px 0 3px 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLegendItem {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLegend .sapMText {
+    color: #334155 !important;
+    font-size: 0.51rem !important;
+    line-height: 0.65rem !important;
+    font-weight: 750 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmLegendDot {
+    width: 7px !important;
+    min-width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    margin-right: 5px !important;
+}
+
+/* Link */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLink {
+    color: #1677ff !important;
+    font-size: 0.58rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 900 !important;
+    margin-top: 2px !important;
+}
+
+/* Oculta estilos viejos si quedaron en caché */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtChart,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtChartBody,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtPlot,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtTrack {
+    display: none !important;
+}
+
+/* =========================================================
+   OT AFECTADAS - Caja de análisis más alargada
+   ========================================================= */
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisBox {
+    width: 225px !important;
+    min-width: 225px !important;
+    max-width: 225px !important;
+
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+
+    padding: 6px 10px !important;
+    margin: 0 0 3px 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Icono alineado al centro */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisIcon {
+    width: 15px !important;
+    min-width: 15px !important;
+    margin: 0 7px 0 0 !important;
+
+    color: #1677ff !important;
+    font-size: 0.78rem !important;
+}
+
+/* Caja de texto */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisTextBox {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+/* Título */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisTitle {
+    font-size: 0.50rem !important;
+    line-height: 0.62rem !important;
+    font-weight: 900 !important;
+}
+
+/* Descripción más cómoda */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisText {
+    font-size: 0.49rem !important;
+    line-height: 0.62rem !important;
+    font-weight: 700 !important;
+
+    white-space: normal !important;
+    overflow: visible !important;
+}
+
+/* =========================================================
+   TOP MATERIALES - HEADER CON INFO POPOVER
+   ========================================================= */
+
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvHeader {
+    width: 100% !important;
+    min-height: 28px !important;
+    height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+}
+
+/* Evita que SAPUI5 deje espacios raros */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvTitle,
+.ConsumoMateriales .cmTopDesviacionCard .cmCardTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Ícono de información junto al título */
+.ConsumoMateriales .cmTopDesvInfoIcon {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    height: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+
+    margin-left: 8px !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 0.95rem !important;
+    line-height: 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    cursor: pointer !important;
+}
+
+/* Quita el ícono circular viejo si por caché queda renderizado */
+.ConsumoMateriales .cmTopDesviacionCard .cmCircleIcon {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoMateriales .cmMatExactList .sapMLIB {
-    border: none !important;
-    background: transparent !important;
+/* Quita el footer viejo de esa card */
+.ConsumoMateriales .cmTopDesviacionCard>.cmInfoFooter {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoMateriales .cmMatExactList .sapMLIBContent {
-    width: 100% !important;
+/* =========================================================
+   POPOVER DE INFORMACIÓN
+   ========================================================= */
+
+.cmInfoPopover .sapMPopoverCont {
+    padding: 0 !important;
 }
 
-/* Fila */
-.ConsumoMateriales .cmMatExactRow {
+.cmInfoPopoverContent {
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+}
+
+.cmInfoPopoverText {
+    display: block !important;
+    color: #334155 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    line-height: 1.15rem !important;
+    margin-bottom: 8px !important;
+}
+
+.cmInfoPopoverTextLast {
+    margin-bottom: 0 !important;
+}
+
+.cmInfoPopover .sapMPopoverHeader .sapMTitle {
+    color: #14213d !important;
+    font-size: 0.9rem !important;
+    font-weight: 900 !important;
+}
+
+/* =========================================================
+   TOP DE MATERIALES - ICONO INFO JUNTO AL TÍTULO
+   ========================================================= */
+
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvHeader {
     width: 100% !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    max-height: 42px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Botón transparente del icono */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+/* Quitar fondo de botón */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Icono azul igual que los demás */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 1rem !important;
+    line-height: 22px !important;
+
+    margin: 0 !important;
+}
+
+/* Hover suave */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
+    border-radius: 50% !important;
+}
+
+/* Oculta el ícono circular viejo si quedó por caché */
+.ConsumoMateriales .cmTopDesviacionCard .cmCircleIcon {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* =========================================================
+   TOP MATERIALES - CENTRAR COLUMNA VARIACIÓN
+   ========================================================= */
+
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniVariationCenter {
+    display: block !important;
+    width: 100% !important;
+
+    text-align: center !important;
+
+    margin: 0 auto !important;
+    padding: 0 !important;
+
+    color: #14213d !important;
+    font-weight: 800 !important;
+}
+
+/* Centra también el header de Variación */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeaderCell:last-child,
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell:last-child {
+    text-align: center !important;
+}
+
+/* Centra el texto interno de la última columna */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell:last-child .sapMText,
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeaderCell:last-child .sapMText {
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+}
+
+/* =========================================================
+   TOP MATERIALES - ALINEAR VARIACIÓN AL CENTRO
+   Aplica SOLO a la card cmTopDesviacionCard
+   ========================================================= */
+
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell:last-child {
+    text-align: center !important;
+    justify-content: center !important;
+}
+
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeaderCell:last-child {
+    text-align: center !important;
+}
+
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell:last-child .sapMText,
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeaderCell:last-child .sapMText,
+.ConsumoMateriales .cmTopDesviacionCard .cmTopMaterialesVariationText {
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+}
+
+/* Mantiene los colores de variación */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopMaterialesVariationText[data-estado="Error"],
+.ConsumoMateriales .cmTopDesviacionCard .cmTopMaterialesVariationText[data-sap-ui-custom-estado="Error"] {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmTopDesviacionCard .cmTopMaterialesVariationText[data-estado="Success"],
+.ConsumoMateriales .cmTopDesviacionCard .cmTopMaterialesVariationText[data-sap-ui-custom-estado="Success"] {
+    color: #06a66a !important;
+}
+
+/* =========================================================
+   FIX TOP MATERIALES - NO ALARGAR LA CARD
+   Regresa la altura correcta y solo mejora un poco la tabla
+   ========================================================= */
+
+/* La card vuelve a su tamaño normal */
+.ConsumoMateriales .cmTopDesviacionCard {
+    min-height: 220px !important;
+    height: auto !important;
+    padding-bottom: 10px !important;
+}
+
+/* Header normal */
+.ConsumoMateriales .cmTopDesviacionCard .cmTopDesvHeader {
+    height: 28px !important;
+    min-height: 28px !important;
+    margin-bottom: 8px !important;
+}
+
+/* Tabla normal, sin crecer de más */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable {
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Encabezado de tabla ligeramente cómodo */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeader,
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblHeaderCell,
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTbl th {
+    height: 27px !important;
+    min-height: 27px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+/* Filas normales, no tan grandes */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblRow {
+    height: 29px !important;
+    min-height: 29px !important;
+}
+
+/* Celdas normales */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell {
+    height: 29px !important;
+    min-height: 29px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    vertical-align: middle !important;
+}
+
+/* Texto centrado verticalmente */
+.ConsumoMateriales .cmTopDesviacionCard .cmMiniTable .sapMListTblCell .sapMText {
+    line-height: 0.75rem !important;
+}
+
+/* =========================================================
+   TOP ÓRDENES MAYOR CONSUMO - MISMO DISEÑO QUE TOP MATERIALES
+   ========================================================= */
+
+.ConsumoMateriales .cmTopConsumoCard {
+    min-height: 220px !important;
+    height: auto !important;
+    padding-bottom: 10px !important;
+}
+
+/* Header: título + icono info */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoHeader {
+    width: 100% !important;
+    height: 28px !important;
+    min-height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+}
+
+/* Evita espacios raros de SAPUI5 */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título igual que la primera card */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Botón transparente del icono */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+/* Quitar fondo/borde del botón */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Icono azul como las demás cards */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 1rem !important;
+    line-height: 22px !important;
+
+    margin: 0 !important;
+}
+
+/* Hover suave */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
+    border-radius: 50% !important;
+}
+
+/* Oculta el icono circular verde anterior si queda por caché */
+.ConsumoMateriales .cmTopConsumoCard .cmCircleIcon,
+.ConsumoMateriales .cmTopConsumoCard .cmCircleIconGreen {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Oculta el footer anterior si todavía quedó en XML */
+.ConsumoMateriales .cmTopConsumoCard>.cmInfoFooter,
+.ConsumoMateriales .cmTopConsumoCard>.cmInfoFooterGreen {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Tabla controlada, sin alargar la card */
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoTable,
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable {
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Header de tabla igual que Top Materiales */
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblHeader,
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblHeaderCell,
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTbl th {
+    height: 27px !important;
+    min-height: 27px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+/* Filas iguales que Top Materiales */
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblRow {
+    height: 29px !important;
+    min-height: 29px !important;
+}
+
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblCell {
+    height: 29px !important;
+    min-height: 29px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    vertical-align: middle !important;
+}
+
+/* Centrar consumo total */
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblHeaderCell:last-child,
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblCell:last-child {
+    text-align: center !important;
+}
+
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblHeaderCell:last-child .sapMText,
+.ConsumoMateriales .cmTopConsumoCard .cmMiniTable .sapMListTblCell:last-child .sapMText,
+.ConsumoMateriales .cmTopConsumoCard .cmTopConsumoTotalText {
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    color: #14213d !important;
+    font-weight: 900 !important;
+}
+
+/* =========================================================
+   TOP ÓRDENES MENOR CONSUMO - MISMO DISEÑO QUE LAS OTRAS
+   ========================================================= */
+
+.ConsumoMateriales .cmMenorConsumoCard {
+    min-height: 220px !important;
+    height: auto !important;
+    padding-bottom: 10px !important;
+}
+
+/* Header: título + icono info */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoHeader {
+    width: 100% !important;
+    height: 28px !important;
+    min-height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+}
+
+/* Evita espacios raros de SAPUI5 */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título igual que las otras cards */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Botón transparente del icono */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+/* Quitar fondo/borde del botón */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Icono azul igual que las demás */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 1rem !important;
+    line-height: 22px !important;
+
+    margin: 0 !important;
+}
+
+/* Hover suave */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
+    border-radius: 50% !important;
+}
+
+/* Oculta el icono circular morado anterior */
+.ConsumoMateriales .cmMenorConsumoCard .cmCircleIcon,
+.ConsumoMateriales .cmMenorConsumoCard .cmCircleIconPurple {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Oculta el footer anterior */
+.ConsumoMateriales .cmMenorConsumoCard>.cmInfoFooter,
+.ConsumoMateriales .cmMenorConsumoCard>.cmInfoFooterPurple {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Tabla controlada igual que las otras */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoTable,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable {
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Header de tabla */
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeader,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTbl th {
+    height: 27px !important;
+    min-height: 27px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+/* Filas */
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblRow {
+    height: 29px !important;
+    min-height: 29px !important;
+}
+
+/* Celdas */
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell {
+    height: 29px !important;
+    min-height: 29px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    vertical-align: middle !important;
+}
+
+/* Centrar Plan, Real y Variación */
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(3),
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(4),
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(5),
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(3),
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(4),
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(5) {
+    text-align: center !important;
+}
+
+/* Textos internos centrados */
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(3) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(4) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblHeaderCell:nth-child(5) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(3) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(4) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMiniTable .sapMListTblCell:nth-child(5) .sapMText,
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoVariationText {
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+}
+
+/* Colores de variación */
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoVariationText[data-estado="Error"],
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoVariationText[data-sap-ui-custom-estado="Error"] {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoVariationText[data-estado="Success"],
+.ConsumoMateriales .cmMenorConsumoCard .cmMenorConsumoVariationText[data-sap-ui-custom-estado="Success"] {
+    color: #06a66a !important;
+}
+
+/* =========================================================
+   FILTROS - FLECHAS DE SELECT EN AZUL
+   ========================================================= */
+
+.ConsumoMateriales .cmFilterBox .sapMSltArrow {
+    color: #1677FF !important;
+    fill: #1677FF !important;
+}
+
+/* Icono interno de la flecha */
+.ConsumoMateriales .cmFilterBox .sapMSltArrow .sapUiIcon,
+.ConsumoMateriales .cmFilterBox .sapMSltArrow::before {
+    color: #1677FF !important;
+    fill: #1677FF !important;
+}
+
+/* Cuando el select está activo o con foco */
+.ConsumoMateriales .cmFilterBox .sapMSlt.sapMSltFocused .sapMSltArrow,
+.ConsumoMateriales .cmFilterBox .sapMSlt:hover .sapMSltArrow {
+    color: #1677FF !important;
+    fill: #1677FF !important;
+}
+
+/* =========================================================
+   CARD - OT AFECTADAS POR FALTA DE MATERIAL
+   ========================================================= */
+
+.cmOtCardHeader {
+    margin-bottom: 0.55rem;
+}
+
+.cmOtCardTitleWrap {
+    gap: 0.28rem;
+}
+
+.cmOtCardTitle {
+    margin: 0;
+    color: #1f2d5a;
+    font-weight: 700;
+}
+
+.cmOtHeaderInfoBtn .sapMBtnIcon,
+.cmOtHeaderMenuBtn .sapMBtnIcon {
+    color: #5d82b3 !important;
+    font-size: 1rem !important;
+}
+
+.cmOtInfoBox {
+    width: 100%;
+    max-width: 17.5rem;
+    min-height: 3.15rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.8rem;
+    background: #f3f7ff;
+    border: 1px solid #e3ebfb;
+    box-sizing: border-box;
+    gap: 0.7rem;
+    margin-bottom: 0.65rem;
+}
+
+.cmOtInfoBoxIcon {
+    color: #1f6fff !important;
+    font-size: 1rem !important;
+    flex-shrink: 0;
+}
+
+.cmOtInfoBoxTextWrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.cmOtInfoBoxTitle {
+    margin: 0;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #1f2d5a;
+    line-height: 1.1rem;
+}
+
+.cmOtInfoBoxText {
+    margin-top: 0.12rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #667792;
+    line-height: 1rem;
+}
+
+/* =========================================================
+   OT AFECTADAS - ICONO INFO CON POPOVER
+   ========================================================= */
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 1rem !important;
+    line-height: 22px !important;
+
+    margin: 0 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
+    border-radius: 50% !important;
+}
+
+/* Oculta el recuadro de Órdenes si se quedó en el XML */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisBox,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtInfoBox {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Título dentro del popover */
+.cmInfoPopoverTitleText {
+    color: #14213d !important;
+    font-size: 0.9rem !important;
+    font-weight: 900 !important;
+    line-height: 1.15rem !important;
+    margin-bottom: 6px !important;
+}
+
+/* =========================================================
+   OT AFECTADAS - APROVECHAR MEJOR EL ESPACIO DE LA GRÁFICA
+   ========================================================= */
+
+/* La card mantiene su tamaño, pero distribuye mejor el contenido */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 11px 12px 10px !important;
+}
+
+/* Header compacto */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalHeader {
+    flex: 0 0 auto !important;
+    height: 25px !important;
+    min-height: 25px !important;
+    margin: 0 0 2px 0 !important;
+}
+
+/* SVG más alto y mejor aprovechado */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvgHtmlLarge,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvgHtml {
+    width: 100% !important;
+
+    height: 165px !important;
+    min-height: 165px !important;
+    max-height: 165px !important;
+
+    display: block !important;
+
+    margin: 0 0 3px 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+}
+
+/* SVG interno ocupa todo el espacio */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvgLarge,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalSvg {
+    width: 100% !important;
+
+    height: 165px !important;
+    min-height: 165px !important;
+    max-height: 165px !important;
+
+    display: block !important;
+    overflow: visible !important;
+}
+
+/* Líneas más visibles */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgGrid {
+    stroke: #e7edf5 !important;
+    stroke-width: 1.15 !important;
+}
+
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgAxis {
+    stroke: #d3ddea !important;
+    stroke-width: 1.3 !important;
+}
+
+/* Barras verticales más largas y limpias */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgVertical {
+    stroke: #d8dee8 !important;
+    stroke-width: 4.4 !important;
+    stroke-linecap: round !important;
+    opacity: 0.85 !important;
+}
+
+/* Marcadores un poco más grandes */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgMarkerRed,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgMarkerOrange,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgMarkerYellow,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgMarkerPurple {
+    stroke-width: 5.2 !important;
+    stroke-linecap: round !important;
+}
+
+/* Valores superiores */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgValueRed,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgValueOrange,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgValueYellow,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgValuePurple {
+    font-size: 8.8px !important;
+    font-weight: 900 !important;
+}
+
+/* Labels inferiores */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgLabel {
+    font-size: 7.2px !important;
+    font-weight: 850 !important;
+}
+
+/* Eje Y */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgAxisTitle,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtSvgAxisLabel {
+    font-size: 7px !important;
+    font-weight: 850 !important;
+}
+
+/* Leyenda más compacta para darle espacio a la gráfica */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLegend {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+
+    display: flex !important;
+    flex-wrap: wrap !important;
+
+    gap: 5px 16px !important;
+
+    margin: 2px 0 4px 0 !important;
+    padding: 0 !important;
+}
+
+/* Texto de leyenda */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLegend .sapMText {
+    font-size: 0.54rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 800 !important;
+}
+
+/* Link final más controlado */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalLink {
+    flex: 0 0 auto !important;
+    margin-top: 2px !important;
+
+    font-size: 0.60rem !important;
+    line-height: 0.75rem !important;
+    font-weight: 900 !important;
+}
+
+/* Por si quedó el recuadro de análisis oculto ocupando espacio */
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtFinalAnalysisBox,
+.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmOtInfoBox {
+    display: none !important;
+    visibility: hidden !important;
+
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* =========================================================
+   MATERIALES VS PLAN - ICONO INFO CON POPOVER
+   Y MEJOR DISTRIBUCIÓN INTERNA
+   ========================================================= */
+
+/* La card mantiene su tamaño, solo reparte mejor el contenido */
+.ConsumoMateriales .cmMaterialVsPlanCard {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 13px 14px 12px !important;
+}
+
+/* Header compacto */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialCardHeader {
+    width: 100% !important;
+    height: 28px !important;
+    min-height: 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialCardHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanTitle,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmCardTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Botón de información */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+/* Quitar fondo/borde del botón */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Icono azul */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+    font-size: 1rem !important;
+    line-height: 22px !important;
+    margin: 0 !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVsPlanInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
+    border-radius: 50% !important;
+}
+
+/* Header de columnas mejor distribuido */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialHeader {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.72fr) minmax(92px, 1fr) minmax(92px, 1fr) 70px !important;
+    column-gap: 14px !important;
+
+    align-items: center !important;
+
+    height: 26px !important;
+    min-height: 26px !important;
+
+    margin: 0 0 6px 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialHeader>.sapMFlexItem {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 0 1 auto !important;
+}
+
+/* Texto de encabezados */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialHeaderText {
+    width: 100% !important;
+    display: block !important;
+
+    color: #475569 !important;
+    font-size: 0.58rem !important;
+    line-height: 0.75rem !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialHeaderCenter {
+    text-align: center !important;
+}
+
+/* La lista ocupa mejor el alto disponible */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialList {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialList .sapMListUl,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialList .sapMLIB,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialList .sapMLIBContent {
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+}
+
+/* Cada fila más distribuida, sin cambiar la card */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRow {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.72fr) minmax(92px, 1fr) minmax(92px, 1fr) 70px !important;
+    column-gap: 14px !important;
+
+    align-items: center !important;
+
+    height: 46px !important;
+    min-height: 46px !important;
+
     padding: 2px 0 !important;
     box-sizing: border-box !important;
 }
 
-/* Material */
-.ConsumoMateriales .cmMatExactMaterial {
-    height: 42px !important;
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRow>.sapMFlexItem {
+    width: auto !important;
     min-width: 0 !important;
-    padding-right: 8px !important;
+    max-width: none !important;
+    flex: 0 1 auto !important;
+}
+
+/* Columna material */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialNameBox {
+    width: 100% !important;
+    height: 46px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding-right: 4px !important;
     box-sizing: border-box !important;
 }
 
-.ConsumoMateriales .cmMatExactIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    width: 18px !important;
-    min-width: 18px !important;
-    margin-right: 8px !important;
-    text-align: center !important;
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialIcon {
+    width: 24px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
+
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+
+    margin-right: 11px !important;
+
+    color: #4f8bff !important;
+    font-size: 1.15rem !important;
+    line-height: 24px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
-.ConsumoMateriales .cmMatExactEmoji {
-    font-size: 1rem !important;
-    width: 18px !important;
-    min-width: 18px !important;
-    margin-right: 8px !important;
-    line-height: 18px !important;
-    text-align: center !important;
-}
-
-.ConsumoMateriales .cmMatExactName {
-    color: #172554 !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-    line-height: 11px !important;
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialName {
+    color: #14213d !important;
+    font-size: 0.64rem !important;
+    line-height: 0.82rem !important;
+    font-weight: 900 !important;
 }
 
 /* Plan y Real */
-.ConsumoMateriales .cmMatExactMeasure {
-    height: 42px !important;
-    min-height: 42px !important;
-    max-height: 42px !important;
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialMeasure {
+    width: 100% !important;
+    height: 46px !important;
+
     display: flex !important;
+    flex-direction: column !important;
     justify-content: center !important;
-    align-items: flex-start !important;
-    padding-right: 10px !important;
+    align-items: stretch !important;
+
+    padding: 0 !important;
     box-sizing: border-box !important;
 }
 
-.ConsumoMateriales .cmMatExactValue {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-    height: 11px !important;
-    min-height: 11px !important;
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialValue {
+    width: 100% !important;
+
     margin: 0 0 5px 0 !important;
-    padding: 0 !important;
+
+    color: #14213d !important;
+    font-size: 0.62rem !important;
+    line-height: 0.78rem !important;
+    font-weight: 900 !important;
     white-space: nowrap !important;
 }
 
-/* Barras */
-.ConsumoMateriales .cmMatExactPlanBar,
-.ConsumoMateriales .cmMatExactRealBar {
+/* Barras un poco más visibles */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialPlanBar,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRealBar {
+    width: 100% !important;
+    min-width: 0 !important;
+
     height: 6px !important;
     min-height: 6px !important;
-    max-height: 6px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    overflow: hidden !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialPlanBar.sapMPI,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRealBar.sapMPI,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialPlanBar .sapMPI,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRealBar .sapMPI {
+    height: 6px !important;
+    min-height: 6px !important;
+
+    border: 0 !important;
+    border-radius: 20px !important;
+    background: #e5e7eb !important;
+    box-shadow: none !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialPlanBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialPlanBar.sapMPI .sapMPIBar {
+    height: 6px !important;
+    background: #9ca3af !important;
+    border-radius: 20px !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRealBar .sapMPIBar,
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialRealBar.sapMPI .sapMPIBar {
+    height: 6px !important;
+    background: #1677ff !important;
+    border-radius: 20px !important;
+}
+
+/* Ocultar textos internos de ProgressIndicator */
+.ConsumoMateriales .cmMaterialVsPlanCard .sapMPIText,
+.ConsumoMateriales .cmMaterialVsPlanCard .sapMPITextLeft,
+.ConsumoMateriales .cmMaterialVsPlanCard .sapMPITextRight {
+    display: none !important;
+}
+
+/* Variación centrada */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVariation {
+    width: 100% !important;
+    height: 46px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 0.64rem !important;
+    line-height: normal !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+}
+
+/* Colores de variación */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVariation[data-estado="Error"],
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVariation[data-sap-ui-custom-estado="Error"] {
+    color: #ef4444 !important;
+}
+
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVariation[data-estado="Success"],
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialVariation[data-sap-ui-custom-estado="Success"] {
+    color: #06a66a !important;
+}
+
+/* Oculta el footer anterior si quedó en XML */
+.ConsumoMateriales .cmMaterialVsPlanCard .cmMaterialInfoFooter,
+.ConsumoMateriales .cmMaterialVsPlanCard #materialesInfoBox {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoMateriales .cmMatExactPlanBar .sapMPI,
-.ConsumoMateriales .cmMatExactRealBar .sapMPI {
-    height: 6px !important;
-    min-height: 6px !important;
-    max-height: 6px !important;
-    border-radius: 20px !important;
-    background: #E5E7EB !important;
-    overflow: hidden !important;
-}
+/* =========================================================
+   FIX - CONSUMO POR TIPO DE ORDEN
+   Mantiene icono info, pero regresa tamaño normal de card
+   ========================================================= */
 
-.ConsumoMateriales .cmMatExactPlanBar .sapMPIBar {
-    background: #9CA3AF !important;
-    border-radius: 20px !important;
-}
+.ConsumoMateriales .cmTipoOrdenCard {
+    padding: 11px 12px 10px !important;
+    min-height: 276px !important;
+    height: 100% !important;
 
-.ConsumoMateriales .cmMatExactRealBar .sapMPIBar {
-    background: #2563EB !important;
-    border-radius: 20px !important;
-}
-
-/* Variación */
-.ConsumoMateriales .cmMatExactVariation {
-    height: 42px !important;
-    line-height: 42px !important;
-    display: block !important;
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoMateriales .cmMatExactVariation[data-estado="Error"],
-.ConsumoMateriales .cmMatExactVariation[data-sap-ui-custom-estado="Error"] {
-    color: #EF4444 !important;
-}
-
-.ConsumoMateriales .cmMatExactVariation[data-estado="Success"],
-.ConsumoMateriales .cmMatExactVariation[data-sap-ui-custom-estado="Success"] {
-    color: #10B981 !important;
-}
-
-/* Footer */
-.ConsumoMateriales .cmMatExactFooter {
-    height: 38px !important;
-    min-height: 38px !important;
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 8px 10px !important;
-    margin-top: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
     box-sizing: border-box !important;
 }
 
-.ConsumoMateriales .cmMatExactFooter .sapUiIcon {
-    color: #2563EB !important;
+/* Header normal */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenHeader {
+    width: 100% !important;
+
+    height: 28px !important;
+    min-height: 28px !important;
+    max-height: 28px !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenHeader>.sapMFlexItem {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Título normal */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenTitle,
+.ConsumoMateriales .cmTipoOrdenCard .cmCardTitle {
+    color: #14213d !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05rem !important;
+    font-weight: 900 !important;
+}
+
+/* Botón info igual que las demás cards, sin crecer */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenInfoButton {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin-left: 8px !important;
+    padding: 0 !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenInfoButton .sapMBtnInner {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenInfoButton .sapMBtnIcon,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenInfoButton .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
     font-size: 1rem !important;
-    margin-right: 8px !important;
+    line-height: 22px !important;
+
+    margin: 0 !important;
 }
 
-.ConsumoMateriales .cmMatExactFooter .sapMText {
-    color: #2563EB !important;
-    font-size: 9.5px !important;
-    font-weight: 800 !important;
-}
-/* ==========================================================================
-   CONSUMO MATERIALES - CARD OT AFECTADAS EXACTA
-   ========================================================================== */
-
-.ConsumoMateriales .cmOtFaltaMaterialCardExact {
-    min-height: 270px !important;
-    padding: 12px !important;
-    overflow: hidden !important;
-}
-
-/* Caja de análisis */
-.ConsumoMateriales .cmOtAnalysisBoxExact {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 7px 8px !important;
-    margin: 4px 0 4px 0 !important;
-}
-
-.ConsumoMateriales .cmOtAnalysisTitleExact {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-}
-
-.ConsumoMateriales .cmOtAnalysisTextExact {
-    color: #64748B !important;
-    font-size: 8.5px !important;
-    line-height: 10px !important;
-}
-
-/* Contenedor gráfico */
-.ConsumoMateriales .cmOtMiniChart {
-    width: 100% !important;
-    height: 135px !important;
-    margin-top: 2px !important;
-}
-
-.ConsumoMateriales .cmOtYAxisAndChart {
-    width: 100% !important;
-    height: 135px !important;
-}
-
-/* Eje Y */
-.ConsumoMateriales .cmOtYAxis {
-    width: 28px !important;
-    min-width: 28px !important;
-    height: 120px !important;
-    padding-top: 4px !important;
-    box-sizing: border-box !important;
-    align-items: center !important;
-}
-
-.ConsumoMateriales .cmOtYAxisTitle {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    margin-bottom: 4px !important;
-}
-
-.ConsumoMateriales .cmOtYAxisLabel {
-    color: #64748B !important;
-    font-size: 8.5px !important;
-    line-height: 16px !important;
-}
-
-/* Área de gráfica */
-.ConsumoMateriales .cmOtChartArea {
-    flex: 1 !important;
-    height: 120px !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #CBD5E1 !important;
-    background-image: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 23px,
-        #E2E8F0 24px
-    ) !important;
-    padding: 0 8px !important;
-    box-sizing: border-box !important;
-}
-
-/* Columnas */
-.ConsumoMateriales .cmOtMiniBarCol {
-    width: 64px !important;
-    height: 120px !important;
-    justify-content: flex-end !important;
-}
-
-/* Línea vertical gris */
-.ConsumoMateriales .cmOtMiniTrack {
-    width: 8px !important;
-    height: 82px !important;
-    background: #E5E7EB !important;
-    border-radius: 20px !important;
-    position: relative !important;
-    margin-bottom: 5px !important;
-}
-
-/* Valores */
-.ConsumoMateriales .cmOtMiniValue {
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-    white-space: nowrap !important;
-}
-
-/* Marcadores horizontales */
-.ConsumoMateriales .cmOtMiniMarker {
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 28px !important;
-    height: 5px !important;
-    border-radius: 20px !important;
-}
-
-/* Posiciones por valor */
-.ConsumoMateriales .cmOtValueRed {
-    color: #EF4444 !important;
-    top: -14px !important;
-}
-
-.ConsumoMateriales .cmOtMiniMarkerRed {
-    background: #EF4444 !important;
-    top: 4px !important;
-}
-
-.ConsumoMateriales .cmOtValueOrange {
-    color: #F97316 !important;
-    top: 30px !important;
-}
-
-.ConsumoMateriales .cmOtMiniMarkerOrange {
-    background: #F97316 !important;
-    top: 44px !important;
-}
-
-.ConsumoMateriales .cmOtValueYellow {
-    color: #F59E0B !important;
-    top: 38px !important;
-}
-
-.ConsumoMateriales .cmOtMiniMarkerYellow {
-    background: #F59E0B !important;
-    top: 52px !important;
-}
-
-.ConsumoMateriales .cmOtValuePurple {
-    color: #6D28D9 !important;
-    top: 56px !important;
-}
-
-.ConsumoMateriales .cmOtMiniMarkerPurple {
-    background: #6D28D9 !important;
-    top: 70px !important;
-}
-
-/* Labels eje X */
-.ConsumoMateriales .cmOtMiniLabel {
-    color: #334155 !important;
-    font-size: 8.5px !important;
-    font-weight: 800 !important;
-    line-height: 10px !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoMateriales .cmOtMiniLabelTwo {
-    white-space: normal !important;
-    width: 70px !important;
-}
-
-/* Leyenda */
-.ConsumoMateriales .cmOtLegendExact {
-    width: 100% !important;
-    gap: 8px !important;
-    margin-top: 6px !important;
-}
-
-.ConsumoMateriales .cmOtLegendExact .sapMText {
-    color: #475569 !important;
-    font-size: 8.5px !important;
-    font-weight: 700 !important;
-    line-height: 10px !important;
-}
-
-/* Dots leyenda */
-.ConsumoMateriales .cmLegendDot {
-    width: 7px !important;
-    height: 7px !important;
-    min-width: 7px !important;
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenInfoButton:hover .sapMBtnInner {
+    background: #eef5ff !important;
     border-radius: 50% !important;
-    margin-right: 4px !important;
 }
 
-.ConsumoMateriales .cmRedBg {
-    background: #EF4444 !important;
+/* Oculta el icono viejo si quedó en XML o caché */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenTitleInfoIcon {
+    display: none !important;
 }
 
-.ConsumoMateriales .cmOrangeBg {
-    background: #F97316 !important;
+/* Total normal */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenTotalText,
+.ConsumoMateriales .cmTipoOrdenCard .cmCardStrongText {
+    color: #14213d !important;
+
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
+    font-weight: 900 !important;
+
+    margin: 0 0 10px 0 !important;
 }
 
-.ConsumoMateriales .cmYellowBg {
-    background: #F59E0B !important;
-}
+/* Barra normal, no de 48px */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenStackedBar,
+.ConsumoMateriales .cmTipoOrdenCard .cmStackedBar {
+    width: 100% !important;
 
-.ConsumoMateriales .cmPurpleBg {
-    background: #6D28D9 !important;
-}
-/* ==========================================================================
-   CONSUMO MATERIALES - OT AFECTADAS FINAL AJUSTADO
-   ========================================================================== */
+    height: 39px !important;
+    min-height: 39px !important;
+    max-height: 39px !important;
 
-.ConsumoMateriales .cmOtFaltaMaterialCardFinal {
-    min-height: 235px !important;
-    padding: 12px !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
+
+    margin: 0 0 12px 0 !important;
 }
 
-/* Caja de análisis compacta */
-.ConsumoMateriales .cmOtFinalAnalysisBox {
-    height: 36px !important;
-    min-height: 36px !important;
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 5px 8px !important;
-    margin: 2px 0 2px 0 !important;
-    box-sizing: border-box !important;
-}
+.ConsumoMateriales .cmTipoOrdenCard .cmStackSegment {
+    height: 39px !important;
+    min-height: 39px !important;
+    max-height: 39px !important;
 
-.ConsumoMateriales .cmOtFinalAnalysisBox .sapUiIcon {
-    font-size: 0.85rem !important;
-    margin-top: 1px !important;
-}
-
-.ConsumoMateriales .cmOtFinalAnalysisTitle {
-    color: #172554 !important;
-    font-size: 8px !important;
-    font-weight: 900 !important;
-    line-height: 8px !important;
-}
-
-.ConsumoMateriales .cmOtFinalAnalysisText {
-    color: #64748B !important;
-    font-size: 7.8px !important;
-    line-height: 8.5px !important;
-}
-
-/* Gráfica más baja como la referencia */
-.ConsumoMateriales .cmOtFinalChart {
-    width: 100% !important;
-    height: 92px !important;
-    min-height: 92px !important;
-    margin-top: 0 !important;
-}
-
-.ConsumoMateriales .cmOtFinalChartBody {
-    width: 100% !important;
-    height: 92px !important;
-    min-height: 92px !important;
-}
-
-/* Eje Y compacto */
-.ConsumoMateriales .cmOtFinalAxis {
-    width: 24px !important;
-    min-width: 24px !important;
-    height: 82px !important;
-    padding-top: 0 !important;
+    display: flex !important;
     align-items: center !important;
-    box-sizing: border-box !important;
+    justify-content: center !important;
 }
 
-.ConsumoMateriales .cmOtFinalAxisTitle {
-    color: #172554 !important;
-    font-size: 8px !important;
+.ConsumoMateriales .cmTipoOrdenCard .cmStackText {
+    color: #ffffff !important;
+
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
     font-weight: 900 !important;
-    line-height: 8px !important;
-    margin-bottom: 1px !important;
 }
 
-.ConsumoMateriales .cmOtFinalAxisLabel {
-    color: #64748B !important;
-    font-size: 7.5px !important;
-    line-height: 11.8px !important;
-}
-
-/* Área de gráfica compacta */
-.ConsumoMateriales .cmOtFinalPlot {
-    flex: 1 !important;
-    height: 78px !important;
-    min-height: 78px !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #CBD5E1 !important;
-    background-image: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 14px,
-        #E2E8F0 15px
-    ) !important;
-    padding: 0 6px !important;
-    box-sizing: border-box !important;
-}
-
-/* Columnas */
-.ConsumoMateriales .cmOtFinalCol {
-    width: 56px !important;
-    height: 78px !important;
-    min-height: 78px !important;
-    justify-content: flex-end !important;
-}
-
-/* Línea vertical gris */
-.ConsumoMateriales .cmOtFinalTrack {
-    width: 7px !important;
-    height: 50px !important;
-    min-height: 50px !important;
-    background: #E5E7EB !important;
-    border-radius: 20px !important;
-    position: relative !important;
-    margin-bottom: 3px !important;
-}
-
-/* Marcadores */
-.ConsumoMateriales .cmOtFinalMarker {
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 24px !important;
-    height: 4px !important;
-    border-radius: 20px !important;
-}
-
-/* Valores */
-.ConsumoMateriales .cmOtFinalValue {
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-size: 8.5px !important;
-    font-weight: 900 !important;
-    line-height: 8.5px !important;
-    white-space: nowrap !important;
-}
-
-/* Posiciones ajustadas a la referencia */
-.ConsumoMateriales .cmOtFinalValueRed {
-    color: #EF4444 !important;
-    top: -10px !important;
-}
-
-.ConsumoMateriales .cmOtFinalMarkerRed {
-    background: #EF4444 !important;
-    top: 1px !important;
-}
-
-.ConsumoMateriales .cmOtFinalValueOrange {
-    color: #F97316 !important;
-    top: 18px !important;
-}
-
-.ConsumoMateriales .cmOtFinalMarkerOrange {
-    background: #F97316 !important;
-    top: 29px !important;
-}
-
-.ConsumoMateriales .cmOtFinalValueYellow {
-    color: #F59E0B !important;
-    top: 22px !important;
-}
-
-.ConsumoMateriales .cmOtFinalMarkerYellow {
-    background: #F59E0B !important;
-    top: 33px !important;
-}
-
-.ConsumoMateriales .cmOtFinalValuePurple {
-    color: #6D28D9 !important;
-    top: 35px !important;
-}
-
-.ConsumoMateriales .cmOtFinalMarkerPurple {
-    background: #6D28D9 !important;
-    top: 45px !important;
-}
-
-/* Labels inferiores */
-.ConsumoMateriales .cmOtFinalLabel {
-    color: #334155 !important;
-    font-size: 7.2px !important;
-    font-weight: 800 !important;
-    line-height: 7.8px !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoMateriales .cmOtFinalLabelTwo {
-    width: 56px !important;
-    white-space: normal !important;
-}
-
-/* Leyenda compacta */
-.ConsumoMateriales .cmOtFinalLegend {
+/* Lista normal */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList {
+    flex: 1 1 auto !important;
     width: 100% !important;
-    gap: 6px !important;
-    margin-top: 2px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
 }
 
-.ConsumoMateriales .cmOtFinalLegend .sapMText {
-    color: #475569 !important;
-    font-size: 7.8px !important;
-    font-weight: 700 !important;
-    line-height: 8.5px !important;
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMListUl,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMLIB,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenList .sapMLIBContent {
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
 }
 
-/* Dots */
-.ConsumoMateriales .cmLegendDot {
-    width: 6px !important;
-    height: 6px !important;
-    min-width: 6px !important;
+/* Filas normales, no de 54px */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenRow {
+    width: 100% !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+
+    padding: 8px 0 !important;
+    box-sizing: border-box !important;
+
+    border-bottom: 1px solid #e8edf5 !important;
+}
+
+/* Punto normal */
+.ConsumoMateriales .cmTipoOrdenCard .cmDot {
+    width: 9px !important;
+    min-width: 9px !important;
+    max-width: 9px !important;
+
+    height: 9px !important;
+    min-height: 9px !important;
+    max-height: 9px !important;
+
     border-radius: 50% !important;
-    margin-right: 4px !important;
+
+    margin-right: 9px !important;
 }
 
-.ConsumoMateriales .cmRedBg {
-    background: #EF4444 !important;
+/* Textos normales */
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenName,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenValue,
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenPercent {
+    color: #14213d !important;
+
+    font-size: 0.70rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 850 !important;
 }
 
-.ConsumoMateriales .cmOrangeBg {
-    background: #F97316 !important;
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenName {
+    max-width: 190px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.ConsumoMateriales .cmYellowBg {
-    background: #F59E0B !important;
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenValue {
+    min-width: 96px !important;
+    text-align: right !important;
 }
 
-.ConsumoMateriales .cmPurpleBg {
-    background: #6D28D9 !important;
-}
+.ConsumoMateriales .cmTipoOrdenCard .cmTipoOrdenPercent {
+    min-width: 42px !important;
+    margin-left: 12px !important;
 
-/* Link */
-.ConsumoMateriales .cmOtFaltaMaterialCardFinal .cmCardLink {
-    margin-top: 2px !important;
-    font-size: 9px !important;
+    color: #475569 !important;
+    text-align: right !important;
 }
