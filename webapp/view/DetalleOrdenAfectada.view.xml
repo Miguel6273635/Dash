@@ -332,7 +332,7 @@
                             class="doaKpiIconBox">
 
                             <core:Icon
-                                src="sap-icon://stopwatch"
+                                src="sap-icon://time-overtime"
                                 class="doaKpiIcon"/>
                         </VBox>
 
@@ -931,12 +931,15 @@
                                                 justifyContent="Center"
                                                 class="doaUtilizationCell">
 
-                                                <ProgressIndicator
-                                                    width="6rem"
-                                                    percentValue="{utilizationBar}"
-                                                    displayValue=""
-                                                    state="Error"
-                                                    class="doaUtilizationBar"/>
+                                                <HBox
+                                                    class="doaUtilizationTrack"
+                                                    alignItems="Center">
+
+                                                    <VBox
+                                                        width="{= ${utilizationBar} + '%' }"
+                                                        class="doaUtilizationFill"/>
+
+                                                </HBox>
 
                                                 <Text
                                                     text="{utilization}"

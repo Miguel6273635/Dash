@@ -1,0 +1,939 @@
+<mvc:View
+    controllerName="mantenimiento.controller.HistorialSeguimiento"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <Page
+        id="historialSeguimientoPage"
+        showHeader="false"
+        enableScrolling="false"
+        class="hsPage sapUiSizeCompact">
+
+        <content>
+            <VBox class="hsRoot">
+
+                <HBox class="hsBreadcrumbs" alignItems="Center">
+                    <Link
+                        text="Equipos bloqueados"
+                        press=".onGoToEquiposBloqueados" />
+
+                    <core:Icon
+                        src="sap-icon://slim-arrow-right"
+                        class="hsBreadcrumbIcon" />
+
+                    <Link
+                        text="Detalle del equipo bloqueado"
+                        press=".onGoToDetalleEquipo" />
+
+                    <core:Icon
+                        src="sap-icon://slim-arrow-right"
+                        class="hsBreadcrumbIcon" />
+
+                    <Text
+                        text="Historial y seguimiento"
+                        class="hsBreadcrumbCurrent" />
+                </HBox>
+
+                <HBox class="hsHeader" alignItems="Center">
+                    <Button
+                        icon="sap-icon://nav-back"
+                        type="Transparent"
+                        tooltip="Regresar"
+                        press=".onNavBack"
+                        class="hsBackButton" />
+
+                    <VBox class="hsHeaderText">
+                        <HBox alignItems="Center" class="hsTitleRow">
+                            <Title
+                                text="Historial y seguimiento:"
+                                level="H2"
+                                class="hsMainTitle" />
+
+                            <Title
+                                text="{historial>/equipmentId}"
+                                level="H2"
+                                class="hsMainTitle hsEquipmentTitle" />
+                        </HBox>
+
+                        <Text
+                            text="Trazabilidad cronológica del bloqueo, seguimiento operativo, cambios de estatus y acciones relacionadas."
+                            class="hsSubtitle" />
+                    </VBox>
+                </HBox>
+
+                <HBox class="hsFilterGrid">
+
+                    <VBox class="hsFilterCard">
+                        <Label
+                            text="Fecha desde"
+                            labelFor="dateFrom" />
+
+                        <DatePicker
+                            id="dateFrom"
+                            width="100%"
+                            placeholder="dd/mm/aaaa"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd" />
+                    </VBox>
+
+                    <VBox class="hsFilterCard">
+                        <Label
+                            text="Fecha hasta"
+                            labelFor="dateTo" />
+
+                        <DatePicker
+                            id="dateTo"
+                            width="100%"
+                            placeholder="dd/mm/aaaa"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd" />
+                    </VBox>
+
+                    <VBox class="hsFilterCard">
+                        <Label
+                            text="Tipo de evento"
+                            labelFor="eventTypeSelect" />
+
+                        <Select
+                            id="eventTypeSelect"
+                            width="100%"
+                            selectedKey="ALL"
+                            items="{historial>/eventTypes}">
+
+                            <core:Item
+                                key="{historial>key}"
+                                text="{historial>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="hsFilterCard">
+                        <Label
+                            text="Responsable"
+                            labelFor="responsibleSelect" />
+
+                        <Select
+                            id="responsibleSelect"
+                            width="100%"
+                            selectedKey="ALL"
+                            items="{historial>/responsibles}">
+
+                            <core:Item
+                                key="{historial>key}"
+                                text="{historial>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="hsFilterCard">
+                        <Label
+                            text="Estatus resultante"
+                            labelFor="resultStatusSelect" />
+
+                        <Select
+                            id="resultStatusSelect"
+                            width="100%"
+                            selectedKey="ALL"
+                            items="{historial>/resultStatuses}">
+
+                            <core:Item
+                                key="{historial>key}"
+                                text="{historial>text}" />
+                        </Select>
+                    </VBox>
+
+                    <VBox class="hsFilterCard hsSearchCard">
+                        <Label
+                            text="Buscar seguimiento"
+                            labelFor="trackingSearch" />
+
+                        <SearchField
+                            id="trackingSearch"
+                            width="100%"
+                            placeholder="Buscar..."
+                            search=".onSearch"
+                            liveChange=".onSearchLive" />
+                    </VBox>
+
+                    <Button
+                        text="Aplicar filtros"
+                        icon="sap-icon://filter"
+                        type="Emphasized"
+                        press=".onApplyFilters"
+                        class="hsApplyButton" />
+
+                </HBox>
+
+                <HBox class="hsKpiGrid">
+
+                    <HBox
+                        class="hsKpiCard hsKpiRed"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://locked"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Estatus actual"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="Bloqueado activo"
+                                class="hsKpiValue hsKpiValueText" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="hsKpiCard hsKpiOrange"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://calendar"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Días bloqueado"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="41"
+                                class="hsKpiValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="hsKpiCard hsKpiPurple"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://activity-items"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Eventos registrados"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="12"
+                                class="hsKpiValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="hsKpiCard hsKpiBlue"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://pending"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Pendientes abiertos"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="5"
+                                class="hsKpiValue" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="hsKpiCard hsKpiCyan"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://appointment-2"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Última actualización"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="31/05/2024 10:20"
+                                class="hsKpiValue hsKpiValueText" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="hsKpiCard hsKpiRose"
+                        alignItems="Center">
+
+                        <VBox class="hsKpiIconWrap">
+                            <core:Icon
+                                src="sap-icon://flag"
+                                class="hsKpiIcon" />
+                        </VBox>
+
+                        <VBox class="hsKpiTextWrap">
+                            <Text
+                                text="Próxima acción"
+                                class="hsKpiLabel" />
+
+                            <Text
+                                text="Reunión con cliente"
+                                class="hsKpiValue hsKpiValueText" />
+                        </VBox>
+                    </HBox>
+
+                </HBox>
+
+                <HBox class="hsMiddleGrid">
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="14"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                    <VBox class="hsMiddleColumn">
+
+                        <VBox class="hsPanel hsGeneralPanel">
+                            <layoutData>
+                                <FlexItemData
+                                    growFactor="8"
+                                    shrinkFactor="1"
+                                    baseSize="0%" />
+                            </layoutData>
+
+                            <HBox
+                                class="hsPanelHeader"
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://hint"
+                                    class="hsPanelTitleIcon" />
+
+                                <Title
+                                    text="Datos generales del equipo"
+                                    level="H5"
+                                    class="hsPanelTitle" />
+                            </HBox>
+
+                            <VBox class="hsInfoBody">
+                                <layoutData>
+                                    <FlexItemData
+                                        growFactor="1"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+                                </layoutData>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Equipo / Elevador"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/equipo}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Cliente"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/cliente}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Zona"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/zona}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Supervisor"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/supervisor}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Sitio"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/sitio}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Dirección"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/direccion}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Tipo de equipo"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/tipoEquipo}"
+                                        class="hsInfoValue" />
+                                </HBox>
+
+                                <HBox class="hsInfoRow">
+                                    <Text
+                                        text="Modelo"
+                                        class="hsInfoLabel" />
+
+                                    <Text
+                                        text="{historial>/general/modelo}"
+                                        class="hsInfoValue" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <VBox class="hsPanel hsTimelinePanel">
+                            <layoutData>
+                                <FlexItemData
+                                    growFactor="12"
+                                    shrinkFactor="1"
+                                    baseSize="0%" />
+                            </layoutData>
+
+                            <HBox
+                                class="hsPanelHeader"
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://circle-task-2"
+                                    class="hsPanelTitleIcon" />
+
+                                <Title
+                                    text="Línea de tiempo de seguimiento"
+                                    level="H5"
+                                    class="hsPanelTitle" />
+                            </HBox>
+
+                            <List
+                                items="{historial>/timeline}"
+                                showSeparators="None"
+                                noDataText="No hay eventos para los filtros seleccionados"
+                                class="hsTimelineList">
+
+                                <layoutData>
+                                    <FlexItemData
+                                        growFactor="1"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+                                </layoutData>
+
+                                <CustomListItem class="hsTimelineListItem">
+                                    <HBox
+                                        class="hsTimelineItem"
+                                        alignItems="Center">
+
+                                        <Text
+                                            text="●"
+                                            class="hsTimelineDot">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="status"
+                                                    value="{historial>statusKey}"
+                                                    writeToDom="true" />
+                                            </customData>
+                                        </Text>
+
+                                        <Text
+                                            text="{historial>date}"
+                                            class="hsTimelineDate"
+                                            wrapping="false" />
+
+                                        <Text
+                                            text="{historial>user}"
+                                            class="hsTimelineUser"
+                                            wrapping="false" />
+
+                                        <Text
+                                            text="{historial>comment}"
+                                            class="hsTimelineComment"
+                                            wrapping="false" />
+
+                                        <ObjectStatus
+                                            text="{historial>resultStatus}"
+                                            class="hsStatusPill">
+
+                                            <customData>
+                                                <core:CustomData
+                                                    key="status"
+                                                    value="{historial>statusKey}"
+                                                    writeToDom="true" />
+                                            </customData>
+                                        </ObjectStatus>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+
+                    </VBox>
+
+                    <VBox class="hsMiddleColumn">
+
+                        <VBox class="hsPanel hsSummaryPanel">
+                            <layoutData>
+                                <FlexItemData
+                                    growFactor="8"
+                                    shrinkFactor="1"
+                                    baseSize="0%" />
+                            </layoutData>
+
+                            <HBox
+                                class="hsPanelHeader"
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://hint"
+                                    class="hsPanelTitleIcon" />
+
+                                <Title
+                                    text="Resumen de seguimiento"
+                                    level="H5"
+                                    class="hsPanelTitle" />
+                            </HBox>
+
+                            <VBox class="hsSummaryBody">
+                                <layoutData>
+                                    <FlexItemData
+                                        growFactor="1"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+                                </layoutData>
+
+                                <HBox class="hsSummaryRow">
+                                    <Text
+                                        text="Motivo de bloqueo"
+                                        class="hsSummaryLabel" />
+
+                                    <Text
+                                        text="{historial>/summary/motivo}"
+                                        class="hsSummaryValue" />
+                                </HBox>
+
+                                <HBox class="hsSummaryRow">
+                                    <Text
+                                        text="Responsable actual"
+                                        class="hsSummaryLabel" />
+
+                                    <Text
+                                        text="{historial>/summary/responsableActual}"
+                                        class="hsSummaryValue" />
+                                </HBox>
+
+                                <HBox class="hsSummaryRow">
+                                    <Text
+                                        text="Fecha de bloqueo"
+                                        class="hsSummaryLabel" />
+
+                                    <Text
+                                        text="{historial>/summary/fechaBloqueo}"
+                                        class="hsSummaryValue" />
+                                </HBox>
+
+                                <HBox class="hsSummaryRow">
+                                    <Text
+                                        text="Estado de gestión"
+                                        class="hsSummaryLabel" />
+
+                                    <ObjectStatus
+                                        text="{historial>/summary/estadoGestion}"
+                                        class="hsStatusPill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="status"
+                                                value="{historial>/summary/estadoKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </ObjectStatus>
+                                </HBox>
+
+                                <HBox class="hsSummaryRow">
+                                    <Text
+                                        text="Fecha compromiso"
+                                        class="hsSummaryLabel" />
+
+                                    <Text
+                                        text="{historial>/summary/fechaCompromiso}"
+                                        class="hsSummaryValue" />
+                                </HBox>
+
+                                <HBox class="hsSummaryRow hsSummaryObservationRow">
+                                    <Text
+                                        text="Observación general"
+                                        class="hsSummaryLabel" />
+
+                                    <Text
+                                        text="{historial>/summary/observacion}"
+                                        class="hsSummaryValue hsSummaryObservation"
+                                        wrapping="true" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <VBox class="hsPanel hsTrackingPanel">
+                            <layoutData>
+                                <FlexItemData
+                                    growFactor="12"
+                                    shrinkFactor="1"
+                                    baseSize="0%" />
+                            </layoutData>
+
+                            <HBox
+                                class="hsPanelHeader"
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://line-chart"
+                                    class="hsPanelTitleIcon" />
+
+                                <Title
+                                    text="Indicadores del seguimiento"
+                                    level="H5"
+                                    class="hsPanelTitle" />
+                            </HBox>
+
+                            <VBox class="hsIndicatorGrid">
+
+                                <HBox class="hsIndicatorRow">
+                                    <Text
+                                        text="Principal causa"
+                                        class="hsIndicatorLabel" />
+
+                                    <Text
+                                        text="Cambio a otro proveedor"
+                                        class="hsIndicatorValue" />
+
+                                    <Text
+                                        text="Última actualización"
+                                        class="hsIndicatorLabel" />
+
+                                    <ObjectStatus
+                                        text="Pendiente"
+                                        class="hsStatusPill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="status"
+                                                value="PENDING"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </ObjectStatus>
+                                </HBox>
+
+                                <HBox class="hsIndicatorRow">
+                                    <Text
+                                        text="Responsable con más intervención"
+                                        class="hsIndicatorLabel" />
+
+                                    <Text
+                                        text="Ana Martínez"
+                                        class="hsIndicatorValue" />
+
+                                    <Text
+                                        text="Días desde última intervención"
+                                        class="hsIndicatorLabel" />
+
+                                    <Text
+                                        text="1"
+                                        class="hsIndicatorValue" />
+                                </HBox>
+
+                            </VBox>
+
+                            <HBox
+                                class="hsSubsectionTitle"
+                                alignItems="Center">
+
+                                <core:Icon
+                                    src="sap-icon://pending"
+                                    class="hsPanelTitleIcon" />
+
+                                <Title
+                                    text="Pendientes activos"
+                                    level="H6"
+                                    class="hsPanelTitle" />
+                            </HBox>
+
+                            <Table
+                                id="pendingTable"
+                                items="{historial>/pending}"
+                                fixedLayout="true"
+                                showSeparators="Inner"
+                                noDataText="No hay pendientes para los filtros seleccionados"
+                                class="hsCompactTable hsPendingTable">
+
+                                <layoutData>
+                                    <FlexItemData
+                                        growFactor="1"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+                                </layoutData>
+
+                                <columns>
+                                    <Column width="29%">
+                                        <Text text="Pendiente" />
+                                    </Column>
+
+                                    <Column width="20%">
+                                        <Text text="Responsable" />
+                                    </Column>
+
+                                    <Column width="16%">
+                                        <Text text="Estatus" />
+                                    </Column>
+
+                                    <Column width="19%">
+                                        <Text text="Fecha compromiso" />
+                                    </Column>
+
+                                    <Column
+                                        width="16%"
+                                        hAlign="Center">
+
+                                        <Text text="Prioridad" />
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text
+                                                text="{historial>pending}"
+                                                wrapping="false" />
+
+                                            <Text
+                                                text="{historial>responsible}"
+                                                wrapping="false" />
+
+                                            <ObjectStatus
+                                                text="{historial>resultStatus}"
+                                                class="hsStatusPill">
+
+                                                <customData>
+                                                    <core:CustomData
+                                                        key="status"
+                                                        value="{historial>statusKey}"
+                                                        writeToDom="true" />
+                                                </customData>
+                                            </ObjectStatus>
+
+                                            <Text
+                                                text="{historial>date}"
+                                                wrapping="false" />
+
+                                            <ObjectStatus
+                                                text="{historial>priority}"
+                                                class="hsPriorityPill">
+
+                                                <customData>
+                                                    <core:CustomData
+                                                        key="priority"
+                                                        value="{historial>priorityKey}"
+                                                        writeToDom="true" />
+                                                </customData>
+                                            </ObjectStatus>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                        </VBox>
+
+                    </VBox>
+                </HBox>
+
+                <VBox class="hsPanel hsLogPanel">
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="9"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                    <HBox
+                        class="hsPanelHeader"
+                        alignItems="Center">
+
+                        <core:Icon
+                            src="sap-icon://list"
+                            class="hsPanelTitleIcon" />
+
+                        <Title
+                            text="Bitácora detallada de seguimiento"
+                            level="H5"
+                            class="hsPanelTitle" />
+                    </HBox>
+
+                    <Table
+                        id="logTable"
+                        items="{historial>/log}"
+                        fixedLayout="true"
+                        showSeparators="Inner"
+                        noDataText="No hay registros para los filtros seleccionados"
+                        class="hsCompactTable hsLogTable">
+
+                        <layoutData>
+                            <FlexItemData
+                                growFactor="1"
+                                shrinkFactor="1"
+                                baseSize="0%" />
+                        </layoutData>
+
+                        <columns>
+                            <Column width="8%">
+                                <Text text="Fecha" />
+                            </Column>
+
+                            <Column width="6%">
+                                <Text text="Hora" />
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Usuario" />
+                            </Column>
+
+                            <Column width="9%">
+                                <Text text="Área" />
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Tipo de evento" />
+                            </Column>
+
+                            <Column width="22%">
+                                <Text text="Acción / comentario" />
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Estatus anterior" />
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Estatus resultante" />
+                            </Column>
+
+                            <Column width="9%">
+                                <Text text="Orden relacionada" />
+                            </Column>
+
+                            <Column
+                                width="6%"
+                                hAlign="Center">
+
+                                <Text text="Evidencia" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text
+                                        text="{historial>date}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{historial>time}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{historial>user}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{historial>area}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{historial>eventTypeText}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{historial>comment}"
+                                        wrapping="false"
+                                        tooltip="{historial>comment}" />
+
+                                    <ObjectStatus
+                                        text="{historial>previousStatus}"
+                                        class="hsStatusPill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="status"
+                                                value="{historial>previousStatusKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </ObjectStatus>
+
+                                    <ObjectStatus
+                                        text="{historial>resultStatus}"
+                                        class="hsStatusPill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="status"
+                                                value="{historial>statusKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </ObjectStatus>
+
+                                    <Link
+                                        text="{historial>order}"
+                                        enabled="{= ${historial>order} !== 'N/A' }"
+                                        press=".onOrderPress"
+                                        class="hsOrderLink" />
+
+                                    <ObjectStatus
+                                        text="{historial>evidence}"
+                                        class="hsEvidencePill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="evidence"
+                                                value="{historial>evidenceKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </ObjectStatus>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

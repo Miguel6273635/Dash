@@ -686,168 +686,333 @@
 
 </VBox>
 
-                        <!-- =============================================
-                             INFORMACIÓN DEL BLOQUEO
-                             ============================================= -->
+                    <!-- =============================================
+     INFORMACIÓN DEL BLOQUEO
+     ============================================= -->
 
-                        <VBox
-                            fitContainer="true"
-                            class="debPanel debBlockPanel">
+<VBox
+    fitContainer="true"
+    class="debPanel debBlockPanel">
 
-                            <layoutData>
-                                <FlexItemData
-                                    growFactor="27"
-                                    shrinkFactor="1"
-                                    baseSize="0%" />
-                            </layoutData>
+    <layoutData>
+        <FlexItemData
+            growFactor="27"
+            shrinkFactor="1"
+            baseSize="0%" />
+    </layoutData>
 
-                            <HBox
-                                width="100%"
-                                alignItems="Center"
-                                class="debPanelHeader">
+    <!-- TÍTULO -->
 
-                                <Title
-                                    text="Información del bloqueo"
-                                    level="H3"
-                                    class="debPanelTitle" />
+    <HBox
+        width="100%"
+        alignItems="Center"
+        class="debPanelHeader debBlockInfoHeader">
 
-                            </HBox>
+        <Title
+            text="Información del bloqueo"
+            level="H3"
+            class="debPanelTitle" />
 
-                            <VBox
-                                width="100%"
-                                class="debBlockInformation">
+    </HBox>
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Start"
-                                    class="debBlockInfoRow">
+    <!-- CONTENIDO -->
 
-                                    <Text
-                                        text="Motivo de bloqueo"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+    <VBox
+        width="100%"
+        fitContainer="true"
+        class="debBlockInfoContent">
 
-                                    <Text
-                                        text="{detalle>/blockInformation/reason}"
-                                        wrapping="true"
-                                        class="debBlockInfoValue" />
+        <!-- PRIMER GRUPO -->
 
-                                </HBox>
+        <VBox
+            width="100%"
+            class="debBlockInfoGroup">
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Center"
-                                    class="debBlockInfoRow">
+            <!-- MOTIVO DE BLOQUEO -->
 
-                                    <Text
-                                        text="Estado de gestión"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
 
-                                    <Text
-                                        text="{detalle>/blockInformation/managementStatus}"
-                                        wrapping="false"
-                                        class="debPill">
+                <Label
+                    text="Motivo de bloqueo"
+                    wrapping="false"
+                    class="debBlockInfoKey">
 
-                                        <customData>
-                                            <core:CustomData
-                                                key="pilltype"
-                                                value="review"
-                                                writeToDom="true" />
-                                        </customData>
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
 
-                                    </Text>
+                </Label>
 
-                                </HBox>
+                <Text
+                    text="{detalle>/blockInformation/reason}"
+                    wrapping="false"
+                    class="debBlockInfoValue">
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Center"
-                                    class="debBlockInfoRow">
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
 
-                                    <Text
-                                        text="Fecha de bloqueo"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+                </Text>
 
-                                    <Text
-                                        text="{detalle>/blockInformation/blockDate}"
-                                        wrapping="false"
-                                        class="debBlockInfoValue" />
+            </HBox>
 
-                                </HBox>
+            <!-- ESTADO DE GESTIÓN -->
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Center"
-                                    class="debBlockInfoRow">
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
 
-                                    <Text
-                                        text="Responsable"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+                <Label
+                    text="Estado de gestión"
+                    wrapping="false"
+                    class="debBlockInfoKey">
 
-                                    <Text
-                                        text="{detalle>/blockInformation/responsible}"
-                                        wrapping="false"
-                                        class="debBlockInfoValue" />
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
 
-                                </HBox>
+                </Label>
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Start"
-                                    class="debBlockInfoRow debBlockInfoSeparator">
+                <HBox
+                    alignItems="Center"
+                    class="debBlockInfoValueContainer">
 
-                                    <Text
-                                        text="Próxima acción"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
 
-                                    <Text
-                                        text="{detalle>/blockInformation/nextAction}"
-                                        wrapping="true"
-                                        class="debBlockInfoValue" />
+                    <Text
+                        text="{detalle>/blockInformation/managementStatus}"
+                        wrapping="false"
+                        class="debBlockInfoStatusPill" />
 
-                                </HBox>
+                </HBox>
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Center"
-                                    class="debBlockInfoRow">
+            </HBox>
 
-                                    <Text
-                                        text="Fecha compromiso"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+            <!-- FECHA DE BLOQUEO -->
 
-                                    <Text
-                                        text="{detalle>/blockInformation/commitmentDate}"
-                                        wrapping="false"
-                                        class="debBlockInfoValue" />
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
 
-                                </HBox>
+                <Label
+                    text="Fecha de bloqueo"
+                    wrapping="false"
+                    class="debBlockInfoKey">
 
-                                <HBox
-                                    width="100%"
-                                    alignItems="Start"
-                                    class="debBlockInfoRow debBlockInfoObservation">
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
 
-                                    <Text
-                                        text="Observación general"
-                                        wrapping="false"
-                                        class="debBlockInfoLabel" />
+                </Label>
 
-                                    <Text
-                                        text="{detalle>/blockInformation/observation}"
-                                        wrapping="true"
-                                        class="debBlockInfoValue" />
+                <Text
+                    text="{detalle>/blockInformation/blockDate}"
+                    wrapping="false"
+                    class="debBlockInfoValue">
 
-                                </HBox>
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
 
-                            </VBox>
+                </Text>
 
-                        </VBox>
+            </HBox>
+
+            <!-- RESPONSABLE -->
+
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
+
+                <Label
+                    text="Responsable"
+                    wrapping="false"
+                    class="debBlockInfoKey">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
+
+                </Label>
+
+                <Text
+                    text="{detalle>/blockInformation/responsible}"
+                    wrapping="false"
+                    class="debBlockInfoValue">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                </Text>
+
+            </HBox>
+
+        </VBox>
+
+        <!-- SEGUNDO GRUPO -->
+
+        <VBox
+            width="100%"
+            class="debBlockInfoGroup debBlockInfoSecondGroup">
+
+            <!-- PRÓXIMA ACCIÓN -->
+
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
+
+                <Label
+                    text="Próxima acción"
+                    wrapping="false"
+                    class="debBlockInfoKey">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
+
+                </Label>
+
+                <Text
+                    text="{detalle>/blockInformation/nextAction}"
+                    wrapping="false"
+                    class="debBlockInfoValue">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                </Text>
+
+            </HBox>
+
+            <!-- FECHA COMPROMISO -->
+
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="debBlockInfoLine">
+
+                <Label
+                    text="Fecha compromiso"
+                    wrapping="false"
+                    class="debBlockInfoKey">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
+
+                </Label>
+
+                <Text
+                    text="{detalle>/blockInformation/commitmentDate}"
+                    wrapping="false"
+                    class="debBlockInfoValue">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                </Text>
+
+            </HBox>
+
+            <!-- OBSERVACIÓN GENERAL -->
+
+            <HBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Start"
+                class="debBlockInfoLine debBlockInfoObservationLine">
+
+                <Label
+                    text="Observación general"
+                    wrapping="false"
+                    class="debBlockInfoKey">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="0"
+                            shrinkFactor="0"
+                            baseSize="40%" />
+                    </layoutData>
+
+                </Label>
+
+                <Text
+                    text="{detalle>/blockInformation/observation}"
+                    tooltip="{detalle>/blockInformation/observation}"
+                    wrapping="true"
+                    maxLines="2"
+                    class="debBlockInfoValue debBlockInfoObservationValue">
+
+                    <layoutData>
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+                    </layoutData>
+
+                </Text>
+
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</VBox>
 
                         <!-- =============================================
                              ÓRDENES AFECTADAS
