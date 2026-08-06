@@ -1,0 +1,290 @@
+###############################################################################
+# DESTINATION SAP BTP
+###############################################################################
+
+@destination = http://QAS_MITSU_DASH.dest
+@service = {{destination}}/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV
+
+@sapClient = 400
+@sapLanguage = ES
+
+# Variables para consultas de detalle
+@orderId = 000040215272
+@materialRequirementId = MATREQ-0001
+@blockId = BLQ-0001
+
+
+###############################################################################
+# 1. METADATA
+#
+# Esta debe ser la primera prueba.
+# Permite confirmar:
+# - Nombre real de los Entity Sets
+# - Nombre real de las propiedades
+# - Tipos Edm.String, Edm.DateTime, Edm.Decimal, etc.
+# - Navegaciones ToOperations, ToCauses, ToResources, etc.
+###############################################################################
+
+GET {{service}}/$metadata?sap-client={{sapClient}}&sap-language={{sapLanguage}}
+Accept: application/xml
+
+
+###############################################################################
+# 2. RAÍZ DEL SERVICIO
+#
+# Devuelve los Entity Sets publicados por ABAP.
+###############################################################################
+
+GET {{service}}/?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json
+Accept: application/json
+
+
+###############################################################################
+# 3. CONSULTA GENÉRICA
+#
+# Cambia únicamente el valor de entitySet para probar cualquier colección.
+###############################################################################
+
+@entitySet = DashboardOrdersSet
+
+GET {{service}}/{{entitySet}}?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=20
+Accept: application/json
+
+
+###############################################################################
+# 4. ÓRDENES: PRIMEROS 20 REGISTROS
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=20
+Accept: application/json
+
+
+###############################################################################
+# 5. ÓRDENES: SOLAMENTE SM01
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=OrderTypeCode%20eq%20'SM01'
+Accept: application/json
+
+
+###############################################################################
+# 6. ÓRDENES: SM01, SM02 Y SM03
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=(OrderTypeCode%20eq%20'SM01'%20or%20OrderTypeCode%20eq%20'SM02'%20or%20OrderTypeCode%20eq%20'SM03')
+Accept: application/json
+
+
+###############################################################################
+# 7. ÓRDENES EJECUTADAS
+#
+# E0015 = Finalizada.
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=SapUserStatusCode%20eq%20'E0015'
+Accept: application/json
+
+
+###############################################################################
+# 8. ÓRDENES NO EJECUTADAS
+#
+# E0013 = Pendiente
+# E0014 = En proceso
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=(SapUserStatusCode%20eq%20'E0013'%20or%20SapUserStatusCode%20eq%20'E0014')
+Accept: application/json
+
+
+###############################################################################
+# 9. ÓRDENES POR PERIODO
+#
+# Modifica las fechas según el periodo que quieras consultar.
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=1000&$filter=PlannedStartDate%20ge%20datetime'2026-08-01T00:00:00'%20and%20PlannedStartDate%20le%20datetime'2026-08-31T23:59:59'
+Accept: application/json
+
+
+###############################################################################
+# 10. ÓRDENES POR PERIODO Y CLASES OFICIALES
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=1000&$filter=(OrderTypeCode%20eq%20'SM01'%20or%20OrderTypeCode%20eq%20'SM02'%20or%20OrderTypeCode%20eq%20'SM03')%20and%20PlannedStartDate%20ge%20datetime'2026-08-01T00:00:00'%20and%20PlannedStartDate%20le%20datetime'2026-08-31T23:59:59'
+Accept: application/json
+
+
+###############################################################################
+# 11. SELECCIONAR SOLAMENTE ALGUNOS CAMPOS
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=20&$select=OrderId,OrderTypeCode,Description,PlannedStartDate,PlannedFinishDate,SapUserStatusCode,AppStatusCode,StatusText,CustomerName,EquipmentName
+Accept: application/json
+
+
+###############################################################################
+# 12. ORDENAR POR FECHA
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=20&$orderby=PlannedStartDate%20desc
+Accept: application/json
+
+
+###############################################################################
+# 13. UNA ORDEN POR SU CLAVE
+###############################################################################
+
+GET {{service}}/DashboardOrdersSet('{{orderId}}')?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json
+Accept: application/json
+
+
+###############################################################################
+# 14. CAUSAS DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderCausesSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 15. RECURSOS ASIGNADOS A UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderResourcesSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 16. OPERACIONES DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderOperationsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 17. CONFIRMACIONES DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderConfirmationsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 18. EVENTOS DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderEventsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'&$orderby=EventAt%20desc
+Accept: application/json
+
+
+###############################################################################
+# 19. REQUISITOS DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderRequirementsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 20. CAPACIDAD DE RECURSOS
+###############################################################################
+
+GET {{service}}/DashboardResourceDailySet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100
+Accept: application/json
+
+
+###############################################################################
+# 21. CAPACIDAD POR ZONA
+###############################################################################
+
+GET {{service}}/DashboardResourceDailySet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=ZoneId%20eq%20'NORTE'
+Accept: application/json
+
+
+###############################################################################
+# 22. CAPACIDAD VALIDADA
+###############################################################################
+
+GET {{service}}/DashboardResourceDailySet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=CapacitySourceValidated%20eq%20true
+Accept: application/json
+
+
+###############################################################################
+# 23. MATERIALES PLANEADOS DE UNA ORDEN
+###############################################################################
+
+GET {{service}}/DashboardOrderMaterialsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=OrderId%20eq%20'{{orderId}}'
+Accept: application/json
+
+
+###############################################################################
+# 24. MOVIMIENTOS DE UN REQUERIMIENTO DE MATERIAL
+###############################################################################
+
+GET {{service}}/DashboardMaterialMovementsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=MaterialRequirementId%20eq%20'{{materialRequirementId}}'
+Accept: application/json
+
+
+###############################################################################
+# 25. SOLICITUDES DE CALL CENTER
+###############################################################################
+
+GET {{service}}/DashboardServiceRequestsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100
+Accept: application/json
+
+
+###############################################################################
+# 26. SOLICITUDES ABIERTAS
+###############################################################################
+
+GET {{service}}/DashboardServiceRequestsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100&$filter=CurrentStatusCode%20eq%20'OPEN'
+Accept: application/json
+
+
+###############################################################################
+# 27. EQUIPOS BLOQUEADOS
+###############################################################################
+
+GET {{service}}/DashboardEquipmentBlocksSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=100
+Accept: application/json
+
+
+###############################################################################
+# 28. ÓRDENES AFECTADAS POR UN BLOQUEO
+###############################################################################
+
+GET {{service}}/DashboardBlockOrdersSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=BlockId%20eq%20'{{blockId}}'
+Accept: application/json
+
+
+###############################################################################
+# 29. EVENTOS Y PENDIENTES DE UN BLOQUEO
+###############################################################################
+
+GET {{service}}/DashboardBlockEventsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=BlockId%20eq%20'{{blockId}}'
+Accept: application/json
+
+
+###############################################################################
+# 30. PENDIENTES ABIERTOS DE UN BLOQUEO
+###############################################################################
+
+GET {{service}}/DashboardBlockEventsSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=BlockId%20eq%20'{{blockId}}'%20and%20RecordTypeCode%20eq%20'PENDING_ACTION'%20and%20IsCurrent%20eq%20true%20and%20ClosedAt%20eq%20null
+Accept: application/json
+
+
+###############################################################################
+# 31. CATÁLOGOS PARA LOS FILTROS
+###############################################################################
+
+GET {{service}}/DashboardFilterCatalogSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$top=1000&$filter=Active%20eq%20true&$orderby=FilterDomain,SortOrder
+Accept: application/json
+
+
+###############################################################################
+# 32. CATÁLOGO DE ZONAS
+###############################################################################
+
+GET {{service}}/DashboardFilterCatalogSet?sap-client={{sapClient}}&sap-language={{sapLanguage}}&$format=json&$filter=FilterDomain%20eq%20'ZONE'%20and%20Active%20eq%20true&$orderby=SortOrder
+Accept: application/json

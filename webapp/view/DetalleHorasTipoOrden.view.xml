@@ -35,98 +35,96 @@
         </HBox>
 
         <!-- FILTROS -->
-        <HBox
-          class="dhtoFilters"
-          wrap="Wrap"
-          alignItems="Stretch"
-          justifyContent="Start">
-
-          <VBox class="dhtoFilterItem dhtoFilterPeriod">
-            <Label text="Periodo" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/periodo}"
-              items="{dhto>/catalogos/periodos}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterDate">
-            <Label text="Fecha desde" class="dhtoFilterLabel" />
-            <DatePicker
-              width="100%"
-              value="{dhto>/filters/fechaDesde}"
-              displayFormat="dd/MM/yyyy"
-              valueFormat="dd/MM/yyyy" />
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterDate">
-            <Label text="Fecha hasta" class="dhtoFilterLabel" />
-            <DatePicker
-              width="100%"
-              value="{dhto>/filters/fechaHasta}"
-              displayFormat="dd/MM/yyyy"
-              valueFormat="dd/MM/yyyy" />
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterNormal">
-            <Label text="Zona" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/zona}"
-              items="{dhto>/catalogos/zonas}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterNormal">
-            <Label text="Supervisor" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/supervisor}"
-              items="{dhto>/catalogos/supervisores}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterNormal">
-            <Label text="Turno" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/turno}"
-              items="{dhto>/catalogos/turnos}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterOrder">
-            <Label text="Tipo de orden" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/tipoOrden}"
-              items="{dhto>/catalogos/tiposOrden}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <VBox class="dhtoFilterItem dhtoFilterNormal">
-            <Label text="Estado de orden" class="dhtoFilterLabel" />
-            <Select
-              width="100%"
-              selectedKey="{dhto>/filters/estado}"
-              items="{dhto>/catalogos/estados}">
-              <core:Item key="{dhto>key}" text="{dhto>text}" />
-            </Select>
-          </VBox>
-
-          <Button
-            text="Aplicar filtros"
-            icon="sap-icon://filter"
-            type="Emphasized"
-            class="dhtoApplyBtn"
-            press=".onApplyFilters" />
-
-        </HBox>
+<HBox
+  class="dhtoFilters"
+  wrap="Wrap"
+  alignItems="Stretch"
+  justifyContent="Start">
+  <!-- Periodo -->
+  <VBox class="dhtoFilterItem dhtoFilterPeriod">
+    <Label text="Periodo" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/periodo}"
+      items="{dhto>/catalogos/periodos}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <!-- Fecha desde -->
+  <VBox class="dhtoFilterItem dhtoFilterDate">
+    <Label text="Fecha desde" class="dhtoFilterLabel" />
+    <DatePicker
+      width="100%"
+      value="{dhto>/filters/fechaDesde}"
+      displayFormat="dd/MM/yyyy"
+      valueFormat="dd/MM/yyyy" />
+  </VBox>
+  <!-- Fecha hasta -->
+  <VBox class="dhtoFilterItem dhtoFilterDate">
+    <Label text="Fecha hasta" class="dhtoFilterLabel" />
+    <DatePicker
+      width="100%"
+      value="{dhto>/filters/fechaHasta}"
+      displayFormat="dd/MM/yyyy"
+      valueFormat="dd/MM/yyyy" />
+  </VBox>
+  <!-- Zona -->
+  <VBox class="dhtoFilterItem dhtoFilterNormal">
+    <Label text="Zona" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/zona}"
+      items="{dhto>/catalogos/zonas}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <!-- Supervisor -->
+  <VBox class="dhtoFilterItem dhtoFilterNormal">
+    <Label text="Supervisor" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/supervisor}"
+      items="{dhto>/catalogos/supervisores}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <!-- Turno -->
+  <VBox class="dhtoFilterItem dhtoFilterNormal">
+    <Label text="Turno" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/turno}"
+      items="{dhto>/catalogos/turnos}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <!-- Tipo de orden -->
+  <VBox class="dhtoFilterItem dhtoFilterOrder">
+    <Label text="Tipo de orden" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/tipoOrden}"
+      items="{dhto>/catalogos/tiposOrden}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <!-- Estado de orden -->
+  <VBox class="dhtoFilterItem dhtoFilterNormal">
+    <Label text="Estado de orden" class="dhtoFilterLabel" />
+    <Select
+      width="100%"
+      selectedKey="{dhto>/filters/estado}"
+      items="{dhto>/catalogos/estados}">
+      <core:Item key="{dhto>key}" text="{dhto>text}" />
+    </Select>
+  </VBox>
+  <Button
+    text="Aplicar filtros"
+    icon="sap-icon://filter"
+    type="Emphasized"
+    class="dhtoApplyBtn"
+    press=".onApplyFilters" />
+</HBox>
 
         <!-- KPI CARDS -->
         <HBox class="dhtoKpiGrid" wrap="Wrap">
@@ -231,10 +229,22 @@
               <Text text="{dhto>turno}" />
               <Text text="{dhto>horasPlan}" />
               <Text text="{dhto>horasReales}" />
-              <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
-              <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+              <Text text="{dhto>variacionH}" class="dhtoVariationValue">
+                <customData>
+                  <core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" />
+                </customData>
+              </Text>
+              <Text text="{dhto>variacionPct}" class="dhtoVariationValue">
+                <customData>
+                  <core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" />
+                </customData>
+              </Text>
               <HBox alignItems="Center" justifyContent="Center" class="dhtoStatusCell">
-                <VBox class="{dhto>statusDotClass}" />
+                <VBox class="dhtoStatusDot">
+                  <customData>
+                    <core:CustomData key="statusClass" value="{dhto>statusDotClass}" writeToDom="true" />
+                  </customData>
+                </VBox>
                 <Text text="{dhto>estado}" class="dhtoStatusText" />
               </HBox>
             </HBox>
@@ -288,10 +298,10 @@
                 <Text text="{dhto>ot}" />
                 <Text text="{dhto>horasPlan}" />
                 <Text text="{dhto>horasReales}" />
-                <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
-                <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+                <Text text="{dhto>variacionH}" class="dhtoVariationValue"><customData><core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" /></customData></Text>
+                <Text text="{dhto>variacionPct}" class="dhtoVariationValue"><customData><core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" /></customData></Text>
                 <HBox alignItems="Center" justifyContent="Center">
-                  <VBox class="{dhto>statusDotClass}" />
+                  <VBox class="dhtoStatusDot"><customData><core:CustomData key="statusClass" value="{dhto>statusDotClass}" writeToDom="true" /></customData></VBox>
                   <Text text="{dhto>estado}" class="dhtoStatusText" />
                 </HBox>
               </HBox>
@@ -336,10 +346,10 @@
                 <Text text="{dhto>ot}" />
                 <Text text="{dhto>horasPlan}" />
                 <Text text="{dhto>horasReales}" />
-                <Text text="{dhto>variacionH}" class="{dhto>colorClass}" />
-                <Text text="{dhto>variacionPct}" class="{dhto>colorClass}" />
+                <Text text="{dhto>variacionH}" class="dhtoVariationValue"><customData><core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" /></customData></Text>
+                <Text text="{dhto>variacionPct}" class="dhtoVariationValue"><customData><core:CustomData key="colorClass" value="{dhto>colorClass}" writeToDom="true" /></customData></Text>
                 <HBox alignItems="Center" justifyContent="Center">
-                  <VBox class="{dhto>statusDotClass}" />
+                  <VBox class="dhtoStatusDot"><customData><core:CustomData key="statusClass" value="{dhto>statusDotClass}" writeToDom="true" /></customData></VBox>
                   <Text text="{dhto>estado}" class="dhtoStatusText" />
                 </HBox>
               </HBox>

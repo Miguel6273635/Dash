@@ -23,7 +23,7 @@
                 <!-- HEADER + FILTROS                                      -->
                 <!-- ===================================================== -->
 
-                <HBox class="tprHeaderCard" justifyContent="SpaceBetween" alignItems="Start">
+                <HBox class="tprHeaderCard" justifyContent="SpaceBetween" alignItems="Center">
 
                     <VBox class="tprHeaderTextBox">
                         <Title
@@ -45,10 +45,10 @@
                                 <VBox>
                                     <Text text="Periodo" class="tprFilterLabel" />
                                     <Select
-                                        id="selPeriodo"
+                                        id="tendenciaSelPeriodo"
                                         selectedKey="{dash>/filtros/periodo}"
                                         change=".onFilterChange"
-                                        width="12rem"
+                                        width="100%"
                                         class="tprFilterSelect"
                                         items="{catalogos>/periodos}">
                                         <core:Item
@@ -66,10 +66,10 @@
                                 <VBox>
                                     <Text text="Zona" class="tprFilterLabel" />
                                     <Select
-                                        id="selZona"
+                                        id="tendenciaSelZona"
                                         selectedKey="{dash>/filtros/zona}"
                                         change=".onFilterChange"
-                                        width="8rem"
+                                        width="100%"
                                         class="tprFilterSelect"
                                         items="{catalogos>/zonas}">
                                         <core:Item
@@ -82,6 +82,7 @@
 
                         <!-- BOTON FILTRO -->
                         <Button
+                            id="tendenciaBtnAplicarFiltros"
                             text="Aplicar filtros"
                             icon="sap-icon://filter"
                             type="Emphasized"

@@ -255,14 +255,6 @@ sap.ui.define([
                 MessageToast.show(
                     "Orden seleccionada: " + sOrder
                 );
-
-                /*
-                 * Cuando quieras activar la navegación:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo("RouteDetalleOrdenAfectada");
-                 */
             },
 
             /**
@@ -280,14 +272,6 @@ sap.ui.define([
                     "Consulta de órdenes afectadas del equipo " +
                     sEquipoId
                 );
-
-                /*
-                 * Cuando quieras activar la navegación:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo("RouteListadoOrdenesAfectadas");
-                 */
             },
 
             /**
@@ -305,14 +289,6 @@ sap.ui.define([
                     "Consulta de pendientes del equipo " +
                     sEquipoId
                 );
-
-                /*
-                 * Cuando quieras activar la navegación:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo("RoutePendientesDesbloqueo");
-                 */
             }
         }
     );

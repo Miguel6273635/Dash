@@ -14,7 +14,6 @@ sap.ui.define([
     return Controller.extend(
         "mantenimiento.controller.DetalleCumplimientoOrdenes",
         {
-
             onInit: function () {
                 includeStylesheet(
                     sap.ui.require.toUrl(
@@ -22,6 +21,18 @@ sap.ui.define([
                     )
                 );
 
+                this._crearModelo();
+            },
+
+            onAfterRendering: function () {
+                var that = this;
+
+                window.setTimeout(function () {
+                    that._renderizarVisualizaciones();
+                }, 80);
+            },
+
+            _crearModelo: function () {
                 var oData = {
                     filtros: {
                         periodo: "mayo2024",
@@ -33,13 +44,51 @@ sap.ui.define([
                     },
 
                     kpis: {
-                        ordenesPlaneadas: "520",
-                        ordenesEjecutadas: "483",
-                        brecha: "-37",
+                        ordenesPlaneadas: 520,
+                        ordenesEjecutadas: 483,
+                        brecha: -37,
                         cumplimientoGeneral: "92.9%"
                     },
 
                     graficas: {
+                        descomposicionBrecha: [
+                            {
+                                concepto: "Plan inicial",
+                                valor: 520,
+                                tipo: "plan"
+                            },
+                            {
+                                concepto: "Falta de mantenimiento",
+                                valor: -12,
+                                tipo: "brecha"
+                            },
+                            {
+                                concepto: "Falta de refacciones",
+                                valor: -8,
+                                tipo: "brecha"
+                            },
+                            {
+                                concepto: "Cliente no disponible",
+                                valor: -5,
+                                tipo: "brecha"
+                            },
+                            {
+                                concepto: "Reprogramación",
+                                valor: -4,
+                                tipo: "brecha"
+                            },
+                            {
+                                concepto: "Mecánico no disponible",
+                                valor: -8,
+                                tipo: "brecha"
+                            },
+                            {
+                                concepto: "Resultado real",
+                                valor: 483,
+                                tipo: "resultado"
+                            }
+                        ],
+
                         elevadoresDesviacion: [
                             {
                                 elevador: "EV-1024",
@@ -128,33 +177,227 @@ sap.ui.define([
                         responsables: [
                             {
                                 responsable: "Luis Pérez",
-                                ordenesEjecutadas: 4,
-                                enRevision: 2,
-                                areaTecnica: 1
+                                ordenesEjecutadas: 2,
+                                enRevision: 4,
+                                areaTecnica: 1,
+                                total: 7,
+                                unidades: [
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "true",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "tecnica",
+                                        inicio: "false",
+                                        fin: "true"
+                                    }
+                                ]
                             },
+
                             {
                                 responsable: "María García",
-                                ordenesEjecutadas: 3,
-                                enRevision: 2,
-                                areaTecnica: 1
+                                ordenesEjecutadas: 2,
+                                enRevision: 3,
+                                areaTecnica: 1,
+                                total: 6,
+                                unidades: [
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "true",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "tecnica",
+                                        inicio: "false",
+                                        fin: "true"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    }
+                                ]
                             },
+
                             {
                                 responsable: "Carlos Herrera",
                                 ordenesEjecutadas: 2,
                                 enRevision: 2,
-                                areaTecnica: 1
+                                areaTecnica: 1,
+                                total: 5,
+                                unidades: [
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "true",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "tecnica",
+                                        inicio: "false",
+                                        fin: "true"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    }
+                                ]
                             },
+
                             {
                                 responsable: "Pedro López",
-                                ordenesEjecutadas: 2,
+                                ordenesEjecutadas: 1,
                                 enRevision: 1,
-                                areaTecnica: 1
+                                areaTecnica: 1,
+                                total: 3,
+                                unidades: [
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "true",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "tecnica",
+                                        inicio: "false",
+                                        fin: "true"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    }
+                                ]
                             },
+
                             {
                                 responsable: "Ana Martínez",
                                 ordenesEjecutadas: 1,
                                 enRevision: 1,
-                                areaTecnica: 0
+                                areaTecnica: 0,
+                                total: 2,
+                                unidades: [
+                                    {
+                                        tipo: "ejecutadas",
+                                        inicio: "true",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "revision",
+                                        inicio: "false",
+                                        fin: "true"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    },
+                                    {
+                                        tipo: "vacia",
+                                        inicio: "false",
+                                        fin: "false"
+                                    }
+                                ]
                             }
                         ],
 
@@ -226,349 +469,497 @@ sap.ui.define([
                     }
                 };
 
+                var oModel = new JSONModel(oData);
+
+                oModel.setSizeLimit(100);
+
                 this.getView().setModel(
-                    new JSONModel(oData),
+                    oModel,
                     "cumplimientoModel"
                 );
             },
 
-            onAfterRendering: function () {
-                if (this._iChartTimer) {
-                    clearTimeout(this._iChartTimer);
-                }
-
-                this._iChartTimer = setTimeout(
-                    function () {
-                        this._configurarGraficas();
-                    }.bind(this),
-                    200
-                );
+            _renderizarVisualizaciones: function () {
+                this._renderizarResponsables();
+                this._renderizarTendencia();
+                this._renderizarFallas();
             },
 
-            onExit: function () {
-                if (this._iChartTimer) {
-                    clearTimeout(this._iChartTimer);
-                    this._iChartTimer = null;
-                }
-            },
-
-            _configurarGraficas: function () {
-                this._configurarBarraApilada(
-                    "vfResponsables"
+            _renderizarResponsables: function () {
+                var oHtml = this.byId("htmlResponsables");
+                var oModel = this.getView().getModel(
+                    "cumplimientoModel"
                 );
+                var aData;
+                var nMax = 7;
+                var sRows;
+                var sContent;
 
-                this._configurarLineaDual(
-                    "vfTendenciaEjecucion"
-                );
-
-                this._configurarDonut(
-                    "vfFallasServicios"
-                );
-            },
-
-            _configurarBarraApilada: function (sId) {
-                var oChart = this.byId(sId);
-
-                if (!oChart) {
+                if (!oHtml || !oModel) {
                     return;
                 }
 
-                oChart.setVizProperties({
-                    plotArea: {
-                        colorPalette: [
-                            "#2563EB",
-                            "#16A34A",
-                            "#6D28D9"
-                        ],
+                aData = oModel.getProperty(
+                    "/graficas/responsables"
+                ) || [];
 
-                        drawingEffect: "normal",
+                sRows = aData.map(function (oItem) {
+                    var nInterna = Number(
+                        oItem.ordenesEjecutadas || 0
+                    );
+                    var nExterna = Number(
+                        oItem.enRevision || 0
+                    );
+                    var nTecnica = Number(
+                        oItem.areaTecnica || 0
+                    );
+                    var nTotal = Number(
+                        oItem.total || 0
+                    );
+                    var nWidth = nTotal / nMax * 100;
+                    var nInternaWidth = nTotal ?
+                        nInterna / nTotal * 100 : 0;
+                    var nExternaWidth = nTotal ?
+                        nExterna / nTotal * 100 : 0;
+                    var nTecnicaWidth = nTotal ?
+                        nTecnica / nTotal * 100 : 0;
 
-                        dataLabel: {
-                            visible: false
-                        }
-                    },
+                    return [
+                        '<div class="dcgoRespHtmlRow">',
+                            '<div class="dcgoRespHtmlName">',
+                                this._escapeHtml(
+                                    oItem.responsable
+                                ),
+                            '</div>',
+                            '<div class="dcgoRespHtmlTrack">',
+                                '<div class="dcgoRespHtmlBar" ',
+                                    'style="width:',
+                                    nWidth.toFixed(3),
+                                    '%">',
+                                    '<div class="dcgoRespHtmlSegment dcgoRespInterna" ',
+                                        'style="width:',
+                                        nInternaWidth.toFixed(3),
+                                        '%">',
+                                        nInterna || '',
+                                    '</div>',
+                                    '<div class="dcgoRespHtmlSegment dcgoRespExterna" ',
+                                        'style="width:',
+                                        nExternaWidth.toFixed(3),
+                                        '%">',
+                                        nExterna || '',
+                                    '</div>',
+                                    '<div class="dcgoRespHtmlSegment dcgoRespTecnica" ',
+                                        'style="width:',
+                                        nTecnicaWidth.toFixed(3),
+                                        '%">',
+                                        nTecnica || '',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                            '<div class="dcgoRespHtmlTotal">',
+                                nTotal,
+                            '</div>',
+                        '</div>'
+                    ].join('');
+                }.bind(this)).join('');
 
-                    legend: {
-                        visible: false
-                    },
+                sContent = [
+                    '<div class="dcgoRespHtmlRoot">',
+                        '<div class="dcgoRespHtmlLegend">',
+                            '<div class="dcgoRespHtmlLegendItems">',
+                                '<span><i class="dcgoRespDot dcgoRespInterna"></i>',
+                                    'Interna (operación)</span>',
+                                '<span><i class="dcgoRespDot dcgoRespExterna"></i>',
+                                    'Externa (cliente/proveedor)</span>',
+                                '<span><i class="dcgoRespDot dcgoRespTecnica"></i>',
+                                    'Área técnica</span>',
+                            '</div>',
+                            '<strong>Total</strong>',
+                        '</div>',
+                        '<div class="dcgoRespHtmlRows">',
+                            sRows,
+                        '</div>',
+                        '<div class="dcgoRespHtmlFooter">',
+                            '<span class="dcgoRespInfoMark">i</span>',
+                            'Las barras destacan representación (%) ',
+                            'del total de la desviación.',
+                        '</div>',
+                    '</div>'
+                ].join('');
 
-                    title: {
-                        visible: false
-                    },
-
-                    valueAxis: {
-                        title: {
-                            visible: false
-                        },
-
-                        scale: {
-                            fixedRange: true,
-                            minValue: 0,
-                            maxValue: 8
-                        },
-
-                        gridline: {
-                            visible: true
-                        },
-
-                        label: {
-                            style: {
-                                color: "#64748B",
-                                fontSize: "8px"
-                            }
-                        }
-                    },
-
-                    categoryAxis: {
-                        title: {
-                            visible: false
-                        },
-
-                        label: {
-                            style: {
-                                color: "#334155",
-                                fontSize: "8px"
-                            }
-                        }
-                    },
-
-                    interaction: {
-                        zoom: {
-                            enablement: "disabled"
-                        },
-
-                        selectability: {
-                            mode: "single"
-                        }
-                    },
-
-                    background: {
-                        color: "transparent"
-                    }
-                });
+                oHtml.setContent(sContent);
             },
 
-            _configurarLineaDual: function (sId) {
-                var oChart = this.byId(sId);
-
-                if (!oChart) {
-                    return;
-                }
-
-                oChart.setVizProperties({
-                    plotArea: {
-                        colorPalette: [
-                            "#94A3B8",
-                            "#2563EB",
-                            "#16A34A"
-                        ],
-
-                        drawingEffect: "normal",
-
-                        marker: {
-                            visible: true,
-                            size: 4
-                        },
-
-                        dataLabel: {
-                            visible: false
-                        },
-
-                        line: {
-                            width: 2
-                        }
-                    },
-
-                    legend: {
-                        visible: false
-                    },
-
-                    title: {
-                        visible: false
-                    },
-
-                    valueAxis: {
-                        title: {
-                            visible: false
-                        },
-
-                        scale: {
-                            fixedRange: true,
-                            minValue: 0,
-                            maxValue: 700
-                        },
-
-                        gridline: {
-                            visible: true
-                        },
-
-                        label: {
-                            style: {
-                                color: "#64748B",
-                                fontSize: "8px"
-                            }
-                        }
-                    },
-
-                    valueAxis2: {
-                        title: {
-                            visible: false
-                        },
-
-                        scale: {
-                            fixedRange: true,
-                            minValue: 0,
-                            maxValue: 120
-                        },
-
-                        gridline: {
-                            visible: false
-                        },
-
-                        label: {
-                            style: {
-                                color: "#16A34A",
-                                fontSize: "8px"
-                            }
-                        }
-                    },
-
-                    categoryAxis: {
-                        title: {
-                            visible: false
-                        },
-
-                        label: {
-                            style: {
-                                color: "#334155",
-                                fontSize: "8px"
-                            }
-                        }
-                    },
-
-                    interaction: {
-                        zoom: {
-                            enablement: "disabled"
-                        },
-
-                        selectability: {
-                            mode: "single"
-                        }
-                    },
-
-                    background: {
-                        color: "transparent"
-                    }
-                });
-            },
-
-            _configurarDonut: function (sId) {
-                var oChart = this.byId(sId);
-
-                if (!oChart) {
-                    return;
-                }
-
-                oChart.setVizProperties({
-                    plotArea: {
-                        colorPalette: [
-                            "#6D28D9",
-                            "#2563EB",
-                            "#38BDF8",
-                            "#F97316",
-                            "#9333EA",
-                            "#CBD5E1"
-                        ],
-
-                        drawingEffect: "normal",
-
-                        dataLabel: {
-                            visible: false
-                        }
-                    },
-
-                    legend: {
-                        visible: false
-                    },
-
-                    title: {
-                        visible: false
-                    },
-
-                    interaction: {
-                        selectability: {
-                            mode: "single"
-                        }
-                    },
-
-                    background: {
-                        color: "transparent"
-                    }
-                });
-            },
-
-            formatBarPercent: function (nValue) {
-                var nPercent = Number(nValue) / 8 * 100;
-
-                return Math.max(
-                    0,
-                    Math.min(100, nPercent)
+            _renderizarTendencia: function () {
+                var oHtml = this.byId(
+                    "htmlTendenciaEjecucion"
                 );
+                var oModel = this.getView().getModel(
+                    "cumplimientoModel"
+                );
+                var aData;
+                var nWidth = 720;
+                var nHeight = 265;
+                var nLeft = 54;
+                var nRight = 50;
+                var nTop = 20;
+                var nBottom = 44;
+                var nPlotWidth = nWidth - nLeft - nRight;
+                var nPlotHeight = nHeight - nTop - nBottom;
+                var nOtMax = 800;
+                var nPctMax = 125;
+                var aX;
+                var fnYOT;
+                var fnYPct;
+                var fnPoints;
+                var sPlanPoints;
+                var sExecutedPoints;
+                var sCompliancePoints;
+                var sAreaPoints;
+                var sGrid;
+                var sMonths;
+                var sMarkers;
+                var sContent;
+
+                if (!oHtml || !oModel) {
+                    return;
+                }
+
+                aData = oModel.getProperty(
+                    "/graficas/tendenciaEjecucion"
+                ) || [];
+
+                if (!aData.length) {
+                    oHtml.setContent("");
+                    return;
+                }
+
+                aX = aData.map(function (oItem, iIndex) {
+                    if (aData.length === 1) {
+                        return nLeft + nPlotWidth / 2;
+                    }
+
+                    return nLeft +
+                        iIndex * nPlotWidth /
+                        (aData.length - 1);
+                });
+
+                fnYOT = function (nValue) {
+                    return nTop + nPlotHeight -
+                        Number(nValue || 0) /
+                        nOtMax * nPlotHeight;
+                };
+
+                fnYPct = function (nValue) {
+                    return nTop + nPlotHeight -
+                        Number(nValue || 0) /
+                        nPctMax * nPlotHeight;
+                };
+
+                fnPoints = function (sProperty, fnY) {
+                    return aData.map(function (oItem, iIndex) {
+                        return aX[iIndex].toFixed(1) + "," +
+                            fnY(oItem[sProperty]).toFixed(1);
+                    }).join(" ");
+                };
+
+                sPlanPoints = fnPoints(
+                    "otPlaneadas",
+                    fnYOT
+                );
+                sExecutedPoints = fnPoints(
+                    "otEjecutadas",
+                    fnYOT
+                );
+                sCompliancePoints = fnPoints(
+                    "cumplimiento",
+                    fnYPct
+                );
+                sAreaPoints = [
+                    nLeft + "," + (nTop + nPlotHeight),
+                    sExecutedPoints,
+                    (nLeft + nPlotWidth) + "," +
+                        (nTop + nPlotHeight)
+                ].join(" ");
+
+                sGrid = [0, 200, 400, 600, 800].map(
+                    function (nValue) {
+                        var nY = fnYOT(nValue);
+
+                        return [
+                            '<line x1="', nLeft,
+                                '" y1="', nY.toFixed(1),
+                                '" x2="',
+                                (nLeft + nPlotWidth),
+                                '" y2="', nY.toFixed(1),
+                                '" class="dcgoSvgGrid"/>',
+                            '<text x="', (nLeft - 10),
+                                '" y="', (nY + 3).toFixed(1),
+                                '" text-anchor="end" ',
+                                'class="dcgoSvgAxisLabel">',
+                                nValue,
+                            '</text>'
+                        ].join('');
+                    }
+                ).join('');
+
+                sGrid += [0, 25, 50, 75, 100, 125].map(
+                    function (nValue) {
+                        var nY = fnYPct(nValue);
+
+                        return [
+                            '<text x="',
+                                (nLeft + nPlotWidth + 10),
+                                '" y="', (nY + 3).toFixed(1),
+                                '" class="dcgoSvgPctLabel">',
+                                nValue, '%',
+                            '</text>'
+                        ].join('');
+                    }
+                ).join('');
+
+                sMonths = aData.map(
+                    function (oItem, iIndex) {
+                        return [
+                            '<text x="', aX[iIndex].toFixed(1),
+                                '" y="', (nHeight - 10),
+                                '" text-anchor="middle" ',
+                                'class="dcgoSvgMonth">',
+                                this._escapeHtml(oItem.mes),
+                            '</text>'
+                        ].join('');
+                    }.bind(this)
+                ).join('');
+
+                sMarkers = aData.map(
+                    function (oItem, iIndex) {
+                        var nX = aX[iIndex];
+                        var nPlanY = fnYOT(
+                            oItem.otPlaneadas
+                        );
+                        var nExecY = fnYOT(
+                            oItem.otEjecutadas
+                        );
+                        var nPctY = fnYPct(
+                            oItem.cumplimiento
+                        );
+                        var sPct = Number(
+                            oItem.cumplimiento
+                        ) % 1 === 0 ?
+                            Number(oItem.cumplimiento) :
+                            Number(oItem.cumplimiento)
+                                .toFixed(1);
+
+                        return [
+                            '<circle cx="', nX.toFixed(1),
+                                '" cy="', nPlanY.toFixed(1),
+                                '" r="3.2" class="dcgoSvgPlanPoint"/>',
+                            '<circle cx="', nX.toFixed(1),
+                                '" cy="', nExecY.toFixed(1),
+                                '" r="4" class="dcgoSvgExecPoint"/>',
+                            '<circle cx="', nX.toFixed(1),
+                                '" cy="', nPctY.toFixed(1),
+                                '" r="4" class="dcgoSvgPctPoint"/>',
+                            '<text x="', nX.toFixed(1),
+                                '" y="', (nPctY - 9).toFixed(1),
+                                '" text-anchor="middle" ',
+                                'class="dcgoSvgPctValue">',
+                                sPct, '%',
+                            '</text>'
+                        ].join('');
+                    }
+                ).join('');
+
+                sContent = [
+                    '<div class="dcgoTrendSvgWrap">',
+                        '<svg viewBox="0 0 ', nWidth, ' ', nHeight,
+                            '" preserveAspectRatio="none" ',
+                            'class="dcgoTrendSvg" ',
+                            'role="img" ',
+                            'aria-label="Tendencia de ejecución">',
+                            '<defs>',
+                                '<linearGradient id="dcgoExecArea" ',
+                                    'x1="0" y1="0" x2="0" y2="1">',
+                                    '<stop offset="0%" ',
+                                        'stop-color="#2563eb" ',
+                                        'stop-opacity="0.22"/>',
+                                    '<stop offset="100%" ',
+                                        'stop-color="#2563eb" ',
+                                        'stop-opacity="0.03"/>',
+                                '</linearGradient>',
+                            '</defs>',
+                            sGrid,
+                            '<polygon points="', sAreaPoints,
+                                '" fill="url(#dcgoExecArea)"/>',
+                            '<polyline points="', sPlanPoints,
+                                '" class="dcgoSvgPlanLine"/>',
+                            '<polyline points="', sExecutedPoints,
+                                '" class="dcgoSvgExecLine"/>',
+                            '<polyline points="', sCompliancePoints,
+                                '" class="dcgoSvgPctLine"/>',
+                            sMarkers,
+                            sMonths,
+                        '</svg>',
+                    '</div>'
+                ].join('');
+
+                oHtml.setContent(sContent);
             },
 
-            formatHeatLevel: function (nValue) {
-                var n = Number(nValue);
+            _renderizarFallas: function () {
+                var oHtml = this.byId(
+                    "htmlFallasDonut"
+                );
+                var oModel = this.getView().getModel(
+                    "cumplimientoModel"
+                );
+                var aData;
+                var aColors = [
+                    "#6D28D9",
+                    "#22C55E",
+                    "#4F46E5",
+                    "#38BDF8",
+                    "#F59E0B",
+                    "#94A3B8"
+                ];
+                var nTotal;
+                var nStart = 0;
+                var aStops = [];
+                var sContent;
 
-                if (n >= 4) {
+                if (!oHtml || !oModel) {
+                    return;
+                }
+
+                aData = oModel.getProperty(
+                    "/graficas/fallasServicios"
+                ) || [];
+
+                nTotal = aData.reduce(function (nSum, oItem) {
+                    return nSum + Number(oItem.total || 0);
+                }, 0);
+
+                aData.forEach(function (oItem, iIndex) {
+                    var nPercent = nTotal ?
+                        Number(oItem.total || 0) /
+                        nTotal * 100 : 0;
+                    var nEnd = nStart + nPercent;
+                    var sColor = aColors[
+                        iIndex % aColors.length
+                    ];
+
+                    aStops.push(
+                        sColor + " " +
+                        nStart.toFixed(3) + "% " +
+                        nEnd.toFixed(3) + "%"
+                    );
+
+                    nStart = nEnd;
+                });
+
+                sContent = [
+                    '<div class="dcgoCssDonutWrap">',
+                        '<div class="dcgoCssDonut" style="background:',
+                            'conic-gradient(',
+                            aStops.join(','),
+                            ')">',
+                            '<div class="dcgoCssDonutHole">',
+                                '<strong>', nTotal, '</strong>',
+                                '<span>OT totales</span>',
+                            '</div>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+                oHtml.setContent(sContent);
+            },
+
+            _escapeHtml: function (vValue) {
+                return String(vValue == null ? "" : vValue)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            },
+
+            formatBarWidth: function (vValue) {
+                var nValue = parseFloat(vValue);
+                var nPercent;
+
+                if (isNaN(nValue) || nValue <= 0) {
+                    return "0%";
+                }
+
+                nPercent = nValue / 8 * 100;
+
+                if (nPercent > 100) {
+                    nPercent = 100;
+                }
+
+                return nPercent + "%";
+            },
+
+            formatHeatLevel: function (vValue) {
+                var nValue = parseInt(
+                    vValue,
+                    10
+                );
+
+                if (isNaN(nValue) || nValue <= 0) {
+                    return "0";
+                }
+
+                if (nValue >= 4) {
                     return "4";
                 }
 
-                if (n >= 3) {
+                if (nValue === 3) {
                     return "3";
                 }
 
-                if (n >= 2) {
+                if (nValue === 2) {
                     return "2";
                 }
 
-                if (n >= 1) {
-                    return "1";
-                }
-
-                return "0";
+                return "1";
             },
 
             formatFallaColorKey: function (sFalla) {
-                switch (sFalla) {
-                    case "Falla mecánica":
-                        return "mecanica";
-
-                    case "Falla eléctrica":
-                        return "electrica";
-
-                    case "Puertas / sensores":
-                        return "puertas";
-
-                    case "Sistemas de tracción":
-                        return "traccion";
-
-                    case "Maniobras / control":
-                        return "maniobras";
-
-                    default:
-                        return "otra";
+                if (sFalla === "Falla mecánica") {
+                    return "mecanica";
                 }
+
+                if (sFalla === "Falla eléctrica") {
+                    return "electrica";
+                }
+
+                if (sFalla === "Puertas / sensores") {
+                    return "puertas";
+                }
+
+                if (sFalla === "Sistemas de tracción") {
+                    return "traccion";
+                }
+
+                if (sFalla === "Maniobras / control") {
+                    return "maniobras";
+                }
+
+                return "otra";
             },
 
             onAplicarFiltros: function () {
                 MessageToast.show(
                     "Filtros aplicados correctamente"
                 );
+
+                this._renderizarVisualizaciones();
             },
 
             onVerElevadores: function () {
                 MessageToast.show(
-                    "Detalle de elevadores con desviación"
+                    "Detalle de elevadores con mayor desviación"
                 );
             },
 
@@ -589,7 +980,6 @@ sap.ui.define([
                     "Detalle de fallas y servicios afectados"
                 );
             }
-
         }
     );
 });

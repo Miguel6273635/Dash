@@ -1,116 +1,117 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
     "sap/ui/core/routing/History"
-], function (Controller, JSONModel, History) {
+], function (Controller, JSONModel, Filter, FilterOperator, History) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.CausasZona", {
-
         onInit: function () {
-            // 1. Arreglo principal de la tabla (Tus datos originales)
-            var aIncumplimientos = [
-                { OT: "OT-100245", Equipo: "EV-1024", TipoOT: "Preventivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Carta de no mantenimiento", Responsable: "Juan Pérez", DiasAtraso: 5, Estado: "No ejecutada", StatusTipo: "Preventivo", StatusCausa: "Error" },
-                { OT: "OT-100311", Equipo: "EV-0871", TipoOT: "Preventivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Falta de refacciones", Responsable: "Juan Pérez", DiasAtraso: 4, Estado: "No ejecutada", StatusTipo: "Preventivo", StatusCausa: "Error" },
-                { OT: "OT-100198", Equipo: "EV-0615", TipoOT: "Correctivo", Cliente: "Torre Mayor", CausaIncumplimiento: "Cliente no disponible", Responsable: "Ana López", DiasAtraso: 4, Estado: "No ejecutada", StatusTipo: "Correctivo", StatusCausa: "Warning" },
-                { OT: "OT-100276", Equipo: "EV-1330", TipoOT: "Preventivo", Cliente: "Corporativo ABC", CausaIncumplimiento: "Carta de no mantenimiento", Responsable: "Carlos Díaz", DiasAtraso: 3, Estado: "No ejecutada", StatusTipo: "Preventivo", StatusCausa: "Error" },
-                { OT: "OT-100332", Equipo: "EV-0456", TipoOT: "Correctivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Falta de refacciones", Responsable: "Juan Pérez", DiasAtraso: 3, Estado: "No ejecutada", StatusTipo: "Correctivo", StatusCausa: "Error" },
-                { OT: "OT-100283", Equipo: "EV-0789", TipoOT: "Preventivo", Cliente: "Plaza Galerías", CausaIncumplimiento: "Reprogramación", Responsable: "Ana López", DiasAtraso: 2, Estado: "No ejecutada", StatusTipo: "Preventivo", StatusCausa: "Reprogramacion" }
+            var aData = [
+                { OT: "OT-100245", Equipo: "EV-1024", TipoOT: "Preventivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Carta de no mantenimiento", Responsable: "Juan Pérez", DiasAtraso: 5, Estado: "No ejecutada", StatusCausa: "Error", Zona: "Norte" },
+                { OT: "OT-100311", Equipo: "EV-0871", TipoOT: "Preventivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Falta de refacciones", Responsable: "Juan Pérez", DiasAtraso: 4, Estado: "No ejecutada", StatusCausa: "Error", Zona: "Norte" },
+                { OT: "OT-100198", Equipo: "EV-0615", TipoOT: "Correctivo", Cliente: "Torre Mayor", CausaIncumplimiento: "Cliente no disponible", Responsable: "Ana López", DiasAtraso: 4, Estado: "No ejecutada", StatusCausa: "Warning", Zona: "Norte" },
+                { OT: "OT-100276", Equipo: "EV-1330", TipoOT: "Preventivo", Cliente: "Corporativo ABC", CausaIncumplimiento: "Carta de no mantenimiento", Responsable: "Carlos Díaz", DiasAtraso: 3, Estado: "No ejecutada", StatusCausa: "Error", Zona: "Norte" },
+                { OT: "OT-100332", Equipo: "EV-0456", TipoOT: "Correctivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Falta de refacciones", Responsable: "Juan Pérez", DiasAtraso: 3, Estado: "No ejecutada", StatusCausa: "Error", Zona: "Norte" },
+                { OT: "OT-100283", Equipo: "EV-0789", TipoOT: "Preventivo", Cliente: "Plaza Galerías", CausaIncumplimiento: "Reprogramación", Responsable: "Ana López", DiasAtraso: 2, Estado: "No ejecutada", StatusCausa: "Information", Zona: "Norte" },
+                { OT: "OT-100341", Equipo: "EV-0911", TipoOT: "Correctivo", Cliente: "Torre Reforma", CausaIncumplimiento: "Cliente no disponible", Responsable: "Carlos Díaz", DiasAtraso: 2, Estado: "No ejecutada", StatusCausa: "Warning", Zona: "Norte" },
+                { OT: "OT-100367", Equipo: "EV-1210", TipoOT: "Call Center", Cliente: "Corporativo ABC", CausaIncumplimiento: "Falta de refacciones", Responsable: "Juan Pérez", DiasAtraso: 1, Estado: "No ejecutada", StatusCausa: "Error", Zona: "Norte" }
             ];
-            // --- CONFIGURACIÓN ESTÉTICA DE LOS GRÁFICOS VIZFRAME ---
-            
-            // 1. Configurar Gráfico de Barras Horizontales
-            var oBarChart = this.getView().byId("barChartCausas");
-            if(oBarChart) {
-                oBarChart.setVizProperties({
+
+            this._aAllRows = aData;
+            this.getView().setModel(new JSONModel({
+                IncumplimientosData: aData,
+                ResumenCausas: [
+                    { Causa: "Carta de no mantenimiento", Cantidad: 8 },
+                    { Causa: "Falta de refacciones", Cantidad: 5 },
+                    { Causa: "Cliente no disponible", Cantidad: 3 },
+                    { Causa: "Reprogramación", Cantidad: 2 },
+                    { Causa: "Otra causa", Cantidad: 2 }
+                ],
+                ResumenTipos: [
+                    { Tipo: "Preventivo", Cantidad: 12 },
+                    { Tipo: "Correctivo", Cantidad: 7 },
+                    { Tipo: "Call Center", Cantidad: 3 }
+                ],
+                TotalOTs: 22,
+                VisibleCount: aData.length,
+                SelectedZone: "Norte",
+                ActiveFilterLabel: "Todas"
+            }));
+            this.getView().addEventDelegate({ onAfterRendering: this._configureCharts.bind(this) });
+        },
+
+        _configureCharts: function () {
+            var oBar = this.byId("causasZonaBarChart");
+            var oDonut = this.byId("causasZonaDonutChart");
+            if (oBar) {
+                oBar.setVizProperties({
+                    general: { background: { color: "transparent" } },
                     plotArea: {
-                        dataLabel: { visible: true }, // Muestra los números en las barras
-                        colorPalette: ['#b91c1c', '#c2410c', '#0369a1', '#4b5563'] // Paleta de colores
+                        background: { color: "transparent" },
+                        dataLabel: { visible: true, position: "outside", style: { color: "#26324f", fontSize: "10px", fontWeight: "bold" } },
+                        colorPalette: ["#e31b36", "#f97316", "#f4b400", "#7c3aed", "#10b981"],
+                        dataPointStyle: {
+                            rules: [
+                                { dataContext: { Causa: "Carta de no mantenimiento" }, properties: { color: "#ef1f3a" } },
+                                { dataContext: { Causa: "Falta de refacciones" }, properties: { color: "#ff7a18" } },
+                                { dataContext: { Causa: "Cliente no disponible" }, properties: { color: "#f5b700" } },
+                                { dataContext: { Causa: "Reprogramación" }, properties: { color: "#7c3aed" } },
+                                { dataContext: { Causa: "Otra causa" }, properties: { color: "#18a96b" } }
+                            ]
+                        },
+                        gridline: { visible: false }
                     },
-                    valueAxis: { title: { visible: false } },    // Ocultar textos de ejes para diseño limpio
-                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { visible: true, title: { visible: false }, label: { visible: true, style: { color: "#7b879b", fontSize: "8px" } }, axisLine: { visible: true, color: "#dfe5ee" } },
+                    categoryAxis: {
+                        title: { visible: false },
+                        label: { style: { color: "#44516a", fontSize: "9px" } },
+                        axisLine: { visible: false }
+                    },
+                    legend: { visible: false },
                     title: { visible: false },
-                    legend: { visible: false } // Sin leyenda (las etiquetas ya están en el eje)
+                    interaction: { selectability: { mode: "NONE" }, zoom: { enablement: "disabled" } }
                 });
             }
-
-            // 2. Configurar Gráfico de Dona
-            var oDonutChart = this.getView().byId("donutChartTipos");
-            if(oDonutChart) {
-                oDonutChart.setVizProperties({
+            if (oDonut) {
+                oDonut.setVizProperties({
+                    general: { background: { color: "transparent" } },
                     plotArea: {
-                        dataLabel: { visible: true, type: 'value' }, // Mostrar cantidad en los pedazos
-                        colorPalette: ['#0369a1', '#c2410c', '#4b5563'] // Azul(Preventivo), Naranja(Correctivo)
+                        background: { color: "transparent" },
+                        dataLabel: { visible: true, type: "percentage", style: { color: "#26324f", fontSize: "11px", fontWeight: "bold" } },
+                        colorPalette: ["#1764e8", "#16a34a", "#f4b400"],
+                        innerRadius: "56%"
+                    },
+                    legend: {
+                        visible: true,
+                        position: "right",
+                        title: { visible: false },
+                        label: { style: { color: "#44516a", fontSize: "9px" } }
                     },
                     title: { visible: false },
-                    legend: { 
-                        title: { visible: false }, // Ocultar título de la leyenda
-                        drawingEffect: "glossy"
-                    }
+                    interaction: { selectability: { mode: "NONE" } }
                 });
             }
+        },
 
-            // 2. Lógica experta: Generar datos de gráficos dinámicamente a partir de la tabla
-            var iTotalOTs = aIncumplimientos.length;
-            var oCausasMap = {};
-            var oTiposMap = {};
+        onTypeFilterChange: function (oEvent) {
+            var sKey = oEvent.getParameter("item").getKey();
+            var oBinding = this.byId("causasZonaIncumplimientoTable").getBinding("items");
+            oBinding.filter(sKey === "todas" ? [] : [new Filter("TipoOT", FilterOperator.EQ, sKey)]);
+            this.getView().getModel().setProperty("/ActiveFilterLabel", sKey === "todas" ? "Todas" : sKey);
+        },
 
-            aIncumplimientos.forEach(function (item) {
-                // Agrupar por Causa
-                if (!oCausasMap[item.CausaIncumplimiento]) {
-                    oCausasMap[item.CausaIncumplimiento] = { Causa: item.CausaIncumplimiento, Cantidad: 0, Color: "Neutral" };
-                }
-                oCausasMap[item.CausaIncumplimiento].Cantidad++;
-
-                // Agrupar por Tipo OT
-                if (!oTiposMap[item.TipoOT]) {
-                    oTiposMap[item.TipoOT] = { Tipo: item.TipoOT, Cantidad: 0, Color: "Neutral" };
-                }
-                oTiposMap[item.TipoOT].Cantidad++;
-            });
-
-             // 3. Formatear arreglos finales para los gráficos (Calculando %)
-            var aResumenCausas = Object.values(oCausasMap).map(function (obj) {
-                obj.Porcentaje = Math.round((obj.Cantidad / iTotalOTs) * 100);
-                // Asignar colores semánticos UI5 (MicroCharts usa Error, Critical, Good, Neutral)
-                if (obj.Causa.includes("refacciones") || obj.Causa.includes("mantenimiento")) { obj.Color = "Error"; } 
-                else if (obj.Causa.includes("Cliente")) { obj.Color = "Critical"; } // <--- ¡AQUÍ ESTÁ LA CORRECCIÓN!
-                return obj;
-            });
-            aResumenCausas.sort((a, b) => b.Cantidad - a.Cantidad);
-
-            var aResumenTipos = Object.values(oTiposMap).map(function (obj) {
-                obj.Porcentaje = Math.round((obj.Cantidad / iTotalOTs) * 100);
-                // Asignar colores semánticos UI5
-                if (obj.Tipo === "Preventivo") { obj.Color = "Good"; } 
-                else if (obj.Tipo === "Correctivo") { obj.Color = "Error"; }
-                return obj;
-            });
-            aResumenTipos.sort((a, b) => b.Cantidad - a.Cantidad);
-
-
-            // 4. Enlazamos los datos a la vista
-            var oModel = new JSONModel({
-                IncumplimientosData: aIncumplimientos,
-                ResumenCausas: aResumenCausas, // <- Datos para InteractiveBarChart
-                ResumenTipos: aResumenTipos,   // <- Datos para InteractiveDonutChart
-                TotalOTs: iTotalOTs            // Útil si quieres bindear el título general
-            });
-
-            this.getView().setModel(oModel);
+        onApplyFilters: function () {
+            var sZone = this.byId("causasZonaZoneSelect").getSelectedKey();
+            this.getView().getModel().setProperty("/SelectedZone", sZone);
         },
 
         onNavBack: function () {
-            var oHistory = History.getInstance();
-            var sPreviousHash = oHistory.getPreviousHash();
-
-            if (sPreviousHash !== undefined) {
-                window.history.go(-1);
-            } else {
-                var oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo("RouteMantenimiento", {}, true);
-            }
+            var sPreviousHash = History.getInstance().getPreviousHash();
+            if (sPreviousHash !== undefined) { window.history.go(-1); }
+            else { this.getOwnerComponent().getRouter().navTo("RouteMantenimiento", {}, true); }
         }
-
     });
 });

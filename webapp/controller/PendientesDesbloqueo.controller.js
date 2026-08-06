@@ -17,12 +17,8 @@ sap.ui.define([
         "mantenimiento.controller.PendientesDesbloqueo",
         {
 
-            /**
-             * Inicialización de la pantalla.
-             */
             onInit: function () {
                 var oData = {
-
                     filtros: {
                         periodo: "MES_ACTUAL",
                         fechaDesde: "2025-05-01",
@@ -277,9 +273,6 @@ sap.ui.define([
                             estadoPendienteKey: "PROXIMO_VENCER",
                             estadoPendienteState: "Warning",
                             fechaRegistro: "18/05/2025",
-                            fechaRegistroISO: "2025-ER",
-                            estadoPendienteState: "Warning",
-                            fechaRegistro: "18/05/2025",
                             fechaRegistroISO: "2025-05-18",
                             fechaCompromiso: "26/05/2025",
                             fechaCompromisoISO: "2025-05-26",
@@ -330,17 +323,10 @@ sap.ui.define([
                 this.getView().setModel(oModel);
             },
 
-            /**
-             * Evento utilizado para cambios individuales de filtros.
-             * Los filtros se aplican al presionar el botón principal.
-             */
             onFiltroChange: function () {
-                // La aplicación se realiza desde onAplicarFiltros.
+                // Los filtros se aplican desde el botón principal.
             },
 
-            /**
-             * Aplica los filtros sobre el listado.
-             */
             onAplicarFiltros: function () {
                 var oModel = this.getView().getModel();
                 var oFiltros = oModel.getProperty("/filtros");
@@ -428,16 +414,18 @@ sap.ui.define([
                     );
                 }
 
-                oBinding.filter(aFilters, "Application");
+                oBinding.filter(
+                    aFilters,
+                    "Application"
+                );
 
                 this._actualizarTextoResultados();
 
-                MessageToast.show("Filtros aplicados correctamente.");
+                MessageToast.show(
+                    "Filtros aplicados correctamente."
+                );
             },
 
-            /**
-             * Restablece los filtros de la pantalla.
-             */
             onLimpiarFiltros: function () {
                 var oModel = this.getView().getModel();
                 var oTable = this.byId("pendientesTable");
@@ -454,37 +442,33 @@ sap.ui.define([
                     supervisor: "TODOS"
                 });
 
-                oBinding.filter([], "Application");
+                oBinding.filter(
+                    [],
+                    "Application"
+                );
 
                 oModel.setProperty(
                     "/paginacion/textoResultados",
                     "Mostrando 1 a 10 de 10 resultados"
                 );
 
-                MessageToast.show("Filtros restablecidos.");
+                MessageToast.show(
+                    "Filtros restablecidos."
+                );
             },
 
-            /**
-             * Acción temporal del botón de calendario.
-             */
             onAbrirCalendario: function () {
                 MessageToast.show(
                     "Consulta de fechas compromiso."
                 );
             },
 
-            /**
-             * Acción temporal del botón de configuración.
-             */
             onConfigurarTabla: function () {
                 MessageToast.show(
                     "Configuración de columnas."
                 );
             },
 
-            /**
-             * Acción de navegación al detalle.
-             */
             onVerDetalle: function (oEvent) {
                 var oContext = oEvent
                     .getSource()
@@ -497,24 +481,11 @@ sap.ui.define([
                 var oPendiente = oContext.getObject();
 
                 MessageToast.show(
-                    "Detalle del equipo " + oPendiente.equipo
+                    "Detalle del equipo " +
+                    oPendiente.equipo
                 );
-
-                /*
-                 * Cuando se agregue la ruta en manifest.json,
-                 * puede reemplazarse el MessageToast por:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo("RouteDetallePendienteDesbloqueo", {
-                 *         equipoId: oPendiente.equipo
-                 *     });
-                 */
             },
 
-            /**
-             * Cambio de cantidad de filas por página.
-             */
             onFilasPorPaginaChange: function (oEvent) {
                 var sFilas = oEvent
                     .getSource()
@@ -530,9 +501,6 @@ sap.ui.define([
                 this._actualizarTextoResultados();
             },
 
-            /**
-             * Actualiza el texto inferior del listado.
-             */
             _actualizarTextoResultados: function () {
                 var oModel = this.getView().getModel();
                 var oTable = this.byId("pendientesTable");
@@ -546,7 +514,10 @@ sap.ui.define([
 
                 window.setTimeout(function () {
                     var iTotal = oBinding.getLength();
-                    var iHasta = Math.min(iFilas, iTotal);
+                    var iHasta = Math.min(
+                        iFilas,
+                        iTotal
+                    );
                     var sTexto;
 
                     if (iTotal === 0) {
@@ -566,6 +537,7 @@ sap.ui.define([
                     );
                 }, 0);
             }
+
         }
     );
 });

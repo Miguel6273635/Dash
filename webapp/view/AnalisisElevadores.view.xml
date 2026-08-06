@@ -4,120 +4,538 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
 
-    <Page showHeader="false" class="pageBackground">
-        <VBox class="analisisElevadoresView sapUiMediumMargin">
-            
-            <!-- TÍTULO PRINCIPAL -->
-            <VBox class="sapUiMediumMarginBottom">
-                <Title text="Análisis de Elevadores con Desviación" level="H1" class="mainTitle" />
-                <Text text="Entienda por qué los elevadores presentan desviación y dónde intervenir para recuperar el cumplimiento." class="subtitleText sapUiTinyMarginTop" />
+    <Page
+        showHeader="false"
+        enableScrolling="false"
+        class="aePage">
+
+        <VBox
+            width="100%"
+            height="100%"
+            class="analisisElevadoresView">
+
+            <!-- =====================================================
+                 ENCABEZADO
+                 ===================================================== -->
+
+            <VBox class="aeHeaderBlock">
+
+                <Title
+                    text="Análisis de Elevadores con Desviación"
+                    level="H1"
+                    class="aePageTitle" />
+
+                <Text
+                    text="Entienda por qué los elevadores presentan desviación y dónde intervenir para recuperar el cumplimiento."
+                    class="aePageSubtitle" />
+
             </VBox>
 
-            <!-- FILTROS (RESTAURADOS A SU DISEÑO PERFECTO CON HBOX) -->
-            <FlexBox width="100%" alignItems="Center" wrap="Wrap" class="sapUiLargeMarginBottom filtersContainerGrid">
-                
-                <HBox id="chipPeriodo" alignItems="Center" justifyContent="SpaceBetween" class="filterChip">
-                    <HBox alignItems="Center">
-                        <core:Icon src="sap-icon://calendar" class="filterIconCustom" />
-                        <VBox class="filterTextContainer">
-                            <Text text="Periodo" class="filterLabelCustom" />
-                            <Text id="textPeriodo" text="Mayo 2024 (Semanal)" class="filterValueCustom" />
-                        </VBox>
+            <!-- =====================================================
+                 FILTROS
+                 ===================================================== -->
+
+            <FlexBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Center"
+                class="aeFilterRow">
+
+                <!-- PERIODO -->
+
+                <VBox
+                    id="chipPeriodo"
+                    class="aeFilterCard aeFilterPeriod">
+
+                    <Label
+                        text="Periodo"
+                        class="aeFilterLabel" />
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="aePeriodControl">
+
+                        <Text
+                            id="textPeriodo"
+                            text="Mayo 2024 (Semanal)"
+                            wrapping="false"
+                            class="aeFilterValue" />
+
+                        <core:Icon
+                            src="sap-icon://calendar"
+                            class="aePeriodIcon" />
+
                     </HBox>
-                    <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom" />
-                </HBox>
-                
-                <HBox id="chipZona" alignItems="Center" justifyContent="SpaceBetween" class="filterChip">
-                    <HBox alignItems="Center">
-                        <core:Icon src="sap-icon://map" class="filterIconCustom" />
-                        <VBox class="filterTextContainer">
-                            <Text text="Zona" class="filterLabelCustom" />
-                            <Text id="textZona" text="Todas" class="filterValueCustom" />
-                        </VBox>
-                    </HBox>
-                    <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom" />
+
+                </VBox>
+
+                <!-- ZONA -->
+
+                <VBox class="aeFilterCard">
+
+                    <Label
+                        text="Zona"
+                        class="aeFilterLabel" />
+
+                    <Select
+                        id="selectZona"
+                        width="100%"
+                        selectedKey="Todas"
+                        class="aeFilterControl"
+                        items="{dashboardModel>/opcionesZona}">
+
+                        <core:Item
+                            key="{dashboardModel>key}"
+                            text="{dashboardModel>text}" />
+
+                    </Select>
+
+                </VBox>
+
+                <!-- SUPERVISOR -->
+
+                <VBox class="aeFilterCard aeFilterWide">
+
+                    <Label
+                        text="Supervisor"
+                        class="aeFilterLabel" />
+
+                    <Select
+                        id="selectSupervisor"
+                        width="100%"
+                        selectedKey="Todos"
+                        class="aeFilterControl"
+                        items="{dashboardModel>/opcionesSupervisor}">
+
+                        <core:Item
+                            key="{dashboardModel>key}"
+                            text="{dashboardModel>text}" />
+
+                    </Select>
+
+                </VBox>
+
+                <!-- TIPO DE ORDEN -->
+
+                <VBox class="aeFilterCard aeFilterWide">
+
+                    <Label
+                        text="Tipo de orden"
+                        class="aeFilterLabel" />
+
+                    <Select
+                        id="selectTipoOrden"
+                        width="100%"
+                        selectedKey="Todos"
+                        class="aeFilterControl"
+                        items="{dashboardModel>/opcionesTipoOrden}">
+
+                        <core:Item
+                            key="{dashboardModel>key}"
+                            text="{dashboardModel>text}" />
+
+                    </Select>
+
+                </VBox>
+
+                <!-- BOTÓN APLICAR FILTROS -->
+
+                <HBox
+                    alignItems="Center"
+                    justifyContent="Center"
+                    class="aeApplyButtonBox">
+
+                    <Button
+                        text="Aplicar filtros"
+                        icon="sap-icon://filter"
+                        type="Emphasized"
+                        class="aeApplyButton"
+                        press=".onAplicarFiltros" />
+
                 </HBox>
 
-                <HBox id="chipSupervisor" alignItems="Center" justifyContent="SpaceBetween" class="filterChip">
-                    <HBox alignItems="Center">
-                        <core:Icon src="sap-icon://employee" class="filterIconCustom" />
-                        <VBox class="filterTextContainer">
-                            <Text text="Supervisor" class="filterLabelCustom" />
-                            <Text id="textSupervisor" text="Todos" class="filterValueCustom" />
-                        </VBox>
-                    </HBox>
-                    <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom" />
-                </HBox>
-
-                <HBox id="chipTipoOrden" alignItems="Center" justifyContent="SpaceBetween" class="filterChip">
-                    <HBox alignItems="Center">
-                        <core:Icon src="sap-icon://form" class="filterIconCustom" />
-                        <VBox class="filterTextContainer">
-                            <Text text="Tipo de orden" class="filterLabelCustom" />
-                            <Text id="textTipoOrden" text="Todos" class="filterValueCustom" />
-                        </VBox>
-                    </HBox>
-                    <core:Icon src="sap-icon://slim-arrow-down" class="filterArrowCustom" />
-                </HBox>
-
-                <Button text="Aplicar filtros" icon="sap-icon://filter" class="btnBlueCustom" press=".onAplicarFiltros" />
             </FlexBox>
 
-            <!-- LA GRAN TARJETA DE LA TABLA -->
-            <VBox class="mainCard">
-                <FlexBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                    <VBox>
-                        <Title text="Elevadores con desviación" level="H3" class="tableTitle" />
-                        <Text text="Detalle de elevadores afectados" class="tableSubtitle"/>
-                    </VBox>
-                    <HBox alignItems="Center">
-                        <SearchField placeholder="Buscar elevador, cliente o causa..." width="320px" class="modernSearchField sapUiSmallMarginEnd" liveChange=".onSearch" />
-                        <Select width="130px"><core:Item key="10" text="10 por página"/></Select>
+            <!-- =====================================================
+                 KPIS
+                 ===================================================== -->
+
+            <FlexBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Stretch"
+                class="aeKpiRow">
+
+                <!-- ELEVADORES CON DESVIACIÓN -->
+
+                <HBox
+                    alignItems="Center"
+                    class="aeKpiCard aeKpiBlue">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="aeKpiIconCircle">
+
+                        <core:Icon
+                            src="sap-icon://building"
+                            class="aeKpiIcon" />
+
                     </HBox>
+
+                    <VBox class="aeKpiTextBlock">
+
+                        <Text
+                            text="Elevadores con desviación"
+                            class="aeKpiLabel" />
+
+                        <Text
+                            text="{dashboardModel>/kpis/elevadores}"
+                            class="aeKpiValue" />
+
+                        <Text
+                            text="elevadores afectados"
+                            class="aeKpiHelper" />
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- OT AFECTADAS -->
+
+                <HBox
+                    alignItems="Center"
+                    class="aeKpiCard aeKpiCyan">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="aeKpiIconCircle">
+
+                        <core:Icon
+                            src="sap-icon://order-status"
+                            class="aeKpiIcon" />
+
+                    </HBox>
+
+                    <VBox class="aeKpiTextBlock">
+
+                        <Text
+                            text="OT afectadas"
+                            class="aeKpiLabel" />
+
+                        <Text
+                            text="{dashboardModel>/kpis/otAfectadas}"
+                            class="aeKpiValue" />
+
+                        <Text
+                            text="órdenes con desviación"
+                            class="aeKpiHelper" />
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- BRECHA ACUMULADA -->
+
+                <HBox
+                    alignItems="Center"
+                    class="aeKpiCard aeKpiOrange">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="aeKpiIconCircle">
+
+                        <core:Icon
+                            src="sap-icon://trend-down"
+                            class="aeKpiIcon" />
+
+                    </HBox>
+
+                    <VBox class="aeKpiTextBlock">
+
+                        <Text
+                            text="Brecha acumulada"
+                            class="aeKpiLabel" />
+
+                        <Text
+                            text="{dashboardModel>/kpis/brecha}"
+                            class="aeKpiValue" />
+
+                        <Text
+                            text="respecto al cumplimiento"
+                            class="aeKpiHelper" />
+
+                    </VBox>
+
+                </HBox>
+
+                <!-- ELEVADORES CRÍTICOS -->
+
+                <HBox
+                    alignItems="Center"
+                    class="aeKpiCard aeKpiRed">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="aeKpiIconCircle">
+
+                        <core:Icon
+                            src="sap-icon://alert"
+                            class="aeKpiIcon" />
+
+                    </HBox>
+
+                    <VBox class="aeKpiTextBlock">
+
+                        <Text
+                            text="Elevadores críticos"
+                            class="aeKpiLabel" />
+
+                        <Text
+                            text="{dashboardModel>/kpis/criticos}"
+                            class="aeKpiValue" />
+
+                        <Text
+                            text="requieren intervención"
+                            class="aeKpiHelper" />
+
+                    </VBox>
+
+                </HBox>
+
+            </FlexBox>
+
+            <!-- =====================================================
+                 TARJETA PRINCIPAL DE LA TABLA
+                 ===================================================== -->
+
+            <VBox
+                width="100%"
+                class="aeMainCard">
+
+                <!-- TÍTULO Y BUSCADOR -->
+
+                <FlexBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Center"
+                    justifyContent="SpaceBetween"
+                    class="aeTableToolbar">
+
+                    <VBox class="aeTableTitleBlock">
+
+                        <Title
+                            text="Elevadores con desviación"
+                            level="H3"
+                            class="aeTableTitle" />
+
+                        <Text
+                            text="Detalle de elevadores afectados"
+                            class="aeTableSubtitle" />
+
+                    </VBox>
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="End"
+                        class="aeSearchContainer">
+
+                        <SearchField
+                            id="searchElevadores"
+                            width="370px"
+                            placeholder="Buscar elevador, cliente o causa..."
+                            class="aeModernSearch"
+                            liveChange=".onSearch" />
+
+                    </HBox>
+
                 </FlexBox>
 
-                <VBox class="tableWrapper">
-                    <Table id="elevatorsTable" items="{dashboardModel>/elevadores}">
+                <!-- TABLA -->
+
+                <VBox
+                    width="100%"
+                    class="aeTableWrapper">
+
+                    <Table
+                        id="elevatorsTable"
+                        width="100%"
+                        inset="false"
+                        fixedLayout="true"
+                        growing="false"
+                        noDataText="No se encontraron elevadores"
+                        items="{dashboardModel>/elevadoresVisibles}">
+
                         <columns>
-                            <Column><Text text="Elevador"/></Column>
-                            <Column><Text text="Cliente"/></Column>
-                            <Column><Text text="Zona"/></Column>
-                            <Column width="22%"><Text text="Causa principal"/></Column>
-                            <Column hAlign="End"><Text text="OT afectadas"/></Column>
-                            <Column hAlign="End"><Text text="Brecha (OT)"/></Column>
-                            <Column hAlign="Center" width="12%"><Text text="Estado"/></Column>
+
+                            <Column width="12%">
+                                <Text text="Elevador" />
+                            </Column>
+
+                            <Column width="17%">
+                                <Text text="Cliente" />
+                            </Column>
+
+                            <Column width="11%">
+                                <Text text="Zona" />
+                            </Column>
+
+                            <Column width="25%">
+                                <Text text="Causa principal" />
+                            </Column>
+
+                            <Column
+                                width="12%"
+                                hAlign="End">
+
+                                <Text text="OT afectadas" />
+
+                            </Column>
+
+                            <Column
+                                width="11%"
+                                hAlign="End">
+
+                                <Text text="Brecha (OT)" />
+
+                            </Column>
+
+                            <Column
+                                width="12%"
+                                hAlign="Center">
+
+                                <Text text="Estado" />
+
+                            </Column>
+
                         </columns>
+
                         <items>
+
                             <ColumnListItem vAlign="Middle">
+
                                 <cells>
-                                    <Link text="{dashboardModel>elevador}" />
-                                    <Text text="{dashboardModel>cliente}" />
-                                    <Text text="{dashboardModel>zona}" />
-                                    
-                                    <HBox alignItems="Center">
-                                        <core:Icon src="{path: 'dashboardModel>causa', formatter: '.formatCausaIcono'}" 
-                                                   color="{path: 'dashboardModel>causa', formatter: '.formatCausaColor'}" 
-                                                   class="sapUiTinyMarginEnd" />
-                                        <Text text="{dashboardModel>causa}" />
-                                    </HBox>
-                                    
-                                    <Text text="{dashboardModel>otAfectadas}" />
-                                    <Text text="{dashboardModel>brecha}" class="brechaText"/>
-                                    
-                                    <HBox justifyContent="Center" alignItems="Center">
-                                        <HBox class="estadoPillRect" alignItems="Center" justifyContent="Center">
+
+                                    <Link
+                                        text="{dashboardModel>elevador}"
+                                        class="aeElevatorLink" />
+
+                                    <Text
+                                        text="{dashboardModel>cliente}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{dashboardModel>zona}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{dashboardModel>causa}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{dashboardModel>otAfectadas}"
+                                        wrapping="false" />
+
+                                    <Text
+                                        text="{dashboardModel>brecha}"
+                                        wrapping="false"
+                                        class="aeBrechaText" />
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <HBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="aeEstadoPill">
+
                                             <customData>
-                                                <core:CustomData key="estado" value="{dashboardModel>estado}" writeToDom="true" />
+
+                                                <core:CustomData
+                                                    key="estado"
+                                                    value="{dashboardModel>estado}"
+                                                    writeToDom="true" />
+
                                             </customData>
-                                            <Text text="{dashboardModel>estado}" class="estadoPillText" />
+
+                                            <Text
+                                                text="{
+                                                    path: 'dashboardModel>estado',
+                                                    formatter: '.formatEstadoTexto'
+                                                }"
+                                                class="aeEstadoText" />
+
                                         </HBox>
+
                                     </HBox>
+
                                 </cells>
+
                             </ColumnListItem>
+
                         </items>
+
                     </Table>
+
                 </VBox>
+
+                <!-- =================================================
+                     PIE DE TABLA
+                     PAGINACIÓN EN INTERVALOS DE 5
+                     ================================================= -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Center"
+                    justifyContent="End"
+                    class="aeTableFooter">
+
+                    <Text
+                        text="Filas por página:"
+                        class="aeFooterLabel" />
+
+                    <Select
+                        id="pageSizeSelect"
+                        width="70px"
+                        selectedKey="5"
+                        class="aePageSizeSelect"
+                        change=".onPageSizeChange">
+
+                        <core:Item
+                            key="5"
+                            text="5" />
+
+                        <core:Item
+                            key="10"
+                            text="10" />
+
+                        <core:Item
+                            key="15"
+                            text="15" />
+
+                        <core:Item
+                            key="20"
+                            text="20" />
+
+                    </Select>
+
+                    <Text
+                        text="{dashboardModel>/paginacion/texto}"
+                        class="aeFooterCounter" />
+
+                </HBox>
+
             </VBox>
+
         </VBox>
+
     </Page>
+
 </mvc:View>

@@ -1,576 +1,959 @@
-.otpePage,
-.otpeScroll {
-  background: #f6f8fc;
+/* ==========================================================================
+   ANÁLISIS DE OT PREVENTIVAS EJECUTADAS
+   CSS COMPLETO Y COMPATIBLE CON EL VIEW XML ENTREGADO
+   ========================================================================== */
+
+.otpePage {
+    --otpe-bg: #f7f9fc;
+    --otpe-card: #ffffff;
+    --otpe-text: #14213d;
+    --otpe-muted: #64748b;
+    --otpe-border: #e3eaf3;
+    --otpe-blue: #1677ff;
+    --otpe-green: #16a34a;
+    --otpe-red: #ef4444;
+    --otpe-purple: #7c3aed;
+    --otpe-shadow:
+        0 0.3rem 0.9rem
+        rgba(15, 23, 42, 0.06);
+
+    background: var(--otpe-bg) !important;
+}
+
+.otpePage.sapMPage,
+.otpePage .sapMPageBgStandard,
+.otpePage .sapMPageScroll,
+.otpePage .sapMPageEnableScrolling,
+.otpePage .otpeScroll {
+    background: var(--otpe-bg) !important;
 }
 
-.otpeContainer {
-  padding: 14px 18px 22px 18px;
-  background: #f6f8fc;
-  box-sizing: border-box;
-  gap: 12px;
+/* ==========================================================================
+   CONTENEDOR
+   ========================================================================== */
+
+.otpePage .otpeContainer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.7rem 0.75rem 1rem !important;
+    box-sizing: border-box !important;
+    gap: 0.6rem !important;
+    background: var(--otpe-bg) !important;
 }
 
-/* HEADER */
-.otpeHeader {
-  width: 100%;
+.otpePage .otpeHeader,
+.otpePage .otpeFilters,
+.otpePage .otpeKpiGrid,
+.otpePage .otpeToolbar,
+.otpePage .otpeTableCard {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
 }
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
 
-.otpeHeaderLeft {
-  gap: 12px;
+.otpePage .otpeHeader {
+    min-height: 2.9rem !important;
 }
 
-.otpeMenuBtn {
-  width: 36px;
-  height: 36px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+.otpePage .otpeTitleRow {
+    gap: 0.28rem !important;
 }
 
-.otpeMenuBtn .sapMBtnInner {
-  border: none !important;
-  background: #ffffff !important;
-  border-radius: 8px !important;
+.otpePage .otpeTitle,
+.otpePage .otpeTitleGreen {
+    font-size: 1.3rem !important;
+    line-height: 1.45rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.015rem !important;
 }
 
-.otpeTitleRow {
-  gap: 6px;
+.otpePage .otpeTitle {
+    color: var(--otpe-text) !important;
 }
 
-.otpeTitle {
-  color: #172554;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
+.otpePage .otpeTitleGreen {
+    color: #188f43 !important;
 }
 
-.otpeTitleGreen {
-  color: #15803d;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
+.otpePage .otpeBreadcrumb {
+    gap: 0.35rem !important;
+    margin-top: 0.14rem !important;
 }
 
-.otpeBreadcrumb {
-  gap: 8px;
-  margin-top: 4px;
+.otpePage .otpeBreadLink,
+.otpePage .otpeBreadText {
+    font-size: 0.58rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 800 !important;
 }
 
-.otpeBreadLink {
-  color: #0b63f6;
-  font-size: 10px;
-  font-weight: 800;
+.otpePage .otpeBreadLink {
+    color: #0b63f6 !important;
 }
 
-.otpeBreadIcon {
-  color: #94a3b8;
-  font-size: 9px;
+.otpePage .otpeBreadText {
+    color: #2563eb !important;
 }
 
-.otpeBreadText {
-  color: #2563eb;
-  font-size: 10px;
-  font-weight: 800;
+.otpePage .otpeBreadIcon {
+    color: #94a3b8 !important;
+    font-size: 0.48rem !important;
+}
+
+.otpePage .otpeDateNote {
+    margin-top: 0.25rem !important;
+    color: #334155 !important;
+    font-size: 0.55rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
+
+.otpePage .otpeFilters {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.18fr)
+        minmax(9rem, 1.18fr)
+        minmax(7rem, 0.9fr)
+        minmax(7.5rem, 0.96fr)
+        minmax(8rem, 1.02fr)
+        7.35rem !important;
+
+    column-gap: 0.55rem !important;
+    row-gap: 0.55rem !important;
+    justify-content: stretch !important;
+    align-items: stretch !important;
+
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.otpePage .otpeFilters > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.otpePage .otpeFilterItem,
+.otpePage .otpeFilterPeriod,
+.otpePage .otpeFilterDate,
+.otpePage .otpeFilterNormal {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 3.35rem !important;
+
+    margin: 0 !important;
+    padding: 0.38rem 0.58rem 0.28rem !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    overflow: visible !important;
+
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.55rem !important;
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0.18rem 0.55rem
+        rgba(15, 23, 42, 0.05) !important;
+}
+
+.otpePage .otpeFilterLabel {
+    width: 100% !important;
+    margin: 0 0 0.08rem !important;
+
+    color: #334155 !important;
+    font-size: 0.54rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+.otpePage .otpeFilterItem .sapMSlt,
+.otpePage .otpeFilterItem .sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    margin: 0 !important;
+}
+
+.otpePage .otpeFilterItem .sapMSlt,
+.otpePage
+.otpeFilterItem
+.sapMInputBaseContentWrapper {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.otpePage .otpeFilterItem .sapMSltLabel,
+.otpePage .otpeFilterItem .sapMInputBaseInner {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    padding: 0 1.45rem 0 0 !important;
+    box-sizing: border-box !important;
+
+    color: #1f2937 !important;
+    background: transparent !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.otpePage .otpeFilterItem .sapMSltArrow {
+    width: 1.45rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: #0f172a !important;
+    font-size: 0.7rem !important;
+}
+
+.otpePage
+.otpeFilterItem
+.sapMInputBaseIconContainer {
+    width: 1.55rem !important;
+    height: 1.75rem !important;
+}
+
+.otpePage .otpeFilterItem .sapMInputBaseIcon,
+.otpePage
+.otpeFilterItem
+.sapMInputBaseIconContainer
+.sapUiIcon {
+    width: 1.55rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: var(--otpe-blue) !important;
+    font-size: 0.72rem !important;
+}
+
+.otpePage .otpeApplyBtn {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+    height: 2.85rem !important;
+
+    align-self: center !important;
+    justify-self: end !important;
+    margin: 0 !important;
+
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.28rem 0.62rem
+        rgba(22, 119, 255, 0.22) !important;
+}
+
+.otpePage .otpeApplyBtn .sapMBtnInner {
+    width: 100% !important;
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+
+    padding: 0 0.5rem !important;
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1787ff 0%,
+            #066ce6 100%
+        ) !important;
+}
+
+.otpePage .otpeApplyBtn .sapMBtnContent,
+.otpePage .otpeApplyBtn .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.6rem !important;
+    line-height: 2.75rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   KPI
+   ========================================================================== */
+
+.otpePage .otpeKpiGrid {
+    display: grid !important;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.62rem !important;
+    align-items: stretch !important;
+}
+
+.otpePage .otpeKpiGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
 }
 
-/* FILTROS */
-.otpeFilters {
-  width: 100%;
-  background: transparent;
-  gap: 10px;
-  box-sizing: border-box;
-  padding: 0;
-  margin-top: 4px;
+.otpePage .otpeKpiCard {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 5.65rem !important;
+
+    padding: 0.65rem 0.9rem !important;
+    box-sizing: border-box !important;
+    gap: 0.72rem !important;
+    align-items: center !important;
+    overflow: hidden !important;
+
+    border: 1px solid var(--otpe-border) !important;
+    border-left-width: 0.27rem !important;
+    border-radius: 0.62rem !important;
+    background: var(--otpe-card) !important;
+    box-shadow: var(--otpe-shadow) !important;
 }
 
-.otpeFilterItem {
-  height: 50px;
-  background: #ffffff;
-  border: 1px solid #dbe3ef;
-  border-radius: 8px;
-  padding: 6px 9px;
-  box-sizing: border-box;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+.otpePage .otpeKpiBlue {
+    border-left-color: var(--otpe-blue) !important;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(22, 119, 255, 0.12),
+            #ffffff 52%
+        ) !important;
 }
 
-.otpeFilterPeriod {
-  flex: 1 1 120px;
-  min-width: 112px;
-  max-width: 135px;
+.otpePage .otpeKpiGreen {
+    border-left-color: var(--otpe-green) !important;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(22, 163, 74, 0.12),
+            #ffffff 52%
+        ) !important;
 }
 
-.otpeFilterDate {
-  flex: 1 1 145px;
-  min-width: 130px;
-  max-width: 160px;
-}
+.otpePage .otpeKpiRed {
+    border-left-color: var(--otpe-red) !important;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 68, 68, 0.12),
+            #ffffff 52%
+        ) !important;
+}
 
-.otpeFilterNormal {
-  flex: 1 1 115px;
-  min-width: 105px;
-  max-width: 130px;
+.otpePage .otpeKpiPurple {
+    border-left-color: var(--otpe-purple) !important;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(124, 58, 237, 0.12),
+            #ffffff 52%
+        ) !important;
 }
+
+.otpePage .otpeKpiIconCircle {
+    width: 2.8rem !important;
+    min-width: 2.8rem !important;
+    height: 2.8rem !important;
+    border-radius: 50% !important;
 
-.otpeFilterLabel {
-  color: #172554;
-  font-size: 9px;
-  font-weight: 900;
-  margin-bottom: 3px;
-  line-height: 11px;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
 }
 
-.otpeFilterItem .sapMSlt,
-.otpeFilterItem .sapMInputBase,
-.otpeFilterItem .sapMInputBaseContentWrapper {
-  height: 25px !important;
-  min-height: 25px !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
+.otpePage .otpeKpiIcon {
+    font-size: 1.3rem !important;
 }
 
-.otpeFilterItem .sapMSlt > .sapMSltLabel,
-.otpeFilterItem .sapMInputBaseInner {
-  height: 25px !important;
-  line-height: 25px !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  color: #1f2937 !important;
-  padding-left: 0 !important;
-  background: transparent !important;
+.otpePage .otpeKpiNumber {
+    font-size: 1.7rem !important;
+    line-height: 1.75rem !important;
+    font-weight: 900 !important;
 }
 
-.otpeFilterItem .sapMSltArrow,
-.otpeFilterItem .sapMInputBaseIcon {
-  height: 25px !important;
-  line-height: 25px !important;
-  color: #0f172a !important;
-  font-size: 13px !important;
+.otpePage .otpeKpiLabel {
+    color: var(--otpe-text) !important;
+    font-size: 0.72rem !important;
+    line-height: 0.84rem !important;
+    font-weight: 900 !important;
 }
 
-.otpeApplyBtn {
-  height: 50px;
-  min-width: 125px;
-  max-width: 140px;
-  flex: 0 0 130px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.28);
+.otpePage .otpeKpiSubLabel,
+.otpePage .otpeKpiSubLabelRed {
+    font-size: 0.57rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 700 !important;
 }
 
-.otpeApplyBtn .sapMBtnInner {
-  height: 50px !important;
-  min-height: 50px !important;
-  border-radius: 8px !important;
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
+.otpePage .otpeKpiSubLabel {
+    color: var(--otpe-muted) !important;
 }
 
-.otpeApplyBtn .sapMBtnContent {
-  color: #ffffff !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  line-height: 48px !important;
+.otpePage .otpeKpiSubLabelRed {
+    color: #dc2626 !important;
+    font-weight: 800 !important;
 }
 
-.otpeApplyBtn .sapMBtnIcon {
-  color: #ffffff !important;
-  font-size: 14px !important;
-  line-height: 48px !important;
+.otpePage .otpeBlueText {
+    color: var(--otpe-blue) !important;
 }
 
-/* KPIS */
-.otpeKpiGrid {
-  width: 100%;
-  gap: 12px;
+.otpePage .otpeGreenText {
+    color: var(--otpe-green) !important;
 }
 
-.otpeKpiCard {
-  flex: 1 1 220px;
-  min-width: 210px;
-  height: 96px;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  border-left-width: 4px;
-  padding: 12px 16px;
-  gap: 14px;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+.otpePage .otpeRedText {
+    color: var(--otpe-red) !important;
 }
 
-.otpeKpiBlue {
-  border-left-color: #2563eb;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, #ffffff 45%);
+.otpePage .otpePurpleText {
+    color: var(--otpe-purple) !important;
 }
 
-.otpeKpiGreen {
-  border-left-color: #16a34a;
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12) 0%, #ffffff 45%);
+.otpePage .otpeBlueBg {
+    background: #eff6ff !important;
 }
 
-.otpeKpiRed {
-  border-left-color: #ef4444;
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12) 0%, #ffffff 45%);
+.otpePage .otpeGreenBg {
+    background: #f0fdf4 !important;
 }
 
-.otpeKpiPurple {
-  border-left-color: #7c3aed;
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12) 0%, #ffffff 45%);
+.otpePage .otpeRedBg {
+    background: #fef2f2 !important;
 }
 
-.otpeKpiIconCircle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.otpePage .otpePurpleBg {
+    background: #faf5ff !important;
 }
 
-.otpeKpiIcon {
-  font-size: 25px;
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.otpePage .otpeToolbar {
+    min-height: 2.2rem !important;
+
+    display: grid !important;
+    grid-template-columns:
+        minmax(0, 1fr) auto !important;
+
+    gap: 0.75rem !important;
+    align-items: center !important;
 }
 
-.otpeKpiNumber {
-  font-size: 31px;
-  line-height: 33px;
-  font-weight: 900;
+.otpePage .otpeToolbar > .sapMFlexItem {
+    min-width: 0 !important;
 }
 
-.otpeKpiLabel {
-  color: #172554;
-  font-size: 12px;
-  font-weight: 900;
+.otpePage .otpeTabs {
+    gap: 0.4rem !important;
 }
 
-.otpeKpiSubLabel {
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
+.otpePage .otpeTabsLabel {
+    margin-right: 0.15rem !important;
+
+    color: var(--otpe-text) !important;
+    font-size: 0.6rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 900 !important;
 }
 
-.otpeKpiSubLabelRed {
-  color: #dc2626;
-  font-size: 10px;
-  font-weight: 800;
+.otpePage .otpeTabBtn {
+    height: 1.9rem !important;
 }
 
-/* COLORS */
-.otpeBlueText {
-  color: #2563eb !important;
+.otpePage .otpeTabBtn .sapMBtnInner {
+    height: 1.9rem !important;
+    min-height: 1.9rem !important;
+    padding: 0 0.58rem !important;
+    border-radius: 0.42rem !important;
 }
 
-.otpeGreenText {
-  color: #16a34a !important;
+.otpePage .otpeTabBtn .sapMBtnContent {
+    font-size: 0.57rem !important;
+    line-height: 1.8rem !important;
+    font-weight: 900 !important;
 }
 
-.otpeRedText {
-  color: #ef4444 !important;
+.otpePage .otpeTabActive .sapMBtnInner {
+    border-color: #0b63f6 !important;
+    background: #0b63f6 !important;
 }
 
-.otpePurpleText {
-  color: #7c3aed !important;
+.otpePage .otpeTabActive .sapMBtnContent {
+    color: #ffffff !important;
 }
+
+.otpePage .otpeInfoBox {
+    min-width: 18.5rem !important;
+    min-height: 2rem !important;
 
-.otpeBlueBg {
-  background: #eff6ff;
+    padding: 0.35rem 0.7rem !important;
+    box-sizing: border-box !important;
+    gap: 0.42rem !important;
+
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.5rem !important;
+    background: #f8fafc !important;
 }
 
-.otpeGreenBg {
-  background: #f0fdf4;
+.otpePage .otpeInfoIcon {
+    color: #64748b !important;
+    font-size: 0.72rem !important;
 }
 
-.otpeRedBg {
-  background: #fef2f2;
+.otpePage .otpeInfoText {
+    color: #64748b !important;
+    font-size: 0.55rem !important;
+    line-height: 0.66rem !important;
+    font-weight: 700 !important;
 }
+
+/* ==========================================================================
+   TARJETA / BUSCADOR
+   ========================================================================== */
 
-.otpePurpleBg {
-  background: #faf5ff;
+.otpePage .otpeTableCard {
+    padding: 0.75rem 0.8rem 0.65rem !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.68rem !important;
+    background: #ffffff !important;
+    box-shadow: var(--otpe-shadow) !important;
 }
 
-/* TOOLBAR */
-.otpeToolbar {
-  width: 100%;
-  gap: 12px;
+.otpePage .otpeTableTop {
+    min-height: 2rem !important;
+    margin-bottom: 0.48rem !important;
 }
 
-.otpeTabs {
-  gap: 8px;
+.otpePage .otpeTableTitle {
+    color: var(--otpe-text) !important;
+    font-size: 0.78rem !important;
+    line-height: 0.92rem !important;
+    font-weight: 900 !important;
 }
 
-.otpeTabsLabel {
-  color: #172554;
-  font-size: 11px;
-  font-weight: 900;
-  margin-right: 4px;
+.otpePage .otpeSearch {
+    width: 15rem !important;
+    min-width: 15rem !important;
+    max-width: 15rem !important;
 }
 
-.otpeTabBtn {
-  height: 32px;
+.otpePage .otpeSearch .sapMSFF {
+    height: 1.8rem !important;
+    min-height: 1.8rem !important;
+    border-radius: 0.45rem !important;
 }
 
-.otpeTabBtn .sapMBtnInner {
-  height: 32px !important;
-  min-height: 32px !important;
-  border-radius: 7px !important;
+.otpePage .otpeSearch .sapMSFI {
+    height: 1.72rem !important;
+    padding-left: 0.55rem !important;
+    font-size: 0.63rem !important;
 }
 
-.otpeTabBtn .sapMBtnContent {
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  line-height: 30px !important;
+.otpePage .otpeSearch .sapMSFB {
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    line-height: 1.8rem !important;
+    font-size: 0.78rem !important;
 }
+
+/* ==========================================================================
+   TABLA PRINCIPAL
+   OCHO COLUMNAS:
+   icono | responsable | OT | % | clientes | elevadores | tiempo | flecha
+   ========================================================================== */
+
+.otpePage .otpeRespHeader,
+.otpePage .otpeRespRow {
+    width: 100% !important;
+    display: grid !important;
 
-.otpeTabActive .sapMBtnInner {
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
+    grid-template-columns:
+        2.6rem
+        minmax(10rem, 1.5fr)
+        minmax(6rem, 0.78fr)
+        minmax(7.8rem, 1fr)
+        minmax(6.8rem, 0.85fr)
+        minmax(7.5rem, 0.92fr)
+        minmax(9.5rem, 1.1fr)
+        2rem !important;
+
+    column-gap: 0.35rem !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
 }
 
-.otpeTabActive .sapMBtnContent {
-  color: #ffffff !important;
+.otpePage .otpeRespHeader > .sapMFlexItem,
+.otpePage .otpeRespRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
 }
+
+.otpePage .otpeRespHeader {
+    min-height: 2.2rem !important;
+    padding: 0 0.35rem !important;
 
-.otpeInfoBox {
-  min-width: 360px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 8px 12px;
-  gap: 8px;
+    border: 1px solid #edf2f7 !important;
+    background: #f8fafc !important;
 }
 
-.otpeInfoIcon {
-  color: #64748b;
-  font-size: 14px;
+.otpePage .otpeRespHeader .sapMText {
+    display: block !important;
+    width: 100% !important;
+
+    color: var(--otpe-text) !important;
+    font-size: 0.62rem !important;
+    line-height: 0.74rem !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    white-space: normal !important;
 }
+
+.otpePage .otpeRespRow {
+    min-height: 2.15rem !important;
+    padding: 0 0.35rem !important;
 
-.otpeInfoText {
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
+    border-right: 1px solid #edf2f7 !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-left: 1px solid #edf2f7 !important;
+    background: #ffffff !important;
 }
 
-/* TABLE CARD */
-.otpeTableCard {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-  box-sizing: border-box;
+.otpePage .otpeRespRow .sapMText {
+    display: block !important;
+    width: 100% !important;
+
+    color: var(--otpe-text) !important;
+    font-size: 0.59rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.otpeTableTop {
-  margin-bottom: 12px;
+.otpePage .otpeRespIconCell {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 0.12rem !important;
 }
 
-.otpeTableTitle {
-  color: #172554;
-  font-size: 14px;
-  font-weight: 900;
+.otpePage .otpeExpandBtn {
+    width: 1.2rem !important;
+    min-width: 1.2rem !important;
+    height: 1.2rem !important;
 }
+
+.otpePage .otpeExpandBtn .sapMBtnInner {
+    width: 1.2rem !important;
+    min-width: 1.2rem !important;
+    height: 1.2rem !important;
+    min-height: 1.2rem !important;
 
-.otpeSearch .sapMSFF {
-  height: 30px !important;
-  border-radius: 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
 }
 
-/* MAIN TABLE */
-.otpeRespHeader,
-.otpeRespRow {
-  display: grid !important;
-  grid-template-columns: 0.34fr 1.45fr 1.05fr 1.15fr 1.15fr 1.15fr 1.4fr 0.28fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
+.otpePage .otpeExpandBtn .sapMBtnIcon {
+    width: 1.2rem !important;
+    line-height: 1.12rem !important;
+    color: #0b63f6 !important;
+    font-size: 0.62rem !important;
 }
 
-.otpeRespHeader {
-  min-height: 38px;
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 10px;
-  font-weight: 900;
-  text-align: center;
+.otpePage .otpeRespIcon {
+    color: #64748b !important;
+    font-size: 0.7rem !important;
 }
 
-.otpeRespRow {
-  min-height: 36px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 10.5px;
-  font-weight: 800;
-  text-align: center;
+.otpePage .otpeRespName {
+    color: var(--otpe-text) !important;
+    font-size: 0.59rem !important;
+    font-weight: 900 !important;
+    text-align: left !important;
 }
 
-.otpeRespExpanded {
-  background: #ffffff;
+.otpePage .otpeStrong {
+    color: var(--otpe-text) !important;
+    font-weight: 900 !important;
 }
 
-.otpeExpandBtn {
-  width: 26px;
-  height: 26px;
+.otpePage .otpeGreenStrong {
+    color: var(--otpe-green) !important;
+    font-weight: 900 !important;
 }
 
-.otpeExpandBtn .sapMBtnInner {
-  border: none !important;
-  background: transparent !important;
+.otpePage .otpeBlueStrong {
+    color: var(--otpe-blue) !important;
+    font-weight: 900 !important;
 }
 
-.otpeRespIcon {
-  color: #64748b;
-  font-size: 14px;
+.otpePage .otpeRowEndIcon {
+    color: #64748b !important;
+    font-size: 0.62rem !important;
+    justify-self: center !important;
 }
 
-.otpeRowEndIcon {
-  color: #64748b;
-  font-size: 13px;
+.otpePage .otpeTotalRow {
+    background: #f8fafc !important;
 }
 
-.otpeRespName {
-  color: #172554;
-  font-size: 10.5px;
-  font-weight: 900;
-  text-align: left;
+/* ==========================================================================
+   SUBTABLA
+   ========================================================================== */
+
+.otpePage .otpeSubTable {
+    width: calc(100% - 4rem) !important;
+    margin: 0 2rem !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+
+    border-right: 1px solid #edf2f7 !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-left: 1px solid #edf2f7 !important;
+    border-radius: 0 0 0.45rem 0.45rem !important;
+    background: #ffffff !important;
 }
+
+.otpePage .otpeSubHeader,
+.otpePage .otpeSubRow {
+    width: 100% !important;
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(5.2rem, 0.75fr)
+        minmax(9rem, 1.15fr)
+        minmax(5.5rem, 0.75fr)
+        minmax(7.5rem, 0.95fr)
+        minmax(7rem, 0.9fr) !important;
 
-.otpeStrong {
-  color: #172554;
-  font-weight: 900;
+    column-gap: 0.3rem !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
 }
 
-.otpeGreenStrong {
-  color: #16a34a;
-  font-weight: 900;
+.otpePage .otpeSubHeader > .sapMFlexItem,
+.otpePage .otpeSubRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
 }
 
-.otpeBlueStrong {
-  color: #2563eb;
-  font-weight: 900;
+.otpePage .otpeSubHeader {
+    min-height: 1.7rem !important;
+    padding: 0 0.35rem !important;
+
+    border-bottom: 1px solid #edf2f7 !important;
+    background: #f8fafc !important;
 }
 
-.otpeTotalRow {
-  background: #f8fafc;
-  min-height: 42px;
+.otpePage .otpeSubHeader .sapMText {
+    display: block !important;
+    width: 100% !important;
+
+    color: #475569 !important;
+    font-size: 0.56rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
 }
+
+.otpePage .otpeSubRow {
+    min-height: 1.65rem !important;
+    padding: 0 0.35rem !important;
 
-/* SUBTABLE */
-.otpeSubTable {
-  margin-left: 36px;
-  margin-right: 24px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  border-radius: 0 0 8px 8px;
-  overflow: hidden;
+    border-bottom:
+        1px solid #f1f5f9 !important;
 }
 
-.otpeSubHeader,
-.otpeSubRow {
-  display: grid !important;
-  grid-template-columns: 1fr 1.2fr 1.1fr 1.2fr 1.1fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
-  text-align: center;
+.otpePage .otpeSubRow:last-child {
+    border-bottom: 0 !important;
 }
 
-.otpeSubHeader {
-  min-height: 30px;
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 9.5px;
-  font-weight: 900;
-  border-bottom: 1px solid #edf2f7;
+.otpePage .otpeSubRow .sapMText {
+    display: block !important;
+    width: 100% !important;
+
+    color: var(--otpe-text) !important;
+    font-size: 0.56rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.otpeSubRow {
-  min-height: 30px;
-  color: #172554;
-  font-size: 9.5px;
-  font-weight: 800;
-  border-bottom: 1px solid #f1f5f9;
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.otpePage .otpeTableFooter {
+    min-height: 1.6rem !important;
+    gap: 0.35rem !important;
+    margin-top: 0.42rem !important;
 }
 
-.otpeTableFooter {
-  gap: 8px;
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
-  margin-top: 12px;
+.otpePage .otpeTableFooter .sapMText {
+    color: #334155 !important;
+    font-size: 0.58rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 800 !important;
 }
 
-.otpeFooterIcon {
-  color: #64748b;
-  font-size: 14px;
+.otpePage .otpeFooterIcon {
+    color: #64748b !important;
+    font-size: 0.68rem !important;
 }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .otpeTableCard {
-    overflow-x: auto;
-  }
+@media screen and (max-width: 68rem) {
+    .otpePage .otpeFilters {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
 
-  .otpeRespHeader,
-  .otpeRespRow,
-  .otpeSubHeader,
-  .otpeSubRow {
-    min-width: 920px;
-  }
+    .otpePage .otpeApplyBtn {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        justify-self: stretch !important;
+    }
+
+    .otpePage .otpeKpiGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .otpePage .otpeToolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    .otpePage .otpeInfoBox {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .otpePage .otpeTableCard {
+        overflow-x: auto !important;
+    }
+
+    .otpePage .otpeRespHeader,
+    .otpePage .otpeRespRow,
+    .otpePage .otpeSubHeader,
+    .otpePage .otpeSubRow {
+        min-width: 58rem !important;
+    }
 }
+
+@media screen and (max-width: 48rem) {
+    .otpePage .otpeContainer {
+        padding: 0.65rem !important;
+    }
+
+    .otpePage .otpeDateNote {
+        display: none !important;
+    }
 
-@media (max-width: 768px) {
-  .otpeContainer {
-    padding: 12px;
-  }
+    .otpePage .otpeFilters {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
 
-  .otpeTitle,
-  .otpeTitleGreen {
-    font-size: 20px;
-    line-height: 24px;
-  }
+    .otpePage .otpeKpiGrid {
+        grid-template-columns: 1fr !important;
+    }
+}
 
-  .otpeHeader {
-    flex-direction: column;
-    gap: 8px;
-  }
+@media screen and (max-width: 32rem) {
+    .otpePage .otpeFilters {
+        grid-template-columns: 1fr !important;
+    }
+
+    .otpePage .otpeSearch {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+}
+/* ==========================================================================
+   AJUSTE FINAL DE COLORES - PREVENTIVAS EJECUTADAS
+   Pegar AL FINAL del CSS actual.
+   ========================================================================== */
 
-  .otpeFilterItem,
-  .otpeApplyBtn {
-    flex: 1 1 calc(50% - 10px);
-    max-width: none;
-  }
+/* OT ejecutadas en verde */
+.otpePage .otpeRespRow .sapMText.otpeGreenStrong,
+.otpePage .otpeRespRow .otpeGreenStrong.sapMText,
+.otpePage .otpeRespRow > .sapMFlexItem:nth-child(3) .sapMText {
+    color: #16a34a !important;
+    font-weight: 900 !important;
+}
 
-  .otpeKpiCard {
-    min-width: 100%;
-  }
+/* Porcentaje del total ejecutado en azul */
+.otpePage .otpeRespRow .sapMText.otpeBlueStrong,
+.otpePage .otpeRespRow .otpeBlueStrong.sapMText,
+.otpePage .otpeRespRow > .sapMFlexItem:nth-child(4) .sapMText {
+    color: #1677ff !important;
+    font-weight: 900 !important;
+}
 
-  .otpeToolbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* Tiempo promedio de ejecución en verde */
+.otpePage .otpeRespRow > .sapMFlexItem:nth-child(7) .sapMText {
+    color: #16a34a !important;
+    font-weight: 900 !important;
+}
 
-  .otpeInfoBox {
-    width: 100%;
-    min-width: 100%;
-  }
+/* Refuerzo específico para la fila Total */
+.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(3) .sapMText {
+    color: #16a34a !important;
+    font-weight: 900 !important;
 }
 
-@media (max-width: 520px) {
-  .otpeFilterItem,
-  .otpeApplyBtn {
-    flex: 1 1 100%;
-  }
+.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(4) .sapMText {
+    color: #1677ff !important;
+    font-weight: 900 !important;
+}
 
-  .otpeTabs {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(7) .sapMText {
+    color: #16a34a !important;
+    font-weight: 900 !important;
 }

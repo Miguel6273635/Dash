@@ -2,23 +2,28 @@
     controllerName="mantenimiento.controller.PendientesDesbloqueo"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%"
+    class="pdView">
 
     <Page
         id="pendientesDesbloqueoPage"
         showHeader="false"
-        enableScrolling="true"
+        enableScrolling="false"
         class="pdPage sapUiSizeCompact">
 
         <content>
 
             <VBox
                 width="100%"
+                height="100%"
+                fitContainer="true"
                 class="pdDashboard">
 
-                <!-- ===================================================== -->
-                <!-- CABECERA                                              -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     CABECERA
+                     ===================================================== -->
 
                 <VBox
                     width="100%"
@@ -27,29 +32,32 @@
                     <Title
                         text="Pendientes de desbloqueo"
                         level="H1"
-                        class="pdMainTitle"/>
+                        class="pdMainTitle" />
 
                     <Text
                         text="Listado ejecutivo de acciones y pendientes para desbloquear equipos/elevadores bloqueados."
                         wrapping="false"
-                        class="pdMainSubtitle"/>
+                        class="pdMainSubtitle" />
 
                 </VBox>
 
-                <!-- ===================================================== -->
-                <!-- FILTROS                                               -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
 
                 <FlexBox
                     width="100%"
-                    wrap="Wrap"
-                    alignItems="End"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
                     class="pdFiltersContainer">
 
+                    <!-- PERIODO -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Periodo"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="periodoSelect"
@@ -59,24 +67,32 @@
                             class="pdFilterControl">
 
                             <items>
+
                                 <core:Item
                                     key="MES_ACTUAL"
-                                    text="Este mes"/>
+                                    text="Este mes" />
+
                                 <core:Item
                                     key="ULTIMOS_30"
-                                    text="Últimos 30 días"/>
+                                    text="Últimos 30 días" />
+
                                 <core:Item
                                     key="TRIMESTRE"
-                                    text="Este trimestre"/>
+                                    text="Este trimestre" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- FECHA DESDE -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Fecha desde"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <DatePicker
                             id="fechaDesdePicker"
@@ -85,13 +101,17 @@
                             valueFormat="yyyy-MM-dd"
                             displayFormat="dd/MM/yyyy"
                             change=".onFiltroChange"
-                            class="pdFilterControl"/>
+                            class="pdFilterControl" />
+
                     </VBox>
 
+                    <!-- FECHA HASTA -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Fecha hasta"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <DatePicker
                             id="fechaHastaPicker"
@@ -100,13 +120,17 @@
                             valueFormat="yyyy-MM-dd"
                             displayFormat="dd/MM/yyyy"
                             change=".onFiltroChange"
-                            class="pdFilterControl"/>
+                            class="pdFilterControl" />
+
                     </VBox>
 
+                    <!-- ZONA -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Zona"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="zonaSelect"
@@ -116,21 +140,44 @@
                             class="pdFilterControl">
 
                             <items>
-                                <core:Item key="TODOS" text="Todos"/>
-                                <core:Item key="NORTE" text="Norte"/>
-                                <core:Item key="CENTRO" text="Centro"/>
-                                <core:Item key="SUR" text="Sur"/>
-                                <core:Item key="ESTE" text="Este"/>
-                                <core:Item key="OESTE" text="Oeste"/>
+
+                                <core:Item
+                                    key="TODOS"
+                                    text="Todos" />
+
+                                <core:Item
+                                    key="NORTE"
+                                    text="Norte" />
+
+                                <core:Item
+                                    key="CENTRO"
+                                    text="Centro" />
+
+                                <core:Item
+                                    key="SUR"
+                                    text="Sur" />
+
+                                <core:Item
+                                    key="ESTE"
+                                    text="Este" />
+
+                                <core:Item
+                                    key="OESTE"
+                                    text="Oeste" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- CLIENTE -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Cliente"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="clienteSelect"
@@ -140,22 +187,48 @@
                             class="pdFilterControl">
 
                             <items>
-                                <core:Item key="TODOS" text="Todos"/>
-                                <core:Item key="GRUPO_ALFA" text="Grupo Alfa S.A."/>
-                                <core:Item key="INMUEBLES_NORTE" text="Inmuebles del Norte"/>
-                                <core:Item key="PLAZA_CENTRAL" text="Plaza Central"/>
-                                <core:Item key="HOSPITAL_SAN_JOSE" text="Hospital San José"/>
-                                <core:Item key="TORRES_SOL" text="Torres del Sol"/>
-                                <core:Item key="CENTRO_RIO" text="Centro Comercial Río"/>
+
+                                <core:Item
+                                    key="TODOS"
+                                    text="Todos" />
+
+                                <core:Item
+                                    key="GRUPO_ALFA"
+                                    text="Grupo Alfa S.A." />
+
+                                <core:Item
+                                    key="INMUEBLES_NORTE"
+                                    text="Inmuebles del Norte" />
+
+                                <core:Item
+                                    key="PLAZA_CENTRAL"
+                                    text="Plaza Central" />
+
+                                <core:Item
+                                    key="HOSPITAL_SAN_JOSE"
+                                    text="Hospital San José" />
+
+                                <core:Item
+                                    key="TORRES_SOL"
+                                    text="Torres del Sol" />
+
+                                <core:Item
+                                    key="CENTRO_RIO"
+                                    text="Centro Comercial Río" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- ESTADO DEL PENDIENTE -->
+
                     <VBox class="pdFilterItem pdFilterItemWide">
+
                         <Label
                             text="Estado de pendiente"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="estadoPendienteSelect"
@@ -165,20 +238,40 @@
                             class="pdFilterControl">
 
                             <items>
-                                <core:Item key="TODOS" text="Todos"/>
-                                <core:Item key="EN_GESTION" text="En gestión"/>
-                                <core:Item key="VENCIDO" text="Vencido"/>
-                                <core:Item key="PROXIMO_VENCER" text="Próximo a vencer"/>
-                                <core:Item key="COMPLETADO" text="Completado"/>
+
+                                <core:Item
+                                    key="TODOS"
+                                    text="Todos" />
+
+                                <core:Item
+                                    key="EN_GESTION"
+                                    text="En gestión" />
+
+                                <core:Item
+                                    key="VENCIDO"
+                                    text="Vencido" />
+
+                                <core:Item
+                                    key="PROXIMO_VENCER"
+                                    text="Próximo a vencer" />
+
+                                <core:Item
+                                    key="COMPLETADO"
+                                    text="Completado" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- RESPONSABLE -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Responsable"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="responsableSelect"
@@ -188,22 +281,48 @@
                             class="pdFilterControl">
 
                             <items>
-                                <core:Item key="TODOS" text="Todos"/>
-                                <core:Item key="LUIS_HERNANDEZ" text="Luis Hernández"/>
-                                <core:Item key="MARIA_GONZALEZ" text="María González"/>
-                                <core:Item key="CARLOS_RAMIREZ" text="Carlos Ramírez"/>
-                                <core:Item key="ANA_DUARTE" text="Ana Duarte"/>
-                                <core:Item key="JORGE_CASTILLO" text="Jorge Castillo"/>
-                                <core:Item key="PAOLA_MENDEZ" text="Paola Méndez"/>
+
+                                <core:Item
+                                    key="TODOS"
+                                    text="Todos" />
+
+                                <core:Item
+                                    key="LUIS_HERNANDEZ"
+                                    text="Luis Hernández" />
+
+                                <core:Item
+                                    key="MARIA_GONZALEZ"
+                                    text="María González" />
+
+                                <core:Item
+                                    key="CARLOS_RAMIREZ"
+                                    text="Carlos Ramírez" />
+
+                                <core:Item
+                                    key="ANA_DUARTE"
+                                    text="Ana Duarte" />
+
+                                <core:Item
+                                    key="JORGE_CASTILLO"
+                                    text="Jorge Castillo" />
+
+                                <core:Item
+                                    key="PAOLA_MENDEZ"
+                                    text="Paola Méndez" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- SUPERVISOR -->
+
                     <VBox class="pdFilterItem">
+
                         <Label
                             text="Supervisor"
-                            class="pdFilterLabel"/>
+                            class="pdFilterLabel" />
 
                         <Select
                             id="supervisorSelect"
@@ -213,40 +332,66 @@
                             class="pdFilterControl">
 
                             <items>
-                                <core:Item key="TODOS" text="Todos"/>
-                                <core:Item key="SUP_NORTE" text="Supervisor Norte"/>
-                                <core:Item key="SUP_CENTRO" text="Supervisor Centro"/>
-                                <core:Item key="SUP_SUR" text="Supervisor Sur"/>
-                                <core:Item key="SUP_ESTE" text="Supervisor Este"/>
-                                <core:Item key="SUP_OESTE" text="Supervisor Oeste"/>
+
+                                <core:Item
+                                    key="TODOS"
+                                    text="Todos" />
+
+                                <core:Item
+                                    key="SUP_NORTE"
+                                    text="Supervisor Norte" />
+
+                                <core:Item
+                                    key="SUP_CENTRO"
+                                    text="Supervisor Centro" />
+
+                                <core:Item
+                                    key="SUP_SUR"
+                                    text="Supervisor Sur" />
+
+                                <core:Item
+                                    key="SUP_ESTE"
+                                    text="Supervisor Este" />
+
+                                <core:Item
+                                    key="SUP_OESTE"
+                                    text="Supervisor Oeste" />
+
                             </items>
 
                         </Select>
+
                     </VBox>
 
+                    <!-- BOTÓN APLICAR FILTROS -->
+
                     <VBox class="pdApplyFilterWrapper">
+
                         <Button
                             id="aplicarFiltrosButton"
-                            text="Aplicar filtro"
+                            width="100%"
+                            text="Aplicar filtros"
                             icon="sap-icon://filter"
                             type="Emphasized"
                             press=".onAplicarFiltros"
-                            class="pdApplyFilterButton"/>
+                            class="pdApplyFilterButton" />
+
                     </VBox>
 
                 </FlexBox>
 
-                <!-- ===================================================== -->
-                <!-- KPIS                                                  -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     KPI
+                     ===================================================== -->
 
                 <FlexBox
                     width="100%"
-                    wrap="Wrap"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
                     justifyContent="SpaceBetween"
                     class="pdKpiContainer">
 
-                    <!-- Pendientes abiertos -->
+                    <!-- PENDIENTES ABIERTOS -->
 
                     <HBox
                         alignItems="Center"
@@ -259,23 +404,26 @@
 
                             <core:Icon
                                 src="sap-icon://activity-items"
-                                size="1.45rem"/>
+                                class="pdKpiIcon" />
+
                         </HBox>
 
                         <VBox class="pdKpiContent">
+
                             <ObjectNumber
                                 number="{/kpis/pendientesAbiertos}"
-                                class="pdKpiNumber pdKpiNumberBlue"/>
+                                class="pdKpiNumber pdKpiNumberBlue" />
 
                             <Text
                                 text="Pendientes abiertos"
                                 wrapping="false"
-                                class="pdKpiLabel"/>
+                                class="pdKpiLabel" />
+
                         </VBox>
 
                     </HBox>
 
-                    <!-- Pendientes vencidos -->
+                    <!-- PENDIENTES VENCIDOS -->
 
                     <HBox
                         alignItems="Center"
@@ -288,23 +436,26 @@
 
                             <core:Icon
                                 src="sap-icon://message-warning"
-                                size="1.45rem"/>
+                                class="pdKpiIcon" />
+
                         </HBox>
 
                         <VBox class="pdKpiContent">
+
                             <ObjectNumber
                                 number="{/kpis/pendientesVencidos}"
-                                class="pdKpiNumber pdKpiNumberRed"/>
+                                class="pdKpiNumber pdKpiNumberRed" />
 
                             <Text
                                 text="Pendientes vencidos"
                                 wrapping="false"
-                                class="pdKpiLabel"/>
+                                class="pdKpiLabel" />
+
                         </VBox>
 
                     </HBox>
 
-                    <!-- Próximos a vencer -->
+                    <!-- PRÓXIMOS A VENCER -->
 
                     <HBox
                         alignItems="Center"
@@ -317,23 +468,26 @@
 
                             <core:Icon
                                 src="sap-icon://history"
-                                size="1.45rem"/>
+                                class="pdKpiIcon" />
+
                         </HBox>
 
                         <VBox class="pdKpiContent">
+
                             <ObjectNumber
                                 number="{/kpis/proximosVencer}"
-                                class="pdKpiNumber pdKpiNumberOrange"/>
+                                class="pdKpiNumber pdKpiNumberOrange" />
 
                             <Text
                                 text="Próximos a vencer"
                                 wrapping="false"
-                                class="pdKpiLabel"/>
+                                class="pdKpiLabel" />
+
                         </VBox>
 
                     </HBox>
 
-                    <!-- Equipos con pendiente -->
+                    <!-- EQUIPOS CON PENDIENTE -->
 
                     <HBox
                         alignItems="Center"
@@ -345,34 +499,48 @@
                             class="pdKpiIconCircle pdKpiIconGreen">
 
                             <core:Icon
-                                src="sap-icon://equipment"
-                                size="1.45rem"/>
+                                src="sap-icon://technical-object"
+                                class="pdKpiIcon" />
+
                         </HBox>
 
                         <VBox class="pdKpiContent">
+
                             <ObjectNumber
                                 number="{/kpis/equiposPendiente}"
-                                class="pdKpiNumber pdKpiNumberGreen"/>
+                                class="pdKpiNumber pdKpiNumberGreen" />
 
                             <Text
                                 text="Equipos con pendiente"
                                 wrapping="false"
-                                class="pdKpiLabel"/>
+                                class="pdKpiLabel" />
+
                         </VBox>
 
                     </HBox>
 
                 </FlexBox>
 
-                <!-- ===================================================== -->
-                <!-- TARJETA DE TABLA                                      -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     TARJETA DE TABLA
+                     ===================================================== -->
 
                 <VBox
                     width="100%"
+                    height="100%"
+                    fitContainer="true"
                     class="pdTableCard">
 
-                    <!-- Cabecera de la tabla -->
+                    <layoutData>
+
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+
+                    </layoutData>
+
+                    <!-- CABECERA DE LA TABLA -->
 
                     <HBox
                         width="100%"
@@ -391,19 +559,22 @@
 
                                 <core:Icon
                                     src="sap-icon://task"
-                                    size="1.1rem"/>
+                                    class="pdTableTitleIconControl" />
+
                             </HBox>
 
                             <VBox>
+
                                 <Title
                                     text="Listado de pendientes de desbloqueo"
                                     level="H2"
-                                    class="pdTableTitle"/>
+                                    class="pdTableTitle" />
 
                                 <Text
                                     text="Seguimiento de acciones, responsables y fechas compromiso para desbloquear equipos bloqueados."
                                     wrapping="false"
-                                    class="pdTableSubtitle"/>
+                                    class="pdTableSubtitle" />
+
                             </VBox>
 
                         </HBox>
@@ -417,27 +588,27 @@
                                 type="Transparent"
                                 tooltip="Limpiar filtros"
                                 press=".onLimpiarFiltros"
-                                class="pdTableActionButton"/>
+                                class="pdTableActionButton" />
 
                             <Button
                                 icon="sap-icon://calendar"
                                 type="Transparent"
                                 tooltip="Consultar calendario"
                                 press=".onAbrirCalendario"
-                                class="pdTableActionButton"/>
+                                class="pdTableActionButton" />
 
                             <Button
                                 icon="sap-icon://action-settings"
                                 type="Transparent"
                                 tooltip="Configurar tabla"
                                 press=".onConfigurarTabla"
-                                class="pdTableActionButton"/>
+                                class="pdTableActionButton" />
 
                         </HBox>
 
                     </HBox>
 
-                    <!-- Tabla -->
+                    <!-- TABLA -->
 
                     <Table
                         id="pendientesTable"
@@ -450,136 +621,165 @@
                         noDataText="No se encontraron pendientes de desbloqueo."
                         class="pdTable">
 
+                        <layoutData>
+
+                            <FlexItemData
+                                growFactor="1"
+                                shrinkFactor="1"
+                                baseSize="0%" />
+
+                        </layoutData>
+
                         <columns>
 
-                            <Column width="5.5%">
+                            <Column width="6%">
+
                                 <Text
                                     text="Equipo / Elevador"
                                     wrapping="true"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
-                            <Column width="7.5%">
+                            <Column width="8%">
+
                                 <Text
                                     text="Cliente"
                                     wrapping="false"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
-                            <Column width="4.5%">
+                            <Column width="5%">
+
                                 <Text
                                     text="Zona"
                                     wrapping="false"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
-                            <Column width="8.5%">
+                            <Column width="9%">
+
                                 <Text
                                     text="Pendiente"
                                     wrapping="false"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
-                            <Column width="7.5%">
+                            <Column width="8%">
+
                                 <Text
                                     text="Responsable"
                                     wrapping="false"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="7.5%"
+                                width="8%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Estado del pendiente"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="5.5%"
+                                width="6%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Fecha registro"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="5.5%"
+                                width="6%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Fecha compromiso"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="4.2%"
+                                width="5%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Días pendiente"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="3.7%"
+                                width="4%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Vencido"
                                     wrapping="false"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
-                            <Column width="9%">
+                            <Column width="10%">
+
                                 <Text
                                     text="Observación"
                                     wrapping="false"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="6.5%"
+                                width="7%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Prioridad desbloqueo"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="6.5%"
+                                width="8%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Estado de gestión"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                             <Column
-                                width="5.5%"
+                                width="10%"
                                 hAlign="Center">
 
                                 <Text
                                     text="Acción"
                                     wrapping="false"
                                     textAlign="Center"
-                                    class="pdColumnHeader"/>
+                                    class="pdColumnHeader" />
+
                             </Column>
 
                         </columns>
@@ -593,28 +793,38 @@
 
                                 <cells>
 
+                                    <!-- EQUIPO -->
+
                                     <Link
                                         text="{equipo}"
                                         tooltip="{equipo}"
                                         press=".onVerDetalle"
-                                        class="pdEquipmentLink"/>
+                                        class="pdEquipmentLink" />
+
+                                    <!-- CLIENTE -->
 
                                     <Text
                                         text="{cliente}"
                                         tooltip="{cliente}"
                                         wrapping="false"
-                                        class="pdCellText"/>
+                                        class="pdCellText" />
+
+                                    <!-- ZONA -->
 
                                     <Text
                                         text="{zona}"
                                         wrapping="false"
-                                        class="pdCellText"/>
+                                        class="pdCellText" />
+
+                                    <!-- PENDIENTE -->
 
                                     <Text
                                         text="{pendiente}"
                                         tooltip="{pendiente}"
                                         wrapping="false"
-                                        class="pdCellText"/>
+                                        class="pdCellText" />
+
+                                    <!-- RESPONSABLE -->
 
                                     <HBox
                                         alignItems="Center"
@@ -622,59 +832,88 @@
 
                                         <core:Icon
                                             src="sap-icon://employee"
-                                            size="0.7rem"
-                                            class="pdResponsibleIcon"/>
+                                            class="pdResponsibleIcon" />
 
                                         <Text
                                             text="{responsable}"
                                             tooltip="{responsable}"
                                             wrapping="false"
-                                            class="pdResponsibleText"/>
+                                            class="pdResponsibleText" />
 
                                     </HBox>
+
+                                    <!-- ESTADO DEL PENDIENTE -->
 
                                     <ObjectStatus
                                         text="{estadoPendiente}"
                                         state="{estadoPendienteState}"
-                                        class="pdStatusPill"/>
+                                        class="pdStatusPill" />
+
+                                    <!-- FECHA REGISTRO -->
 
                                     <Text
                                         text="{fechaRegistro}"
                                         textAlign="Center"
                                         wrapping="false"
-                                        class="pdDateText"/>
+                                        class="pdDateText" />
+
+                                    <!-- FECHA COMPROMISO -->
 
                                     <Text
                                         text="{fechaCompromiso}"
                                         textAlign="Center"
                                         wrapping="false"
-                                        class="pdDateText"/>
+                                        class="pdDateText" />
 
-                                    <ObjectStatus
+                                    <!-- DÍAS PENDIENTE SIN PÍLDORA -->
+
+                                    <Text
                                         text="{diasPendiente}"
-                                        state="{diasState}"
-                                        class="pdDaysStatus"/>
+                                        textAlign="Center"
+                                        wrapping="false"
+                                        class="pdDaysText">
+
+                                        <customData>
+
+                                            <core:CustomData
+                                                key="dias"
+                                                value="{diasState}"
+                                                writeToDom="true" />
+
+                                        </customData>
+
+                                    </Text>
+
+                                    <!-- VENCIDO -->
 
                                     <ObjectStatus
                                         text="{vencido}"
                                         state="{vencidoState}"
-                                        class="pdStatusPill pdExpiredPill"/>
+                                        class="pdStatusPill pdExpiredPill" />
+
+                                    <!-- OBSERVACIÓN -->
 
                                     <Text
                                         text="{observacion}"
                                         tooltip="{observacion}"
                                         wrapping="false"
-                                        class="pdCellText"/>
+                                        class="pdCellText" />
+
+                                    <!-- PRIORIDAD -->
 
                                     <ObjectStatus
                                         text="{prioridad}"
                                         state="{prioridadState}"
-                                        class="pdStatusPill pdPriorityPill"/>
+                                        class="pdStatusPill pdPriorityPill" />
+
+                                    <!-- ESTADO DE GESTIÓN -->
 
                                     <ObjectStatus
                                         text="{estadoGestion}"
                                         state="{estadoGestionState}"
-                                        class="pdStatusPill pdManagementPill"/>
+                                        class="pdStatusPill pdManagementPill" />
+
+                                    <!-- ACCIÓN -->
 
                                     <HBox
                                         alignItems="Center"
@@ -684,12 +923,11 @@
                                         <Link
                                             text="Ver detalle"
                                             press=".onVerDetalle"
-                                            class="pdDetailLink"/>
+                                            class="pdDetailLink" />
 
                                         <core:Icon
                                             src="sap-icon://navigation-right-arrow"
-                                            size="0.55rem"
-                                            class="pdDetailArrow"/>
+                                            class="pdDetailArrow" />
 
                                     </HBox>
 
@@ -701,7 +939,7 @@
 
                     </Table>
 
-                    <!-- Pie y paginación -->
+                    <!-- PIE DE TABLA -->
 
                     <HBox
                         width="100%"
@@ -713,7 +951,7 @@
                             id="resultadosText"
                             text="{/paginacion/textoResultados}"
                             wrapping="false"
-                            class="pdResultText"/>
+                            class="pdResultText" />
 
                         <HBox
                             alignItems="Center"
@@ -724,18 +962,18 @@
                                 icon="sap-icon://navigation-left-arrow"
                                 type="Transparent"
                                 enabled="false"
-                                class="pdPaginationArrow"/>
+                                class="pdPaginationArrow" />
 
                             <Button
                                 text="1"
                                 type="Emphasized"
-                                class="pdCurrentPageButton"/>
+                                class="pdCurrentPageButton" />
 
                             <Button
                                 icon="sap-icon://navigation-right-arrow"
                                 type="Transparent"
                                 enabled="false"
-                                class="pdPaginationArrow"/>
+                                class="pdPaginationArrow" />
 
                         </HBox>
 
@@ -746,7 +984,7 @@
                             <Text
                                 text="Filas por página:"
                                 wrapping="false"
-                                class="pdRowsLabel"/>
+                                class="pdRowsLabel" />
 
                             <Select
                                 width="4rem"
@@ -755,9 +993,19 @@
                                 class="pdRowsSelect">
 
                                 <items>
-                                    <core:Item key="10" text="10"/>
-                                    <core:Item key="20" text="20"/>
-                                    <core:Item key="50" text="50"/>
+
+                                    <core:Item
+                                        key="10"
+                                        text="10" />
+
+                                    <core:Item
+                                        key="20"
+                                        text="20" />
+
+                                    <core:Item
+                                        key="50"
+                                        text="50" />
+
                                 </items>
 
                             </Select>

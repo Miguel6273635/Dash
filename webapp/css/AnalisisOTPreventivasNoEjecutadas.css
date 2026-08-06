@@ -1,585 +1,1019 @@
-.otnePage,
-.otneScroll {
-  background: #f6f8fc;
+/* ==========================================================================
+   ANÁLISIS DE OT PREVENTIVAS NO EJECUTADAS
+   Ajuste visual basado en la pantalla de referencia y Consumo de materiales.
+   ========================================================================== */
+
+.otnePage {
+    --otne-bg: #f7f9fc;
+    --otne-card: #ffffff;
+    --otne-text: #14213d;
+    --otne-muted: #64748b;
+    --otne-border: #e3eaf3;
+    --otne-blue: #1677ff;
+    --otne-green: #16a34a;
+    --otne-red: #ef4444;
+    --otne-purple: #7c3aed;
+    --otne-shadow: 0 0.3rem 0.9rem rgba(15, 23, 42, 0.06);
+
+    background: var(--otne-bg) !important;
+}
+
+.otnePage.sapMPage,
+.otnePage .sapMPageBgStandard,
+.otnePage .sapMPageScroll,
+.otnePage .sapMPageEnableScrolling,
+.otnePage .otneScroll {
+    background: var(--otne-bg) !important;
+}
+
+/* ==========================================================================
+   ANCHO Y CENTRADO GENERAL
+   ========================================================================== */
+
+.otnePage .otneContainer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0.7rem 0.8rem 1rem !important;
+    box-sizing: border-box !important;
+    gap: 0.6rem !important;
+    background: var(--otne-bg) !important;
+}
+
+.otnePage .otneHeader,
+.otnePage .otneFilters,
+.otnePage .otneKpiGrid,
+.otnePage .otneToolbar,
+.otnePage .otneTableCard {
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.otnePage .otneHeader {
+    min-height: 2.9rem !important;
+}
+
+.otnePage .otneHeaderLeft {
+    min-width: 0 !important;
+    gap: 0.6rem !important;
+}
+
+.otnePage .otneMenuBtn {
+    width: 2rem !important;
+    min-width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 0.5rem !important;
+    background: #ffffff !important;
+    box-shadow: 0 0.18rem 0.55rem rgba(15, 23, 42, 0.08) !important;
 }
 
-.otneContainer {
-  padding: 14px 18px 22px 18px;
-  background: #f6f8fc;
-  box-sizing: border-box;
-  gap: 12px;
+.otnePage .otneMenuBtn .sapMBtnInner {
+    width: 2rem !important;
+    min-width: 2rem !important;
+    height: 2rem !important;
+    min-height: 2rem !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+    background: #ffffff !important;
 }
 
-/* HEADER */
-.otneHeader {
-  width: 100%;
+.otnePage .otneMenuBtn .sapMBtnIcon {
+    width: 2rem !important;
+    line-height: 1.9rem !important;
+    color: var(--otne-blue) !important;
+    font-size: 0.82rem !important;
+}
+
+.otnePage .otneTitleRow {
+    min-width: 0 !important;
+    gap: 0.28rem !important;
+}
+
+.otnePage .otneTitle,
+.otnePage .otneTitleRed {
+    font-size: 1.3rem !important;
+    line-height: 1.45rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.015rem !important;
+}
+
+.otnePage .otneTitle {
+    color: var(--otne-text) !important;
+}
+
+.otnePage .otneTitleRed {
+    color: #e02525 !important;
 }
 
-.otneHeaderLeft {
-  gap: 12px;
+.otnePage .otneBreadcrumb {
+    gap: 0.35rem !important;
+    margin-top: 0.14rem !important;
+}
+
+.otnePage .otneBreadLink,
+.otnePage .otneBreadText {
+    font-size: 0.58rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 800 !important;
 }
+
+.otnePage .otneBreadLink {
+    color: #0b63f6 !important;
+}
+
+.otnePage .otneBreadText {
+    color: #2563eb !important;
+}
+
+.otnePage .otneBreadIcon {
+    color: #94a3b8 !important;
+    font-size: 0.48rem !important;
+}
+
+.otnePage .otneDateNote {
+    margin-top: 0.25rem !important;
+    color: #334155 !important;
+    font-size: 0.55rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   FILTROS
+   ========================================================================== */
+
+.otnePage .otneFilters {
+    display: grid !important;
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.15fr)
+        minmax(9rem, 1.15fr)
+        minmax(7rem, 0.88fr)
+        minmax(7.4rem, 0.94fr)
+        minmax(7.8rem, 1fr)
+        minmax(8rem, 0.9fr) !important;
+    column-gap: 0.55rem !important;
+    row-gap: 0.55rem !important;
+    justify-content: stretch !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+}
+
+.otnePage .otneFilters > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.otnePage .otneFilterItem,
+.otnePage .otneFilterPeriod,
+.otnePage .otneFilterDate,
+.otnePage .otneFilterNormal {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 3.35rem !important;
+    flex: none !important;
+    margin: 0 !important;
+    padding: 0.38rem 0.58rem 0.28rem !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.55rem !important;
+    background: #ffffff !important;
+    box-shadow: 0 0.18rem 0.55rem rgba(15, 23, 42, 0.05) !important;
+}
+
+.otnePage .otneFilterItem:hover {
+    border-color: #b9c9dd !important;
+}
+
+.otnePage .otneFilterLabel {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 0.08rem !important;
+    color: #334155 !important;
+    font-size: 0.54rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+.otnePage .otneFilterItem .sapMSlt,
+.otnePage .otneFilterItem .sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    margin: 0 !important;
+}
+
+.otnePage .otneFilterItem .sapMSlt,
+.otnePage .otneFilterItem .sapMInputBaseContentWrapper {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.otnePage .otneFilterItem .sapMSltLabel,
+.otnePage .otneFilterItem .sapMInputBaseInner {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    padding: 0 1.45rem 0 0 !important;
+    box-sizing: border-box !important;
+    color: #1f2937 !important;
+    background: transparent !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.otnePage .otneFilterItem .sapMSltArrow {
+    width: 1.45rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: #0f172a !important;
+    font-size: 0.7rem !important;
+}
+
+.otnePage .otneFilterItem .sapMInputBaseIconContainer {
+    width: 1.55rem !important;
+    height: 1.75rem !important;
+}
+
+.otnePage .otneFilterItem .sapMInputBaseIcon {
+    width: 1.55rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: #0f172a !important;
+    font-size: 0.72rem !important;
+}
+
+.otnePage .otneApplyBtn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 3.35rem !important;
+    flex: none !important;
+    margin: 0 !important;
+    border-radius: 0.55rem !important;
+    box-shadow: 0 0.35rem 0.8rem rgba(22, 119, 255, 0.24) !important;
+}
+
+.otnePage .otneApplyBtn .sapMBtnInner {
+    width: 100% !important;
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+    padding: 0 0.55rem !important;
+    border: 0 !important;
+    border-radius: 0.55rem !important;
+    background: linear-gradient(180deg, #1787ff 0%, #066ce6 100%) !important;
+}
+
+.otnePage .otneApplyBtn .sapMBtnContent,
+.otnePage .otneApplyBtn .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.62rem !important;
+    line-height: 3.25rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
 
-.otneMenuBtn {
-  width: 36px;
-  height: 36px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+/* ==========================================================================
+   KPI
+   ========================================================================== */
+
+.otnePage .otneKpiGrid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.62rem !important;
+    align-items: stretch !important;
 }
 
-.otneMenuBtn .sapMBtnInner {
-  border: none !important;
-  background: #ffffff !important;
-  border-radius: 8px !important;
+.otnePage .otneKpiGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
 }
 
-.otneTitleRow {
-  gap: 6px;
+.otnePage .otneKpiCard {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 5.65rem !important;
+    flex: none !important;
+    padding: 0.65rem 0.9rem !important;
+    box-sizing: border-box !important;
+    gap: 0.72rem !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    border: 1px solid var(--otne-border) !important;
+    border-left-width: 0.27rem !important;
+    border-radius: 0.62rem !important;
+    background: var(--otne-card) !important;
+    box-shadow: var(--otne-shadow) !important;
 }
 
-.otneTitle {
-  color: #172554;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
+.otnePage .otneKpiBlue {
+    border-left-color: var(--otne-blue) !important;
+    background: linear-gradient(90deg, rgba(22, 119, 255, 0.12), #ffffff 52%) !important;
 }
 
-.otneTitleRed {
-  color: #dc2626;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
+.otnePage .otneKpiGreen {
+    border-left-color: var(--otne-green) !important;
+    background: linear-gradient(90deg, rgba(22, 163, 74, 0.12), #ffffff 52%) !important;
 }
 
-.otneBreadcrumb {
-  gap: 8px;
-  margin-top: 4px;
+.otnePage .otneKpiRed {
+    border-left-color: var(--otne-red) !important;
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.12), #ffffff 52%) !important;
 }
 
-.otneBreadLink {
-  color: #0b63f6;
-  font-size: 10px;
-  font-weight: 800;
+.otnePage .otneKpiPurple {
+    border-left-color: var(--otne-purple) !important;
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.12), #ffffff 52%) !important;
 }
 
-.otneBreadIcon {
-  color: #94a3b8;
-  font-size: 9px;
+.otnePage .otneKpiIconCircle {
+    width: 2.8rem !important;
+    min-width: 2.8rem !important;
+    height: 2.8rem !important;
+    border-radius: 50% !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
 }
 
-.otneBreadText {
-  color: #2563eb;
-  font-size: 10px;
-  font-weight: 800;
+.otnePage .otneKpiIcon {
+    font-size: 1.3rem !important;
 }
 
-.otneDateNote {
-  color: #334155;
-  font-size: 10px;
-  font-weight: 800;
-  margin-top: 8px;
+.otnePage .otneKpiNumber {
+    font-size: 1.7rem !important;
+    line-height: 1.75rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.02rem !important;
 }
 
-/* FILTROS */
-.otneFilters {
-  width: 100%;
-  background: transparent;
-  gap: 10px;
-  box-sizing: border-box;
-  padding: 0;
-  margin-top: 4px;
+.otnePage .otneKpiLabel {
+    color: var(--otne-text) !important;
+    font-size: 0.72rem !important;
+    line-height: 0.84rem !important;
+    font-weight: 900 !important;
 }
 
-.otneFilterItem {
-  height: 50px;
-  background: #ffffff;
-  border: 1px solid #dbe3ef;
-  border-radius: 8px;
-  padding: 6px 9px;
-  box-sizing: border-box;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+.otnePage .otneKpiSubLabel,
+.otnePage .otneKpiSubLabelRed {
+    font-size: 0.57rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 700 !important;
 }
 
-.otneFilterPeriod {
-  flex: 1 1 120px;
-  min-width: 112px;
-  max-width: 135px;
-}
-
-.otneFilterDate {
-  flex: 1 1 145px;
-  min-width: 130px;
-  max-width: 160px;
-}
+.otnePage .otneKpiSubLabel {
+    color: var(--otne-muted) !important;
+}
 
-.otneFilterNormal {
-  flex: 1 1 115px;
-  min-width: 105px;
-  max-width: 130px;
+.otnePage .otneKpiSubLabelRed {
+    color: #dc2626 !important;
+    font-weight: 800 !important;
 }
 
-.otneFilterLabel {
-  color: #172554;
-  font-size: 9px;
-  font-weight: 900;
-  margin-bottom: 3px;
-  line-height: 11px;
+/* ==========================================================================
+   COLORES GENERALES
+   ========================================================================== */
+
+.otnePage .otneBlueText {
+    color: var(--otne-blue) !important;
 }
 
-.otneFilterItem .sapMSlt,
-.otneFilterItem .sapMInputBase,
-.otneFilterItem .sapMInputBaseContentWrapper {
-  height: 25px !important;
-  min-height: 25px !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
+.otnePage .otneGreenText {
+    color: var(--otne-green) !important;
 }
 
-.otneFilterItem .sapMSlt > .sapMSltLabel,
-.otneFilterItem .sapMInputBaseInner {
-  height: 25px !important;
-  line-height: 25px !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  color: #1f2937 !important;
-  padding-left: 0 !important;
-  background: transparent !important;
+.otnePage .otneRedText {
+    color: var(--otne-red) !important;
 }
 
-.otneFilterItem .sapMSltArrow,
-.otneFilterItem .sapMInputBaseIcon {
-  height: 25px !important;
-  line-height: 25px !important;
-  color: #0f172a !important;
-  font-size: 13px !important;
+.otnePage .otnePurpleText {
+    color: var(--otne-purple) !important;
 }
 
-.otneApplyBtn {
-  height: 50px;
-  min-width: 125px;
-  max-width: 140px;
-  flex: 0 0 130px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.28);
+.otnePage .otneBlueBg {
+    background: #eff6ff !important;
 }
 
-.otneApplyBtn .sapMBtnInner {
-  height: 50px !important;
-  min-height: 50px !important;
-  border-radius: 8px !important;
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
+.otnePage .otneGreenBg {
+    background: #f0fdf4 !important;
 }
 
-.otneApplyBtn .sapMBtnContent {
-  color: #ffffff !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  line-height: 48px !important;
+.otnePage .otneRedBg {
+    background: #fef2f2 !important;
 }
 
-.otneApplyBtn .sapMBtnIcon {
-  color: #ffffff !important;
-  font-size: 14px !important;
-  line-height: 48px !important;
+.otnePage .otnePurpleBg {
+    background: #faf5ff !important;
 }
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
 
-/* KPIS */
-.otneKpiGrid {
-  width: 100%;
-  gap: 12px;
+.otnePage .otneToolbar {
+    min-height: 2.2rem !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 0.75rem !important;
+    align-items: center !important;
 }
 
-.otneKpiCard {
-  flex: 1 1 220px;
-  min-width: 210px;
-  height: 82px;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  border-left-width: 4px;
-  padding: 12px 16px;
-  gap: 14px;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+.otnePage .otneToolbar > .sapMFlexItem {
+    min-width: 0 !important;
 }
 
-.otneKpiBlue {
-  border-left-color: #2563eb;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, #ffffff 45%);
+.otnePage .otneTabs {
+    gap: 0.4rem !important;
 }
 
-.otneKpiGreen {
-  border-left-color: #16a34a;
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12) 0%, #ffffff 45%);
+.otnePage .otneTabsLabel {
+    margin-right: 0.15rem !important;
+    color: var(--otne-text) !important;
+    font-size: 0.6rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
 }
 
-.otneKpiRed {
-  border-left-color: #ef4444;
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12) 0%, #ffffff 45%);
+.otnePage .otneTabBtn {
+    height: 1.9rem !important;
 }
 
-.otneKpiPurple {
-  border-left-color: #7c3aed;
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12) 0%, #ffffff 45%);
+.otnePage .otneTabBtn .sapMBtnInner {
+    height: 1.9rem !important;
+    min-height: 1.9rem !important;
+    padding: 0 0.58rem !important;
+    border-radius: 0.42rem !important;
 }
 
-.otneKpiIconCircle {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.otnePage .otneTabBtn .sapMBtnContent {
+    font-size: 0.57rem !important;
+    line-height: 1.8rem !important;
+    font-weight: 900 !important;
 }
 
-.otneKpiIcon {
-  font-size: 22px;
+.otnePage .otneTabActive .sapMBtnInner {
+    border-color: #0b63f6 !important;
+    background: #0b63f6 !important;
 }
 
-.otneKpiNumber {
-  font-size: 28px;
-  line-height: 30px;
-  font-weight: 900;
+.otnePage .otneTabActive .sapMBtnContent {
+    color: #ffffff !important;
 }
 
-.otneKpiLabel {
-  color: #172554;
-  font-size: 12px;
-  font-weight: 900;
+.otnePage .otneInfoBox {
+    min-width: 18.5rem !important;
+    min-height: 2rem !important;
+    padding: 0.35rem 0.7rem !important;
+    box-sizing: border-box !important;
+    gap: 0.42rem !important;
+    overflow: hidden !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.5rem !important;
+    background: #f8fafc !important;
 }
 
-.otneKpiSubLabel {
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
+.otnePage .otneInfoIcon {
+    color: #64748b !important;
+    font-size: 0.72rem !important;
 }
 
-.otneKpiSubLabelRed {
-  color: #dc2626;
-  font-size: 10px;
-  font-weight: 800;
+.otnePage .otneInfoText {
+    color: #64748b !important;
+    font-size: 0.55rem !important;
+    line-height: 0.66rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
 }
 
-/* COLORS */
-.otneBlueText {
-  color: #2563eb !important;
+/* ==========================================================================
+   TARJETA Y BUSCADOR
+   ========================================================================== */
+
+.otnePage .otneTableCard {
+    padding: 0.75rem 0.8rem 0.65rem !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.68rem !important;
+    background: #ffffff !important;
+    box-shadow: var(--otne-shadow) !important;
 }
 
-.otneGreenText {
-  color: #16a34a !important;
+.otnePage .otneTableTop {
+    min-height: 2rem !important;
+    margin-bottom: 0.48rem !important;
 }
 
-.otneRedText {
-  color: #ef4444 !important;
+.otnePage .otneTableTitle {
+    color: var(--otne-text) !important;
+    font-size: 0.78rem !important;
+    line-height: 0.92rem !important;
+    font-weight: 900 !important;
 }
 
-.otnePurpleText {
-  color: #7c3aed !important;
+.otnePage .otneSearch {
+    width: 15rem !important;
+    min-width: 15rem !important;
+    max-width: 15rem !important;
 }
 
-.otneBlueBg {
-  background: #eff6ff;
+.otnePage .otneSearch .sapMSFF {
+    height: 1.8rem !important;
+    min-height: 1.8rem !important;
+    border-radius: 0.45rem !important;
 }
 
-.otneGreenBg {
-  background: #f0fdf4;
+.otnePage .otneSearch .sapMSFI {
+    height: 1.72rem !important;
+    padding-left: 0.55rem !important;
+    font-size: 0.63rem !important;
 }
 
-.otneRedBg {
-  background: #fef2f2;
+.otnePage .otneSearch .sapMSFB {
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    line-height: 1.8rem !important;
+    font-size: 0.78rem !important;
 }
+
+/* ==========================================================================
+   TABLA PRINCIPAL
+   ========================================================================== */
 
-.otnePurpleBg {
-  background: #faf5ff;
+.otnePage .otneCauseHeader,
+.otnePage .otneCauseRow {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        minmax(12rem, 1.52fr)
+        minmax(5.6rem, 0.72fr)
+        minmax(7.2rem, 0.92fr)
+        minmax(6.3rem, 0.8fr)
+        minmax(7rem, 0.88fr)
+        minmax(8.2rem, 1fr) !important;
+    column-gap: 0.35rem !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
 }
 
-/* TOOLBAR */
-.otneToolbar {
-  width: 100%;
-  gap: 12px;
+.otnePage .otneCauseHeader > .sapMFlexItem,
+.otnePage .otneCauseRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
 }
 
-.otneTabs {
-  gap: 8px;
+.otnePage .otneCauseHeader {
+    min-height: 2.05rem !important;
+    padding: 0 0.4rem !important;
+    border: 1px solid #edf2f7 !important;
+    background: #f8fafc !important;
 }
 
-.otneTabsLabel {
-  color: #172554;
-  font-size: 11px;
-  font-weight: 900;
-  margin-right: 4px;
+.otnePage .otneCauseHeader .sapMText {
+    display: block !important;
+    width: 100% !important;
+    color: var(--otne-text) !important;
+    font-size: 0.57rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    white-space: normal !important;
 }
 
-.otneTabBtn {
-  height: 32px;
+.otnePage .otneCauseRow {
+    min-height: 2rem !important;
+    padding: 0 0.4rem !important;
+    border-right: 1px solid #edf2f7 !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-left: 1px solid #edf2f7 !important;
+    background: #ffffff !important;
 }
 
-.otneTabBtn .sapMBtnInner {
-  height: 32px !important;
-  min-height: 32px !important;
-  border-radius: 7px !important;
+.otnePage .otneCauseRow .sapMText {
+    display: block !important;
+    width: 100% !important;
+    color: var(--otne-text) !important;
+    font-size: 0.58rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.otneTabBtn .sapMBtnContent {
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  line-height: 30px !important;
+/* Colores de la tabla principal, aunque el XML no tenga clases específicas */
+.otnePage .otneCauseRow > .sapMFlexItem:nth-child(2) .sapMText {
+    color: var(--otne-red) !important;
+    font-weight: 900 !important;
 }
 
-.otneTabActive .sapMBtnInner {
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
+.otnePage .otneCauseRow > .sapMFlexItem:nth-child(3) .sapMText {
+    color: var(--otne-blue) !important;
+    font-weight: 900 !important;
 }
 
-.otneTabActive .sapMBtnContent {
-  color: #ffffff !important;
+.otnePage .otneCauseRow > .sapMFlexItem:nth-child(6) .sapMText {
+    color: var(--otne-red) !important;
+    font-weight: 900 !important;
 }
 
-.otneInfoBox {
-  min-width: 280px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 8px 12px;
-  gap: 8px;
+.otnePage .otneCauseNameCell {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 0.3rem !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
 }
 
-.otneInfoIcon {
-  color: #64748b;
-  font-size: 14px;
+.otnePage .otneCauseNameCell .sapMFlexItem:last-child {
+    min-width: 0 !important;
 }
 
-.otneInfoText {
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
+.otnePage .otneExpandBtn {
+    width: 1.3rem !important;
+    min-width: 1.3rem !important;
+    height: 1.3rem !important;
 }
 
-/* TABLE CARD */
-.otneTableCard {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-  box-sizing: border-box;
+.otnePage .otneExpandBtn .sapMBtnInner {
+    width: 1.3rem !important;
+    min-width: 1.3rem !important;
+    height: 1.3rem !important;
+    min-height: 1.3rem !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
 }
 
-.otneTableTop {
-  margin-bottom: 12px;
+.otnePage .otneExpandBtn .sapMBtnIcon {
+    width: 1.3rem !important;
+    line-height: 1.22rem !important;
+    color: #0b63f6 !important;
+    font-size: 0.66rem !important;
 }
 
-.otneTableTitle {
-  color: #172554;
-  font-size: 14px;
-  font-weight: 900;
+.otnePage .otneCauseIcon {
+    color: #64748b !important;
+    font-size: 0.7rem !important;
 }
 
-.otneSearch .sapMSFF {
-  height: 30px !important;
-  border-radius: 8px !important;
+.otnePage .otneCauseName {
+    min-width: 0 !important;
+    color: var(--otne-text) !important;
+    font-size: 0.58rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 900 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-/* MAIN TABLE */
-.otneCauseHeader,
-.otneCauseRow {
-  display: grid !important;
-  grid-template-columns: 1.6fr 0.8fr 1fr 0.9fr 1fr 1.1fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
+.otnePage .otneTotalRow {
+    background: #f8fafc !important;
 }
 
-.otneCauseHeader {
-  min-height: 34px;
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 10px;
-  font-weight: 900;
-  text-align: center;
+/* ==========================================================================
+   SUBTABLA
+   ========================================================================== */
+
+.otnePage .otneSubTable {
+    margin: 0 0.55rem 0 1.15rem !important;
+    overflow: hidden !important;
+    border-right: 1px solid #edf2f7 !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-left: 1px solid #edf2f7 !important;
+    background: #ffffff !important;
 }
 
-.otneCauseRow {
-  min-height: 36px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 10.5px;
-  font-weight: 800;
-  text-align: center;
+.otnePage .otneSubHeader,
+.otnePage .otneSubRow {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        minmax(4.8rem, 0.68fr)
+        minmax(7.5rem, 1fr)
+        minmax(5.2rem, 0.72fr)
+        minmax(7.2rem, 0.95fr)
+        minmax(7rem, 0.92fr)
+        minmax(8rem, 1.05fr) !important;
+    column-gap: 0.3rem !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
 }
 
-.otneCauseExpanded {
-  background: #ffffff;
+.otnePage .otneSubHeader > .sapMFlexItem,
+.otnePage .otneSubRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
 }
 
-.otneCauseNameCell {
-  gap: 8px;
-  text-align: left;
-  justify-content: flex-start;
+.otnePage .otneSubHeader {
+    min-height: 1.6rem !important;
+    padding: 0 0.3rem !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    background: #f8fafc !important;
 }
 
-.otneExpandBtn {
-  width: 26px;
-  height: 26px;
+.otnePage .otneSubHeader .sapMText {
+    display: block !important;
+    width: 100% !important;
+    color: #475569 !important;
+    font-size: 0.52rem !important;
+    line-height: 0.62rem !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
 }
 
-.otneExpandBtn .sapMBtnInner {
-  border: none !important;
-  background: transparent !important;
+.otnePage .otneSubRow {
+    min-height: 1.55rem !important;
+    padding: 0 0.3rem !important;
+    border-bottom: 1px solid #f1f5f9 !important;
 }
 
-.otneCauseIcon {
-  color: #64748b;
-  font-size: 14px;
+.otnePage .otneSubRow:last-child {
+    border-bottom: 0 !important;
 }
 
-.otneCauseName {
-  color: #172554;
-  font-size: 10.5px;
-  font-weight: 900;
+.otnePage .otneSubRow .sapMText {
+    display: block !important;
+    width: 100% !important;
+    color: var(--otne-text) !important;
+    font-size: 0.53rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.otneStrong {
-  color: #172554;
-  font-weight: 900;
+/* Días detenida en rojo */
+.otnePage .otneSubRow > .sapMFlexItem:nth-child(6) .sapMText {
+    color: var(--otne-red) !important;
+    font-weight: 900 !important;
 }
 
-.otneRedStrong {
-  color: #ef4444;
-  font-weight: 900;
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.otnePage .otneTableFooter {
+    min-height: 1.6rem !important;
+    gap: 0.35rem !important;
+    margin-top: 0.42rem !important;
 }
 
-.otneBlueStrong {
-  color: #2563eb;
-  font-weight: 900;
+.otnePage .otneTableFooter .sapMText {
+    color: #64748b !important;
+    font-size: 0.52rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 700 !important;
 }
 
-.otneTotalRow {
-  background: #f8fafc;
+.otnePage .otneFooterIcon {
+    color: #64748b !important;
+    font-size: 0.68rem !important;
 }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media screen and (max-width: 68rem) {
+    .otnePage .otneContainer {
+        max-width: none !important;
+    }
+
+    .otnePage .otneHeader,
+    .otnePage .otneFilters,
+    .otnePage .otneKpiGrid,
+    .otnePage .otneToolbar,
+    .otnePage .otneTableCard {
+        max-width: none !important;
+    }
+
+    .otnePage .otneFilters {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
 
-/* SUBTABLE */
-.otneSubTable {
-  margin-left: 36px;
-  margin-right: 10px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
+    .otnePage .otneKpiGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .otnePage .otneToolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    .otnePage .otneInfoBox {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .otnePage .otneTableCard {
+        overflow-x: auto !important;
+    }
+
+    .otnePage .otneCauseHeader,
+    .otnePage .otneCauseRow,
+    .otnePage .otneSubHeader,
+    .otnePage .otneSubRow {
+        min-width: 55rem !important;
+    }
 }
+
+@media screen and (max-width: 48rem) {
+    .otnePage .otneContainer {
+        padding: 0.65rem !important;
+    }
+
+    .otnePage .otneDateNote {
+        display: none !important;
+    }
+
+    .otnePage .otneFilters {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
 
-.otneSubHeader,
-.otneSubRow {
-  display: grid !important;
-  grid-template-columns: 0.7fr 1.2fr 0.8fr 1fr 1fr 1.2fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
-  text-align: center;
+    .otnePage .otneKpiGrid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
-.otneSubHeader {
-  min-height: 28px;
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 9.5px;
-  font-weight: 900;
-  border-bottom: 1px solid #edf2f7;
+@media screen and (max-width: 32rem) {
+    .otnePage .otneFilters {
+        grid-template-columns: 1fr !important;
+    }
+
+    .otnePage .otneSearch {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
 }
+
+
+/* ==========================================================================
+   AJUSTE FINAL FULL WIDTH
+   Extiende el dashboard sobre todo el espacio útil del contenido.
+   ========================================================================== */
 
-.otneSubRow {
-  min-height: 28px;
-  color: #172554;
-  font-size: 9.5px;
-  font-weight: 800;
-  border-bottom: 1px solid #f1f5f9;
+.otnePage .otneContainer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-right: 0.75rem !important;
+    padding-left: 0.75rem !important;
 }
 
-.otneTableFooter {
-  gap: 8px;
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 700;
-  margin-top: 12px;
+.otnePage .otneHeader,
+.otnePage .otneFilters,
+.otnePage .otneKpiGrid,
+.otnePage .otneToolbar,
+.otnePage .otneTableCard {
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
-.otneFooterIcon {
-  color: #64748b;
-  font-size: 14px;
+.otnePage .otneFilters {
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.18fr)
+        minmax(9rem, 1.18fr)
+        minmax(7rem, 0.9fr)
+        minmax(7.5rem, 0.96fr)
+        minmax(8rem, 1.02fr)
+        minmax(8.2rem, 0.92fr) !important;
+    justify-content: stretch !important;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .otneCauseHeader,
-  .otneCauseRow {
-    grid-template-columns: 1.5fr 0.7fr 0.8fr 0.8fr 0.9fr 1fr;
-  }
+.otnePage .otneKpiGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
 
-  .otneTableCard {
-    overflow-x: auto;
-  }
+.otnePage .otneKpiCard {
+    width: 100% !important;
+}
 
-  .otneCauseHeader,
-  .otneCauseRow,
-  .otneSubHeader,
-  .otneSubRow {
-    min-width: 850px;
-  }
+.otnePage .otneTableCard {
+    width: 100% !important;
 }
+
+@media screen and (min-width: 90rem) {
+    .otnePage .otneContainer {
+        padding-right: 1rem !important;
+        padding-left: 1rem !important;
+    }
 
-@media (max-width: 768px) {
-  .otneContainer {
-    padding: 12px;
-  }
+    .otnePage .otneFilters {
+        column-gap: 0.65rem !important;
+    }
 
-  .otneTitle,
-  .otneTitleRed {
-    font-size: 20px;
-    line-height: 24px;
-  }
+    .otnePage .otneKpiGrid {
+        gap: 0.75rem !important;
+    }
+}
 
-  .otneHeader {
-    flex-direction: column;
-    gap: 8px;
-  }
+/* ==========================================================================
+   AJUSTES FINALES
+   1. Ocultar botón de menú antes del título.
+   2. Reducir botón Aplicar filtros.
+   3. Pintar los calendarios de azul.
+   Agregar al FINAL del CSS actual.
+   ========================================================================== */
+
+/* Quitar las tres rayas antes del título */
+.otnePage .otneMenuBtn {
+    display: none !important;
+}
 
-  .otneFilterItem,
-  .otneApplyBtn {
-    flex: 1 1 calc(50% - 10px);
-    max-width: none;
-  }
+/* La última columna queda del tamaño exacto del botón */
+.otnePage .otneFilters {
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.18fr)
+        minmax(9rem, 1.18fr)
+        minmax(7rem, 0.9fr)
+        minmax(7.5rem, 0.96fr)
+        minmax(8rem, 1.02fr)
+        7.35rem !important;
+}
 
-  .otneKpiCard {
-    min-width: 100%;
-  }
+/* Botón Aplicar filtros más compacto */
+.otnePage .otneApplyBtn {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+    height: 2.85rem !important;
+    align-self: center !important;
+    justify-self: end !important;
+    box-shadow: 0 0.28rem 0.62rem rgba(22, 119, 255, 0.22) !important;
+}
 
-  .otneToolbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.otnePage .otneApplyBtn .sapMBtnInner {
+    width: 100% !important;
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    padding: 0 0.5rem !important;
+    border-radius: 0.5rem !important;
+}
 
-  .otneInfoBox {
-    width: 100%;
-    min-width: 100%;
-  }
+.otnePage .otneApplyBtn .sapMBtnContent,
+.otnePage .otneApplyBtn .sapMBtnIcon {
+    font-size: 0.6rem !important;
+    line-height: 2.75rem !important;
 }
 
-@media (max-width: 520px) {
-  .otneFilterItem,
-  .otneApplyBtn {
-    flex: 1 1 100%;
-  }
+/* Calendarios azules */
+.otnePage .otneFilterItem .sapMInputBaseIcon,
+.otnePage .otneFilterItem .sapMInputBaseIconContainer .sapUiIcon {
+    color: #1677ff !important;
+}
 
-  .otneTabs {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* Responsive: el botón vuelve a ocupar su celda completa */
+@media screen and (max-width: 68rem) {
+    .otnePage .otneApplyBtn {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        justify-self: stretch !important;
+    }
 }

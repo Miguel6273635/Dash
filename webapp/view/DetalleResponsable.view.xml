@@ -2,483 +2,530 @@
     controllerName="mantenimiento.controller.DetalleResponsable"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:f="sap.f"
-    xmlns:l="sap.ui.layout"
-    xmlns:mc="sap.suite.ui.microchart"
     xmlns:core="sap.ui.core"
+    xmlns:mc="sap.suite.ui.microchart"
     height="100%">
 
     <Page
         id="pageDetalle"
         showHeader="false"
+        enableScrolling="false"
         backgroundDesign="Solid"
         class="detalleResponsablePage">
 
-        <content>
+        <VBox
+            width="100%"
+            height="100%"
+            class="detalleResponsableWrapper">
 
-            <VBox class="detalleResponsableWrapper">
+            <!-- =====================================================
+                 ENCABEZADO Y FILTROS
+                 ===================================================== -->
+            <HBox
+                width="100%"
+                alignItems="Start"
+                justifyContent="SpaceBetween"
+                wrap="NoWrap"
+                class="detalleHeader">
 
-                <!-- ENCABEZADO + FILTROS -->
-                <HBox
-                    class="detalleHeader"
-                    justifyContent="SpaceBetween"
-                    alignItems="Start"
-                    wrap="Wrap">
+                <!-- TÍTULO -->
+                <VBox class="detalleHeaderTitle">
+                    <Title
+                        text="Detalle del responsable"
+                        level="H1"
+                        class="detalleTitle" />
 
-                    <!-- TÍTULO -->
-                    <VBox class="detalleHeaderTitle">
-                        <Title
-                            text="Detalle del responsable"
-                            level="H1"
-                            class="detalleTitle" />
-
-                        <Text
-                            text="Consulta el resumen operativo y contexto del responsable seleccionado."
-                            class="detalleSubtitle" />
-                    </VBox>
+                    <Text
+                        text="Consulta el resumen operativo y contexto del responsable seleccionado."
+                        class="detalleSubtitle" />
+                </VBox>
 
                 <!-- FILTROS -->
-<HBox
-    class="detalleFilters"
-    alignItems="Center"
-    wrap="NoWrap">
-
-    <!-- Semana -->
-    <HBox
-        class="detalleFilterCard detalleFilterCardSemana"
-        alignItems="Center">
-
-        <VBox
-            class="detalleFilterIconBox"
-            alignItems="Center"
-            justifyContent="Center">
-            <core:Icon
-                src="sap-icon://appointment-2"
-                class="detalleFilterIcon" />
-        </VBox>
-
-        <VBox class="detalleFilterTextBox">
-            <Text
-                text="Semana"
-                class="detalleFilterCardLabel" />
-
-            <Select
-                width="170px"
-                selectedKey="18"
-                class="detalleSelectCard">
-                <core:Item
-                    key="18"
-                    text="Semana 18 (29 abr - 5 may 2024)" />
-                <core:Item
-                    key="17"
-                    text="Semana 17" />
-            </Select>
-        </VBox>
-    </HBox>
-
-    <!-- Zona -->
-    <HBox
-        class="detalleFilterCard detalleFilterCardZona"
-        alignItems="Center">
-
-        <VBox
-            class="detalleFilterIconBox"
-            alignItems="Center"
-            justifyContent="Center">
-            <core:Icon
-                src="sap-icon://map"
-                class="detalleFilterIcon" />
-        </VBox>
-
-        <VBox class="detalleFilterTextBox">
-            <Text
-                text="Zona"
-                class="detalleFilterCardLabel" />
-
-            <Select
-                width="70px"
-                selectedKey="norte"
-                class="detalleSelectCard">
-                <core:Item
-                    key="norte"
-                    text="Norte" />
-                <core:Item
-                    key="sur"
-                    text="Sur" />
-                <core:Item
-                    key="todas"
-                    text="Todas" />
-            </Select>
-        </VBox>
-    </HBox>
-
-    <!-- Botón aplicar -->
-    <Button
-        text="Aplicar filtros"
-        icon="sap-icon://filter"
-        type="Emphasized"
-        press=".onApplyFilters"
-        class="detalleApplyButton" />
-
-</HBox>
-                </HBox>
-
-                <!-- BLOQUE RESPONSABLE -->
                 <HBox
-                    class="responsableBlock"
-                    alignItems="Center">
+                    alignItems="Center"
+                    wrap="NoWrap"
+                    class="detalleFilters">
 
-                    <f:Avatar
-                        displaySize="S"
-                        src="sap-icon://person-placeholder"
-                        class="responsableAvatar" />
+                    <!-- SEMANA -->
+                    <VBox
+                        id="chipSemana"
+                        class="detalleFilterCard detalleFilterCardSemana">
 
-                    <VBox class="responsableInfo">
-                        <Title
-                            text="{detail>/responsable}"
-                            level="H3"
-                            class="responsableName" />
+                        <Label
+                            text="Semana"
+                            class="detalleFilterCardLabel" />
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            justifyContent="SpaceBetween"
+                            class="detalleWeekControl">
+
+                            <Text
+                                id="textSemana"
+                                text="{detail>/filtros/semanaTexto}"
+                                wrapping="false"
+                                class="detalleFilterValue" />
+
+                            <HBox
+                                alignItems="Center"
+                                class="detalleWeekIconsBox">
+
+                                <core:Icon
+                                    src="sap-icon://calendar"
+                                    class="detalleFilterCalendarIcon" />
+
+                                <core:Icon
+                                    src="sap-icon://slim-arrow-down"
+                                    class="detalleFilterArrowIcon" />
+
+                            </HBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- ZONA -->
+                    <VBox class="detalleFilterCard detalleFilterCardZona">
+                        <Label
+                            text="Zona"
+                            class="detalleFilterCardLabel" />
+
+                        <Select
+                            id="selectZona"
+                            width="100%"
+                            selectedKey="{detail>/filtros/zonaKey}"
+                            items="{detail>/opcionesZona}"
+                            class="detalleSelectCard">
+
+                            <core:Item
+                                key="{detail>key}"
+                                text="{detail>text}" />
+                        </Select>
+                    </VBox>
+
+                    <!-- BOTÓN -->
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="detalleApplyButtonBox">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="detalleApplyButton" />
+                    </HBox>
+                </HBox>
+            </HBox>
+
+            <!-- =====================================================
+                 RESPONSABLE
+                 ===================================================== -->
+            <HBox
+                width="100%"
+                alignItems="Center"
+                class="responsableBlock">
+
+                <Avatar
+                    displaySize="M"
+                    src="sap-icon://person-placeholder"
+                    class="responsableAvatar" />
+
+                <VBox class="responsableInfo">
+                    <Title
+                        text="{detail>/responsable}"
+                        level="H3"
+                        class="responsableName" />
+
+                    <HBox
+                        alignItems="Center"
+                        wrap="NoWrap"
+                        class="responsableMetaRow">
 
                         <Text
-                            text="Zona: {detail>/zona}  |  Semana: 18 (29 abr - 5 may 2024)  |  Origen activo: Todas"
-                            class="responsableMeta" />
+                            text="Zona:"
+                            class="responsableMetaLabel" />
+
+                        <Text
+                            text="{detail>/zona}"
+                            class="responsableMetaValue" />
+
+                        <Text
+                            text="|"
+                            class="responsableMetaSeparator" />
+
+                        <Text
+                            text="Semana:"
+                            class="responsableMetaLabel" />
+
+                        <Text
+                            text="{detail>/semana}"
+                            class="responsableMetaValue" />
+
+                        <Text
+                            text="|"
+                            class="responsableMetaSeparator" />
+
+                        <Text
+                            text="Origen activo:"
+                            class="responsableMetaLabel" />
+
+                        <Text
+                            text="{detail>/origenActivo}"
+                            class="responsableMetaValue" />
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- =====================================================
+                 KPI
+                 ===================================================== -->
+            <FlexBox
+                width="100%"
+                wrap="NoWrap"
+                alignItems="Stretch"
+                class="detalleKpiRow">
+
+                <!-- KPI 1 -->
+                <HBox
+                    alignItems="Center"
+                    class="detalleKpiCard detalleKpiPurple">
+
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="detalleKpiIconCircle">
+
+                        <core:Icon
+                            src="sap-icon://order-status"
+                            class="detalleKpiIcon" />
+                    </HBox>
+
+                    <VBox class="detalleKpiTextBox">
+                        <Text
+                            text="OT desviadas"
+                            class="detalleKpiLabel" />
+
+                        <Text
+                            text="{detail>/kpi/otDesviadas}"
+                            class="detalleKpiNumber" />
+
+                        <Text
+                            text="Del total de desviaciones"
+                            class="detalleKpiCaption" />
                     </VBox>
                 </HBox>
 
-                <!-- KPIs -->
-                <l:Grid
-                    defaultSpan="L3 M6 S12"
-                    class="detalleKpiGrid">
+                <!-- KPI 2 -->
+                <HBox
+                    alignItems="Center"
+                    class="detalleKpiCard detalleKpiGreen">
 
-                    <!-- KPI 1 -->
-                    <f:Card class="detalleKpiCard kpiCardPurple">
-                        <f:content>
-                            <HBox
-                                class="detalleKpiContent"
-                                alignItems="Center">
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="detalleKpiIconCircle">
 
-                                <VBox
-                                    class="detalleKpiIconBox"
-                                    alignItems="Center"
-                                    justifyContent="Center">
-                                    <core:Icon
-                                        src="sap-icon://order-status"
-                                        class="detalleKpiIcon" />
-                                </VBox>
+                        <core:Icon
+                            src="sap-icon://machine"
+                            class="detalleKpiIcon" />
+                    </HBox>
 
-                                <VBox class="detalleKpiTextBox">
-                                    <Text
-                                        text="OT desviadas"
-                                        class="detalleKpiLabel" />
+                    <VBox class="detalleKpiTextBox">
+                        <Text
+                            text="Equipos afectados"
+                            class="detalleKpiLabel" />
 
-                                    <Text
-                                        text="{detail>/kpi/otDesviadas}"
-                                        class="detalleKpiNumber" />
+                        <Text
+                            text="{detail>/kpi/equiposAfectados}"
+                            class="detalleKpiNumber" />
 
-                                    <Text
-                                        text="Del total de desviaciones"
-                                        class="detalleKpiCaption" />
-                                </VBox>
-                            </HBox>
-                        </f:content>
-                    </f:Card>
+                        <Text
+                            text="Equipos únicos"
+                            class="detalleKpiCaption" />
+                    </VBox>
+                </HBox>
 
-                    <!-- KPI 2 -->
-                    <f:Card class="detalleKpiCard kpiCardGreen">
-                        <f:content>
-                            <HBox
-                                class="detalleKpiContent"
-                                alignItems="Center">
+                <!-- KPI 3 -->
+                <HBox
+                    alignItems="Center"
+                    class="detalleKpiCard detalleKpiOrange">
 
-                                <VBox
-                                    class="detalleKpiIconBox"
-                                    alignItems="Center"
-                                    justifyContent="Center">
-                                    <core:Icon
-                                        src="sap-icon://machine"
-                                        class="detalleKpiIcon" />
-                                </VBox>
+                    <HBox
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="detalleKpiIconCircle">
 
-                                <VBox class="detalleKpiTextBox">
-                                    <Text
-                                        text="Equipos afectados"
-                                        class="detalleKpiLabel" />
+                        <core:Icon
+                            src="sap-icon://customer-and-contacts"
+                            class="detalleKpiIcon" />
+                    </HBox>
 
-                                    <Text
-                                        text="{detail>/kpi/equiposAfectados}"
-                                        class="detalleKpiNumber" />
+                    <VBox class="detalleKpiTextBox">
+                        <Text
+                            text="Clientes afectados"
+                            class="detalleKpiLabel" />
 
-                                    <Text
-                                        text="Equipos únicos"
-                                        class="detalleKpiCaption" />
-                                </VBox>
-                            </HBox>
-                        </f:content>
-                    </f:Card>
+                        <Text
+                            text="{detail>/kpi/clientesAfectados}"
+                            class="detalleKpiNumber" />
 
-                    <!-- KPI 3 -->
-                    <f:Card class="detalleKpiCard kpiCardOrange">
-                        <f:content>
-                            <HBox
-                                class="detalleKpiContent"
-                                alignItems="Center">
+                        <Text
+                            text="Clientes únicos"
+                            class="detalleKpiCaption" />
+                    </VBox>
+                </HBox>
 
-                                <VBox
-                                    class="detalleKpiIconBox"
-                                    alignItems="Center"
-                                    justifyContent="Center">
-                                    <core:Icon
-                                        src="sap-icon://customer-and-contacts"
-                                        class="detalleKpiIcon" />
-                                </VBox>
+   <!-- KPI 4: CUMPLIMIENTO OPERATIVO -->
+<HBox
+    alignItems="Center"
+    class="detalleKpiCard detalleKpiBlue">
 
-                                <VBox class="detalleKpiTextBox">
-                                    <Text
-                                        text="Clientes afectados"
-                                        class="detalleKpiLabel" />
+    <HBox
+        id="cumplimientoChart"
+        alignItems="Center"
+        justifyContent="Center"
+        class="detalleComplianceDonut">
 
-                                    <Text
-                                        text="{detail>/kpi/clientesAfectados}"
-                                        class="detalleKpiNumber" />
+        <Text
+            text="{detail>/kpi/cumplimiento}%"
+            class="detalleComplianceDonutText" />
 
-                                    <Text
-                                        text="Clientes únicos"
-                                        class="detalleKpiCaption" />
-                                </VBox>
-                            </HBox>
-                        </f:content>
-                    </f:Card>
+    </HBox>
 
-                    <!-- KPI 4 -->
-                    <f:Card class="detalleKpiCard kpiCardBlue">
-                        <f:content>
-                            <HBox
-                                class="detalleKpiContent"
-                                alignItems="Center">
+    <VBox class="detalleKpiTextBox">
 
-                                <mc:RadialMicroChart
-                                    percentage="{detail>/kpi/cumplimiento}"
-                                    size="M"
-                                    valueColor="Neutral"
-                                    class="detalleRadialChart" />
+        <Text
+            text="Cumplimiento operativo"
+            class="detalleKpiLabel" />
 
-                                <VBox class="detalleKpiTextBox">
-                                    <Text
-                                        text="Cumplimiento operativo"
-                                        class="detalleKpiLabel" />
+        <Text
+            text="{detail>/kpi/cumplimiento}%"
+            class="detalleKpiNumber" />
 
-                                    <Text
-                                        text="{detail>/kpi/cumplimiento}%"
-                                        class="detalleKpiNumber" />
+        <Text
+            text="Del total de sus OT"
+            class="detalleKpiCaption" />
 
-                                    <Text
-                                        text="Del total de sus OT"
-                                        class="detalleKpiCaption" />
-                                </VBox>
-                            </HBox>
-                        </f:content>
-                    </f:Card>
+    </VBox>
 
-                </l:Grid>
+</HBox>
+            </FlexBox>
 
-                <!-- TABLA PRINCIPAL -->
-                <f:Card class="detalleTableCard">
-                    <f:content>
+            <!-- =====================================================
+                 TARJETA DE TABLA
+                 ===================================================== -->
+            <VBox
+                width="100%"
+                class="detalleTableCard">
 
-                        <VBox class="detalleTableContent">
+                <!-- TÍTULO TABLA SIN ICONO -->
+                <HBox
+                    width="100%"
+                    alignItems="Center"
+                    class="detalleTableHeader">
 
-                            <!-- Título tabla -->
-                            <HBox
-                                class="detalleTableHeader"
-                                alignItems="Center">
+                    <Title
+                        text="ÓRDENES DE TRABAJO QUE EXPLICAN LA DESVIACIÓN"
+                        level="H4"
+                        class="detalleTableTitle" />
+                </HBox>
 
-                                <VBox
-                                    class="detalleTableIconBox"
-                                    alignItems="Center"
-                                    justifyContent="Center">
-                                    <core:Icon
-                                        src="sap-icon://task"
-                                        class="detalleTableIcon" />
-                                </VBox>
+                <!-- TABLA -->
+                <VBox
+                    width="100%"
+                    class="detalleTableWrapper">
 
-                                <Title
-                                    text="ÓRDENES DE TRABAJO QUE EXPLICAN LA DESVIACIÓN"
-                                    level="H4"
-                                    class="detalleTableTitle" />
-                            </HBox>
+                    <Table
+                        id="tablaOrdenesDesviadas"
+                        width="100%"
+                        inset="false"
+                        fixedLayout="true"
+                        growing="false"
+                        mode="None"
+                        noDataText="No existen órdenes desviadas"
+                        items="{detail>/desgloseVisibles}"
+                        class="detalleOrdersTable">
 
-                            <!-- Tabla -->
-                            <Table
-                                id="tablaOrdenesDesviadas"
-                                items="{path: 'detail>/desglose'}"
-                                class="detalleOrdersTable"
-                                mode="None"
-                                growing="false">
-
-                                <columns>
-                                    <Column width="12%">
-                                        <Text
-                                            text="OT"
-                                            class="detalleColumnText" />
-                                    </Column>
-
-                                    <Column width="12%">
-                                        <Text
-                                            text="Equipo"
-                                            class="detalleColumnText" />
-                                    </Column>
-
-                                    <Column width="17%">
-                                        <Text
-                                            text="Cliente"
-                                            class="detalleColumnText" />
-                                    </Column>
-
-                                    <Column
-                                        width="13%"
-                                        hAlign="Center">
-                                        <Text
-                                            text="Tipo OT"
-                                            class="detalleColumnText" />
-                                    </Column>
-
-                                    <Column width="20%">
-                                        <Text
-                                            text="Causa principal"
-                                            class="detalleColumnText" />
-                                    </Column>
-
-                                    <Column
-                                        width="12%"
-                                        hAlign="Center">
-                                        <HBox
-                                            alignItems="Center"
-                                            justifyContent="Center">
-                                            <Text
-                                                text="Días de atraso"
-                                                class="detalleColumnText" />
-
-                                            <core:Icon
-                                                src="sap-icon://hint"
-                                                class="detalleInfoIcon" />
-                                        </HBox>
-                                    </Column>
-
-                                    <Column
-                                        width="14%"
-                                        hAlign="Center">
-                                        <Text
-                                            text="Estado"
-                                            class="detalleColumnText" />
-                                    </Column>
-                                </columns>
-
-                                <items>
-                                    <ColumnListItem class="detalleTableRow">
-                                        <cells>
-
-                                            <!-- OT con icono externo -->
-                                            <HBox alignItems="Center">
-                                                <Link
-                                                    text="{detail>ot}"
-                                                    press=".onNavToOrder"
-                                                    class="detalleOrderLink" />
-
-                                                <core:Icon
-                                                    src="sap-icon://action"
-                                                    class="detalleOrderActionIcon" />
-                                            </HBox>
-
-                                            <Text
-                                                text="{detail>equipo}"
-                                                class="detalleCellText" />
-
-                                            <Text
-                                                text="{detail>cliente}"
-                                                class="detalleCellText" />
-
-                                            <!-- Badge Tipo OT -->
-                                            <HBox
-                                                class="badgeWrapper badgeTipo"
-                                                justifyContent="Center"
-                                                alignItems="Center">
-                                                <customData>
-                                                    <core:CustomData
-                                                        key="tipo"
-                                                        value="{detail>tipoOt}"
-                                                        writeToDom="true" />
-                                                </customData>
-
-                                                <Text
-                                                    text="{detail>tipoOt}"
-                                                    wrapping="false"
-                                                    class="badgeText" />
-                                            </HBox>
-
-                                            <Text
-                                                text="{detail>causa}"
-                                                class="detalleCellText" />
-
-                                            <Text
-                                                text="{detail>retraso}"
-                                                class="detalleDelayText" />
-
-                                            <!-- Badge Estado -->
-                                            <HBox
-                                                class="badgeWrapper badgeEstado"
-                                                justifyContent="Center"
-                                                alignItems="Center">
-                                                <customData>
-                                                    <core:CustomData
-                                                        key="estado"
-                                                        value="{detail>estado}"
-                                                        writeToDom="true" />
-                                                </customData>
-
-                                                <Text
-                                                    text="{detail>estado}"
-                                                    wrapping="false"
-                                                    class="badgeText" />
-                                            </HBox>
-
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
-                            </Table>
-
-                            <!-- Footer tabla -->
-                            <HBox
-                                class="detalleTableFooter"
-                                justifyContent="SpaceBetween"
-                                alignItems="Center">
-
+                        <columns>
+                            <Column width="12%">
                                 <Text
-                                    text="Mostrando 1 a 6 de 6 OT desviadas"
-                                    class="detalleTableFooterText" />
+                                    text="OT"
+                                    class="detalleColumnText" />
+                            </Column>
 
-                                <Select
-                                    selectedKey="10"
-                                    width="120px"
-                                    class="detallePageSizeSelect">
-                                    <core:Item
-                                        key="10"
-                                        text="10 por página" />
-                                    <core:Item
-                                        key="20"
-                                        text="20 por página" />
-                                    <core:Item
-                                        key="50"
-                                        text="50 por página" />
-                                </Select>
-                            </HBox>
+                            <Column width="12%">
+                                <Text
+                                    text="Equipo"
+                                    class="detalleColumnText" />
+                            </Column>
 
-                        </VBox>
+                            <Column width="17%">
+                                <Text
+                                    text="Cliente"
+                                    class="detalleColumnText" />
+                            </Column>
 
-                    </f:content>
-                </f:Card>
+                            <Column width="13%" hAlign="Center">
+                                <Text
+                                    text="Tipo OT"
+                                    class="detalleColumnText" />
+                            </Column>
 
+                            <Column width="20%">
+                                <Text
+                                    text="Causa principal"
+                                    class="detalleColumnText" />
+                            </Column>
+
+                            <Column width="12%" hAlign="Center">
+                                <HBox
+                                    width="100%"
+                                    alignItems="Center"
+                                    justifyContent="Center">
+
+                                    <Text
+                                        text="Días de atraso"
+                                        class="detalleColumnText" />
+
+                                    <core:Icon
+                                        src="sap-icon://hint"
+                                        class="detalleInfoIcon" />
+                                </HBox>
+                            </Column>
+
+                            <Column width="14%" hAlign="Center">
+                                <Text
+                                    text="Estado"
+                                    class="detalleColumnText" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem
+                                vAlign="Middle"
+                                class="detalleTableRow">
+
+                                <cells>
+                                    <HBox alignItems="Center">
+                                        <Link
+                                            text="{detail>ot}"
+                                            press=".onNavToOrder"
+                                            class="detalleOrderLink" />
+
+                                        <core:Icon
+                                            src="sap-icon://action"
+                                            class="detalleOrderActionIcon" />
+                                    </HBox>
+
+                                    <Text
+                                        text="{detail>equipo}"
+                                        wrapping="false"
+                                        class="detalleCellText" />
+
+                                    <Text
+                                        text="{detail>cliente}"
+                                        wrapping="false"
+                                        class="detalleCellText" />
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="badgeWrapper badgeTipo">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="tipo"
+                                                value="{detail>tipoOt}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{detail>tipoOt}"
+                                            wrapping="false"
+                                            class="badgeText" />
+                                    </HBox>
+
+                                    <Text
+                                        text="{detail>causa}"
+                                        wrapping="false"
+                                        class="detalleCellText" />
+
+                                    <Text
+                                        text="{detail>retraso}"
+                                        class="detalleDelayText" />
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="badgeWrapper badgeEstado">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="estado"
+                                                value="{detail>estado}"
+                                                writeToDom="true" />
+                                        </customData>
+
+                                        <Text
+                                            text="{detail>estado}"
+                                            wrapping="false"
+                                            class="badgeText" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+                <!-- FOOTER -->
+                <HBox
+                    width="100%"
+                    alignItems="Center"
+                    justifyContent="SpaceBetween"
+                    class="detalleTableFooter">
+
+                    <Text
+                        text="{detail>/paginacion/texto}"
+                        class="detalleTableFooterText" />
+
+                    <HBox
+                        alignItems="Center"
+                        class="detallePageSizeBox">
+
+                        <Text
+                            text="Filas por página:"
+                            class="detallePageSizeLabel" />
+
+                        <Select
+                            id="pageSizeSelect"
+                            selectedKey="5"
+                            width="65px"
+                            change=".onPageSizeChange"
+                            class="detallePageSizeSelect">
+
+                            <core:Item
+                                key="5"
+                                text="5" />
+
+                            <core:Item
+                                key="10"
+                                text="10" />
+
+                            <core:Item
+                                key="15"
+                                text="15" />
+
+                            <core:Item
+                                key="20"
+                                text="20" />
+                        </Select>
+                    </HBox>
+                </HBox>
             </VBox>
 
-        </content>
+        </VBox>
     </Page>
 </mvc:View>

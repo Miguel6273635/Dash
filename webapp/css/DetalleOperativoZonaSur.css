@@ -44,12 +44,13 @@
    ======================================================================= */
 
 .DetalleOperativoZonaSur .dozFiltersBar {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: 140px 150px 150px 120px 140px 150px 130px !important;
-    gap: 10px !important;
-    align-items: end !important;
-    margin-bottom: 14px !important;
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:
+        repeat(6,minmax(140px,1fr))
+        170px !important;
+    gap:12px !important;
+align-items:start !important;
 }
 
 .DetalleOperativoZonaSur .dozFiltersBar > .sapMFlexItem {
@@ -57,7 +58,8 @@
 }
 
 .DetalleOperativoZonaSur .dozFilterBox {
-    width: 100% !important;
+    width:100% !important;
+    min-width:0 !important;
 }
 
 .DetalleOperativoZonaSur .dozFilterLabel {
@@ -96,13 +98,12 @@
 }
 
 .DetalleOperativoZonaSur .dozApplyButton {
-    width: 130px !important;
-    min-width: 130px !important;
-    height: 38px !important;
-    align-self: end !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    transform: translateY(-6px) !important;
+    width:170px !important;
+    min-width:170px !important;
+    margin:0 !important;
+    transform:none !important;
+    align-self:start !important;
+    margin-top:15px !important;
 }
 
 .DetalleOperativoZonaSur .dozApplyButton .sapMBtnInner {
@@ -302,7 +303,7 @@
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr !important;
     gap: 14px !important;
-    align-items: start !important;
+    align-items: stretch !important;
 }
 
 .DetalleOperativoZonaSur .dozTopGrid {
@@ -324,6 +325,10 @@
     height: 340px !important;
     min-height: 340px !important;
     max-height: 340px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
 }
 
 .DetalleOperativoZonaSur .dozBottomGrid .dozCard {
@@ -412,7 +417,7 @@
 
 .DetalleOperativoZonaSur .dozStatusList {
     margin-top: 8px !important;
-    padding-bottom: 22px !important;
+    padding-bottom: 20px !important;
 }
 
 .DetalleOperativoZonaSur .dozStatusRow {
@@ -480,8 +485,8 @@
 }
 
 .DetalleOperativoZonaSur .dozStatusName {
-    width: 148px !important;
-    min-width: 148px !important;
+    width: 220px !important;
+    min-width: 220px !important;
     color: #172554 !important;
     font-size: 9.5px !important;
     line-height: 11px !important;
@@ -489,10 +494,11 @@
 }
 
 .DetalleOperativoZonaSur .dozStatusProgress {
-    width: 120px !important;
-    min-width: 120px !important;
-    max-width: 120px !important;
-    margin-right: 10px !important;
+flex:1 1 auto !important;
+width:auto !important;
+min-width:180px !important;
+max-width:none !important;
+margin-right:14px !important;
 }
 
 .DetalleOperativoZonaSur .dozStatusProgress .sapMPI {
@@ -527,23 +533,23 @@
 }
 
 .DetalleOperativoZonaSur .dozStatusQty {
-    width: 26px !important;
-    min-width: 26px !important;
+width:40px !important;
+min-width:40px !important;
     color: #172554 !important;
     font-size: 13px !important;
     line-height: 14px !important;
     font-weight: 900 !important;
-    text-align: right !important;
+text-align:center !important;
 }
 
 .DetalleOperativoZonaSur .dozStatusPct {
-    width: 44px !important;
-    min-width: 44px !important;
+width:55px !important;
+min-width:55px !important;
     color: #64748B !important;
     font-size: 9.5px !important;
     line-height: 12px !important;
     font-weight: 900 !important;
-    text-align: right !important;
+text-align:right !important;
 }
 
 /* =======================================================================
@@ -554,11 +560,13 @@
     height: 340px !important;
     min-height: 340px !important;
     max-height: 340px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
     padding: 14px 14px 10px 14px !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
 }
 
 .DetalleOperativoZonaSur .dozHoursCardFixed .dozHoursFixedHeader {
@@ -680,7 +688,7 @@
 }
 
 .DetalleOperativoZonaSur .dozTopGrid .dozHoursCardFixed {
-    height: 325px !important;
+    /*height: 325px !important;*/
     min-height: 325px !important;
     max-height: 325px !important;
     padding: 14px 14px 10px 14px !important;
@@ -788,6 +796,24 @@
     color: #2563EB !important;
     font-size: 9.5px !important;
     font-weight: 900 !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursFixedChartBox{
+    flex:1 1 auto !important;
+    display:flex !important;
+    flex-direction:column !important;
+    overflow:hidden !important;
+    min-height:0 !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursFixedSvg{
+    width:100% !important;
+    height:100% !important;
+    display:block !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursFixedLink{
+    margin-top:auto !important;
 }
 
 /* =======================================================================
@@ -1023,14 +1049,14 @@
 }
 
 .DetalleOperativoZonaSur .dozCauseName {
-    width: 150px !important;
+    width: 220px !important;
     color: #172554 !important;
     font-size: 10.5px !important;
     font-weight: 900 !important;
 }
 
 .DetalleOperativoZonaSur .dozCauseProgress {
-    width: 126px !important;
+    width: 160px !important;
     margin-right: 14px !important;
 }
 
@@ -1065,7 +1091,7 @@
 }
 
 .DetalleOperativoZonaSur .dozCauseImpact {
-    width: 48px !important;
+    width: 60px !important;
     color: #172554 !important;
     font-size: 15px !important;
     font-weight: 900 !important;
@@ -1248,9 +1274,13 @@
     }
 
     .DetalleOperativoZonaSur .dozTopGrid .dozCard {
-        height: auto !important;
-        min-height: 320px !important;
-        max-height: none !important;
+    height: 340px !important;
+    min-height: 340px !important;
+    max-height: 340px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
     }
 }
 
@@ -1548,4 +1578,824 @@
     margin-left: -10px !important;
     margin-right: auto !important;
     transform: translateX(-8px) !important;
+}
+/* =======================================================================
+   AJUSTE FINAL APROBADO
+   - Filtros compactos con etiqueta integrada.
+   - Calendarios y flechas azules.
+   - Botón Aplicar filtros compacto.
+   - Las tres tarjetas superiores con la misma altura.
+   ESTE BLOQUE DEBE PERMANECER AL FINAL DEL ARCHIVO.
+   ======================================================================= */
+
+/* ============================= FILTROS ================================ */
+
+.DetalleOperativoZonaSur .dozFiltersBar {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.18fr)
+        minmax(9rem, 1.18fr)
+        minmax(7rem, 0.9fr)
+        minmax(8rem, 1fr)
+        minmax(8rem, 1fr)
+        7.35rem !important;
+    column-gap: 0.55rem !important;
+    row-gap: 0.55rem !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    margin: 0 0 0.65rem !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleOperativoZonaSur .dozFiltersBar > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+    margin: 0 !important;
+    padding: 0.38rem 0.58rem 0.28rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.55rem !important;
+    background: #ffffff !important;
+    box-shadow: 0 0.18rem 0.55rem rgba(15, 23, 42, 0.05) !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox:hover {
+    border-color: #c8d5e6 !important;
+    box-shadow: 0 0.25rem 0.7rem rgba(15, 23, 42, 0.075) !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox:focus-within {
+    border-color: #1677ff !important;
+    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12) !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterLabel {
+    display: block !important;
+    width: 100% !important;
+    height: 0.72rem !important;
+    min-height: 0.72rem !important;
+    margin: 0 0 0.06rem !important;
+    padding: 0 !important;
+    color: #334155 !important;
+    font-size: 0.54rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSlt,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSlt,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseContentWrapper {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSlt:hover,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseContentWrapper:hover,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseContentWrapper:focus-within {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSltLabel,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseInner {
+    width: 100% !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    padding: 0 1.5rem 0 0 !important;
+    color: #1f2937 !important;
+    background: transparent !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSltArrow {
+    width: 1.45rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: #1677ff !important;
+    fill: #1677ff !important;
+    font-size: 0.7rem !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMSltArrow::before,
+.DetalleOperativoZonaSur .dozFilterBox .sapMSltArrow .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseIconContainer {
+    width: 1.55rem !important;
+    height: 1.75rem !important;
+    background: transparent !important;
+}
+
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseIcon,
+.DetalleOperativoZonaSur .dozFilterBox .sapMInputBaseIconContainer .sapUiIcon {
+    width: 1.55rem !important;
+    min-width: 1.55rem !important;
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+    color: #1677ff !important;
+    fill: #1677ff !important;
+    background: transparent !important;
+    font-size: 0.74rem !important;
+}
+
+.DetalleOperativoZonaSur .dozApplyButton {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: center !important;
+    justify-self: end !important;
+    transform: none !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 0.28rem 0.62rem rgba(22, 119, 255, 0.22) !important;
+}
+
+.DetalleOperativoZonaSur .dozApplyButton .sapMBtnInner {
+    width: 100% !important;
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    padding: 0 0.5rem !important;
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+    background: linear-gradient(180deg, #1787ff 0%, #066ce6 100%) !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.DetalleOperativoZonaSur .dozApplyButton .sapMBtnContent,
+.DetalleOperativoZonaSur .dozApplyButton .sapMBtnIcon {
+    height: 2.75rem !important;
+    line-height: 2.75rem !important;
+    color: #ffffff !important;
+    font-size: 0.60rem !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+.DetalleOperativoZonaSur .dozApplyButton:hover .sapMBtnInner {
+    background: linear-gradient(180deg, #0f7ff5 0%, #075fc5 100%) !important;
+}
+
+/* ===================== TRES TARJETAS AL MISMO NIVEL ================== */
+
+.DetalleOperativoZonaSur .dozTopGrid {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.85rem !important;
+    align-items: stretch !important;
+    margin-bottom: 1rem !important;
+}
+
+.DetalleOperativoZonaSur .dozTopGrid > .sapMFlexItem {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 21.25rem !important;
+    min-height: 21.25rem !important;
+    max-height: 21.25rem !important;
+    align-self: stretch !important;
+    overflow: visible !important;
+}
+
+.DetalleOperativoZonaSur .dozTopGrid .dozStatusCard,
+.DetalleOperativoZonaSur .dozTopGrid .dozHoursCardFixed,
+.DetalleOperativoZonaSur .dozTopGrid .dozResourcesCard {
+    width: 100% !important;
+    height: 21.25rem !important;
+    min-height: 21.25rem !important;
+    max-height: 21.25rem !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleOperativoZonaSur .dozTopGrid .dozHoursCardFixed {
+    height: 21.25rem !important;
+    min-height: 21.25rem !important;
+    max-height: 21.25rem !important;
+    padding: 0.875rem 0.875rem 0.625rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursCardFixed .dozHoursFixedChartBox {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursCardFixed .dozHoursFixedSvg {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: block !important;
+}
+
+.DetalleOperativoZonaSur .dozHoursCardFixed .dozHoursFixedLink {
+    flex: 0 0 1.15rem !important;
+    height: 1.15rem !important;
+    min-height: 1.15rem !important;
+    margin: auto 0 0 !important;
+    padding: 0 0 0 0.4rem !important;
+    align-self: flex-end !important;
+}
+
+/* ============================= RESPONSIVE ============================ */
+
+@media screen and (max-width: 68rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .DetalleOperativoZonaSur .dozApplyButton {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        justify-self: stretch !important;
+    }
+
+    .DetalleOperativoZonaSur .dozTopGrid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .DetalleOperativoZonaSur .dozTopGrid > .sapMFlexItem,
+    .DetalleOperativoZonaSur .dozTopGrid .dozStatusCard,
+    .DetalleOperativoZonaSur .dozTopGrid .dozHoursCardFixed,
+    .DetalleOperativoZonaSur .dozTopGrid .dozResourcesCard {
+        height: 21.25rem !important;
+        min-height: 21.25rem !important;
+        max-height: 21.25rem !important;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 32rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* =======================================================================
+   AJUSTE DEFINITIVO - BADGES, BARRAS, GRÁFICA Y FILTROS
+   Debe permanecer al final del archivo.
+   ======================================================================= */
+
+/* =======================================================================
+   1. FILTROS CENTRADOS Y BOTÓN MÁS CORTO
+   ======================================================================= */
+
+.DetalleOperativoZonaSur .dozFiltersBar {
+    width: calc(100% - 1rem) !important;
+    max-width: none !important;
+
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(9rem, 1.18fr)
+        minmax(9rem, 1.18fr)
+        minmax(7rem, 0.9fr)
+        minmax(8rem, 1fr)
+        minmax(8rem, 1fr)
+        6.55rem !important;
+
+    margin:
+        0 auto
+        0.65rem !important;
+
+    padding: 0 !important;
+}
+
+.DetalleOperativoZonaSur .dozApplyButton {
+    width: 6.55rem !important;
+    min-width: 6.55rem !important;
+    max-width: 6.55rem !important;
+
+    height: 2.65rem !important;
+    min-height: 2.65rem !important;
+
+    justify-self: end !important;
+    align-self: center !important;
+}
+
+.DetalleOperativoZonaSur
+.dozApplyButton .sapMBtnInner {
+    height: 2.65rem !important;
+    min-height: 2.65rem !important;
+
+    padding: 0 0.4rem !important;
+}
+
+.DetalleOperativoZonaSur
+.dozApplyButton .sapMBtnContent,
+.DetalleOperativoZonaSur
+.dozApplyButton .sapMBtnIcon {
+    height: 2.55rem !important;
+    line-height: 2.55rem !important;
+
+    font-size: 0.56rem !important;
+}
+
+/* =======================================================================
+   2. BADGES TIPO PÍLDORA
+   ======================================================================= */
+
+/* Base común para todos los ObjectStatus marcados */
+.DetalleOperativoZonaSur
+.dozNumberBadge .sapMObjStatusText,
+.DetalleOperativoZonaSur
+.dozTypeBadge .sapMObjStatusText,
+.DetalleOperativoZonaSur
+.dozPriorityBadge .sapMObjStatusText,
+.DetalleOperativoZonaSur
+.dozDayBadge .sapMObjStatusText {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 2.35rem !important;
+
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+
+    margin: 0 auto !important;
+    padding: 0 0.62rem !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    font-size: 0.52rem !important;
+    line-height: 1.35rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+    box-shadow: none !important;
+}
+
+/* Vencidas */
+.DetalleOperativoZonaSur
+.dozNumberBadge .sapMObjStatusText {
+    min-width: 2rem !important;
+
+    color: #ef4444 !important;
+    background: #ffe8ec !important;
+}
+
+/* Tipo de orden */
+.DetalleOperativoZonaSur
+.dozTypeBadge[data-tipo="inspeccion"]
+.sapMObjStatusText {
+    color: #ef4444 !important;
+    background: #ffe8ec !important;
+}
+
+.DetalleOperativoZonaSur
+.dozTypeBadge[data-tipo="mantenimiento"]
+.sapMObjStatusText {
+    color: #7c3aed !important;
+    background: #f1eaff !important;
+}
+
+.DetalleOperativoZonaSur
+.dozTypeBadge[data-tipo="callcenter"]
+.sapMObjStatusText {
+    color: #1677ff !important;
+    background: #e8f3ff !important;
+}
+
+/* Días */
+.DetalleOperativoZonaSur
+.dozDayBadge .sapMObjStatusText {
+    min-width: 2.4rem !important;
+
+    color: #172554 !important;
+    background: #edf3fa !important;
+}
+
+/* Prioridad */
+.DetalleOperativoZonaSur
+.dozPriorityBadge[data-priority="alta"]
+.sapMObjStatusText {
+    color: #ef4444 !important;
+    background: #ffe8ec !important;
+}
+
+.DetalleOperativoZonaSur
+.dozPriorityBadge[data-priority="media"]
+.sapMObjStatusText {
+    color: #d97706 !important;
+    background: #fff2c7 !important;
+}
+
+.DetalleOperativoZonaSur
+.dozPriorityBadge[data-priority="baja"]
+.sapMObjStatusText {
+    color: #16a34a !important;
+    background: #e0f7e8 !important;
+}
+
+/* Quitar iconos/espacios internos que agranden la píldora */
+.DetalleOperativoZonaSur
+.dozNumberBadge .sapMObjStatusIcon,
+.DetalleOperativoZonaSur
+.dozTypeBadge .sapMObjStatusIcon,
+.DetalleOperativoZonaSur
+.dozPriorityBadge .sapMObjStatusIcon,
+.DetalleOperativoZonaSur
+.dozDayBadge .sapMObjStatusIcon {
+    display: none !important;
+}
+
+/* =======================================================================
+   3. QUITAR PUNTOS AL FINAL DE LAS BARRAS
+   ======================================================================= */
+
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPI,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPI {
+    overflow: hidden !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    background: #d8dee5 !important;
+    box-shadow: none !important;
+}
+
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIBarRemaining,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIBarRemaining {
+    border: 0 !important;
+    border-radius: 0 999px 999px 0 !important;
+
+    background: #d8dee5 !important;
+    box-shadow: none !important;
+}
+
+/* SAPUI5 puede generar el punto con before o after,
+   según la versión del tema. */
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPI::before,
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPI::after,
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIBar::before,
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIBar::after,
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIBarRemaining::before,
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIBarRemaining::after,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPI::before,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPI::after,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIBar::before,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIBar::after,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIBarRemaining::before,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIBarRemaining::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Ocultar textos internos vacíos del ProgressIndicator */
+.DetalleOperativoZonaSur
+.dozStatusProgress .sapMPIText,
+.DetalleOperativoZonaSur
+.dozCauseProgress .sapMPIText {
+    display: none !important;
+}
+
+/* =======================================================================
+   4. GRÁFICA DE EVOLUCIÓN COMPLETA
+   ======================================================================= */
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedChartBox {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 11.5rem !important;
+    min-height: 11.5rem !important;
+    max-height: 11.5rem !important;
+
+    margin: 0.15rem 0 1.4rem !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedSvg {
+    width: 100% !important;
+    max-width: none !important;
+
+    height: 11.1rem !important;
+    min-height: 11.1rem !important;
+    max-height: 11.1rem !important;
+
+    margin: 0 !important;
+
+    display: block !important;
+
+    overflow: visible !important;
+    transform: none !important;
+}
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLegend {
+    top: 0 !important;
+    right: 0.5rem !important;
+}
+
+/* Etiquetas completas y legibles */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabel {
+    font-size: 7px !important;
+}
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabelGreen,
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabelPurple {
+    font-size: 7.2px !important;
+}
+
+/* =======================================================================
+   RESPONSIVE
+   ======================================================================= */
+
+@media screen and (max-width: 68rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        width: 100% !important;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .DetalleOperativoZonaSur .dozApplyButton {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+
+        justify-self: stretch !important;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 32rem) {
+    .DetalleOperativoZonaSur .dozFiltersBar {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* =======================================================================
+   AJUSTE FINO FINAL
+   - Texto de filtros con sangría moderada.
+   - Gráfica de horas ligeramente desplazada hacia la izquierda.
+   ESTE BLOQUE DEBE PERMANECER AL FINAL DEL ARCHIVO.
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   FILTROS: alineación izquierda con separación cómoda
+   ----------------------------------------------------------------------- */
+
+.DetalleOperativoZonaSur
+.dozFilterLabel {
+    padding-left: 0.32rem !important;
+    padding-right: 0.15rem !important;
+    text-align: left !important;
+}
+
+.DetalleOperativoZonaSur
+.dozFilterBox .sapMSltLabel,
+.DetalleOperativoZonaSur
+.dozFilterBox .sapMInputBaseInner {
+    padding-left: 0.32rem !important;
+    padding-right: 1.55rem !important;
+
+    text-align: left !important;
+}
+
+/* Mantiene flechas y calendarios en su posición normal */
+.DetalleOperativoZonaSur
+.dozFilterBox .sapMSltArrow {
+    right: 0.05rem !important;
+}
+
+.DetalleOperativoZonaSur
+.dozFilterBox .sapMInputBaseIconContainer {
+    right: 0.05rem !important;
+}
+
+/* -----------------------------------------------------------------------
+   GRÁFICA: ocupar mejor el ancho y moverla moderadamente a la izquierda
+   ----------------------------------------------------------------------- */
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedChartBox {
+    padding:
+        0
+        0.15rem
+        0
+        0.15rem !important;
+
+    justify-content: flex-start !important;
+}
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedSvg {
+    width: calc(100% + 2.4rem) !important;
+    max-width: none !important;
+
+    margin:
+        0
+        -1.2rem
+        0
+        0 !important;
+
+    transform: translateX(-1.15rem) !important;
+    transform-origin: center left !important;
+
+    overflow: visible !important;
+}
+
+/* La leyenda permanece alineada a la derecha de la tarjeta */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLegend {
+    right: 0.55rem !important;
+}
+
+/* En pantallas más angostas el desplazamiento es menor */
+@media screen and (max-width: 68rem) {
+    .DetalleOperativoZonaSur
+    .dozHoursCardFixed .dozHoursFixedSvg {
+        width: calc(100% + 1.2rem) !important;
+
+        margin-right: -0.6rem !important;
+
+        transform: translateX(-0.55rem) !important;
+    }
+}
+
+/* =======================================================================
+   AJUSTE DEFINITIVO DE LA GRÁFICA DE EVOLUCIÓN
+   Mantener este bloque al final del archivo.
+   ======================================================================= */
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedChartBox {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 11.65rem !important;
+    min-height: 11.65rem !important;
+    max-height: 11.65rem !important;
+
+    margin: 0.15rem 0 1.15rem !important;
+    padding: 0 0.15rem !important;
+
+    display: block !important;
+    overflow: hidden !important;
+}
+
+/* Cualquier wrapper generado por UI5 debe ocupar todo el ancho. */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed
+.dozHoursFixedChartBox > .sapMFlexItem {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* El SVG llena la tarjeta y ya no se desplaza hacia la derecha. */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedSvg {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0.15rem !important;
+    bottom: 0 !important;
+    left: 0.15rem !important;
+
+    width: calc(100% - 0.3rem) !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block !important;
+
+    transform: none !important;
+    transform-origin: center !important;
+
+    overflow: visible !important;
+}
+
+/* Leyenda sobre la esquina superior derecha, sin empujar la gráfica. */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLegend {
+    position: absolute !important;
+    top: 0.15rem !important;
+    right: 0.55rem !important;
+    z-index: 5 !important;
+
+    margin: 0 !important;
+}
+
+/* Etiquetas un poco más legibles. */
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabel {
+    font-size: 7.2px !important;
+}
+
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabelGreen,
+.DetalleOperativoZonaSur
+.dozHoursCardFixed .dozHoursFixedLabelPurple {
+    font-size: 7.3px !important;
 }

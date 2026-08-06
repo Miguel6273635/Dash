@@ -32,7 +32,7 @@ sap.ui.define([
                 includeStylesheet(
                     sap.ui.require.toUrl(
                         "mantenimiento/css/VistaDireccion.css"
-                    ),
+                    ) + "?version=20260805_03",
                     "vistaDireccionCss"
                 );
 

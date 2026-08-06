@@ -1594,3 +1594,201 @@
             1fr !important;
     }
 }
+
+/* =======================================================================
+   AJUSTE FINAL DE ANCHO - DETALLE DE SUPERVISOR
+   Elimina las franjas grises laterales y aprovecha el ancho disponible.
+   Mantener este bloque al final del archivo.
+   ======================================================================= */
+
+/* La página y su zona de scroll ocupan todo el ancho disponible */
+.dcsPage,
+.dcsPage.sapMPage,
+.dcsPage .sapMPageScroll,
+.dcsPage .sapMPageEnableScrolling,
+.dcsPage .sapMPageBgStandard {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+}
+
+/* El contenedor deja de limitarse a 100rem */
+.dcsPage .dcsShell {
+    width: calc(100% - 1rem) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    margin: 0.5rem auto !important;
+    padding: 0.85rem 0.9rem 1rem !important;
+
+    box-sizing: border-box !important;
+}
+
+/* Asegura que filtros, KPI y contenido principal utilicen todo el ancho */
+.dcsPage .dcsFiltersGrid,
+.dcsPage .dcsKpiRow,
+.dcsPage .dcsMainGrid {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+/* La tabla absorbe el ancho restante sin dejar huecos */
+.dcsPage .dcsTableCard {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* El resumen lateral conserva su tamaño definido */
+.dcsPage .dcsSummaryCard {
+    flex: 0 0 18rem !important;
+    width: 18rem !important;
+    min-width: 18rem !important;
+}
+
+/* Pantallas amplias */
+@media screen and (min-width: 1600px) {
+    .dcsPage .dcsShell {
+        width: calc(100% - 0.8rem) !important;
+
+        margin-left: 0.4rem !important;
+        margin-right: 0.4rem !important;
+    }
+}
+
+/* Resoluciones menores: conserva separación segura */
+@media screen and (max-width: 900px) {
+    .dcsPage .dcsShell {
+        width: calc(100% - 0.7rem) !important;
+
+        margin: 0.35rem auto !important;
+        padding-left: 0.65rem !important;
+        padding-right: 0.65rem !important;
+    }
+}
+
+/* =======================================================================
+   AJUSTE FINAL DE PÍLDORAS - DETALLE DE SUPERVISOR
+   Tipo de servicio dominante y Estatus.
+   Mantener este bloque al final del archivo.
+   ======================================================================= */
+
+/* Contenedor ObjectStatus */
+.dcsPage .dcsPill.sapMObjStatus {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 4.15rem !important;
+    max-width: 100% !important;
+
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+    max-height: 1.35rem !important;
+
+    margin: 0 auto !important;
+    padding: 0 0.66rem !important;
+
+    box-sizing: border-box !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+/* Texto centrado dentro de la píldora */
+.dcsPage .dcsPill .sapMObjStatusText {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 0.54rem !important;
+    line-height: 1.35rem !important;
+    font-weight: 800 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Sin icono nativo dentro de las píldoras */
+.dcsPage .dcsPill .sapMObjStatusIcon {
+    display: none !important;
+}
+
+/* Verde: Planeado / Normal */
+.dcsPage .dcsPill.sapMObjStatusSuccess {
+    background: #e2f7e9 !important;
+}
+
+.dcsPage .dcsPill.sapMObjStatusSuccess .sapMObjStatusText {
+    color: #159447 !important;
+}
+
+/* Naranja: Alto / Atención */
+.dcsPage .dcsPill.sapMObjStatusWarning {
+    background: #fff0dc !important;
+}
+
+.dcsPage .dcsPill.sapMObjStatusWarning .sapMObjStatusText {
+    color: #d97706 !important;
+}
+
+/* Rojo: Correctivo / Crítico / Sobre plan */
+.dcsPage .dcsPill.sapMObjStatusError {
+    background: #ffe5e8 !important;
+}
+
+.dcsPage .dcsPill.sapMObjStatusError .sapMObjStatusText {
+    color: #e33b4b !important;
+}
+
+/* Azul: Call Center / Bajo / Información */
+.dcsPage .dcsPill.sapMObjStatusInformation {
+    background: #e4f1ff !important;
+}
+
+.dcsPage .dcsPill.sapMObjStatusInformation .sapMObjStatusText {
+    color: #1677d2 !important;
+}
+
+/* Estado neutro */
+.dcsPage .dcsPill.sapMObjStatusNone {
+    background: #eef2f6 !important;
+}
+
+.dcsPage .dcsPill.sapMObjStatusNone .sapMObjStatusText {
+    color: #58677d !important;
+}
+
+/* Mantiene las píldoras centradas dentro de las celdas */
+.dcsPage .dcsDataTable .sapMListTblCell .dcsPill {
+    vertical-align: middle !important;
+}
+
+/* Ajuste para pantallas angostas */
+@media screen and (max-width: 900px) {
+    .dcsPage .dcsPill.sapMObjStatus {
+        min-width: 3.75rem !important;
+        padding-left: 0.52rem !important;
+        padding-right: 0.52rem !important;
+    }
+
+    .dcsPage .dcsPill .sapMObjStatusText {
+        font-size: 0.51rem !important;
+    }
+}

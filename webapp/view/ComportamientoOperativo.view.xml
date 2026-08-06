@@ -34,12 +34,12 @@
                     <!-- Filtros superiores -->
                     <HBox
                         class="coFilters"
-                        alignItems="Center">
+                        alignItems="Stretch">
 
                         <!-- Semana -->
                         <HBox
                             class="coFilterCard"
-                            width="250px"
+                            width="290px"
                             alignItems="Center"
                             justifyContent="SpaceBetween">
 
@@ -93,11 +93,15 @@
                         </HBox>
 
                         <!-- Botón aplicar filtros -->
-                        <Button
-                            text="Aplicar Filtros"
-                            icon="sap-icon://filter"
-                            type="Emphasized"
-                            class="coApplyButton" />
+                        <HBox
+                            class="coApplyButtonSlot"
+                            alignItems="Stretch">
+                            <Button
+                                text="Aplicar Filtros"
+                                icon="sap-icon://filter"
+                                type="Emphasized"
+                                class="coApplyButton" />
+                        </HBox>
 
                     </HBox>
                 </HBox>
@@ -184,19 +188,19 @@
                                     <Text text="#" class="coTableHeaderText" />
                                 </Column>
 
-                                <Column width="18%">
+                                <Column width="17%">
                                     <Text text="Responsable" class="coTableHeaderText" />
                                 </Column>
 
-                                <Column width="10%" hAlign="Center">
+                                <Column width="9%" hAlign="Center">
                                     <Text text="OT desviadas" class="coTableHeaderText" />
                                 </Column>
 
-                                <Column width="10%" hAlign="Center">
+                                <Column width="9%" hAlign="Center">
                                     <Text text="% del total" class="coTableHeaderText" />
                                 </Column>
 
-                                <Column width="25%">
+                                <Column width="24%">
                                     <HBox alignItems="Center">
                                         <Text
                                             text="Principal causa"
@@ -208,7 +212,7 @@
                                     </HBox>
                                 </Column>
 
-                                <Column width="11%" hAlign="Center">
+                                <Column width="10%" hAlign="Center">
                                     <Text text="Tipo de OT" class="coTableHeaderText" />
                                 </Column>
 
@@ -240,7 +244,7 @@
                                             alignItems="Center"
                                             class="coResponsibleCell">
 
-                                            <f:Avatar
+                                            <Avatar
                                                 displaySize="XS"
                                                 backgroundColor="{path: 'data>id', formatter: '.getAvatarColor'}"
                                                 initials="{data>initials}"

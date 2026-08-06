@@ -1,589 +1,893 @@
+/* =========================================================
+   ANÁLISIS DE REPARACIONES PLANEADAS NO EJECUTADAS
+   ========================================================= */
+
 .otpePage,
-.otpeScroll {
+.otpePage .sapMPageBgStandard,
+.otpePage .sapMPageEnableScrolling,
+.otpePage .sapMPageScroll,
+.otpePage .otpeScroll,
+.otpePage .sapMScrollContScroll {
   background: #f6f8fc;
 }
 
-.otpeContainer {
-  padding: 14px 18px 22px 18px;
-  background: #f6f8fc;
+.otpePage,
+.otpePage * {
   box-sizing: border-box;
-  gap: 12px;
 }
 
-/* HEADER */
-.otpeHeader {
+.otpePage .otpeScroll,
+.otpePage .sapMScrollContScroll {
   width: 100%;
+  overflow-x: hidden;
 }
 
-.otpeHeaderLeft {
+.otpePage .otpeContainer {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px 10px;
+  gap: 8px;
+  background: #f6f8fc;
+}
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.otpePage .otpeHeader {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
   gap: 12px;
 }
 
-.otpeMenuBtn {
-  width: 36px;
-  height: 36px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+.otpePage .otpeHeaderLeft {
+  min-width: 0;
 }
 
-.otpeMenuBtn .sapMBtnInner {
-  border: none !important;
-  background: #ffffff !important;
-  border-radius: 8px !important;
+.otpePage .otpeHeaderText {
+  min-width: 0;
 }
 
-.otpeTitleRow {
+.otpePage .otpeTitleRow {
+  min-width: 0;
+  gap: 5px;
+}
+
+.otpePage .otpeTitle.sapMTitle,
+.otpePage .otpeTitleRed.sapMTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 1.18rem;
+  line-height: 1.22rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+.otpePage .otpeTitle.sapMTitle {
+  color: #172554;
+}
+
+.otpePage .otpeTitleRed.sapMTitle {
+  color: #ef4444;
+}
+
+.otpePage .otpeBreadcrumb {
+  min-height: 13px;
+  margin-top: 3px;
   gap: 6px;
 }
 
-.otpeTitle {
-  color: #172554;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
-}
-
-.otpeTitleGreen {
-  color: #15803d;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
-}
-
-.otpeTitleRed {
-  color: #ef4444;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
-}
-
-.otpeBreadcrumb {
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.otpeBreadLink {
-  color: #0b63f6;
-  font-size: 10px;
+.otpePage .otpeBreadLink,
+.otpePage .otpeBreadLink.sapMLnk,
+.otpePage .otpeBreadText {
+  color: #0a6ff5;
+  font-size: 0.52rem;
+  line-height: 0.68rem;
   font-weight: 800;
+  text-decoration: none;
 }
 
-.otpeBreadIcon {
+.otpePage .otpeBreadIcon {
   color: #94a3b8;
-  font-size: 9px;
+  font-size: 0.48rem;
 }
 
-.otpeBreadText {
-  color: #2563eb;
-  font-size: 10px;
+.otpePage .otpeHeaderDate {
+  width: 170px;
+  min-width: 170px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #edf2f7;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.otpePage .otpeHeaderDateText {
+  color: #64748b;
+  font-size: 0.54rem;
+  line-height: 0.68rem;
   font-weight: 800;
 }
 
-/* FILTROS */
-.otpeFilters {
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.otpePage .otpeFilters {
   width: 100%;
-  background: transparent;
-  gap: 10px;
-  box-sizing: border-box;
+  min-width: 0;
+  gap: 8px;
   padding: 0;
-  margin-top: 4px;
+  margin: 0;
 }
 
-.otpeFilterItem {
+.otpePage .otpeFilterItem {
   height: 50px;
-  background: #ffffff;
+  min-height: 50px;
+  max-height: 50px;
+  min-width: 0;
+  padding: 7px 9px;
+  justify-content: flex-start;
   border: 1px solid #dbe3ef;
   border-radius: 8px;
-  padding: 6px 9px;
-  box-sizing: border-box;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  background: #ffffff;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
 }
 
-.otpeFilterPeriod {
-  flex: 1 1 120px;
-  min-width: 112px;
-  max-width: 135px;
+.otpePage .otpeFilterPeriod {
+  flex: 1.08 1 108px;
 }
 
-.otpeFilterDate {
-  flex: 1 1 145px;
-  min-width: 130px;
-  max-width: 160px;
+.otpePage .otpeFilterDate {
+  flex: 1.22 1 126px;
 }
 
-.otpeFilterNormal {
-  flex: 1 1 115px;
-  min-width: 105px;
-  max-width: 130px;
+.otpePage .otpeFilterNormal {
+  flex: 0.9 1 88px;
 }
 
-.otpeFilterLabel {
-  color: #172554;
-  font-size: 9px;
-  font-weight: 900;
-  margin-bottom: 3px;
+.otpePage .otpeFilterResponsible {
+  flex: 1.04 1 104px;
+}
+
+.otpePage .otpeFilterLabel,
+.otpePage .otpeFilterLabel.sapMLabel {
+  display: block;
+  height: 11px;
+  min-height: 11px;
+  margin: 0 0 3px;
+  padding: 0;
+  color: #64748b;
+  font-size: 0.49rem;
   line-height: 11px;
+  font-weight: 800;
 }
 
-.otpeFilterItem .sapMSlt,
-.otpeFilterItem .sapMInputBase,
-.otpeFilterItem .sapMInputBaseContentWrapper {
-  height: 25px !important;
-  min-height: 25px !important;
-  border: none !important;
+.otpePage .otpeFilterItem .sapMSlt,
+.otpePage .otpeFilterItem .sapMInputBase,
+.otpePage .otpeFilterItem .sapMInputBaseContentWrapper {
+  width: 100% !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  margin: -1px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  padding: 0 !important;
 }
 
-.otpeFilterItem .sapMSlt > .sapMSltLabel,
-.otpeFilterItem .sapMInputBaseInner {
-  height: 25px !important;
-  line-height: 25px !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  color: #1f2937 !important;
-  padding-left: 0 !important;
+.otpePage .otpeFilterItem .sapMSltLabel,
+.otpePage .otpeFilterItem .sapMInputBaseInner {
+  width: 100% !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  margin: 0 !important;
+  padding: 0 1.25rem 0 0 !important;
+  color: #172554 !important;
   background: transparent !important;
-}
-
-.otpeFilterItem .sapMSltArrow,
-.otpeFilterItem .sapMInputBaseIcon {
-  height: 25px !important;
-  line-height: 25px !important;
-  color: #0f172a !important;
-  font-size: 13px !important;
-}
-
-.otpeApplyBtn {
-  height: 50px;
-  min-width: 125px;
-  max-width: 140px;
-  flex: 0 0 130px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.28);
-}
-
-.otpeApplyBtn .sapMBtnInner {
-  height: 50px !important;
-  min-height: 50px !important;
-  border-radius: 8px !important;
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
-}
-
-.otpeApplyBtn .sapMBtnContent {
-  color: #ffffff !important;
-  font-size: 11px !important;
+  font-size: 0.57rem !important;
+  line-height: 22px !important;
   font-weight: 900 !important;
-  line-height: 48px !important;
+  text-overflow: ellipsis;
 }
 
-.otpeApplyBtn .sapMBtnIcon {
-  color: #ffffff !important;
-  font-size: 14px !important;
-  line-height: 48px !important;
+.otpePage .otpeFilterItem .sapMSltArrow,
+.otpePage .otpeFilterItem .sapMInputBaseIconContainer,
+.otpePage .otpeFilterItem .sapMInputBaseIcon {
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  padding: 0 !important;
+  color: #0a6ff5 !important;
+  font-size: 0.72rem !important;
+  line-height: 22px !important;
 }
 
-/* KPIS */
-.otpeKpiGrid {
-  width: 100%;
-  gap: 12px;
-}
-
-.otpeKpiCard {
-  flex: 1 1 220px;
-  min-width: 210px;
-  height: 96px;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  border-left-width: 4px;
-  padding: 12px 16px;
-  gap: 14px;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
-}
-
-.otpeKpiBlue {
-  border-left-color: #2563eb;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, #ffffff 45%);
-}
-
-.otpeKpiGreen {
-  border-left-color: #16a34a;
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12) 0%, #ffffff 45%);
-}
-
-.otpeKpiRed {
-  border-left-color: #ef4444;
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12) 0%, #ffffff 45%);
-}
-
-.otpeKpiPurple {
-  border-left-color: #7c3aed;
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12) 0%, #ffffff 45%);
-}
-
-.otpeKpiIconCircle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+.otpePage .otpeApplyBtn {
+  flex: 0 0 108px;
+  width: 108px;
+  min-width: 108px;
+  max-width: 108px;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  padding: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
-.otpeKpiIcon {
-  font-size: 25px;
+.otpePage .otpeApplyBtn .sapMBtnInner {
+  width: 108px !important;
+  min-width: 108px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 0.45rem !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: #0a6ff5 !important;
+  box-shadow: 0 4px 10px rgba(10, 111, 245, 0.26) !important;
 }
 
-.otpeKpiNumber {
-  font-size: 31px;
-  line-height: 33px;
+.otpePage .otpeApplyBtn .sapMBtnContent,
+.otpePage .otpeApplyBtn .sapMBtnIcon {
+  color: #ffffff !important;
+  font-size: 0.55rem !important;
+  line-height: 34px !important;
+  font-weight: 900 !important;
+}
+
+.otpePage .otpeApplyBtn .sapMBtnIcon {
+  font-size: 0.66rem !important;
+}
+
+/* =========================================================
+   KPIS
+   ========================================================= */
+
+.otpePage .otpeKpiGrid {
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+}
+
+.otpePage .otpeKpiCard {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 78px;
+  min-height: 78px;
+  max-height: 78px;
+  padding: 8px 12px;
+  gap: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-left-width: 3px;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.otpePage .otpeKpiBlue {
+  border-left-color: #2563eb;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), #ffffff 48%);
+}
+
+.otpePage .otpeKpiGreen {
+  border-left-color: #16a34a;
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12), #ffffff 48%);
+}
+
+.otpePage .otpeKpiRed {
+  border-left-color: #ef4444;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12), #ffffff 48%);
+}
+
+.otpePage .otpeKpiPurple {
+  border-left-color: #7c3aed;
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12), #ffffff 48%);
+}
+
+.otpePage .otpeKpiIconCircle {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+}
+
+.otpePage .otpeKpiIcon {
+  font-size: 1.12rem;
+}
+
+.otpePage .otpeKpiContent {
+  min-width: 0;
+  height: 100%;
+}
+
+.otpePage .otpeKpiNumber {
+  font-size: 1.34rem;
+  line-height: 1.38rem;
   font-weight: 900;
 }
 
-.otpeKpiLabel {
+.otpePage .otpeKpiLabel {
   color: #172554;
-  font-size: 12px;
+  font-size: 0.58rem;
+  line-height: 0.68rem;
   font-weight: 900;
 }
 
-.otpeKpiSubLabel {
+.otpePage .otpeKpiSubLabel,
+.otpePage .otpeKpiSubLabelRed {
+  margin-top: 2px;
   color: #64748b;
-  font-size: 10px;
+  font-size: 0.48rem;
+  line-height: 0.58rem;
   font-weight: 700;
 }
 
-.otpeKpiSubLabelRed {
+.otpePage .otpeKpiSubLabelRed {
   color: #dc2626;
-  font-size: 10px;
   font-weight: 800;
 }
 
-/* COLORS */
-.otpeBlueText {
+.otpePage .otpeBlueText {
   color: #2563eb !important;
 }
 
-.otpeGreenText {
+.otpePage .otpeGreenText,
+.otpePage .otpeGreenStrong {
   color: #16a34a !important;
 }
 
-.otpeRedText {
+.otpePage .otpeRedText,
+.otpePage .otpeRedStrong {
   color: #ef4444 !important;
 }
 
-.otpePurpleText {
+.otpePage .otpePurpleText {
   color: #7c3aed !important;
 }
 
-.otpeBlueBg {
+.otpePage .otpeBlueBg {
   background: #eff6ff;
 }
 
-.otpeGreenBg {
+.otpePage .otpeGreenBg {
   background: #f0fdf4;
 }
 
-.otpeRedBg {
+.otpePage .otpeRedBg {
   background: #fef2f2;
 }
 
-.otpePurpleBg {
+.otpePage .otpePurpleBg {
   background: #faf5ff;
 }
 
-/* TOOLBAR */
-.otpeToolbar {
+/* =========================================================
+   SELECTOR DE ESTADO
+   ========================================================= */
+
+.otpePage .otpeToolbar {
   width: 100%;
-  gap: 12px;
+  min-width: 0;
+  min-height: 34px;
+  gap: 10px;
 }
 
-.otpeTabs {
-  gap: 8px;
+.otpePage .otpeTabs {
+  min-width: 0;
+  gap: 6px;
 }
 
-.otpeTabsLabel {
+.otpePage .otpeTabsLabel {
+  margin-right: 2px;
   color: #172554;
-  font-size: 11px;
+  font-size: 0.54rem;
+  line-height: 0.66rem;
   font-weight: 900;
-  margin-right: 4px;
 }
 
-.otpeTabBtn {
-  height: 32px;
+.otpePage .otpeTabBtn {
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
 }
 
-.otpeTabBtn .sapMBtnInner {
-  height: 32px !important;
-  min-height: 32px !important;
+.otpePage .otpeTabBtn .sapMBtnInner {
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  padding: 0 0.7rem !important;
+  border-color: #cbd5e1 !important;
   border-radius: 7px !important;
+  background: #ffffff !important;
 }
 
-.otpeTabBtn .sapMBtnContent {
-  font-size: 10px !important;
+.otpePage .otpeTabBtn .sapMBtnContent {
+  color: #0a6ff5 !important;
+  font-size: 0.52rem !important;
+  line-height: 28px !important;
   font-weight: 900 !important;
-  line-height: 30px !important;
 }
 
-.otpeTabActive .sapMBtnInner {
-  background: #0b63f6 !important;
-  border-color: #0b63f6 !important;
+.otpePage .otpeTabActive .sapMBtnInner {
+  border-color: #0a6ff5 !important;
+  background: #0a6ff5 !important;
+  box-shadow: 0 2px 6px rgba(10, 111, 245, 0.2) !important;
 }
 
-.otpeTabActive .sapMBtnContent {
+.otpePage .otpeTabActive .sapMBtnContent {
   color: #ffffff !important;
 }
 
-.otpeInfoBox {
-  min-width: 360px;
+.otpePage .otpeInfoBox {
+  min-width: 300px;
+  height: 30px;
+  padding: 0 10px;
+  gap: 7px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 8px 12px;
-  gap: 8px;
 }
 
-.otpeInfoIcon {
+.otpePage .otpeInfoIcon {
   color: #64748b;
-  font-size: 14px;
+  font-size: 0.66rem;
 }
 
-.otpeInfoText {
+.otpePage .otpeInfoText {
   color: #64748b;
-  font-size: 10px;
+  font-size: 0.48rem;
+  line-height: 0.6rem;
   font-weight: 700;
 }
 
-/* TABLE CARD */
-.otpeTableCard {
+/* =========================================================
+   CARD Y TABLA PRINCIPAL
+   ========================================================= */
+
+.otpePage .otpeTableCard {
   width: 100%;
+  min-width: 0;
+  padding: 10px 12px 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
-.otpeTableTop {
-  margin-bottom: 12px;
+.otpePage .otpeTableTop {
+  width: 100%;
+  min-height: 30px;
+  margin-bottom: 7px;
+  gap: 12px;
 }
 
-.otpeTableTitle {
+.otpePage .otpeTableTitle.sapMTitle {
+  min-width: 0;
+  margin: 0;
   color: #172554;
-  font-size: 14px;
+  font-size: 0.69rem;
+  line-height: 0.82rem;
   font-weight: 900;
 }
 
-.otpeSearch .sapMSFF {
-  height: 30px !important;
-  border-radius: 8px !important;
+.otpePage .otpeSearch {
+  width: 220px !important;
+  min-width: 180px;
+  height: 28px;
+  flex: 0 0 220px;
 }
 
-/* CAUSE TABLE */
-.otpeCauseHeader,
-.otpeCauseRow {
+.otpePage .otpeSearch .sapMSFF {
+  height: 28px !important;
+  min-height: 28px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+}
+
+.otpePage .otpeSearch .sapMSFI {
+  height: 26px !important;
+  font-size: 0.56rem !important;
+  line-height: 26px !important;
+}
+
+.otpePage .otpeSearch .sapMSFB {
+  width: 28px !important;
+  height: 26px !important;
+  line-height: 26px !important;
+}
+
+.otpePage .otpeTableViewport {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.otpePage .otpeCauseHeader,
+.otpePage .otpeCauseRow {
   display: grid !important;
-  grid-template-columns: 0.34fr 1.55fr 1.35fr 1fr 1.2fr 1fr 1fr 1.3fr 0.28fr;
-  column-gap: 8px;
+  grid-template-columns:
+    42px
+    minmax(128px, 1.45fr)
+    minmax(112px, 1.25fr)
+    minmax(76px, 0.8fr)
+    minmax(104px, 1fr)
+    minmax(78px, 0.82fr)
+    minmax(78px, 0.82fr)
+    minmax(100px, 1.05fr)
+    24px;
+  column-gap: 0;
   align-items: center;
   width: 100%;
+  min-width: 0;
 }
 
-.otpeCauseHeader {
-  min-height: 42px;
+.otpePage .otpeCauseHeader > *,
+.otpePage .otpeCauseRow > * {
+  min-width: 0;
+  padding: 0 5px;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.otpePage .otpeCauseHeader {
+  min-height: 36px;
+  border: 1px solid #e8edf4;
   background: #f8fafc;
-  border: 1px solid #edf2f7;
+}
+
+.otpePage .otpeCauseHeader .sapMText {
   color: #172554;
-  font-size: 10px;
+  font-size: 0.47rem;
+  line-height: 0.58rem;
   font-weight: 900;
-  text-align: center;
 }
 
-.otpeCauseRow {
-  min-height: 38px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 10.5px;
-  font-weight: 800;
-  text-align: center;
-}
-
-.otpeCauseExpanded {
+.otpePage .otpeCauseRow {
+  min-height: 34px;
+  border-right: 1px solid #e8edf4;
+  border-bottom: 1px solid #e8edf4;
+  border-left: 1px solid #e8edf4;
   background: #ffffff;
 }
 
-.otpeCauseIcon {
-  color: #64748b;
-  font-size: 15px;
+.otpePage .otpeCauseRow .sapMText {
+  color: #172554;
+  font-size: 0.5rem;
+  line-height: 0.62rem;
+  font-weight: 800;
 }
 
-.otpeCauseName {
+.otpePage .otpeCauseExpanded {
+  background: #ffffff;
+}
+
+.otpePage .otpeCauseLead {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.otpePage .otpeCauseIcon {
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.otpePage .otpeExpandBtn {
+  width: 18px;
+  min-width: 18px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+}
+
+.otpePage .otpeExpandBtn .sapMBtnInner {
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.otpePage .otpeExpandBtn .sapMBtnIcon {
+  width: 18px !important;
+  margin: 0 !important;
+  color: #0a6ff5 !important;
+  font-size: 0.56rem !important;
+  line-height: 22px !important;
+}
+
+.otpePage .otpeRowEndIcon {
+  color: #64748b;
+  font-size: 0.56rem;
+  justify-self: center;
+}
+
+.otpePage .otpeCauseRow .otpeCauseName {
   color: #172554;
-  font-size: 10.5px;
   font-weight: 900;
   text-align: left;
 }
 
-.otpeExpandBtn {
-  width: 26px;
-  height: 26px;
-}
-
-.otpeExpandBtn .sapMBtnInner {
-  border: none !important;
-  background: transparent !important;
-}
-
-.otpeRowEndIcon {
-  color: #64748b;
-  font-size: 13px;
-}
-
-.otpeStrong {
+.otpePage .otpeCauseRow .otpeStrong {
   color: #172554;
   font-weight: 900;
 }
 
-.otpeGreenStrong {
-  color: #16a34a;
+.otpePage .otpeCauseRow .otpeBlueStrong {
+  color: #0a6ff5;
   font-weight: 900;
 }
 
-.otpeBlueStrong {
-  color: #2563eb;
-  font-weight: 900;
-}
-
-.otpeRedStrong {
+.otpePage .otpeCauseRow .otpeRedStrong {
   color: #ef4444;
   font-weight: 900;
 }
 
-.otpeTotalRow {
+.otpePage .otpeCauseRow .otpeGreenStrong {
+  color: #16a34a;
+  font-weight: 900;
+}
+
+.otpePage .otpeTotalRow {
+  min-height: 34px;
   background: #f8fafc;
-  min-height: 42px;
 }
 
-/* SUBTABLE */
-.otpeSubTable {
-  margin-left: 36px;
-  margin-right: 24px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  border-radius: 0 0 8px 8px;
+/* =========================================================
+   DETALLE EXPANDIDO
+   ========================================================= */
+
+.otpePage .otpeSubTable {
+  width: auto;
+  min-width: 0;
+  margin: 0 24px 0 42px;
   overflow: hidden;
+  border-right: 1px solid #e8edf4;
+  border-bottom: 1px solid #e8edf4;
+  border-left: 1px solid #e8edf4;
+  border-radius: 0 0 7px 7px;
 }
 
-.otpeSubHeader,
-.otpeSubRow {
+.otpePage .otpeSubHeader,
+.otpePage .otpeSubRow {
   display: grid !important;
-  grid-template-columns: 1fr 0.9fr 1.2fr 1.2fr 1.1fr 1.2fr 1fr;
-  column-gap: 8px;
+  grid-template-columns:
+    minmax(92px, 1.05fr)
+    minmax(72px, 0.85fr)
+    minmax(98px, 1.15fr)
+    minmax(105px, 1.2fr)
+    minmax(90px, 1fr)
+    minmax(100px, 1.15fr)
+    minmax(88px, 0.95fr);
+  column-gap: 0;
   align-items: center;
   width: 100%;
+  min-width: 0;
+}
+
+.otpePage .otpeSubHeader > *,
+.otpePage .otpeSubRow > * {
+  min-width: 0;
+  padding: 0 5px;
   text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
-.otpeSubHeader {
-  min-height: 30px;
+.otpePage .otpeSubHeader {
+  min-height: 24px;
+  border-bottom: 1px solid #e8edf4;
   background: #f8fafc;
+}
+
+.otpePage .otpeSubHeader .sapMText {
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 0.43rem;
+  line-height: 0.52rem;
   font-weight: 900;
-  border-bottom: 1px solid #edf2f7;
 }
 
-.otpeSubRow {
-  min-height: 30px;
-  color: #172554;
-  font-size: 9.5px;
-  font-weight: 800;
+.otpePage .otpeSubRow {
+  min-height: 25px;
   border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
 }
 
-.otpeTableFooter {
-  gap: 8px;
+.otpePage .otpeSubRow:last-child {
+  border-bottom: 0;
+}
+
+.otpePage .otpeSubRow .sapMText {
+  color: #172554;
+  font-size: 0.43rem;
+  line-height: 0.54rem;
+  font-weight: 800;
+}
+
+.otpePage .otpeSubRow .otpeRedStrong {
+  color: #ef4444;
+  font-weight: 900;
+}
+
+.otpePage .otpeTableFooter {
+  min-height: 22px;
+  margin-top: 6px;
+  gap: 6px;
+}
+
+.otpePage .otpeTableFooter .sapMText {
   color: #64748b;
-  font-size: 10px;
+  font-size: 0.45rem;
+  line-height: 0.56rem;
   font-weight: 700;
-  margin-top: 12px;
 }
 
-.otpeFooterIcon {
+.otpePage .otpeFooterIcon {
   color: #64748b;
-  font-size: 14px;
+  font-size: 0.62rem;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .otpeTableCard {
-    overflow-x: auto;
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media screen and (max-width: 1100px) {
+  .otpePage .otpeContainer {
+    padding: 8px 10px 14px;
   }
 
-  .otpeCauseHeader,
-  .otpeCauseRow,
-  .otpeSubHeader,
-  .otpeSubRow {
-    min-width: 980px;
-  }
-}
-
-@media (max-width: 768px) {
-  .otpeContainer {
-    padding: 12px;
+  .otpePage .otpeFilters {
+    flex-wrap: wrap !important;
   }
 
-  .otpeTitle,
-  .otpeTitleGreen,
-  .otpeTitleRed {
-    font-size: 20px;
-    line-height: 24px;
-  }
-
-  .otpeHeader {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .otpeFilterItem,
-  .otpeApplyBtn {
-    flex: 1 1 calc(50% - 10px);
+  .otpePage .otpeFilterItem,
+  .otpePage .otpeFilterPeriod,
+  .otpePage .otpeFilterDate,
+  .otpePage .otpeFilterNormal,
+  .otpePage .otpeFilterResponsible,
+  .otpePage .otpeApplyBtn {
+    flex: 1 1 calc(25% - 8px);
+    width: calc(25% - 8px);
+    min-width: 150px;
     max-width: none;
   }
 
-  .otpeKpiCard {
-    min-width: 100%;
+  .otpePage .otpeApplyBtn .sapMBtnInner {
+    width: 100% !important;
   }
 
-  .otpeToolbar {
-    flex-direction: column;
-    align-items: flex-start;
+  .otpePage .otpeKpiGrid {
+    flex-wrap: wrap !important;
   }
 
-  .otpeInfoBox {
-    width: 100%;
-    min-width: 100%;
+  .otpePage .otpeKpiCard {
+    flex: 1 1 calc(50% - 8px);
+    width: calc(50% - 8px);
+    min-width: calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+
+  .otpePage .otpeToolbar {
+    flex-wrap: wrap !important;
+  }
+
+  .otpePage .otpeInfoBox {
+    flex: 1 1 300px;
+  }
+
+  .otpePage .otpeTableViewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .otpePage .otpeCauseHeader,
+  .otpePage .otpeCauseRow {
+    width: 900px;
+    min-width: 900px;
+  }
+
+  .otpePage .otpeSubTable {
+    width: 834px;
+    min-width: 834px;
   }
 }
 
-@media (max-width: 520px) {
-  .otpeFilterItem,
-  .otpeApplyBtn {
-    flex: 1 1 100%;
+@media screen and (max-width: 700px) {
+  .otpePage .otpeHeader {
+    flex-wrap: wrap !important;
   }
 
-  .otpeTabs {
+  .otpePage .otpeHeaderDate {
+    display: none;
+  }
+
+  .otpePage .otpeTitle.sapMTitle,
+  .otpePage .otpeTitleRed.sapMTitle {
+    font-size: 1rem;
+    line-height: 1.08rem;
+  }
+
+  .otpePage .otpeFilterItem,
+  .otpePage .otpeFilterPeriod,
+  .otpePage .otpeFilterDate,
+  .otpePage .otpeFilterNormal,
+  .otpePage .otpeFilterResponsible,
+  .otpePage .otpeApplyBtn {
+    flex: 1 1 calc(50% - 8px);
+    width: calc(50% - 8px);
+    min-width: calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+
+  .otpePage .otpeToolbar,
+  .otpePage .otpeTabs {
+    align-items: flex-start !important;
+  }
+
+  .otpePage .otpeTabs {
+    width: 100%;
+    flex-wrap: wrap !important;
+  }
+
+  .otpePage .otpeInfoBox {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .otpePage .otpeTableTop {
+    align-items: flex-start !important;
     flex-direction: column;
-    align-items: flex-start;
+  }
+
+  .otpePage .otpeSearch {
+    width: 100% !important;
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .otpePage .otpeContainer {
+    padding: 8px 8px 60px;
+  }
+
+  .otpePage .otpeFilterItem,
+  .otpePage .otpeFilterPeriod,
+  .otpePage .otpeFilterDate,
+  .otpePage .otpeFilterNormal,
+  .otpePage .otpeFilterResponsible,
+  .otpePage .otpeApplyBtn,
+  .otpePage .otpeKpiCard {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .otpePage .otpeKpiCard {
+    height: 74px;
+    min-height: 74px;
+    max-height: 74px;
+  }
+
+  .otpePage .otpeTabBtn .sapMBtnInner {
+    padding: 0 0.5rem !important;
   }
 }

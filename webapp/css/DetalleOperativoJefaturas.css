@@ -1286,3 +1286,494 @@
         justify-content: flex-end;
     }
 }
+
+/* =======================================================================
+   AJUSTE FINAL SEGÚN REFERENCIA - DETALLE OPERATIVO DE JEFATURAS
+   Mantener este bloque al final del archivo.
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   1. CONTENEDOR Y COMPOSICIÓN GENERAL
+   ----------------------------------------------------------------------- */
+
+.dojPage .dojDashboard {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: calc(100% - 1.1rem) !important;
+    min-height: calc(100vh - 6.8rem) !important;
+
+    margin: 0.55rem auto !important;
+    padding: 0.78rem 0.9rem 0.7rem !important;
+
+    border-radius: 0.72rem !important;
+}
+
+.dojPage .dojHeaderBlock {
+    flex: 0 0 auto !important;
+    margin-bottom: 0.62rem !important;
+}
+
+.dojPage .dojMainTitle.sapMTitle {
+    font-size: 1.42rem !important;
+    line-height: 1.65rem !important;
+}
+
+.dojPage .dojSubtitle.sapMText {
+    margin-top: 0.12rem !important;
+
+    font-size: 0.66rem !important;
+    line-height: 0.9rem !important;
+}
+
+/* -----------------------------------------------------------------------
+   2. FILTROS: UNA SOLA FILA Y PROPORCIONES DE REFERENCIA
+   ----------------------------------------------------------------------- */
+
+.dojPage .dojFiltersBar {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(6.7rem, 0.78fr)
+        minmax(7.8rem, 1fr)
+        minmax(7.8rem, 1fr)
+        minmax(8.9rem, 1.15fr)
+        minmax(6.8rem, 0.82fr)
+        minmax(6rem, 0.7fr)
+        minmax(6rem, 0.7fr)
+        minmax(7rem, 0.84fr)
+        minmax(6.8rem, 0.82fr)
+        8.4rem !important;
+
+    width: 100% !important;
+
+    column-gap: 0.42rem !important;
+    row-gap: 0.45rem !important;
+
+    align-items: end !important;
+
+    margin: 0 0 0.82rem !important;
+    padding: 0 !important;
+}
+
+.dojPage .dojFiltersBar > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dojPage .dojFilter,
+.dojPage .dojFilterPeriod,
+.dojPage .dojFilterDate,
+.dojPage .dojFilterManagement,
+.dojPage .dojFilterMedium,
+.dojPage .dojFilterSmall,
+.dojPage .dojFilterService,
+.dojPage .dojFilterResource {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Etiqueta sobre el control, igual que la referencia */
+.dojPage .dojFilterLabel.sapMLabel {
+    display: block !important;
+
+    height: 0.82rem !important;
+    min-height: 0.82rem !important;
+
+    margin: 0 0 0.18rem 0.12rem !important;
+    padding: 0 !important;
+
+    color: #475569 !important;
+
+    font-size: 0.54rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 800 !important;
+}
+
+/* Caja única del control */
+.dojPage .dojFilter .sapMSlt,
+.dojPage .dojFilter .sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+
+    margin: 0 !important;
+}
+
+.dojPage .dojFilter .sapMSlt,
+.dojPage .dojFilter .sapMInputBaseContentWrapper {
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.45rem !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0.12rem 0.34rem
+        rgba(15, 23, 42, 0.045) !important;
+}
+
+.dojPage .dojFilter .sapMSltLabel,
+.dojPage .dojFilter .sapMInputBaseInner {
+    height: 2.08rem !important;
+    min-height: 2.08rem !important;
+    line-height: 2.08rem !important;
+
+    padding: 0 1.65rem 0 0.62rem !important;
+
+    color: #1f2937 !important;
+
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+}
+
+/* Flechas azules */
+.dojPage .dojFilter .sapMSltArrow {
+    width: 1.5rem !important;
+
+    height: 2.08rem !important;
+    line-height: 2.08rem !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 0.67rem !important;
+}
+
+/* Calendarios azules a la derecha */
+.dojPage .dojFilter .sapMInputBaseIconContainer,
+.dojPage .dojFilter .sapMInputBaseIcon {
+    height: 2.08rem !important;
+    line-height: 2.08rem !important;
+}
+
+.dojPage .dojFilter .sapMInputBaseIcon,
+.dojPage .dojFilter
+.sapMInputBaseIconContainer .sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    font-size: 0.72rem !important;
+}
+
+/* -----------------------------------------------------------------------
+   3. ACCIÓN ADAPTAR FILTROS + IR
+   ----------------------------------------------------------------------- */
+
+.dojPage .dojFilterActions {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+
+    width: 8.4rem !important;
+    min-width: 8.4rem !important;
+    max-width: 8.4rem !important;
+
+    height: 3.15rem !important;
+    min-height: 3.15rem !important;
+
+    gap: 0.42rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dojPage .dojAdaptFiltersLink.sapMLnk {
+    display: inline-flex !important;
+    align-items: center !important;
+
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+
+    color: #1677ff !important;
+
+    font-size: 0.56rem !important;
+    line-height: 2.15rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+}
+
+.dojPage .dojApplyFiltersButton.sapMBtn {
+    flex: 0 0 2.55rem !important;
+
+    width: 2.55rem !important;
+    min-width: 2.55rem !important;
+    max-width: 2.55rem !important;
+
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+    max-height: 2.15rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dojPage .dojApplyFiltersButton .sapMBtnInner {
+    width: 2.55rem !important;
+    min-width: 2.55rem !important;
+    max-width: 2.55rem !important;
+
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+    max-height: 2.15rem !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0.45rem !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1787ff 0%,
+            #066ce6 100%
+        ) !important;
+
+    box-shadow:
+        0 0.22rem 0.5rem
+        rgba(22, 119, 255, 0.22) !important;
+}
+
+.dojPage .dojApplyFiltersButton .sapMBtnContent {
+    height: 2.08rem !important;
+    line-height: 2.08rem !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.62rem !important;
+    font-weight: 900 !important;
+}
+
+/* -----------------------------------------------------------------------
+   4. KPI CON PROPORCIÓN Y ALTURA DE LA REFERENCIA
+   ----------------------------------------------------------------------- */
+
+.dojPage .dojKpiGrid {
+    display: grid !important;
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr)) !important;
+
+    width: 100% !important;
+    gap: 0.68rem !important;
+
+    align-items: stretch !important;
+
+    margin: 0 0 0.82rem !important;
+}
+
+.dojPage .dojKpiGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.dojPage .dojKpiCard {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 6.25rem !important;
+    min-height: 6.25rem !important;
+    max-height: 6.25rem !important;
+
+    padding: 0.74rem 0.72rem 0.68rem 0.62rem !important;
+
+    border-radius: 0.62rem !important;
+
+    transform: none !important;
+}
+
+.dojPage .dojKpiCard::after {
+    display: none !important;
+}
+
+.dojPage .dojKpiIconWrap {
+    flex: 0 0 2.75rem !important;
+
+    width: 2.75rem !important;
+    min-width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+
+    margin-right: 0.72rem !important;
+}
+
+.dojPage .dojKpiIcon.sapUiIcon {
+    font-size: 1.34rem !important;
+    line-height: 2.75rem !important;
+}
+
+.dojPage .dojKpiLabel.sapMText {
+    font-size: 0.6rem !important;
+    line-height: 0.76rem !important;
+    font-weight: 900 !important;
+}
+
+.dojPage .dojKpiValue.sapMText {
+    margin-top: 0.1rem !important;
+
+    font-size: 1.48rem !important;
+    line-height: 1.58rem !important;
+    font-weight: 900 !important;
+}
+
+.dojPage .dojKpiDescription.sapMText {
+    margin-top: 0.28rem !important;
+
+    font-size: 0.51rem !important;
+    line-height: 0.65rem !important;
+    font-weight: 600 !important;
+}
+
+/* -----------------------------------------------------------------------
+   5. TABLA CON MAYOR PRESENCIA VERTICAL
+   ----------------------------------------------------------------------- */
+
+.dojPage .dojTableCard {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+
+    min-height: 29rem !important;
+
+    border-radius: 0.7rem !important;
+}
+
+.dojPage .dojTableToolbar.sapMTB {
+    flex: 0 0 auto !important;
+
+    min-height: 3.2rem !important;
+    padding: 0.48rem 0.78rem !important;
+}
+
+.dojPage .dojTableTitle.sapMTitle {
+    font-size: 0.88rem !important;
+}
+
+.dojPage .dojOperationsTable .sapMListTblHeader,
+.dojPage .dojOperationsTable .sapMListTblHeaderCell {
+    height: 3.25rem !important;
+}
+
+.dojPage .dojOperationsTable .sapMListTblRow,
+.dojPage .dojOperationsTable .sapMListTblCell {
+    height: clamp(2.9rem, 5.6vh, 3.45rem) !important;
+    min-height: clamp(2.9rem, 5.6vh, 3.45rem) !important;
+}
+
+.dojPage .dojColumnHeader.sapMText {
+    font-size: 0.57rem !important;
+    line-height: 0.77rem !important;
+}
+
+.dojPage .dojCellText.sapMText,
+.dojPage .dojManagementLink.sapMLnk {
+    font-size: 0.6rem !important;
+    line-height: 0.86rem !important;
+}
+
+.dojPage .dojTableFooter {
+    flex: 0 0 auto !important;
+
+    min-height: 2.9rem !important;
+    padding: 0.42rem 0.68rem !important;
+}
+
+/* Píldoras de estatus, compactas y ovaladas */
+.dojPage .dojUtilStatus.sapMObjStatus {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 3.6rem !important;
+
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+    max-height: 1.35rem !important;
+
+    padding: 0 0.62rem !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    box-shadow: none !important;
+}
+
+.dojPage .dojUtilStatus .sapMObjStatusText {
+    height: 1.35rem !important;
+    line-height: 1.35rem !important;
+
+    font-size: 0.55rem !important;
+    font-weight: 850 !important;
+}
+
+/* -----------------------------------------------------------------------
+   6. RESPONSIVE
+   ----------------------------------------------------------------------- */
+
+@media screen and (max-width: 1450px) {
+    .dojPage .dojFiltersBar {
+        grid-template-columns:
+            repeat(5, minmax(8rem, 1fr)) !important;
+    }
+
+    .dojPage .dojFilterActions {
+        grid-column: auto !important;
+        justify-self: end !important;
+    }
+
+    .dojPage .dojKpiGrid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .dojPage .dojFiltersBar {
+        grid-template-columns:
+            repeat(3, minmax(8rem, 1fr)) !important;
+    }
+
+    .dojPage .dojKpiGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .dojPage .dojTableCard {
+        min-height: 0 !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .dojPage .dojFiltersBar {
+        grid-template-columns: 1fr !important;
+    }
+
+    .dojPage .dojFilterActions {
+        width: 8.4rem !important;
+        min-width: 8.4rem !important;
+        max-width: 8.4rem !important;
+
+        justify-self: start !important;
+    }
+
+    .dojPage .dojKpiGrid {
+        grid-template-columns: 1fr !important;
+    }
+}

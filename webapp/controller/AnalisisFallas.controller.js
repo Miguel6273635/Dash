@@ -1,15 +1,15 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/ValueState"
-], function (Controller, JSONModel, ValueState) {
+    "sap/ui/core/ValueState",
+    "sap/m/MessageToast"
+], function (Controller, JSONModel, ValueState, MessageToast) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.AnalisisFallas", {
 
         onInit: function () {
-            // Datos de ejemplo para el modelo de la vista
-            const oFallasData = {
+            var oFallasData = {
                 clasificaciones: [
                     {
                         id: 1,
@@ -22,12 +22,12 @@ sap.ui.define([
                         impactoState: ValueState.Error,
                         tendenciaTexto: "En aumento",
                         tendenciaColor: "Error",
-                        tendenciaData: [{x:0,y:10},{x:1,y:12},{x:2,y:15},{x:3,y:20}]
+                        tendenciaData: [{ x: 0, y: 10 }, { x: 1, y: 12 }, { x: 2, y: 15 }, { x: 3, y: 20 }]
                     },
                     {
                         id: 2,
                         nombre: "Falla eléctrica",
-                        icon: "sap-icon://electrical-inspected",
+                            icon: "sap-icon://lightbulb",
                         otAfectadas: 4,
                         equiposAfectados: 3,
                         clientesAfectados: 3,
@@ -35,7 +35,7 @@ sap.ui.define([
                         impactoState: ValueState.Warning,
                         tendenciaTexto: "En aumento",
                         tendenciaColor: "Critical",
-                         tendenciaData: [{x:0,y:8},{x:1,y:10},{x:2,y:13},{x:3,y:18}]
+                        tendenciaData: [{ x: 0, y: 8 }, { x: 1, y: 10 }, { x: 2, y: 13 }, { x: 3, y: 18 }]
                     },
                     {
                         id: 3,
@@ -47,8 +47,8 @@ sap.ui.define([
                         impacto: 18,
                         impactoState: ValueState.Warning,
                         tendenciaTexto: "Estable",
-                        tendenciaColor: "Neutral",
-                         tendenciaData: [{x:0,y:10},{x:1,y:11},{x:2,y:10},{x:3,y:12}]
+                        tendenciaColor: "Critical",
+                        tendenciaData: [{ x: 0, y: 10 }, { x: 1, y: 11 }, { x: 2, y: 10 }, { x: 3, y: 12 }]
                     },
                     {
                         id: 4,
@@ -58,10 +58,10 @@ sap.ui.define([
                         equiposAfectados: 2,
                         clientesAfectados: 2,
                         impacto: 14,
-                        impactoState: ValueState.Information,
+                        impactoState: ValueState.Warning,
                         tendenciaTexto: "Estable",
-                        tendenciaColor: "Neutral",
-                         tendenciaData: [{x:0,y:9},{x:1,y:8},{x:2,y:9},{x:3,y:10}]
+                        tendenciaColor: "Critical",
+                        tendenciaData: [{ x: 0, y: 9 }, { x: 1, y: 8 }, { x: 2, y: 9 }, { x: 3, y: 10 }]
                     },
                     {
                         id: 5,
@@ -74,7 +74,7 @@ sap.ui.define([
                         impactoState: ValueState.Success,
                         tendenciaTexto: "A la baja",
                         tendenciaColor: "Good",
-                         tendenciaData: [{x:0,y:15},{x:1,y:12},{x:2,y:10},{x:3,y:8}]
+                        tendenciaData: [{ x: 0, y: 15 }, { x: 1, y: 12 }, { x: 2, y: 10 }, { x: 3, y: 8 }]
                     },
                     {
                         id: 6,
@@ -87,15 +87,19 @@ sap.ui.define([
                         impactoState: ValueState.Success,
                         tendenciaTexto: "A la baja",
                         tendenciaColor: "Good",
-                         tendenciaData: [{x:0,y:10},{x:1,y:8},{x:2,y:6},{x:3,y:4}]
+                        tendenciaData: [{ x: 0, y: 10 }, { x: 1, y: 8 }, { x: 2, y: 6 }, { x: 3, y: 4 }]
                     }
                 ]
             };
 
-            const oModel = new JSONModel(oFallasData);
-            this.getView().setModel(oModel, "fallasModel");
-        }
+            this.getView().setModel(new JSONModel(oFallasData), "fallasModel");
+        },
 
-        // Aquí puedes agregar manejadores de eventos, como onFilterPress, onRowPress, etc.
+        onApplyFilters: function () {
+            var sSemana = this.byId("analisisFallasWeekSelect").getSelectedItem().getText();
+            var sZona = this.byId("analisisFallasZoneSelect").getSelectedItem().getText();
+
+            MessageToast.show("Filtros aplicados: " + sSemana + " · Zona " + sZona);
+        }
     });
 });

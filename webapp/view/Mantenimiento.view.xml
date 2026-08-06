@@ -1,1536 +1,582 @@
-<mvc:View
-    controllerName="mantenimiento.controller.Mantenimiento"
+<mvc:View controllerName="mantenimiento.controller.Mantenimiento" displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-
-    <Page
-        id="pageMantenimiento"
-        showHeader="false"
-        enableScrolling="false"
-        class="MantenimientoDashboard">
-
+    <Page id="pageMantenimientoDashboard" showHeader="false" enableScrolling="false" class="MantenimientoDashboard">
         <content>
-            <VBox
-                id="dashboardViewport"
-                width="100%"
-                height="100%"
-                renderType="Div"
-                class="mdViewport">
-
-                <VBox
-                    id="dashboardCanvas"
-                    renderType="Div"
-                    class="mdCanvas">
-
-                    <!-- =====================================================
-                         ENCABEZADO
-                         ===================================================== -->
-                    <VBox class="mdHeader">
-                        <Title
-                            text="Dashboard Ejecutivo de Mantenimiento"
-                            level="H1"
-                            class="mdMainTitle"/>
-
-                        <Text
-                            text="Desempeño del periodo vs plan (Planeado vs Real del periodo seleccionado)"
-                            class="mdMainSubtitle"/>
+            <VBox id="dashboardPage" class="mdPageContainer sapUiSizeCompact">
+                <!-- Encabezado -->
+                <VBox class="mdHeader" justifyContent="Center">
+                    <Title text="Dashboard Ejecutivo de Mantenimiento" level="H1" class="mdMainTitle" />
+                </VBox>
+                <!-- Filtros -->
+                <HBox class="mdFiltersBar" renderType="Bare" wrap="NoWrap" alignItems="Stretch">
+                    <VBox class="mdFilterBox mdFilterPeriod">
+                        <Label text="Periodo" class="mdFilterLabel" />
+                        <Select id="slPeriodo" selectedKey="{dash>/filtros/periodo}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="ABRIL_2024" text="Abril 2024 (Mensual)" />
+                                <core:Item key="MAYO_2024" text="Mayo 2024 (Mensual)" />
+                                <core:Item key="JUNIO_2024" text="Junio 2024 (Mensual)" />
+                            </items>
+                        </Select>
                     </VBox>
-
-                    <!-- =====================================================
-                         FILTROS
-                         ===================================================== -->
-                    <HBox class="mdFiltersGrid" alignItems="Stretch">
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Periodo" class="mdFilterLabel"/>
-                            <Select
-                                id="slPeriodo"
-                                width="100%"
-                                selectedKey="MAYO_2024"
-                                change=".onFilterChange"
-                                class="mdFilterControl">
-                                <items>
-                                    <core:Item key="MAYO_2024" text="Mayo 2024 (Mensual)"/>
-                                    <core:Item key="ABRIL_2024" text="Abril 2024 (Mensual)"/>
-                                </items>
-                            </Select>
-                        </VBox>
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Fecha desde" class="mdFilterLabel"/>
-                            <DatePicker
-                                id="dpInicio"
-                                width="100%"
-                                value="2024-05-01"
-                                valueFormat="yyyy-MM-dd"
-                                displayFormat="dd/MM/yyyy"
-                                change=".onFilterChange"
-                                class="mdFilterControl"/>
-                        </VBox>
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Fecha hasta" class="mdFilterLabel"/>
-                            <DatePicker
-                                id="dpFin"
-                                width="100%"
-                                value="2024-05-31"
-                                valueFormat="yyyy-MM-dd"
-                                displayFormat="dd/MM/yyyy"
-                                change=".onFilterChange"
-                                class="mdFilterControl"/>
-                        </VBox>
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Zona" class="mdFilterLabel"/>
-                            <HBox class="mdFilterWithIcon" alignItems="Center">
-                                <core:Icon src="sap-icon://map-2" class="mdFilterPrefixIcon"/>
-                                <Select
-                                    id="slZona"
-                                    width="100%"
-                                    selectedKey="TODAS"
-                                    change=".onFilterChange"
-                                    class="mdFilterSelectFlat">
-                                    <items>
-                                        <core:Item key="TODAS" text="Todas"/>
-                                        <core:Item key="NORTE" text="Norte"/>
-                                        <core:Item key="CENTRO" text="Centro"/>
-                                        <core:Item key="SUR" text="Sur"/>
-                                        <core:Item key="ESTE" text="Este"/>
-                                        <core:Item key="OESTE" text="Oeste"/>
-                                    </items>
-                                </Select>
-                            </HBox>
-                        </VBox>
-
-
-
-
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Supervisor" class="mdFilterLabel"/>
-                            <HBox class="mdFilterWithIcon" alignItems="Center">
-                                <core:Icon src="sap-icon://employee" class="mdFilterPrefixIcon"/>
-                                <Select
-                                    id="slSupervisor"
-                                    width="100%"
-                                    selectedKey="TODOS"
-                                    change=".onFilterChange"
-                                    class="mdFilterSelectFlat">
-                                    <items>
-                                        <core:Item key="TODOS" text="Todos"/>
-                                        <core:Item key="SUP_01" text="Supervisor 1"/>
-                                        <core:Item key="SUP_02" text="Supervisor 2"/>
-                                    </items>
-                                </Select>
-                            </HBox>
-                        </VBox>
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Tipo de orden" class="mdFilterLabel"/>
-                            <HBox class="mdFilterWithIcon" alignItems="Center">
-                                <core:Icon src="sap-icon://list" class="mdFilterPrefixIcon"/>
-                                <Select
-                                    id="slTipoOrden"
-                                    width="100%"
-                                    selectedKey="TODOS"
-                                    change=".onFilterChange"
-                                    class="mdFilterSelectFlat">
-                                    <items>
-                                        <core:Item key="TODOS" text="Todos"/>
-                                        <core:Item key="PREVENTIVO" text="Preventivo"/>
-                                        <core:Item key="CORRECTIVO" text="Correctivo"/>
-                                        <core:Item key="CALL_CENTER" text="Call Center"/>
-                                    </items>
-                                </Select>
-                            </HBox>
-                        </VBox>
-
-                        <VBox class="mdFilterCard">
-                            <Label text="Turno" class="mdFilterLabel"/>
-                            <HBox class="mdFilterWithIcon" alignItems="Center">
-                                <core:Icon src="sap-icon://history" class="mdFilterPrefixIcon"/>
-                                <Select
-                                    id="slTurno"
-                                    width="100%"
-                                    selectedKey="TODOS"
-                                    change=".onFilterChange"
-                                    class="mdFilterSelectFlat">
-                                    <items>
-                                        <core:Item key="TODOS" text="Todos"/>
-                                        <core:Item key="DIURNO" text="Diurno"/>
-                                        <core:Item key="NOCTURNO" text="Nocturno"/>
-                                        <core:Item key="FIN_SEMANA" text="Fin de semana"/>
-                                    </items>
-                                </Select>
-                            </HBox>
-                        </VBox>
-                    </HBox>
-
-                    <!-- =====================================================
-                         FILA SUPERIOR
-                         ===================================================== -->
-                    <HBox
-                        class="mdTopGrid"
-                        width="100%"
-                        height="100%"
-                        fitContainer="true"
-                        alignItems="Stretch">
-
-                    <!-- ============================================================
-     CARD: CUMPLIMIENTO GENERAL DEL PLAN
-     Construida únicamente con controles SAPUI5
-     ============================================================ -->
-<VBox
-    width="100%"
-    height="100%"
-    renderType="Div"
-    class="mdCard mdComplianceCard">
-
-    <layoutData>
-        <FlexItemData
-            growFactor="1"
-            shrinkFactor="1"
-            baseSize="0%"/>
-    </layoutData>
-
-    <!-- Encabezado -->
-    <HBox
-        width="100%"
-        alignItems="Start"
-        class="mdComplianceHeader">
-
-        <VBox
-            alignItems="Center"
-            justifyContent="Center"
-            class="mdComplianceIconBox">
-
-            <core:Icon
-                src="sap-icon://task"
-                class="mdComplianceIcon"/>
-        </VBox>
-
-        <VBox class="mdComplianceTitleBox">
-            <Text
-                text="Cumplimiento general"
-                class="mdComplianceTitleLine"/>
-
-            <Text
-                text="del plan"
-                class="mdComplianceTitleLine"/>
-        </VBox>
-    </HBox>
-
-    <!-- Porcentaje -->
-    <Text
-        text="{dash>/summary/compliance}%"
-        class="mdComplianceValue"/>
-
-    <!-- Gráfica semicircular -->
-    <VBox
-        width="100%"
-        alignItems="Center"
-        class="mdComplianceChartArea">
-
-        <VBox
-            renderType="Div"
-            class="mdComplianceArc"/>
-
-        <HBox
-            justifyContent="SpaceBetween"
-            alignItems="Center"
-            class="mdComplianceScale">
-
-            <Text
-                text="0%"
-                class="mdComplianceScaleText"/>
-
-            <Text
-                text="50%"
-                class="mdComplianceScaleText"/>
-
-            <Text
-                text="100%"
-                class="mdComplianceScaleText"/>
-        </HBox>
-    </VBox>
-
-    <!-- Órdenes -->
-    <HBox
-        width="100%"
-        justifyContent="Center"
-        alignItems="Center"
-        class="mdComplianceOrders">
-
-        <Text
-            text="{dash>/summary/executed}"
-            class="mdComplianceOrdersText"/>
-
-        <Text
-            text=" / "
-            class="mdComplianceOrdersText"/>
-
-        <Text
-            text="{dash>/summary/planned}"
-            class="mdComplianceOrdersText"/>
-
-        <Text
-            text=" órdenes"
-            class="mdComplianceOrdersText"/>
-    </HBox>
-
-    <!-- Barra azul pastel -->
-    <HBox
-        width="100%"
-        justifyContent="Center"
-        alignItems="Center"
-        class="mdComplianceGoalBand">
-
-        <Text
-            text="Meta ≥ 95%"
-            class="mdComplianceGoalText"/>
-    </HBox>
-</VBox>
-                    <!-- ============================================================
-     CARD: DESVIACIÓN GENERAL DEL PERIODO
-     Sin icono lateral
-     ============================================================ -->
-<VBox
-    width="100%"
-    height="100%"
-    renderType="Div"
-    class="mdCard mdDeviationPeriodCard">
-
-    <VBox
-        renderType="Div"
-        class="mdDeviationPeriodTitleBox">
-        <Text
-            text="Desviación general"
-            class="mdDeviationPeriodTitleLine"/>
-        <Text
-            text="del periodo"
-            class="mdDeviationPeriodTitleLine"/>
-    </VBox>
-
-    <Text
-        text="{= ${dash>/summary/deviation} + '%'}"
-        class="mdDeviationPeriodValue"/>
-
-    <Text
-        text="Fuera de tolerancia"
-        class="mdDeviationPeriodStatus"/>
-
-    <VBox
-        width="100%"
-        renderType="Div"
-        class="mdDeviationPeriodGaugeArea">
-
-        <VBox
-            renderType="Div"
-            class="mdDeviationPeriodGaugeWrap">
-
-            <HBox
-                renderType="Div"
-                class="mdDeviationPeriodTrack">
-
-                <VBox
-                    renderType="Div"
-                    class="mdDeviationPeriodSeg mdDeviationPeriodSegGreen"/>
-
-                <VBox
-                    renderType="Div"
-                    class="mdDeviationPeriodSeg mdDeviationPeriodSegYellow"/>
-
-                <VBox
-                    renderType="Div"
-                    class="mdDeviationPeriodSeg mdDeviationPeriodSegRed"/>
-            </HBox>
-
-            <VBox
-                renderType="Div"
-                class="mdDeviationPeriodMarker"/>
-        </VBox>
-
-        <HBox
-            justifyContent="SpaceBetween"
-            alignItems="Center"
-            class="mdDeviationPeriodScale">
-            <Text text="0%" class="mdDeviationPeriodScaleText"/>
-            <Text text="5%" class="mdDeviationPeriodScaleText"/>
-            <Text text="15%" class="mdDeviationPeriodScaleText"/>
-        </HBox>
-    </VBox>
-
-    <HBox
-        width="100%"
-        justifyContent="Center"
-        alignItems="Center"
-        class="mdDeviationPeriodGoalBand">
-        <Text
-            text="Meta ≤ 5%"
-            class="mdDeviationPeriodGoalText"/>
-    </HBox>
-</VBox>
-
- <!-- ============================================================
-     CARD: CAUSAS DE NO EJECUCIÓN
-     Escala horizontal de 0 a 10
-     Construida únicamente con controles SAPUI5
-     ============================================================ -->
-<VBox
-    width="100%"
-    height="100%"
-    renderType="Div"
-    class="mdCard mdCauseCard">
-
-    <!-- Encabezado -->
-    <HBox
-        width="100%"
-        alignItems="Center"
-        justifyContent="SpaceBetween"
-        class="mdCauseHeader">
-
-        <Title
-            text="Causas de no ejecución"
-            level="H3"
-            class="mdCauseTitle"/>
-    </HBox>
-
-    <!-- Área de gráfica -->
-    <VBox
-        width="100%"
-        height="100%"
-        renderType="Div"
-        class="mdCauseChartArea">
-
-        <!-- Filas de causas -->
-        <VBox
-            width="100%"
-            height="100%"
-            renderType="Div"
-            class="mdCauseBars">
-
-            <!-- Causa 1 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotBlue"/>
-
-                    <Text
-                        text="Carta de no mantenimiento"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
+                    <VBox class="mdFilterBox">
+                        <Label text="Fecha desde" class="mdFilterLabel" />
+                        <DatePicker id="dpInicio" value="{dash>/filtros/fechaInicio}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" change=".onFilterChange" width="100%" />
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Fecha hasta" class="mdFilterLabel" />
+                        <DatePicker id="dpFin" value="{dash>/filtros/fechaFin}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" change=".onFilterChange" width="100%" />
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Zona" class="mdFilterLabel" />
+                        <Select id="slZona" selectedKey="{dash>/filtros/zona}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODAS" text="Todas" />
+                                <core:Item key="NORTE" text="Norte" />
+                                <core:Item key="CENTRO" text="Centro" />
+                                <core:Item key="SUR" text="Sur" />
+                                <core:Item key="ESTE" text="Este" />
+                                <core:Item key="OESTE" text="Oeste" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Supervisor" class="mdFilterLabel" />
+                        <Select id="slSupervisor" selectedKey="{dash>/filtros/supervisor}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODOS" text="Todos" />
+                                <core:Item key="SUP_01" text="Supervisor 1" />
+                                <core:Item key="SUP_02" text="Supervisor 2" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Tipo de orden" class="mdFilterLabel" />
+                        <Select id="slTipoOrden" selectedKey="{dash>/filtros/tipoOrden}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODOS" text="Todos" />
+                                <core:Item key="PREVENTIVO" text="Preventivo" />
+                                <core:Item key="CORRECTIVO" text="Correctivo" />
+                                <core:Item key="CALL_CENTER" text="Call Center" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Turno" class="mdFilterLabel" />
+                        <Select id="slTurno" selectedKey="{dash>/filtros/turno}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODOS" text="Todos" />
+                                <core:Item key="DIURNO" text="Diurno" />
+                                <core:Item key="NOCTURNO" text="Nocturno" />
+                                <core:Item key="FIN_SEMANA" text="Fin de semana" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdFilterBox">
+                        <Label text="Mecánico" class="mdFilterLabel" />
+                        <Select id="slMecanico" selectedKey="{dash>/filtros/mecanico}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODOS" text="Todos" />
+                                <core:Item key="MEC_01" text="Carlos Ruiz" />
+                                <core:Item key="MEC_02" text="Ana López" />
+                                <core:Item key="MEC_03" text="Miguel Torres" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdFilterBox mdFilterStatus">
+                        <Label text="Estado de orden" class="mdFilterLabel" />
+                        <Select id="slEstadoOrden" selectedKey="{dash>/filtros/estadoOrden}" change=".onFilterChange" width="100%">
+                            <items>
+                                <core:Item key="TODOS" text="Todos" />
+                                <core:Item key="ABIERTA" text="Abierta" />
+                                <core:Item key="EN_PROCESO" text="En proceso" />
+                                <core:Item key="COMPLETADA" text="Completada" />
+                                <core:Item key="DETENIDA" text="Detenida" />
+                            </items>
+                        </Select>
+                    </VBox>
+                    <VBox class="mdApplyWrap" justifyContent="Center" alignItems="Stretch">
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onAplicarFiltros" class="mdApplyButton" />
+                    </VBox>
                 </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillBlue mdCauseValue80"/>
-                </VBox>
-
-                <Text
-                    text="8 (36%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 2 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotSky"/>
-
-                    <Text
-                        text="Falta de materiales / refacciones"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillSky mdCauseValue50"/>
-                </VBox>
-
-                <Text
-                    text="5 (23%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 3 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotGreen"/>
-
-                    <Text
-                        text="Cliente no disponible"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillGreen mdCauseValue30"/>
-                </VBox>
-
-                <Text
-                    text="3 (14%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 4 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotYellow"/>
-
-                    <Text
-                        text="Orden reprogramada"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillYellow mdCauseValue20"/>
-                </VBox>
-
-                <Text
-                    text="2 (9%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 5 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotOrange"/>
-
-                    <Text
-                        text="Mecánico no disponible"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillOrange mdCauseValue20"/>
-                </VBox>
-
-                <Text
-                    text="2 (9%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 6 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotPurple"/>
-
-                    <Text
-                        text="Información incompleta"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillPurple mdCauseValue10"/>
-                </VBox>
-
-                <Text
-                    text="1 (5%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-
-            <!-- Causa 7 -->
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseBarRow">
-
-                <HBox
-                    alignItems="Center"
-                    class="mdCauseLabelBox">
-
-                    <VBox class="mdCauseDot mdCauseDotGray"/>
-
-                    <Text
-                        text="Otro motivo"
-                        wrapping="false"
-                        class="mdCauseLabel"/>
-                </HBox>
-
-                <VBox class="mdCauseTrack">
-                    <VBox class="mdCauseFill mdCauseFillGray mdCauseValue10"/>
-                </VBox>
-
-                <Text
-                    text="1 (4%)"
-                    wrapping="false"
-                    class="mdCauseValue"/>
-            </HBox>
-        </VBox>
-
-        <!-- Eje horizontal -->
-        <HBox
-            width="100%"
-            alignItems="Center"
-            class="mdCauseAxisRow">
-
-            <VBox class="mdCauseAxisLabelSpacer"/>
-
-            <HBox
-                width="100%"
-                alignItems="Center"
-                class="mdCauseAxisScale">
-
-                <Text text="0" class="mdCauseAxisText"/>
-                <Text text="2" class="mdCauseAxisText"/>
-                <Text text="4" class="mdCauseAxisText"/>
-                <Text text="6" class="mdCauseAxisText"/>
-                <Text text="8" class="mdCauseAxisText"/>
-                <Text text="10" class="mdCauseAxisText"/>
-            </HBox>
-
-            <VBox class="mdCauseAxisValueSpacer"/>
-        </HBox>
-    </VBox>
-
-    <!-- Banda informativa -->
-    <HBox
-        width="100%"
-        alignItems="Center"
-        class="mdCauseInfoBand">
-
-        <core:Icon
-            src="sap-icon://information"
-            class="mdCauseInfoIcon"/>
-
-        <Text
-            text="{dash>/summary/nonExecuted} órdenes no ejecutadas representan el {dash>/summary/nonExecutedPercent}% del plan."
-            wrapping="false"
-            class="mdCauseInfoText"/>
-    </HBox>
-</VBox>
-                       <!-- ============================================================
-     CARD: TOTAL DE ÓRDENES NO EJECUTADAS
-     Sin core:HTML
-     ============================================================ -->
-<VBox
-    width="100%"
-    height="100%"
-    renderType="Div"
-    class="mdCard mdCauseTotalCard">
-
-    <!-- Acción superior -->
-    <Button
-        text="Ver detalle"
-        icon="sap-icon://navigation-right-arrow"
-        iconFirst="false"
-        type="Transparent"
-        width="100%"
-        press=".onVerDetalle"
-        class="mdCauseTotalDetailButton">
-
-        <customData>
-            <core:CustomData
-                key="section"
-                value="ordenesNoEjecutadas"/>
-        </customData>
-    </Button>
-
-    <!-- Contenido interior -->
-    <VBox
-        width="100%"
-        height="100%"
-        renderType="Div"
-        alignItems="Center"
-        justifyContent="Center"
-        class="mdCauseTotalBody">
-
-        <!-- Icono -->
-        <VBox
-            renderType="Div"
-            alignItems="Center"
-            justifyContent="Center"
-            class="mdCauseTotalIconBox">
-
-            <core:Icon
-                src="sap-icon://task"
-                class="mdCauseTotalIconGlyph"/>
-        </VBox>
-
-        <!-- Total de órdenes -->
-        <Text
-            text="{dash>/summary/nonExecuted}"
-            wrapping="false"
-            class="mdCauseTotalNumber"/>
-
-        <Text
-            text="OT"
-            wrapping="false"
-            class="mdCauseTotalUnit"/>
-
-        <!-- Total porcentual -->
-        <Text
-            text="Total"
-            wrapping="false"
-            class="mdCauseTotalLabel"/>
-
-        <Text
-            text="100%"
-            wrapping="false"
-            class="mdCauseTotalPercent"/>
-    </VBox>
-</VBox>
-                    </HBox>
-
-                    <!-- =====================================================
-                         FILA MEDIA
-                         ===================================================== -->
-                    <HBox class="mdTwoColumnGrid" alignItems="Stretch">
-                        <!-- Ejecución -->
-                        <VBox
-                            width="100%"
-                            height="100%"
-                            renderType="Div"
-                            class="mdCard mdExecutionCard">
-
-                            <!-- Encabezado -->
-                            <HBox
-                                width="100%"
-                                alignItems="Start"
-                                justifyContent="SpaceBetween"
-                                class="mdExecutionHeader">
-
-                                <VBox class="mdExecutionHeaderLeft">
-                                    <Text
-                                        text="Ejecución del plan del periodo"
-                                        class="mdExecutionTitle"/>
-
-                                    <Text
-                                        text="Planeado vs real y equipo por semana"
-                                        class="mdExecutionSubtitle"/>
+                <!-- Indicadores superiores -->
+                <HBox class="mdGridRow mdTopRow" renderType="Bare" wrap="NoWrap">
+                    <VBox class="mdCard mdComplianceCard">
+                        <HBox class="mdComplianceTitleRow" alignItems="Center" justifyContent="Center">
+                            <Text text="Cumplimiento general del plan" textDirection="LTR" textAlign="Center" wrapping="false" class="mdComplianceTitle" />
+                        </HBox>
+                        <VBox class="mdSemiGauge" alignItems="Center" renderType="Bare">
+                            <VBox class="mdGaugeVisual" renderType="Bare">
+                                <core:HTML sanitizeContent="false" content='&lt;svg viewBox=&quot;0 0 220 100&quot; preserveAspectRatio=&quot;xMidYMid meet&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;linearGradient id=&quot;mdComplianceBlue&quot; x1=&quot;0%&quot; y1=&quot;0%&quot; x2=&quot;100%&quot; y2=&quot;0%&quot;&gt;&lt;stop offset=&quot;0%&quot; stop-color=&quot;#0867e8&quot;/&gt;&lt;stop offset=&quot;52%&quot; stop-color=&quot;#1685ff&quot;/&gt;&lt;stop offset=&quot;100%&quot; stop-color=&quot;#0875f5&quot;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;path d=&quot;M28 86 A82 64 0 0 1 192 86&quot; pathLength=&quot;100&quot; class=&quot;mdGaugeTrack&quot;/&gt;&lt;path d=&quot;M28 86 A82 64 0 0 1 192 86&quot; pathLength=&quot;100&quot; stroke-dasharray=&quot;94.8 100&quot; stroke=&quot;url(#mdComplianceBlue)&quot; class=&quot;mdGaugeProgress&quot;/&gt;&lt;/svg&gt;' />
+                                <VBox class="mdGaugeOverlay" alignItems="Center">
+                                    <Text text="{dash>/summary/compliance}" class="mdMetricValue mdBlueText" />
+                                    <Text text="{= ${dash>/summary/executed} + ' órdenes'}" class="mdGaugeOrdersInside" />
                                 </VBox>
-
-                                <HBox
-                                    alignItems="Center"
-                                    justifyContent="End"
-                                    class="mdChartLegend">
-
-                                    <HBox
-                                        alignItems="Center"
-                                        class="mdLegendItem">
-                                        <VBox class="mdLegendLine mdLineBlue"/>
-                                        <Text text="OT Ejecutadas"/>
+                            </VBox>
+                            <HBox class="mdGaugeLabels" justifyContent="SpaceBetween">
+                                <Text text="0%" />
+                                <Text text="100%" />
+                            </HBox>
+                        </VBox>
+                        <HBox class="mdTargetBand mdTargetBlue" alignItems="Center" justifyContent="Center">
+                            <Text text="Meta ≥ 95%" />
+                        </HBox>
+                    </VBox>
+                    <VBox class="mdCard mdDeviationCard">
+                        <HBox class="mdDeviationTitleRow" alignItems="Center" justifyContent="Center">
+                            <Text text="Desviación general del periodo" textAlign="Center" wrapping="false" class="mdDeviationTitle" />
+                        </HBox>
+                        <Text text="{dash>/summary/deviation}" class="mdMetricValue mdRedText" />
+                        <Text text="Fuera de tolerancia" class="mdMetricCaption" />
+                        <VBox class="mdDeviationGauge">
+                            <HBox class="mdDeviationBar" renderType="Bare">
+                                <VBox class="mdDevGood" />
+                                <VBox class="mdDevWarn" />
+                                <VBox class="mdDevBad" />
+                                <VBox class="mdDevMarker" />
+                            </HBox>
+                            <HBox class="mdScaleLabels" justifyContent="SpaceBetween">
+                                <Text text="0%" />
+                                <Text text="6%" />
+                                <Text text="15%" />
+                            </HBox>
+                        </VBox>
+                        <HBox class="mdTargetBand mdTargetRed" alignItems="Center" justifyContent="Center">
+                            <Text text="Meta ≤ 5%" />
+                        </HBox>
+                    </VBox>
+                    <VBox class="mdCard mdCausesCard">
+                        <Title text="Causas de no ejecución" level="H3" class="mdCardTitle" />
+                        <List items="{dash>/causes}" showSeparators="None" class="mdCauseList">
+                            <CustomListItem>
+                                <HBox class="mdCauseRow" alignItems="Center" renderType="Bare">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>tone}" writeToDom="true" />
+                                    </customData>
+                                    <HBox class="mdCauseName" alignItems="Center">
+                                        <VBox class="mdCauseDot" />
+                                        <Text text="{dash>label}" />
                                     </HBox>
-
-                                    <HBox
-                                        alignItems="Center"
-                                        class="mdLegendItem">
-                                        <VBox class="mdLegendLine mdLineGreen"/>
-                                        <Text text="% Cumplimiento"/>
+                                    <HBox class="mdCauseTrack" alignItems="Center">
+                                        <HBox class="mdCauseFill" width="{dash>width}" />
                                     </HBox>
+                                    <Text text="{dash>value}" class="mdCauseValue" />
                                 </HBox>
-                            </HBox>
-
-                            <!-- Cuerpo -->
-                            <HBox
-                                width="100%"
-                                height="100%"
-                                alignItems="Stretch"
-                                class="mdExecutionBody">
-
-                                <!-- Gráfica y semanas -->
-                                <VBox
-                                    width="100%"
-                                    height="100%"
-                                    renderType="Div"
-                                    class="mdExecutionChartColumn">
-
-                                    <!-- Área gráfica -->
-                                    <VBox
-                                        width="100%"
-                                        height="100%"
-                                        renderType="Div"
-                                        class="mdExecutionChartFrame">
-
-                                        <!-- Área interna de trazado -->
-                                        <VBox
-                                            renderType="Div"
-                                            class="mdExecutionPlotArea">
-
-                                            <!-- Rejilla -->
-                                            <VBox class="mdChartGrid mdChartGrid1"/>
-                                            <VBox class="mdChartGrid mdChartGrid2"/>
-                                            <VBox class="mdChartGrid mdChartGrid3"/>
-                                            <VBox class="mdChartGrid mdChartGrid4"/>
-                                            <VBox class="mdChartGrid mdChartGrid5"/>
-
-                                            <!-- Líneas completas estables -->
-                                            <VBox class="mdChartPolyline mdChartPolylinePlan"/>
-                                            <VBox class="mdChartPolyline mdChartPolylineActual"/>
-                                            <VBox class="mdChartPolyline mdChartPolylineCompliance"/>
-
-                                            <!-- Puntos OT Planeadas -->
-                                            <VBox class="mdChartPoint mdChartPointPlan mdChartPlanP1"/>
-                                            <VBox class="mdChartPoint mdChartPointPlan mdChartPlanP2"/>
-                                            <VBox class="mdChartPoint mdChartPointPlan mdChartPlanP3"/>
-                                            <VBox class="mdChartPoint mdChartPointPlan mdChartPlanP4"/>
-                                            <VBox class="mdChartPoint mdChartPointPlan mdChartPlanP5"/>
-
-                                            <!-- Puntos OT Ejecutadas -->
-                                            <VBox class="mdChartPoint mdChartPointActual mdChartActualP1"/>
-                                            <VBox class="mdChartPoint mdChartPointActual mdChartActualP2"/>
-                                            <VBox class="mdChartPoint mdChartPointActual mdChartActualP3"/>
-                                            <VBox class="mdChartPoint mdChartPointActual mdChartActualP4"/>
-                                            <VBox class="mdChartPoint mdChartPointActual mdChartActualP5"/>
-
-                                            <!-- Puntos de cumplimiento -->
-                                            <VBox class="mdChartPoint mdChartPointCompliance mdChartComplianceP1"/>
-                                            <VBox class="mdChartPoint mdChartPointCompliance mdChartComplianceP2"/>
-                                            <VBox class="mdChartPoint mdChartPointCompliance mdChartComplianceP3"/>
-                                            <VBox class="mdChartPoint mdChartPointCompliance mdChartComplianceP4"/>
-                                            <VBox class="mdChartPoint mdChartPointCompliance mdChartComplianceP5"/>
-                                        </VBox>
-
-                                        <!-- Eje izquierdo -->
-                                        <Text text="300" class="mdChartAxisLabel mdChartAxisL1"/>
-                                        <Text text="225" class="mdChartAxisLabel mdChartAxisL2"/>
-                                        <Text text="150" class="mdChartAxisLabel mdChartAxisL3"/>
-                                        <Text text="75" class="mdChartAxisLabel mdChartAxisL4"/>
-                                        <Text text="0" class="mdChartAxisLabel mdChartAxisL5"/>
-
-                                        <!-- Eje derecho -->
-                                        <Text text="100%" class="mdChartAxisRight mdChartAxisR1"/>
-                                        <Text text="80%" class="mdChartAxisRight mdChartAxisR2"/>
-                                        <Text text="60%" class="mdChartAxisRight mdChartAxisR3"/>
-                                        <Text text="40%" class="mdChartAxisRight mdChartAxisR4"/>
-                                        <Text text="20%" class="mdChartAxisRight mdChartAxisR5"/>
-                                    </VBox>
-
-                                    <!-- Semanas -->
-                                    <HBox
-                                        width="100%"
-                                        alignItems="Start"
-                                        class="mdExecutionWeeksRow">
-
-                                        <VBox class="mdExecutionWeekCell">
-                                            <Text text="Sem 18" class="mdExecutionWeekTitle"/>
-                                            <Text text="(28 Abr - 4 May)" class="mdExecutionWeekDate"/>
-                                        </VBox>
-
-                                        <VBox class="mdExecutionWeekCell">
-                                            <Text text="Sem 19" class="mdExecutionWeekTitle"/>
-                                            <Text text="(5 - 11 May)" class="mdExecutionWeekDate"/>
-                                        </VBox>
-
-                                        <VBox class="mdExecutionWeekCell">
-                                            <Text text="Sem 20" class="mdExecutionWeekTitle"/>
-                                            <Text text="(12 - 18 May)" class="mdExecutionWeekDate"/>
-                                        </VBox>
-
-                                        <VBox class="mdExecutionWeekCell">
-                                            <Text text="Sem 21" class="mdExecutionWeekTitle"/>
-                                            <Text text="(19 - 25 May)" class="mdExecutionWeekDate"/>
-                                        </VBox>
-
-                                        <VBox class="mdExecutionWeekCell">
-                                            <Text text="Sem 22" class="mdExecutionWeekTitle"/>
-                                            <Text text="(26 May - 1 Jun)" class="mdExecutionWeekDate"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
-
-                                <!-- Panel derecho -->
-                                <VBox
-                                    width="100%"
-                                    height="100%"
-                                    renderType="Div"
-                                    alignItems="Center"
-                                    justifyContent="Center"
-                                    class="mdForecastPanel">
-
-                                    <Text
-                                        text="Progreso órdenes del periodo"
-                                        class="mdForecastLabel"/>
-
-                                    <Text
-                                        text="{dash>/summary/forecast}%"
-                                        class="mdForecastValue"/>
-
-                                    <Text
-                                        text="Cumplimiento estimado"
-                                        class="mdForecastSub"/>
-
-                                    <VBox class="mdForecastDivider"/>
-
-                                    <Text
-                                        text="{= ${dash>/summary/forecastExecuted} + ' / ' + ${dash>/summary/planned} }"
-                                        class="mdForecastOrders"/>
-
-                                    <Text
-                                        text="Órdenes"
-                                        class="mdForecastOrdersLabel"/>
-                                </VBox>
-                            </HBox>
+                            </CustomListItem>
+                        </List>
+                        <HBox class="mdInfoBand" alignItems="Center">
+                            <core:Icon src="sap-icon://message-information" />
+                            <Text text="22 órdenes no ejecutadas representan el 5.2% del plan." />
+                        </HBox>
+                    </VBox>
+                    <VBox class="mdCard mdDetailCard">
+                        <Button text="Ver detalle" icon="sap-icon://navigation-right-arrow" iconFirst="false" type="Transparent" press=".onVerDetalle" class="mdDetailButton">
+                            <customData>
+                                <core:CustomData key="section" value="no_ejecutadas" />
+                            </customData>
+                        </Button>
+                        <VBox class="mdDetailBody" alignItems="Center" justifyContent="SpaceAround">
+                            <VBox class="mdRoundIcon mdBlueSoft" alignItems="Center" justifyContent="Center">
+                                <core:Icon src="sap-icon://task" />
+                            </VBox>
+                            <Text text="{dash>/summary/nonExecuted}" class="mdDetailNumber" />
+                            <Text text="OT" class="mdDetailLabel" />
+                            <VBox class="mdDivider" />
+                            <Text text="Total" class="mdDetailLabel" />
+                            <Text text="{dash>/summary/nonExecutedPercent}" class="mdDetailPercent" />
                         </VBox>
-
-                        <!-- Heatmap -->
-                        <VBox class="mdCard mdHeatCard">
-                            <HBox class="mdCardHeader">
-                                <VBox>
-                                    <Title
-                                        text="Cumplimiento del plan por zona y periodo"
-                                        level="H3"
-                                        class="mdSectionTitle"/>
-                                    <Text text="% de ejecución" class="mdSectionSubtitle"/>
-                                </VBox>
+                    </VBox>
+                </HBox>
+                <!-- Ejecución y matriz por zonas -->
+                <HBox class="mdGridRow mdMiddleRow" renderType="Bare" wrap="NoWrap">
+                    <VBox class="mdCard mdExecutionCard">
+                        <HBox class="mdCardHeader" alignItems="Start" justifyContent="SpaceBetween">
+                            <VBox>
+                                <Title text="Ejecución del plan del periodo" level="H3" class="mdCardTitle" />
+                                <Text text="Planeado vs real y equipo por semana" class="mdCardSubtitle" />
+                            </VBox>
+                            <HBox class="mdChartLegend" alignItems="Center">
+                                <HBox alignItems="Center">
+                                    <VBox class="mdLegendLine mdLineBlueKey" />
+                                    <Text text="OT Ejecutadas" />
+                                </HBox>
+                                <HBox alignItems="Center">
+                                    <VBox class="mdLegendLine mdLineGrayKey" />
+                                    <Text text="Plan" />
+                                </HBox>
+                                <HBox alignItems="Center">
+                                    <VBox class="mdLegendLine mdLineGreenKey" />
+                                    <Text text="% Cumplimiento" />
+                                </HBox>
                             </HBox>
-                            <VBox class="mdHeatTableUi5">
-                                <HBox class="mdHeatRow mdHeatHeaderRow">
-                                    <Text text="" class="mdHeatCell mdHeatHeaderCell mdHeatZoneCell"/>
-                                    <Text text="29 Abr - 5 May" class="mdHeatCell mdHeatHeaderCell"/>
-                                    <Text text="6 - 12 May" class="mdHeatCell mdHeatHeaderCell"/>
-                                    <Text text="13 - 19 May" class="mdHeatCell mdHeatHeaderCell"/>
-                                    <Text text="20 - 26 May" class="mdHeatCell mdHeatHeaderCell"/>
-                                    <Text text="27 May - 2 Jun" class="mdHeatCell mdHeatHeaderCell"/>
-                                    <Text text="Cumplimiento" class="mdHeatCell mdHeatHeaderCell"/>
-                                </HBox>
-
-                                <HBox class="mdHeatRow">
-                                    <Text text="Norte" class="mdHeatCell mdHeatZoneCell"/>
-                                    <Text text="74%" class="mdHeatCell heatYellow"/>
-                                    <Text text="67%" class="mdHeatCell heatOrange"/>
-                                    <Text text="88%" class="mdHeatCell heatGreen"/>
-                                    <Text text="92%" class="mdHeatCell heatGreen"/>
-                                    <Text text="90%" class="mdHeatCell heatGreen"/>
-                                    <Text text="82%" class="mdHeatCell heatTotal"/>
-                                </HBox>
-
-                                <HBox class="mdHeatRow">
-                                    <Text text="Centro" class="mdHeatCell mdHeatZoneCell"/>
-                                    <Text text="68%" class="mdHeatCell heatOrange"/>
-                                    <Text text="70%" class="mdHeatCell heatYellow"/>
-                                    <Text text="85%" class="mdHeatCell heatGreen"/>
-                                    <Text text="79%" class="mdHeatCell heatYellow"/>
-                                    <Text text="88%" class="mdHeatCell heatGreen"/>
-                                    <Text text="77%" class="mdHeatCell heatTotal"/>
-                                </HBox>
-
-                                <HBox class="mdHeatRow">
-                                    <Text text="Sur" class="mdHeatCell mdHeatZoneCell"/>
-                                    <Text text="61%" class="mdHeatCell heatOrange"/>
-                                    <Text text="61%" class="mdHeatCell heatOrange"/>
-                                    <Text text="72%" class="mdHeatCell heatYellow"/>
-                                    <Text text="76%" class="mdHeatCell heatYellow"/>
-                                    <Text text="84%" class="mdHeatCell heatGreen"/>
-                                    <Text text="71%" class="mdHeatCell heatTotal"/>
-                                </HBox>
-
-                                <HBox class="mdHeatRow">
-                                    <Text text="Este" class="mdHeatCell mdHeatZoneCell"/>
-                                    <Text text="58%" class="mdHeatCell heatRed"/>
-                                    <Text text="62%" class="mdHeatCell heatOrange"/>
-                                    <Text text="75%" class="mdHeatCell heatYellow"/>
-                                    <Text text="62%" class="mdHeatCell heatOrange"/>
-                                    <Text text="78%" class="mdHeatCell heatYellow"/>
-                                    <Text text="67%" class="mdHeatCell heatTotal"/>
-                                </HBox>
-
-                                <HBox class="mdHeatRow">
-                                    <Text text="Oeste" class="mdHeatCell mdHeatZoneCell"/>
-                                    <Text text="46%" class="mdHeatCell heatRed"/>
-                                    <Text text="52%" class="mdHeatCell heatRed"/>
-                                    <Text text="63%" class="mdHeatCell heatOrange"/>
-                                    <Text text="68%" class="mdHeatCell heatOrange"/>
-                                    <Text text="70%" class="mdHeatCell heatYellow"/>
-                                    <Text text="60%" class="mdHeatCell heatTotal"/>
+                        </HBox>
+                        <HBox class="mdExecutionBody" renderType="Bare">
+                            <VBox class="mdLineChart">
+                                <core:HTML sanitizeContent="false" content='&lt;svg viewBox=&quot;0 0 620 175&quot; preserveAspectRatio=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;g class=&quot;mdChartGrid&quot;&gt;&lt;line x1=&quot;48&quot; y1=&quot;18&quot; x2=&quot;588&quot; y2=&quot;18&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;52&quot; x2=&quot;588&quot; y2=&quot;52&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;86&quot; x2=&quot;588&quot; y2=&quot;86&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;120&quot; x2=&quot;588&quot; y2=&quot;120&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;150&quot; x2=&quot;588&quot; y2=&quot;150&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdAxisText&quot;&gt;&lt;text x=&quot;8&quot; y=&quot;22&quot;&gt;300&lt;/text&gt;&lt;text x=&quot;8&quot; y=&quot;56&quot;&gt;225&lt;/text&gt;&lt;text x=&quot;8&quot; y=&quot;90&quot;&gt;150&lt;/text&gt;&lt;text x=&quot;16&quot; y=&quot;124&quot;&gt;75&lt;/text&gt;&lt;text x=&quot;24&quot; y=&quot;154&quot;&gt;0&lt;/text&gt;&lt;/g&gt;&lt;polyline points=&quot;70,100 190,86 310,66 430,45 550,92&quot; class=&quot;mdChartPlan&quot;/&gt;&lt;polyline points=&quot;70,122 190,108 310,88 430,69 550,116&quot; class=&quot;mdChartReal&quot;/&gt;&lt;polyline points=&quot;70,72 190,70 310,39 430,37 550,78&quot; class=&quot;mdChartRate&quot;/&gt;&lt;g class=&quot;mdDotsPlan&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;100&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;86&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;66&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;45&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;92&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdDotsReal&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;122&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;108&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;88&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;69&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;116&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdDotsRate&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;72&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;70&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;39&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;37&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;78&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdXAxisText&quot;&gt;&lt;text x=&quot;70&quot; y=&quot;169&quot;&gt;Sem 18&lt;/text&gt;&lt;text x=&quot;190&quot; y=&quot;169&quot;&gt;Sem 19&lt;/text&gt;&lt;text x=&quot;310&quot; y=&quot;169&quot;&gt;Sem 20&lt;/text&gt;&lt;text x=&quot;430&quot; y=&quot;169&quot;&gt;Sem 21&lt;/text&gt;&lt;text x=&quot;550&quot; y=&quot;169&quot;&gt;Sem 22&lt;/text&gt;&lt;/g&gt;&lt;/svg&gt;' />
+                                <HBox class="mdWeekDates" renderType="Bare">
+                                    <Text text="(28 Abr - 4 May)" />
+                                    <Text text="(5 - 11 May)" />
+                                    <Text text="(12 - 18 May)" />
+                                    <Text text="(19 - 25 May)" />
+                                    <Text text="(26 May - 1 Jun)" />
                                 </HBox>
                             </VBox>
-
-<HBox class="mdHeatLegend" justifyContent="Center" alignItems="Center">
-                                <HBox alignItems="Center"><VBox class="mdHeatDot mdHeatDotRed"/><Text text="&lt; 70%"/></HBox>
-                                <HBox alignItems="Center"><VBox class="mdHeatDot mdHeatDotYellow"/><Text text="70% - 84%"/></HBox>
-                                <HBox alignItems="Center"><VBox class="mdHeatDot mdHeatDotGreen"/><Text text="85% - 94%"/></HBox>
-                                <HBox alignItems="Center"><VBox class="mdHeatDot mdHeatDotBlue"/><Text text="≥ 95%"/></HBox>
-                            </HBox>
-                        </VBox>
-                    </HBox>
-
-                    <!-- =====================================================
-                         FILA INFERIOR PRINCIPAL
-                         ===================================================== -->
-                    <HBox class="mdTwoColumnGrid" alignItems="Stretch">
-                        <!-- Capacidad de plantilla V2 -->
-                        <VBox class="mdCard mdCapV2Card">
-                            <HBox class="mdCapV2Header" alignItems="Center">
-                                <Title
-                                    text="Capacidad de plantilla vs horas programadas"
-                                    level="H3"
-                                    class="mdSectionTitle mdCapV2Title"/>
-                            </HBox>
-
-                            <HBox
-                                class="mdCapV2Main"
-                                width="100%"
-                                height="100%"
-                                fitContainer="true"
-                                alignItems="Stretch">
-
-                                <!-- Resumen -->
-                                <VBox class="mdCapV2Summary">
-                                    <layoutData>
-                                        <FlexItemData
-                                            growFactor="10"
-                                            shrinkFactor="1"
-                                            baseSize="0%"/>
-                                    </layoutData>
-
-                                    <HBox class="mdCapV2SummaryRow" alignItems="Center">
-                                        <core:Icon
-                                            src="sap-icon://employee"
-                                            class="mdCapV2SummaryIcon"/>
-                                        <VBox class="mdCapV2SummaryText">
-                                            <Text
-                                                text="Mecánicos activos"
-                                                class="mdCapV2Eyebrow"/>
-                                            <Text
-                                                text="{dash>/capacity/mechanics}"
-                                                class="mdCapV2SummaryValue"/>
-                                        </VBox>
-                                    </HBox>
-
-                                    <HBox class="mdCapV2SummaryRow" alignItems="Center">
-                                        <core:Icon
-                                            src="sap-icon://calendar"
-                                            class="mdCapV2SummaryIcon"/>
-                                        <VBox class="mdCapV2SummaryText">
-                                            <Text
-                                                text="Días laborables"
-                                                class="mdCapV2Eyebrow"/>
-                                            <Text
-                                                text="{dash>/capacity/workdays}"
-                                                class="mdCapV2SummaryValue"/>
-                                        </VBox>
-                                    </HBox>
-
-                                    <HBox class="mdCapV2SummaryRow" alignItems="Center">
-                                        <core:Icon
-                                            src="sap-icon://history"
-                                            class="mdCapV2SummaryIcon"/>
-                                        <VBox class="mdCapV2SummaryText">
-                                            <Text
-                                                text="Turnos considerados"
-                                                class="mdCapV2Eyebrow"/>
-                                            <Text
-                                                text="Diurno, Nocturno,"
-                                                class="mdCapV2SummarySmall"/>
-                                            <Text
-                                                text="Fin de semana"
-                                                class="mdCapV2SummarySmall"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
-
-                                <!-- Barras -->
-                                <VBox class="mdCapV2Bars">
-                                    <layoutData>
-                                        <FlexItemData
-                                            growFactor="20"
-                                            shrinkFactor="1"
-                                            baseSize="0%"/>
-                                    </layoutData>
-
-                                    <VBox class="mdCapV2BarRow">
-                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text
-                                                text="Capacidad disponible de plantilla"
-                                                class="mdCapV2BarLabel"/>
-                                            <Text
-                                                text="6,400 h"
-                                                class="mdCapV2BarValue"/>
-                                        </HBox>
-                                        <ProgressIndicator
-                                            percentValue="100"
-                                            displayValue=""
-                                            class="mdCapV2Progress mdCapV2ProgressBlue"/>
-                                    </VBox>
-
-                                    <VBox class="mdCapV2BarRow">
-                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text
-                                                text="Horas programadas en órdenes"
-                                                class="mdCapV2BarLabel"/>
-                                            <Text
-                                                text="5,900 h"
-                                                class="mdCapV2BarValue"/>
-                                        </HBox>
-                                        <ProgressIndicator
-                                            percentValue="92.1"
-                                            displayValue=""
-                                            class="mdCapV2Progress mdCapV2ProgressBlue"/>
-                                    </VBox>
-
-                                    <VBox class="mdCapV2BarRow">
-                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text
-                                                text="Horas reales utilizadas"
-                                                class="mdCapV2BarLabel"/>
-                                            <Text
-                                                text="5,842 h"
-                                                class="mdCapV2BarValue"/>
-                                        </HBox>
-                                        <ProgressIndicator
-                                            percentValue="91.2"
-                                            displayValue=""
-                                            class="mdCapV2Progress mdCapV2ProgressGreen"/>
-                                    </VBox>
-
-                                    <HBox class="mdCapV2Scale" justifyContent="SpaceBetween">
-                                        <Text text="0"/>
-                                        <Text text="2,000"/>
-                                        <Text text="4,000"/>
-                                        <Text text="6,000"/>
-                                    </HBox>
-                                </VBox>
-
-                                <!-- KPIs laterales -->
-                                <VBox class="mdCapV2Kpis">
-                                    <layoutData>
-                                        <FlexItemData
-                                            growFactor="10"
-                                            shrinkFactor="1"
-                                            baseSize="0%"/>
-                                    </layoutData>
-
-                                    <HBox
-                                        class="mdCapV2Kpi mdCapV2KpiRed"
-                                        justifyContent="SpaceBetween"
-                                        alignItems="Center">
-                                        <VBox>
-                                            <Text
-                                                text="Capacidad comprometida"
-                                                class="mdCapV2KpiLabel"/>
-                                            <Text
-                                                text="92.1%"
-                                                class="mdCapV2KpiValue mdCapV2RedText"/>
-                                            <Text
-                                                text="5,900 / 6,400 h"
-                                                class="mdCapV2KpiSub"/>
-                                        </VBox>
-                                        <VBox class="mdCapV2KpiIconWrap mdCapV2KpiIconRed">
-                                            <core:Icon
-                                                src="sap-icon://performance"
-                                                class="mdCapV2KpiIcon"/>
-                                        </VBox>
-                                    </HBox>
-
-                                    <HBox
-                                        class="mdCapV2Kpi mdCapV2KpiGreen"
-                                        justifyContent="SpaceBetween"
-                                        alignItems="Center">
-                                        <VBox>
-                                            <Text
-                                                text="Margen disponible"
-                                                class="mdCapV2KpiLabel"/>
-                                            <Text
-                                                text="500 h"
-                                                class="mdCapV2KpiValue mdCapV2GreenText"/>
-                                            <Text
-                                                text="8% disponible - programado"
-                                                class="mdCapV2KpiSub"/>
-                                        </VBox>
-                                        <VBox class="mdCapV2KpiIconWrap mdCapV2KpiIconGreen">
-                                            <core:Icon
-                                                src="sap-icon://performance"
-                                                class="mdCapV2KpiIcon"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
-                            </HBox>
-
-                            <!-- Detalle por turno -->
-                            <HBox
-                                class="mdCapV2ShiftGrid"
-                                width="100%"
-                                height="100%"
-                                fitContainer="true"
-                                alignItems="Stretch">
-
-                                <VBox class="mdCapV2ShiftCard mdCapV2ShiftDay">
-                                    <layoutData>
-                                        <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
-                                    </layoutData>
-                                    <HBox class="mdCapV2ShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://lightbulb" class="mdCapV2ShiftIcon"/>
-                                            <Text text="Diurno" class="mdCapV2ShiftTitle"/>
-                                        </HBox>
-                                        <Text text="94.6%" class="mdCapV2ShiftPercent"/>
-                                    </HBox>
-                                    <VBox class="mdCapV2ShiftMetricsUi5">
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Personal" class="mdCapV2MetricLabel"/>
-                                            <Text text="38" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Capacidad" class="mdCapV2MetricLabel"/>
-                                            <Text text="4,200 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Programado" class="mdCapV2MetricLabel"/>
-                                            <Text text="3,900 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Utilizado" class="mdCapV2MetricLabel"/>
-                                            <Text text="94.6%" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                    </VBox>
-                                    <ProgressIndicator
-                                        percentValue="94.6"
-                                        displayValue=""
-                                        class="mdCapV2ShiftProgress"/>
-                                    <HBox class="mdCapV2ShiftFooter" justifyContent="SpaceBetween" alignItems="Center">
-                                        <Text text="Estado" class="mdCapV2ShiftStateLabel"/>
-                                        <Text text="Normal" class="mdCapV2StatePill mdCapV2StateNormal"/>
-                                    </HBox>
-                                </VBox>
-
-                                <VBox class="mdCapV2ShiftCard mdCapV2ShiftNight">
-                                    <layoutData>
-                                        <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
-                                    </layoutData>
-                                    <HBox class="mdCapV2ShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://lateness" class="mdCapV2ShiftIcon"/>
-                                            <Text text="Nocturno" class="mdCapV2ShiftTitle"/>
-                                        </HBox>
-                                        <Text text="88.0%" class="mdCapV2ShiftPercent"/>
-                                    </HBox>
-                                    <VBox class="mdCapV2ShiftMetricsUi5">
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Personal" class="mdCapV2MetricLabel"/>
-                                            <Text text="30" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Capacidad" class="mdCapV2MetricLabel"/>
-                                            <Text text="1,200 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Programado" class="mdCapV2MetricLabel"/>
-                                            <Text text="1,050 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Utilizado" class="mdCapV2MetricLabel"/>
-                                            <Text text="88.0%" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                    </VBox>
-                                    <ProgressIndicator
-                                        percentValue="88"
-                                        displayValue=""
-                                        class="mdCapV2ShiftProgress"/>
-                                    <HBox class="mdCapV2ShiftFooter" justifyContent="SpaceBetween" alignItems="Center">
-                                        <Text text="Estado" class="mdCapV2ShiftStateLabel"/>
-                                        <Text text="Carga a tiempo" class="mdCapV2StatePill mdCapV2StateWarning"/>
-                                    </HBox>
-                                </VBox>
-
-                                <VBox class="mdCapV2ShiftCard mdCapV2ShiftWeekend">
-                                    <layoutData>
-                                        <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
-                                    </layoutData>
-                                    <HBox class="mdCapV2ShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://appointment-2" class="mdCapV2ShiftIcon"/>
-                                            <Text text="Fin de semana" class="mdCapV2ShiftTitle"/>
-                                        </HBox>
-                                        <Text text="90.0%" class="mdCapV2ShiftPercent"/>
-                                    </HBox>
-                                    <VBox class="mdCapV2ShiftMetricsUi5">
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Personal" class="mdCapV2MetricLabel"/>
-                                            <Text text="8" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Capacidad" class="mdCapV2MetricLabel"/>
-                                            <Text text="420 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Programado" class="mdCapV2MetricLabel"/>
-                                            <Text text="380 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Utilizado" class="mdCapV2MetricLabel"/>
-                                            <Text text="90.0%" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                    </VBox>
-                                    <ProgressIndicator
-                                        percentValue="90"
-                                        displayValue=""
-                                        class="mdCapV2ShiftProgress"/>
-                                    <HBox class="mdCapV2ShiftFooter" justifyContent="SpaceBetween" alignItems="Center">
-                                        <Text text="Estado" class="mdCapV2ShiftStateLabel"/>
-                                        <Text text="Saturado" class="mdCapV2StatePill mdCapV2StateCritical"/>
-                                    </HBox>
-                                </VBox>
-
-                                <VBox class="mdCapV2ShiftCard mdCapV2ShiftTotal">
-                                    <layoutData>
-                                        <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
-                                    </layoutData>
-                                    <HBox class="mdCapV2ShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
-                                        <HBox alignItems="Center">
-                                            <core:Icon src="sap-icon://calendar" class="mdCapV2ShiftIcon"/>
-                                            <Text text="Total" class="mdCapV2ShiftTitle"/>
-                                        </HBox>
-                                        <Text text="92.1%" class="mdCapV2ShiftPercent"/>
-                                    </HBox>
-                                    <VBox class="mdCapV2ShiftMetricsUi5">
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Personal" class="mdCapV2MetricLabel"/>
-                                            <Text text="76" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Capacidad" class="mdCapV2MetricLabel"/>
-                                            <Text text="6,400 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Programado" class="mdCapV2MetricLabel"/>
-                                            <Text text="5,900 h" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                        <HBox class="mdCapV2MetricRow" justifyContent="SpaceBetween" alignItems="Center">
-                                            <Text text="Utilizado" class="mdCapV2MetricLabel"/>
-                                            <Text text="92.1%" class="mdCapV2MetricValue"/>
-                                        </HBox>
-                                    </VBox>
-                                    <ProgressIndicator
-                                        percentValue="92.1"
-                                        displayValue=""
-                                        class="mdCapV2ShiftProgress"/>
-                                    <HBox class="mdCapV2ShiftFooter" justifyContent="SpaceBetween" alignItems="Center">
-                                        <Text text="Estado" class="mdCapV2ShiftStateLabel"/>
-                                        <Text text="Carga a tiempo" class="mdCapV2StatePill mdCapV2StateWarning"/>
-                                    </HBox>
-                                </VBox>
-                            </HBox>
-                        </VBox>
-
-                        <!-- Materiales -->
-                        <VBox class="mdCard mdMaterialsCard">
-                            <HBox class="mdCardHeader">
-                                <Title
-                                    text="Consumo de materiales vs plan (Cantidades)"
-                                    level="H3"
-                                    class="mdSectionTitle"/>
-                            </HBox>
-                            <VBox class="mdMaterialsTableUi5">
-                                <HBox class="mdMaterialRow mdMaterialHeaderRow">
-                                    <Text text="Material" class="mdMaterialCell mdMaterialHeaderCell"/>
-                                    <Text text="Plan" class="mdMaterialCell mdMaterialHeaderCell"/>
-                                    <Text text="Real" class="mdMaterialCell mdMaterialHeaderCell"/>
-                                    <Text text="Variación" class="mdMaterialCell mdMaterialHeaderCell mdMaterialVariationCell"/>
-                                </HBox>
-
-                                <HBox class="mdMaterialRow">
-                                    <HBox class="mdMaterialCell mdMaterialNameCell" alignItems="Center">
-                                        <VBox class="mdMaterialIcon">
-                                            <core:Icon src="sap-icon://settings"/>
-                                        </VBox>
-                                        <VBox class="mdMaterialNameText">
-                                            <Text text="Refacciones" class="mdMaterialName"/>
-                                            <Text text="(pzas)" class="mdMaterialUnit"/>
-                                        </VBox>
-                                    </HBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="1,000 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialPlan mdMaterialW72"/>
-                                        </HBox>
-                                    </VBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="1,140 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialReal mdMaterialW86"/>
-                                        </HBox>
-                                    </VBox>
-                                    <Text text="+14%" class="mdMaterialCell mdMaterialVariationCell mdVarRed"/>
-                                </HBox>
-
-                                <HBox class="mdMaterialRow">
-                                    <HBox class="mdMaterialCell mdMaterialNameCell" alignItems="Center">
-                                        <VBox class="mdMaterialIcon">
-                                            <core:Icon src="sap-icon://product"/>
-                                        </VBox>
-                                        <VBox class="mdMaterialNameText">
-                                            <Text text="Consumibles" class="mdMaterialName"/>
-                                            <Text text="(pzas)" class="mdMaterialUnit"/>
-                                        </VBox>
-                                    </HBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="600 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialPlan mdMaterialW72"/>
-                                        </HBox>
-                                    </VBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="570 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialReal mdMaterialW68"/>
-                                        </HBox>
-                                    </VBox>
-                                    <Text text="-5%" class="mdMaterialCell mdMaterialVariationCell mdVarGreen"/>
-                                </HBox>
-
-                                <HBox class="mdMaterialRow">
-                                    <HBox class="mdMaterialCell mdMaterialNameCell" alignItems="Center">
-                                        <VBox class="mdMaterialIcon">
-                                            <core:Icon src="sap-icon://drop"/>
-                                        </VBox>
-                                        <VBox class="mdMaterialNameText">
-                                            <Text text="Lubricantes" class="mdMaterialName"/>
-                                            <Text text="(L)" class="mdMaterialUnit"/>
-                                        </VBox>
-                                    </HBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="400 L" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialPlan mdMaterialW62"/>
-                                        </HBox>
-                                    </VBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="468 L" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialReal mdMaterialW79"/>
-                                        </HBox>
-                                    </VBox>
-                                    <Text text="+17%" class="mdMaterialCell mdMaterialVariationCell mdVarRed"/>
-                                </HBox>
-
-                                <HBox class="mdMaterialRow">
-                                    <HBox class="mdMaterialCell mdMaterialNameCell" alignItems="Center">
-                                        <VBox class="mdMaterialIcon">
-                                            <core:Icon src="sap-icon://wrench"/>
-                                        </VBox>
-                                        <VBox class="mdMaterialNameText">
-                                            <Text text="Herramientas" class="mdMaterialName"/>
-                                            <Text text="(pzas)" class="mdMaterialUnit"/>
-                                        </VBox>
-                                    </HBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="200 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialPlan mdMaterialW62"/>
-                                        </HBox>
-                                    </VBox>
-                                    <VBox class="mdMaterialCell mdMaterialDataCell">
-                                        <Text text="190 pzas" class="mdMaterialValue"/>
-                                        <HBox class="mdMaterialBar">
-                                            <VBox class="mdMaterialFill mdMaterialReal mdMaterialW58"/>
-                                        </HBox>
-                                    </VBox>
-                                    <Text text="-5%" class="mdMaterialCell mdMaterialVariationCell mdVarGreen"/>
-                                </HBox>
-                            </VBox>
-
-</VBox>
-                    </HBox>
-
-                    <!-- =====================================================
-                         TARJETAS FINALES
-                         ===================================================== -->
-                    <HBox class="mdBottomGrid" alignItems="Stretch">
-
-                        <HBox class="mdBottomCard" alignItems="Center">
-                            <VBox class="mdBottomIcon mdBottomGreen"><core:Icon src="sap-icon://shield"/></VBox>
-                            <VBox class="mdBottomText">
-                                <Text text="Preventivo" class="mdBottomTitle"/>
-                                <Text text="248 / 260" class="mdBottomValue"/>
-                                <Text text="Ejecutadas / Planeadas" class="mdBottomSub"/>
-                            </VBox>
-                            <VBox class="mdMiniRing mdRingGreen" alignItems="Center" justifyContent="Center">
-                                <Text text="95.4%" class="mdMiniRingText"/>
+                            <VBox class="mdExecutionKpi" alignItems="Center" justifyContent="SpaceAround">
+                                <Text text="Progreso órdenes del periodo" class="mdCardSubtitle" />
+                                <Text text="{dash>/summary/forecast}" class="mdForecastValue" />
+                                <Text text="Cumplimiento estimado" class="mdCardSubtitle" />
+                                <VBox class="mdDivider" />
+                                <Text text="{dash>/summary/forecastExecuted}" wrapping="false" class="mdForecastOrders" />
+                                <Text text="Órdenes" wrapping="false" class="mdCardSubtitle" />
                             </VBox>
                         </HBox>
-
-                        <HBox class="mdBottomCard" alignItems="Center">
-                            <VBox class="mdBottomIcon mdBottomBlue"><core:Icon src="sap-icon://wrench"/></VBox>
-                            <VBox class="mdBottomText">
-                                <Text text="Correctivo" class="mdBottomTitle"/>
-                                <Text text="88 / 95" class="mdBottomValue"/>
-                                <Text text="Ejecutadas / Planeadas" class="mdBottomSub"/>
+                    </VBox>
+                    <VBox class="mdCard mdHeatmapCard">
+                        <Title text="Cumplimiento del plan por zona y periodo" level="H3" class="mdCardTitle" />
+                        <VBox class="mdHeatmapTable">
+                            <HBox class="mdHeatRow mdHeatHead" renderType="Bare">
+                                <Text text="" />
+                                <Text text="28 Abr - 4 May" />
+                                <Text text="5 - 11 May" />
+                                <Text text="12 - 18 May" />
+                                <Text text="19 - 25 May" />
+                                <Text text="26 May - 1 Jun" />
+                                <Text text="Cumplimiento general" />
+                            </HBox>
+                            <HBox class="mdHeatRow" renderType="Bare">
+                                <Text text="Norte" class="mdZone" />
+                                <Text text="74%" class="mdHeatYellow" />
+                                <Text text="67%" class="mdHeatOrange" />
+                                <Text text="87%" class="mdHeatGreen" />
+                                <Text text="87%" class="mdHeatGreen" />
+                                <Text text="80%" class="mdHeatGreen" />
+                                <Text text="82%" class="mdHeatTotal" />
+                            </HBox>
+                            <HBox class="mdHeatRow" renderType="Bare">
+                                <Text text="Centro" class="mdZone" />
+                                <Text text="64%" class="mdHeatYellow" />
+                                <Text text="70%" class="mdHeatYellow" />
+                                <Text text="85%" class="mdHeatGreen" />
+                                <Text text="91%" class="mdHeatGreen" />
+                                <Text text="84%" class="mdHeatGreen" />
+                                <Text text="77%" class="mdHeatTotal" />
+                            </HBox>
+                            <HBox class="mdHeatRow" renderType="Bare">
+                                <Text text="Sur" class="mdZone" />
+                                <Text text="61%" class="mdHeatYellow" />
+                                <Text text="61%" class="mdHeatYellow" />
+                                <Text text="72%" class="mdHeatOrange" />
+                                <Text text="78%" class="mdHeatYellow" />
+                                <Text text="84%" class="mdHeatGreen" />
+                                <Text text="71%" class="mdHeatTotal" />
+                            </HBox>
+                            <HBox class="mdHeatRow" renderType="Bare">
+                                <Text text="Este" class="mdZone" />
+                                <Text text="54%" class="mdHeatOrange" />
+                                <Text text="62%" class="mdHeatYellow" />
+                                <Text text="71%" class="mdHeatYellow" />
+                                <Text text="66%" class="mdHeatOrange" />
+                                <Text text="72%" class="mdHeatYellow" />
+                                <Text text="66%" class="mdHeatTotal" />
+                            </HBox>
+                            <HBox class="mdHeatRow" renderType="Bare">
+                                <Text text="Oeste" class="mdZone" />
+                                <Text text="46%" class="mdHeatRed" />
+                                <Text text="53%" class="mdHeatOrange" />
+                                <Text text="61%" class="mdHeatYellow" />
+                                <Text text="71%" class="mdHeatYellow" />
+                                <Text text="70%" class="mdHeatYellow" />
+                                <Text text="60%" class="mdHeatTotal" />
+                            </HBox>
+                        </VBox>
+                        <HBox class="mdHeatLegend" alignItems="Center" justifyContent="Center">
+                            <HBox alignItems="Center">
+                                <VBox class="mdLegendDot mdDotRed" />
+                                <Text text="&lt; 70%" />
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="mdLegendDot mdDotYellow" />
+                                <Text text="70% - 84%" />
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="mdLegendDot mdDotGreen" />
+                                <Text text="85% - 94%" />
+                            </HBox>
+                            <HBox alignItems="Center">
+                                <VBox class="mdLegendDot mdDotBlue" />
+                                <Text text="≥ 95%" />
+                            </HBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+                <!-- Capacidad y materiales -->
+                <HBox class="mdGridRow mdLowerRow" renderType="Bare" wrap="NoWrap">
+                    <VBox class="mdCard mdStaffCard">
+                        <Title text="Capacidad de plantillas vs horas programadas" level="H3" class="mdCardTitle" />
+                        <HBox class="mdStaffTop" renderType="Bare">
+                            <VBox class="mdStaffFacts" justifyContent="SpaceBetween">
+                                <HBox class="mdStaffFact" alignItems="Center">
+                                    <core:Icon src="sap-icon://employee" />
+                                    <VBox>
+                                        <Text text="Turnos activos" />
+                                        <Text text="76" class="mdFactValue" />
+                                    </VBox>
+                                </HBox>
+                                <HBox class="mdStaffFact" alignItems="Center">
+                                    <core:Icon src="sap-icon://calendar" />
+                                    <VBox>
+                                        <Text text="Total técnicos" />
+                                        <Text text="21" class="mdFactValue" />
+                                    </VBox>
+                                </HBox>
+                                <HBox class="mdStaffFact" alignItems="Center">
+                                    <core:Icon src="sap-icon://history" />
+                                    <VBox>
+                                        <Text text="Turnos actuales" />
+                                        <Text text="Diurno, Nocturno y" />
+                                        <Text text="fin de semana" />
+                                    </VBox>
+                                </HBox>
                             </VBox>
-                            <VBox class="mdMiniRing mdRingBlue" alignItems="Center" justifyContent="Center">
-                                <Text text="92.6%" class="mdMiniRingText"/>
+                            <VBox class="mdStaffBars" justifyContent="SpaceAround">
+                                <VBox class="mdStaffBarRow">
+                                    <HBox justifyContent="SpaceBetween">
+                                        <Text text="Capacidad disponible de plantillas" />
+                                        <Text text="6,400 h" />
+                                    </HBox>
+                                    <HBox class="mdStaffTrack">
+                                        <HBox class="mdStaffFill mdStaffBlue" width="100%" />
+                                    </HBox>
+                                </VBox>
+                                <VBox class="mdStaffBarRow">
+                                    <HBox justifyContent="SpaceBetween">
+                                        <Text text="Horas programadas en órdenes" />
+                                        <Text text="5,800 h" />
+                                    </HBox>
+                                    <HBox class="mdStaffTrack">
+                                        <HBox class="mdStaffFill mdStaffBlue" width="91%" />
+                                    </HBox>
+                                </VBox>
+                                <VBox class="mdStaffBarRow">
+                                    <HBox justifyContent="SpaceBetween">
+                                        <Text text="Horas reales utilizadas" />
+                                        <Text text="5,842 h" />
+                                    </HBox>
+                                    <HBox class="mdStaffTrack">
+                                        <HBox class="mdStaffFill mdStaffGreen" width="92%" />
+                                    </HBox>
+                                </VBox>
+                                <HBox class="mdStaffScale" justifyContent="SpaceBetween">
+                                    <Text text="0" />
+                                    <Text text="2,000" />
+                                    <Text text="4,000" />
+                                    <Text text="6,000" />
+                                </HBox>
+                            </VBox>
+                            <VBox class="mdStaffKpis" justifyContent="SpaceBetween">
+                                <VBox class="mdStaffKpi mdStaffKpiRed">
+                                    <Text text="Capacidad comprometida" />
+                                    <Text text="92.1%" class="mdStaffRedValue" />
+                                    <Text text="(5,800 / 6,400 h)" class="mdStaffKpiDetail" />
+                                    <core:Icon src="sap-icon://performance" class="mdStaffKpiIcon" />
+                                </VBox>
+                                <VBox class="mdStaffKpi mdStaffKpiGreen">
+                                    <Text text="Margen disponible" />
+                                    <Text text="500 h" class="mdStaffGreenValue" />
+                                    <Text text="(8% disponible - Programado)" class="mdStaffKpiDetail" />
+                                    <core:Icon src="sap-icon://performance" class="mdStaffKpiIcon" />
+                                </VBox>
                             </VBox>
                         </HBox>
-
-                        <HBox class="mdBottomCard" alignItems="Center">
-                            <VBox class="mdBottomIcon mdBottomPurple"><core:Icon src="sap-icon://headset"/></VBox>
-                            <VBox class="mdBottomText">
-                                <Text text="Call Center" class="mdBottomTitle"/>
-                                <Text text="62 / 65" class="mdBottomValue"/>
-                                <Text text="Ejecutadas / Planeadas" class="mdBottomSub"/>
+                        <HBox class="mdShiftCards" renderType="Bare" wrap="NoWrap">
+                            <VBox class="mdShiftCard mdShiftNormal">
+                                <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://lightbulb" />
+                                        <Text text="Diurno" class="mdShiftTitle" />
+                                    </HBox>
+                                    <Text text="94.6%" class="mdShiftPercent" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Técnicos" />
+                                    <Text text="21" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Capacidad" />
+                                    <Text text="4,200 h" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Programado" />
+                                    <Text text="4,155 h" />
+                                </HBox>
+                                <Text text="Normal" class="mdState mdStateGreen" />
                             </VBox>
-                            <VBox class="mdMiniRing mdRingPurple" alignItems="Center" justifyContent="Center">
-                                <Text text="95.3%" class="mdMiniRingText"/>
+                            <VBox class="mdShiftCard mdShiftWarning">
+                                <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://lateness" />
+                                        <Text text="Nocturno" class="mdShiftTitle" />
+                                    </HBox>
+                                    <Text text="92.9%" class="mdShiftPercent" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Técnicos" />
+                                    <Text text="20" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Capacidad" />
+                                    <Text text="1,500 h" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Programado" />
+                                    <Text text="1,097 h" />
+                                </HBox>
+                                <Text text="Con exceso moderado" class="mdState mdStateOrange" />
+                            </VBox>
+                            <VBox class="mdShiftCard mdShiftError">
+                                <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://calendar" />
+                                        <Text text="Fin de semana" class="mdShiftTitle" />
+                                    </HBox>
+                                    <Text text="99.7%" class="mdShiftPercent" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Técnicos" />
+                                    <Text text="14" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Capacidad" />
+                                    <Text text="600 h" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Programado" />
+                                    <Text text="598 h" />
+                                </HBox>
+                                <Text text="Sobrecargado" class="mdState mdStateRed" />
+                            </VBox>
+                            <VBox class="mdShiftCard mdShiftWarning">
+                                <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://group" />
+                                        <Text text="Total" class="mdShiftTitle" />
+                                    </HBox>
+                                    <Text text="95.4%" class="mdShiftPercent" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Técnicos" />
+                                    <Text text="76" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Capacidad" />
+                                    <Text text="6,400 h" />
+                                </HBox>
+                                <HBox class="mdShiftData" justifyContent="SpaceBetween">
+                                    <Text text="Programado" />
+                                    <Text text="6,134 h" />
+                                </HBox>
+                                <Text text="Con exceso moderado" class="mdState mdStateOrange" />
                             </VBox>
                         </HBox>
-
-                        <HBox class="mdBottomCard" alignItems="Center">
-                            <VBox class="mdBottomIcon mdBottomRed"><core:Icon src="sap-icon://locked"/></VBox>
-                            <VBox class="mdBottomText">
-                                <Text text="Órdenes detenidas" class="mdBottomSub"/>
-                                <Text text="{dash>/summary/blockedOrders}" class="mdBlockedValue"/>
-                            </VBox>
-                            <Button
-                                icon="sap-icon://navigation-right-arrow"
-                                type="Emphasized"
-                                press=".onVerDetalle"
-                                class="mdBlockedButton">
-                                <customData>
-                                    <core:CustomData key="section" value="ordenes-detenidas"/>
-                                </customData>
-                            </Button>
-                        </HBox>
+                    </VBox>
+                    <VBox class="mdCard mdMaterialsCard">
+                        <Title text="Consumo de materiales vs plan (Cantidades)" level="H3" class="mdCardTitle" />
+                        <VBox class="mdMaterialTable">
+                            <HBox class="mdMaterialRow mdMaterialHead" renderType="Bare">
+                                <Text text="Material" />
+                                <Text text="Plan" />
+                                <Text text="Real" />
+                                <Text text="Variación" />
+                            </HBox>
+                            <List items="{dash>/materials}" showSeparators="None" class="mdMaterialList">
+                                <CustomListItem>
+                                    <HBox class="mdMaterialRow" renderType="Bare" alignItems="Center">
+                                        <HBox class="mdMaterialName" alignItems="Center">
+                                            <VBox class="mdMaterialIcon" alignItems="Center" justifyContent="Center">
+                                                <core:Icon src="{dash>icon}" />
+                                            </VBox>
+                                            <VBox>
+                                                <Text text="{dash>name}" class="mdMaterialTitle" />
+                                                <Text text="{dash>unit}" class="mdMaterialUnit" />
+                                            </VBox>
+                                        </HBox>
+                                        <VBox class="mdMaterialMeasure">
+                                            <Text text="{dash>plan}" />
+                                            <HBox class="mdMaterialTrack">
+                                                <HBox class="mdPlanFill" width="{dash>planWidth}" />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox class="mdMaterialMeasure">
+                                            <Text text="{dash>real}" />
+                                            <HBox class="mdMaterialTrack">
+                                                <HBox class="mdRealFill" width="{dash>realWidth}" />
+                                            </HBox>
+                                        </VBox>
+                                        <ObjectStatus text="{dash>variation}" state="{dash>statusState}" class="mdMaterialVariation" />
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+                    </VBox>
+                </HBox>
+                <!-- Resumen inferior -->
+                <HBox class="mdGridRow mdBottomRow" renderType="Bare" wrap="NoWrap">
+                    <HBox class="mdBottomCard mdBottomCardGreen" alignItems="Center">
+                        <VBox class="mdBottomIcon mdBottomGreen" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://shield" />
+                        </VBox>
+                        <VBox class="mdBottomText">
+                            <Text text="Preventivo" class="mdBottomTitle" />
+                            <Text text="248 / 260" class="mdBottomValue" />
+                            <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
+                        </VBox>
+                        <VBox class="mdMiniRing mdRingGreen" alignItems="Center" justifyContent="Center">
+                            <Text text="95.4%" />
+                        </VBox>
                     </HBox>
-                </VBox>
+                    <HBox class="mdBottomCard mdBottomCardBlue" alignItems="Center">
+                        <VBox class="mdBottomIcon mdBottomBlue" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://wrench" />
+                        </VBox>
+                        <VBox class="mdBottomText">
+                            <Text text="Correctivo" class="mdBottomTitle" />
+                            <Text text="88 / 95" class="mdBottomValue" />
+                            <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
+                        </VBox>
+                        <VBox class="mdMiniRing mdRingBlue" alignItems="Center" justifyContent="Center">
+                            <Text text="92.6%" />
+                        </VBox>
+                    </HBox>
+                    <HBox class="mdBottomCard mdBottomCardPurple" alignItems="Center">
+                        <VBox class="mdBottomIcon mdBottomPurple" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://headset" />
+                        </VBox>
+                        <VBox class="mdBottomText">
+                            <Text text="Call Center" class="mdBottomTitle" />
+                            <Text text="63 / 66" class="mdBottomValue" />
+                            <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
+                        </VBox>
+                        <VBox class="mdMiniRing mdRingPurple" alignItems="Center" justifyContent="Center">
+                            <Text text="95.3%" />
+                        </VBox>
+                    </HBox>
+                    <HBox class="mdBottomCard mdBottomCardRed mdBlockedCard" alignItems="Center">
+                        <VBox class="mdBottomIcon mdBottomRed" alignItems="Center" justifyContent="Center">
+                            <core:Icon src="sap-icon://locked" />
+                        </VBox>
+                        <VBox class="mdBottomText">
+                            <Text text="Órdenes detenidas" class="mdBottomSub" />
+                            <Text text="{dash>/summary/blockedOrders}" class="mdBlockedValue" />
+                        </VBox>
+                        <Button icon="sap-icon://navigation-right-arrow" type="Emphasized" press=".onVerDetalle" class="mdRedArrowButton">
+                            <customData>
+                                <core:CustomData key="section" value="ordenes_detenidas" />
+                            </customData>
+                        </Button>
+                    </HBox>
+                </HBox>
             </VBox>
         </content>
     </Page>

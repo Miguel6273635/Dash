@@ -9,119 +9,215 @@ sap.ui.define([
     return Controller.extend("mantenimiento.controller.Mantenimiento", {
 
         onInit: function () {
-            var oModel = new JSONModel(this._getMockDashboardData());
+            var oDashboardModel = new JSONModel(this._getDashboardData());
 
-            oModel.setSizeLimit(200);
-            this.getView().setModel(oModel, "dash");
+            oDashboardModel.setSizeLimit(500);
+            this.getView().setModel(oDashboardModel, "dash");
         },
 
+        /**
+         * Los filtros actualizan el request inmediatamente. Sustituye la parte
+         * marcada para llamar a tu servicio OData/REST cuando esté disponible.
+         */
         onFilterChange: function () {
             var oRequest = this._buildDashboardRequest();
+            var oModel = this.getView().getModel("dash");
 
-            console.group(
-                "DASHBOARD EJECUTIVO DE MANTENIMIENTO - FILTROS"
-            );
-            console.log(JSON.stringify(oRequest, null, 2));
-            console.groupEnd();
+            oModel.setProperty("/lastRequest", oRequest);
+
+            // Ejemplo de integración real:
+            // this.getOwnerComponent().getModel().read("/DashboardMantenimiento", {
+            //     urlParameters: oRequest.filtros,
+            //     success: this._onDashboardLoaded.bind(this),
+            //     error: this._onDashboardError.bind(this)
+            // });
         },
 
-        onActualizar: function () {
+        onAplicarFiltros: function () {
             this.onFilterChange();
-            MessageToast.show("Dashboard actualizado");
+            MessageToast.show("Filtros actualizados");
         },
 
         onVerDetalle: function (oEvent) {
-            var sSection =
-                oEvent.getSource().data("section") || "general";
+            var oSource = oEvent && oEvent.getSource ? oEvent.getSource() : null;
+            var sSection = oSource && oSource.data("section")
+                ? oSource.data("section")
+                : "general";
+            var oRouter = UIComponent.getRouterFor(this);
 
-            var oRouter =
-                UIComponent.getRouterFor(this);
-
-            console.log(
-                "Detalle solicitado:",
-                sSection
-            );
-
-            if (!oRouter) {
-                MessageToast.show(
-                    "No se encontró el router de la aplicación"
-                );
+            if (oRouter && oRouter.getRoute("MantenimientoDetalle")) {
+                oRouter.navTo("MantenimientoDetalle", {
+                    section: sSection
+                });
                 return;
             }
 
-            /*
-             * Habilitar cuando exista la ruta de detalle:
-             *
-             * oRouter.navTo("MantenimientoDetalle", {
-             *     section: sSection
-             * });
-             */
-
-            MessageToast.show(
-                "Detalle seleccionado: " + sSection
-            );
+            MessageToast.show("Detalle seleccionado: " + sSection);
         },
 
         _buildDashboardRequest: function () {
             return {
                 dashboard: "MANTENIMIENTO",
                 tipoConsulta: "GENERAL",
-
                 filtros: {
-                    periodo:
-                        this.byId("slPeriodo")
-                            .getSelectedKey() || null,
-
-                    fechaInicio:
-                        this.byId("dpInicio")
-                            .getValue() || null,
-
-                    fechaFin:
-                        this.byId("dpFin")
-                            .getValue() || null,
-
-                    zona:
-                        this.byId("slZona")
-                            .getSelectedKey() || null,
-
-                    supervisor:
-                        this.byId("slSupervisor")
-                            .getSelectedKey() || null,
-
-                    tipoOrden:
-                        this.byId("slTipoOrden")
-                            .getSelectedKey() || null,
-
-                    turno:
-                        this.byId("slTurno")
-                            .getSelectedKey() || null
+                    periodo: this._getSelectedKey("slPeriodo"),
+                    fechaInicio: this._getValue("dpInicio"),
+                    fechaFin: this._getValue("dpFin"),
+                    zona: this._getSelectedKey("slZona"),
+                    supervisor: this._getSelectedKey("slSupervisor"),
+                    tipoOrden: this._getSelectedKey("slTipoOrden"),
+                    turno: this._getSelectedKey("slTurno"),
+                    mecanico: this._getSelectedKey("slMecanico"),
+                    estadoOrden: this._getSelectedKey("slEstadoOrden")
                 }
             };
         },
 
-        _getMockDashboardData: function () {
-            return {
-                summary: {
-                    compliance: "94.8",
-                    deviation: "6.4",
-                    executed: 398,
-                    planned: 420,
-                    forecast: "96.1",
-                    forecastExecuted: 404,
-                    nonExecuted: 22,
-                    nonExecutedPercent: "5.2",
-                    blockedOrders: 18
-                },
+        _getSelectedKey: function (sControlId) {
+            var oControl = this.byId(sControlId);
 
-                capacity: {
-                    mechanics: 76,
-                    workdays: 21,
-                    availableHours: "6,400",
-                    scheduledHours: "5,900",
-                    usedHours: "5,842",
-                    committedPercent: "92.1",
-                    availableMargin: 500
-                }
+            return oControl && oControl.getSelectedKey
+                ? oControl.getSelectedKey() || null
+                : null;
+        },
+
+        _getValue: function (sControlId) {
+            var oControl = this.byId(sControlId);
+
+            return oControl && oControl.getValue
+                ? oControl.getValue() || null
+                : null;
+        },
+
+        _onDashboardLoaded: function (oData) {
+            var oModel = this.getView().getModel("dash");
+
+            if (!oData) {
+                return;
+            }
+
+            Object.keys(oData).forEach(function (sProperty) {
+                oModel.setProperty("/" + sProperty, oData[sProperty]);
+            });
+        },
+
+        _onDashboardError: function () {
+            MessageToast.show("No fue posible actualizar el dashboard");
+        },
+
+        _getDashboardData: function () {
+            return {
+                filtros: {
+                    periodo: "MAYO_2024",
+                    fechaInicio: "01/05/2024",
+                    fechaFin: "31/05/2024",
+                    zona: "TODAS",
+                    supervisor: "TODOS",
+                    tipoOrden: "TODOS",
+                    turno: "TODOS",
+                    mecanico: "TODOS",
+                    estadoOrden: "TODOS"
+                },
+                summary: {
+                    compliance: "94.8%",
+                    deviation: "6.4%",
+                    executed: "398 / 420",
+                    forecast: "96.1%",
+                    forecastExecuted: "404 / 420",
+                    nonExecuted: "22",
+                    nonExecutedPercent: "100%",
+                    blockedOrders: "18"
+                },
+                causes: [
+                    {
+                        tone: "blue",
+                        label: "Carta de no mantenimiento",
+                        value: "8 (36%)",
+                        width: "100%"
+                    },
+                    {
+                        tone: "sky",
+                        label: "Falta de materiales / refacciones",
+                        value: "5 (23%)",
+                        width: "63%"
+                    },
+                    {
+                        tone: "green",
+                        label: "Cliente no disponible",
+                        value: "3 (14%)",
+                        width: "38%"
+                    },
+                    {
+                        tone: "yellow",
+                        label: "Orden reprogramada",
+                        value: "2 (9%)",
+                        width: "25%"
+                    },
+                    {
+                        tone: "orange",
+                        label: "Mecánico no disponible",
+                        value: "2 (9%)",
+                        width: "25%"
+                    },
+                    {
+                        tone: "purple",
+                        label: "Información incompleta",
+                        value: "1 (5%)",
+                        width: "13%"
+                    },
+                    {
+                        tone: "gray",
+                        label: "Otro motivo",
+                        value: "1 (4%)",
+                        width: "13%"
+                    }
+                ],
+                materials: [
+                    {
+                        icon: "sap-icon://action-settings",
+                        name: "Refacciones",
+                        unit: "(pzas)",
+                        plan: "1,000 pzas",
+                        real: "1,140 pzas",
+                        variation: "+14%",
+                        statusState: "Error",
+                        planWidth: "72%",
+                        realWidth: "84%"
+                    },
+                    {
+                        icon: "sap-icon://product",
+                        name: "Consumibles",
+                        unit: "(pzas)",
+                        plan: "600 pzas",
+                        real: "570 pzas",
+                        variation: "-5%",
+                        statusState: "Success",
+                        planWidth: "62%",
+                        realWidth: "56%"
+                    },
+                    {
+                        icon: "sap-icon://color-fill",
+                        name: "Lubricantes",
+                        unit: "(L)",
+                        plan: "400 L",
+                        real: "468 L",
+                        variation: "+17%",
+                        statusState: "Error",
+                        planWidth: "50%",
+                        realWidth: "70%"
+                    },
+                    {
+                        icon: "sap-icon://wrench",
+                        name: "Herramientas",
+                        unit: "(pzas)",
+                        plan: "200 pzas",
+                        real: "190 pzas",
+                        variation: "-5%",
+                        statusState: "Success",
+                        planWidth: "45%",
+                        realWidth: "40%"
+                    }
+                ]
             };
         }
     });

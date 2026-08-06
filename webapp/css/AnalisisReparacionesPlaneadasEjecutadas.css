@@ -1,362 +1,424 @@
-/* ==========================================================================
+/* =========================================================
    ANÁLISIS DE REPARACIONES PLANEADAS EJECUTADAS
-   ========================================================================== */
+   ========================================================= */
 
-.repaEjecutadasPage {
-  background: #f7f9fc !important;
+.repaEjecutadasPage,
+.repaEjecutadasPage .sapMPageBgStandard,
+.repaEjecutadasPage .sapMPageEnableScrolling,
+.repaEjecutadasPage .sapMPageScroll,
+.repaEjecutadasPage .repaScroll,
+.repaEjecutadasPage .sapMScrollContScroll {
+  background: #f6f8fc;
 }
 
-.repaEjecutadasPage .sapMPageBgStandard {
-  background: #f7f9fc !important;
-}
-
-.repaEjecutadasPage .repaContainer {
-  padding: 18px 22px 28px 22px;
-  background: #f7f9fc;
-  min-height: 100%;
+.repaEjecutadasPage,
+.repaEjecutadasPage * {
   box-sizing: border-box;
 }
 
-/* ==========================================================================
-   HEADER
-   ========================================================================== */
+.repaEjecutadasPage .repaScroll,
+.repaEjecutadasPage .sapMScrollContScroll {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.repaEjecutadasPage .repaContainer {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px 10px;
+  gap: 8px;
+  background: #f6f8fc;
+}
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
 
 .repaEjecutadasPage .repaHeader {
-  margin-bottom: 14px !important;
-  padding-left: 0 !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0;
+  padding: 0;
 }
 
-/* Oculta el botón/ícono superior izquierdo */
-.repaEjecutadasPage .repaMenuBox {
-  display: none !important;
-}
-
-.repaEjecutadasPage .repaTitleRow {
-  gap: 0 !important;
-  align-items: center !important;
+.repaEjecutadasPage .repaTitleRow,
+.repaEjecutadasPage .repaHeaderText {
+  width: 100%;
+  min-width: 0;
 }
 
 .repaEjecutadasPage .repaTitleTextRow {
-  gap: 10px !important;
-  align-items: baseline !important;
+  min-width: 0;
+  gap: 5px;
 }
 
-.repaEjecutadasPage .repaTitle {
-  color: #0a124b !important;
-  font-size: 2rem !important;
-  font-weight: 900 !important;
-  line-height: 2.15rem !important;
-  letter-spacing: -0.4px !important;
+.repaEjecutadasPage .repaTitle.sapMTitle,
+.repaEjecutadasPage .repaTitleGreen.sapMTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 1.18rem;
+  line-height: 1.22rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
 }
 
-.repaEjecutadasPage .repaTitleGreen {
-  color: #16a34a !important;
-  font-size: 2rem !important;
-  font-weight: 900 !important;
-  line-height: 2.15rem !important;
-  letter-spacing: -0.4px !important;
+.repaEjecutadasPage .repaTitle.sapMTitle {
+  color: #172554;
 }
 
-.repaEjecutadasPage .repaTitle .sapMText {
-  color: #0a124b !important;
-  font-size: 2rem !important;
-  font-weight: 900 !important;
+.repaEjecutadasPage .repaTitleGreen.sapMTitle {
+  color: #16a34a;
 }
 
 .repaEjecutadasPage .repaBreadcrumb {
-  gap: 8px;
-  margin-top: 6px;
+  min-height: 13px;
+  margin-top: 3px;
+  gap: 6px;
 }
 
-.repaEjecutadasPage .repaBreadcrumb .sapMText,
+.repaEjecutadasPage .repaBreadcrumb .sapMText {
+  color: #0a6ff5;
+  font-size: 0.52rem;
+  line-height: 0.68rem;
+  font-weight: 800;
+}
+
 .repaEjecutadasPage .repaBreadcrumb .sapUiIcon {
-  color: #2563eb !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
+  color: #94a3b8;
+  font-size: 0.48rem;
 }
 
-/* ==========================================================================
-   FILTROS ALINEADOS
-   ========================================================================== */
+/* =========================================================
+   FILTROS
+   ========================================================= */
 
-.repaEjecutadasPage .repaFilterCard.sapMFlexBox,
 .repaEjecutadasPage .repaFilterCard {
-  display: grid !important;
-  grid-template-columns:
-    minmax(170px, 1fr)
-    minmax(190px, 1.1fr)
-    minmax(190px, 1.1fr)
-    minmax(150px, 0.9fr)
-    minmax(165px, 1fr)
-    minmax(180px, 1fr)
-    180px;
-  column-gap: 14px !important;
-  row-gap: 12px !important;
-  align-items: end !important;
-  background: #ffffff !important;
-  border: 1px solid #e5ebf4 !important;
-  border-radius: 16px !important;
-  padding: 16px !important;
-  margin-bottom: 16px !important;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05) !important;
-}
-
-.repaEjecutadasPage .repaFilterItem,
-.repaEjecutadasPage .repaFilterAction {
-  height: 70px !important;
-  min-height: 70px !important;
   display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-end !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  align-items: stretch;
+  background: transparent;
 }
 
-.repaEjecutadasPage .repaFilterItem .sapMLabel,
-.repaEjecutadasPage .repaFilterAction .sapMLabel {
-  height: 18px !important;
-  min-height: 18px !important;
-  line-height: 18px !important;
-  margin: 0 0 6px 0 !important;
-  padding: 0 !important;
-  color: #25315f !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
+.repaEjecutadasPage .repaFilterItem {
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  min-width: 0;
+  padding: 7px 9px;
+  justify-content: flex-start;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+}
+
+.repaEjecutadasPage .repaFilterPeriod {
+  flex: 1.08 1 108px;
+}
+
+.repaEjecutadasPage .repaFilterDate {
+  flex: 1.22 1 126px;
+}
+
+.repaEjecutadasPage .repaFilterNormal {
+  flex: 0.9 1 88px;
+}
+
+.repaEjecutadasPage .repaFilterResponsible {
+  flex: 1.04 1 104px;
+}
+
+.repaEjecutadasPage .repaFilterItem .sapMLabel {
+  display: block;
+  height: 11px;
+  min-height: 11px;
+  margin: 0 0 3px;
+  padding: 0;
+  color: #64748b;
+  font-size: 0.49rem;
+  line-height: 11px;
+  font-weight: 800;
 }
 
 .repaEjecutadasPage .repaFilterItem .sapMSlt,
-.repaEjecutadasPage .repaFilterItem .sapMInputBase {
-  width: 100% !important;
-  height: 46px !important;
-  min-height: 46px !important;
-  margin: 0 !important;
-}
-
-.repaEjecutadasPage .repaFilterItem .sapMSlt {
-  border-radius: 12px !important;
-  border: 1px solid #dfe7f2 !important;
-  background: #ffffff !important;
-  box-shadow: 0 3px 10px rgba(8, 29, 71, 0.04) !important;
-}
-
+.repaEjecutadasPage .repaFilterItem .sapMInputBase,
 .repaEjecutadasPage .repaFilterItem .sapMInputBaseContentWrapper {
-  height: 46px !important;
-  min-height: 46px !important;
-  border-radius: 12px !important;
-  border: 1px solid #dfe7f2 !important;
-  background: #ffffff !important;
-  box-shadow: 0 3px 10px rgba(8, 29, 71, 0.04) !important;
+  width: 100% !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  margin: -1px 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .repaEjecutadasPage .repaFilterItem .sapMSltLabel,
 .repaEjecutadasPage .repaFilterItem .sapMInputBaseInner {
-  height: 44px !important;
-  line-height: 44px !important;
+  width: 100% !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  margin: 0 !important;
+  padding: 0 1.25rem 0 0 !important;
   color: #172554 !important;
-  font-size: 13px !important;
-  font-weight: 800 !important;
+  background: transparent !important;
+  font-size: 0.57rem !important;
+  line-height: 22px !important;
+  font-weight: 900 !important;
+  text-overflow: ellipsis;
 }
 
 .repaEjecutadasPage .repaFilterItem .sapMSltArrow,
-.repaEjecutadasPage .repaFilterItem .sapMInputBaseIcon,
-.repaEjecutadasPage .repaFilterItem .sapUiIcon {
-  height: 44px !important;
-  line-height: 44px !important;
-  color: #172554 !important;
+.repaEjecutadasPage .repaFilterItem .sapMInputBaseIconContainer,
+.repaEjecutadasPage .repaFilterItem .sapMInputBaseIcon {
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  padding: 0 !important;
+  color: #0a6ff5 !important;
+  font-size: 0.72rem !important;
+  line-height: 22px !important;
 }
 
 .repaEjecutadasPage .repaFilterAction {
-  width: 180px !important;
-  min-width: 180px !important;
+  flex: 0 0 108px;
+  width: 108px;
+  min-width: 108px;
+  max-width: 108px;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  padding: 0;
 }
 
 .repaEjecutadasPage .repaFilterButton {
-  width: 180px !important;
-  height: 46px !important;
-  min-height: 46px !important;
-  margin: 0 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.24) !important;
+  width: 108px;
+  min-width: 108px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
 }
 
 .repaEjecutadasPage .repaFilterButton .sapMBtnInner {
-  height: 46px !important;
-  min-height: 46px !important;
-  border-radius: 12px !important;
-  background: linear-gradient(135deg, #1e63f0 0%, #1258e8 100%) !important;
-  border: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  width: 108px !important;
+  min-width: 108px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 0.45rem !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: #0a6ff5 !important;
+  box-shadow: 0 4px 10px rgba(10, 111, 245, 0.26) !important;
 }
 
 .repaEjecutadasPage .repaFilterButton .sapMBtnContent,
 .repaEjecutadasPage .repaFilterButton .sapMBtnIcon {
   color: #ffffff !important;
+  font-size: 0.55rem !important;
+  line-height: 34px !important;
   font-weight: 900 !important;
 }
 
-/* ==========================================================================
-   KPI CARDS CON DEGRADADO
-   ========================================================================== */
+.repaEjecutadasPage .repaFilterButton .sapMBtnIcon {
+  font-size: 0.66rem !important;
+}
+
+/* =========================================================
+   KPIS
+   ========================================================= */
 
 .repaEjecutadasPage .repaKpiRow {
-  gap: 14px;
-  margin-bottom: 16px;
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+  margin: 0;
 }
 
 .repaEjecutadasPage .repaKpiCard {
-  flex: 1 1 23%;
-  min-width: 255px;
-  border-radius: 18px;
-  padding: 22px 22px;
-  position: relative;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 78px;
+  min-height: 78px;
+  max-height: 78px;
+  padding: 0;
   overflow: hidden;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
-  border: 1px solid #edf1f7;
+  border: 1px solid #e2e8f0;
+  border-left-width: 3px;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.repaEjecutadasPage .repaKpiInner {
+  width: 100%;
+  height: 100%;
+  padding: 8px 12px;
+  gap: 10px;
 }
 
 .repaEjecutadasPage .repaKpiBlue {
-  background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
-  border-left: 5px solid #2f72ff;
+  border-left-color: #2563eb;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), #ffffff 48%);
 }
 
 .repaEjecutadasPage .repaKpiGreen {
-  background: linear-gradient(135deg, #ffffff 0%, #effaf2 100%);
-  border-left: 5px solid #16a34a;
+  border-left-color: #16a34a;
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12), #ffffff 48%);
 }
 
 .repaEjecutadasPage .repaKpiRed {
-  background: linear-gradient(135deg, #ffffff 0%, #fff4f4 100%);
-  border-left: 5px solid #ff3131;
+  border-left-color: #ef4444;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12), #ffffff 48%);
 }
 
 .repaEjecutadasPage .repaKpiPurple {
-  background: linear-gradient(135deg, #ffffff 0%, #f7f1ff 100%);
-  border-left: 5px solid #7c3aed;
+  border-left-color: #7c3aed;
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12), #ffffff 48%);
 }
 
 .repaEjecutadasPage .repaKpiIconBox {
-  width: 76px;
-  height: 76px;
-  min-width: 76px;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  flex: 0 0 42px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 18px;
 }
 
 .repaEjecutadasPage .repaKpiIconBox .sapUiIcon {
-  font-size: 2rem !important;
+  font-size: 1.12rem;
 }
 
 .repaEjecutadasPage .repaBlueSoft {
-  background: radial-gradient(circle at center, #ffffff 0%, #eaf1ff 100%);
+  background: #eff6ff;
 }
 
 .repaEjecutadasPage .repaGreenSoft {
-  background: radial-gradient(circle at center, #ffffff 0%, #e8f8ee 100%);
+  background: #f0fdf4;
 }
 
 .repaEjecutadasPage .repaRedSoft {
-  background: radial-gradient(circle at center, #ffffff 0%, #fff0f0 100%);
+  background: #fef2f2;
 }
 
 .repaEjecutadasPage .repaPurpleSoft {
-  background: radial-gradient(circle at center, #ffffff 0%, #f2eaff 100%);
+  background: #faf5ff;
 }
 
-.repaEjecutadasPage .repaBlueSoft .sapUiIcon {
-  color: #2f72ff !important;
-}
-
-.repaEjecutadasPage .repaGreenSoft .sapUiIcon {
-  color: #16a34a !important;
-}
-
-.repaEjecutadasPage .repaRedSoft .sapUiIcon {
-  color: #ff3131 !important;
-}
-
-.repaEjecutadasPage .repaPurpleSoft .sapUiIcon {
-  color: #7c3aed !important;
-}
-
-.repaEjecutadasPage .repaKpiNumber {
-  font-size: 2.45rem !important;
-  font-weight: 900 !important;
-  line-height: 2.5rem;
-}
-
-.repaEjecutadasPage .repaKpiLabel {
-  color: #172554 !important;
-  font-size: 1rem !important;
-  font-weight: 900 !important;
-  margin-top: 4px;
-}
-
-.repaEjecutadasPage .repaKpiSub {
-  color: #64748b !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  margin-top: 4px;
-}
-
+.repaEjecutadasPage .repaBlueSoft .sapUiIcon,
 .repaEjecutadasPage .repaBlueText {
-  color: #1258e8 !important;
+  color: #2563eb !important;
 }
 
+.repaEjecutadasPage .repaGreenSoft .sapUiIcon,
 .repaEjecutadasPage .repaGreenText {
   color: #16a34a !important;
 }
 
+.repaEjecutadasPage .repaRedSoft .sapUiIcon,
 .repaEjecutadasPage .repaRedText {
-  color: #ff3131 !important;
+  color: #ef4444 !important;
 }
 
+.repaEjecutadasPage .repaPurpleSoft .sapUiIcon,
 .repaEjecutadasPage .repaPurpleText {
-  color: #6d28d9 !important;
+  color: #7c3aed !important;
 }
 
-/* ==========================================================================
-   TABS
-   ========================================================================== */
+.repaEjecutadasPage .repaKpiContent {
+  min-width: 0;
+  height: 100%;
+}
+
+.repaEjecutadasPage .repaKpiNumber {
+  font-size: 1.34rem;
+  line-height: 1.38rem;
+  font-weight: 900;
+}
+
+.repaEjecutadasPage .repaKpiLabel {
+  color: #172554;
+  font-size: 0.58rem;
+  line-height: 0.68rem;
+  font-weight: 900;
+}
+
+.repaEjecutadasPage .repaKpiSub {
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 0.48rem;
+  line-height: 0.58rem;
+  font-weight: 700;
+}
+
+.repaEjecutadasPage .repaRedSub {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+/* =========================================================
+   SELECTOR DE ESTADO
+   ========================================================= */
 
 .repaEjecutadasPage .repaAnalysisBar {
-  margin-bottom: 14px;
-  gap: 12px;
-}
-
-.repaEjecutadasPage .repaTabs {
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  margin: 0;
   gap: 10px;
 }
 
+.repaEjecutadasPage .repaTabs {
+  min-width: 0;
+  gap: 6px;
+}
+
 .repaEjecutadasPage .repaTabsLabel {
-  color: #172554 !important;
-  font-size: 13px !important;
-  font-weight: 900 !important;
-  margin-right: 8px;
+  margin-right: 2px;
+  color: #172554;
+  font-size: 0.54rem;
+  line-height: 0.66rem;
+  font-weight: 900;
+}
+
+.repaEjecutadasPage .repaTabButton {
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
 }
 
 .repaEjecutadasPage .repaTabButton .sapMBtnInner {
-  min-width: 150px;
-  height: 42px !important;
-  border-radius: 10px !important;
-  border: 1px solid #dfe7f2 !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  padding: 0 0.7rem !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 7px !important;
   background: #ffffff !important;
 }
 
 .repaEjecutadasPage .repaTabButton .sapMBtnContent {
-  color: #25315f !important;
-  font-size: 13px !important;
+  color: #0a6ff5 !important;
+  font-size: 0.52rem !important;
+  line-height: 28px !important;
   font-weight: 900 !important;
 }
 
 .repaEjecutadasPage .repaTabButtonActive .sapMBtnInner {
-  background: linear-gradient(135deg, #1f66f1 0%, #1258e8 100%) !important;
-  border-color: #1258e8 !important;
-  box-shadow: 0 8px 16px rgba(18, 88, 232, 0.22);
+  border-color: #0a6ff5 !important;
+  background: #0a6ff5 !important;
+  box-shadow: 0 2px 6px rgba(10, 111, 245, 0.2) !important;
 }
 
 .repaEjecutadasPage .repaTabButtonActive .sapMBtnContent {
@@ -364,78 +426,139 @@
 }
 
 .repaEjecutadasPage .repaInfoMessage {
-  min-width: 430px;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #f4fbf8 0%, #f5f8ff 100%);
+  min-width: 310px;
+  height: 30px;
+  padding: 0 10px;
+  gap: 7px;
   border: 1px solid #e2e8f0;
-  gap: 9px;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #f4fbf8, #f5f8ff);
 }
 
-.repaEjecutadasPage .repaInfoMessage .sapUiIcon,
+.repaEjecutadasPage .repaInfoMessage .sapUiIcon {
+  color: #64748b;
+  font-size: 0.66rem;
+}
+
 .repaEjecutadasPage .repaInfoMessage .sapMText {
-  color: #7b8fae !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
+  color: #64748b;
+  font-size: 0.48rem;
+  line-height: 0.6rem;
+  font-weight: 700;
 }
 
-/* ==========================================================================
-   TABLE CARD
-   ========================================================================== */
+/* =========================================================
+   CARD Y TABLA PRINCIPAL
+   ========================================================= */
 
 .repaEjecutadasPage .repaTableCard {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+  width: 100%;
+  min-width: 0;
   overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
 
 .repaEjecutadasPage .repaTableTop {
-  padding: 16px 18px;
-  border-bottom: 1px solid #e7edf6;
+  width: 100%;
+  min-height: 37px;
+  padding: 5px 12px;
+  gap: 12px;
+  border-bottom: 1px solid #e8edf4;
 }
 
-.repaEjecutadasPage .repaSectionTitle {
-  color: #172554 !important;
-  font-size: 1.15rem !important;
-  font-weight: 900 !important;
+.repaEjecutadasPage .repaSectionTitle.sapMTitle {
+  min-width: 0;
+  margin: 0;
+  color: #172554;
+  font-size: 0.69rem;
+  line-height: 0.82rem;
+  font-weight: 900;
 }
 
-.repaEjecutadasPage .repaSearch .sapMInputBaseContentWrapper {
-  height: 40px !important;
-  border-radius: 10px !important;
-  border: 1px solid #dfe7f2 !important;
+.repaEjecutadasPage .repaSearch {
+  width: 220px !important;
+  min-width: 180px;
+  height: 28px;
+  flex: 0 0 220px;
 }
 
-/* ==========================================================================
-   GRID TABLA PRINCIPAL
-   ========================================================================== */
+.repaEjecutadasPage .repaSearch .sapMSFF {
+  height: 28px !important;
+  min-height: 28px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+}
+
+.repaEjecutadasPage .repaSearch .sapMSFI {
+  height: 26px !important;
+  font-size: 0.56rem !important;
+  line-height: 26px !important;
+}
+
+.repaEjecutadasPage .repaSearch .sapMSFB {
+  width: 28px !important;
+  height: 26px !important;
+  line-height: 26px !important;
+}
+
+.repaEjecutadasPage .repaTableViewport {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
 
 .repaEjecutadasPage .repaTableGrid {
   display: grid !important;
   grid-template-columns:
-    44px
-    minmax(270px, 2.3fr)
-    minmax(120px, 1fr)
-    minmax(140px, 1fr)
-    minmax(130px, 1fr)
-    minmax(130px, 1fr)
-    minmax(170px, 1.2fr)
-    44px;
+    36px
+    minmax(150px, 1.7fr)
+    minmax(76px, 0.85fr)
+    minmax(86px, 0.95fr)
+    minmax(81px, 0.9fr)
+    minmax(81px, 0.9fr)
+    minmax(95px, 1.05fr)
+    24px;
+  column-gap: 0;
   align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.repaEjecutadasPage .repaTableGrid > * {
+  min-width: 0;
 }
 
 .repaEjecutadasPage .repaTableHeaderRow {
-  min-height: 58px;
-  background: #f7f9fc;
-  border-bottom: 1px solid #e7edf6;
+  min-height: 36px;
+  border-bottom: 1px solid #e8edf4;
+  background: #f8fafc;
+}
+
+.repaEjecutadasPage .repaHeaderText,
+.repaEjecutadasPage .repaTableHeaderRow .sapMText {
+  padding: 0 5px;
+  color: #172554;
+  font-size: 0.47rem;
+  line-height: 0.58rem;
+  font-weight: 900;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.repaEjecutadasPage .repaMaterialBlock {
+  width: 100%;
+  min-width: 0;
 }
 
 .repaEjecutadasPage .repaMaterialRow {
-  min-height: 64px;
-  padding: 0 6px;
-  border-bottom: 1px solid #edf2f8;
+  min-height: 34px;
+  padding: 0;
+  border-bottom: 1px solid #e8edf4;
   background: #ffffff;
 }
 
@@ -443,202 +566,280 @@
   background: #fbfdff;
 }
 
-.repaEjecutadasPage .repaHeaderText {
-  color: #25315f !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  text-align: center;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
 .repaEjecutadasPage .repaCellExpand,
 .repaEjecutadasPage .repaCellArrow {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
   text-align: center;
 }
 
 .repaEjecutadasPage .repaCellMaterial {
-  padding: 0 10px;
-  box-sizing: border-box;
+  min-width: 0;
+  padding: 0 5px;
 }
 
 .repaEjecutadasPage .repaCellCenter {
+  min-width: 0;
+  padding: 0 5px;
+  color: #172554;
+  font-size: 0.5rem;
+  line-height: 0.62rem;
+  font-weight: 800;
   text-align: center;
-  color: #25315f !important;
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  padding: 0 8px;
-  box-sizing: border-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
-.repaEjecutadasPage .repaExpandButton .sapUiIcon,
-.repaEjecutadasPage .repaArrowButton .sapUiIcon {
-  color: #2563eb !important;
-  font-size: 0.9rem !important;
+.repaEjecutadasPage .repaExpandButton,
+.repaEjecutadasPage .repaArrowButton {
+  width: 18px;
+  min-width: 18px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  justify-self: center;
+}
+
+.repaEjecutadasPage .repaExpandButton .sapMBtnInner,
+.repaEjecutadasPage .repaArrowButton .sapMBtnInner {
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 22px !important;
+  min-height: 22px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.repaEjecutadasPage .repaExpandButton .sapMBtnIcon,
+.repaEjecutadasPage .repaArrowButton .sapMBtnIcon {
+  width: 18px !important;
+  margin: 0 !important;
+  color: #0a6ff5 !important;
+  font-size: 0.56rem !important;
+  line-height: 22px !important;
 }
 
 .repaEjecutadasPage .repaMaterialContent {
-  gap: 12px;
+  gap: 7px;
 }
 
 .repaEjecutadasPage .repaMaterialIcon {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  border-radius: 10px;
-  border: 1px solid #dfe7f2;
-  background: #f7f9fc;
-  color: #435386 !important;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem !important;
+  flex: 0 0 24px;
+  border: 1px solid #dbe3ef;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #435386;
+  font-size: 0.72rem;
 }
 
 .repaEjecutadasPage .repaMaterialName {
-  color: #25315f !important;
-  font-size: 13px !important;
-  font-weight: 900 !important;
+  min-width: 0;
+  color: #172554;
+  font-size: 0.5rem;
+  line-height: 0.62rem;
+  font-weight: 900;
 }
 
 .repaEjecutadasPage .repaGreenNumber {
-  color: #16a34a !important;
-  font-weight: 900 !important;
+  color: #16a34a;
+  font-weight: 900;
 }
 
 .repaEjecutadasPage .repaBlueNumber {
-  color: #2563eb !important;
-  font-weight: 900 !important;
+  color: #0a6ff5;
+  font-weight: 900;
 }
 
-/* ==========================================================================
-   SOPORTE PARA TABLA ANTERIOR
-   ========================================================================== */
-
-.repaEjecutadasPage .repaTableHeader {
-  background: #f7f9fc;
-  border-bottom: 1px solid #e7edf6;
-  min-height: 50px;
-  align-items: center;
-}
-
-.repaEjecutadasPage .repaTableHeader .sapMText {
-  color: #25315f !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  text-align: center;
-}
-
-.repaEjecutadasPage .repaColMaterial {
-  width: 28%;
-  min-width: 270px;
-  box-sizing: border-box;
-}
-
-.repaEjecutadasPage .repaColSmall {
-  width: 14%;
-  min-width: 130px;
-  text-align: center;
-  color: #25315f !important;
-  font-size: 13px !important;
-  font-weight: 800 !important;
-}
-
-.repaEjecutadasPage .repaColArrow {
-  width: 45px;
-  min-width: 45px;
-}
-
-.repaEjecutadasPage .repaMaterialBlock {
-  border-bottom: 1px solid #e7edf6;
-}
-
-.repaEjecutadasPage .repaMaterialBlock:last-child {
-  border-bottom: none;
-}
-
-.repaEjecutadasPage .repaExpandButton {
-  width: 36px;
-  min-width: 36px;
-}
-
-.repaEjecutadasPage .repaArrowButton {
-  width: 36px;
-  min-width: 36px;
-}
-
-/* ==========================================================================
-   TABLA INTERNA
-   ========================================================================== */
+/* =========================================================
+   DETALLE EXPANDIDO SAP.M.TABLE
+   ========================================================= */
 
 .repaEjecutadasPage .repaInnerTable {
-  width: calc(100% - 70px);
-  margin-left: 54px;
-  margin-right: 16px;
-  margin-bottom: 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  width: calc(100% - 60px);
+  min-width: 0;
+  margin: 0 24px 0 36px;
   overflow: hidden;
+  border-right: 1px solid #e8edf4;
+  border-bottom: 1px solid #e8edf4;
+  border-left: 1px solid #e8edf4;
+  border-radius: 0 0 7px 7px;
+  background: #ffffff;
+}
+
+.repaEjecutadasPage .repaInnerTable .sapMListTbl {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.repaEjecutadasPage .repaInnerTable .sapMListTblHeader {
+  height: 24px;
 }
 
 .repaEjecutadasPage .repaInnerTable .sapMListTblHeaderCell {
-  background: #f8fafc !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  height: 24px;
+  padding: 0 5px !important;
+  border-bottom: 1px solid #e8edf4;
+  background: #f8fafc;
+  vertical-align: middle;
 }
 
-.repaEjecutadasPage .repaInnerTable .sapMColumnHeader .sapMText {
-  color: #64748b !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
+.repaEjecutadasPage .repaInnerTable .sapMColumnHeader .sapMText,
+.repaEjecutadasPage .repaInnerTable .sapMListTblHeaderCell .sapMText {
+  color: #64748b;
+  font-size: 0.42rem;
+  line-height: 0.52rem;
+  font-weight: 900;
+  text-align: center;
 }
 
-.repaEjecutadasPage .repaInnerTable .sapMText {
-  color: #334155 !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-}
-
+.repaEjecutadasPage .repaInnerTable .sapMListTblRow,
 .repaEjecutadasPage .repaInnerTable .sapMLIB {
-  background: #ffffff !important;
+  height: 25px;
+  min-height: 25px;
+  background: #ffffff;
 }
 
-.repaEjecutadasPage .repaOtText {
-  color: #3157b7 !important;
-  font-weight: 900 !important;
+.repaEjecutadasPage .repaInnerTable .sapMListTblCell {
+  height: 25px;
+  padding: 0 5px !important;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
 }
 
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
+.repaEjecutadasPage .repaInnerTable .sapMListTblCell .sapMText {
+  color: #172554;
+  font-size: 0.43rem;
+  line-height: 0.54rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.repaEjecutadasPage .repaInnerTable .repaOtText {
+  color: #3157b7;
+  font-weight: 900;
+}
+
+/* =========================================================
+   PIE DE TABLA
+   ========================================================= */
 
 .repaEjecutadasPage .repaFooterInfo {
-  gap: 10px;
-  padding: 16px 18px;
+  min-height: 28px;
+  padding: 0 12px;
+  gap: 6px;
+  border-top: 1px solid #e8edf4;
   background: #ffffff;
-  border-top: 1px solid #e7edf6;
 }
 
-.repaEjecutadasPage .repaFooterInfo .sapUiIcon,
+.repaEjecutadasPage .repaFooterInfo .sapUiIcon {
+  color: #64748b;
+  font-size: 0.62rem;
+}
+
 .repaEjecutadasPage .repaFooterInfo .sapMText {
-  color: #4b5a7a !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
+  color: #64748b;
+  font-size: 0.45rem;
+  line-height: 0.56rem;
+  font-weight: 700;
 }
 
-/* ==========================================================================
+/* =========================================================
    RESPONSIVE
-   ========================================================================== */
+   ========================================================= */
 
-@media screen and (max-width: 1450px) {
-  .repaEjecutadasPage .repaFilterCard.sapMFlexBox,
+@media screen and (max-width: 1100px) {
+  .repaEjecutadasPage .repaContainer {
+    padding: 8px 10px 14px;
+  }
+
   .repaEjecutadasPage .repaFilterCard {
-    grid-template-columns:
-      repeat(3, minmax(180px, 1fr))
-      180px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .repaEjecutadasPage .repaFilterItem,
+  .repaEjecutadasPage .repaFilterPeriod,
+  .repaEjecutadasPage .repaFilterDate,
+  .repaEjecutadasPage .repaFilterNormal,
+  .repaEjecutadasPage .repaFilterResponsible,
+  .repaEjecutadasPage .repaFilterAction {
+    flex: 1 1 calc(25% - 8px);
+    width: calc(25% - 8px);
+    min-width: 150px;
+    max-width: none;
+  }
+
+  .repaEjecutadasPage .repaFilterButton,
+  .repaEjecutadasPage .repaFilterButton .sapMBtnInner {
+    width: 100% !important;
+  }
+
+  .repaEjecutadasPage .repaKpiRow {
+    flex-wrap: wrap !important;
   }
 
   .repaEjecutadasPage .repaKpiCard {
-    flex: 1 1 48%;
+    flex: 1 1 calc(50% - 8px);
+    width: calc(50% - 8px);
+    min-width: calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+
+  .repaEjecutadasPage .repaAnalysisBar {
+    flex-wrap: wrap !important;
+  }
+
+  .repaEjecutadasPage .repaInfoMessage {
+    flex: 1 1 310px;
+  }
+
+  .repaEjecutadasPage .repaTableViewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .repaEjecutadasPage .repaTableHeaderRow,
+  .repaEjecutadasPage .repaMaterialList {
+    width: 900px;
+    min-width: 900px;
+  }
+
+  .repaEjecutadasPage .repaInnerTable {
+    width: 840px;
+    min-width: 840px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .repaEjecutadasPage .repaTitle.sapMTitle,
+  .repaEjecutadasPage .repaTitleGreen.sapMTitle {
+    font-size: 1rem;
+    line-height: 1.08rem;
+  }
+
+  .repaEjecutadasPage .repaFilterItem,
+  .repaEjecutadasPage .repaFilterPeriod,
+  .repaEjecutadasPage .repaFilterDate,
+  .repaEjecutadasPage .repaFilterNormal,
+  .repaEjecutadasPage .repaFilterResponsible,
+  .repaEjecutadasPage .repaFilterAction {
+    flex: 1 1 calc(50% - 8px);
+    width: calc(50% - 8px);
+    min-width: calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+
+  .repaEjecutadasPage .repaTabs {
+    width: 100%;
+    flex-wrap: wrap !important;
   }
 
   .repaEjecutadasPage .repaInfoMessage {
@@ -646,55 +847,43 @@
     min-width: 100%;
   }
 
-  .repaEjecutadasPage .repaTableCard {
-    overflow-x: auto;
-  }
-
-  .repaEjecutadasPage .repaTableHeaderRow,
-  .repaEjecutadasPage .repaMaterialRow,
-  .repaEjecutadasPage .repaTableHeader {
-    min-width: 1220px;
-  }
-
-  .repaEjecutadasPage .repaInnerTable {
-    min-width: 1040px;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .repaEjecutadasPage .repaFilterCard.sapMFlexBox,
-  .repaEjecutadasPage .repaFilterCard {
-    grid-template-columns: 1fr !important;
-  }
-
-  .repaEjecutadasPage .repaFilterAction,
-  .repaEjecutadasPage .repaFilterButton {
-    width: 100% !important;
-    min-width: 100% !important;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .repaEjecutadasPage .repaContainer {
-    padding: 14px;
-  }
-
-  .repaEjecutadasPage .repaTitle,
-  .repaEjecutadasPage .repaTitleGreen,
-  .repaEjecutadasPage .repaTitle .sapMText {
-    font-size: 1.45rem !important;
-    line-height: 1.65rem !important;
-  }
-
-  .repaEjecutadasPage .repaTitleTextRow {
-    flex-wrap: wrap !important;
-  }
-
-  .repaEjecutadasPage .repaKpiCard {
-    flex: 1 1 100%;
+  .repaEjecutadasPage .repaTableTop {
+    align-items: flex-start !important;
+    flex-direction: column;
   }
 
   .repaEjecutadasPage .repaSearch {
     width: 100% !important;
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .repaEjecutadasPage .repaContainer {
+    padding: 8px 8px 60px;
+  }
+
+  .repaEjecutadasPage .repaFilterItem,
+  .repaEjecutadasPage .repaFilterPeriod,
+  .repaEjecutadasPage .repaFilterDate,
+  .repaEjecutadasPage .repaFilterNormal,
+  .repaEjecutadasPage .repaFilterResponsible,
+  .repaEjecutadasPage .repaFilterAction,
+  .repaEjecutadasPage .repaKpiCard {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .repaEjecutadasPage .repaKpiCard {
+    height: 74px;
+    min-height: 74px;
+    max-height: 74px;
+  }
+
+  .repaEjecutadasPage .repaTabButton .sapMBtnInner {
+    padding: 0 0.5rem !important;
   }
 }

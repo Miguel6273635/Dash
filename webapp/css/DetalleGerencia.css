@@ -1919,3 +1919,767 @@
 .dgCapacityTable .sapMListTblHeaderCell:last-child {
     border-top-right-radius: 0.65rem !important;
 }
+
+/* ========================================================================
+   AJUSTE FINAL SEGÚN REFERENCIA - DETALLE DE GERENCIA
+   Mantener este bloque al final del archivo.
+   ======================================================================== */
+
+/* ========================================================================
+   1. COMPOSICIÓN GENERAL
+   ======================================================================== */
+
+.dgPage .dgWorkspace {
+    width: calc(100% - 1.2rem) !important;
+    max-width: none !important;
+    min-height: calc(100vh - 6.7rem) !important;
+
+    margin: 0.6rem auto !important;
+    padding: 0.72rem 0.85rem 0.75rem !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e5ebf2 !important;
+    border-radius: 0.72rem !important;
+
+    box-shadow:
+        0 0.12rem 0.38rem rgba(15, 23, 42, 0.035),
+        0 0.42rem 1.1rem rgba(15, 23, 42, 0.025) !important;
+}
+
+/* La referencia comienza directamente con el título. */
+.dgPage .dgBreadcrumbs {
+    display: none !important;
+}
+
+.dgPage .dgHeaderBlock {
+    margin-bottom: 0.58rem !important;
+}
+
+.dgPage .dgMainTitle.sapMTitle {
+    margin: 0 !important;
+
+    color: #10234f !important;
+
+    font-size: 1.42rem !important;
+    line-height: 1.62rem !important;
+    font-weight: 800 !important;
+}
+
+.dgPage .dgSubtitle.sapMText {
+    margin-top: 0.12rem !important;
+
+    color: #60708c !important;
+
+    font-size: 0.72rem !important;
+    line-height: 0.94rem !important;
+    font-weight: 500 !important;
+}
+
+/* ========================================================================
+   2. FILTROS EN UNA SOLA FILA
+   ======================================================================== */
+
+.dgPage .dgFiltersRow {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(7rem, 0.82fr)
+        minmax(8rem, 1fr)
+        minmax(8rem, 1fr)
+        minmax(9.4rem, 1.18fr)
+        minmax(7rem, 0.84fr)
+        minmax(6.5rem, 0.76fr)
+        minmax(7.5rem, 0.9fr)
+        7.35rem !important;
+
+    width: 100% !important;
+    min-height: 3.35rem !important;
+
+    column-gap: 0.48rem !important;
+    row-gap: 0.5rem !important;
+
+    align-items: stretch !important;
+
+    margin: 0 0 0.78rem !important;
+    padding: 0 !important;
+}
+
+.dgPage .dgFiltersRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Una sola card por filtro. */
+.dgPage .dgFilterField,
+.dgPage .dgFilterPeriod,
+.dgPage .dgFilterDate,
+.dgPage .dgFilterManagement,
+.dgPage .dgFilterCompact,
+.dgPage .dgFilterService {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    margin: 0 !important;
+    padding: 0.37rem 0.58rem 0.27rem !important;
+
+    box-sizing: border-box !important;
+    overflow: visible !important;
+
+    background: #ffffff !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.52rem !important;
+
+    box-shadow:
+        0 0.15rem 0.42rem
+        rgba(15, 23, 42, 0.055) !important;
+}
+
+.dgPage .dgFilterField:focus-within {
+    border-color: #1677ff !important;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(22, 119, 255, 0.11) !important;
+}
+
+.dgPage .dgFilterLabel.sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+    height: 0.72rem !important;
+    min-height: 0.72rem !important;
+
+    margin: 0 0 0.05rem !important;
+    padding: 0 0.1rem !important;
+
+    color: #475569 !important;
+
+    font-size: 0.53rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 850 !important;
+
+    white-space: nowrap !important;
+}
+
+/* Quita la segunda caja interna. */
+.dgPage .dgFilterControl,
+.dgPage .dgFilterControl.sapMSlt,
+.dgPage .dgFilterControl.sapMInputBase {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dgPage .dgFilterControl.sapMSlt,
+.dgPage .dgFilterControl .sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.dgPage .dgFilterControl.sapMSlt:hover,
+.dgPage .dgFilterControl .sapMInputBaseContentWrapper:hover,
+.dgPage .dgFilterControl .sapMInputBaseContentWrapper:focus-within {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.dgPage .dgFilterControl.sapMSlt .sapMSltLabel,
+.dgPage .dgFilterControl .sapMInputBaseInner {
+    width: 100% !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    padding: 0 1.48rem 0 0.1rem !important;
+
+    color: #1f2937 !important;
+    background: transparent !important;
+
+    font-size: 0.64rem !important;
+    font-weight: 800 !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+/* Flechas azules a la derecha. */
+.dgPage .dgFilterControl.sapMSlt .sapMSltArrow {
+    width: 1.42rem !important;
+
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    background: transparent !important;
+
+    font-size: 0.68rem !important;
+}
+
+/* Calendarios azules a la derecha. */
+.dgPage .dgFilterControl .sapMInputBaseIconContainer {
+    width: 1.5rem !important;
+    height: 1.75rem !important;
+
+    background: transparent !important;
+}
+
+.dgPage .dgFilterControl .sapMInputBaseIcon,
+.dgPage .dgFilterControl
+.sapMInputBaseIconContainer .sapUiIcon {
+    width: 1.5rem !important;
+    min-width: 1.5rem !important;
+
+    height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    background: transparent !important;
+
+    font-size: 0.73rem !important;
+}
+
+/* ========================================================================
+   3. BOTÓN APLICAR FILTROS ESTÁNDAR
+   ======================================================================== */
+
+.dgPage .dgApplyButtonWrap {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-self: stretch !important;
+    justify-self: end !important;
+}
+
+.dgPage .dgApplyButton.sapMBtn {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dgPage .dgApplyButton .sapMBtnInner {
+    width: 100% !important;
+    min-width: 100% !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    padding: 0 0.48rem !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1787ff 0%,
+            #066ce6 100%
+        ) !important;
+
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.27rem 0.6rem
+        rgba(22, 119, 255, 0.23) !important;
+
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 0.31rem !important;
+}
+
+.dgPage .dgApplyButton .sapMBtnIcon,
+.dgPage .dgApplyButton .sapUiIcon {
+    position: static !important;
+    order: 1 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+}
+
+.dgPage .dgApplyButton .sapMBtnContent {
+    order: 2 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+}
+
+/* ========================================================================
+   4. KPI COMO EN LA REFERENCIA
+   ======================================================================== */
+
+.dgPage .dgKpiRow {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr))
+        5.2rem !important;
+
+    width: 100% !important;
+
+    gap: 0.58rem !important;
+    align-items: stretch !important;
+
+    margin: 0 0 0.72rem !important;
+}
+
+.dgPage .dgKpiRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+}
+
+.dgPage .dgKpiCard {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 5.35rem !important;
+    min-height: 5.35rem !important;
+    max-height: 5.35rem !important;
+
+    margin: 0 !important;
+    padding: 0.57rem 0.58rem 0.55rem 0.48rem !important;
+
+    border: 1px solid #e4eaf2 !important;
+    border-left-width: 0.22rem !important;
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.16rem 0.48rem
+        rgba(35, 55, 91, 0.08) !important;
+
+    overflow: hidden !important;
+}
+
+.dgPage .dgKpiIconBox {
+    flex: 0 0 2.55rem !important;
+
+    width: 2.55rem !important;
+    min-width: 2.55rem !important;
+    height: 2.55rem !important;
+    min-height: 2.55rem !important;
+
+    margin-right: 0.52rem !important;
+}
+
+.dgPage .dgKpiIcon {
+    font-size: 1.28rem !important;
+}
+
+.dgPage .dgKpiLabel.sapMText {
+    color: #31425f !important;
+
+    font-size: 0.58rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 850 !important;
+}
+
+.dgPage .dgKpiNumber .sapMObjectNumberText {
+    font-size: 1.4rem !important;
+    line-height: 1.52rem !important;
+    font-weight: 850 !important;
+}
+
+.dgPage .dgKpiNumber .sapMObjectNumberUnit,
+.dgPage .dgKpiUnit {
+    font-size: 0.66rem !important;
+    line-height: 0.86rem !important;
+    font-weight: 800 !important;
+}
+
+/* Degradados con mayor presencia. */
+.dgPage .dgKpiBlue {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(20, 121, 246, 0.16) 0%,
+            rgba(20, 121, 246, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiPurple {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(115, 64, 220, 0.16) 0%,
+            rgba(115, 64, 220, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiGreen {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(25, 168, 90, 0.16) 0%,
+            rgba(25, 168, 90, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiOrange {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 152, 20, 0.17) 0%,
+            rgba(255, 152, 20, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiTeal {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(22, 184, 189, 0.16) 0%,
+            rgba(22, 184, 189, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiRed {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 53, 68, 0.16) 0%,
+            rgba(239, 53, 68, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+.dgPage .dgKpiSky {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(27, 155, 245, 0.16) 0%,
+            rgba(27, 155, 245, 0.08) 27%,
+            #ffffff 76%
+        ) !important;
+}
+
+/* Tarjeta de acción a la misma altura. */
+.dgPage .dgKpiActionCard.sapMCustomTile {
+    width: 5.2rem !important;
+    min-width: 5.2rem !important;
+    max-width: 5.2rem !important;
+
+    height: 5.35rem !important;
+    min-height: 5.35rem !important;
+    max-height: 5.35rem !important;
+}
+
+.dgPage .dgKpiActionContent {
+    padding: 0.42rem 0.18rem 0.28rem !important;
+}
+
+.dgPage .dgKpiActionIconBox {
+    width: 2.15rem !important;
+    min-width: 2.15rem !important;
+    height: 2.15rem !important;
+    min-height: 2.15rem !important;
+
+    margin-bottom: 0.18rem !important;
+}
+
+.dgPage .dgKpiActionText {
+    max-width: 4.7rem !important;
+
+    font-size: 0.54rem !important;
+    line-height: 0.65rem !important;
+    font-weight: 800 !important;
+}
+
+/* ========================================================================
+   5. PESTAÑAS
+   ======================================================================== */
+
+.dgPage .dgTabArea {
+    min-height: 2.8rem !important;
+
+    margin: 0 0 0.48rem !important;
+    padding: 0 0 0 0.18rem !important;
+}
+
+.dgPage .dgTabStrip {
+    min-height: 2.7rem !important;
+
+    gap: 0.4rem !important;
+}
+
+.dgPage .dgTabButton .sapMBtnInner {
+    min-width: 13rem !important;
+
+    height: 2.65rem !important;
+    min-height: 2.65rem !important;
+
+    border-radius: 0.42rem !important;
+}
+
+.dgPage .dgTabButton .sapMBtnContent {
+    font-size: 0.65rem !important;
+    line-height: 2.45rem !important;
+    font-weight: 700 !important;
+}
+
+/* ========================================================================
+   6. TABLA PRINCIPAL
+   ======================================================================== */
+
+.dgPage .dgTableCard {
+    border-radius: 0.66rem !important;
+
+    box-shadow:
+        0 0.12rem 0.42rem
+        rgba(34, 57, 93, 0.055) !important;
+}
+
+.dgPage .dgCapacityTable .sapMListTblHeader,
+.dgPage .dgCapacityTable .sapMListTblHeaderCell {
+    height: 3.15rem !important;
+    min-height: 3.15rem !important;
+}
+
+.dgPage .dgCapacityTable .sapMListTblHeaderCell {
+    padding: 0.42rem 0.62rem !important;
+}
+
+.dgPage .dgCapacityTable .sapMListTblRow,
+.dgPage .dgCapacityTable .sapMListTblCell {
+    height: 3.15rem !important;
+    min-height: 3.15rem !important;
+}
+
+.dgPage .dgCapacityTable .sapMListTblCell {
+    padding: 0.42rem 0.62rem !important;
+}
+
+.dgPage .dgCapacityTable .sapMText,
+.dgPage .dgCapacityTable .sapMLnk,
+.dgPage .dgCapacityTable .sapMObjStatusText {
+    font-size: 0.68rem !important;
+    line-height: 0.84rem !important;
+}
+
+.dgPage .dgColumnHeader .sapMText,
+.dgPage .dgColumnHeaderText {
+    font-size: 0.61rem !important;
+    line-height: 0.74rem !important;
+}
+
+/* Píldoras más ovaladas. */
+.dgPage .dgStatusPill.sapMObjStatus {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 3.65rem !important;
+
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+    max-height: 1.35rem !important;
+
+    margin: 0 auto !important;
+    padding: 0 0.62rem !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    box-shadow: none !important;
+}
+
+.dgPage .dgStatusPill .sapMObjStatusText {
+    height: 1.35rem !important;
+    line-height: 1.35rem !important;
+
+    font-size: 0.57rem !important;
+    font-weight: 800 !important;
+}
+
+/* Barra de utilización compacta. */
+.dgPage .dgUtilizationCell {
+    gap: 0.2rem !important;
+}
+
+.dgPage .dgUtilizationText {
+    font-size: 0.66rem !important;
+}
+
+.dgPage .dgUtilBarTrack {
+    height: 0.25rem !important;
+    min-height: 0.25rem !important;
+    max-width: 6.35rem !important;
+}
+
+/* ========================================================================
+   7. PAGINACIÓN
+   ======================================================================== */
+
+.dgPage .dgPaginationBar {
+    min-height: 3.15rem !important;
+
+    padding: 0.48rem 0.65rem !important;
+}
+
+.dgPage .dgPaginationBar .sapMText {
+    font-size: 0.66rem !important;
+}
+
+.dgPage .dgPageSizeSelect.sapMSlt,
+.dgPage .dgPageSizeSelect .sapMSltLabel,
+.dgPage .dgPageSizeSelect .sapMSltArrow {
+    height: 1.9rem !important;
+    line-height: 1.9rem !important;
+}
+
+.dgPage .dgPageButton .sapMBtnInner {
+    width: 1.9rem !important;
+    min-width: 1.9rem !important;
+    height: 1.9rem !important;
+}
+
+.dgPage .dgPageButton .sapMBtnIcon,
+.dgPage .dgPageButton .sapMBtnContent {
+    line-height: 1.84rem !important;
+}
+
+/* ========================================================================
+   8. RESPONSIVE
+   ======================================================================== */
+
+@media screen and (max-width: 1450px) {
+    .dgPage .dgFiltersRow {
+        grid-template-columns:
+            repeat(4, minmax(8rem, 1fr)) !important;
+    }
+
+    .dgPage .dgApplyButtonWrap {
+        justify-self: end !important;
+    }
+
+    .dgPage .dgKpiRow {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .dgPage .dgKpiActionCard.sapMCustomTile {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .dgPage .dgFiltersRow {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .dgPage .dgKpiRow {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .dgPage .dgFiltersRow {
+        grid-template-columns: 1fr !important;
+    }
+
+    .dgPage .dgApplyButtonWrap {
+        width: 7.35rem !important;
+        min-width: 7.35rem !important;
+        max-width: 7.35rem !important;
+
+        justify-self: start !important;
+    }
+
+    .dgPage .dgKpiRow {
+        grid-template-columns: 1fr !important;
+    }
+}

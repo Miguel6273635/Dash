@@ -1,81 +1,1260 @@
-.pageBackground { background-color: #F8F9FA !important; }
+/* ================================================================
+   ANÁLISIS DE ELEVADORES
+   Pantalla compacta sin scroll
+   ================================================================ */
 
-/* TÍTULO PRINCIPAL */
-.analisisElevadoresView .mainTitle { color: #111827 !important; font-size: 26px !important; font-weight: 800 !important; letter-spacing: -0.5px;}
-.analisisElevadoresView .subtitleText { color: #6B7280 !important; font-size: 15px !important; }
-
-/* ==========================================================================
-   FILTROS Y BOTÓN (SIMÉTRICOS Y PERFECTOS)
-   ========================================================================== */
-.analisisElevadoresView .filtersContainerGrid { gap: 16px; align-items: stretch !important; width: 100% !important; }
-
-.analisisElevadoresView .filterChip {
-    background-color: #FFFFFF !important; border-radius: 12px !important; padding: 0 18px !important;
-    border: 1px solid #E5E7EB !important; box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-    cursor: pointer; flex: 1; min-width: 180px; height: 68px !important;
+.aePage,
+.aePage .sapMPage,
+.aePage .sapMPageBgStandard,
+.aePage .sapMPageCont,
+.aePage .sapMPageEnableScrolling,
+.aePage .sapMPageScroll {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    background: #f7f9fc !important;
+    overflow: hidden !important;
 }
 
-.analisisElevadoresView .filterIconCustom { color: #6B7280 !important; font-size: 1.6rem !important; margin-right: 14px; }
-.analisisElevadoresView .filterTextContainer { margin-right: 10px; }
-.analisisElevadoresView .filterLabelCustom { color: #6B7280 !important; font-size: 13px !important; display: block; margin-bottom: 2px;}
-.analisisElevadoresView .filterValueCustom { color: #111827 !important; font-weight: 700 !important; font-size: 15px !important; display: block;}
-.analisisElevadoresView .filterArrowCustom { color: #9CA3AF !important; font-size: 1.1rem !important; }
-
-.analisisElevadoresView .btnBlueCustom { flex: 1; border-radius: 12px !important; overflow: hidden; height: 68px !important; min-width: 180px; }
-.analisisElevadoresView .btnBlueCustom .sapMBtnInner { background-color: #2563EB !important; border: none !important; text-shadow: none !important; height: 100% !important; display: flex; align-items: center; justify-content: center;}
-.analisisElevadoresView .btnBlueCustom .sapMBtnContent { color: #FFFFFF !important; font-weight: 700 !important; font-size: 15px !important;}
-.analisisElevadoresView .btnBlueCustom .sapMBtnIcon { color: #FFFFFF !important; font-size: 1.3rem !important; margin-right: 8px !important; }
-
-/* ==========================================================================
-   TARJETA Y BUSCADOR MODERNO
-   ========================================================================== */
-.analisisElevadoresView .mainCard {
-    background-color: #FFFFFF; border-radius: 12px; padding: 1.5rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #E5E7EB;
+.analisisElevadoresView {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 10px 12px 9px !important;
+    overflow: hidden !important;
+    color: #15243d;
+    box-sizing: border-box;
 }
 
-.analisisElevadoresView .modernSearchField.sapMSF {
-    background-color: #F9FAFB !important; border: 1px solid #E5E7EB !important;
-    border-radius: 8px !important; height: 40px !important; box-shadow: none !important;
-    padding: 0 8px !important; display: flex !important; align-items: center !important;
+.analisisElevadoresView,
+.analisisElevadoresView * {
+    box-sizing: border-box;
 }
-.analisisElevadoresView .modernSearchField.sapMSF.sapMSFF { border: 1px solid #D1D5DB !important; }
-.analisisElevadoresView .modernSearchField .sapMSFI, .analisisElevadoresView .modernSearchField .sapMInputBaseInner { background: transparent !important; border: none !important; color: #4B5563 !important; height: 100% !important; margin: 0 !important; }
-.analisisElevadoresView .modernSearchField .sapMInputBaseInner::placeholder { color: #9CA3AF !important; font-weight: 400 !important; }
-.analisisElevadoresView .modernSearchField .sapMSFBtn { background: transparent !important; }
-.analisisElevadoresView .modernSearchField .sapMSFBtnIcon { color: #9CA3AF !important; line-height: normal !important; }
 
-.analisisElevadoresView .tableTitle { color: #111827; font-weight: bold; }
-.analisisElevadoresView .tableSubtitle { color: #6B7280; font-size: 0.9rem; }
-.analisisElevadoresView .sapMText.brechaText { color: #DC2626 !important; font-weight: bold !important; }
+/* ================================================================
+   ENCABEZADO
+   ================================================================ */
 
-/* ==========================================================================
-   CABECERA GRIS REDONDEADA
-   ========================================================================== */
-.analisisElevadoresView .tableWrapper { border-radius: 10px; overflow: hidden; border: 1px solid #E5E7EB; margin-top: 1rem; }
-.analisisElevadoresView .sapMListTbl { margin: 0 !important; }
-.analisisElevadoresView .sapMListTblHeader { background-color: #F3F4F6 !important; border-bottom: 1px solid #E5E7EB !important; }
-.analisisElevadoresView .sapMListTbl th { background-color: #F3F4F6 !important; }
-.analisisElevadoresView .sapMListTbl th .sapMText { color: #4B5563; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.analisisElevadoresView .aeHeaderBlock {
+    flex: 0 0 auto !important;
+    padding: 1px 7px 7px;
+    border-top: 1px solid #dce4ef;
+}
 
-/* ==========================================================================
-   PÍLDORAS INFALIBLES
-   ========================================================================== */
-.analisisElevadoresView .estadoPillRect { padding: 4px 12px !important; border-radius: 6px !important; min-width: 85px; }
-.analisisElevadoresView .estadoPillText { font-weight: 700 !important; font-size: 0.85rem !important; }
+.analisisElevadoresView .aePageTitle.sapMTitle {
+    margin-top: 5px;
+    color: #13214a !important;
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em;
+}
+
+.analisisElevadoresView .aePageSubtitle.sapMText {
+    margin-top: 3px;
+    color: #65748b !important;
+    font-size: 0.72rem !important;
+    line-height: 1.15 !important;
+}
+
+/* ================================================================
+   FILTROS
+   ================================================================ */
+
+.analisisElevadoresView .aeFilterRow {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    gap: 9px;
+    padding: 0 1px;
+}
+
+.analisisElevadoresView .aeFilterCard {
+    flex: 1 1 145px !important;
+    min-width: 125px;
+    height: 54px !important;
+    padding: 7px 10px 5px;
+
+    background: #ffffff;
+    border: 1px solid #e3e9f2;
+    border-radius: 8px;
+
+    box-shadow: 0 2px 7px rgba(25, 45, 79, 0.05);
+    overflow: hidden;
+}
+
+.analisisElevadoresView .aeFilterPeriod {
+    flex-basis: 180px !important;
+    cursor: pointer;
+}
+
+.analisisElevadoresView .aeFilterWide {
+    flex-basis: 175px !important;
+}
+
+.analisisElevadoresView .aeFilterCard:hover {
+    border-color: #b9cff1;
+    box-shadow: 0 3px 9px rgba(25, 77, 155, 0.09);
+}
+
+.analisisElevadoresView .aeFilterLabel.sapMLabel {
+    display: block;
+    height: 14px;
+    margin-bottom: 1px;
+
+    color: #78869a !important;
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+    line-height: 14px !important;
+}
+
+/* ================================================================
+   PERIODO
+   Calendario únicamente del lado derecho
+   ================================================================ */
+
+.analisisElevadoresView .aePeriodControl {
+    width: 100% !important;
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+}
+
+.analisisElevadoresView .aeFilterValue.sapMText {
+    display: block;
+    min-width: 0;
+    padding-right: 8px;
+
+    overflow: hidden;
+    color: #1e2e4c !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.analisisElevadoresView .aePeriodIcon {
+    flex: 0 0 auto;
+    width: 1.35rem;
+    height: 1.62rem;
+
+    color: #0a6ff5 !important;
+    font-size: 0.82rem !important;
+    line-height: 1.62rem !important;
+    text-align: center;
+}
+
+/* ================================================================
+   SELECTS
+   Sin iconos a la izquierda; solo flecha derecha
+   ================================================================ */
+
+.analisisElevadoresView .aeFilterControl.sapMSlt {
+    width: 100% !important;
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.analisisElevadoresView .aeFilterControl.sapMSlt:hover,
+.analisisElevadoresView .aeFilterControl.sapMSltPressed,
+.analisisElevadoresView .aeFilterControl.sapMSlt.sapMSltPressed {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.analisisElevadoresView .aeFilterControl.sapMSlt .sapMSltLabel {
+    height: 1.62rem !important;
+    padding: 0 1.55rem 0 0 !important;
+
+    color: #1e2e4c !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    line-height: 1.62rem !important;
+}
+
+.analisisElevadoresView .aeFilterControl.sapMSlt .sapMSltArrow {
+    width: 1.35rem !important;
+    height: 1.62rem !important;
+
+    color: #0a6ff5 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.62rem !important;
+}
+
+.analisisElevadoresView .aeFilterControl.sapMSlt::after,
+.analisisElevadoresView .aeFilterControl.sapMSlt:focus::after {
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+/* ================================================================
+   BOTÓN APLICAR FILTROS
+   ================================================================ */
+
+.analisisElevadoresView .aeApplyButtonBox {
+    flex: 0 0 auto !important;
+    height: 54px !important;
+    padding: 0 1px 1px 2px;
+}
+
+.analisisElevadoresView .aeApplyButton .sapMBtnInner {
+    min-width: 115px;
+    height: 1.95rem !important;
+    padding: 0 0.8rem;
+
+    background: #0a6ff5 !important;
+    border: 0 !important;
+    border-radius: 5px !important;
+
+    box-shadow: 0 3px 8px rgba(10, 111, 245, 0.24);
+    text-shadow: none !important;
+}
+
+.analisisElevadoresView .aeApplyButton:hover .sapMBtnInner {
+    background: #0866e5 !important;
+}
+
+.analisisElevadoresView .aeApplyButton .sapMBtnContent,
+.analisisElevadoresView .aeApplyButton .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+    line-height: 1.95rem !important;
+}
+
+.analisisElevadoresView .aeApplyButton .sapMBtnIcon {
+    font-size: 0.72rem !important;
+}
+
+.analisisElevadoresView .aeApplyButton .sapMBtnInner::after,
+.analisisElevadoresView .aeApplyButton .sapMBtnInner:focus::after,
+.analisisElevadoresView .aeApplyButton .sapMFocusable:focus::after {
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+/* ================================================================
+   KPI
+   ================================================================ */
+
+.analisisElevadoresView .aeKpiRow {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    gap: 9px;
+    margin-top: 9px;
+}
+
+.analisisElevadoresView .aeKpiCard {
+    position: relative;
+    flex: 1 1 0 !important;
+    min-width: 150px;
+    min-height: 76px;
+    padding: 10px 9px 10px 12px;
+
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e4eaf2;
+    border-radius: 7px;
+
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06);
+}
+
+.analisisElevadoresView .aeKpiCard::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 3px;
+    border-radius: 8px 0 0 8px;
+    content: "";
+}
+
+.analisisElevadoresView .aeKpiIconCircle {
+    flex: 0 0 43px;
+    width: 43px;
+    height: 43px;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+
+.analisisElevadoresView .aeKpiIcon {
+    font-size: 1.28rem !important;
+}
+
+.analisisElevadoresView .aeKpiTextBlock {
+    min-width: 0;
+}
+
+.analisisElevadoresView .aeKpiLabel.sapMText {
+    width: 100%;
+    color: #43516a !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+}
+
+.analisisElevadoresView .aeKpiValue.sapMText {
+    margin-top: 2px;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+}
+
+.analisisElevadoresView .aeKpiHelper.sapMText {
+    margin-top: 3px;
+    color: #6f7c8f !important;
+    font-size: 0.52rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+}
+
+/* KPI AZUL */
+
+.analisisElevadoresView .aeKpiBlue {
+    background: linear-gradient(
+        90deg,
+        rgba(46, 140, 255, 0.20) 0%,
+        rgba(46, 140, 255, 0.11) 22%,
+        rgba(46, 140, 255, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+
+    border-color: rgba(46, 140, 255, 0.18);
+}
+
+.analisisElevadoresView .aeKpiBlue::before {
+    background: #2e8cff;
+}
+
+.analisisElevadoresView .aeKpiBlue .aeKpiIconCircle {
+    background: rgba(46, 140, 255, 0.13);
+}
+
+.analisisElevadoresView .aeKpiBlue .aeKpiIcon,
+.analisisElevadoresView .aeKpiBlue .aeKpiValue {
+    color: #1877e8 !important;
+}
+
+/* KPI CYAN */
+
+.analisisElevadoresView .aeKpiCyan {
+    background: linear-gradient(
+        90deg,
+        rgba(27, 198, 200, 0.20) 0%,
+        rgba(27, 198, 200, 0.11) 22%,
+        rgba(27, 198, 200, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+
+    border-color: rgba(27, 198, 200, 0.18);
+}
+
+.analisisElevadoresView .aeKpiCyan::before {
+    background: #1bc6c8;
+}
+
+.analisisElevadoresView .aeKpiCyan .aeKpiIconCircle {
+    background: rgba(27, 198, 200, 0.13);
+}
+
+.analisisElevadoresView .aeKpiCyan .aeKpiIcon,
+.analisisElevadoresView .aeKpiCyan .aeKpiValue {
+    color: #11b6ba !important;
+}
+
+/* KPI NARANJA */
+
+.analisisElevadoresView .aeKpiOrange {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 158, 49, 0.22) 0%,
+        rgba(255, 158, 49, 0.12) 22%,
+        rgba(255, 158, 49, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+
+    border-color: rgba(255, 158, 49, 0.20);
+}
+
+.analisisElevadoresView .aeKpiOrange::before {
+    background: #ff9e31;
+}
+
+.analisisElevadoresView .aeKpiOrange .aeKpiIconCircle {
+    background: rgba(255, 158, 49, 0.14);
+}
+
+.analisisElevadoresView .aeKpiOrange .aeKpiIcon,
+.analisisElevadoresView .aeKpiOrange .aeKpiValue {
+    color: #f28c1c !important;
+}
+
+/* KPI ROJO */
+
+.analisisElevadoresView .aeKpiRed {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 77, 83, 0.20) 0%,
+        rgba(255, 77, 83, 0.11) 22%,
+        rgba(255, 77, 83, 0.04) 48%,
+        rgba(255, 255, 255, 0.98) 76%,
+        #ffffff 100%
+    );
+
+    border-color: rgba(255, 77, 83, 0.18);
+}
+
+.analisisElevadoresView .aeKpiRed::before {
+    background: #ff4d53;
+}
+
+.analisisElevadoresView .aeKpiRed .aeKpiIconCircle {
+    background: rgba(255, 77, 83, 0.13);
+}
+
+.analisisElevadoresView .aeKpiRed .aeKpiIcon,
+.analisisElevadoresView .aeKpiRed .aeKpiValue {
+    color: #ef3f47 !important;
+}
+
+/* ================================================================
+   TARJETA PRINCIPAL
+   ================================================================ */
+
+.analisisElevadoresView .aeMainCard {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    min-height: 0 !important;
+    margin-top: 9px;
+    padding: 11px 12px 7px;
+
+    overflow: hidden !important;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.05);
+}
+
+/* ================================================================
+   CABECERA Y BUSCADOR
+   ================================================================ */
+
+.analisisElevadoresView .aeTableToolbar {
+    flex: 0 0 auto !important;
+    min-height: 43px;
+    margin-bottom: 7px;
+}
+
+.analisisElevadoresView .aeTableTitleBlock {
+    min-width: 0;
+}
+
+.analisisElevadoresView .aeTableTitle.sapMTitle {
+    color: #1c2940 !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+}
+
+.analisisElevadoresView .aeTableSubtitle.sapMText {
+    margin-top: 2px;
+    color: #8792a3 !important;
+    font-size: 0.53rem !important;
+    line-height: 1.2 !important;
+}
+
+.analisisElevadoresView .aeModernSearch.sapMSF {
+    height: 34px !important;
+
+    overflow: hidden;
+    background: #f8faff !important;
+    border: 1px solid #dce4ef !important;
+    border-radius: 7px !important;
+
+    box-shadow: none !important;
+}
+
+.analisisElevadoresView .aeModernSearch.sapMSF:focus-within {
+    background: #ffffff !important;
+    border-color: #7da9ea !important;
+    box-shadow: 0 0 0 2px rgba(10, 111, 245, 0.08) !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFF,
+.analisisElevadoresView .aeModernSearch .sapMSFI,
+.analisisElevadoresView .aeModernSearch .sapMSFB {
+    height: 32px !important;
+    min-height: 32px !important;
+    background: transparent !important;
+    border: 0 !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFI {
+    padding-left: 10px !important;
+    color: #34435a !important;
+    font-size: 0.66rem !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFI::placeholder {
+    color: #8b98aa !important;
+    font-style: normal !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFB::before,
+.analisisElevadoresView .aeModernSearch .sapMSFB .sapUiIcon {
+    color: #0a6ff5 !important;
+}
+
+/* ================================================================
+   TABLA
+   ================================================================ */
+
+.analisisElevadoresView .aeTableWrapper {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+    background: #ffffff;
+    border: 1px solid #e3e8f0;
+    border-radius: 7px;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTbl {
+    width: 100% !important;
+    margin: 0 !important;
+    table-layout: fixed !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblHeader {
+    background: #f1f3f6 !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblHeaderCell,
+.analisisElevadoresView .aeTableWrapper .sapMListTbl th {
+    height: 34px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    background: #f1f3f6 !important;
+    border-bottom: 1px solid #dfe4eb !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblHeaderCell .sapMText,
+.analisisElevadoresView .aeTableWrapper .sapMListTbl th .sapMText {
+    color: #596579 !important;
+    font-size: 0.57rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblRow {
+    height: 35px !important;
+    background: #ffffff !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblRow:hover {
+    background: #f8faff !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMListTblCell {
+    height: 35px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+
+    border-bottom: 1px solid #edf0f4 !important;
+}
+
+.analisisElevadoresView .aeTableWrapper .sapMText {
+    overflow: hidden;
+    color: #293548 !important;
+    font-size: 0.65rem !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.analisisElevadoresView .aeElevatorLink {
+    color: #0a6ff5 !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+}
+
+.analisisElevadoresView .aeBrechaText.sapMText {
+    color: #e5484d !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+}
+
+/* ================================================================
+   ESTADOS
+   ================================================================ */
+
+.analisisElevadoresView .aeEstadoPill {
+    min-width: 72px;
+    height: 22px !important;
+    padding: 0 11px !important;
+
+    border: 1px solid transparent;
+    border-radius: 999px !important;
+}
+
+.analisisElevadoresView .aeEstadoText.sapMText {
+    font-size: 0.57rem !important;
+    font-weight: 800 !important;
+    line-height: 20px !important;
+}
 
 /* CRÍTICO */
-.analisisElevadoresView .estadoPillRect[data-estado="Critico"], .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Critico"] { background-color: #FFE4E6 !important; }
-.analisisElevadoresView .estadoPillRect[data-estado="Critico"] .estadoPillText, .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Critico"] .estadoPillText { color: #E11D48 !important; }
+
+.analisisElevadoresView .aeEstadoPill[data-estado="Critico"],
+.analisisElevadoresView .aeEstadoPill[data-sap-ui-custom-estado="Critico"] {
+    background: #fce8ec !important;
+    border-color: #f8d4dc !important;
+}
+
+.analisisElevadoresView
+.aeEstadoPill[data-estado="Critico"]
+.aeEstadoText,
+.analisisElevadoresView
+.aeEstadoPill[data-sap-ui-custom-estado="Critico"]
+.aeEstadoText {
+    color: #c9294f !important;
+}
 
 /* ALTO */
-.analisisElevadoresView .estadoPillRect[data-estado="Alto"], .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Alto"] { background-color: #FFEDD5 !important; }
-.analisisElevadoresView .estadoPillRect[data-estado="Alto"] .estadoPillText, .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Alto"] .estadoPillText { color: #EA580C !important; }
+
+.analisisElevadoresView .aeEstadoPill[data-estado="Alto"],
+.analisisElevadoresView .aeEstadoPill[data-sap-ui-custom-estado="Alto"] {
+    background: #fceedd !important;
+    border-color: #f7dfc3 !important;
+}
+
+.analisisElevadoresView
+.aeEstadoPill[data-estado="Alto"]
+.aeEstadoText,
+.analisisElevadoresView
+.aeEstadoPill[data-sap-ui-custom-estado="Alto"]
+.aeEstadoText {
+    color: #c65b13 !important;
+}
 
 /* MEDIO */
-.analisisElevadoresView .estadoPillRect[data-estado="Medio"], .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Medio"] { background-color: #FEF08A !important; }
-.analisisElevadoresView .estadoPillRect[data-estado="Medio"] .estadoPillText, .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Medio"] .estadoPillText { color: #A16207 !important; }
+
+.analisisElevadoresView .aeEstadoPill[data-estado="Medio"],
+.analisisElevadoresView .aeEstadoPill[data-sap-ui-custom-estado="Medio"] {
+    background: #fff6d8 !important;
+    border-color: #f7e9b6 !important;
+}
+
+.analisisElevadoresView
+.aeEstadoPill[data-estado="Medio"]
+.aeEstadoText,
+.analisisElevadoresView
+.aeEstadoPill[data-sap-ui-custom-estado="Medio"]
+.aeEstadoText {
+    color: #a56a09 !important;
+}
 
 /* BAJO */
-.analisisElevadoresView .estadoPillRect[data-estado="Bajo"], .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Bajo"] { background-color: #DCFCE7 !important; }
-.analisisElevadoresView .estadoPillRect[data-estado="Bajo"] .estadoPillText, .analisisElevadoresView .estadoPillRect[data-sap-ui-custom-estado="Bajo"] .estadoPillText { color: #059669 !important; }
+
+.analisisElevadoresView .aeEstadoPill[data-estado="Bajo"],
+.analisisElevadoresView .aeEstadoPill[data-sap-ui-custom-estado="Bajo"] {
+    background: #e2f7ec !important;
+    border-color: #cbeedc !important;
+}
+
+.analisisElevadoresView
+.aeEstadoPill[data-estado="Bajo"]
+.aeEstadoText,
+.analisisElevadoresView
+.aeEstadoPill[data-sap-ui-custom-estado="Bajo"]
+.aeEstadoText {
+    color: #138a5b !important;
+}
+
+/* ================================================================
+   PIE DE TABLA
+   ================================================================ */
+
+.analisisElevadoresView .aeTableFooter {
+    flex: 0 0 31px !important;
+    width: 100% !important;
+    min-height: 31px !important;
+    gap: 7px;
+    padding-top: 5px;
+}
+
+.analisisElevadoresView .aeFooterLabel.sapMText,
+.analisisElevadoresView .aeFooterCounter.sapMText {
+    color: #748196 !important;
+    font-size: 0.57rem !important;
+    font-weight: 600 !important;
+}
+
+.analisisElevadoresView .aeFooterCounter.sapMText {
+    min-width: 52px;
+    text-align: right;
+}
+
+.analisisElevadoresView .aePageSizeSelect.sapMSlt {
+    height: 27px !important;
+    min-height: 27px !important;
+
+    background: #f8faff !important;
+    border: 1px solid #dce4ef !important;
+    border-radius: 6px !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect .sapMSltLabel {
+    height: 25px !important;
+    padding-left: 8px !important;
+
+    color: #34435a !important;
+    font-size: 0.58rem !important;
+    line-height: 25px !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect .sapMSltArrow {
+    height: 25px !important;
+    color: #0a6ff5 !important;
+    font-size: 0.65rem !important;
+    line-height: 25px !important;
+}
+
+/* ================================================================
+   MONITOR 1366 x 768 Y ALTURAS ÚTILES REDUCIDAS
+   Mantiene toda la pantalla sin scroll
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (max-height: 720px) {
+
+    .analisisElevadoresView {
+        padding: 6px 8px 6px 18px !important;
+    }
+
+    .analisisElevadoresView .aeHeaderBlock {
+        padding: 0 6px 4px !important;
+    }
+
+    .analisisElevadoresView .aePageTitle.sapMTitle {
+        margin-top: 2px !important;
+        font-size: 1.35rem !important;
+        line-height: 1 !important;
+    }
+
+    .analisisElevadoresView .aePageSubtitle.sapMText {
+        margin-top: 1px !important;
+        font-size: 0.61rem !important;
+    }
+
+    .analisisElevadoresView .aeFilterRow,
+    .analisisElevadoresView .aeKpiRow {
+        gap: 7px !important;
+    }
+
+    .analisisElevadoresView .aeFilterCard,
+    .analisisElevadoresView .aeApplyButtonBox {
+        height: 48px !important;
+    }
+
+    .analisisElevadoresView .aeFilterCard {
+        padding: 4px 8px 3px !important;
+    }
+
+    .analisisElevadoresView .aeFilterLabel.sapMLabel {
+        height: 12px !important;
+        margin-bottom: 0 !important;
+        font-size: 0.55rem !important;
+        line-height: 12px !important;
+    }
+
+    .analisisElevadoresView .aePeriodControl,
+    .analisisElevadoresView .aeFilterControl.sapMSlt,
+    .analisisElevadoresView
+    .aeFilterControl.sapMSlt
+    .sapMSltLabel,
+    .analisisElevadoresView
+    .aeFilterControl.sapMSlt
+    .sapMSltArrow {
+        height: 1.5rem !important;
+        min-height: 1.5rem !important;
+        line-height: 1.5rem !important;
+    }
+
+    .analisisElevadoresView .aeFilterValue.sapMText,
+    .analisisElevadoresView .aePeriodIcon {
+        height: 1.5rem !important;
+        line-height: 1.5rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiRow,
+    .analisisElevadoresView .aeMainCard {
+        margin-top: 6px !important;
+    }
+
+    .analisisElevadoresView .aeKpiCard {
+        min-height: 62px !important;
+        padding: 5px 7px 5px 10px !important;
+    }
+
+    .analisisElevadoresView .aeKpiIconCircle {
+        flex-basis: 35px !important;
+        width: 35px !important;
+        height: 35px !important;
+        margin-right: 6px !important;
+    }
+
+    .analisisElevadoresView .aeKpiIcon {
+        font-size: 1.04rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiLabel.sapMText {
+        font-size: 0.55rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiValue.sapMText {
+        font-size: 0.98rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiHelper.sapMText {
+        margin-top: 2px !important;
+        font-size: 0.46rem !important;
+    }
+
+    .analisisElevadoresView .aeMainCard {
+        padding: 7px 8px 5px !important;
+    }
+
+    .analisisElevadoresView .aeTableToolbar {
+        min-height: 37px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch.sapMSF {
+        height: 30px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch .sapMSFF,
+    .analisisElevadoresView .aeModernSearch .sapMSFI,
+    .analisisElevadoresView .aeModernSearch .sapMSFB {
+        height: 28px !important;
+        min-height: 28px !important;
+    }
+
+    .analisisElevadoresView
+    .aeTableWrapper
+    .sapMListTblHeaderCell,
+    .analisisElevadoresView
+    .aeTableWrapper
+    .sapMListTbl th {
+        height: 30px !important;
+    }
+
+    .analisisElevadoresView .aeTableWrapper .sapMListTblRow,
+    .analisisElevadoresView .aeTableWrapper .sapMListTblCell {
+        height: 31px !important;
+    }
+
+    .analisisElevadoresView
+    .aeTableWrapper
+    .sapMListTblCell {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+
+    .analisisElevadoresView .aeTableFooter {
+        flex-basis: 28px !important;
+        min-height: 28px !important;
+        padding-top: 3px !important;
+    }
+}
+
+/* ================================================================
+   AJUSTE DE ANCHO PARA LAPTOP
+   No genera filas nuevas ni scroll
+   ================================================================ */
+
+@media screen and (max-width: 1180px) {
+
+    .analisisElevadoresView {
+        padding-right: 9px !important;
+        padding-left: 9px !important;
+    }
+
+    .analisisElevadoresView .aeFilterRow,
+    .analisisElevadoresView .aeKpiRow {
+        gap: 6px;
+    }
+
+    .analisisElevadoresView .aeFilterCard {
+        min-width: 105px;
+    }
+
+    .analisisElevadoresView .aeFilterPeriod {
+        flex-basis: 150px !important;
+    }
+
+    .analisisElevadoresView .aeFilterWide {
+        flex-basis: 135px !important;
+    }
+
+    .analisisElevadoresView .aeApplyButton .sapMBtnInner {
+        min-width: 103px;
+        padding-right: 0.55rem;
+        padding-left: 0.55rem;
+    }
+
+    .analisisElevadoresView .aeKpiCard {
+        min-width: 125px;
+    }
+
+    .analisisElevadoresView .aeKpiIconCircle {
+        flex-basis: 37px;
+        width: 37px;
+        height: 37px;
+        margin-right: 6px;
+    }
+
+    .analisisElevadoresView .aeKpiIcon {
+        font-size: 1.05rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiLabel.sapMText {
+        font-size: 0.55rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiValue.sapMText {
+        font-size: 1rem !important;
+    }
+
+    .analisisElevadoresView .aeKpiHelper.sapMText {
+        font-size: 0.45rem !important;
+    }
+}  
+/* ================================================================
+   AJUSTE FINAL DE SEPARACIÓN, BUSCADOR Y PAGINACIÓN
+   ================================================================ */
+
+/*
+ * Se aumenta únicamente el espacio lateral izquierdo del dashboard.
+ * La pantalla continúa usando height: 100% y overflow: hidden.
+ */
+@media screen and (min-width: 761px) {
+    .analisisElevadoresView {
+        padding-left: 25px !important;
+        padding-right: 12px !important;
+    }
+}
+
+/*
+ * Monitor con altura útil reducida.
+ * Se conserva la separación con el menú sin introducir scroll.
+ */
+@media screen and (min-width: 1181px) and (max-height: 720px) {
+    .analisisElevadoresView {
+        padding-left: 25px !important;
+        padding-right: 8px !important;
+    }
+}
+
+/* ================================================================
+   ENCABEZADO DE LA TABLA
+   ================================================================ */
+
+.analisisElevadoresView .aeTableToolbar {
+    width: 100% !important;
+    min-height: 46px !important;
+    margin-bottom: 8px !important;
+    padding: 0 2px !important;
+}
+
+.analisisElevadoresView .aeTableTitleBlock {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.analisisElevadoresView .aeSearchContainer {
+    flex: 0 0 auto !important;
+    margin-left: 18px !important;
+}
+
+/* ================================================================
+   BUSCADOR MODERNO
+   ================================================================ */
+
+.analisisElevadoresView .aeModernSearch.sapMSF {
+    position: relative !important;
+    height: 38px !important;
+    min-height: 38px !important;
+
+    background: #ffffff !important;
+    border: 1px solid #d8e1ed !important;
+    border-radius: 10px !important;
+
+    box-shadow:
+        0 2px 6px rgba(24, 47, 82, 0.06),
+        0 1px 2px rgba(24, 47, 82, 0.04) !important;
+
+    overflow: hidden !important;
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
+}
+
+.analisisElevadoresView .aeModernSearch.sapMSF:hover {
+    border-color: #abc6eb !important;
+    box-shadow:
+        0 3px 9px rgba(29, 91, 174, 0.09),
+        0 1px 3px rgba(24, 47, 82, 0.05) !important;
+}
+
+.analisisElevadoresView .aeModernSearch.sapMSF:focus-within {
+    background: #ffffff !important;
+    border-color: #4b91ea !important;
+
+    box-shadow:
+        0 0 0 3px rgba(10, 111, 245, 0.10),
+        0 3px 9px rgba(29, 91, 174, 0.08) !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFF {
+    height: 36px !important;
+    min-height: 36px !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFI {
+    height: 36px !important;
+    min-height: 36px !important;
+
+    padding: 0 46px 0 13px !important;
+
+    color: #25344d !important;
+    background: transparent !important;
+    border: 0 !important;
+
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    line-height: 36px !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFI::placeholder {
+    color: #8997aa !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    opacity: 1 !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFB {
+    position: absolute !important;
+    top: 4px !important;
+    right: 5px !important;
+
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+
+    background: #edf5ff !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFB:hover {
+    background: #e2efff !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFB::before,
+.analisisElevadoresView .aeModernSearch .sapMSFB .sapUiIcon {
+    color: #0a6ff5 !important;
+    font-size: 0.8rem !important;
+    line-height: 28px !important;
+}
+
+/* Elimina marcos internos generados por el tema SAPUI5 */
+
+.analisisElevadoresView .aeModernSearch.sapMSF::before,
+.analisisElevadoresView .aeModernSearch.sapMSF::after,
+.analisisElevadoresView .aeModernSearch .sapMSFF::before,
+.analisisElevadoresView .aeModernSearch .sapMSFF::after {
+    display: none !important;
+    border: 0 !important;
+}
+
+/* ================================================================
+   PIE Y SELECTOR DE FILAS
+   ================================================================ */
+
+.analisisElevadoresView .aeTableFooter {
+    flex: 0 0 34px !important;
+    width: 100% !important;
+    min-height: 34px !important;
+
+    gap: 8px !important;
+    padding: 6px 4px 0 4px !important;
+}
+
+.analisisElevadoresView .aeFooterLabel.sapMText,
+.analisisElevadoresView .aeFooterCounter.sapMText {
+    color: #69778c !important;
+    font-size: 0.6rem !important;
+    font-weight: 600 !important;
+}
+
+.analisisElevadoresView .aeFooterCounter.sapMText {
+    min-width: 60px !important;
+    text-align: right !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect.sapMSlt {
+    width: 70px !important;
+    height: 29px !important;
+    min-height: 29px !important;
+
+    background: #ffffff !important;
+    border: 1px solid #d9e2ed !important;
+    border-radius: 7px !important;
+
+    box-shadow: 0 1px 3px rgba(24, 47, 82, 0.05) !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect.sapMSlt:hover {
+    border-color: #a9c5eb !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect .sapMSltLabel {
+    height: 27px !important;
+    padding: 0 1.65rem 0 9px !important;
+
+    color: #2b3950 !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+    line-height: 27px !important;
+}
+
+.analisisElevadoresView .aePageSizeSelect .sapMSltArrow {
+    width: 1.45rem !important;
+    height: 27px !important;
+
+    color: #0a6ff5 !important;
+    font-size: 0.65rem !important;
+    line-height: 27px !important;
+}
+
+/* ================================================================
+   AJUSTE PARA MONITOR DE ALTURA REDUCIDA
+   ================================================================ */
+
+@media screen and (min-width: 1181px) and (max-height: 720px) {
+    .analisisElevadoresView .aeTableToolbar {
+        min-height: 40px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch.sapMSF {
+        height: 34px !important;
+        min-height: 34px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch .sapMSFF,
+    .analisisElevadoresView .aeModernSearch .sapMSFI {
+        height: 32px !important;
+        min-height: 32px !important;
+        line-height: 32px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch .sapMSFB {
+        top: 3px !important;
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px !important;
+    }
+
+    .analisisElevadoresView .aeModernSearch .sapMSFB::before,
+    .analisisElevadoresView .aeModernSearch .sapMSFB .sapUiIcon {
+        line-height: 26px !important;
+    }
+
+    .analisisElevadoresView .aeTableFooter {
+        flex-basis: 30px !important;
+        min-height: 30px !important;
+        padding-top: 3px !important;
+    }
+}
+
+/* ================================================================
+   LAPTOP DE ANCHO REDUCIDO
+   ================================================================ */
+
+@media screen and (max-width: 1180px) {
+    .analisisElevadoresView .aeModernSearch {
+        width: 310px !important;
+    }
+
+    .analisisElevadoresView .aeSearchContainer {
+        margin-left: 10px !important;
+    }
+}
+/* ================================================================
+   AJUSTE FINAL DEL BUSCADOR
+   ================================================================ */
+
+/* Texto escrito y placeholder más pequeños */
+.analisisElevadoresView .aeModernSearch .sapMSFI {
+    font-size: 0.64rem !important;
+    font-weight: 500 !important;
+}
+
+.analisisElevadoresView .aeModernSearch .sapMSFI::placeholder {
+    color: #8b98aa !important;
+    font-size: 0.64rem !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    opacity: 1 !important;
+}
+
+/* Quitar fondo azul del icono */
+.analisisElevadoresView .aeModernSearch .sapMSFB,
+.analisisElevadoresView .aeModernSearch .sapMSFB:hover,
+.analisisElevadoresView .aeModernSearch .sapMSFB:active,
+.analisisElevadoresView .aeModernSearch .sapMSFB:focus {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Icono limpio, sin recuadro */
+.analisisElevadoresView .aeModernSearch .sapMSFB::before,
+.analisisElevadoresView .aeModernSearch .sapMSFB .sapUiIcon {
+    color: #1e2e4c !important;
+    font-size: 0.78rem !important;
+}
+/* ================================================================
+   QUITAR CONTORNO DE LAS PÍLDORAS DE ESTADO
+   ================================================================ */
+
+.analisisElevadoresView .aeEstadoPill,
+.analisisElevadoresView .aeEstadoPill[data-estado],
+.analisisElevadoresView .aeEstadoPill[data-sap-ui-custom-estado] {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}

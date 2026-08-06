@@ -1,317 +1,391 @@
 <mvc:View
-  controllerName="mantenimiento.controller.AnalisisReparacionesPlaneadasEjecutadas"
-  xmlns:mvc="sap.ui.core.mvc"
-  xmlns="sap.m"
-  xmlns:core="sap.ui.core">
+    controllerName="mantenimiento.controller.AnalisisReparacionesPlaneadasEjecutadas"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
 
-  <Page
-    id="pageAnalisisReparacionesEjecutadas"
-    showHeader="false"
-    class="repaEjecutadasPage">
+    <Page
+        id="pageAnalisisReparacionesEjecutadas"
+        showHeader="false"
+        class="repaEjecutadasPage sapUiSizeCompact">
 
-    <content>
-      <ScrollContainer height="100%" vertical="true">
-        <VBox class="repaContainer">
+        <content>
+            <ScrollContainer
+                width="100%"
+                height="100%"
+                vertical="true"
+                horizontal="false"
+                focusable="true"
+                class="repaScroll">
 
-          <!-- HEADER -->
-          <VBox class="repaHeader">
-            <HBox class="repaTitleRow" alignItems="Center">
+                <VBox class="repaContainer">
 
-              <VBox>
-                <HBox alignItems="Baseline" class="repaTitleTextRow">
-                  <Text text="Análisis de reparaciones planeadas" class="repaTitle"/>
-                  <Text text="ejecutadas" class="repaTitleGreen"/>
-                </HBox>
+                    <!-- ENCABEZADO -->
+                    <VBox class="repaHeader">
+                        <HBox class="repaTitleRow" alignItems="Center">
+                            <VBox class="repaHeaderText">
+                                <HBox
+                                    alignItems="Baseline"
+                                    wrap="Wrap"
+                                    class="repaTitleTextRow">
+                                    <Title
+                                        text="Análisis de Reparaciones Planeadas"
+                                        level="H1"
+                                        class="repaTitle" />
+                                    <Title
+                                        text="Ejecutadas"
+                                        level="H1"
+                                        class="repaTitleGreen" />
+                                </HBox>
 
-                <HBox class="repaBreadcrumb" alignItems="Center">
-                  <Text text="Órdenes"/>
-                  <core:Icon src="sap-icon://navigation-right-arrow"/>
-                  <Text text="Composición de órdenes del periodo"/>
-                  <core:Icon src="sap-icon://navigation-right-arrow"/>
-                  <Text text="Reparaciones"/>
-                </HBox>
-              </VBox>
-            </HBox>
-          </VBox>
+                                <HBox class="repaBreadcrumb" alignItems="Center" wrap="Wrap">
+                                    <Text text="Órdenes" />
+                                    <core:Icon src="sap-icon://navigation-right-arrow" />
+                                    <Text text="Composición de órdenes del periodo" />
+                                    <core:Icon src="sap-icon://navigation-right-arrow" />
+                                    <Text text="Reparaciones" />
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
 
-          <!-- FILTROS -->
-          <HBox class="repaFilterCard" wrap="NoWrap">
+                    <!-- FILTROS -->
+                    <HBox class="repaFilterCard" wrap="NoWrap" alignItems="Stretch">
+                        <VBox class="repaFilterItem repaFilterPeriod">
+                            <Label text="Periodo" />
+                            <Select id="selPeriodo" selectedKey="mayo" width="100%">
+                                <items>
+                                    <core:Item key="mayo" text="Mayo 2024" />
+                                    <core:Item key="junio" text="Junio 2024" />
+                                    <core:Item key="todos" text="Todos" />
+                                </items>
+                            </Select>
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Periodo"/>
-              <Select id="selPeriodo" selectedKey="mayo">
-                <items>
-                  <core:Item key="mayo" text="Mayo 2024"/>
-                  <core:Item key="junio" text="Junio 2024"/>
-                  <core:Item key="todos" text="Todos"/>
-                </items>
-              </Select>
-            </VBox>
+                        <VBox class="repaFilterItem repaFilterDate">
+                            <Label text="Fecha desde" />
+                            <DatePicker
+                                id="dpDesde"
+                                value="01/05/2024"
+                                displayFormat="dd/MM/yyyy"
+                                valueFormat="dd/MM/yyyy"
+                                width="100%" />
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Fecha desde"/>
-              <DatePicker id="dpDesde" value="01/05/2024"/>
-            </VBox>
+                        <VBox class="repaFilterItem repaFilterDate">
+                            <Label text="Fecha hasta" />
+                            <DatePicker
+                                id="dpHasta"
+                                value="31/05/2024"
+                                displayFormat="dd/MM/yyyy"
+                                valueFormat="dd/MM/yyyy"
+                                width="100%" />
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Fecha hasta"/>
-              <DatePicker id="dpHasta" value="31/05/2024"/>
-            </VBox>
+                        <VBox class="repaFilterItem repaFilterNormal">
+                            <Label text="Zona" />
+                            <Select id="selZona" selectedKey="todas" width="100%">
+                                <items>
+                                    <core:Item key="todas" text="Todas" />
+                                    <core:Item key="norte" text="Norte" />
+                                    <core:Item key="centro" text="Centro" />
+                                    <core:Item key="sur" text="Sur" />
+                                </items>
+                            </Select>
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Zona"/>
-              <Select id="selZona" selectedKey="todas">
-                <items>
-                  <core:Item key="todas" text="Todas"/>
-                  <core:Item key="norte" text="Norte"/>
-                  <core:Item key="centro" text="Centro"/>
-                  <core:Item key="sur" text="Sur"/>
-                </items>
-              </Select>
-            </VBox>
+                        <VBox class="repaFilterItem repaFilterNormal">
+                            <Label text="Cliente" />
+                            <Select id="selCliente" selectedKey="todos" width="100%">
+                                <items>
+                                    <core:Item key="todos" text="Todos" />
+                                    <core:Item key="Torre Reforma" text="Torre Reforma" />
+                                    <core:Item key="Plaza Satélite" text="Plaza Satélite" />
+                                    <core:Item key="Hospital Ángeles" text="Hospital Ángeles" />
+                                    <core:Item key="Torre Mayor" text="Torre Mayor" />
+                                    <core:Item key="Centro Ejecutivo Sur" text="Centro Ejecutivo Sur" />
+                                    <core:Item key="Corporativo Norte" text="Corporativo Norte" />
+                                    <core:Item key="Plaza Central" text="Plaza Central" />
+                                    <core:Item key="Torre Prisma" text="Torre Prisma" />
+                                    <core:Item key="Hospital Norte" text="Hospital Norte" />
+                                </items>
+                            </Select>
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Cliente"/>
-              <Select id="selCliente" selectedKey="todos">
-                <items>
-                  <core:Item key="todos" text="Todos"/>
-                  <core:Item key="Torre Reforma" text="Torre Reforma"/>
-                  <core:Item key="Plaza Satélite" text="Plaza Satélite"/>
-                  <core:Item key="Hospital Ángeles" text="Hospital Ángeles"/>
-                  <core:Item key="Torre Mayor" text="Torre Mayor"/>
-                  <core:Item key="Centro Ejecutivo Sur" text="Centro Ejecutivo Sur"/>
-                  <core:Item key="Corporativo Norte" text="Corporativo Norte"/>
-                  <core:Item key="Plaza Central" text="Plaza Central"/>
-                  <core:Item key="Torre Prisma" text="Torre Prisma"/>
-                  <core:Item key="Hospital Norte" text="Hospital Norte"/>
-                </items>
-              </Select>
-            </VBox>
+                        <VBox class="repaFilterItem repaFilterResponsible">
+                            <Label text="Responsable" />
+                            <Select id="selResponsable" selectedKey="todos" width="100%">
+                                <items>
+                                    <core:Item key="todos" text="Todos" />
+                                    <core:Item key="Juan Pérez" text="Juan Pérez" />
+                                    <core:Item key="María González" text="María González" />
+                                    <core:Item key="Carlos Herrera" text="Carlos Herrera" />
+                                    <core:Item key="Luis Ramírez" text="Luis Ramírez" />
+                                </items>
+                            </Select>
+                        </VBox>
 
-            <VBox class="repaFilterItem">
-              <Label text="Responsable"/>
-              <Select id="selResponsable" selectedKey="todos">
-                <items>
-                  <core:Item key="todos" text="Todos"/>
-                  <core:Item key="Juan Pérez" text="Juan Pérez"/>
-                  <core:Item key="María González" text="María González"/>
-                  <core:Item key="Carlos Herrera" text="Carlos Herrera"/>
-                  <core:Item key="Luis Ramírez" text="Luis Ramírez"/>
-                </items>
-              </Select>
-            </VBox>
-
-            <VBox class="repaFilterAction">
-              <Label text=" "/>
-              <Button
-                text="Aplicar filtros"
-                icon="sap-icon://filter"
-                type="Emphasized"
-                press=".onAplicarFiltros"
-                class="repaFilterButton"/>
-            </VBox>
-
-          </HBox>
-
-          <!-- KPI CARDS -->
-          <HBox class="repaKpiRow" wrap="Wrap">
-
-            <VBox class="repaKpiCard repaKpiBlue">
-              <HBox alignItems="Center">
-                <VBox class="repaKpiIconBox repaBlueSoft">
-                  <core:Icon src="sap-icon://appointment-2"/>
-                </VBox>
-                <VBox>
-                  <Text text="{repa>/kpis/planeadas}" class="repaKpiNumber repaBlueText"/>
-                  <Text text="Planeadas" class="repaKpiLabel"/>
-                  <Text text="Órdenes del periodo" class="repaKpiSub"/>
-                </VBox>
-              </HBox>
-            </VBox>
-
-            <VBox class="repaKpiCard repaKpiGreen">
-              <HBox alignItems="Center">
-                <VBox class="repaKpiIconBox repaGreenSoft">
-                  <core:Icon src="sap-icon://accept"/>
-                </VBox>
-                <VBox>
-                  <Text text="{repa>/kpis/ejecutadas}" class="repaKpiNumber repaGreenText"/>
-                  <Text text="Ejecutadas" class="repaKpiLabel"/>
-                  <Text text="{repa>/kpis/cumplimiento} del total" class="repaKpiSub"/>
-                </VBox>
-              </HBox>
-            </VBox>
-
-            <VBox class="repaKpiCard repaKpiRed">
-              <HBox alignItems="Center">
-                <VBox class="repaKpiIconBox repaRedSoft">
-                  <core:Icon src="sap-icon://decline"/>
-                </VBox>
-                <VBox>
-                  <Text text="{repa>/kpis/noEjecutadas}" class="repaKpiNumber repaRedText"/>
-                  <Text text="No ejecutadas" class="repaKpiLabel"/>
-                  <Text text="Dentro del periodo filtrado" class="repaKpiSub"/>
-                </VBox>
-              </HBox>
-            </VBox>
-
-            <VBox class="repaKpiCard repaKpiPurple">
-              <HBox alignItems="Center">
-                <VBox class="repaKpiIconBox repaPurpleSoft">
-                  <core:Icon src="sap-icon://target-group"/>
-                </VBox>
-                <VBox>
-                  <Text text="{repa>/kpis/cumplimiento}" class="repaKpiNumber repaPurpleText"/>
-                  <Text text="Cumplimiento" class="repaKpiLabel"/>
-                  <Text text="{repa>/kpis/resumen}" class="repaKpiSub"/>
-                </VBox>
-              </HBox>
-            </VBox>
-
-          </HBox>
-
-          <!-- TABS -->
-          <HBox class="repaAnalysisBar" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-
-            <HBox class="repaTabs" alignItems="Center">
-              <Text text="Ver análisis por:" class="repaTabsLabel"/>
-
-              <Button
-                text="No ejecutadas"
-                type="Transparent"
-                press=".onVerNoEjecutadas"
-                class="repaTabButton"/>
-
-              <Button
-                text="Ejecutadas"
-                type="Emphasized"
-                class="repaTabButton repaTabButtonActive"/>
-
-              <Button
-                text="Todas"
-                type="Transparent"
-                press=".onVerTodas"
-                class="repaTabButton"/>
-            </HBox>
-
-            <HBox class="repaInfoMessage" alignItems="Center">
-              <core:Icon src="sap-icon://information"/>
-              <Text text="{repa>/infoMessage}"/>
-            </HBox>
-
-          </HBox>
-
-          <!-- TABLA PRINCIPAL -->
-          <VBox class="repaTableCard">
-
-            <HBox class="repaTableTop" justifyContent="SpaceBetween" alignItems="Center">
-              <Title text="Ejecución de Reparaciones Planeadas" level="H2" class="repaSectionTitle"/>
-
-              <SearchField
-                width="320px"
-                placeholder="Buscar material..."
-                liveChange=".onBuscarMaterial"
-                class="repaSearch"/>
-            </HBox>
-
-            <!-- HEADER TABLA -->
-            <HBox class="repaTableGrid repaTableHeaderRow">
-              <Text text="" class="repaCellExpand"/>
-              <Text text="Material utilizado" class="repaCellMaterial repaHeaderText"/>
-              <Text text="OT ejecutadas" class="repaCellCenter repaHeaderText"/>
-              <Text text="% de las ejecutadas" class="repaCellCenter repaHeaderText"/>
-              <Text text="Equipos atendidos" class="repaCellCenter repaHeaderText"/>
-              <Text text="Clientes atendidos" class="repaCellCenter repaHeaderText"/>
-              <Text text="Días promedio de ejecución" class="repaCellCenter repaHeaderText"/>
-              <Text text="" class="repaCellArrow"/>
-            </HBox>
-
-            <!-- BODY -->
-            <VBox items="{repa>/materiales}" class="repaMaterialList">
-              <items>
-                <VBox class="repaMaterialBlock">
-
-                  <HBox class="repaTableGrid repaMaterialRow">
-                    <Button
-                      icon="{repa>chevronIcon}"
-                      type="Transparent"
-                      press=".onToggleMaterial"
-                      class="repaExpandButton repaCellExpand"/>
-
-                    <HBox class="repaCellMaterial repaMaterialContent" alignItems="Center">
-                      <core:Icon src="{repa>icon}" class="repaMaterialIcon"/>
-                      <Text text="{repa>material}" class="repaMaterialName"/>
+                        <VBox
+                            class="repaFilterAction"
+                            alignItems="Center"
+                            justifyContent="Center">
+                            <Button
+                                text="Aplicar filtros"
+                                icon="sap-icon://filter"
+                                type="Emphasized"
+                                press=".onAplicarFiltros"
+                                class="repaFilterButton" />
+                        </VBox>
                     </HBox>
 
-                    <Text text="{repa>ejecutadas}" class="repaCellCenter repaGreenNumber"/>
-                    <Text text="{repa>porcentaje}" class="repaCellCenter repaBlueNumber"/>
-                    <Text text="{repa>equipos}" class="repaCellCenter"/>
-                    <Text text="{repa>clientes}" class="repaCellCenter"/>
-                    <Text text="{repa>dias}" class="repaCellCenter repaGreenNumber"/>
+                    <!-- INDICADORES -->
+                    <HBox class="repaKpiRow" wrap="NoWrap" alignItems="Stretch">
+                        <VBox class="repaKpiCard repaKpiBlue">
+                            <HBox alignItems="Center" class="repaKpiInner">
+                                <VBox
+                                    class="repaKpiIconBox repaBlueSoft"
+                                    alignItems="Center"
+                                    justifyContent="Center">
+                                    <core:Icon src="sap-icon://appointment-2" />
+                                </VBox>
+                                <VBox class="repaKpiContent" justifyContent="Center">
+                                    <Text
+                                        text="{repa>/kpis/planeadas}"
+                                        class="repaKpiNumber repaBlueText" />
+                                    <Text text="Planeadas" class="repaKpiLabel" />
+                                    <Text text="Órdenes del periodo" class="repaKpiSub" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
 
-                    <Button
-                      icon="{repa>chevronIcon}"
-                      type="Transparent"
-                      press=".onToggleMaterial"
-                      class="repaArrowButton repaCellArrow"/>
-                  </HBox>
+                        <VBox class="repaKpiCard repaKpiGreen">
+                            <HBox alignItems="Center" class="repaKpiInner">
+                                <VBox
+                                    class="repaKpiIconBox repaGreenSoft"
+                                    alignItems="Center"
+                                    justifyContent="Center">
+                                    <core:Icon src="sap-icon://sys-enter-2" />
+                                </VBox>
+                                <VBox class="repaKpiContent" justifyContent="Center">
+                                    <Text
+                                        text="{repa>/kpis/ejecutadas}"
+                                        class="repaKpiNumber repaGreenText" />
+                                    <Text text="Ejecutadas" class="repaKpiLabel" />
+                                    <Text
+                                        text="{repa>/kpis/cumplimiento} del total"
+                                        class="repaKpiSub" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
 
-                  <Table
-                    visible="{repa>expanded}"
-                    items="{repa>ordenes}"
-                    class="repaInnerTable"
-                    fixedLayout="Strict"
-                    showSeparators="Inner">
+                        <VBox class="repaKpiCard repaKpiRed">
+                            <HBox alignItems="Center" class="repaKpiInner">
+                                <VBox
+                                    class="repaKpiIconBox repaRedSoft"
+                                    alignItems="Center"
+                                    justifyContent="Center">
+                                    <core:Icon src="sap-icon://decline" />
+                                </VBox>
+                                <VBox class="repaKpiContent" justifyContent="Center">
+                                    <Text
+                                        text="{repa>/kpis/noEjecutadas}"
+                                        class="repaKpiNumber repaRedText" />
+                                    <Text text="No ejecutadas" class="repaKpiLabel" />
+                                    <Text
+                                        text="7.4% del total planeado"
+                                        class="repaKpiSub repaRedSub" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
 
-                    <columns>
-                      <Column width="16%">
-                        <Text text="OT"/>
-                      </Column>
-                      <Column width="14%">
-                        <Text text="Equipo"/>
-                      </Column>
-                      <Column width="22%">
-                        <Text text="Cliente"/>
-                      </Column>
-                      <Column width="16%">
-                        <Text text="Fecha ejecución"/>
-                      </Column>
-                      <Column width="20%">
-                        <Text text="Técnico responsable"/>
-                      </Column>
-                      <Column width="12%">
-                        <Text text="Días de ejecución"/>
-                      </Column>
-                    </columns>
+                        <VBox class="repaKpiCard repaKpiPurple">
+                            <HBox alignItems="Center" class="repaKpiInner">
+                                <VBox
+                                    class="repaKpiIconBox repaPurpleSoft"
+                                    alignItems="Center"
+                                    justifyContent="Center">
+                                    <core:Icon src="sap-icon://target-group" />
+                                </VBox>
+                                <VBox class="repaKpiContent" justifyContent="Center">
+                                    <Text
+                                        text="{repa>/kpis/cumplimiento}"
+                                        class="repaKpiNumber repaPurpleText" />
+                                    <Text text="Cumplimiento" class="repaKpiLabel" />
+                                    <Text text="{repa>/kpis/resumen}" class="repaKpiSub" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
 
-                    <items>
-                      <ColumnListItem>
-                        <cells>
-                          <Text text="{repa>ot}" class="repaOtText"/>
-                          <Text text="{repa>equipo}"/>
-                          <Text text="{repa>cliente}"/>
-                          <Text text="{repa>fecha}"/>
-                          <Text text="{repa>tecnico}"/>
-                          <Text text="{repa>dias}"/>
-                        </cells>
-                      </ColumnListItem>
-                    </items>
+                    <!-- ESTADO DEL ANÁLISIS -->
+                    <HBox
+                        class="repaAnalysisBar"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        wrap="NoWrap">
+                        <HBox class="repaTabs" alignItems="Center" wrap="NoWrap">
+                            <Text text="Ver análisis por:" class="repaTabsLabel" />
+                            <Button
+                                text="{= 'No ejecutadas (' + ${repa>/kpis/noEjecutadas} + ')' }"
+                                type="Transparent"
+                                press=".onVerNoEjecutadas"
+                                class="repaTabButton" />
+                            <Button
+                                text="{= 'Ejecutadas (' + ${repa>/kpis/ejecutadas} + ')' }"
+                                type="Emphasized"
+                                class="repaTabButton repaTabButtonActive" />
+                            <Button
+                                text="{= 'Todas (' + ${repa>/kpis/planeadas} + ')' }"
+                                type="Transparent"
+                                press=".onVerTodas"
+                                class="repaTabButton" />
+                        </HBox>
 
-                  </Table>
+                        <HBox class="repaInfoMessage" alignItems="Center">
+                            <core:Icon src="sap-icon://information" />
+                            <Text text="{repa>/infoMessage}" />
+                        </HBox>
+                    </HBox>
 
+                    <!-- TABLA PRINCIPAL -->
+                    <VBox class="repaTableCard">
+                        <HBox
+                            class="repaTableTop"
+                            justifyContent="SpaceBetween"
+                            alignItems="Center">
+                            <Title
+                                text="Ejecución de Reparaciones Planeadas"
+                                level="H2"
+                                class="repaSectionTitle" />
+                            <SearchField
+                                width="220px"
+                                placeholder="Buscar material..."
+                                liveChange=".onBuscarMaterial"
+                                class="repaSearch" />
+                        </HBox>
+
+                        <VBox class="repaTableViewport">
+                            <HBox class="repaTableGrid repaTableHeaderRow">
+                                <Text text="" class="repaCellExpand" />
+                                <Text
+                                    text="Material utilizado"
+                                    class="repaCellMaterial repaHeaderText" />
+                                <Text
+                                    text="OT ejecutadas"
+                                    class="repaCellCenter repaHeaderText" />
+                                <Text
+                                    text="% de las ejecutadas"
+                                    class="repaCellCenter repaHeaderText" />
+                                <Text
+                                    text="Equipos atendidos"
+                                    class="repaCellCenter repaHeaderText" />
+                                <Text
+                                    text="Clientes atendidos"
+                                    class="repaCellCenter repaHeaderText" />
+                                <Text
+                                    text="Días promedio de ejecución"
+                                    class="repaCellCenter repaHeaderText" />
+                                <Text text="" class="repaCellArrow" />
+                            </HBox>
+
+                            <VBox items="{repa>/materiales}" class="repaMaterialList">
+                                <items>
+                                    <VBox class="repaMaterialBlock">
+                                        <HBox class="repaTableGrid repaMaterialRow">
+                                            <Button
+                                                icon="{repa>chevronIcon}"
+                                                type="Transparent"
+                                                press=".onToggleMaterial"
+                                                class="repaExpandButton repaCellExpand" />
+
+                                            <HBox
+                                                class="repaCellMaterial repaMaterialContent"
+                                                alignItems="Center">
+                                                <core:Icon
+                                                    src="{repa>icon}"
+                                                    class="repaMaterialIcon" />
+                                                <Text
+                                                    text="{repa>material}"
+                                                    class="repaMaterialName" />
+                                            </HBox>
+
+                                            <Text
+                                                text="{repa>ejecutadas}"
+                                                class="repaCellCenter repaGreenNumber" />
+                                            <Text
+                                                text="{repa>porcentaje}"
+                                                class="repaCellCenter repaBlueNumber" />
+                                            <Text
+                                                text="{repa>equipos}"
+                                                class="repaCellCenter" />
+                                            <Text
+                                                text="{repa>clientes}"
+                                                class="repaCellCenter" />
+                                            <Text
+                                                text="{repa>dias}"
+                                                class="repaCellCenter repaGreenNumber" />
+
+                                            <Button
+                                                icon="{repa>chevronIcon}"
+                                                type="Transparent"
+                                                press=".onToggleMaterial"
+                                                class="repaArrowButton repaCellArrow" />
+                                        </HBox>
+
+                                        <Table
+                                            visible="{repa>expanded}"
+                                            items="{repa>ordenes}"
+                                            class="repaInnerTable"
+                                            fixedLayout="Strict"
+                                            showSeparators="Inner">
+                                            <columns>
+                                                <Column width="16%">
+                                                    <Text text="OT" />
+                                                </Column>
+                                                <Column width="14%">
+                                                    <Text text="Equipo" />
+                                                </Column>
+                                                <Column width="22%">
+                                                    <Text text="Cliente" />
+                                                </Column>
+                                                <Column width="16%">
+                                                    <Text text="Fecha ejecución" />
+                                                </Column>
+                                                <Column width="20%">
+                                                    <Text text="Técnico responsable" />
+                                                </Column>
+                                                <Column width="12%">
+                                                    <Text text="Días de ejecución" />
+                                                </Column>
+                                            </columns>
+
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <Text text="{repa>ot}" class="repaOtText" />
+                                                        <Text text="{repa>equipo}" />
+                                                        <Text text="{repa>cliente}" />
+                                                        <Text text="{repa>fecha}" />
+                                                        <Text text="{repa>tecnico}" />
+                                                        <Text text="{repa>dias}" />
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </VBox>
+                                </items>
+                            </VBox>
+                        </VBox>
+
+                        <HBox class="repaFooterInfo" alignItems="Center">
+                            <core:Icon src="sap-icon://information" />
+                            <Text
+                                text="Los días de ejecución corresponden al tiempo desde la fecha de inicio hasta la fecha de cierre de la OT." />
+                        </HBox>
+                    </VBox>
                 </VBox>
-              </items>
-            </VBox>
-
-            <HBox class="repaFooterInfo" alignItems="Center">
-              <core:Icon src="sap-icon://information"/>
-              <Text text="Los días de ejecución corresponden al tiempo desde la fecha de inicio hasta la fecha de cierre de la OT."/>
-            </HBox>
-
-          </VBox>
-
-        </VBox>
-      </ScrollContainer>
-    </content>
-  </Page>
+            </ScrollContainer>
+        </content>
+    </Page>
 </mvc:View>
