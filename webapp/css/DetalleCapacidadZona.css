@@ -2064,3 +2064,837 @@
         min-width: 100% !important;
     }
 }
+
+/* ==========================================================================
+   AJUSTE MAESTRO FINAL - DETALLE DE CAPACIDAD POR ZONA
+   Referencia aprobada:
+   - KPI compactas con iconos y degradados correctos
+   - variaciones rojas/verdes
+   - estados con punto de color
+   - resúmenes inferiores en la misma fila
+   Mantener este bloque al final del archivo.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. PÁGINA Y CABECERA
+   ========================================================================== */
+
+.DetalleCapacidadZona,
+.DetalleCapacidadZona.sapMPage,
+.DetalleCapacidadZona .sapMPageBgStandard,
+.DetalleCapacidadZona .sapMPageScroll {
+    width: 100% !important;
+    max-width: none !important;
+    background: #f8fafc !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleCapacidadZona .dczPage {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    padding: 0.55rem 1rem 1rem !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleCapacidadZona .dczBackRow {
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+    margin-bottom: 0.08rem !important;
+}
+
+.DetalleCapacidadZona .dczBackButton,
+.DetalleCapacidadZona .dczBackButton .sapMBtnInner {
+    height: 1.35rem !important;
+    min-height: 1.35rem !important;
+}
+
+.DetalleCapacidadZona .dczBackButton .sapMBtnContent,
+.DetalleCapacidadZona .dczBackButton .sapMBtnIcon {
+    color: #2563eb !important;
+    font-size: 0.62rem !important;
+    line-height: 1.25rem !important;
+    font-weight: 800 !important;
+}
+
+.DetalleCapacidadZona .dczHeader {
+    margin-bottom: 0.52rem !important;
+}
+
+.DetalleCapacidadZona .dczTitle {
+    color: #172554 !important;
+    font-size: 1.55rem !important;
+    line-height: 1.75rem !important;
+    font-weight: 900 !important;
+}
+
+.DetalleCapacidadZona .dczSubtitle {
+    color: #64748b !important;
+    font-size: 0.67rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   2. FILTROS
+   ========================================================================== */
+
+.DetalleCapacidadZona .dczFiltersBar {
+    display: grid !important;
+    grid-template-columns:
+        minmax(7rem, 0.82fr)
+        minmax(8rem, 1fr)
+        minmax(8rem, 1fr)
+        minmax(6.8rem, 0.78fr)
+        minmax(7.5rem, 0.9fr)
+        minmax(6.8rem, 0.78fr)
+        minmax(9.2rem, 1.08fr)
+        minmax(8rem, 0.94fr)
+        7.35rem !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    gap: 0.5rem !important;
+    align-items: stretch !important;
+
+    margin-bottom: 0.72rem !important;
+}
+
+.DetalleCapacidadZona .dczFiltersBar > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+.DetalleCapacidadZona .dczFilterBox {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    padding: 0.36rem 0.58rem 0.27rem !important;
+
+    background: #ffffff !important;
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.15rem 0.45rem
+        rgba(15, 23, 42, 0.055) !important;
+
+    overflow: visible !important;
+}
+
+.DetalleCapacidadZona .dczFilterLabel {
+    height: 0.7rem !important;
+    min-height: 0.7rem !important;
+
+    margin: 0 0 0.05rem !important;
+
+    color: #475569 !important;
+    font-size: 0.53rem !important;
+    line-height: 0.63rem !important;
+    font-weight: 900 !important;
+}
+
+.DetalleCapacidadZona .dczFilterBox .sapMSlt,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBase,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.DetalleCapacidadZona .dczFilterBox .sapMSltLabel,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBaseInner {
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    padding: 0 1.5rem 0 0.08rem !important;
+
+    color: #172554 !important;
+    background: transparent !important;
+
+    font-size: 0.64rem !important;
+    font-weight: 800 !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+/* Flechas y calendarios azules a la derecha. */
+.DetalleCapacidadZona .dczFilterBox .sapMSltArrow,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBaseIconContainer,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBaseIcon {
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+}
+
+.DetalleCapacidadZona .dczFilterBox .sapMSltArrow,
+.DetalleCapacidadZona .dczFilterBox .sapMInputBaseIcon,
+.DetalleCapacidadZona
+.dczFilterBox
+.sapMInputBaseIconContainer
+.sapUiIcon {
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    background: transparent !important;
+    font-size: 0.72rem !important;
+}
+
+/* ==========================================================================
+   3. BOTÓN APLICAR FILTROS ESTÁNDAR
+   ========================================================================== */
+
+.DetalleCapacidadZona .dczApplyButtonBox {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    padding: 0 !important;
+
+    align-self: stretch !important;
+    justify-self: end !important;
+}
+
+.DetalleCapacidadZona .dczApplyButton {
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.DetalleCapacidadZona .dczApplyButton .sapMBtnInner {
+    width: 100% !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    padding: 0 0.5rem !important;
+
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1787ff 0%,
+            #066ce6 100%
+        ) !important;
+
+    box-shadow:
+        0 0.28rem 0.62rem
+        rgba(22, 119, 255, 0.23) !important;
+
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 0.32rem !important;
+}
+
+.DetalleCapacidadZona .dczApplyButton .sapMBtnIcon,
+.DetalleCapacidadZona .dczApplyButton .sapUiIcon {
+    position: static !important;
+    order: 1 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+}
+
+.DetalleCapacidadZona .dczApplyButton .sapMBtnContent {
+    order: 2 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   4. KPI
+   ========================================================================== */
+
+.DetalleCapacidadZona .dczKpiRow {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    gap: 0.62rem !important;
+    align-items: stretch !important;
+
+    margin-bottom: 0.72rem !important;
+}
+
+.DetalleCapacidadZona .dczKpiRow > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.DetalleCapacidadZona .dczKpiCard {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 4.75rem !important;
+    min-height: 4.75rem !important;
+    max-height: 4.75rem !important;
+
+    padding: 0.55rem 0.68rem !important;
+
+    border: 1px solid #e2e8f0 !important;
+    border-left-width: 0.24rem !important;
+    border-radius: 0.58rem !important;
+
+    box-shadow:
+        0 0.28rem 0.8rem
+        rgba(15, 23, 42, 0.055) !important;
+}
+
+.DetalleCapacidadZona .dczKpiBlue {
+    border-left-color: #2563eb !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(37, 99, 235, 0.14) 0%,
+            rgba(37, 99, 235, 0.055) 40%,
+            #ffffff 100%
+        ) !important;
+}
+
+.DetalleCapacidadZona .dczKpiTeal {
+    border-left-color: #14b8a6 !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(20, 184, 166, 0.14) 0%,
+            rgba(20, 184, 166, 0.055) 40%,
+            #ffffff 100%
+        ) !important;
+}
+
+.DetalleCapacidadZona .dczKpiGreen {
+    border-left-color: #16a34a !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(22, 163, 74, 0.14) 0%,
+            rgba(22, 163, 74, 0.055) 40%,
+            #ffffff 100%
+        ) !important;
+}
+
+.DetalleCapacidadZona .dczKpiOrange {
+    border-left-color: #f59e0b !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(245, 158, 11, 0.14) 0%,
+            rgba(245, 158, 11, 0.055) 40%,
+            #ffffff 100%
+        ) !important;
+}
+
+.DetalleCapacidadZona .dczKpiRed {
+    border-left-color: #ef4444 !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 68, 68, 0.14) 0%,
+            rgba(239, 68, 68, 0.055) 40%,
+            #ffffff 100%
+        ) !important;
+}
+
+.DetalleCapacidadZona .dczKpiIcon {
+    flex: 0 0 2.7rem !important;
+
+    width: 2.7rem !important;
+    min-width: 2.7rem !important;
+    height: 2.7rem !important;
+    min-height: 2.7rem !important;
+
+    margin-right: 0.65rem !important;
+
+    border-radius: 50% !important;
+}
+
+.DetalleCapacidadZona .dczKpiIcon .sapUiIcon {
+    font-size: 1.32rem !important;
+}
+
+.DetalleCapacidadZona .dczKpiLabel {
+    color: #64748b !important;
+
+    font-size: 0.56rem !important;
+    line-height: 0.7rem !important;
+    font-weight: 850 !important;
+}
+
+.DetalleCapacidadZona .dczKpiNumber {
+    font-size: 1.28rem !important;
+    line-height: 1.42rem !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+}
+
+.DetalleCapacidadZona .dczUtilTrack {
+    width: 6.5rem !important;
+    max-width: 100% !important;
+
+    height: 0.28rem !important;
+    min-height: 0.28rem !important;
+
+    margin-top: 0.25rem !important;
+
+    background: #fed7aa !important;
+    border-radius: 999px !important;
+
+    overflow: hidden !important;
+}
+
+.DetalleCapacidadZona .dczUtilFill {
+    height: 0.28rem !important;
+    min-height: 0.28rem !important;
+
+    background: #f59e0b !important;
+    border-radius: 999px !important;
+}
+
+/* ==========================================================================
+   5. TARJETA Y TABLA PRINCIPAL
+   ========================================================================== */
+
+.DetalleCapacidadZona .dczCard {
+    background: #ffffff !important;
+    border: 1px solid #dce4ef !important;
+    border-radius: 0.6rem !important;
+
+    box-shadow:
+        0 0.28rem 0.8rem
+        rgba(15, 23, 42, 0.05) !important;
+}
+
+.DetalleCapacidadZona .dczMainTableCard {
+    width: 100% !important;
+
+    margin-bottom: 0.72rem !important;
+    padding: 0.62rem 0.72rem 0.48rem !important;
+
+    overflow-x: hidden !important;
+}
+
+.DetalleCapacidadZona .dczCardHeader {
+    min-height: 2rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.DetalleCapacidadZona .dczCardTitle {
+    color: #172554 !important;
+
+    font-size: 0.76rem !important;
+    line-height: 0.95rem !important;
+    font-weight: 900 !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable,
+.DetalleCapacidadZona .dczOrdersTable .sapMListTbl {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+/* Proporciones para que la tabla quepa sin scroll horizontal. */
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(1),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(1) {
+    width: 7% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(2),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(2) {
+    width: 10.5% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(3),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(3) {
+    width: 10% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(4),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(4) {
+    width: 13% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(5),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(5) {
+    width: 10.5% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(6),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(6) {
+    width: 8% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(7),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(7),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(8),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(8),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(9),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(9),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(10),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(10) {
+    width: 8% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell:nth-child(11),
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell:nth-child(11) {
+    width: 11% !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeader,
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblHeaderCell,
+.DetalleCapacidadZona .dczOrdersTable .sapMListTbl th {
+    height: 1.85rem !important;
+    min-height: 1.85rem !important;
+
+    background: #ffffff !important;
+
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable th .sapMText {
+    color: #172554 !important;
+
+    font-size: 0.5rem !important;
+    line-height: 0.62rem !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblRow,
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell {
+    height: 1.82rem !important;
+    min-height: 1.82rem !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .sapMListTblCell {
+    padding: 0.18rem 0.32rem !important;
+
+    background: #ffffff !important;
+
+    border-right: 0 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .dczTableText,
+.DetalleCapacidadZona .dczOrdersTable .dczTableTextCenter,
+.DetalleCapacidadZona .dczOrdersTable .dczStatusText,
+.DetalleCapacidadZona .dczOrdersTable .dczBlueStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczRedStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczGreenStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczOrangeStrong {
+    font-size: 0.54rem !important;
+    line-height: 0.68rem !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .dczRedStrong {
+    color: #ef4444 !important;
+}
+
+.DetalleCapacidadZona .dczOrdersTable .dczGreenStrong {
+    color: #16a34a !important;
+}
+
+/* Estados con punto de color + texto. */
+.DetalleCapacidadZona .dczOrdersTable .dczStatusCell {
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    gap: 0.34rem !important;
+    padding-left: 0.35rem !important;
+}
+
+.DetalleCapacidadZona .dczStatusText {
+    color: #172554 !important;
+    font-weight: 750 !important;
+}
+
+.DetalleCapacidadZona .dczDotRed,
+.DetalleCapacidadZona .dczDotOrange,
+.DetalleCapacidadZona .dczDotGreen,
+.DetalleCapacidadZona .dczDotBlue,
+.DetalleCapacidadZona .dczDotLightBlue,
+.DetalleCapacidadZona .dczDotTeal,
+.DetalleCapacidadZona .dczDotPurple {
+    width: 0.42rem !important;
+    min-width: 0.42rem !important;
+    height: 0.42rem !important;
+    min-height: 0.42rem !important;
+    flex: 0 0 0.42rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+}
+
+/* ==========================================================================
+   6. RESÚMENES INFERIORES
+   ========================================================================== */
+
+.DetalleCapacidadZona .dczBottomGrid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    gap: 0.72rem !important;
+    align-items: stretch !important;
+}
+
+.DetalleCapacidadZona .dczSummaryCard {
+    flex: 1 1 0 !important;
+
+    width: 50% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    min-height: 12.7rem !important;
+
+    padding: 0.62rem 0.72rem 0.7rem !important;
+}
+
+.DetalleCapacidadZona .dczSummaryBlue {
+    border-left: 0.24rem solid #2563eb !important;
+}
+
+.DetalleCapacidadZona .dczSummaryGreen {
+    border-left: 0.24rem solid #16a34a !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTitleRow {
+    min-height: 1.9rem !important;
+
+    gap: 0.42rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+.DetalleCapacidadZona .dczSummaryIcon {
+    width: 1.8rem !important;
+    min-width: 1.8rem !important;
+    height: 1.8rem !important;
+    min-height: 1.8rem !important;
+
+    border-radius: 50% !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable,
+.DetalleCapacidadZona .dczSummaryTable .sapMListTbl {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable .sapMListTblHeader,
+.DetalleCapacidadZona .dczSummaryTable .sapMListTblHeaderCell,
+.DetalleCapacidadZona .dczSummaryTable .sapMListTbl th {
+    height: 2rem !important;
+    min-height: 2rem !important;
+
+    background: #f8fafc !important;
+
+    border-bottom: 1px solid #dce4ef !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable th .sapMText {
+    color: #172554 !important;
+
+    font-size: 0.48rem !important;
+    line-height: 0.61rem !important;
+    font-weight: 900 !important;
+
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable .sapMListTblRow,
+.DetalleCapacidadZona .dczSummaryTable .sapMListTblCell {
+    height: 2.1rem !important;
+    min-height: 2.1rem !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable .sapMListTblCell {
+    padding: 0.22rem 0.32rem !important;
+
+    background: #ffffff !important;
+
+    border-right: 0 !important;
+    border-bottom: 1px solid #e8edf4 !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable td .sapMText,
+.DetalleCapacidadZona .dczSummaryTable .dczTableText,
+.DetalleCapacidadZona .dczSummaryTable .dczTableTextCenter,
+.DetalleCapacidadZona .dczSummaryTable .dczStatusText,
+.DetalleCapacidadZona .dczSummaryTable .dczRedStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczOrangeStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczGreenStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilRed,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilOrange,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilGreen {
+    font-size: 0.55rem !important;
+    line-height: 0.68rem !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTable .dczStatusCell,
+.DetalleCapacidadZona .dczSummaryTotalRow .dczStatusCell {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 0.28rem !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTotalRow {
+    min-height: 2.1rem !important;
+    padding: 0 0.32rem !important;
+
+    background: #f8fafc !important;
+
+    border: 1px solid #e2e8f0 !important;
+    border-top: 0 !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTotalTurno {
+    grid-template-columns:
+        20%
+        8%
+        14%
+        14%
+        13%
+        13%
+        18% !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTotalTipo {
+    grid-template-columns:
+        24%
+        7%
+        12%
+        12%
+        11%
+        11%
+        11%
+        12% !important;
+}
+
+.DetalleCapacidadZona .dczSummaryTotalRow .sapMText {
+    font-size: 0.55rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 850 !important;
+}
+
+/* ==========================================================================
+   7. RESPONSIVE
+   ========================================================================== */
+
+@media screen and (max-width: 1100px) {
+    .DetalleCapacidadZona .dczFiltersBar {
+        grid-template-columns:
+            repeat(3, minmax(8rem, 1fr)) !important;
+    }
+
+    .DetalleCapacidadZona .dczKpiRow {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .DetalleCapacidadZona .dczBottomGrid {
+        flex-wrap: wrap !important;
+    }
+
+    .DetalleCapacidadZona .dczSummaryCard {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .DetalleCapacidadZona .dczFiltersBar,
+    .DetalleCapacidadZona .dczKpiRow {
+        grid-template-columns: 1fr !important;
+    }
+
+    .DetalleCapacidadZona .dczApplyButtonBox {
+        justify-self: start !important;
+    }
+}
