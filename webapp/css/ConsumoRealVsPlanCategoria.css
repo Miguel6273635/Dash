@@ -1,601 +1,769 @@
-/* ==========================================================================
-   CONSUMO REAL VS PLAN POR CATEGORIA
-   Archivo: webapp/css/ConsumoRealVsPlanCategoria.css
-   ========================================================================== */
-
+/* Consumo real vs plan por categoría - vista ejecutiva en una pantalla */
 .ConsumoRealVsPlanCategoria,
-.ConsumoRealVsPlanCategoria .sapMPageBgStandard {
-    background: #F8FAFC !important;
+.ConsumoRealVsPlanCategoria .sapMPage,
+.ConsumoRealVsPlanCategoria .sapMPageBgStandard,
+.ConsumoRealVsPlanCategoria .sapMPageEnableScrolling {
+    width: 100% !important;
+    height: 100% !important;
+    background: #F4F7FB !important;
+    overflow: hidden !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcPage {
     width: 100% !important;
-    padding: 12px 18px 22px 18px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 8px 12px !important;
     box-sizing: border-box !important;
-    background: #F8FAFC !important;
-    overflow-x: hidden !important;
+    display: grid !important;
+    grid-template-rows: 30px 60px 70px minmax(275px, 1fr) minmax(235px, 1fr) !important;
+    gap: 7px !important;
+    overflow: hidden !important;
 }
 
-/* HEADER */
+/* Encabezado */
 .ConsumoRealVsPlanCategoria .crpcHeader {
-    margin-bottom: 10px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    justify-content: center !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTitle {
-    color: #172554 !important;
-    font-size: 30px !important;
-    line-height: 34px !important;
-    font-weight: 900 !important;
-    letter-spacing: -0.4px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcSubtitle {
-    color: #64748B !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
+    color: #172B4D !important;
+    font-size: 23px !important;
+    line-height: 25px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.3px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcHintButton {
+    margin-left: 3px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcSectionInfoIcon {
+    color: #087AF5 !important;
+    font-size: 0.8rem !important;
     margin-left: 6px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcHintButton .sapUiIcon {
-    color: #94A3B8 !important;
+.ConsumoRealVsPlanCategoria .crpcHintButton .sapMBtnInner {
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
 }
 
-/* FILTERS */
+.ConsumoRealVsPlanCategoria .crpcHintButton .sapUiIcon {
+    color: #0B74F1 !important;
+    font-size: 0.85rem !important;
+}
+
+/* Filtros: mismo patrón visual del dashboard principal */
 .ConsumoRealVsPlanCategoria .crpcFilters {
     width: 100% !important;
+    min-width: 0 !important;
     display: grid !important;
-    grid-template-columns: 130px 140px 140px 120px 130px 140px 120px 126px !important;
-    column-gap: 12px !important;
-    row-gap: 8px !important;
-    align-items: end !important;
-    margin-bottom: 12px !important;
-    box-sizing: border-box !important;
+    grid-template-columns:
+        minmax(150px, 1.2fr) minmax(128px, 1fr) minmax(128px, 1fr) minmax(94px, 0.76fr) minmax(118px, 0.96fr) minmax(128px, 1.02fr) minmax(105px, 0.84fr) 126px !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+    margin: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcFilters > .sapMFlexItem {
-    min-width: 0 !important;
+.ConsumoRealVsPlanCategoria .crpcFilters>.sapMFlexItem {
     width: 100% !important;
-    max-width: 100% !important;
+    min-width: 0 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcFilter {
     width: 100% !important;
     min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    height: 60px !important;
+    padding: 6px 10px 5px !important;
+    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    background: #FFFFFF !important;
+    border: 1px solid #D6E1EF !important;
+    border-radius: 10px !important;
+    box-shadow: 0 3px 9px rgba(15, 42, 77, 0.055) !important;
+    overflow: hidden !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcFilterLabel {
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    margin-bottom: 5px !important;
+    color: #60738D !important;
+    font-size: 10.5px !important;
     line-height: 12px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcFilter .sapMSlt,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBase {
-    width: 100% !important;
-    height: 42px !important;
-    min-width: 0 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMSlt,
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBase,
 .ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseContentWrapper {
-    height: 42px !important;
-    border-radius: 8px !important;
-    border: 1px solid #DDE6F2 !important;
-    background: #FFFFFF !important;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcFilter .sapMSltLabel,
 .ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseInner {
-    color: #172554 !important;
-    font-size: 11px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    line-height: 28px !important;
+    padding: 0 28px 0 0 !important;
+    color: #142A51 !important;
+    background: transparent !important;
+    font-size: 11.5px !important;
     font-weight: 800 !important;
-    height: 42px !important;
-    line-height: 42px !important;
-    padding-left: 10px !important;
+    text-overflow: ellipsis !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMSltArrow {
+    width: 24px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    color: #087AF5 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIconContainer,
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIcon {
+    width: 25px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    color: #087AF5 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIconContainer .sapUiIcon,
+.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIcon::before {
+    color: #087AF5 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcApplyButton {
     width: 126px !important;
-    min-width: 126px !important;
-    max-width: 126px !important;
-    height: 42px !important;
+    height: 44px !important;
+    align-self: center !important;
     margin: 0 !important;
-    padding: 0 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnInner {
     width: 126px !important;
-    height: 42px !important;
-    border-radius: 8px !important;
-    background: #2563EB !important;
-    border: none !important;
-    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.22) !important;
+    height: 44px !important;
+    min-height: 44px !important;
     display: flex !important;
-    justify-content: center !important;
     align-items: center !important;
+    justify-content: center !important;
+    color: #FFFFFF !important;
+    background: #087AF5 !important;
+    border: 0 !important;
+    border-radius: 9px !important;
+    box-shadow: 0 6px 13px rgba(8, 122, 245, 0.23) !important;
     text-shadow: none !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnContent,
 .ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnIcon {
     color: #FFFFFF !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
 }
 
-/* KPI */
+/* KPIs */
 .ConsumoRealVsPlanCategoria .crpcKpis {
     width: 100% !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 14px !important;
-    margin-bottom: 12px !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+    margin: 0 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpi {
     flex: 1 1 0 !important;
     min-width: 0 !important;
-    height: 100px !important;
-    border-radius: 10px !important;
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.055) !important;
-    padding: 14px 18px !important;
+    height: 70px !important;
+    padding: 8px 13px !important;
     box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: center !important;
+    background: #FFFFFF !important;
+    border: 1px solid #DCE5F0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 3px 10px rgba(15, 42, 77, 0.05) !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiBlue {
-    border-left: 5px solid #2563EB !important;
-    background: linear-gradient(90deg, #EFF6FF 0%, #FFFFFF 100%) !important;
+    border-left: 4px solid #1479F8 !important;
+    background: linear-gradient(90deg, #EDF5FF 0%, #FFFFFF 55%) !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiGreen {
-    border-left: 5px solid #16A34A !important;
-    background: linear-gradient(90deg, #F0FDF4 0%, #FFFFFF 100%) !important;
+    border-left: 4px solid #18A957 !important;
+    background: linear-gradient(90deg, #ECFBF2 0%, #FFFFFF 55%) !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiRed {
-    border-left: 5px solid #EF4444 !important;
-    background: linear-gradient(90deg, #FEF2F2 0%, #FFFFFF 100%) !important;
+    border-left: 4px solid #F04452 !important;
+    background: linear-gradient(90deg, #FFF0F2 0%, #FFFFFF 55%) !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiIcon {
-    width: 58px !important;
-    height: 58px !important;
-    min-width: 58px !important;
-    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    margin-right: 10px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-right: 16px !important;
+    border-radius: 50% !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiIcon .sapUiIcon {
-    font-size: 1.9rem !important;
+    font-size: 1.25rem !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcBlueBg {
-    background: #DBEAFE !important;
+    background: #DDEEFF !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcBlueBg .sapUiIcon {
-    color: #2563EB !important;
+.ConsumoRealVsPlanCategoria .crpcBlueBg .sapUiIcon,
+.ConsumoRealVsPlanCategoria .crpcBlueText {
+    color: #1479F8 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcGreenBg {
-    background: #DCFCE7 !important;
+    background: #DFF8E9 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcGreenBg .sapUiIcon {
-    color: #16A34A !important;
+.ConsumoRealVsPlanCategoria .crpcGreenBg .sapUiIcon,
+.ConsumoRealVsPlanCategoria .crpcGreenText {
+    color: #18A957 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcRedBgSoft {
-    background: #FEE2E2 !important;
+    background: #FFE3E6 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcRedBgSoft .sapUiIcon {
-    color: #EF4444 !important;
+.ConsumoRealVsPlanCategoria .crpcRedBgSoft .sapUiIcon,
+.ConsumoRealVsPlanCategoria .crpcRedText {
+    color: #F04452 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiLabel {
-    color: #172554 !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
+    color: #172B4D !important;
+    font-size: 9.5px !important;
+    line-height: 11px !important;
+    font-weight: 800 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiNumber {
-    font-size: 30px !important;
-    line-height: 32px !important;
+    font-size: 21px !important;
+    line-height: 23px !important;
     font-weight: 900 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiUnit {
-    color: #172554 !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-    margin-left: 4px !important;
+    color: #172B4D !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    margin-left: 3px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcKpiSub {
-    font-size: 12px !important;
-    font-weight: 900 !important;
+    font-size: 9px !important;
+    line-height: 10px !important;
+    font-weight: 800 !important;
 }
 
-/* CARDS */
+/* Tarjetas */
 .ConsumoRealVsPlanCategoria .crpcCard {
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.055) !important;
-    padding: 12px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 7px 9px !important;
     box-sizing: border-box !important;
+    background: #FFFFFF !important;
+    border: 1px solid #DCE5F0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 3px 10px rgba(15, 42, 77, 0.05) !important;
     overflow: hidden !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcCardHead {
-    margin-bottom: 8px !important;
+    min-height: 25px !important;
+    margin: 0 0 4px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcCardTitle {
-    color: #172554 !important;
-    font-size: 13px !important;
+    color: #172B4D !important;
+    font-size: 12px !important;
+    line-height: 14px !important;
     font-weight: 900 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcSearch.sapMSF {
-    height: 32px !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
-    background: #FFFFFF !important;
-    margin-right: 8px !important;
-}
-
+.ConsumoRealVsPlanCategoria .crpcSearch.sapMSF,
 .ConsumoRealVsPlanCategoria .crpcColumnButton .sapMBtnInner {
-    height: 32px !important;
-    border-radius: 8px !important;
+    height: 27px !important;
+    min-height: 27px !important;
+    border: 1px solid #DCE5F0 !important;
+    border-radius: 7px !important;
+    background: #FFFFFF !important;
 }
 
-/* MAIN TABLE */
+.ConsumoRealVsPlanCategoria .crpcSearch {
+    margin-right: 6px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcSearch .sapMSFI,
+.ConsumoRealVsPlanCategoria .crpcColumnButton .sapMBtnContent {
+    font-size: 9.5px !important;
+}
+
+/* Tabla principal */
 .ConsumoRealVsPlanCategoria .crpcTableCard {
-    min-height: 270px !important;
-    margin-bottom: 12px !important;
+    height: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcMainTable {
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    border: 1px solid #DCE5F0 !important;
+    border-radius: 7px 7px 0 0 !important;
     overflow: hidden !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblHeader,
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTbl th {
-    background: #F8FAFC !important;
+.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblHeaderCell {
+    height: 31px !important;
+    min-height: 31px !important;
+    box-sizing: border-box !important;
+    padding: 2px 4px !important;
+    vertical-align: middle !important;
+    background: #F4F7FB !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcMainTable th .sapMText {
-    color: #172554 !important;
-    font-size: 8.5px !important;
+    width: 100% !important;
+    color: #526781 !important;
+    font-size: 8px !important;
+    line-height: 9px !important;
     font-weight: 900 !important;
     text-align: center !important;
 }
 
+.ConsumoRealVsPlanCategoria .crpcMainTable .sapMColumnHeader,
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMColumnHeader {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblRow,
 .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
-    padding: 4px 6px !important;
-    border-color: #E2E8F0 !important;
+    height: 23px !important;
+    min-height: 23px !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
+    padding: 2px 4px !important;
+    vertical-align: middle !important;
+    border-color: #E7EDF5 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcCell,
-.ConsumoRealVsPlanCategoria .crpcNum {
-    color: #172554 !important;
-    font-size: 9px !important;
-    font-weight: 700 !important;
+.ConsumoRealVsPlanCategoria .crpcNum,
+.ConsumoRealVsPlanCategoria .crpcMaterialLink,
+.ConsumoRealVsPlanCategoria .crpcZoneVal,
+.ConsumoRealVsPlanCategoria .crpcTotalVar {
+    color: #172B4D !important;
+    font-size: 8.3px !important;
+    line-height: 9px !important;
+    font-weight: 800 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcNum {
-    text-align: right !important;
+.ConsumoRealVsPlanCategoria .crpcNum,
+.ConsumoRealVsPlanCategoria .crpcTotalVar {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcMaterialIcon {
-    color: #2563EB !important;
-    font-size: 0.85rem !important;
-    margin-right: 6px !important;
+    color: #087AF5 !important;
+    font-size: 0.72rem !important;
+    margin-right: 4px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcMaterialLink {
-    color: #2563EB !important;
-    font-size: 9px !important;
+    color: #087AF5 !important;
     font-weight: 900 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcContribBox {
     width: 100% !important;
+    min-width: 0 !important;
     align-items: center !important;
+    justify-content: center !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcContribBox>.sapMFlexItem {
+    min-height: 0 !important;
+    line-height: 8px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcContribBar {
-    width: 70px !important;
+    width: 48px !important;
+    min-width: 48px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPI {
-    height: 7px !important;
+.ConsumoRealVsPlanCategoria .crpcContribBar.sapMPI {
+    height: 5px !important;
+    min-height: 5px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
     border-radius: 20px !important;
-    background: #E5E7EB !important;
+    overflow: hidden !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBar {
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBar,
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBarRemaining {
+    height: 5px !important;
+    min-height: 5px !important;
+    line-height: 5px !important;
     border-radius: 20px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Red"] .sapMPIBar,
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-sap-ui-custom-estado="Red"] .sapMPIBar {
-    background: #EF4444 !important;
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBarRemaining {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Orange"] .sapMPIBar,
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-sap-ui-custom-estado="Orange"] .sapMPIBar {
-    background: #F97316 !important;
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIText,
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPITextLeft,
+.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPITextRight {
+    display: none !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Yellow"] .sapMPIBar,
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-sap-ui-custom-estado="Yellow"] .sapMPIBar {
-    background: #F59E0B !important;
+.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Red"] .sapMPIBar {
+    background: #F04452 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Green"] .sapMPIBar,
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-sap-ui-custom-estado="Green"] .sapMPIBar {
-    background: #16A34A !important;
+.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Orange"] .sapMPIBar {
+    background: #F98220 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Yellow"] .sapMPIBar {
+    background: #ECAE12 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Green"] .sapMPIBar {
+    background: #18A957 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcContribText {
-    color: #172554 !important;
-    font-size: 8.5px !important;
-    font-weight: 800 !important;
-    margin-top: 2px !important;
+    color: #526781 !important;
+    font-size: 7.5px !important;
+    line-height: 8px !important;
+    font-weight: 900 !important;
+    margin-left: 5px !important;
+    white-space: nowrap !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcZones {
-    gap: 6px !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcZoneVal,
-.ConsumoRealVsPlanCategoria .crpcTotalVar {
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
+.ConsumoRealVsPlanCategoria .crpcZoneVal {
+    flex: 1 1 0 !important;
+    text-align: center !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Red"],
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-sap-ui-custom-estado="Red"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Red"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-sap-ui-custom-estado="Red"] {
-    color: #EF4444 !important;
+.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Red"] {
+    color: #F04452 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Green"],
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-sap-ui-custom-estado="Green"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Green"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-sap-ui-custom-estado="Green"] {
-    color: #16A34A !important;
+.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Green"] {
+    color: #18A957 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Neutral"],
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-sap-ui-custom-estado="Neutral"] {
-    color: #172554 !important;
+.ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Neutral"] {
+    color: #526781 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTotalLine {
-    height: 30px !important;
-    background: #F8FAFC !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-right: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #E2E8F0 !important;
-    padding: 0 10px !important;
-    gap: 25px !important;
+.ConsumoRealVsPlanCategoria .crpcZoneHeader {
+    width: 100% !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTotalLabel,
-.ConsumoRealVsPlanCategoria .crpcTotalValue {
-    color: #172554 !important;
-    font-size: 9px !important;
+.ConsumoRealVsPlanCategoria .crpcZoneHeaderLabels {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcZoneHeaderLabels .sapMText {
+    width: 100% !important;
+    color: #65758B !important;
+    font-size: 6.6px !important;
+    line-height: 8px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTotalZones {
+    height: 100% !important;
+    align-items: center !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTotalZones .crpcZoneVal {
+    display: block !important;
+    width: 100% !important;
+    font-size: 8.2px !important;
     font-weight: 900 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcInfo {
-    background: #F8FAFC !important;
-    border-radius: 8px !important;
-    padding: 8px 10px !important;
-    margin-top: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcTotalRow {
+    width: 100% !important;
+    min-height: 25px !important;
+    display: grid !important;
+    grid-template-columns: 4fr 16fr 10fr 8fr 8fr 10fr 9fr 7fr 8fr 8fr 12fr 7fr !important;
+    align-items: center !important;
+    background: #F4F7FB !important;
+    border: 1px solid #DCE5F0 !important;
+    border-top: 0 !important;
+    box-sizing: border-box !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcInfo .sapMText {
-    color: #475569 !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
+.ConsumoRealVsPlanCategoria .crpcTotalLabel {
+    grid-column: 1 / 4 !important;
+    padding-left: 8px !important;
+    color: #172B4D !important;
+    font-size: 8.2px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcInfoIcon {
-    color: #64748B !important;
-    margin-right: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcTotalCell {
+    display: block !important;
+    width: 100% !important;
+    color: #172B4D !important;
+    font-size: 8.2px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
 }
 
-/* BOTTOM */
+/* Paneles inferiores */
 .ConsumoRealVsPlanCategoria .crpcBottom {
     width: 100% !important;
-    display: flex !important;
-    gap: 12px !important;
-    flex-wrap: nowrap !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    gap: 7px !important;
     align-items: stretch !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcDetail {
-    flex: 1.05 1 0 !important;
+    flex: 1.12 1 0 !important;
     min-width: 0 !important;
-    min-height: 300px !important;
+    height: 100% !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTrend {
-    flex: 0.95 1 0 !important;
+    flex: 0.88 1 0 !important;
     min-width: 0 !important;
-    min-height: 300px !important;
+    height: 100% !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTrend>.crpcCardHead {
+    min-height: 21px !important;
+    margin-bottom: 2px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTrend .crpcTrendKpis {
+    margin-bottom: 2px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcPill {
-    background: #EFF6FF !important;
+    padding: 1px 7px !important;
+    margin-left: 6px !important;
+    background: #EDF5FF !important;
     border-radius: 8px !important;
-    padding: 2px 8px !important;
-    margin-left: 8px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcPill .sapMText {
-    color: #2563EB !important;
-    font-size: 8px !important;
+    color: #087AF5 !important;
+    font-size: 7.5px !important;
     font-weight: 900 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniKpis {
-    display: flex !important;
-    gap: 8px !important;
-    margin-bottom: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcMiniKpis,
+.ConsumoRealVsPlanCategoria .crpcTrendKpis {
+    width: 100% !important;
+    gap: 5px !important;
+    margin-bottom: 4px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniKpi {
+.ConsumoRealVsPlanCategoria .crpcMiniKpi,
+.ConsumoRealVsPlanCategoria .crpcTrendKpi {
     flex: 1 1 0 !important;
     min-width: 0 !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
+    height: 35px !important;
+    padding: 4px 6px !important;
     box-sizing: border-box !important;
+    border: 1px solid #E1E8F1 !important;
+    border-radius: 6px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniKpi .sapUiIcon {
-    color: #2563EB !important;
-    font-size: 1rem !important;
-    margin-right: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcMiniKpi .sapUiIcon,
+.ConsumoRealVsPlanCategoria .crpcTrendKpi .sapUiIcon {
+    color: #087AF5 !important;
+    font-size: 0.82rem !important;
+    margin-right: 5px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniLabel {
-    color: #64748B !important;
-    font-size: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcMiniLabel,
+.ConsumoRealVsPlanCategoria .crpcTrendLbl {
+    color: #65758B !important;
+    font-size: 7px !important;
+    line-height: 8px !important;
     font-weight: 800 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniValue {
-    color: #172554 !important;
-    font-size: 9px !important;
+.ConsumoRealVsPlanCategoria .crpcMiniValue,
+.ConsumoRealVsPlanCategoria .crpcTrendVal {
+    color: #172B4D !important;
+    font-size: 8px !important;
+    line-height: 9px !important;
     font-weight: 900 !important;
 }
 
-/* TABS */
 .ConsumoRealVsPlanCategoria .crpcTabs {
-    gap: 6px !important;
-    margin-bottom: 8px !important;
+    width: 100% !important;
+    gap: 3px !important;
+    margin-bottom: 4px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTab {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnInner {
-    height: 28px !important;
-    border-radius: 6px !important;
-    background: #F8FAFC !important;
-    border: 1px solid #E2E8F0 !important;
+    min-width: 0 !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 5px !important;
+    background: #F4F7FB !important;
+    border: 1px solid #DCE5F0 !important;
+    border-radius: 5px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnContent {
-    color: #172554 !important;
-    font-size: 9px !important;
+    font-size: 7.5px !important;
+    line-height: 20px !important;
     font-weight: 800 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTabActive .sapMBtnInner {
-    background: #2563EB !important;
-    border-color: #2563EB !important;
+    background: #087AF5 !important;
+    border-color: #087AF5 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcTabActive .sapMBtnContent {
     color: #FFFFFF !important;
 }
 
-/* DETAIL TABLE */
 .ConsumoRealVsPlanCategoria .crpcDetailTable {
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
+    border: 1px solid #E1E8F1 !important;
+    border-radius: 6px !important;
     overflow: hidden !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblHeader,
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTbl th {
-    background: #F8FAFC !important;
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblHeaderCell {
+    height: 24px !important;
+    min-height: 24px !important;
+    box-sizing: border-box !important;
+    padding: 2px 3px !important;
+    background: #F4F7FB !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable th .sapMText,
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell .sapMText {
-    color: #172554 !important;
-    font-size: 8px !important;
-    font-weight: 800 !important;
-}
-
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblRow,
 .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
-    padding: 4px 5px !important;
-}
-
-/* TREND */
-.ConsumoRealVsPlanCategoria .crpcTrendKpis {
-    display: flex !important;
-    gap: 8px !important;
-    margin-bottom: 8px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTrendKpi {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    height: 44px !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
-    padding: 6px 8px !important;
+    height: 21px !important;
+    min-height: 21px !important;
     box-sizing: border-box !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTrendKpi .sapUiIcon {
-    color: #2563EB !important;
-    font-size: 1.1rem !important;
-    margin-right: 8px !important;
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
+    padding: 1px 3px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTrendVal {
-    color: #172554 !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTrendLbl {
-    color: #64748B !important;
-    font-size: 8.5px !important;
+.ConsumoRealVsPlanCategoria .crpcDetailTable th .sapMText,
+.ConsumoRealVsPlanCategoria .crpcDetailTable td .sapMText {
+    color: #172B4D !important;
+    font-size: 7.2px !important;
+    line-height: 8px !important;
     font-weight: 800 !important;
 }
 
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTrigger {
+    height: 20px !important;
+    min-height: 20px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListDescription,
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText {
+    font-size: 7.5px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcLink {
+    height: 10px !important;
+    color: #087AF5 !important;
+    font-size: 8px !important;
+    line-height: 10px !important;
+    font-weight: 900 !important;
+    margin-top: 3px !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcDetail>.sapMFlexItem:last-child {
+    height: 10px !important;
+    min-height: 10px !important;
+    line-height: 10px !important;
+}
+
 .ConsumoRealVsPlanCategoria .crpcLegend {
-    gap: 16px !important;
-    margin-bottom: 2px !important;
+    gap: 12px !important;
+    min-height: 14px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcLegend .sapMText {
-    color: #475569 !important;
-    font-size: 9px !important;
+    color: #526781 !important;
+    font-size: 7.5px !important;
     font-weight: 800 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcLegendLine {
-    width: 20px !important;
-    height: 3px !important;
-    border-radius: 20px !important;
-    margin-right: 5px !important;
+    width: 17px !important;
+    height: 2px !important;
+    margin-right: 4px !important;
+    border-radius: 10px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcPlanLine {
@@ -607,458 +775,236 @@
 }
 
 .ConsumoRealVsPlanCategoria .crpcVarLine {
-    background: #EF4444 !important;
+    background: repeating-linear-gradient(90deg,
+            #EF4444 0 5px,
+            transparent 5px 8px) !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTrendSvgInner {
+    width: 100% !important;
+    height: 110px !important;
+    min-height: 110px !important;
+    overflow: visible !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcTrendSvgInner svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcWeekAxis {
+    width: 100% !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    padding: 0 16px 0 41px !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: start !important;
+    margin-top: 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcWeekAxis>.sapMFlexItem {
+    min-width: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcWeekName,
+.ConsumoRealVsPlanCategoria .crpcWeekDate {
+    display: block !important;
+    width: 100% !important;
+    color: #526781 !important;
+    font-size: 6.8px !important;
+    line-height: 8px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcWeekName {
+    color: #31445F !important;
+    font-weight: 900 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcWeekDate {
+    font-weight: 700 !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcSuccess {
-    height: 34px !important;
-    min-height: 34px !important;
-    background: #ECFDF5 !important;
-    border: 1px solid #BBF7D0 !important;
-    border-radius: 8px !important;
-    margin-top: 4px !important;
+    height: 23px !important;
+    min-height: 23px !important;
+    margin-top: 2px !important;
+    background: #ECFDF3 !important;
+    border: 1px solid #C5F0D4 !important;
+    border-radius: 6px !important;
 }
 
 .ConsumoRealVsPlanCategoria .crpcSuccess .sapUiIcon {
-    color: #16A34A !important;
-    margin-right: 8px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcSuccess .sapMText {
-    color: #16A34A !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
-}
-
-/* LINKS AND COLORS */
-.ConsumoRealVsPlanCategoria .crpcLink {
-    color: #2563EB !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    margin-top: 8px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcBlueText {
-    color: #2563EB !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcGreenText {
-    color: #16A34A !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcRedText {
-    color: #EF4444 !important;
-}
-
-.ConsumoRealVsPlanCategoria .sapVizFrame,
-.ConsumoRealVsPlanCategoria .v-m-root,
-.ConsumoRealVsPlanCategoria .v-background-body {
-    background: transparent !important;
-    fill: transparent !important;
-}
-
-/* RESPONSIVE */
-@media screen and (max-width: 1350px) {
-    .ConsumoRealVsPlanCategoria .crpcFilters {
-        grid-template-columns: 130px 140px 140px 120px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcKpis,
-    .ConsumoRealVsPlanCategoria .crpcBottom {
-        flex-wrap: wrap !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcKpi,
-    .ConsumoRealVsPlanCategoria .crpcDetail,
-    .ConsumoRealVsPlanCategoria .crpcTrend {
-        flex: 1 1 100% !important;
-        min-width: 100% !important;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    .ConsumoRealVsPlanCategoria .crpcFilters {
-        grid-template-columns: 1fr !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcTitle {
-        font-size: 24px !important;
-    }
-}
-.ConsumoRealVsPlanCategoria .crvpTotalRow {
-    width: 100% !important;
-    min-height: 38px !important;
-    display: grid !important;
-    grid-template-columns: 4% 17% 11% 8% 8% 12% 9% 7% 8% 8% 6% 6% 6% 7% 8% !important;
-    align-items: center !important;
-    background: #F8FAFC !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-right: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #E2E8F0 !important;
-    box-sizing: border-box !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalLabel {
-    grid-column: 1 / 4 !important;
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    padding-left: 12px !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalCell {
-    display: block !important;
-    width: 100% !important;
-    color: #172554 !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-    padding-right: 8px !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-}
-/* ==========================================================================
-   AJUSTE FINAL TABLA MATERIALES - TEXTOS Y TOTALES
-   ========================================================================== */
-
-/* Encabezados más grandes y centrados */
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblHeader,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTbl th {
-    height: 58px !important;
-    min-height: 58px !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblHeader .sapMText,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTbl th .sapMText {
-    color: #172554 !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
-    line-height: 13px !important;
-    text-align: center !important;
-    white-space: normal !important;
-}
-
-/* Filas más legibles */
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblRow {
-    height: 72px !important;
-    min-height: 72px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblCell {
-    height: 72px !important;
-    min-height: 72px !important;
-    padding: 8px 8px !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-}
-
-/* Textos generales de la tabla */
-.ConsumoRealVsPlanCategoria .crvpCell,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMText {
-    color: #172554 !important;
-    font-size: 11.5px !important;
-    font-weight: 850 !important;
-    line-height: 14px !important;
-}
-
-/* Material */
-.ConsumoRealVsPlanCategoria .crvpMaterialIcon {
-    color: #0B72F0 !important;
-    font-size: 1rem !important;
-    margin-right: 7px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMaterialName {
-    color: #0B72F0 !important;
-    font-size: 11.5px !important;
-    font-weight: 900 !important;
-    line-height: 14px !important;
-}
-
-/* Numeros centrados */
-.ConsumoRealVsPlanCategoria .crvpNum,
-.ConsumoRealVsPlanCategoria .crvpVar {
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    font-size: 11.5px !important;
-    font-weight: 900 !important;
-    line-height: 14px !important;
-}
-
-/* Barra de contribucion mejor centrada */
-.ConsumoRealVsPlanCategoria .crvpContribution {
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 6px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpContributionBar {
-    width: 64px !important;
-    min-width: 64px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpContributionText {
-    min-width: 45px !important;
-    text-align: center !important;
-    font-size: 11px !important;
-    font-weight: 900 !important;
-}
-
-/* Fila de totales alineada con las mismas columnas */
-.ConsumoRealVsPlanCategoria .crvpTotalRow {
-    width: 100% !important;
-    min-height: 46px !important;
-    display: grid !important;
-    grid-template-columns: 4fr 17fr 11fr 8fr 8fr 12fr 9fr 7fr 8fr 8fr 6fr 6fr 6fr 7fr 8fr !important;
-    align-items: center !important;
-    background: #F8FAFC !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-right: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #E2E8F0 !important;
-    box-sizing: border-box !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* El label ocupa # + Material + Categoria */
-.ConsumoRealVsPlanCategoria .crvpTotalLabel {
-    grid-column: 1 / 4 !important;
-    color: #172554 !important;
-    font-size: 11.5px !important;
-    font-weight: 900 !important;
-    padding-left: 14px !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-}
-
-/* Totales centrados debajo de cada columna */
-.ConsumoRealVsPlanCategoria .crvpTotalCell {
-    display: block !important;
-    width: 100% !important;
-    color: #172554 !important;
-    font-size: 11.5px !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-}
-/* ==========================================================================
-   AJUSTE EXACTO TABLA DESVIACION COMO REFERENCIA
-   ========================================================================== */
-
-.ConsumoRealVsPlanCategoria .crvpMaterialsCard {
-    padding: 10px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMainTable {
-    border-radius: 8px 8px 0 0 !important;
-}
-
-/* Header compacto */
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblHeader,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTbl th {
-    height: 42px !important;
-    min-height: 42px !important;
-    padding: 2px 4px !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblHeader .sapMText,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTbl th .sapMText {
-    color: #172554 !important;
-    font-size: 9.2px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-    text-align: center !important;
-    white-space: normal !important;
-}
-
-/* Filas compactas como la segunda imagen */
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblRow {
-    height: 34px !important;
-    min-height: 34px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMListTblCell {
-    height: 34px !important;
-    min-height: 34px !important;
-    padding: 3px 5px !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-}
-
-/* Textos */
-.ConsumoRealVsPlanCategoria .crvpCell,
-.ConsumoRealVsPlanCategoria .crvpMainTable .sapMText {
-    color: #172554 !important;
-    font-size: 9.3px !important;
-    font-weight: 800 !important;
-    line-height: 10px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMaterialName {
-    color: #0B72F0 !important;
-    font-size: 9.3px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpMaterialIcon {
-    color: #0B72F0 !important;
-    font-size: 0.8rem !important;
+    color: #18A957 !important;
+    font-size: 0.7rem !important;
     margin-right: 5px !important;
 }
 
-/* Numeros centrados */
-.ConsumoRealVsPlanCategoria .crvpNum,
-.ConsumoRealVsPlanCategoria .crvpVar {
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    font-size: 9.3px !important;
-    font-weight: 900 !important;
-    line-height: 10px !important;
-}
-
-/* Contribucion compacta */
-.ConsumoRealVsPlanCategoria .crvpContribution {
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 4px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpContributionBar {
-    width: 45px !important;
-    min-width: 45px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpContributionBar .sapMPI {
-    height: 5px !important;
-    min-height: 5px !important;
-    border-radius: 20px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpContributionText {
-    min-width: 35px !important;
-    text-align: center !important;
-    font-size: 8.8px !important;
+.ConsumoRealVsPlanCategoria .crpcSuccess .sapMText {
+    color: #16884A !important;
+    font-size: 8px !important;
     font-weight: 900 !important;
 }
 
-/* Total alineado como referencia */
-.ConsumoRealVsPlanCategoria .crvpTotalRow {
-    width: 100% !important;
-    min-height: 34px !important;
-    display: grid !important;
-    grid-template-columns:
-        4fr
-        17fr
-        11fr
-        8fr
-        8fr
-        8fr
-        12fr
-        9fr
-        7fr
-        8fr
-        8fr
-        6fr
-        6fr
-        6fr
-        7fr
-        8fr !important;
-    align-items: center !important;
-    background: #F8FAFC !important;
-    border-left: 1px solid #E2E8F0 !important;
-    border-right: 1px solid #E2E8F0 !important;
-    border-bottom: 1px solid #E2E8F0 !important;
-    box-sizing: border-box !important;
+/* Compactación adicional para laptops con poco alto */
+@media screen and (max-height: 800px) {
+    .ConsumoRealVsPlanCategoria .crpcPage {
+        padding: 5px 8px !important;
+        grid-template-rows: 28px 56px 62px minmax(275px, 1fr) minmax(235px, 1fr) !important;
+        gap: 5px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcTitle {
+        font-size: 20px !important;
+        line-height: 22px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcFilter {
+        height: 56px !important;
+        padding-top: 4px !important;
+        padding-bottom: 3px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcKpi {
+        height: 62px !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcKpiIcon {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcCard {
+        padding: 5px 7px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcCardHead {
+        min-height: 22px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcMiniKpis,
+    .ConsumoRealVsPlanCategoria .crpcTrendKpis {
+        margin-bottom: 2px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcMiniKpi,
+    .ConsumoRealVsPlanCategoria .crpcTrendKpi {
+        height: 30px !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcTabs {
+        margin-bottom: 2px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcTab,
+    .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnInner {
+        height: 20px !important;
+        min-height: 20px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnContent {
+        line-height: 18px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblRow,
+    .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
+        height: 21px !important;
+        min-height: 21px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblHeaderCell {
+        height: 22px !important;
+        min-height: 22px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblRow,
+    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
+        height: 19px !important;
+        min-height: 19px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcTrendSvgInner {
+        height: 110px !important;
+        min-height: 110px !important;
+    }
+}
+
+/* Ajuste horizontal sin romper la fila de filtros */
+@media screen and (max-width: 1400px) {
+    .ConsumoRealVsPlanCategoria .crpcPage {
+        padding-left: 7px !important;
+        padding-right: 7px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcFilters {
+        grid-template-columns: 1.16fr 1fr 1fr 0.72fr 0.9fr 0.98fr 0.8fr 118px !important;
+        gap: 5px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcFilter {
+        padding-left: 7px !important;
+        padding-right: 7px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcApplyButton,
+    .ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnInner {
+        width: 118px !important;
+    }
+
+    .ConsumoRealVsPlanCategoria .crpcFilterLabel,
+    .ConsumoRealVsPlanCategoria .crpcFilter .sapMSltLabel,
+    .ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseInner {
+        font-size: 9.5px !important;
+    }
+}
+
+/* El disparador growing de SAPUI5 usa internamente alturas de lista estándar.
+   Se compacta de forma explícita para que "Más" no quede recortado. */
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTrigger {
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
     padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* Label ocupa # + Material + Categoria */
-.ConsumoRealVsPlanCategoria .crvpTotalLabel {
-    grid-column: 1 / 4 !important;
-    color: #172554 !important;
-    font-size: 9.6px !important;
-    font-weight: 900 !important;
-    padding-left: 10px !important;
+    overflow: hidden !important;
     box-sizing: border-box !important;
-    white-space: nowrap !important;
 }
 
-/* Cada total cae centrado debajo de su columna */
-.ConsumoRealVsPlanCategoria .crvpTotalCell {
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 23px !important;
+    min-height: 23px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText .sapMSLITitle {
     display: block !important;
-    width: 100% !important;
-    color: #172554 !important;
-    font-size: 9.6px !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    color: #0878E8 !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    line-height: 12px !important;
+    overflow: visible !important;
 }
 
-/* Recorre los totales a las columnas correctas */
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(2) {
-    grid-column: 4 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(3) {
-    grid-column: 5 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(4) {
-    grid-column: 6 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(5) {
-    grid-column: 7 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(6) {
-    grid-column: 8 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(7) {
-    grid-column: 9 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(8) {
-    grid-column: 10 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(9) {
-    grid-column: 11 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(10) {
-    grid-column: 12 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(11) {
-    grid-column: 13 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(12) {
-    grid-column: 14 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(13) {
-    grid-column: 15 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crvpTotalRow .crvpTotalCell:nth-child(14) {
-    grid-column: 16 !important;
+.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListDescription {
+    display: none !important;
 }

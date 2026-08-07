@@ -1,37 +1,17 @@
-<mvc:View
-    controllerName="mantenimiento.controller.DetalleDesviacionHoras"
-    displayBlock="true"
+<mvc:View controllerName="mantenimiento.controller.DetalleDesviacionHoras" displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-
     <Page showHeader="false" class="DetalleDesviacionHoras">
         <content>
             <ScrollContainer height="100%" width="100%" vertical="true" horizontal="false">
                 <VBox class="ddhPage">
-
                     <!-- HEADER -->
                     <VBox class="ddhHeader">
-                        <HBox alignItems="Center">
-                            <Title
-                                text="Detalle de desviación de horas"
-                                level="H1"
-                                class="ddhTitle" />
-
-                            <Button
-                                icon="sap-icon://hint"
-                                type="Transparent"
-                                class="ddhInfoButton" />
-                        </HBox>
-
-                        <Text
-                            text="Consulta el detalle de la desviación entre las horas reales y las horas planificadas por orden de trabajo."
-                            class="ddhSubtitle" />
+                        <Title text="Detalle de desviación de horas" level="H1" class="ddhTitle" />
                     </VBox>
-
                     <!-- FILTROS -->
                     <HBox class="ddhFiltersBar" wrap="NoWrap">
-
                         <VBox class="ddhFilterBox">
                             <Label text="Periodo" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/periodo}">
@@ -39,23 +19,14 @@
                                 <core:Item key="Junio 2024" text="Junio 2024" />
                             </Select>
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Fecha desde" class="ddhFilterLabel" />
-                            <DatePicker
-                                value="{ddh>/filters/fechaDesde}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy" />
+                            <DatePicker value="{ddh>/filters/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" />
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Fecha hasta" class="ddhFilterLabel" />
-                            <DatePicker
-                                value="{ddh>/filters/fechaHasta}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy" />
+                            <DatePicker value="{ddh>/filters/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" />
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Zona" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/zona}">
@@ -65,7 +36,6 @@
                                 <core:Item key="Todas" text="Todas" />
                             </Select>
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Supervisor" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/supervisor}">
@@ -75,7 +45,6 @@
                                 <core:Item key="Carlos Ruiz" text="Carlos Ruiz" />
                             </Select>
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Turno" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/turno}">
@@ -85,7 +54,6 @@
                                 <core:Item key="Fin de semana" text="Fin de semana" />
                             </Select>
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Tipo de orden" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/tipoOrden}">
@@ -95,7 +63,6 @@
                                 <core:Item key="Call Center" text="Call Center" />
                             </Select>
                         </VBox>
-
                         <VBox class="ddhFilterBox">
                             <Label text="Estado de orden" class="ddhFilterLabel" />
                             <Select selectedKey="{ddh>/filters/estado}">
@@ -105,102 +72,70 @@
                                 <core:Item key="Dentro de plan" text="Dentro de plan" />
                             </Select>
                         </VBox>
-
-                        <Button
-                            text="Aplicar filtros"
-                            icon="sap-icon://filter"
-                            type="Emphasized"
-                            class="ddhApplyButton"
-                            press=".onAplicarFiltros" />
-
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" class="ddhApplyButton" press=".onAplicarFiltros" />
                     </HBox>
-
                     <!-- KPIS -->
                     <HBox class="ddhKpiRow">
-
                         <HBox class="ddhKpiCard ddhKpiBlue" alignItems="Center">
                             <HBox class="ddhKpiIcon ddhKpiIconBlue" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://appointment-2" />
                             </HBox>
-
                             <VBox>
                                 <Text text="OT con desviación" class="ddhKpiLabel" />
                                 <Text text="{ddh>/kpis/otDesviacion}" class="ddhKpiNumber ddhDarkText" />
                                 <Text text="órdenes" class="ddhKpiSub" />
                             </VBox>
                         </HBox>
-
                         <HBox class="ddhKpiCard ddhKpiGreen" alignItems="Center">
                             <HBox class="ddhKpiIcon ddhKpiIconGreen" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://time-account" />
                             </HBox>
-
                             <VBox>
                                 <Text text="Horas planificadas" class="ddhKpiLabel" />
                                 <Text text="{ddh>/kpis/horasPlanificadas}" class="ddhKpiNumber ddhDarkText" />
                             </VBox>
                         </HBox>
-
                         <HBox class="ddhKpiCard ddhKpiSky" alignItems="Center">
                             <HBox class="ddhKpiIcon ddhKpiIconSky" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://lateness" />
                             </HBox>
-
                             <VBox>
                                 <Text text="Horas reales" class="ddhKpiLabel" />
                                 <Text text="{ddh>/kpis/horasReales}" class="ddhKpiNumber ddhDarkText" />
                             </VBox>
                         </HBox>
-
                         <HBox class="ddhKpiCard ddhKpiRed" alignItems="Center">
                             <HBox class="ddhKpiIcon ddhKpiIconRed" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://sort" />
                             </HBox>
-
                             <VBox>
                                 <Text text="Desviación total" class="ddhKpiLabel" />
                                 <Text text="{ddh>/kpis/desviacionTotal}" class="ddhKpiNumber ddhRedText" />
                                 <Text text="sobre lo planeado" class="ddhKpiSub" />
                             </VBox>
                         </HBox>
-
                         <HBox class="ddhKpiCard ddhKpiPurple" alignItems="Center">
                             <HBox class="ddhKpiIcon ddhKpiIconPurple" alignItems="Center" justifyContent="Center">
                                 <Text text="%" class="ddhPercentIcon" />
                             </HBox>
-
                             <VBox>
                                 <Text text="Desviación % promedio" class="ddhKpiLabel" />
                                 <Text text="{ddh>/kpis/desviacionPromedio}" class="ddhKpiNumber ddhPurpleText" />
                             </VBox>
                         </HBox>
-
                     </HBox>
-
                     <!-- TABLA PRINCIPAL -->
                     <VBox class="ddhCard ddhMainTableCard">
-
                         <HBox class="ddhCardHeader" justifyContent="SpaceBetween" alignItems="Center">
                             <HBox alignItems="Center">
                                 <HBox class="ddhHeaderIcon ddhHeaderIconBlue" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://appointment-2" />
                                 </HBox>
-
-                                <Title
-                                    text="Órdenes con desviación de horas"
-                                    level="H3"
-                                    class="ddhCardTitle" />
+                                <Title text="Órdenes con desviación de horas" level="H3" class="ddhCardTitle" />
                             </HBox>
-
-                            <Button
-                                text="Columnas"
-                                icon="sap-icon://table-view"
-                                type="Transparent"
-                                class="ddhColumnsButton" />
+                            <Button text="Columnas" icon="sap-icon://table-view" type="Transparent" class="ddhColumnsButton" />
                         </HBox>
-
                         <VBox class="ddhOrdersGrid">
-
                             <HBox class="ddhOrdersGridHeader">
                                 <Text text="OT" class="ddhGridHeadText" />
                                 <Text text="Cliente" class="ddhGridHeadText" />
@@ -215,7 +150,6 @@
                                 <Text text="Variación (%)" class="ddhGridHeadText ddhCenter" />
                                 <Text text="Estado" class="ddhGridHeadText ddhCenter" />
                             </HBox>
-
                             <VBox items="{ddh>/ordenes}">
                                 <HBox class="ddhOrdersGridRow">
                                     <Text text="{ddh>ot}" class="ddhBlueStrong ddhCellText" />
@@ -227,41 +161,16 @@
                                     <Text text="{ddh>turno}" class="ddhCellText ddhCenter" />
                                     <Text text="{ddh>horasPlan}" class="ddhCellText ddhCenter" />
                                     <Text text="{ddh>horasReales}" class="ddhCellText ddhCenter" />
-
                                     <VBox class="ddhCenterCell">
-                                        <Text
-                                            text="{ddh>variacionH}"
-                                            class="ddhVarText ddhRedStrong"
-                                            visible="{= ${ddh>variacionH}.charAt(0) === '+' }" />
-
-                                        <Text
-                                            text="{ddh>variacionH}"
-                                            class="ddhVarText ddhGreenStrong"
-                                            visible="{= ${ddh>variacionH}.charAt(0) === '-' }" />
-
-                                        <Text
-                                            text="{ddh>variacionH}"
-                                            class="ddhVarText ddhDarkStrong"
-                                            visible="{= ${ddh>variacionH}.charAt(0) !== '+' &amp;&amp; ${ddh>variacionH}.charAt(0) !== '-' }" />
+                                        <Text text="{ddh>variacionH}" class="ddhVarText ddhRedStrong" visible="{= ${ddh>variacionH}.charAt(0) === '+' }" />
+                                        <Text text="{ddh>variacionH}" class="ddhVarText ddhGreenStrong" visible="{= ${ddh>variacionH}.charAt(0) === '-' }" />
+                                        <Text text="{ddh>variacionH}" class="ddhVarText ddhDarkStrong" visible="{= ${ddh>variacionH}.charAt(0) !== '+' &amp;&amp; ${ddh>variacionH}.charAt(0) !== '-' }" />
                                     </VBox>
-
                                     <VBox class="ddhCenterCell">
-                                        <Text
-                                            text="{ddh>variacionPct}"
-                                            class="ddhVarText ddhRedStrong"
-                                            visible="{= ${ddh>variacionPct}.charAt(0) === '+' }" />
-
-                                        <Text
-                                            text="{ddh>variacionPct}"
-                                            class="ddhVarText ddhGreenStrong"
-                                            visible="{= ${ddh>variacionPct}.charAt(0) === '-' }" />
-
-                                        <Text
-                                            text="{ddh>variacionPct}"
-                                            class="ddhVarText ddhDarkStrong"
-                                            visible="{= ${ddh>variacionPct}.charAt(0) !== '+' &amp;&amp; ${ddh>variacionPct}.charAt(0) !== '-' }" />
+                                        <Text text="{ddh>variacionPct}" class="ddhVarText ddhRedStrong" visible="{= ${ddh>variacionPct}.charAt(0) === '+' }" />
+                                        <Text text="{ddh>variacionPct}" class="ddhVarText ddhGreenStrong" visible="{= ${ddh>variacionPct}.charAt(0) === '-' }" />
+                                        <Text text="{ddh>variacionPct}" class="ddhVarText ddhDarkStrong" visible="{= ${ddh>variacionPct}.charAt(0) !== '+' &amp;&amp; ${ddh>variacionPct}.charAt(0) !== '-' }" />
                                     </VBox>
-
                                     <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                         <VBox class="ddhDotRed" visible="{= ${ddh>estado} === 'Sobrecargado' }" />
                                         <VBox class="ddhDotOrange" visible="{= ${ddh>estado} === 'Cerca de plan' }" />
@@ -270,18 +179,14 @@
                                     </HBox>
                                 </HBox>
                             </VBox>
-
                         </VBox>
-
                         <HBox class="ddhTableFooter" justifyContent="SpaceBetween" alignItems="Center">
                             <Text text="Mostrando 1 a 10 de 68 resultados" />
-
                             <HBox alignItems="Center" class="ddhPager">
                                 <Select selectedKey="10" width="112px">
                                     <core:Item key="10" text="10 por página" />
                                     <core:Item key="20" text="20 por página" />
                                 </Select>
-
                                 <Button icon="sap-icon://navigation-left-arrow" type="Transparent" class="ddhPagerButton" />
                                 <Button text="1" type="Emphasized" class="ddhPagerActive" />
                                 <Button text="2" type="Transparent" class="ddhPagerButton" />
@@ -291,25 +196,18 @@
                                 <Button icon="sap-icon://navigation-right-arrow" type="Transparent" class="ddhPagerButton" />
                             </HBox>
                         </HBox>
-
                     </VBox>
-
                     <!-- RESÚMENES -->
                     <HBox class="ddhBottomGrid">
-
                         <!-- RESUMEN POR ZONA -->
                         <VBox class="ddhCard ddhSummaryCard ddhSummaryBlue ddhZonaSummaryCard">
-
                             <HBox class="ddhSummaryTitleRow" alignItems="Center">
                                 <HBox class="ddhSummaryIcon ddhSummaryIconBlue" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://map-2" />
                                 </HBox>
-
                                 <Title text="Resumen por zona" level="H3" class="ddhCardTitle" />
                             </HBox>
-
                             <VBox class="ddhZonaSummaryGrid">
-
                                 <HBox class="ddhZonaSummaryHeader">
                                     <Text text="Zona" class="ddhZonaHeadText" />
                                     <Text text="OT con desv." class="ddhZonaHeadText ddhCenter" />
@@ -319,7 +217,6 @@
                                     <Text text="Variación (%)" class="ddhZonaHeadText ddhCenter" />
                                     <Text text="Estado" class="ddhZonaHeadText ddhCenter" />
                                 </HBox>
-
                                 <VBox items="{ddh>/resumenZona}">
                                     <HBox class="ddhZonaSummaryRow">
                                         <Text text="{ddh>zona}" class="ddhZonaCellText" />
@@ -328,7 +225,6 @@
                                         <Text text="{ddh>horasReales}" class="ddhZonaCellText ddhCenter" />
                                         <Text text="{ddh>variacionH}" class="ddhZonaVarText ddhRedStrong" />
                                         <Text text="{ddh>variacionPct}" class="ddhZonaVarText ddhRedStrong" />
-
                                         <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                             <VBox class="ddhDotRed" visible="{= ${ddh>estado} === 'Sobrecargado' }" />
                                             <VBox class="ddhDotOrange" visible="{= ${ddh>estado} === 'Cerca de plan' }" />
@@ -337,7 +233,6 @@
                                         </HBox>
                                     </HBox>
                                 </VBox>
-
                                 <HBox class="ddhZonaSummaryTotal">
                                     <Text text="Total" class="ddhZonaTotalText" />
                                     <Text text="68" class="ddhZonaTotalText ddhCenter" />
@@ -345,29 +240,22 @@
                                     <Text text="6,172" class="ddhZonaTotalText ddhCenter" />
                                     <Text text="+712" class="ddhZonaVarText ddhRedStrong" />
                                     <Text text="+13.0%" class="ddhZonaVarText ddhRedStrong" />
-
                                     <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                         <VBox class="ddhDotRed" />
                                         <Text text="Sobrecargado" class="ddhSummaryStatusText" />
                                     </HBox>
                                 </HBox>
-
                             </VBox>
                         </VBox>
-
                         <!-- RESUMEN POR TURNO -->
                         <VBox class="ddhCard ddhSummaryCard ddhSummaryGreen ddhTurnoSummaryCard">
-
                             <HBox class="ddhSummaryTitleRow" alignItems="Center">
                                 <HBox class="ddhSummaryIcon ddhSummaryIconGreen" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://time-entry-request" />
                                 </HBox>
-
                                 <Title text="Resumen por turno" level="H3" class="ddhCardTitle" />
                             </HBox>
-
                             <VBox class="ddhTurnoSummaryGrid">
-
                                 <HBox class="ddhTurnoSummaryHeader">
                                     <Text text="Turno" class="ddhTurnoHeadText" />
                                     <Text text="OT con desv." class="ddhTurnoHeadText ddhCenter" />
@@ -377,7 +265,6 @@
                                     <Text text="Variación (%)" class="ddhTurnoHeadText ddhCenter" />
                                     <Text text="Estado" class="ddhTurnoHeadText ddhCenter" />
                                 </HBox>
-
                                 <VBox items="{ddh>/resumenTurno}">
                                     <HBox class="ddhTurnoSummaryRow">
                                         <Text text="{ddh>turno}" class="ddhTurnoCellText" />
@@ -386,7 +273,6 @@
                                         <Text text="{ddh>horasReales}" class="ddhTurnoCellText ddhCenter" />
                                         <Text text="{ddh>variacionH}" class="ddhTurnoVarText ddhRedStrong" />
                                         <Text text="{ddh>variacionPct}" class="ddhTurnoVarText ddhRedStrong" />
-
                                         <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                             <VBox class="ddhDotRed" visible="{= ${ddh>estado} === 'Sobrecargado' }" />
                                             <VBox class="ddhDotOrange" visible="{= ${ddh>estado} === 'Cerca de plan' }" />
@@ -395,7 +281,6 @@
                                         </HBox>
                                     </HBox>
                                 </VBox>
-
                                 <HBox class="ddhTurnoSummaryTotal">
                                     <Text text="Total" class="ddhTurnoTotalText" />
                                     <Text text="68" class="ddhTurnoTotalText ddhCenter" />
@@ -403,29 +288,22 @@
                                     <Text text="6,172" class="ddhTurnoTotalText ddhCenter" />
                                     <Text text="+712" class="ddhTurnoVarText ddhRedStrong" />
                                     <Text text="+13.0%" class="ddhTurnoVarText ddhRedStrong" />
-
                                     <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                         <VBox class="ddhDotRed" />
                                         <Text text="Sobrecargado" class="ddhSummaryStatusText" />
                                     </HBox>
                                 </HBox>
-
                             </VBox>
                         </VBox>
-
                         <!-- RESUMEN POR TIPO DE ORDEN -->
                         <VBox class="ddhCard ddhSummaryCard ddhSummaryPurple ddhTipoSummaryCard">
-
                             <HBox class="ddhSummaryTitleRow" alignItems="Center">
                                 <HBox class="ddhSummaryIcon ddhSummaryIconPurple" alignItems="Center" justifyContent="Center">
                                     <core:Icon src="sap-icon://wrench" />
                                 </HBox>
-
                                 <Title text="Resumen por tipo de orden" level="H3" class="ddhCardTitle" />
                             </HBox>
-
                             <VBox class="ddhTipoSummaryGrid">
-
                                 <HBox class="ddhTipoSummaryHeader">
                                     <Text text="Tipo de orden" class="ddhTipoHeadText" />
                                     <Text text="OT con desv." class="ddhTipoHeadText ddhCenter" />
@@ -435,7 +313,6 @@
                                     <Text text="Variación (%)" class="ddhTipoHeadText ddhCenter" />
                                     <Text text="Estado" class="ddhTipoHeadText ddhCenter" />
                                 </HBox>
-
                                 <VBox items="{ddh>/resumenTipoOrden}">
                                     <HBox class="ddhTipoSummaryRow">
                                         <Text text="{ddh>tipoOrden}" class="ddhTipoCellText" />
@@ -444,7 +321,6 @@
                                         <Text text="{ddh>horasReales}" class="ddhTipoCellText ddhCenter" />
                                         <Text text="{ddh>variacionH}" class="ddhTipoVarText ddhRedStrong" />
                                         <Text text="{ddh>variacionPct}" class="ddhTipoVarText ddhRedStrong" />
-
                                         <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                             <VBox class="ddhDotRed" visible="{= ${ddh>estado} === 'Sobrecargado' }" />
                                             <VBox class="ddhDotOrange" visible="{= ${ddh>estado} === 'Cerca de plan' }" />
@@ -453,7 +329,6 @@
                                         </HBox>
                                     </HBox>
                                 </VBox>
-
                                 <HBox class="ddhTipoSummaryTotal">
                                     <Text text="Total" class="ddhTipoTotalText" />
                                     <Text text="68" class="ddhTipoTotalText ddhCenter" />
@@ -461,18 +336,14 @@
                                     <Text text="6,172" class="ddhTipoTotalText ddhCenter" />
                                     <Text text="+712" class="ddhTipoVarText ddhRedStrong" />
                                     <Text text="+13.0%" class="ddhTipoVarText ddhRedStrong" />
-
                                     <HBox alignItems="Center" justifyContent="Center" class="ddhSummaryStatusCell">
                                         <VBox class="ddhDotRed" />
                                         <Text text="Sobrecargado" class="ddhSummaryStatusText" />
                                     </HBox>
                                 </HBox>
-
                             </VBox>
                         </VBox>
-
                     </HBox>
-
                 </VBox>
             </ScrollContainer>
         </content>

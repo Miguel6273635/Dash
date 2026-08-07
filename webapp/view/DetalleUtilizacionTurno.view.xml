@@ -47,7 +47,7 @@
                 <!-- ===================================================== -->
 
                 <FlexBox
-                    wrap="Wrap"
+                    wrap="NoWrap"
                     alignItems="Stretch"
                     class="dutFiltersContainer">
 
@@ -167,13 +167,18 @@
 
                     </VBox>
 
-                    <Button
-                        id="aplicarFiltrosButton"
-                        text="Aplicar filtros"
-                        icon="sap-icon://filter"
-                        type="Emphasized"
-                        press=".onAplicarFiltros"
-                        class="dutApplyButton"/>
+                    <VBox
+                        class="dutApplyButtonBox">
+
+                        <Button
+                            id="aplicarFiltrosButton"
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onAplicarFiltros"
+                            class="dutApplyButton"/>
+
+                    </VBox>
 
                 </FlexBox>
 
@@ -730,10 +735,10 @@
                     </FlexBox>
 
                     <ScrollContainer
-                        horizontal="true"
+                        horizontal="false"
                         vertical="false"
                         width="100%"
-                        class="dutTableScroll">
+                        class="dutOrdersTableWrapper">
 
                         <Table
                             id="ordenesTable"
@@ -747,84 +752,84 @@
 
                             <columns>
 
-                                <Column width="7.4rem">
+                                <Column width="6.4rem">
                                     <Text
                                         text="OT"
                                         class="dutColumnHeader"/>
                                 </Column>
 
-                                <Column width="9.2rem">
+                                <Column width="7.6rem">
                                     <Text
                                         text="Cliente"
                                         class="dutColumnHeader"/>
                                 </Column>
 
-                                <Column width="7.5rem">
+                                <Column width="5.8rem">
                                     <Text
                                         text="Elevador"
                                         class="dutColumnHeader"/>
                                 </Column>
 
-                                <Column width="5.8rem">
+                                <Column width="4.8rem">
                                     <Text
                                         text="Zona"
                                         class="dutColumnHeader"/>
                                 </Column>
 
-                                <Column width="11rem">
+                                <Column width="8.8rem">
                                     <Text
                                         text="Tipo de OT"
                                         class="dutColumnHeader"/>
                                 </Column>
 
-                                <Column width="8.5rem">
+                                <Column width="7rem">
                                     <Text
                                         text="Responsable"
                                         class="dutColumnHeader"/>
                                 </Column>
 
                                 <Column
-                                    width="6rem"
+                                    width="5.2rem"
                                     hAlign="Center">
 
                                     <Text
                                         text="Horas plan."
-                                        class="dutColumnHeader"/>
+                                        class="dutColumnHeader dutColumnHeaderCenter"/>
 
                                 </Column>
 
                                 <Column
-                                    width="6rem"
+                                    width="5.2rem"
                                     hAlign="Center">
 
                                     <Text
                                         text="Horas real."
-                                        class="dutColumnHeader"/>
+                                        class="dutColumnHeader dutColumnHeaderCenter"/>
 
                                 </Column>
 
                                 <Column
-                                    width="6.5rem"
+                                    width="5.4rem"
                                     hAlign="Center">
 
                                     <Text
                                         text="Variación (h)"
-                                        class="dutColumnHeader"/>
+                                        class="dutColumnHeader dutColumnHeaderCenter"/>
 
                                 </Column>
 
                                 <Column
-                                    width="7rem"
+                                    width="5.6rem"
                                     hAlign="Center">
 
                                     <Text
                                         text="Variación (%)"
-                                        class="dutColumnHeader"/>
+                                        class="dutColumnHeader dutColumnHeaderCenter"/>
 
                                 </Column>
 
                                 <Column
-                                    width="10rem"
+                                    width="7.6rem"
                                     hAlign="Begin">
 
                                     <Text
@@ -837,7 +842,9 @@
 
                             <items>
 
-                                <ColumnListItem vAlign="Middle">
+                                <ColumnListItem
+                                    vAlign="Middle"
+                                    class="dutOrderRow">
 
                                     <cells>
 
@@ -887,15 +894,51 @@
                                             width="100%"
                                             class="dutCenteredCell"/>
 
-                                        <ObjectStatus
-                                            text="{detalleTurno>variacionHoras}"
-                                            state="{detalleTurno>variacionState}"
-                                            class="dutVariationValue"/>
+                                        <VBox
+                                            justifyContent="Center"
+                                            alignItems="Center"
+                                            width="100%"
+                                            class="dutVariationCell">
 
-                                        <ObjectStatus
-                                            text="{detalleTurno>variacionPorcentaje}"
-                                            state="{detalleTurno>variacionState}"
-                                            class="dutVariationValue"/>
+                                            <Text
+                                                text="{detalleTurno>variacionHoras}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Error' }"
+                                                class="dutVariationText dutVariationError"/>
+
+                                            <Text
+                                                text="{detalleTurno>variacionHoras}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Success' }"
+                                                class="dutVariationText dutVariationSuccess"/>
+
+                                            <Text
+                                                text="{detalleTurno>variacionHoras}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Warning' }"
+                                                class="dutVariationText dutVariationWarning"/>
+
+                                        </VBox>
+
+                                        <VBox
+                                            justifyContent="Center"
+                                            alignItems="Center"
+                                            width="100%"
+                                            class="dutVariationCell">
+
+                                            <Text
+                                                text="{detalleTurno>variacionPorcentaje}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Error' }"
+                                                class="dutVariationText dutVariationError"/>
+
+                                            <Text
+                                                text="{detalleTurno>variacionPorcentaje}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Success' }"
+                                                class="dutVariationText dutVariationSuccess"/>
+
+                                            <Text
+                                                text="{detalleTurno>variacionPorcentaje}"
+                                                visible="{= ${detalleTurno>variacionState} === 'Warning' }"
+                                                class="dutVariationText dutVariationWarning"/>
+
+                                        </VBox>
 
                                         <HBox
                                             alignItems="Center"

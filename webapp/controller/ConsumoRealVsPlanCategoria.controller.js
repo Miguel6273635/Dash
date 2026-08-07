@@ -11,15 +11,8 @@ sap.ui.define([
 
         onInit: function () {
             var oData = this._getMockData();
+            oData.tendenciaSvg = this._crearGraficaTendenciaSvg(oData.tendenciaSemanal);
             this.getView().setModel(new JSONModel(oData), "crpc");
-        },
-
-        onAfterRendering: function () {
-            var that = this;
-
-            setTimeout(function () {
-                that._configurarGraficaTendencia();
-            }, 300);
         },
 
         _getMockData: function () {
@@ -341,87 +334,82 @@ sap.ui.define([
             };
         },
 
-        _configurarGraficaTendencia: function () {
-            var oChart = this.byId("vfTendenciaDesviacion");
+        _crearGraficaTendenciaSvg: function (aDatos) {
+            var aSeries = aDatos || [];
+            var aX = [92, 193, 293, 393, 494];
+            var iTop = 8;
+            var iBottom = 104;
+            var iRange = iBottom - iTop;
 
-            if (!oChart) {
-                return;
+            function y(iValor) {
+                return iTop + ((30 - Number(iValor)) / 40) * iRange;
             }
 
-            oChart.setVizProperties({
-                plotArea: {
-                    colorPalette: [
-                        "#93C5FD",
-                        "#2563EB",
-                        "#EF4444"
-                    ],
-                    drawingEffect: "normal",
-                    marker: {
-                        visible: true,
-                        size: 4
-                    },
-                    dataLabel: {
-                        visible: true,
-                        style: {
-                            color: "#172554",
-                            fontSize: "10px"
-                        }
-                    },
-                    line: {
-                        width: 2
-                    }
-                },
-                legend: {
-                    visible: false
-                },
-                title: {
-                    visible: false
-                },
-                valueAxis: {
-                    title: {
-                        visible: false
-                    },
-                    label: {
-                        style: {
-                            color: "#64748B",
-                            fontSize: "10px"
-                        }
-                    },
-                    scale: {
-                        fixedRange: true,
-                        minValue: -10,
-                        maxValue: 30
-                    },
-                    gridline: {
-                        visible: true
-                    }
-                },
-                categoryAxis: {
-                    title: {
-                        visible: false
-                    },
-                    label: {
-                        style: {
-                            color: "#334155",
-                            fontSize: "9px"
-                        }
-                    }
-                },
-                tooltip: {
-                    visible: true
-                },
-                background: {
-                    color: "transparent"
-                },
-                interaction: {
-                    selectability: {
-                        mode: "single"
-                    }
-                }
-            });
+            function puntos(sPropiedad) {
+                return aSeries.map(function (oDato, iIndice) {
+                    return aX[iIndice] + "," + y(oDato[sPropiedad]).toFixed(1);
+                }).join(" ");
+            }
+
+            function marcadores(sPropiedad, sColor) {
+                return aSeries.map(function (oDato, iIndice) {
+                    return "<circle cx=\"" + aX[iIndice] + "\" cy=\"" +
+                        y(oDato[sPropiedad]).toFixed(1) + "\" r=\"2.4\" fill=\"" +
+                        sColor + "\" stroke=\"#FFFFFF\" stroke-width=\"0.8\"/>";
+                }).join("");
+            }
+
+            function etiquetas(sPropiedad, sColor, iDesplazamientoY, iDesplazamientoX, bSigno) {
+                return aSeries.map(function (oDato, iIndice) {
+                    var iValor = Number(oDato[sPropiedad]);
+                    var sValor = bSigno && iValor > 0 ? "+" + iValor : String(iValor);
+
+                    return "<text x=\"" + (aX[iIndice] + iDesplazamientoX) + "\" y=\"" +
+                        (y(iValor) + iDesplazamientoY).toFixed(1) + "\" text-anchor=\"middle\" " +
+                        "fill=\"" + sColor + "\" font-size=\"8\" font-weight=\"800\">" +
+                        sValor + "</text>";
+                }).join("");
+            }
+
+            var aEscala = [30, 20, 10, 0, -10];
+            var sRejilla = aEscala.map(function (iValor) {
+                var iY = y(iValor).toFixed(1);
+                return "<line x1=\"42\" y1=\"" + iY + "\" x2=\"544\" y2=\"" + iY +
+                    "\" stroke=\"#D8E1EC\" stroke-width=\"1\"/>" +
+                    "<text x=\"31\" y=\"" + (Number(iY) + 3) +
+                    "\" text-anchor=\"end\" fill=\"#60738D\" font-size=\"8\">" + iValor + "</text>";
+            }).join("");
+
+            return "<div class=\"crpcTrendSvgInner\">" +
+                "<svg viewBox=\"0 0 560 112\" preserveAspectRatio=\"none\" role=\"img\" " +
+                "aria-label=\"Tendencia semanal: plan, real y variación\">" +
+                sRejilla +
+                "<polyline points=\"" + puntos("plan") +
+                "\" fill=\"none\" stroke=\"#93C5FD\" stroke-width=\"1.5\"/>" +
+                "<polyline points=\"" + puntos("real") +
+                "\" fill=\"none\" stroke=\"#2563EB\" stroke-width=\"1.9\"/>" +
+                "<polyline points=\"" + puntos("variacion") +
+                "\" fill=\"none\" stroke=\"#EF4444\" stroke-width=\"1.6\" " +
+                "stroke-dasharray=\"2 4\" stroke-linecap=\"round\"/>" +
+                marcadores("plan", "#93C5FD") +
+                marcadores("real", "#2563EB") +
+                marcadores("variacion", "#EF4444") +
+                etiquetas("plan", "#526781", 12, 0, false) +
+                etiquetas("real", "#1D4ED8", -7, -5, false) +
+                etiquetas("variacion", "#EF4444", -10, 7, true) +
+                "</svg></div>";
+        },
+
+        _actualizarGraficaTendencia: function () {
+            var oModel = this.getView().getModel("crpc");
+            oModel.setProperty(
+                "/tendenciaSvg",
+                this._crearGraficaTendenciaSvg(oModel.getProperty("/tendenciaSemanal"))
+            );
         },
 
         onAplicarFiltros: function () {
+            this._actualizarGraficaTendencia();
             MessageToast.show("Filtros aplicados correctamente");
         },
 

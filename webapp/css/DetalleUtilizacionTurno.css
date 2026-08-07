@@ -56,14 +56,23 @@
 
 .dutFiltersContainer {
     width: 100%;
-    gap: 0.62rem;
+    display: flex;
+    gap: 0.7rem;
     margin-bottom: 0.15rem;
     align-items: stretch !important;
 }
 
+.dutFiltersContainer > .sapMFlexItem,
+.dutFiltersContainer > .sapUiRespGridSpan,
+.dutFiltersContainer > * {
+    min-width: 0;
+}
+
 .dutFilterCard {
-    height: 3.8rem;
-    padding: 0.42rem 0.65rem 0.34rem;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 3.55rem;
+    padding: 0.42rem 0.7rem 0.3rem;
     box-sizing: border-box;
     background: #ffffff;
     border: 1px solid #edf0f7;
@@ -72,23 +81,23 @@
 }
 
 .dutFilterPeriodo {
-    width: 9rem;
+    flex: 0.95 1 0;
 }
 
 .dutFilterFecha {
-    width: 9.2rem;
+    flex: 1.02 1 0;
 }
 
 .dutFilterZona {
-    width: 8.9rem;
+    flex: 0.9 1 0;
 }
 
 .dutFilterSupervisor {
-    width: 9.3rem;
+    flex: 1 1 0;
 }
 
 .dutFilterMecanico {
-    width: 10.5rem;
+    flex: 1.15 1 0;
 }
 
 .dutFilterLabel {
@@ -100,7 +109,8 @@
 }
 
 .dutBorderlessSelect.sapMSlt {
-    height: 2rem !important;
+    height: 1.85rem !important;
+    width: 100% !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -115,27 +125,29 @@
 }
 
 .dutBorderlessSelect .sapMSltLabel {
-    height: 2rem !important;
-    line-height: 2rem !important;
+    height: 1.85rem !important;
+    line-height: 1.85rem !important;
     padding-left: 0.05rem !important;
+    padding-right: 1.7rem !important;
     color: #1b265b !important;
-    font-size: 0.76rem !important;
+    font-size: 0.78rem !important;
     font-weight: 600 !important;
 }
 
 .dutBorderlessSelect .sapMSltArrow {
-    height: 2rem !important;
-    line-height: 2rem !important;
+    height: 1.85rem !important;
+    line-height: 1.85rem !important;
     color: #536183 !important;
     background: transparent !important;
 }
 
 .dutBorderlessDatePicker.sapMInputBase {
-    height: 2rem !important;
+    height: 1.85rem !important;
+    width: 100% !important;
 }
 
 .dutBorderlessDatePicker .sapMInputBaseContentWrapper {
-    height: 2rem !important;
+    height: 1.85rem !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -151,34 +163,36 @@
 }
 
 .dutBorderlessDatePicker .sapMInputBaseInner {
-    height: 2rem !important;
+    height: 1.85rem !important;
     color: #1b265b !important;
-    font-size: 0.76rem !important;
+    font-size: 0.78rem !important;
     font-weight: 600 !important;
     padding-left: 0.05rem !important;
     background: transparent !important;
 }
 
 .dutBorderlessDatePicker .sapMInputBaseIconContainer {
-    height: 2rem !important;
+    height: 1.85rem !important;
 }
 
 .dutBorderlessDatePicker .sapMInputBaseIcon {
-    height: 2rem !important;
-    line-height: 2rem !important;
+    height: 1.85rem !important;
+    line-height: 1.85rem !important;
     color: #536183 !important;
     background: transparent !important;
 }
 
 .dutApplyButton {
-    height: 3.8rem !important;
+    flex: 0 0 11rem;
+    height: 3.55rem !important;
     margin: 0 !important;
     align-self: stretch !important;
 }
 
 .dutApplyButton .sapMBtnInner {
-    height: 3.8rem !important;
-    min-width: 9.2rem !important;
+    width: 100% !important;
+    height: 3.55rem !important;
+    min-width: 11rem !important;
     padding: 0 1.1rem !important;
     border: none !important;
     border-radius: 0.55rem !important;
@@ -192,8 +206,8 @@
 
 .dutApplyButton .sapMBtnContent,
 .dutApplyButton .sapMBtnIcon {
-    height: 3.8rem !important;
-    line-height: 3.8rem !important;
+    height: 3.55rem !important;
+    line-height: 3.55rem !important;
     color: #ffffff !important;
     font-size: 0.74rem !important;
     font-weight: 700 !important;
@@ -1588,4 +1602,527 @@
     height: 1.9rem !important;
     line-height: 1.9rem !important;
     font-size: 0.6rem !important;
+}
+
+/* ================================================================ */
+/* AJUSTE FINAL - DETALLE UTILIZACIÓN POR TURNO                     */
+/* Ajuste visual para igualar la vista de referencia                 */
+/* ================================================================ */
+
+.dutOrdersSection {
+    margin-top: 0.15rem !important;
+}
+
+.dutOrdersTableWrapper {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+}
+
+.dutOrdersTableWrapper .sapMScrollCont,
+.dutOrdersTableWrapper .sapMScrollContScroll {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+}
+
+.dutOrdersTable {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.dutOrdersTable .sapMListTbl {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+.dutOrdersTable .sapMListTblHeader {
+    background: #f6f7fa !important;
+}
+
+.dutOrdersTable .sapMListTblHeaderCell {
+    height: 2.25rem !important;
+    min-height: 2.25rem !important;
+    padding: 0.3rem 0.42rem !important;
+    background: #f6f7fa !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e9edf3 !important;
+    vertical-align: middle !important;
+}
+
+.dutOrdersTable .dutColumnHeader {
+    display: block !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    color: #626d86 !important;
+    font-size: 0.58rem !important;
+    line-height: 0.8rem !important;
+    font-weight: 700 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dutColumnHeaderCenter {
+    text-align: center !important;
+}
+
+.dutOrdersTable .sapMListTblRow,
+.dutOrdersTable .sapMListTblCell {
+    height: 2.35rem !important;
+    min-height: 2.35rem !important;
+}
+
+.dutOrdersTable .sapMListTblCell {
+    padding: 0.28rem 0.42rem !important;
+    background: #ffffff !important;
+    border-right: none !important;
+    border-bottom: 1px solid #edf0f4 !important;
+    vertical-align: middle !important;
+}
+
+.dutOrdersTable .dutOrderRow:hover .sapMListTblCell {
+    background: #fafbfe !important;
+}
+
+.dutOrdersTable .dutCellText,
+.dutOrdersTable .dutCenteredCell {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    color: #3e4966 !important;
+    font-size: 0.6rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 500 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dutOrdersTable .dutCenteredCell {
+    text-align: center !important;
+}
+
+.dutOrdersTable .dutOrderLink {
+    display: block !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    color: #1768d7 !important;
+    font-size: 0.61rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 700 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dutVariationCell {
+    width: 100% !important;
+    min-height: 1rem !important;
+}
+
+.dutVariationText {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 0.6rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.dutVariationError {
+    color: #ef3447 !important;
+}
+
+.dutVariationSuccess {
+    color: #18a367 !important;
+}
+
+.dutVariationWarning {
+    color: #ee9808 !important;
+}
+
+.dutOrdersTable .dutOrderStatus {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 0.3rem !important;
+}
+
+.dutOrdersTable .dutStatusDot {
+    width: 0.38rem !important;
+    min-width: 0.38rem !important;
+    font-size: 0.38rem !important;
+    line-height: 0.38rem !important;
+}
+
+.dutOrdersTable .dutStatusText {
+    display: block !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    color: #4b566f !important;
+    font-size: 0.58rem !important;
+    line-height: 0.85rem !important;
+    font-weight: 600 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dutOrdersHeader {
+    min-height: 3rem !important;
+    padding: 0.42rem 0.7rem !important;
+}
+
+.dutOrdersHeader .dutSectionTitle {
+    font-size: 0.82rem !important;
+    line-height: 1rem !important;
+}
+
+.dutSearchField {
+    width: 15rem !important;
+    height: 2rem !important;
+}
+
+.dutSearchField .sapMSFF,
+.dutSearchField .sapMSFI,
+.dutSearchField .sapMSFB {
+    height: 2rem !important;
+}
+
+.dutSearchField .sapMSFI {
+    font-size: 0.62rem !important;
+    font-style: italic !important;
+}
+
+.dutTableFooter {
+    min-height: 3.1rem !important;
+    padding: 0.45rem 0.75rem !important;
+    border-top: none !important;
+}
+
+.dutResultCount {
+    color: #7b8499 !important;
+    font-size: 0.58rem !important;
+}
+
+/* ================================================================ */
+/* AJUSTE FINAL - FILTROS A TODO EL ANCHO COMO REFERENCIA            */
+/* ================================================================ */
+
+.dutPage .sapMPageScroll,
+.dutPage .sapMPageScrollCont,
+.dutPage .sapMPageEnableScrolling {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.dutMainContainer {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    padding: 0.55rem 0.75rem 1.25rem !important;
+}
+
+.dutHeaderBlock {
+    width: 100% !important;
+    margin-bottom: 0.35rem !important;
+}
+
+.dutFiltersContainer {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    gap: 0.72rem !important;
+    margin: 0 0 0.8rem 0 !important;
+    padding: 0 !important;
+}
+
+.dutFiltersContainer > * {
+    min-width: 0 !important;
+}
+
+.dutFilterCard,
+.dutFilterPeriodo,
+.dutFilterFecha,
+.dutFilterZona,
+.dutFilterSupervisor,
+.dutFilterMecanico {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    height: 4rem !important;
+    padding: 0.48rem 0.8rem 0.42rem !important;
+    box-sizing: border-box !important;
+    background: #ffffff !important;
+    border: 1px solid #dfe5ef !important;
+    border-radius: 0.62rem !important;
+    box-shadow: 0 0.09rem 0.35rem rgba(25, 39, 80, 0.04) !important;
+}
+
+.dutFilterPeriodo {
+    flex: 0.95 1 0 !important;
+}
+
+.dutFilterFecha {
+    flex: 1.08 1 0 !important;
+}
+
+.dutFilterZona {
+    flex: 0.95 1 0 !important;
+}
+
+.dutFilterSupervisor {
+    flex: 1.08 1 0 !important;
+}
+
+.dutFilterMecanico {
+    flex: 1.18 1 0 !important;
+}
+
+.dutFilterLabel {
+    color: #68748b !important;
+    font-size: 0.66rem !important;
+    font-weight: 800 !important;
+    line-height: 0.92rem !important;
+    margin: 0 0 0.18rem 0 !important;
+}
+
+.dutBorderlessSelect.sapMSlt,
+.dutBorderlessDatePicker.sapMInputBase {
+    width: 100% !important;
+    height: 2.05rem !important;
+    min-height: 2.05rem !important;
+}
+
+.dutBorderlessSelect.sapMSlt,
+.dutBorderlessSelect.sapMSlt:hover,
+.dutBorderlessSelect.sapMSlt:focus,
+.dutBorderlessDatePicker .sapMInputBaseContentWrapper,
+.dutBorderlessDatePicker.sapMInputBase:hover .sapMInputBaseContentWrapper,
+.dutBorderlessDatePicker.sapMInputBaseFocused .sapMInputBaseContentWrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.dutBorderlessSelect .sapMSltLabel,
+.dutBorderlessDatePicker .sapMInputBaseInner {
+    height: 2.05rem !important;
+    line-height: 2.05rem !important;
+    padding-left: 0 !important;
+    color: #18244b !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+    background: transparent !important;
+}
+
+.dutBorderlessSelect .sapMSltArrow,
+.dutBorderlessDatePicker .sapMInputBaseIconContainer,
+.dutBorderlessDatePicker .sapMInputBaseIcon {
+    height: 2.05rem !important;
+    line-height: 2.05rem !important;
+    color: #0b73ff !important;
+    background: transparent !important;
+}
+
+.dutApplyButton {
+    flex: 0 0 9.7rem !important;
+    width: 9.7rem !important;
+    min-width: 9.7rem !important;
+    height: 4rem !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+}
+
+.dutApplyButton .sapMBtnInner {
+    width: 100% !important;
+    min-width: 9.7rem !important;
+    height: 4rem !important;
+    padding: 0 1rem !important;
+    border: none !important;
+    border-radius: 0.62rem !important;
+    background: #0f6df2 !important;
+    box-shadow: 0 0.35rem 0.8rem rgba(15, 109, 242, 0.20) !important;
+}
+
+.dutApplyButton .sapMBtnContent,
+.dutApplyButton .sapMBtnIcon {
+    height: 4rem !important;
+    line-height: 4rem !important;
+    color: #ffffff !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+}
+
+.dutApplyButton:hover .sapMBtnInner {
+    background: #0b5ed7 !important;
+}
+
+@media (max-width: 1200px) {
+    .dutFiltersContainer {
+        flex-wrap: wrap !important;
+    }
+
+    .dutFilterCard,
+    .dutFilterPeriodo,
+    .dutFilterFecha,
+    .dutFilterZona,
+    .dutFilterSupervisor,
+    .dutFilterMecanico {
+        flex: 1 1 calc(33.333% - 0.72rem) !important;
+        width: calc(33.333% - 0.72rem) !important;
+    }
+
+    .dutApplyButton {
+        flex: 1 1 calc(33.333% - 0.72rem) !important;
+        width: calc(33.333% - 0.72rem) !important;
+    }
+}
+
+@media (max-width: 760px) {
+    .dutFilterCard,
+    .dutFilterPeriodo,
+    .dutFilterFecha,
+    .dutFilterZona,
+    .dutFilterSupervisor,
+    .dutFilterMecanico,
+    .dutApplyButton {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+}
+
+
+/* ================================================================ */
+/* AJUSTE COLOR AZUL - FLECHAS E ICONOS DE FILTROS                  */
+/* ================================================================ */
+
+.dutFiltersContainer .dutBorderlessSelect .sapMSltArrow {
+    color: #0a6ed1 !important;
+}
+
+.dutFiltersContainer .dutBorderlessDatePicker .sapMInputBaseIcon {
+    color: #0a6ed1 !important;
+}
+
+.dutFiltersContainer .sapUiIcon {
+    color: #0a6ed1 !important;
+}
+
+/* ================================================================ */
+/* AJUSTE FINAL - BOTÓN APLICAR FILTROS COMPACTO                    */
+/* ================================================================ */
+
+.dutFiltersContainer .dutApplyButton {
+    flex: 0 0 9rem !important;
+    width: 9rem !important;
+    min-width: 9rem !important;
+    max-width: 9rem !important;
+    height: 3.55rem !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnInner {
+    width: 9rem !important;
+    min-width: 9rem !important;
+    max-width: 9rem !important;
+    height: 3.55rem !important;
+    padding: 0 0.75rem !important;
+    border-radius: 0.55rem !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnContent,
+.dutFiltersContainer .dutApplyButton .sapMBtnIcon {
+    height: 3.55rem !important;
+    line-height: 3.55rem !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnIcon {
+    margin-right: 0.35rem !important;
+}
+
+/* ================================================================ */
+/* AJUSTE DEFINITIVO - BOTÓN APLICAR FILTROS COMO VISTA JEFATURA    */
+/* ================================================================ */
+
+.dutFiltersContainer .dutApplyButtonBox {
+    flex: 0 0 118px !important;
+    width: 118px !important;
+    min-width: 118px !important;
+    max-width: 118px !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+}
+
+.dutFiltersContainer .dutApplyButton {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 118px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnInner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 118px !important;
+    height: 3rem !important;
+    min-height: 3rem !important;
+    padding: 0 0.8rem !important;
+    border: 0 !important;
+    border-radius: 0.7rem !important;
+    background: #0a6ff5 !important;
+    box-shadow: 0 3px 8px rgba(10, 111, 245, 0.24) !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnContent,
+.dutFiltersContainer .dutApplyButton .sapMBtnIcon {
+    height: auto !important;
+    line-height: 1 !important;
+    color: #ffffff !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+    vertical-align: middle !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnIcon {
+    position: static !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0.72rem !important;
+}
+
+.dutFiltersContainer .dutApplyButton .sapMBtnInner::after,
+.dutFiltersContainer .dutApplyButton .sapMBtnInner:focus::after,
+.dutFiltersContainer .dutApplyButton .sapMFocusable:focus::after {
+    border: 0 !important;
+    outline: 0 !important;
 }

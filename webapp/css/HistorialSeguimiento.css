@@ -1159,3 +1159,1372 @@ and (max-height: 720px) {
         min-height: 14rem;
     }
 }
+
+/* =======================================================================
+   AJUSTE FINAL APROBADO - HISTORIAL Y SEGUIMIENTO
+   - Filtros y KPI con patrón visual de Vista Jefatura
+   - Botón Aplicar filtros estándar
+   - Píldoras ovaladas
+   - Paneles alineados y sin recortes
+   - Scroll vertical seguro
+   Mantener este bloque al final del archivo.
+   ======================================================================= */
+
+/* =======================================================================
+   1. PÁGINA Y CONTENEDOR
+   ======================================================================= */
+
+.hsPage,
+.hsPage.sapMPage,
+.hsPage .sapMPageBgStandard,
+.hsPage .sapMPageEnableScrolling,
+.hsPage .sapMPageScroll,
+.hsPage > section {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    height: 100% !important;
+    min-height: 0 !important;
+
+    box-sizing: border-box !important;
+}
+
+.hsPage .sapMPageScroll {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    background: #f6f8fb !important;
+}
+
+.hsPage .hsRoot {
+    width: calc(100% - 1rem) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+    min-height: 100% !important;
+
+    margin: 0.5rem auto !important;
+    padding: 0.55rem 0.68rem 0.78rem !important;
+
+    gap: 0.58rem !important;
+
+    overflow: visible !important;
+
+    background: #f6f8fb !important;
+
+    box-sizing: border-box !important;
+}
+
+/* =======================================================================
+   2. BREADCRUMB Y ENCABEZADO
+   ======================================================================= */
+
+.hsPage .hsBreadcrumbs {
+    min-height: 1rem !important;
+
+    gap: 0.3rem !important;
+}
+
+.hsPage .hsBreadcrumbs .sapMLnk,
+.hsPage .hsBreadcrumbCurrent {
+    font-size: 0.61rem !important;
+    line-height: 0.9rem !important;
+}
+
+.hsPage .hsBreadcrumbs .sapMLnk {
+    color: #0a6ed1 !important;
+    font-weight: 800 !important;
+}
+
+.hsPage .hsBreadcrumbCurrent {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+.hsPage .hsHeader {
+    min-height: 2.65rem !important;
+
+    gap: 0.38rem !important;
+}
+
+.hsPage .hsBackButton {
+    flex: 0 0 1.75rem !important;
+
+    margin-top: -0.08rem !important;
+}
+
+.hsPage .hsBackButton,
+.hsPage .hsBackButton .sapMBtnInner {
+    width: 1.75rem !important;
+    min-width: 1.75rem !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+}
+
+.hsPage .hsBackButton .sapMBtnIcon {
+    color: #24364b !important;
+
+    font-size: 0.88rem !important;
+    line-height: 1.75rem !important;
+}
+
+.hsPage .hsHeaderText {
+    gap: 0.08rem !important;
+}
+
+.hsPage .hsTitleRow {
+    gap: 0.28rem !important;
+}
+
+.hsPage .hsMainTitle.sapMTitle {
+    color: #14213d !important;
+
+    font-size: 1.38rem !important;
+    line-height: 1.55rem !important;
+    font-weight: 900 !important;
+}
+
+.hsPage .hsEquipmentTitle.sapMTitle {
+    color: #24364b !important;
+}
+
+.hsPage .hsSubtitle {
+    color: #64748b !important;
+
+    font-size: 0.64rem !important;
+    line-height: 0.84rem !important;
+    font-weight: 500 !important;
+}
+
+/* =======================================================================
+   3. FILTROS
+   ======================================================================= */
+
+.hsPage .hsFilterGrid {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(8rem, 1fr)
+        minmax(8rem, 1fr)
+        minmax(7.3rem, 0.9fr)
+        minmax(7.3rem, 0.9fr)
+        minmax(7.6rem, 0.92fr)
+        minmax(9rem, 1.05fr)
+        7.35rem !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 3.35rem !important;
+
+    column-gap: 0.5rem !important;
+    row-gap: 0.5rem !important;
+
+    align-items: stretch !important;
+
+    margin: 0 !important;
+}
+
+.hsPage .hsFilterGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Una sola tarjeta por filtro. */
+.hsPage .hsFilterCard {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 3.35rem !important;
+    min-height: 3.35rem !important;
+
+    margin: 0 !important;
+    padding: 0.36rem 0.56rem 0.26rem !important;
+
+    overflow: visible !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #dce5f0 !important;
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.14rem 0.42rem
+        rgba(15, 23, 42, 0.055) !important;
+
+    box-sizing: border-box !important;
+}
+
+.hsPage .hsFilterCard:focus-within {
+    border-color: #1677ff !important;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(22, 119, 255, 0.1) !important;
+}
+
+.hsPage .hsFilterCard .sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+    height: 0.7rem !important;
+    min-height: 0.7rem !important;
+
+    margin: 0 0 0.04rem !important;
+    padding: 0 0.08rem !important;
+
+    color: #52657b !important;
+
+    font-size: 0.53rem !important;
+    line-height: 0.64rem !important;
+    font-weight: 850 !important;
+
+    white-space: nowrap !important;
+}
+
+.hsPage .hsFilterCard .sapMInputBase,
+.hsPage .hsFilterCard .sapMSlt,
+.hsPage .hsFilterCard .sapMSF {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hsPage .hsFilterCard .sapMInputBaseContentWrapper,
+.hsPage .hsFilterCard .sapMSlt,
+.hsPage .hsFilterCard .sapMSF,
+.hsPage .hsFilterCard .sapMSFF {
+    width: 100% !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.hsPage .hsFilterCard .sapMInputBaseInner,
+.hsPage .hsFilterCard .sapMSltLabel,
+.hsPage .hsFilterCard .sapMSFI {
+    width: 100% !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    padding: 0 1.52rem 0 0.08rem !important;
+
+    color: #1e293b !important;
+    background: transparent !important;
+
+    font-size: 0.64rem !important;
+    font-weight: 800 !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
+}
+
+/* Flechas, calendarios y lupa azules a la derecha. */
+.hsPage .hsFilterCard .sapMSltArrow,
+.hsPage .hsFilterCard .sapMInputBaseIcon,
+.hsPage .hsFilterCard .sapMInputBaseIconContainer,
+.hsPage .hsFilterCard .sapMSFB {
+    width: 1.5rem !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    background: transparent !important;
+
+    font-size: 0.7rem !important;
+}
+
+/* =======================================================================
+   4. BOTÓN APLICAR FILTROS
+   ======================================================================= */
+
+.hsPage .hsApplyButton.sapMBtn {
+    align-self: center !important;
+
+    width: 7.35rem !important;
+    min-width: 7.35rem !important;
+    max-width: 7.35rem !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hsPage .hsApplyButton .sapMBtnInner {
+    width: 100% !important;
+    min-width: 100% !important;
+
+    height: 2.85rem !important;
+    min-height: 2.85rem !important;
+    max-height: 2.85rem !important;
+
+    padding: 0 0.48rem !important;
+
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 0.32rem !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1787ff 0%,
+            #066ce6 100%
+        ) !important;
+
+    border: 0 !important;
+    border-radius: 0.5rem !important;
+
+    box-shadow:
+        0 0.27rem 0.6rem
+        rgba(22, 119, 255, 0.23) !important;
+}
+
+.hsPage .hsApplyButton .sapMBtnIcon,
+.hsPage .hsApplyButton .sapUiIcon {
+    position: static !important;
+    order: 1 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+}
+
+.hsPage .hsApplyButton .sapMBtnContent {
+    order: 2 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+}
+
+/* =======================================================================
+   5. KPI
+   ======================================================================= */
+
+.hsPage .hsKpiGrid {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 4.8rem !important;
+
+    gap: 0.58rem !important;
+    align-items: stretch !important;
+
+    margin: 0 !important;
+}
+
+.hsPage .hsKpiGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 4.8rem !important;
+    min-height: 4.8rem !important;
+
+    margin: 0 !important;
+}
+
+.hsPage .hsKpiCard {
+    position: relative !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 4.8rem !important;
+    min-height: 4.8rem !important;
+    max-height: 4.8rem !important;
+
+    margin: 0 !important;
+    padding: 0.52rem 0.58rem 0.48rem 0.48rem !important;
+
+    gap: 0 !important;
+    overflow: hidden !important;
+
+    border: 1px solid #e3eaf3 !important;
+    border-left: 0.24rem solid var(--hs-accent) !important;
+    border-radius: 0.55rem !important;
+
+    box-shadow:
+        0 0.2rem 0.55rem
+        rgba(15, 23, 42, 0.055) !important;
+
+    box-sizing: border-box !important;
+}
+
+.hsPage .hsKpiCard::before {
+    display: none !important;
+    content: none !important;
+}
+
+.hsPage .hsKpiIconWrap {
+    position: relative !important;
+
+    flex: 0 0 2.55rem !important;
+
+    width: 2.55rem !important;
+    min-width: 2.55rem !important;
+    height: 2.55rem !important;
+    min-height: 2.55rem !important;
+
+    margin-right: 0.95rem !important;
+
+    border-radius: 50% !important;
+
+    background: var(--hs-icon-bg) !important;
+
+    overflow: visible !important;
+}
+
+/* Divisor entre icono y contenido. */
+.hsPage .hsKpiIconWrap::after {
+    content: "" !important;
+
+    position: absolute !important;
+    top: 0.12rem !important;
+    right: -0.48rem !important;
+
+    display: block !important;
+
+    width: 1px !important;
+    height: 2.3rem !important;
+
+    background: var(--hs-accent) !important;
+
+    border-radius: 999px !important;
+
+    opacity: 0.22 !important;
+}
+
+.hsPage .hsKpiIcon {
+    color: var(--hs-accent) !important;
+    fill: var(--hs-accent) !important;
+
+    font-size: 1.16rem !important;
+}
+
+.hsPage .hsKpiTextWrap {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+}
+
+.hsPage .hsKpiLabel {
+    color: #52657b !important;
+
+    font-size: 0.54rem !important;
+    line-height: 0.68rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.hsPage .hsKpiValue {
+    max-width: 100% !important;
+
+    color: #24364b !important;
+
+    font-size: 1.08rem !important;
+    line-height: 1.2rem !important;
+    font-weight: 900 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.hsPage .hsKpiValueText {
+    font-size: 0.68rem !important;
+    line-height: 0.82rem !important;
+}
+
+/* Gradientes reforzados. */
+.hsPage .hsKpiRed {
+    --hs-accent: #ef5b5b;
+    --hs-icon-bg: #fff0f0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 91, 91, 0.16) 0%,
+            rgba(239, 91, 91, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+.hsPage .hsKpiOrange {
+    --hs-accent: #f39a4a;
+    --hs-icon-bg: #fff3e7;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(243, 154, 74, 0.16) 0%,
+            rgba(243, 154, 74, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+.hsPage .hsKpiPurple {
+    --hs-accent: #a855f7;
+    --hs-icon-bg: #f5eafe;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(168, 85, 247, 0.16) 0%,
+            rgba(168, 85, 247, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+.hsPage .hsKpiBlue {
+    --hs-accent: #4f8ff7;
+    --hs-icon-bg: #eaf3ff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(79, 143, 247, 0.16) 0%,
+            rgba(79, 143, 247, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+.hsPage .hsKpiCyan {
+    --hs-accent: #2e9fe8;
+    --hs-icon-bg: #e8f6ff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46, 159, 232, 0.16) 0%,
+            rgba(46, 159, 232, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+.hsPage .hsKpiRose {
+    --hs-accent: #ef5f6c;
+    --hs-icon-bg: #fff0f2;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 95, 108, 0.16) 0%,
+            rgba(239, 95, 108, 0.07) 32%,
+            #ffffff 82%
+        ) !important;
+}
+
+/* =======================================================================
+   6. DISTRIBUCIÓN DE PANELES
+   ======================================================================= */
+
+.hsPage .hsMiddleGrid {
+    display: grid !important;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr) !important;
+
+    flex: none !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 22.5rem !important;
+
+    gap: 0.62rem !important;
+    align-items: stretch !important;
+}
+
+.hsPage .hsMiddleGrid > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+.hsPage .hsMiddleColumn {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 22.5rem !important;
+
+    gap: 0.62rem !important;
+}
+
+.hsPage .hsMiddleColumn > .sapMFlexItem {
+    width: 100% !important;
+    min-height: 0 !important;
+}
+
+.hsPage .hsPanel {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+
+    padding: 0.45rem 0.55rem 0.5rem !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #dfe6ef !important;
+    border-radius: 0.55rem !important;
+
+    box-shadow:
+        0 0.14rem 0.42rem
+        rgba(15, 23, 42, 0.045) !important;
+
+    box-sizing: border-box !important;
+}
+
+.hsPage .hsGeneralPanel,
+.hsPage .hsSummaryPanel {
+    flex: 0 0 9.2rem !important;
+
+    min-height: 9.2rem !important;
+}
+
+.hsPage .hsTimelinePanel,
+.hsPage .hsTrackingPanel {
+    flex: 1 1 auto !important;
+
+    min-height: 12.7rem !important;
+}
+
+.hsPage .hsPanelHeader,
+.hsPage .hsSubsectionTitle {
+    min-height: 1.35rem !important;
+
+    gap: 0.35rem !important;
+}
+
+.hsPage .hsPanelTitleIcon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 1.45rem !important;
+    min-width: 1.45rem !important;
+    height: 1.45rem !important;
+    min-height: 1.45rem !important;
+
+    color: #1677ff !important;
+
+    background: #edf5ff !important;
+
+    border-radius: 50% !important;
+
+    font-size: 0.7rem !important;
+}
+
+.hsPage .hsPanelTitle.sapMTitle {
+    color: #24364b !important;
+
+    font-size: 0.7rem !important;
+    line-height: 0.9rem !important;
+    font-weight: 900 !important;
+}
+
+/* =======================================================================
+   7. DATOS GENERALES Y RESUMEN
+   ======================================================================= */
+
+.hsPage .hsInfoBody,
+.hsPage .hsSummaryBody {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin-top: 0.2rem !important;
+
+    overflow: hidden !important;
+
+    border: 1px solid #e9eef4 !important;
+    border-radius: 0.38rem !important;
+}
+
+.hsPage .hsInfoRow,
+.hsPage .hsSummaryRow {
+    min-height: 1.05rem !important;
+
+    border-bottom: 1px solid #edf1f5 !important;
+}
+
+.hsPage .hsInfoRow:last-child,
+.hsPage .hsSummaryRow:last-child {
+    border-bottom: 0 !important;
+}
+
+.hsPage .hsInfoLabel,
+.hsPage .hsSummaryLabel {
+    flex: 0 0 43% !important;
+
+    padding: 0.12rem 0.38rem !important;
+
+    color: #68778b !important;
+
+    font-size: 0.51rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 650 !important;
+}
+
+.hsPage .hsInfoValue,
+.hsPage .hsSummaryValue {
+    flex: 1 1 auto !important;
+
+    padding: 0.12rem 0.38rem !important;
+
+    color: #26384d !important;
+
+    font-size: 0.52rem !important;
+    line-height: 0.72rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.hsPage .hsSummaryObservationRow {
+    min-height: 1.75rem !important;
+
+    align-items: flex-start !important;
+}
+
+.hsPage .hsSummaryObservation {
+    white-space: normal !important;
+    line-height: 0.68rem !important;
+}
+
+/* =======================================================================
+   8. LÍNEA DE TIEMPO
+   ======================================================================= */
+
+.hsPage .hsTimelineList {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin-top: 0.18rem !important;
+
+    overflow: visible !important;
+}
+
+.hsPage .hsTimelineList .sapMListUl {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: auto !important;
+}
+
+.hsPage .hsTimelineListItem {
+    flex: none !important;
+
+    min-height: 1.52rem !important;
+
+    background: transparent !important;
+}
+
+.hsPage .hsTimelineListItem .sapMLIBContent {
+    height: auto !important;
+    min-height: 1.52rem !important;
+
+    padding: 0 !important;
+}
+
+.hsPage .hsTimelineItem {
+    position: relative !important;
+
+    width: 100% !important;
+    min-height: 1.52rem !important;
+
+    gap: 0.28rem !important;
+
+    padding: 0.16rem 0 !important;
+}
+
+.hsPage .hsTimelineItem::before {
+    top: 50% !important;
+    bottom: -50% !important;
+    left: 0.235rem !important;
+
+    width: 1px !important;
+
+    background: #dbe5ef !important;
+}
+
+.hsPage .hsTimelineDot {
+    flex: 0 0 0.5rem !important;
+
+    width: 0.5rem !important;
+
+    font-size: 0.58rem !important;
+    line-height: 1 !important;
+}
+
+.hsPage .hsTimelineDate,
+.hsPage .hsTimelineUser,
+.hsPage .hsTimelineComment {
+    color: #41546b !important;
+
+    font-size: 0.51rem !important;
+    line-height: 0.74rem !important;
+}
+
+.hsPage .hsTimelineDate {
+    flex: 0 0 24% !important;
+    font-weight: 750 !important;
+}
+
+.hsPage .hsTimelineUser {
+    flex: 0 0 19% !important;
+    font-weight: 750 !important;
+}
+
+.hsPage .hsTimelineComment {
+    flex: 1 1 auto !important;
+}
+
+/* =======================================================================
+   9. INDICADORES Y PENDIENTES
+   ======================================================================= */
+
+.hsPage .hsIndicatorGrid {
+    margin: 0.16rem 0 0.28rem !important;
+
+    overflow: hidden !important;
+
+    border: 1px solid #e9eef4 !important;
+    border-radius: 0.38rem !important;
+}
+
+.hsPage .hsIndicatorRow {
+    min-height: 1.38rem !important;
+
+    border-bottom: 1px solid #edf1f5 !important;
+}
+
+.hsPage .hsIndicatorLabel,
+.hsPage .hsIndicatorValue {
+    padding: 0.16rem 0.34rem !important;
+
+    font-size: 0.49rem !important;
+    line-height: 0.7rem !important;
+}
+
+.hsPage .hsIndicatorLabel {
+    color: #6c7c90 !important;
+    font-weight: 700 !important;
+}
+
+.hsPage .hsIndicatorValue {
+    color: #2b3d52 !important;
+    font-weight: 850 !important;
+}
+
+/* =======================================================================
+   10. TABLAS
+   ======================================================================= */
+
+.hsPage .hsCompactTable {
+    width: 100% !important;
+    min-height: 0 !important;
+
+    background: #ffffff !important;
+}
+
+.hsPage .hsCompactTable .sapMListTbl {
+    width: 100% !important;
+
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+.hsPage .hsCompactTable .sapMListTblHeaderCell {
+    height: 1.55rem !important;
+    min-height: 1.55rem !important;
+
+    padding: 0.16rem 0.34rem !important;
+
+    background: #f4f7fb !important;
+
+    border-bottom: 1px solid #dfe6ef !important;
+}
+
+.hsPage .hsCompactTable .sapMListTblHeaderCell .sapMText {
+    color: #52657b !important;
+
+    font-size: 0.48rem !important;
+    line-height: 0.63rem !important;
+    font-weight: 850 !important;
+
+    white-space: nowrap !important;
+}
+
+.hsPage .hsCompactTable .sapMListTblRow,
+.hsPage .hsCompactTable .sapMListTblCell {
+    height: 1.48rem !important;
+    min-height: 1.48rem !important;
+}
+
+.hsPage .hsCompactTable .sapMListTblCell {
+    padding: 0.12rem 0.34rem !important;
+
+    border-bottom-color: #edf1f5 !important;
+}
+
+.hsPage .hsCompactTable .sapMListTblCell .sapMText,
+.hsPage .hsCompactTable .sapMListTblCell .sapMLnk {
+    color: #41546b !important;
+
+    font-size: 0.48rem !important;
+    line-height: 0.64rem !important;
+}
+
+.hsPage .hsPendingTable,
+.hsPage .hsLogTable {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+}
+
+.hsPage .hsLogPanel {
+    flex: none !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 12.6rem !important;
+
+    padding-bottom: 0.55rem !important;
+}
+
+.hsPage .hsOrderLink {
+    color: #0a6ed1 !important;
+    font-weight: 800 !important;
+}
+
+/* =======================================================================
+   11. PÍLDORAS OVALADAS
+   ======================================================================= */
+
+.hsPage .hsStatusPill,
+.hsPage .hsPriorityPill,
+.hsPage .hsEvidencePill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 3.35rem !important;
+    max-width: 100% !important;
+
+    height: 1.2rem !important;
+    min-height: 1.2rem !important;
+    max-height: 1.2rem !important;
+
+    margin: 0 auto !important;
+    padding: 0 0.48rem !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    box-shadow: none !important;
+
+    vertical-align: middle !important;
+    overflow: hidden !important;
+}
+
+.hsPage .hsStatusPill .sapMObjStatusText,
+.hsPage .hsPriorityPill .sapMObjStatusText,
+.hsPage .hsEvidencePill .sapMObjStatusText {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    height: 1.2rem !important;
+    min-height: 1.2rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 0.45rem !important;
+    line-height: 1.2rem !important;
+    font-weight: 850 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/* =======================================================================
+   12. RESPONSIVE
+   ======================================================================= */
+
+@media screen and (max-width: 1350px) {
+    .hsPage .hsFilterGrid {
+        grid-template-columns:
+            repeat(4, minmax(8rem, 1fr)) !important;
+    }
+
+    .hsPage .hsFilterGrid > .sapMFlexItem {
+        height: 3.35rem !important;
+    }
+
+    .hsPage .hsKpiGrid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    .hsPage .hsKpiGrid > .sapMFlexItem,
+    .hsPage .hsKpiCard {
+        height: 4.8rem !important;
+        min-height: 4.8rem !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .hsPage .hsRoot {
+        width: calc(100% - 0.7rem) !important;
+
+        margin: 0.35rem auto !important;
+        padding-left: 0.55rem !important;
+        padding-right: 0.55rem !important;
+    }
+
+    .hsPage .hsFilterGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .hsPage .hsKpiGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .hsPage .hsMiddleGrid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hsPage .hsMiddleColumn {
+        min-height: 0 !important;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .hsPage .hsFilterGrid,
+    .hsPage .hsKpiGrid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hsPage .hsApplyButton.sapMBtn {
+        justify-self: start !important;
+    }
+
+    .hsPage .hsTitleRow {
+        flex-wrap: wrap !important;
+    }
+}
+
+/* =======================================================================
+   AJUSTE EXCLUSIVO - FECHA DESDE Y FECHA HASTA
+   Mantener este bloque al final del CSS.
+   No modifica los demás filtros.
+   ======================================================================= */
+
+/* Mantiene las dos tarjetas de fecha con el patrón aprobado. */
+.hsPage .hsDateFilter {
+    padding:
+        0.36rem
+        0.48rem
+        0.26rem
+        0.56rem !important;
+}
+
+/* DatePicker completo. */
+.hsPage .hsDateFilter .hsDatePicker.sapMInputBase {
+    position: relative !important;
+
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+}
+
+/* Elimina la segunda caja interna. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseContentWrapper {
+    position: relative !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+/* Texto de fecha alineado igual que en las otras pantallas. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseInner {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding:
+        0
+        1.9rem
+        0
+        0.1rem !important;
+
+    color: #1e293b !important;
+    background: transparent !important;
+
+    font-family:
+        "72",
+        "72full",
+        Arial,
+        Helvetica,
+        sans-serif !important;
+
+    font-size: 0.64rem !important;
+    font-style: normal !important;
+    font-weight: 800 !important;
+
+    text-align: left !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+
+    box-sizing: border-box !important;
+}
+
+/* El placeholder tampoco se muestra en cursiva. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseInner::placeholder {
+    color: #64748b !important;
+
+    font-style: normal !important;
+    font-weight: 700 !important;
+
+    opacity: 1 !important;
+}
+
+/* Contenedor del calendario fijo a la derecha. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIconContainer {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 1.7rem !important;
+    min-width: 1.7rem !important;
+    max-width: 1.7rem !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+/* Icono azul, centrado y sin fondo adicional. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIcon,
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIconContainer
+.sapUiIcon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 1.7rem !important;
+    min-width: 1.7rem !important;
+    max-width: 1.7rem !important;
+
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
+    line-height: 1.75rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #1677ff !important;
+    fill: #1677ff !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    font-size: 0.74rem !important;
+}
+
+/* Sin divisores o fondos del tema al pasar el cursor. */
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIcon:hover,
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIcon:active,
+.hsPage
+.hsDateFilter
+.hsDatePicker
+.sapMInputBaseIcon:focus {
+    color: #0a6ed1 !important;
+    fill: #0a6ed1 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+}

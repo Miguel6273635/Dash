@@ -8,7 +8,7 @@
     <Page
         id="historialSeguimientoPage"
         showHeader="false"
-        enableScrolling="false"
+        enableScrolling="true"
         class="hsPage sapUiSizeCompact">
 
         <content>
@@ -65,7 +65,7 @@
 
                 <HBox class="hsFilterGrid">
 
-                    <VBox class="hsFilterCard">
+                    <VBox class="hsFilterCard hsDateFilter">
                         <Label
                             text="Fecha desde"
                             labelFor="dateFrom" />
@@ -73,12 +73,14 @@
                         <DatePicker
                             id="dateFrom"
                             width="100%"
+                            value="2024-05-01"
                             placeholder="dd/mm/aaaa"
                             displayFormat="dd/MM/yyyy"
-                            valueFormat="yyyy-MM-dd" />
+                            valueFormat="yyyy-MM-dd"
+                            class="hsDatePicker" />
                     </VBox>
 
-                    <VBox class="hsFilterCard">
+                    <VBox class="hsFilterCard hsDateFilter">
                         <Label
                             text="Fecha hasta"
                             labelFor="dateTo" />
@@ -86,9 +88,11 @@
                         <DatePicker
                             id="dateTo"
                             width="100%"
+                            value="2024-05-31"
                             placeholder="dd/mm/aaaa"
                             displayFormat="dd/MM/yyyy"
-                            valueFormat="yyyy-MM-dd" />
+                            valueFormat="yyyy-MM-dd"
+                            class="hsDatePicker" />
                     </VBox>
 
                     <VBox class="hsFilterCard">
@@ -158,6 +162,7 @@
                     <Button
                         text="Aplicar filtros"
                         icon="sap-icon://filter"
+                        iconFirst="true"
                         type="Emphasized"
                         press=".onApplyFilters"
                         class="hsApplyButton" />
