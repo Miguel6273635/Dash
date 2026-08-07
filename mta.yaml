@@ -1,0 +1,33 @@
+_schema-version: "3.3"
+ID: mantenimiento-dashboard
+version: 0.1.0
+description: Dashboard Ejecutivo de Mantenimiento SAPUI5 con backend Node.js.
+
+modules:
+  - name: mantenimiento-dashboard-srv
+    type: nodejs
+    path: .
+    parameters:
+      memory: 512M
+      disk-quota: 1G
+    properties:
+      SAP_DESTINATION_NAME: QAS_MITSU_DASH
+      SAP_ODATA_SERVICE_PATH: /sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV
+      SAP_ODATA_CACHE_TTL_MS: 60000
+      SAP_ODATA_PAGE_SIZE: 2000
+    requires:
+      - name: mantenimiento-destination
+      - name: mantenimiento-connectivity
+
+resources:
+  - name: mantenimiento-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  - name: mantenimiento-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite

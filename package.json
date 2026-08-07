@@ -1,29 +1,39 @@
 {
   "name": "mantenimiento",
-  "version": "0.0.1",
-  "description": "An SAP Fiori application.",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dashboard SAPUI5 de mantenimiento conectado mediante BTP Destination.",
   "keywords": [
     "ui5",
     "openui5",
-    "sapui5"
+    "sapui5",
+    "sap-btp"
   ],
-  "main": "webapp/index.html",
+  "main": "srv/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@sap-cloud-sdk/http-client": "^4.8.0",
+    "express": "^5.2.1"
+  },
   "devDependencies": {
     "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
-    "@sap/ux-ui5-tooling": "1",
+    "@sap/ux-ui5-tooling": "^1.20.5",
     "@ui5/cli": "^4.0.33",
     "eslint": "^9.39.5"
   },
   "scripts": {
-    "start": "fiori run --open \"test/flp.html#app-preview\"",
+    "start": "node srv/server.js",
+    "start:fiori": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
+    "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
+    "test": "node --test --test-isolation=none test/*.test.js",
     "lint": "eslint ./",
     "deploy": "fiori verify",
     "deploy-config": "fiori add deploy-config",
-    "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
     "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
-    "start-variants-management": "fiori run --open \"/preview.html#app-preview\"",
     "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\""
   },
   "sapuxLayer": "CUSTOMER_BASE"

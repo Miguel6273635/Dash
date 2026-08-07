@@ -8,13 +8,13 @@ const { buildDashboard } = require("./lib/dashboardMapper");
 const app = express();
 const port = Number(process.env.PORT || 4004);
 const destinationName = process.env.SAP_DESTINATION_NAME || "QAS_MITSU_DASH";
-const upstreamBaseUrl = normalizeBaseUrl(process.env.SAP_ODATA_BASE_URL);
 const servicePath = normalizeServicePath(
     process.env.SAP_ODATA_SERVICE_PATH || "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV"
 );
 const pageSize = Math.max(100, Number(process.env.SAP_ODATA_PAGE_SIZE || 2000));
 const cacheTtlMs = Math.max(0, Number(process.env.SAP_ODATA_CACHE_TTL_MS || 60000));
-let rawDataCache = { expiresAt: 0, data: null, pending: null };
+const ordersCache = new Map();
+let auxiliaryDataCache = { expiresAt: 0, data: null, pending: null };
 
 const TYPE_MAP = {
     PREVENTIVO: "SM01",
@@ -27,10 +27,6 @@ const STATUS_MAP = {
     EN_PROCESO: "E0014",
     COMPLETADA: "E0015"
 };
-
-function normalizeBaseUrl(value) {
-    return String(value || "").trim().replace(/\/+$/, "") || null;
-}
 
 const SELECTS = {
     DashboardOrdersSet: [
@@ -186,6 +182,53 @@ function getFilterContext(query) {
     };
 }
 
+function formatODataDate(date) {
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+        return null;
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}T00:00:00`;
+}
+
+function escapeODataString(value) {
+    return String(value).replace(/'/g, "''");
+}
+
+function buildOrdersFilter(context) {
+    const clauses = [];
+    const startDate = formatODataDate(context.startDate);
+    const endDate = formatODataDate(context.endDate);
+
+    // El GET_ENTITYSET ABAP usa estos campos como parámetros de rango.
+    // Por eso se conserva `eq` (aunque no sea un rango OData convencional).
+    if (startDate) {
+        clauses.push(`PlannedStartDate eq datetime'${startDate}'`);
+    }
+    if (endDate) {
+        clauses.push(`PlannedFinishDate eq datetime'${endDate}'`);
+    }
+    if (context.zone) {
+        clauses.push(`Zona eq '${escapeODataString(context.zone)}'`);
+    }
+    if (context.orderType) {
+        clauses.push(`OrderTypeCode eq '${escapeODataString(context.orderType)}'`);
+    }
+    if (context.supervisor) {
+        clauses.push(`SupervisorId eq '${escapeODataString(context.supervisor)}'`);
+    }
+    if (context.mechanic) {
+        clauses.push(`Mecanico eq '${escapeODataString(context.mechanic)}'`);
+    }
+    if (context.shift) {
+        clauses.push(`Turno eq '${escapeODataString(context.shift)}'`);
+    }
+
+    return clauses.join(" and ");
+}
+
 function normalizeValue(value) {
     return String(value || "").trim().toUpperCase();
 }
@@ -222,7 +265,7 @@ function filterOrders(orders, context) {
         ["SM01", "SM02", "SM03"].includes(normalizeValue(order.OrderTypeCode)) &&
         isWithinRange(order.PlannedStartDate, context.startDate, context.endDate) &&
         matches(order.OrderTypeCode, context.orderType) &&
-        matches(order.SapUserStatusCode, context.status) &&
+        matches(order.SapUserStatusCode || order.AppStatusCode, context.status) &&
         matches(order.Zona, context.zone) &&
         matches(order.SupervisorId, context.supervisor) &&
         matches(order.Turno, context.shift) &&
@@ -273,8 +316,7 @@ function buildUrl(entitySet, filter) {
         params.push(`$filter=${encodeURIComponent(filter)}`);
     }
 
-    const root = upstreamBaseUrl || servicePath;
-    return `${root}/${entitySet}?${params.join("&")}`;
+    return `${servicePath}/${entitySet}?${params.join("&")}`;
 }
 
 function normalizeNextUrl(nextUrl) {
@@ -284,39 +326,13 @@ function normalizeNextUrl(nextUrl) {
 
     if (/^https?:\/\//i.test(nextUrl)) {
         const parsed = new URL(nextUrl);
-        if (upstreamBaseUrl) {
-            const entityAndKey = parsed.pathname.split("/").pop();
-            return `${upstreamBaseUrl}/${entityAndKey}${parsed.search}`;
-        }
         return `${parsed.pathname}${parsed.search}`;
-    }
-
-    if (upstreamBaseUrl) {
-        return nextUrl.startsWith("/")
-            ? `${new URL(upstreamBaseUrl).origin}${nextUrl}`
-            : `${upstreamBaseUrl}/${nextUrl}`;
     }
 
     return nextUrl.startsWith("/") ? nextUrl : `${servicePath}/${nextUrl}`;
 }
 
 async function executeOData(url) {
-    if (upstreamBaseUrl) {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            signal: AbortSignal.timeout(45000)
-        });
-
-        if (!response.ok) {
-            const error = new Error(`El API OData respondió HTTP ${response.status}`);
-            error.response = { status: response.status };
-            throw error;
-        }
-
-        return { data: await response.json() };
-    }
-
     return executeHttpRequest(
         { destinationName },
         {
@@ -355,73 +371,162 @@ async function fetchAll(entitySet, filter) {
     return results;
 }
 
-async function fetchRawDashboardData(forceRefresh) {
+async function fetchOptional(entitySet) {
+    try {
+        return { entitySet, records: await fetchAll(entitySet), error: null };
+    } catch (error) {
+        console.warn(`EntitySet auxiliar no disponible (${entitySet}): ${error.message}`);
+        return { entitySet, records: [], error: error.message };
+    }
+}
+
+async function fetchOrders(orderFilter, forceRefresh) {
     const now = Date.now();
+    const cacheKey = orderFilter || "__ALL__";
+    const cached = ordersCache.get(cacheKey);
 
-    if (!forceRefresh && rawDataCache.data && rawDataCache.expiresAt > now) {
-        return rawDataCache.data;
+    if (!forceRefresh && cached && cached.data && cached.expiresAt > now) {
+        return cached.data;
     }
-    if (!forceRefresh && rawDataCache.pending) {
-        return rawDataCache.pending;
+    if (!forceRefresh && cached && cached.pending) {
+        return cached.pending;
     }
 
-    rawDataCache.pending = Promise.all([
-        fetchAll("DashboardOrdersSet"),
-        fetchAll("DashboardOrderCausesSet"),
-        fetchAll("DashboardOrderMaterialsSet"),
-        fetchAll("DashboardMaterialMovementsSet"),
-        fetchAll("DashboardServiceRequestsSet"),
-        fetchAll("DashboardEquipmentBlocksSet"),
-        fetchAll("DashboardBlockOrdersSet"),
-        fetchAll("DashboardFilterCatalogSet"),
-        fetchAll("DashboardResourceDailySet"),
-        fetchAll("DashboardOrderOperationsSet"),
-        fetchAll("DashboardOrderConfirmationsSet")
-    ]).then(([
-        orders,
-        causes,
-        materials,
-        movements,
-        serviceRequests,
-        blocks,
-        blockOrders,
-        catalogs,
-        resources,
-        operations,
-        confirmations
-    ]) => ({
-        orders,
-        causes,
-        materials,
-        movements,
-        serviceRequests,
-        blocks,
-        blockOrders,
-        catalogs,
-        resources,
-        operations,
-        confirmations
-    }));
+    const pending = fetchAll("DashboardOrdersSet", orderFilter);
+    ordersCache.set(cacheKey, { expiresAt: 0, data: null, pending });
 
     try {
-        const data = await rawDataCache.pending;
-        rawDataCache = {
+        const data = await pending;
+        ordersCache.set(cacheKey, {
+            data,
+            expiresAt: Date.now() + cacheTtlMs,
+            pending: null
+        });
+        return data;
+    } catch (error) {
+        ordersCache.delete(cacheKey);
+        throw error;
+    }
+}
+
+async function fetchAuxiliaryData(forceRefresh) {
+    const now = Date.now();
+
+    if (!forceRefresh && auxiliaryDataCache.data && auxiliaryDataCache.expiresAt > now) {
+        return auxiliaryDataCache.data;
+    }
+    if (!forceRefresh && auxiliaryDataCache.pending) {
+        return auxiliaryDataCache.pending;
+    }
+
+    const entitySets = [
+        "DashboardOrderCausesSet",
+        "DashboardOrderMaterialsSet",
+        "DashboardMaterialMovementsSet",
+        "DashboardServiceRequestsSet",
+        "DashboardEquipmentBlocksSet",
+        "DashboardBlockOrdersSet",
+        "DashboardFilterCatalogSet",
+        "DashboardResourceDailySet",
+        "DashboardOrderOperationsSet",
+        "DashboardOrderConfirmationsSet"
+    ];
+    const propertyByEntitySet = {
+        DashboardOrderCausesSet: "causes",
+        DashboardOrderMaterialsSet: "materials",
+        DashboardMaterialMovementsSet: "movements",
+        DashboardServiceRequestsSet: "serviceRequests",
+        DashboardEquipmentBlocksSet: "blocks",
+        DashboardBlockOrdersSet: "blockOrders",
+        DashboardFilterCatalogSet: "catalogs",
+        DashboardResourceDailySet: "resources",
+        DashboardOrderOperationsSet: "operations",
+        DashboardOrderConfirmationsSet: "confirmations"
+    };
+
+    auxiliaryDataCache.pending = Promise.all(entitySets.map(fetchOptional)).then((responses) => {
+        const data = { warnings: [] };
+
+        responses.forEach((response) => {
+            data[propertyByEntitySet[response.entitySet]] = response.records;
+            if (response.error) {
+                data.warnings.push({ entitySet: response.entitySet, message: response.error });
+            }
+        });
+
+        return data;
+    });
+
+    try {
+        const data = await auxiliaryDataCache.pending;
+        auxiliaryDataCache = {
             data,
             expiresAt: Date.now() + cacheTtlMs,
             pending: null
         };
         return data;
     } catch (error) {
-        rawDataCache.pending = null;
+        auxiliaryDataCache.pending = null;
         throw error;
     }
 }
 
+async function fetchRawDashboardData(forceRefresh, orderFilter) {
+    const [orders, auxiliaryData] = await Promise.all([
+        fetchOrders(orderFilter, forceRefresh),
+        fetchAuxiliaryData(forceRefresh)
+    ]);
+
+    return { orders, ...auxiliaryData };
+}
+
+function analyzeOrderData(orders) {
+    const officialOrders = orders.filter((order) =>
+        ["SM01", "SM02", "SM03"].includes(normalizeValue(order.OrderTypeCode))
+    );
+    const total = officialOrders.length;
+    const countMissing = (property) => officialOrders.filter((order) => !String(order[property] || "").trim()).length;
+    const placeholderPeople = officialOrders.filter((order) =>
+        [order.SupervisorId, order.Mecanico].some((value) => /^0+$/.test(String(value || "").trim()))
+    ).length;
+    const missingStatus = officialOrders.filter((order) =>
+        !String(order.SapUserStatusCode || order.AppStatusCode || "").trim()
+    ).length;
+    const fields = {
+        status: { missing: missingStatus, total },
+        zone: { missing: countMissing("Zona"), total },
+        shift: { missing: countMissing("Turno"), total },
+        peopleWithPlaceholderId: { count: placeholderPeople, total }
+    };
+    const warnings = [];
+
+    if (total > 0 && fields.status.missing > 0) {
+        warnings.push(`${fields.status.missing} de ${total} órdenes no incluyen SapUserStatusCode`);
+    }
+    if (total > 0 && fields.zone.missing > 0) {
+        warnings.push(`${fields.zone.missing} de ${total} órdenes no incluyen Zona`);
+    }
+    if (total > 0 && fields.shift.missing > 0) {
+        warnings.push(`${fields.shift.missing} de ${total} órdenes no incluyen Turno`);
+    }
+    if (placeholderPeople > 0) {
+        warnings.push(`${placeholderPeople} de ${total} órdenes contienen identificadores de persona en ceros`);
+    }
+
+    return {
+        level: warnings.length > 0 ? "PARTIAL" : "COMPLETE",
+        fields,
+        warnings
+    };
+}
+
 async function loadDashboard(query) {
     const context = getFilterContext(query);
-    // El metadata publicado marca los campos como no filterable. Por eso BTP
-    // obtiene registros base y aplica los filtros sin depender de $filter.
-    const rawData = await fetchRawDashboardData(String(query.refresh || "").toLowerCase() === "true");
+    const orderFilter = buildOrdersFilter(context);
+    const rawData = await fetchRawDashboardData(
+        String(query.refresh || "").toLowerCase() === "true",
+        orderFilter
+    );
     const rawOrders = rawData.orders;
     const rawCauses = rawData.causes;
     const rawMaterials = rawData.materials;
@@ -433,7 +538,7 @@ async function loadDashboard(query) {
     const orderIds = new Set(orders.map((order) => String(order.OrderId)));
     const nonExecutedIds = new Set(
         orders
-            .filter((order) => ["E0013", "E0014"].includes(normalizeValue(order.SapUserStatusCode)))
+            .filter((order) => ["E0013", "E0014"].includes(normalizeValue(order.SapUserStatusCode || order.AppStatusCode)))
             .map((order) => String(order.OrderId))
     );
     const causes = rawCauses.filter((cause) => nonExecutedIds.has(String(cause.OrderId)));
@@ -484,8 +589,12 @@ async function loadDashboard(query) {
         ...dashboard,
         meta: {
             source: "SAP_ODATA",
-            endpoint: upstreamBaseUrl || `${destinationName}:${servicePath}`,
+            endpoint: `${destinationName}:${servicePath}`,
+            ordersUri: buildUrl("DashboardOrdersSet", orderFilter),
+            ordersFilter: orderFilter,
             generatedAt: new Date().toISOString(),
+            dataQuality: analyzeOrderData(orders),
+            unavailableEntitySets: rawData.warnings,
             records: {
                 orders: orders.length,
                 causes: causes.length,
@@ -510,10 +619,9 @@ app.get("/api/health", (request, response) => {
     response.json({
         success: true,
         service: "dashboard-mantenimiento-api",
-        transport: upstreamBaseUrl ? "DIRECT_URL" : "BTP_DESTINATION",
+        transport: "BTP_DESTINATION",
         destination: destinationName,
-        servicePath,
-        endpoint: upstreamBaseUrl || null
+        servicePath
     });
 });
 
@@ -537,15 +645,17 @@ if (require.main === module) {
     app.listen(port, () => {
         console.log(`Dashboard API ejecutándose en el puerto ${port}`);
         console.log(`Destino SAP: ${destinationName}`);
-        console.log(`Servicio OData: ${upstreamBaseUrl || servicePath}`);
+        console.log(`Servicio OData: ${servicePath}`);
     });
 }
 
 module.exports = {
     app,
     loadDashboard,
-    normalizeBaseUrl,
     getFilterContext,
+    buildOrdersFilter,
+    formatODataDate,
+    buildUrl,
     filterOrders,
     filterResources,
     filterServiceRequests,

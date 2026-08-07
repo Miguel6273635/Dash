@@ -104,6 +104,11 @@ function getStatusCode(order) {
     return normalize(order.SapUserStatusCode || order.AppStatusCode);
 }
 
+function hasRecognizedStatus(order) {
+    const status = getStatusCode(order);
+    return status === EXECUTED_STATUS || NON_EXECUTED_STATUSES.has(status);
+}
+
 function getOfficialOrders(orders) {
     return uniqueBy(orders, "OrderId").filter((order) =>
         OFFICIAL_ORDER_TYPES.has(normalize(order.OrderTypeCode))
@@ -130,8 +135,10 @@ function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
     const planned = officialOrders.length;
     const executed = officialOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
     const nonExecuted = officialOrders.filter((order) => NON_EXECUTED_STATUSES.has(getStatusCode(order))).length;
-    const complianceValue = percentage(executed, planned);
-    const deviationValue = percentage(nonExecuted, planned);
+    const classified = officialOrders.filter(hasRecognizedStatus).length;
+    const hasStatusData = classified > 0;
+    const complianceValue = hasStatusData ? percentage(executed, planned) : null;
+    const deviationValue = hasStatusData ? percentage(nonExecuted, planned) : null;
     const complianceTarget = configuredTarget(catalogs, "COMPLIANCE_TARGET", 95);
     const deviationTarget = configuredTarget(catalogs, "DEVIATION_TARGET", 5);
     const publishableBlockRecords = uniqueBy(blocks, "BlockId").filter((block) =>
@@ -159,20 +166,25 @@ function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
         gaugeSvg: buildGaugeSvg(complianceValue),
         deviation: formatPercentage(deviationValue),
         deviationValue: deviationValue || 0,
-        deviationScaleMiddle: `${Math.round(deviationValue || 0)}%`,
-        deviationCaption: deviationValue !== null && deviationValue <= deviationTarget
-            ? "Dentro de tolerancia"
-            : "Fuera de tolerancia",
+        deviationScaleMiddle: deviationValue === null ? "--" : `${Math.round(deviationValue)}%`,
+        deviationCaption: deviationValue === null
+            ? "Sin datos de estado"
+            : deviationValue <= deviationTarget
+                ? "Dentro de tolerancia"
+                : "Fuera de tolerancia",
         deviationTargetText: `Meta ≤ ${formatQuantity(deviationTarget)}%`,
         deviationMarkerHtml: `<span class="mdDevMarker" style="left:${deviationPosition.toFixed(1)}%"></span>`,
-        executed: `${executed} / ${planned}`,
+        executed: `${hasStatusData ? executed : "--"} / ${planned}`,
         plannedOrders: planned,
         executedOrders: executed,
-        nonExecuted: String(nonExecuted),
-        nonExecutedPercent: planned > 0 ? "100%" : "0%",
-        nonExecutedInfo: `${nonExecuted} órdenes no ejecutadas representan ${formatPercentage(deviationValue, 1, "0.0%")} del plan.`,
+        classifiedOrders: classified,
+        nonExecuted: hasStatusData ? String(nonExecuted) : "--",
+        nonExecutedPercent: hasStatusData ? (planned > 0 ? "100%" : "0%") : "--",
+        nonExecutedInfo: hasStatusData
+            ? `${nonExecuted} órdenes no ejecutadas representan ${formatPercentage(deviationValue, 1, "0.0%")} del plan.`
+            : `SAP devolvió ${planned} órdenes sin estado de usuario para calcular la desviación.`,
         forecast: formatPercentage(complianceValue),
-        forecastExecuted: `${executed} / ${planned}`,
+        forecastExecuted: `${hasStatusData ? executed : "--"} / ${planned}`,
         blockedOrders: String(stoppedOrders),
         callCenter: `${attendedRequests} / ${uniqueRequests.length}`,
         callCenterCompliance: formatPercentage(percentage(attendedRequests, uniqueRequests.length))
@@ -353,19 +365,22 @@ function buildExecution(orders, periods) {
     const values = periods.map((period) => {
         const periodOrders = ordersInPeriod(orders, period);
         const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const classified = periodOrders.filter(hasRecognizedStatus).length;
         return {
             planned: periodOrders.length,
             executed,
-            rate: percentage(executed, periodOrders.length) || 0
+            classified,
+            rate: classified > 0 ? percentage(executed, periodOrders.length) : null
         };
     });
+    const hasStatusData = values.some((value) => value.classified > 0);
     const maximum = niceMaximum(values.reduce((max, value) => Math.max(max, value.planned, value.executed), 0));
     const xPositions = [70, 190, 310, 430, 550];
     const countY = (value) => 150 - value / maximum * 132;
     const rateY = (value) => 150 - Math.max(0, Math.min(100, value)) / 100 * 132;
     const planPoints = values.map((value, index) => ({ x: xPositions[index], y: countY(value.planned).toFixed(1) }));
     const realPoints = values.map((value, index) => ({ x: xPositions[index], y: countY(value.executed).toFixed(1) }));
-    const ratePoints = values.map((value, index) => ({ x: xPositions[index], y: rateY(value.rate).toFixed(1) }));
+    const ratePoints = values.map((value, index) => ({ x: xPositions[index], y: rateY(value.rate || 0).toFixed(1) }));
     const grid = [18, 52, 86, 120, 150].map((y) => `<line x1="48" y1="${y}" x2="588" y2="${y}"/>`).join("");
     const axisValues = [maximum, maximum * 0.75, maximum * 0.5, maximum * 0.25, 0];
     const axisY = [22, 56, 90, 124, 154];
@@ -379,9 +394,9 @@ function buildExecution(orders, periods) {
             dateLabel: period.dateLabel,
             planned: values[index].planned,
             executed: values[index].executed,
-            rate: formatPercentage(values[index].rate, 1, "0.0%")
+            rate: formatPercentage(values[index].rate, 1)
         })),
-        chartSvg: `<svg viewBox="0 0 620 175" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><g class="mdChartGrid">${grid}</g><g class="mdAxisText">${axis}</g><polyline points="${points(planPoints)}" class="mdChartPlan"/><polyline points="${points(realPoints)}" class="mdChartReal"/><polyline points="${points(ratePoints)}" class="mdChartRate"/>${svgDots(planPoints, "mdDotsPlan")}${svgDots(realPoints, "mdDotsReal")}${svgDots(ratePoints, "mdDotsRate")}<g class="mdXAxisText">${weekLabels}</g></svg>`
+        chartSvg: `<svg viewBox="0 0 620 175" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><g class="mdChartGrid">${grid}</g><g class="mdAxisText">${axis}</g><polyline points="${points(planPoints)}" class="mdChartPlan"/>${hasStatusData ? `<polyline points="${points(realPoints)}" class="mdChartReal"/><polyline points="${points(ratePoints)}" class="mdChartRate"/>` : ""}${svgDots(planPoints, "mdDotsPlan")}${hasStatusData ? `${svgDots(realPoints, "mdDotsReal")}${svgDots(ratePoints, "mdDotsRate")}` : ""}<g class="mdXAxisText">${weekLabels}</g></svg>`
     };
 }
 
@@ -401,8 +416,8 @@ function heatTone(value) {
     return "red";
 }
 
-function heatValue(executed, planned) {
-    const value = percentage(executed, planned);
+function heatValue(executed, planned, classified) {
+    const value = classified > 0 ? percentage(executed, planned) : null;
     return {
         value: formatPercentage(value, 0, "—"),
         tone: heatTone(value)
@@ -427,13 +442,15 @@ function buildZonePeriods(orders, periods) {
         const cells = periods.map((period) => {
             const periodOrders = ordersInPeriod(zoneOrders, period);
             const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
-            return heatValue(executed, periodOrders.length);
+            const classified = periodOrders.filter(hasRecognizedStatus).length;
+            return heatValue(executed, periodOrders.length, classified);
         });
         const executedTotal = zoneOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const classifiedTotal = zoneOrders.filter(hasRecognizedStatus).length;
         return {
             zone,
             periods: cells,
-            total: heatValue(executedTotal, zoneOrders.length).value
+            total: heatValue(executedTotal, zoneOrders.length, classifiedTotal).value
         };
     });
 
@@ -609,9 +626,10 @@ function buildComposition(orders) {
 
     const card = (items) => {
         const executed = items.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const classified = items.filter(hasRecognizedStatus).length;
         return {
-            orders: `${executed} / ${items.length}`,
-            compliance: formatPercentage(percentage(executed, items.length))
+            orders: `${classified > 0 ? executed : "--"} / ${items.length}`,
+            compliance: formatPercentage(classified > 0 ? percentage(executed, items.length) : null)
         };
     };
 
