@@ -14,6 +14,16 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.24.0",
       "toolsId": "b12e882a-3837-4505-bf89-b09af6d5620c"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/metadata.xml"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -58,6 +68,24 @@
             ""
           ],
           "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": true
+        }
+      },
+      "dashboardOData": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline",
+          "useBatch": false
         }
       }
     },
@@ -192,8 +220,8 @@
         {
           "uri": "css/App.css"
         },
-            {
-            "uri": "css/HistorialSeguimiento.css"
+        {
+          "uri": "css/HistorialSeguimiento.css"
         }
       ]
     },
@@ -517,11 +545,11 @@
           "pattern": "detalle-carga-supervisor",
           "target": "TargetDetalleCargaSupervisor"
         },
-       {
-    "name": "RouteHistorialSeguimiento",
-    "pattern": "historial-seguimiento",
-    "target": "TargetHistorialSeguimiento"
-}
+        {
+          "name": "RouteHistorialSeguimiento",
+          "pattern": "historial-seguimiento",
+          "target": "TargetHistorialSeguimiento"
+        }
       ],
       "targets": {
         "TargetAnalisisFallas": {
@@ -782,12 +810,12 @@
           "viewName": "DetalleCargaSupervisor",
           "viewLevel": 2
         },
-"TargetHistorialSeguimiento": {
-    "viewId": "HistorialSeguimiento",
-    "viewName": "HistorialSeguimiento",
-    "viewType": "XML",
-    "viewLevel": 3
-}
+        "TargetHistorialSeguimiento": {
+          "viewId": "HistorialSeguimiento",
+          "viewName": "HistorialSeguimiento",
+          "viewType": "XML",
+          "viewLevel": 3
+        }
       }
     },
     "rootView": {

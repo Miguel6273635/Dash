@@ -1,0 +1,2374 @@
+sap.ui.define([], function () {
+    "use strict";
+
+    var OFFICIAL_ORDER_TYPES = new Set(["SM01", "SM02", "SM03"]);
+    var EXECUTED_STATUS = "E0015";
+    var NON_EXECUTED_STATUSES = new Set(["E0013", "E0014"]);
+    var CAUSE_TONES = ["blue", "sky", "green", "yellow", "orange", "purple", "gray"];
+    var MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    var MONTH_NAMES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    var MONTH_KEYS = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+    var DEFAULT_SHIFTS = [
+        { key: "DIURNO", text: "Diurno" },
+        { key: "NOCTURNO", text: "Nocturno" },
+        { key: "FIN_SEMANA", text: "Fin de semana" }
+    ];
+
+    function asArray(value) {
+        return Array.isArray(value) ? value : [];
+    }
+
+    function asNumber(value) {
+        var parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function normalize(value) {
+        return String(value || "").trim().toUpperCase();
+    }
+
+    function uniqueBy(items, property) {
+        var map = new Map();
+
+        asArray(items).forEach(function (item) {
+            var key = item && item[property];
+
+            if (key !== undefined && key !== null && key !== "") {
+                map.set(String(key), item);
+            }
+        });
+
+        return Array.from(map.values());
+    }
+
+    function percentage(numerator, denominator) {
+        return denominator > 0 ? (numerator / denominator) * 100 : null;
+    }
+
+    function formatPercentage(value, decimals, emptyText) {
+        var iDecimals = decimals === undefined ? 1 : decimals;
+        var sEmptyText = emptyText === undefined ? "Sin datos" : emptyText;
+
+        return value === null || !Number.isFinite(value)
+            ? sEmptyText
+            : value.toFixed(iDecimals) + "%";
+    }
+
+    function formatQuantity(value) {
+        return new Intl.NumberFormat("es-MX", {
+            maximumFractionDigits: 2
+        }).format(asNumber(value));
+    }
+
+    function formatHours(value) {
+        return formatQuantity(value) + " h";
+    }
+
+    function parseDate(value) {
+        var odataMatch;
+        var date;
+
+        if (!value) {
+            return null;
+        }
+
+        if (value instanceof Date) {
+            return Number.isNaN(value.getTime())
+                ? null
+                : new Date(value.getTime());
+        }
+
+        odataMatch = String(value).match(/\/Date\((-?\d+)/);
+        date = odataMatch
+            ? new Date(Number(odataMatch[1]))
+            : new Date(value);
+
+        return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function startOfDay(date) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+    }
+
+    function addDays(date, days) {
+        var result = new Date(date.getTime());
+
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    function formatShortDate(date) {
+        return date.getDate() + " " + MONTHS[date.getMonth()];
+    }
+
+    function formatPeriodLabel(start, end) {
+        if (start.getMonth() === end.getMonth()) {
+            return start.getDate() + " - " + end.getDate() + " " + MONTHS[end.getMonth()];
+        }
+
+        return formatShortDate(start) + " - " + formatShortDate(end);
+    }
+
+    function weekNumber(date) {
+        var first = new Date(date.getFullYear(), 0, 1);
+        var elapsedDays = Math.floor(
+            (startOfDay(date) - first) / 86400000
+        );
+
+        return Math.ceil(
+            (elapsedDays + first.getDay() + 1) / 7
+        );
+    }
+
+    function getStatusCode(order) {
+        return normalize(
+            order &&
+            (
+                order.SapUserStatusCode ||
+                order.AppStatusCode
+            )
+        );
+    }
+
+    function hasRecognizedStatus(order) {
+        var status = getStatusCode(order);
+
+        return status === EXECUTED_STATUS ||
+            NON_EXECUTED_STATUSES.has(status);
+    }
+
+    function getOfficialOrders(orders) {
+        return uniqueBy(orders, "OrderId").filter(function (order) {
+            return OFFICIAL_ORDER_TYPES.has(
+                normalize(order.OrderTypeCode)
+            );
+        });
+    }
+
+    function configuredTarget(catalogs, domain, fallback) {
+        var candidates = asArray(catalogs).filter(function (catalog) {
+            return catalog.Active !== false &&
+                normalize(catalog.FilterDomain) === domain;
+        });
+
+        var target = candidates.find(function (catalog) {
+            return normalize(catalog.ScopeTypeCode) === "GLOBAL";
+        }) || candidates[0];
+
+        var value = target
+            ? Number(target.NumericValue)
+            : NaN;
+
+        return Number.isFinite(value)
+            ? value
+            : fallback;
+    }
+
+    function buildGaugeSvg(value) {
+        var progress = Math.max(
+            0,
+            Math.min(
+                100,
+                Number.isFinite(value) ? value : 0
+            )
+        );
+
+        return '<svg viewBox="0 0 220 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">' +
+            '<defs>' +
+            '<linearGradient id="mdComplianceBlue" x1="0%" y1="0%" x2="100%" y2="0%">' +
+            '<stop offset="0%" stop-color="#0867e8"/>' +
+            '<stop offset="52%" stop-color="#1685ff"/>' +
+            '<stop offset="100%" stop-color="#0875f5"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<path d="M28 86 A82 64 0 0 1 192 86" pathLength="100" class="mdGaugeTrack"/>' +
+            '<path d="M28 86 A82 64 0 0 1 192 86" pathLength="100" stroke-dasharray="' +
+            progress.toFixed(1) +
+            ' 100" stroke="url(#mdComplianceBlue)" class="mdGaugeProgress"/>' +
+            '</svg>';
+    }
+
+    function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
+        var officialOrders = getOfficialOrders(orders);
+        var planned = officialOrders.length;
+
+        var executed = officialOrders.filter(function (order) {
+            return getStatusCode(order) === EXECUTED_STATUS;
+        }).length;
+
+        var nonExecuted = officialOrders.filter(function (order) {
+            return NON_EXECUTED_STATUSES.has(
+                getStatusCode(order)
+            );
+        }).length;
+
+        var classified = officialOrders.filter(
+            hasRecognizedStatus
+        ).length;
+
+        var hasStatusData = classified > 0;
+        var complianceValue = hasStatusData
+            ? percentage(executed, planned)
+            : null;
+
+        var deviationValue = hasStatusData
+            ? percentage(nonExecuted, planned)
+            : null;
+
+        var complianceTarget = configuredTarget(
+            catalogs,
+            "COMPLIANCE_TARGET",
+            95
+        );
+
+        var deviationTarget = configuredTarget(
+            catalogs,
+            "DEVIATION_TARGET",
+            5
+        );
+
+        var publishableBlockRecords = uniqueBy(
+            blocks,
+            "BlockId"
+        ).filter(function (block) {
+            return block.IsPublishable !== false &&
+                !block.ReleasedAt;
+        });
+
+        var publishableBlockIds = new Set(
+            publishableBlockRecords.map(function (block) {
+                return String(block.BlockId);
+            })
+        );
+
+        var impactedOrderIds = new Set(
+            asArray(blockOrders)
+                .filter(function (blockOrder) {
+                    return publishableBlockIds.has(
+                        String(blockOrder.BlockId)
+                    ) &&
+                        blockOrder.OrderId &&
+                        !blockOrder.ImpactEndAt;
+                })
+                .map(function (blockOrder) {
+                    return String(blockOrder.OrderId);
+                })
+        );
+
+        var stoppedOrders = impactedOrderIds.size > 0
+            ? impactedOrderIds.size
+            : publishableBlockRecords.length;
+
+        var uniqueRequests = uniqueBy(
+            serviceRequests,
+            "RequestId"
+        );
+
+        var attendedRequests = uniqueRequests.filter(
+            function (request) {
+                return request.AttendedAt ||
+                    request.ClosedAt;
+            }
+        ).length;
+
+        var deviationPosition = Math.max(
+            0,
+            Math.min(
+                100,
+                (deviationValue || 0) / 15 * 100
+            )
+        );
+
+        return {
+            compliance: formatPercentage(complianceValue),
+            complianceValue: complianceValue || 0,
+            complianceTargetText: "Meta ≥ " + formatQuantity(complianceTarget) + "%",
+            gaugeSvg: buildGaugeSvg(complianceValue),
+            deviation: formatPercentage(deviationValue),
+            deviationValue: deviationValue || 0,
+            deviationScaleMiddle: deviationValue === null
+                ? "--"
+                : Math.round(deviationValue) + "%",
+            deviationCaption: deviationValue === null
+                ? "Sin datos de estado"
+                : deviationValue <= deviationTarget
+                    ? "Dentro de tolerancia"
+                    : "Fuera de tolerancia",
+            deviationTargetText: "Meta ≤ " + formatQuantity(deviationTarget) + "%",
+            deviationMarkerHtml:
+                '<span class="mdDevMarker" style="left:' +
+                deviationPosition.toFixed(1) +
+                '%"></span>',
+            executed:
+                (hasStatusData ? executed : "--") +
+                " / " +
+                planned,
+            plannedOrders: planned,
+            executedOrders: executed,
+            classifiedOrders: classified,
+            nonExecuted: hasStatusData
+                ? String(nonExecuted)
+                : "--",
+            nonExecutedPercent: hasStatusData
+                ? planned > 0
+                    ? "100%"
+                    : "0%"
+                : "--",
+            nonExecutedInfo: hasStatusData
+                ? nonExecuted +
+                    " órdenes no ejecutadas representan " +
+                    formatPercentage(
+                        deviationValue,
+                        1,
+                        "0.0%"
+                    ) +
+                    " del plan."
+                : "SAP devolvió " +
+                    planned +
+                    " órdenes sin estado de usuario para calcular la desviación.",
+            forecast: formatPercentage(complianceValue),
+            forecastExecuted:
+                (hasStatusData ? executed : "--") +
+                " / " +
+                planned,
+            blockedOrders: String(stoppedOrders),
+            callCenter:
+                attendedRequests +
+                " / " +
+                uniqueRequests.length,
+            callCenterCompliance: formatPercentage(
+                percentage(
+                    attendedRequests,
+                    uniqueRequests.length
+                )
+            )
+        };
+    }
+
+    function buildCauses(orders, causes) {
+        var nonExecutedOrderIds = new Set(
+            getOfficialOrders(orders)
+                .filter(function (order) {
+                    return NON_EXECUTED_STATUSES.has(
+                        getStatusCode(order)
+                    );
+                })
+                .map(function (order) {
+                    return String(order.OrderId);
+                })
+        );
+
+        var totals = new Map();
+
+        asArray(causes)
+            .filter(function (cause) {
+                return nonExecutedOrderIds.has(
+                    String(cause.OrderId)
+                ) &&
+                    normalize(cause.CauseContextCode) === "NON_EXECUTION" &&
+                    cause.IsPrimary !== false &&
+                    !cause.ValidTo;
+            })
+            .forEach(function (cause) {
+                var label =
+                    cause.CauseText ||
+                    cause.CauseCode ||
+                    "Sin causa registrada";
+
+                totals.set(
+                    label,
+                    (totals.get(label) || 0) + 1
+                );
+            });
+
+        var sorted = Array.from(
+            totals,
+            function (entry) {
+                return {
+                    label: entry[0],
+                    total: entry[1]
+                };
+            }
+        )
+            .sort(function (left, right) {
+                return right.total - left.total ||
+                    left.label.localeCompare(
+                        right.label,
+                        "es"
+                    );
+            })
+            .slice(0, 7);
+
+        var causeTotal = sorted.reduce(
+            function (sum, item) {
+                return sum + item.total;
+            },
+            0
+        );
+
+        var maximum = sorted.reduce(
+            function (max, item) {
+                return Math.max(
+                    max,
+                    item.total
+                );
+            },
+            0
+        );
+
+        return sorted.map(function (item, index) {
+            return {
+                tone: CAUSE_TONES[index],
+                label: item.label,
+                value:
+                    item.total +
+                    " (" +
+                    (
+                        causeTotal > 0
+                            ? Math.round(
+                                item.total /
+                                causeTotal *
+                                100
+                            )
+                            : 0
+                    ) +
+                    "%)",
+                width:
+                    (
+                        maximum > 0
+                            ? Math.max(
+                                4,
+                                Math.round(
+                                    item.total /
+                                    maximum *
+                                    100
+                                )
+                            )
+                            : 0
+                    ) +
+                    "%"
+            };
+        });
+    }
+
+    function normalizeUnit(unitCode) {
+        var code = normalize(unitCode);
+
+        if (["PZA", "PZ", "PC", "EA"].includes(code)) {
+            return "pzas";
+        }
+
+        if (["L", "LT", "LTR"].includes(code)) {
+            return "L";
+        }
+
+        return unitCode || "";
+    }
+
+    function materialIcon(categoryCode) {
+        var code = normalize(categoryCode);
+
+        if (code.indexOf("LUBRIC") >= 0) {
+            return "sap-icon://color-fill";
+        }
+
+        if (code.indexOf("CONSUM") >= 0) {
+            return "sap-icon://product";
+        }
+
+        if (code.indexOf("HERRAM") >= 0) {
+            return "sap-icon://wrench";
+        }
+
+        return "sap-icon://action-settings";
+    }
+
+    function buildMaterials(materials, movements) {
+        var publishableMaterials = asArray(
+            materials
+        ).filter(function (material) {
+            return material.IsPublishable !== false;
+        });
+
+        var materialByRequirement = new Map(
+            publishableMaterials.map(
+                function (material) {
+                    return [
+                        String(material.MaterialRequirementId),
+                        material
+                    ];
+                }
+            )
+        );
+
+        var actualByRequirement = new Map();
+
+        asArray(movements).forEach(
+            function (movement) {
+                var requirementId = String(
+                    movement.MaterialRequirementId || ""
+                );
+
+                if (
+                    !materialByRequirement.has(
+                        requirementId
+                    ) ||
+                    movement.IsReversal === true
+                ) {
+                    return;
+                }
+
+                var signedQuantity =
+                    normalize(
+                        movement.MovementDirectionCode
+                    ) === "RETURN"
+                        ? -asNumber(
+                            movement.MovementQuantity
+                        )
+                        : asNumber(
+                            movement.MovementQuantity
+                        );
+
+                actualByRequirement.set(
+                    requirementId,
+                    (
+                        actualByRequirement.get(
+                            requirementId
+                        ) || 0
+                    ) + signedQuantity
+                );
+            }
+        );
+
+        var categories = new Map();
+
+        publishableMaterials.forEach(
+            function (material) {
+                var key = String(
+                    material.MaterialCategoryCode ||
+                    "OTROS"
+                );
+
+                var current =
+                    categories.get(key) || {
+                        categoryCode: key,
+                        name:
+                            material.MaterialCategoryName ||
+                            key,
+                        unitCode:
+                            material.BaseUnitCode,
+                        planValue: 0,
+                        realValue: 0
+                    };
+
+                current.planValue += asNumber(
+                    material.PlannedQuantity
+                );
+
+                current.realValue +=
+                    actualByRequirement.get(
+                        String(
+                            material.MaterialRequirementId
+                        )
+                    ) || 0;
+
+                categories.set(
+                    key,
+                    current
+                );
+            }
+        );
+
+        var rows = Array.from(
+            categories.values()
+        );
+
+        var maximum = rows.reduce(
+            function (max, row) {
+                return Math.max(
+                    max,
+                    row.planValue,
+                    row.realValue
+                );
+            },
+            0
+        );
+
+        return rows
+            .sort(function (left, right) {
+                return right.planValue -
+                    left.planValue;
+            })
+            .slice(0, 4)
+            .map(function (row) {
+                var variationValue =
+                    row.planValue > 0
+                        ? (
+                            row.realValue -
+                            row.planValue
+                        ) /
+                            row.planValue *
+                            100
+                        : null;
+
+                var unit = normalizeUnit(
+                    row.unitCode
+                );
+
+                return {
+                    icon: materialIcon(
+                        row.categoryCode
+                    ),
+                    name: row.name,
+                    unit: unit
+                        ? "(" + unit + ")"
+                        : "",
+                    plan:
+                        formatQuantity(
+                            row.planValue
+                        ) +
+                        (
+                            unit
+                                ? " " + unit
+                                : ""
+                        ),
+                    real:
+                        formatQuantity(
+                            row.realValue
+                        ) +
+                        (
+                            unit
+                                ? " " + unit
+                                : ""
+                        ),
+                    variation:
+                        variationValue === null
+                            ? "Sin datos"
+                            : (
+                                variationValue >= 0
+                                    ? "+"
+                                    : ""
+                            ) +
+                            Math.round(
+                                variationValue
+                            ) +
+                            "%",
+                    statusState:
+                        variationValue !== null &&
+                        variationValue > 0
+                            ? "Error"
+                            : "Success",
+                    planWidth:
+                        (
+                            maximum > 0
+                                ? Math.max(
+                                    3,
+                                    Math.round(
+                                        row.planValue /
+                                        maximum *
+                                        100
+                                    )
+                                )
+                                : 0
+                        ) +
+                        "%",
+                    realWidth:
+                        (
+                            maximum > 0
+                                ? Math.max(
+                                    3,
+                                    Math.round(
+                                        row.realValue /
+                                        maximum *
+                                        100
+                                    )
+                                )
+                                : 0
+                        ) +
+                        "%"
+                };
+            });
+    }
+
+    function getRangeStart(range, orders) {
+        var configuredStart = parseDate(
+            range && range.startDate
+        );
+
+        if (configuredStart) {
+            return startOfDay(
+                configuredStart
+            );
+        }
+
+        var orderDates = getOfficialOrders(orders)
+            .map(function (order) {
+                return parseDate(
+                    order.PlannedStartDate
+                );
+            })
+            .filter(Boolean)
+            .sort(function (left, right) {
+                return left - right;
+            });
+
+        return orderDates[0]
+            ? startOfDay(orderDates[0])
+            : startOfDay(new Date());
+    }
+
+    function buildPeriods(range, orders) {
+        var rangeStart = getRangeStart(
+            range,
+            orders
+        );
+
+        var firstSunday = addDays(
+            rangeStart,
+            -rangeStart.getDay()
+        );
+
+        return Array.from(
+            { length: 5 },
+            function (_, index) {
+                var start = addDays(
+                    firstSunday,
+                    index * 7
+                );
+
+                var end = addDays(
+                    start,
+                    6
+                );
+
+                return {
+                    start: start,
+                    end: new Date(
+                        end.getFullYear(),
+                        end.getMonth(),
+                        end.getDate(),
+                        23,
+                        59,
+                        59,
+                        999
+                    ),
+                    headerLabel:
+                        formatPeriodLabel(
+                            start,
+                            end
+                        ),
+                    dateLabel:
+                        "(" +
+                        formatPeriodLabel(
+                            start,
+                            end
+                        ) +
+                        ")",
+                    weekLabel:
+                        "Sem " +
+                        weekNumber(start)
+                };
+            }
+        );
+    }
+
+    function ordersInPeriod(orders, period) {
+        return getOfficialOrders(
+            orders
+        ).filter(function (order) {
+            var date = parseDate(
+                order.PlannedStartDate
+            );
+
+            return date &&
+                date >= period.start &&
+                date <= period.end;
+        });
+    }
+
+    function niceMaximum(value) {
+        var step;
+
+        if (value <= 10) {
+            return 10;
+        }
+
+        step = value <= 100
+            ? 25
+            : value <= 500
+                ? 50
+                : 100;
+
+        return Math.ceil(value / step) * step;
+    }
+
+    function svgDots(points, cssClass) {
+        return '<g class="' +
+            cssClass +
+            '">' +
+            points.map(function (point) {
+                return '<circle cx="' +
+                    point.x +
+                    '" cy="' +
+                    point.y +
+                    '" r="4"/>';
+            }).join("") +
+            "</g>";
+    }
+
+    function buildExecution(orders, periods) {
+        var values = periods.map(
+            function (period) {
+                var periodOrders =
+                    ordersInPeriod(
+                        orders,
+                        period
+                    );
+
+                var executed =
+                    periodOrders.filter(
+                        function (order) {
+                            return getStatusCode(
+                                order
+                            ) ===
+                                EXECUTED_STATUS;
+                        }
+                    ).length;
+
+                var classified =
+                    periodOrders.filter(
+                        hasRecognizedStatus
+                    ).length;
+
+                return {
+                    planned:
+                        periodOrders.length,
+                    executed: executed,
+                    classified: classified,
+                    rate:
+                        classified > 0
+                            ? percentage(
+                                executed,
+                                periodOrders.length
+                            )
+                            : null
+                };
+            }
+        );
+
+        var hasStatusData = values.some(
+            function (value) {
+                return value.classified > 0;
+            }
+        );
+
+        var maximum = niceMaximum(
+            values.reduce(
+                function (max, value) {
+                    return Math.max(
+                        max,
+                        value.planned,
+                        value.executed
+                    );
+                },
+                0
+            )
+        );
+
+        var xPositions = [
+            70,
+            190,
+            310,
+            430,
+            550
+        ];
+
+        function countY(value) {
+            return 150 -
+                value /
+                maximum *
+                132;
+        }
+
+        function rateY(value) {
+            return 150 -
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        value
+                    )
+                ) /
+                100 *
+                132;
+        }
+
+        var planPoints = values.map(
+            function (value, index) {
+                return {
+                    x: xPositions[index],
+                    y: countY(
+                        value.planned
+                    ).toFixed(1)
+                };
+            }
+        );
+
+        var realPoints = values.map(
+            function (value, index) {
+                return {
+                    x: xPositions[index],
+                    y: countY(
+                        value.executed
+                    ).toFixed(1)
+                };
+            }
+        );
+
+        var ratePoints = values.map(
+            function (value, index) {
+                return {
+                    x: xPositions[index],
+                    y: rateY(
+                        value.rate || 0
+                    ).toFixed(1)
+                };
+            }
+        );
+
+        var grid = [
+            18,
+            52,
+            86,
+            120,
+            150
+        ].map(function (y) {
+            return '<line x1="48" y1="' +
+                y +
+                '" x2="588" y2="' +
+                y +
+                '"/>';
+        }).join("");
+
+        var axisValues = [
+            maximum,
+            maximum * 0.75,
+            maximum * 0.5,
+            maximum * 0.25,
+            0
+        ];
+
+        var axisY = [
+            22,
+            56,
+            90,
+            124,
+            154
+        ];
+
+        var axis = axisValues.map(
+            function (value, index) {
+                return '<text x="' +
+                    (
+                        value < 100
+                            ? 16
+                            : 8
+                    ) +
+                    '" y="' +
+                    axisY[index] +
+                    '">' +
+                    Math.round(value) +
+                    '</text>';
+            }
+        ).join("");
+
+        var weekLabels = periods.map(
+            function (period, index) {
+                return '<text x="' +
+                    xPositions[index] +
+                    '" y="169">' +
+                    period.weekLabel +
+                    '</text>';
+            }
+        ).join("");
+
+        function points(items) {
+            return items.map(
+                function (point) {
+                    return point.x +
+                        "," +
+                        point.y;
+                }
+            ).join(" ");
+        }
+
+        return {
+            weeks: periods.map(
+                function (period, index) {
+                    return {
+                        weekLabel:
+                            period.weekLabel,
+                        dateLabel:
+                            period.dateLabel,
+                        planned:
+                            values[index].planned,
+                        executed:
+                            values[index].executed,
+                        rate:
+                            formatPercentage(
+                                values[index].rate,
+                                1
+                            )
+                    };
+                }
+            ),
+
+            chartSvg:
+                '<svg viewBox="0 0 620 175" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
+                '<g class="mdChartGrid">' +
+                grid +
+                '</g>' +
+                '<g class="mdAxisText">' +
+                axis +
+                '</g>' +
+                '<polyline points="' +
+                points(planPoints) +
+                '" class="mdChartPlan"/>' +
+                (
+                    hasStatusData
+                        ? '<polyline points="' +
+                            points(realPoints) +
+                            '" class="mdChartReal"/>' +
+                            '<polyline points="' +
+                            points(ratePoints) +
+                            '" class="mdChartRate"/>'
+                        : ""
+                ) +
+                svgDots(
+                    planPoints,
+                    "mdDotsPlan"
+                ) +
+                (
+                    hasStatusData
+                        ? svgDots(
+                            realPoints,
+                            "mdDotsReal"
+                        ) +
+                        svgDots(
+                            ratePoints,
+                            "mdDotsRate"
+                        )
+                        : ""
+                ) +
+                '<g class="mdXAxisText">' +
+                weekLabels +
+                '</g>' +
+                '</svg>'
+        };
+    }
+
+    function heatTone(value) {
+        if (value === null) {
+            return "neutral";
+        }
+
+        if (value >= 95) {
+            return "blue";
+        }
+
+        if (value >= 85) {
+            return "green";
+        }
+
+        if (value >= 70) {
+            return "yellow";
+        }
+
+        return "red";
+    }
+
+    function heatValue(
+        executed,
+        planned,
+        classified
+    ) {
+        var value = classified > 0
+            ? percentage(
+                executed,
+                planned
+            )
+            : null;
+
+        return {
+            value: formatPercentage(
+                value,
+                0,
+                "—"
+            ),
+            tone: heatTone(value)
+        };
+    }
+
+    function buildZonePeriods(orders, periods) {
+        var zonePriority = [
+            "NORTE",
+            "CENTRO",
+            "SUR",
+            "ESTE",
+            "OESTE"
+        ];
+
+        var officialOrders =
+            getOfficialOrders(orders);
+
+        var zones = Array.from(
+            new Set(
+                officialOrders.map(
+                    function (order) {
+                        return String(
+                            order.Zona ||
+                            order.ZoneId ||
+                            "Sin zona"
+                        );
+                    }
+                )
+            )
+        )
+            .sort(function (left, right) {
+                var leftIndex =
+                    zonePriority.indexOf(
+                        normalize(left)
+                    );
+
+                var rightIndex =
+                    zonePriority.indexOf(
+                        normalize(right)
+                    );
+
+                if (
+                    leftIndex >= 0 ||
+                    rightIndex >= 0
+                ) {
+                    return (
+                        leftIndex < 0
+                            ? 99
+                            : leftIndex
+                    ) -
+                        (
+                            rightIndex < 0
+                                ? 99
+                                : rightIndex
+                        );
+                }
+
+                return left.localeCompare(
+                    right,
+                    "es"
+                );
+            })
+            .slice(0, 5);
+
+        var rows = zones.map(
+            function (zone) {
+                var zoneOrders =
+                    officialOrders.filter(
+                        function (order) {
+                            return String(
+                                order.Zona ||
+                                order.ZoneId ||
+                                "Sin zona"
+                            ) === zone;
+                        }
+                    );
+
+                var cells = periods.map(
+                    function (period) {
+                        var periodOrders =
+                            ordersInPeriod(
+                                zoneOrders,
+                                period
+                            );
+
+                        var executed =
+                            periodOrders.filter(
+                                function (order) {
+                                    return getStatusCode(
+                                        order
+                                    ) ===
+                                        EXECUTED_STATUS;
+                                }
+                            ).length;
+
+                        var classified =
+                            periodOrders.filter(
+                                hasRecognizedStatus
+                            ).length;
+
+                        return heatValue(
+                            executed,
+                            periodOrders.length,
+                            classified
+                        );
+                    }
+                );
+
+                var executedTotal =
+                    zoneOrders.filter(
+                        function (order) {
+                            return getStatusCode(
+                                order
+                            ) ===
+                                EXECUTED_STATUS;
+                        }
+                    ).length;
+
+                var classifiedTotal =
+                    zoneOrders.filter(
+                        hasRecognizedStatus
+                    ).length;
+
+                return {
+                    zone: zone,
+                    periods: cells,
+                    total: heatValue(
+                        executedTotal,
+                        zoneOrders.length,
+                        classifiedTotal
+                    ).value
+                };
+            }
+        );
+
+        while (rows.length < 5) {
+            rows.push({
+                zone: "—",
+                periods: Array.from(
+                    { length: 5 },
+                    function () {
+                        return {
+                            value: "—",
+                            tone: "neutral"
+                        };
+                    }
+                ),
+                total: "—"
+            });
+        }
+
+        return {
+            headers: periods.map(
+                function (period) {
+                    return period.headerLabel;
+                }
+            ),
+            rows: rows
+        };
+    }
+
+    function toHours(value, unit) {
+        var amount = asNumber(value);
+        var code = normalize(unit);
+
+        if (
+            [
+                "MIN",
+                "M",
+                "MINUTE",
+                "MINUTES"
+            ].includes(code)
+        ) {
+            return amount / 60;
+        }
+
+        if (
+            [
+                "SEC",
+                "S",
+                "SECOND",
+                "SECONDS"
+            ].includes(code)
+        ) {
+            return amount / 3600;
+        }
+
+        if (
+            [
+                "DAY",
+                "D",
+                "DIA",
+                "DÍAS"
+            ].includes(code)
+        ) {
+            return amount * 8;
+        }
+
+        return amount;
+    }
+
+    function deduplicateOperations(operations) {
+        var priorities = {
+            AFVV_WORK: 3,
+            AFVV_DURATION: 2,
+            KBED_CAPACITY: 1
+        };
+
+        var selected = new Map();
+
+        asArray(operations).forEach(
+            function (operation) {
+                var key = String(
+                    operation.OperationKey ||
+                    (
+                        operation.OrderId +
+                        "-" +
+                        (
+                            operation.OperationCounter ||
+                            ""
+                        )
+                    )
+                );
+
+                var current =
+                    selected.get(key);
+
+                if (
+                    !current ||
+                    (
+                        priorities[
+                            normalize(
+                                operation.PlannedSourceCode
+                            )
+                        ] || 0
+                    ) >
+                    (
+                        priorities[
+                            normalize(
+                                current.PlannedSourceCode
+                            )
+                        ] || 0
+                    )
+                ) {
+                    selected.set(
+                        key,
+                        operation
+                    );
+                }
+            }
+        );
+
+        return Array.from(
+            selected.values()
+        );
+    }
+
+    function shiftState(utilization) {
+        if (utilization === null) {
+            return "Sin datos";
+        }
+
+        if (utilization > 100) {
+            return "Sobrecargado";
+        }
+
+        if (utilization > 95) {
+            return "Con exceso moderado";
+        }
+
+        return "Normal";
+    }
+
+    function shiftTone(utilization) {
+        if (
+            utilization !== null &&
+            utilization > 100
+        ) {
+            return "error";
+        }
+
+        if (
+            utilization !== null &&
+            utilization > 95
+        ) {
+            return "warning";
+        }
+
+        return "normal";
+    }
+
+    function buildCapacity(
+        orders,
+        resources,
+        operations,
+        confirmations
+    ) {
+        var officialOrders =
+            getOfficialOrders(orders);
+
+        var orderById = new Map(
+            officialOrders.map(
+                function (order) {
+                    return [
+                        String(order.OrderId),
+                        order
+                    ];
+                }
+            )
+        );
+
+        var validResources =
+            asArray(resources).filter(
+                function (resource) {
+                    return (
+                        resource.CapacitySourceValidated !== false &&
+                        normalize(
+                            resource.AvailabilityStatusCode
+                        ) !== "INACTIVE"
+                    );
+                }
+            );
+
+        var selectedOperations =
+            deduplicateOperations(
+                operations
+            );
+
+        var validConfirmations =
+            asArray(confirmations).filter(
+                function (confirmation) {
+                    return confirmation.IncludedInCalculation !== false;
+                }
+            );
+
+        var capacityHours =
+            validResources.reduce(
+                function (sum, resource) {
+                    return sum +
+                        asNumber(
+                            resource.CapacityHours
+                        );
+                },
+                0
+            );
+
+        var plannedHours =
+            selectedOperations.reduce(
+                function (sum, operation) {
+                    return sum +
+                        toHours(
+                            operation.PlannedValueOriginal,
+                            operation.PlannedUnitOriginal
+                        );
+                },
+                0
+            );
+
+        var actualHours =
+            validConfirmations.reduce(
+                function (sum, confirmation) {
+                    return sum +
+                        toHours(
+                            confirmation.ActualValueOriginal,
+                            confirmation.ActualUnitOriginal
+                        );
+                },
+                0
+            );
+
+        var technicians = new Set(
+            validResources.map(
+                function (resource) {
+                    return String(
+                        resource.ResourceId
+                    );
+                }
+            )
+        ).size;
+
+        var activeTurns = new Set(
+            validResources.map(
+                function (resource) {
+                    return String(
+                        resource.ResourceDateId ||
+                        (
+                            resource.ResourceId +
+                            "-" +
+                            resource.WorkDate +
+                            "-" +
+                            resource.ShiftId
+                        )
+                    );
+                }
+            )
+        ).size;
+
+        var shiftNames = Array.from(
+            new Set(
+                validResources
+                    .map(function (resource) {
+                        return resource.ShiftName ||
+                            resource.ShiftId;
+                    })
+                    .filter(Boolean)
+            )
+        );
+
+        var maximum = Math.max(
+            capacityHours,
+            plannedHours,
+            actualHours,
+            0
+        );
+
+        var committed = percentage(
+            plannedHours,
+            capacityHours
+        );
+
+        var margin =
+            capacityHours -
+            plannedHours;
+
+        var resourceShiftMap =
+            new Map();
+
+        validResources.forEach(
+            function (resource) {
+                var key = normalize(
+                    resource.ShiftId ||
+                    resource.ShiftName ||
+                    "SIN_TURNO"
+                );
+
+                var current =
+                    resourceShiftMap.get(key) ||
+                    {
+                        capacity: 0,
+                        technicians:
+                            new Set(),
+                        text:
+                            resource.ShiftName ||
+                            resource.ShiftId ||
+                            "Sin turno"
+                    };
+
+                current.capacity += asNumber(
+                    resource.CapacityHours
+                );
+
+                current.technicians.add(
+                    String(
+                        resource.ResourceId
+                    )
+                );
+
+                resourceShiftMap.set(
+                    key,
+                    current
+                );
+            }
+        );
+
+        var plannedByShift =
+            new Map();
+
+        selectedOperations.forEach(
+            function (operation) {
+                var order =
+                    orderById.get(
+                        String(
+                            operation.OrderId
+                        )
+                    ) || {};
+
+                var key = normalize(
+                    order.Turno ||
+                    "SIN_TURNO"
+                );
+
+                plannedByShift.set(
+                    key,
+                    (
+                        plannedByShift.get(
+                            key
+                        ) || 0
+                    ) +
+                    toHours(
+                        operation.PlannedValueOriginal,
+                        operation.PlannedUnitOriginal
+                    )
+                );
+            }
+        );
+
+        var shiftKeys = DEFAULT_SHIFTS
+            .map(function (shift) {
+                return shift.key;
+            })
+            .concat(
+                Array.from(
+                    resourceShiftMap.keys()
+                ).filter(
+                    function (key) {
+                        return !DEFAULT_SHIFTS.some(
+                            function (shift) {
+                                return shift.key === key;
+                            }
+                        );
+                    }
+                )
+            )
+            .slice(0, 3);
+
+        var shiftCards = shiftKeys.map(
+            function (key, index) {
+                var fallback =
+                    DEFAULT_SHIFTS[index];
+
+                var resourceShift =
+                    resourceShiftMap.get(
+                        key
+                    );
+
+                var capacity =
+                    resourceShift
+                        ? resourceShift.capacity
+                        : 0;
+
+                var programmed =
+                    plannedByShift.get(key) ||
+                    0;
+
+                var utilization =
+                    percentage(
+                        programmed,
+                        capacity
+                    );
+
+                return {
+                    title:
+                        resourceShift
+                            ? resourceShift.text
+                            : fallback.text,
+                    percent:
+                        formatPercentage(
+                            utilization
+                        ),
+                    technicians:
+                        String(
+                            resourceShift
+                                ? resourceShift
+                                    .technicians
+                                    .size
+                                : 0
+                        ),
+                    capacity:
+                        formatHours(
+                            capacity
+                        ),
+                    programmed:
+                        formatHours(
+                            programmed
+                        ),
+                    state:
+                        shiftState(
+                            utilization
+                        ),
+                    tone:
+                        shiftTone(
+                            utilization
+                        )
+                };
+            }
+        );
+
+        shiftCards.push({
+            title: "Total",
+            percent:
+                formatPercentage(
+                    committed
+                ),
+            technicians:
+                String(technicians),
+            capacity:
+                formatHours(
+                    capacityHours
+                ),
+            programmed:
+                formatHours(
+                    plannedHours
+                ),
+            state:
+                shiftState(
+                    committed
+                ),
+            tone:
+                shiftTone(
+                    committed
+                )
+        });
+
+        var firstShiftLine =
+            shiftNames.length > 0
+                ? shiftNames
+                    .slice(0, 2)
+                    .join(", ")
+                : "Sin datos";
+
+        var secondShiftLine =
+            shiftNames.length > 2
+                ? "y " +
+                    shiftNames
+                        .slice(2)
+                        .join(", ")
+                : "";
+
+        return {
+            activeTurns:
+                String(activeTurns),
+            technicians:
+                String(technicians),
+            currentShiftLine1:
+                firstShiftLine,
+            currentShiftLine2:
+                secondShiftLine,
+            capacity:
+                formatHours(
+                    capacityHours
+                ),
+            planned:
+                formatHours(
+                    plannedHours
+                ),
+            actual:
+                formatHours(
+                    actualHours
+                ),
+            capacityWidth:
+                (
+                    maximum > 0
+                        ? capacityHours /
+                            maximum *
+                            100
+                        : 0
+                ) +
+                "%",
+            plannedWidth:
+                (
+                    maximum > 0
+                        ? plannedHours /
+                            maximum *
+                            100
+                        : 0
+                ) +
+                "%",
+            actualWidth:
+                (
+                    maximum > 0
+                        ? actualHours /
+                            maximum *
+                            100
+                        : 0
+                ) +
+                "%",
+            scale0: "0",
+            scale1:
+                formatQuantity(
+                    maximum / 3
+                ),
+            scale2:
+                formatQuantity(
+                    maximum * 2 / 3
+                ),
+            scale3:
+                formatQuantity(
+                    maximum
+                ),
+            committed:
+                formatPercentage(
+                    committed
+                ),
+            committedDetail:
+                "(" +
+                formatQuantity(
+                    plannedHours
+                ) +
+                " / " +
+                formatQuantity(
+                    capacityHours
+                ) +
+                " h)",
+            margin:
+                formatHours(
+                    margin
+                ),
+            marginDetail:
+                "(" +
+                formatPercentage(
+                    capacityHours > 0
+                        ? margin /
+                            capacityHours *
+                            100
+                        : null
+                ) +
+                " disponible - Programado)",
+            shifts: shiftCards
+        };
+    }
+
+    function buildComposition(orders) {
+        var officialOrders =
+            getOfficialOrders(orders);
+
+        var preventiveByText =
+            officialOrders.filter(
+                function (order) {
+                    return normalize(
+                        order.OrderTypeText
+                    ).indexOf("PREVENT") >= 0;
+                }
+            );
+
+        var correctiveByText =
+            officialOrders.filter(
+                function (order) {
+                    return normalize(
+                        order.OrderTypeText
+                    ).indexOf("CORRECT") >= 0;
+                }
+            );
+
+        var preventive =
+            preventiveByText.length > 0
+                ? preventiveByText
+                : officialOrders.filter(
+                    function (order) {
+                        return normalize(
+                            order.OrderTypeCode
+                        ) === "SM01";
+                    }
+                );
+
+        var corrective =
+            correctiveByText.length > 0
+                ? correctiveByText
+                : officialOrders.filter(
+                    function (order) {
+                        return normalize(
+                            order.OrderTypeCode
+                        ) === "SM02";
+                    }
+                );
+
+        function card(items) {
+            var executed =
+                items.filter(
+                    function (order) {
+                        return getStatusCode(
+                            order
+                        ) ===
+                            EXECUTED_STATUS;
+                    }
+                ).length;
+
+            var classified =
+                items.filter(
+                    hasRecognizedStatus
+                ).length;
+
+            return {
+                orders:
+                    (
+                        classified > 0
+                            ? executed
+                            : "--"
+                    ) +
+                    " / " +
+                    items.length,
+
+                compliance:
+                    formatPercentage(
+                        classified > 0
+                            ? percentage(
+                                executed,
+                                items.length
+                            )
+                            : null
+                    )
+            };
+        }
+
+        return {
+            preventive:
+                card(preventive),
+            corrective:
+                card(corrective)
+        };
+    }
+
+    function catalogOptions(
+        catalogs,
+        domains,
+        allKey,
+        allText
+    ) {
+        var acceptedDomains =
+            asArray(domains).map(
+                normalize
+            );
+
+        var values =
+            asArray(catalogs)
+                .filter(
+                    function (catalog) {
+                        return (
+                            catalog.Active !== false &&
+                            acceptedDomains.includes(
+                                normalize(
+                                    catalog.FilterDomain
+                                )
+                            )
+                        );
+                    }
+                )
+                .sort(
+                    function (left, right) {
+                        return asNumber(
+                            left.SortOrder
+                        ) -
+                            asNumber(
+                                right.SortOrder
+                            );
+                    }
+                )
+                .map(
+                    function (catalog) {
+                        return {
+                            key:
+                                String(
+                                    catalog.ValueId
+                                ),
+                            text:
+                                catalog.ValueText ||
+                                catalog.ValueId
+                        };
+                    }
+                );
+
+        return [
+            {
+                key: allKey,
+                text: allText
+            }
+        ].concat(
+            uniqueBy(
+                values,
+                "key"
+            )
+        );
+    }
+
+    function derivedOptions(
+        records,
+        keyProperty,
+        textProperty,
+        allKey,
+        allText
+    ) {
+        var values =
+            asArray(records)
+                .filter(
+                    function (record) {
+                        return (
+                            record &&
+                            record[keyProperty]
+                        );
+                    }
+                )
+                .map(
+                    function (record) {
+                        return {
+                            key:
+                                String(
+                                    record[
+                                        keyProperty
+                                    ]
+                                ),
+                            text:
+                                String(
+                                    record[
+                                        textProperty
+                                    ] ||
+                                    record[
+                                        keyProperty
+                                    ]
+                                )
+                        };
+                    }
+                );
+
+        return [
+            {
+                key: allKey,
+                text: allText
+            }
+        ].concat(
+            uniqueBy(
+                values,
+                "key"
+            )
+        );
+    }
+
+    function preferCatalog(
+        catalogValues,
+        derivedValues
+    ) {
+        return catalogValues.length > 1
+            ? catalogValues
+            : derivedValues;
+    }
+
+    function buildPeriodOptions(orders) {
+        var periods = new Map();
+
+        asArray(orders).forEach(
+            function (order) {
+                var date = parseDate(
+                    order.PlannedStartDate
+                );
+
+                if (!date) {
+                    return;
+                }
+
+                var key =
+                    MONTH_KEYS[
+                        date.getMonth()
+                    ] +
+                    "_" +
+                    date.getFullYear();
+
+                periods.set(
+                    key,
+                    {
+                        key: key,
+                        text:
+                            MONTH_NAMES[
+                                date.getMonth()
+                            ] +
+                            " " +
+                            date.getFullYear() +
+                            " (Mensual)",
+                        sortValue:
+                            date.getFullYear() *
+                            100 +
+                            date.getMonth()
+                    }
+                );
+            }
+        );
+
+        return Array.from(
+            periods.values()
+        )
+            .sort(
+                function (left, right) {
+                    return (
+                        left.sortValue -
+                        right.sortValue
+                    );
+                }
+            )
+            .map(
+                function (item) {
+                    return {
+                        key: item.key,
+                        text: item.text
+                    };
+                }
+            );
+    }
+
+    function buildFilterOptions(
+        catalogs,
+        orders,
+        resources
+    ) {
+        var allRecords = asArray(
+            orders
+        ).concat(
+            asArray(resources)
+        );
+
+        return {
+            periodos:
+                buildPeriodOptions(
+                    orders
+                ),
+
+            zonas:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        ["ZONE"],
+                        "TODAS",
+                        "Todas"
+                    ),
+                    derivedOptions(
+                        allRecords.map(
+                            function (record) {
+                                return {
+                                    key:
+                                        record.Zona ||
+                                        record.ZoneId,
+                                    text:
+                                        record.ZoneName ||
+                                        record.Zona ||
+                                        record.ZoneId
+                                };
+                            }
+                        ),
+                        "key",
+                        "text",
+                        "TODAS",
+                        "Todas"
+                    )
+                ),
+
+            supervisores:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        ["SUPERVISOR"],
+                        "TODOS",
+                        "Todos"
+                    ),
+                    derivedOptions(
+                        allRecords.map(
+                            function (record) {
+                                return {
+                                    key:
+                                        record.SupervisorId,
+                                    text:
+                                        record.SupervisorName ||
+                                        record.SupervisorId
+                                };
+                            }
+                        ),
+                        "key",
+                        "text",
+                        "TODOS",
+                        "Todos"
+                    )
+                ),
+
+            tiposOrden:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        ["ORDER_TYPE"],
+                        "TODOS",
+                        "Todos"
+                    ),
+                    derivedOptions(
+                        orders,
+                        "OrderTypeCode",
+                        "OrderTypeText",
+                        "TODOS",
+                        "Todos"
+                    )
+                ),
+
+            turnos:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        ["SHIFT"],
+                        "TODOS",
+                        "Todos"
+                    ),
+                    derivedOptions(
+                        allRecords.map(
+                            function (record) {
+                                return {
+                                    key:
+                                        record.Turno ||
+                                        record.ShiftId,
+                                    text:
+                                        record.ShiftName ||
+                                        record.Turno ||
+                                        record.ShiftId
+                                };
+                            }
+                        ),
+                        "key",
+                        "text",
+                        "TODOS",
+                        "Todos"
+                    )
+                ),
+
+            mecanicos:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        [
+                            "MECHANIC",
+                            "RESOURCE"
+                        ],
+                        "TODOS",
+                        "Todos"
+                    ),
+                    derivedOptions(
+                        allRecords.map(
+                            function (record) {
+                                return {
+                                    key:
+                                        record.Mecanico ||
+                                        record.ResourceId,
+                                    text:
+                                        record.ResourceName ||
+                                        record.Mecanico ||
+                                        record.ResourceId
+                                };
+                            }
+                        ),
+                        "key",
+                        "text",
+                        "TODOS",
+                        "Todos"
+                    )
+                ),
+
+            estadosOrden:
+                preferCatalog(
+                    catalogOptions(
+                        catalogs,
+                        ["STATUS"],
+                        "TODOS",
+                        "Todos"
+                    ),
+                    derivedOptions(
+                        orders,
+                        "SapUserStatusCode",
+                        "StatusText",
+                        "TODOS",
+                        "Todos"
+                    )
+                )
+        };
+    }
+
+    function buildDashboard(rawData) {
+        var data = rawData || {};
+        var periods = buildPeriods(
+            data.range,
+            data.orders
+        );
+
+        return {
+            summary:
+                buildSummary(
+                    data.orders,
+                    data.serviceRequests,
+                    data.blocks,
+                    data.catalogs,
+                    data.blockOrders
+                ),
+
+            causes:
+                buildCauses(
+                    data.orders,
+                    data.causes
+                ),
+
+            execution:
+                buildExecution(
+                    data.orders,
+                    periods
+                ),
+
+            zonePeriods:
+                buildZonePeriods(
+                    data.orders,
+                    periods
+                ),
+
+            staff:
+                buildCapacity(
+                    data.orders,
+                    data.resources,
+                    data.operations,
+                    data.confirmations
+                ),
+
+            materials:
+                buildMaterials(
+                    data.materials,
+                    data.movements
+                ),
+
+            composition:
+                buildComposition(
+                    data.orders
+                ),
+
+            filterOptions:
+                buildFilterOptions(
+                    data.catalogs,
+                    data.allOrders ||
+                    data.orders,
+                    data.allResources ||
+                    data.resources
+                )
+        };
+    }
+
+    return {
+        buildDashboard:
+            buildDashboard,
+
+        buildSummary:
+            buildSummary,
+
+        buildCauses:
+            buildCauses,
+
+        buildMaterials:
+            buildMaterials,
+
+        buildExecution:
+            buildExecution,
+
+        buildZonePeriods:
+            buildZonePeriods,
+
+        buildCapacity:
+            buildCapacity,
+
+        buildComposition:
+            buildComposition,
+
+        buildFilterOptions:
+            buildFilterOptions,
+
+        getOfficialOrders:
+            getOfficialOrders,
+
+        toHours:
+            toHours,
+
+        parseDate:
+            parseDate,
+
+        percentage:
+            percentage,
+
+        formatPercentage:
+            formatPercentage
+    };
+});

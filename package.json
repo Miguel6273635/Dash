@@ -2,20 +2,15 @@
   "name": "mantenimiento",
   "version": "0.1.0",
   "private": true,
-  "description": "Dashboard SAPUI5 de mantenimiento conectado mediante BTP Destination.",
+  "description": "Dashboard SAPUI5 de mantenimiento conectado directamente al servicio OData mediante SAP BTP Destination.",
   "keywords": [
     "ui5",
-    "openui5",
     "sapui5",
-    "sap-btp"
+    "sap-btp",
+    "odata"
   ],
-  "main": "srv/server.js",
   "engines": {
     "node": ">=20"
-  },
-  "dependencies": {
-    "@sap-cloud-sdk/http-client": "^4.8.0",
-    "express": "^5.2.1"
   },
   "devDependencies": {
     "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
@@ -24,12 +19,11 @@
     "eslint": "^9.39.5"
   },
   "scripts": {
-    "start": "node srv/server.js",
+    "start": "fiori run --open \"test/flp.html#app-preview\"",
     "start:fiori": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
     "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
-    "test": "node --test --test-isolation=none test/*.test.js",
     "lint": "eslint ./",
     "deploy": "fiori verify",
     "deploy-config": "fiori add deploy-config",

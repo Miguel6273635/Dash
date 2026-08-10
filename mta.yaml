@@ -1,33 +1,130 @@
 _schema-version: "3.3"
-ID: mantenimiento-dashboard
-version: 0.1.0
-description: Dashboard Ejecutivo de Mantenimiento SAPUI5 con backend Node.js.
+
+ID: mantenimiento
+version: 0.0.1
+
+description: >
+  Dashboard de Mantenimiento SAPUI5 conectado directamente
+  al servicio OData ZPM_BTP_DASHMANTTO_SRV mediante la
+  Destination QAS_MITSU_DASH.
 
 modules:
-  - name: mantenimiento-dashboard-srv
-    type: nodejs
+  # =========================================================
+  # APLICACIÓN SAPUI5
+  # =========================================================
+  - name: mantenimiento
+    type: html5
     path: .
-    parameters:
-      memory: 512M
-      disk-quota: 1G
-    properties:
-      SAP_DESTINATION_NAME: QAS_MITSU_DASH
-      SAP_ODATA_SERVICE_PATH: /sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV
-      SAP_ODATA_CACHE_TTL_MS: 60000
-      SAP_ODATA_PAGE_SIZE: 2000
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      build-result: dist
+      supported-platforms: []
+
+  # =========================================================
+  # CONTENIDO HTML5
+  # Sube la aplicación al HTML5 Application Repository
+  # =========================================================
+  - name: mantenimiento-app-content
+    type: com.sap.application.content
+    path: .
     requires:
-      - name: mantenimiento-destination
-      - name: mantenimiento-connectivity
+      - name: mantenimiento-html5-repo-host
+        parameters:
+          content-target: true
+
+    build-parameters:
+      build-result: resources
+
+      requires:
+        - name: mantenimiento
+          artifacts:
+            - mantenimiento.zip
+          target-path: resources/
+
+  # =========================================================
+  # CONTENIDO DE DESTINATIONS
+  # Configuración necesaria para HTML5 / Work Zone
+  # =========================================================
+  - name: mantenimiento-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: mantenimiento-destination-service
+        parameters:
+          content-target: true
+
+      - name: mantenimiento-html5-repo-host
+        parameters:
+          service-key:
+            name: mantenimiento-html5-repo-host-key
+
+      - name: mantenimiento-xsuaa
+        parameters:
+          service-key:
+            name: mantenimiento-xsuaa-key
+
+    parameters:
+      content:
+        instance:
+          destinations:
+            # =================================================
+            # DESTINATION HACIA HTML5 REPOSITORY
+            # =================================================
+            - Name: mantenimiento-html5-repo-host
+              ServiceInstanceName: mantenimiento-html5-repo-host
+              ServiceKeyName: mantenimiento-html5-repo-host-key
+              sap.cloud.service: mantenimiento
+
+            # =================================================
+            # DESTINATION HACIA XSUAA
+            # =================================================
+            - Authentication: OAuth2UserTokenExchange
+              Name: mantenimiento-xsuaa
+              ServiceInstanceName: mantenimiento-xsuaa
+              ServiceKeyName: mantenimiento-xsuaa-key
+              sap.cloud.service: mantenimiento
+
+          existing_destinations_policy: update
+
+    build-parameters:
+      no-source: true
 
 resources:
-  - name: mantenimiento-destination
+  # =========================================================
+  # HTML5 APPLICATION REPOSITORY
+  # =========================================================
+  - name: mantenimiento-html5-repo-host
     type: org.cloudfoundry.managed-service
+
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+
+  # =========================================================
+  # DESTINATION SERVICE
+  # =========================================================
+  - name: mantenimiento-destination-service
+    type: org.cloudfoundry.managed-service
+
     parameters:
       service: destination
       service-plan: lite
 
-  - name: mantenimiento-connectivity
+      config:
+        HTML5Runtime_enabled: true
+
+        version: 1.0.0
+
+  # =========================================================
+  # AUTENTICACIÓN
+  # =========================================================
+  - name: mantenimiento-xsuaa
     type: org.cloudfoundry.managed-service
+
     parameters:
-      service: connectivity
-      service-plan: lite
+      service: xsuaa
+      service-plan: application
+
+      path: ./xs-security.json

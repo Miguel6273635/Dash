@@ -3,8 +3,8 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/UIComponent",
-    "sap/ui/thirdparty/jquery"
-], function (Controller, JSONModel, MessageToast, UIComponent, jQuery) {
+    "mantenimiento/model/DashboardDataService"
+], function (Controller, JSONModel, MessageToast, UIComponent, DashboardDataService) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.Mantenimiento", {
@@ -12,6 +12,7 @@ sap.ui.define([
         onInit: function () {
             var oDashboardModel = new JSONModel(this._getDashboardData());
 
+            this._hasLoadedDashboard = false;
             oDashboardModel.setSizeLimit(500);
             this.getView().setModel(oDashboardModel, "dash");
             this._loadDashboard(false);
@@ -170,9 +171,15 @@ sap.ui.define([
         _onDashboardError: function (bNotify) {
             var oModel = this.getView().getModel("dash");
 
+            // No se conservan cifras de demostración si la primera consulta no
+            // llega a SAP. Después de una carga correcta sí se conserva el
+            // último resultado conocido para que el usuario no pierda contexto.
+            if (!this._hasLoadedDashboard) {
+                this._onDashboardLoaded(DashboardDataService.createEmpty(this._buildDashboardRequest().filtros));
+            }
             oModel.setProperty("/connection", {
                 status: "FALLBACK",
-                source: "LOCAL_STATIC"
+                source: "ODATA_ERROR"
             });
 
             if (bNotify) {
@@ -182,32 +189,27 @@ sap.ui.define([
 
         _loadDashboard: function (bNotify) {
             var oRequest = this._buildDashboardRequest();
+            var oODataModel = this.getOwnerComponent().getModel("dashboardOData");
 
             this.getView().setBusy(true);
 
-            jQuery.ajax({
-                url: "/api/dashboard/mantenimiento",
-                method: "GET",
-                dataType: "json",
-                data: oRequest.filtros
-            }).done(function (oResponse) {
-                if (!oResponse || oResponse.success !== true || !oResponse.data) {
-                    this._onDashboardError(bNotify);
-                    return;
-                }
-
-                this._onDashboardLoaded(oResponse.data);
+            DashboardDataService.load(oODataModel, oRequest.filtros).then(function (oData) {
+                this._onDashboardLoaded(oData);
+                this._hasLoadedDashboard = true;
                 if (bNotify) {
-                    if (oResponse.data.meta && oResponse.data.meta.dataQuality &&
-                        oResponse.data.meta.dataQuality.level === "PARTIAL") {
+                    if (oData.meta && oData.meta.dataQuality &&
+                        oData.meta.dataQuality.level === "PARTIAL") {
                         MessageToast.show("Datos SAP cargados; hay campos pendientes de informar en el OData");
                     } else {
                         MessageToast.show("Dashboard actualizado con datos de SAP");
                     }
                 }
-            }.bind(this)).fail(function () {
+            }.bind(this)).catch(function (oError) {
+                if (window.console && window.console.error) {
+                    window.console.error("Error al consultar el OData del dashboard", oError);
+                }
                 this._onDashboardError(bNotify);
-            }.bind(this)).always(function () {
+            }.bind(this)).finally(function () {
                 this.getView().setBusy(false);
             }.bind(this));
         },

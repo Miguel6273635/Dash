@@ -1,9 +1,12 @@
 # yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
 
 specVersion: "4.0"
+
 metadata:
   name: mantenimiento
+
 type: application
+
 framework:
   name: SAPUI5
   version: 1.148.0
@@ -12,6 +15,7 @@ framework:
     - name: sap.ui.core
     - name: sap.ushell
     - name: themelib_sap_horizon
+
 server:
   customMiddleware:
     - name: fiori-tools-appreload
@@ -20,12 +24,25 @@ server:
         port: 35729
         path: webapp
         delay: 300
+
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
         flp:
           theme: sap_horizon
+
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertErrors: false
+
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+
+        backend:
+          - path: /sap
+            url: http://melco-qa-01:8000
+            destination: QAS_MITSU_DASH

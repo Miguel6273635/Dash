@@ -12,16 +12,32 @@ sap.ui.define([
     return Controller.extend(
         "mantenimiento.controller.AnalisisOTPreventivasEjecutadas",
         {
+
             onInit: function () {
                 var oModel = new JSONModel(
                     this._getInitialData()
                 );
 
                 oModel.setSizeLimit(1000);
-                this.getView().setModel(oModel, "otpe");
+
+                this.getView().setModel(
+                    oModel,
+                    "otpe"
+                );
             },
 
             onApplyFilters: function () {
+                var oModel =
+                    this.getView().getModel("otpe");
+
+                var oFilters =
+                    oModel.getProperty("/filters");
+
+                console.log(
+                    "Filtros Preventivas Ejecutadas:",
+                    oFilters
+                );
+
                 MessageToast.show(
                     "Filtros aplicados correctamente."
                 );
@@ -51,28 +67,100 @@ sap.ui.define([
                     oEvent.getParameter("query") ||
                     "";
 
-                console.log(
-                    "Buscar responsable:",
+                var sSearch =
                     sValue
-                );
-            },
+                        .trim()
+                        .toLowerCase();
 
-            onToggleResponsable: function (oEvent) {
-                var oButton = oEvent.getSource();
-                var sPath = oButton.data("path");
                 var oModel =
                     this.getView().getModel("otpe");
 
-                if (!sPath || !oModel) {
+                var aResponsables =
+                    oModel.getProperty("/responsables") ||
+                    [];
+
+                aResponsables.forEach(function (
+                    oResponsable,
+                    iIndex
+                ) {
+                    var sNombre =
+                        String(
+                            oResponsable.nombre || ""
+                        ).toLowerCase();
+
+                    var bVisible =
+                        !sSearch ||
+                        sNombre.indexOf(sSearch) !== -1;
+
+                    oModel.setProperty(
+                        "/responsables/" +
+                        iIndex +
+                        "/visible",
+                        bVisible
+                    );
+
+                    if (!bVisible) {
+                        oModel.setProperty(
+                            "/responsables/" +
+                            iIndex +
+                            "/expanded",
+                            false
+                        );
+                    }
+                });
+            },
+
+            onToggleResponsable: function (oEvent) {
+                var oSource =
+                    oEvent.getSource();
+
+                var oContext =
+                    oSource.getBindingContext("otpe");
+
+                if (!oContext) {
                     return;
                 }
 
-                oModel.setProperty(
-                    sPath,
-                    !Boolean(
-                        oModel.getProperty(sPath)
-                    )
-                );
+                var oModel =
+                    this.getView().getModel("otpe");
+
+                var sPath =
+                    oContext.getPath();
+
+                var bExpanded =
+                    Boolean(
+                        oModel.getProperty(
+                            sPath + "/expanded"
+                        )
+                    );
+
+                var aResponsables =
+                    oModel.getProperty("/responsables") ||
+                    [];
+
+                /*
+                 * Solo dejamos un responsable desplegado.
+                 * Esto mantiene controlada la altura de la
+                 * pantalla y evita scroll en escritorio.
+                 */
+                aResponsables.forEach(function (
+                    oResponsable,
+                    iIndex
+                ) {
+                    oModel.setProperty(
+                        "/responsables/" +
+                        iIndex +
+                        "/expanded",
+                        false
+                    );
+                });
+
+                if (!bExpanded) {
+                    oModel.setProperty(
+                        sPath + "/expanded",
+                        true
+                    );
+                }
             },
 
             _getInitialData: function () {
@@ -179,6 +267,17 @@ sap.ui.define([
                         cumplimiento: "95.4%"
                     },
 
+                    infoMessage:
+                        "Análisis basado en 248 OT preventivas ejecutadas.",
+
+                    totales: {
+                        ot: 248,
+                        pct: "100%",
+                        clientes: 87,
+                        elevadores: 201,
+                        tiempo: "1.5 días"
+                    },
+
                     responsables: [
                         {
                             nombre: "Juan Pérez",
@@ -187,8 +286,34 @@ sap.ui.define([
                             clientes: 18,
                             elevadores: 42,
                             tiempo: "1.2 días",
-                            expanded: true
+                            expanded: true,
+                            visible: true,
+
+                            ordenes: [
+                                {
+                                    ot: "OT-0412",
+                                    cliente: "Torre Reforma",
+                                    elevador: "EV0871",
+                                    fecha: "03/05/2024",
+                                    tiempo: "1 día"
+                                },
+                                {
+                                    ot: "OT-0425",
+                                    cliente: "Plaza Satélite",
+                                    elevador: "EV1024",
+                                    fecha: "04/05/2024",
+                                    tiempo: "2 días"
+                                },
+                                {
+                                    ot: "OT-0437",
+                                    cliente: "Hospital Ángeles",
+                                    elevador: "EV0636",
+                                    fecha: "05/05/2024",
+                                    tiempo: "1 día"
+                                }
+                            ]
                         },
+
                         {
                             nombre: "María González",
                             ot: 49,
@@ -196,8 +321,11 @@ sap.ui.define([
                             clientes: 16,
                             elevadores: 38,
                             tiempo: "1.4 días",
-                            expanded: false
+                            expanded: false,
+                            visible: true,
+                            ordenes: []
                         },
+
                         {
                             nombre: "Carlos Herrera",
                             ot: 43,
@@ -205,8 +333,11 @@ sap.ui.define([
                             clientes: 15,
                             elevadores: 35,
                             tiempo: "1.6 días",
-                            expanded: false
+                            expanded: false,
+                            visible: true,
+                            ordenes: []
                         },
+
                         {
                             nombre: "Pedro López",
                             ot: 38,
@@ -214,8 +345,11 @@ sap.ui.define([
                             clientes: 14,
                             elevadores: 31,
                             tiempo: "1.5 días",
-                            expanded: false
+                            expanded: false,
+                            visible: true,
+                            ordenes: []
                         },
+
                         {
                             nombre: "Otros responsables",
                             ot: 64,
@@ -223,11 +357,14 @@ sap.ui.define([
                             clientes: 24,
                             elevadores: 55,
                             tiempo: "1.8 días",
-                            expanded: false
+                            expanded: false,
+                            visible: true,
+                            ordenes: []
                         }
                     ]
                 };
             }
+
         }
     );
 });

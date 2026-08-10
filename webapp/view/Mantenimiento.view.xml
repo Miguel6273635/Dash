@@ -13,12 +13,8 @@
                 <HBox class="mdFiltersBar" renderType="Bare" wrap="NoWrap" alignItems="Stretch">
                     <VBox class="mdFilterBox mdFilterPeriod">
                         <Label text="Periodo" class="mdFilterLabel" />
-                        <Select id="slPeriodo" selectedKey="{dash>/filtros/periodo}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="ABRIL_2024" text="Abril 2024 (Mensual)" />
-                                <core:Item key="MAYO_2024" text="Mayo 2024 (Mensual)" />
-                                <core:Item key="JUNIO_2024" text="Junio 2024 (Mensual)" />
-                            </items>
+                        <Select id="slPeriodo" selectedKey="{dash>/filtros/periodo}" change=".onPeriodoChange" width="100%" items="{dash>/filterOptions/periodos}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox">
@@ -31,70 +27,38 @@
                     </VBox>
                     <VBox class="mdFilterBox">
                         <Label text="Zona" class="mdFilterLabel" />
-                        <Select id="slZona" selectedKey="{dash>/filtros/zona}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODAS" text="Todas" />
-                                <core:Item key="NORTE" text="Norte" />
-                                <core:Item key="CENTRO" text="Centro" />
-                                <core:Item key="SUR" text="Sur" />
-                                <core:Item key="ESTE" text="Este" />
-                                <core:Item key="OESTE" text="Oeste" />
-                            </items>
+                        <Select id="slZona" selectedKey="{dash>/filtros/zona}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/zonas}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox">
                         <Label text="Supervisor" class="mdFilterLabel" />
-                        <Select id="slSupervisor" selectedKey="{dash>/filtros/supervisor}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODOS" text="Todos" />
-                                <core:Item key="SUP_01" text="Supervisor 1" />
-                                <core:Item key="SUP_02" text="Supervisor 2" />
-                            </items>
+                        <Select id="slSupervisor" selectedKey="{dash>/filtros/supervisor}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/supervisores}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox">
                         <Label text="Tipo de orden" class="mdFilterLabel" />
-                        <Select id="slTipoOrden" selectedKey="{dash>/filtros/tipoOrden}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODOS" text="Todos" />
-                                <core:Item key="PREVENTIVO" text="Preventivo" />
-                                <core:Item key="CORRECTIVO" text="Correctivo" />
-                                <core:Item key="CALL_CENTER" text="Call Center" />
-                            </items>
+                        <Select id="slTipoOrden" selectedKey="{dash>/filtros/tipoOrden}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/tiposOrden}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox">
                         <Label text="Turno" class="mdFilterLabel" />
-                        <Select id="slTurno" selectedKey="{dash>/filtros/turno}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODOS" text="Todos" />
-                                <core:Item key="DIURNO" text="Diurno" />
-                                <core:Item key="NOCTURNO" text="Nocturno" />
-                                <core:Item key="FIN_SEMANA" text="Fin de semana" />
-                            </items>
+                        <Select id="slTurno" selectedKey="{dash>/filtros/turno}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/turnos}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox">
                         <Label text="Mecánico" class="mdFilterLabel" />
-                        <Select id="slMecanico" selectedKey="{dash>/filtros/mecanico}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODOS" text="Todos" />
-                                <core:Item key="MEC_01" text="Carlos Ruiz" />
-                                <core:Item key="MEC_02" text="Ana López" />
-                                <core:Item key="MEC_03" text="Miguel Torres" />
-                            </items>
+                        <Select id="slMecanico" selectedKey="{dash>/filtros/mecanico}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/mecanicos}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdFilterBox mdFilterStatus">
                         <Label text="Estado de orden" class="mdFilterLabel" />
-                        <Select id="slEstadoOrden" selectedKey="{dash>/filtros/estadoOrden}" change=".onFilterChange" width="100%">
-                            <items>
-                                <core:Item key="TODOS" text="Todos" />
-                                <core:Item key="ABIERTA" text="Abierta" />
-                                <core:Item key="EN_PROCESO" text="En proceso" />
-                                <core:Item key="COMPLETADA" text="Completada" />
-                                <core:Item key="DETENIDA" text="Detenida" />
-                            </items>
+                        <Select id="slEstadoOrden" selectedKey="{dash>/filtros/estadoOrden}" change=".onFilterChange" width="100%" items="{dash>/filterOptions/estadosOrden}">
+                            <core:Item key="{dash>key}" text="{dash>text}" />
                         </Select>
                     </VBox>
                     <VBox class="mdApplyWrap" justifyContent="Center" alignItems="Stretch">
@@ -109,7 +73,7 @@
                         </HBox>
                         <VBox class="mdSemiGauge" alignItems="Center" renderType="Bare">
                             <VBox class="mdGaugeVisual" renderType="Bare">
-                                <core:HTML sanitizeContent="false" content='&lt;svg viewBox=&quot;0 0 220 100&quot; preserveAspectRatio=&quot;xMidYMid meet&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;linearGradient id=&quot;mdComplianceBlue&quot; x1=&quot;0%&quot; y1=&quot;0%&quot; x2=&quot;100%&quot; y2=&quot;0%&quot;&gt;&lt;stop offset=&quot;0%&quot; stop-color=&quot;#0867e8&quot;/&gt;&lt;stop offset=&quot;52%&quot; stop-color=&quot;#1685ff&quot;/&gt;&lt;stop offset=&quot;100%&quot; stop-color=&quot;#0875f5&quot;/&gt;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;path d=&quot;M28 86 A82 64 0 0 1 192 86&quot; pathLength=&quot;100&quot; class=&quot;mdGaugeTrack&quot;/&gt;&lt;path d=&quot;M28 86 A82 64 0 0 1 192 86&quot; pathLength=&quot;100&quot; stroke-dasharray=&quot;94.8 100&quot; stroke=&quot;url(#mdComplianceBlue)&quot; class=&quot;mdGaugeProgress&quot;/&gt;&lt;/svg&gt;' />
+                                <core:HTML sanitizeContent="false" content="{dash>/summary/gaugeSvg}" />
                                 <VBox class="mdGaugeOverlay" alignItems="Center">
                                     <Text text="{dash>/summary/compliance}" class="mdMetricValue mdBlueText" />
                                     <Text text="{= ${dash>/summary/executed} + ' órdenes'}" class="mdGaugeOrdersInside" />
@@ -121,7 +85,7 @@
                             </HBox>
                         </VBox>
                         <HBox class="mdTargetBand mdTargetBlue" alignItems="Center" justifyContent="Center">
-                            <Text text="Meta ≥ 95%" />
+                            <Text text="{dash>/summary/complianceTargetText}" />
                         </HBox>
                     </VBox>
                     <VBox class="mdCard mdDeviationCard">
@@ -129,22 +93,22 @@
                             <Text text="Desviación general del periodo" textAlign="Center" wrapping="false" class="mdDeviationTitle" />
                         </HBox>
                         <Text text="{dash>/summary/deviation}" class="mdMetricValue mdRedText" />
-                        <Text text="Fuera de tolerancia" class="mdMetricCaption" />
+                        <Text text="{dash>/summary/deviationCaption}" class="mdMetricCaption" />
                         <VBox class="mdDeviationGauge">
                             <HBox class="mdDeviationBar" renderType="Bare">
                                 <VBox class="mdDevGood" />
                                 <VBox class="mdDevWarn" />
                                 <VBox class="mdDevBad" />
-                                <VBox class="mdDevMarker" />
+                                <core:HTML sanitizeContent="false" content="{dash>/summary/deviationMarkerHtml}" />
                             </HBox>
                             <HBox class="mdScaleLabels" justifyContent="SpaceBetween">
                                 <Text text="0%" />
-                                <Text text="6%" />
+                                <Text text="{dash>/summary/deviationScaleMiddle}" />
                                 <Text text="15%" />
                             </HBox>
                         </VBox>
                         <HBox class="mdTargetBand mdTargetRed" alignItems="Center" justifyContent="Center">
-                            <Text text="Meta ≤ 5%" />
+                            <Text text="{dash>/summary/deviationTargetText}" />
                         </HBox>
                     </VBox>
                     <VBox class="mdCard mdCausesCard">
@@ -168,7 +132,7 @@
                         </List>
                         <HBox class="mdInfoBand" alignItems="Center">
                             <core:Icon src="sap-icon://message-information" />
-                            <Text text="22 órdenes no ejecutadas representan el 5.2% del plan." />
+                            <Text text="{dash>/summary/nonExecutedInfo}" />
                         </HBox>
                     </VBox>
                     <VBox class="mdCard mdDetailCard">
@@ -214,13 +178,13 @@
                         </HBox>
                         <HBox class="mdExecutionBody" renderType="Bare">
                             <VBox class="mdLineChart">
-                                <core:HTML sanitizeContent="false" content='&lt;svg viewBox=&quot;0 0 620 175&quot; preserveAspectRatio=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;g class=&quot;mdChartGrid&quot;&gt;&lt;line x1=&quot;48&quot; y1=&quot;18&quot; x2=&quot;588&quot; y2=&quot;18&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;52&quot; x2=&quot;588&quot; y2=&quot;52&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;86&quot; x2=&quot;588&quot; y2=&quot;86&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;120&quot; x2=&quot;588&quot; y2=&quot;120&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;150&quot; x2=&quot;588&quot; y2=&quot;150&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdAxisText&quot;&gt;&lt;text x=&quot;8&quot; y=&quot;22&quot;&gt;300&lt;/text&gt;&lt;text x=&quot;8&quot; y=&quot;56&quot;&gt;225&lt;/text&gt;&lt;text x=&quot;8&quot; y=&quot;90&quot;&gt;150&lt;/text&gt;&lt;text x=&quot;16&quot; y=&quot;124&quot;&gt;75&lt;/text&gt;&lt;text x=&quot;24&quot; y=&quot;154&quot;&gt;0&lt;/text&gt;&lt;/g&gt;&lt;polyline points=&quot;70,100 190,86 310,66 430,45 550,92&quot; class=&quot;mdChartPlan&quot;/&gt;&lt;polyline points=&quot;70,122 190,108 310,88 430,69 550,116&quot; class=&quot;mdChartReal&quot;/&gt;&lt;polyline points=&quot;70,72 190,70 310,39 430,37 550,78&quot; class=&quot;mdChartRate&quot;/&gt;&lt;g class=&quot;mdDotsPlan&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;100&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;86&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;66&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;45&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;92&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdDotsReal&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;122&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;108&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;88&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;69&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;116&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdDotsRate&quot;&gt;&lt;circle cx=&quot;70&quot; cy=&quot;72&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;70&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;310&quot; cy=&quot;39&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;430&quot; cy=&quot;37&quot; r=&quot;4&quot;/&gt;&lt;circle cx=&quot;550&quot; cy=&quot;78&quot; r=&quot;4&quot;/&gt;&lt;/g&gt;&lt;g class=&quot;mdXAxisText&quot;&gt;&lt;text x=&quot;70&quot; y=&quot;169&quot;&gt;Sem 18&lt;/text&gt;&lt;text x=&quot;190&quot; y=&quot;169&quot;&gt;Sem 19&lt;/text&gt;&lt;text x=&quot;310&quot; y=&quot;169&quot;&gt;Sem 20&lt;/text&gt;&lt;text x=&quot;430&quot; y=&quot;169&quot;&gt;Sem 21&lt;/text&gt;&lt;text x=&quot;550&quot; y=&quot;169&quot;&gt;Sem 22&lt;/text&gt;&lt;/g&gt;&lt;/svg&gt;' />
+                                <core:HTML sanitizeContent="false" content="{dash>/execution/chartSvg}" />
                                 <HBox class="mdWeekDates" renderType="Bare">
-                                    <Text text="(28 Abr - 4 May)" />
-                                    <Text text="(5 - 11 May)" />
-                                    <Text text="(12 - 18 May)" />
-                                    <Text text="(19 - 25 May)" />
-                                    <Text text="(26 May - 1 Jun)" />
+                                    <Text text="{dash>/execution/weeks/0/dateLabel}" />
+                                    <Text text="{dash>/execution/weeks/1/dateLabel}" />
+                                    <Text text="{dash>/execution/weeks/2/dateLabel}" />
+                                    <Text text="{dash>/execution/weeks/3/dateLabel}" />
+                                    <Text text="{dash>/execution/weeks/4/dateLabel}" />
                                 </HBox>
                             </VBox>
                             <VBox class="mdExecutionKpi" alignItems="Center" justifyContent="SpaceAround">
@@ -238,57 +202,157 @@
                         <VBox class="mdHeatmapTable">
                             <HBox class="mdHeatRow mdHeatHead" renderType="Bare">
                                 <Text text="" />
-                                <Text text="28 Abr - 4 May" />
-                                <Text text="5 - 11 May" />
-                                <Text text="12 - 18 May" />
-                                <Text text="19 - 25 May" />
-                                <Text text="26 May - 1 Jun" />
+                                <Text text="{dash>/zonePeriods/headers/0}" />
+                                <Text text="{dash>/zonePeriods/headers/1}" />
+                                <Text text="{dash>/zonePeriods/headers/2}" />
+                                <Text text="{dash>/zonePeriods/headers/3}" />
+                                <Text text="{dash>/zonePeriods/headers/4}" />
                                 <Text text="Cumplimiento general" />
                             </HBox>
                             <HBox class="mdHeatRow" renderType="Bare">
-                                <Text text="Norte" class="mdZone" />
-                                <Text text="74%" class="mdHeatYellow" />
-                                <Text text="67%" class="mdHeatOrange" />
-                                <Text text="87%" class="mdHeatGreen" />
-                                <Text text="87%" class="mdHeatGreen" />
-                                <Text text="80%" class="mdHeatGreen" />
-                                <Text text="82%" class="mdHeatTotal" />
+                                <Text text="{dash>/zonePeriods/rows/0/zone}" class="mdZone" />
+                                <Text text="{dash>/zonePeriods/rows/0/periods/0/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/0/periods/0/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/0/periods/1/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/0/periods/1/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/0/periods/2/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/0/periods/2/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/0/periods/3/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/0/periods/3/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/0/periods/4/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/0/periods/4/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/0/total}" class="mdHeatTotal" />
                             </HBox>
                             <HBox class="mdHeatRow" renderType="Bare">
-                                <Text text="Centro" class="mdZone" />
-                                <Text text="64%" class="mdHeatYellow" />
-                                <Text text="70%" class="mdHeatYellow" />
-                                <Text text="85%" class="mdHeatGreen" />
-                                <Text text="91%" class="mdHeatGreen" />
-                                <Text text="84%" class="mdHeatGreen" />
-                                <Text text="77%" class="mdHeatTotal" />
+                                <Text text="{dash>/zonePeriods/rows/1/zone}" class="mdZone" />
+                                <Text text="{dash>/zonePeriods/rows/1/periods/0/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/1/periods/0/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/1/periods/1/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/1/periods/1/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/1/periods/2/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/1/periods/2/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/1/periods/3/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/1/periods/3/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/1/periods/4/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/1/periods/4/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/1/total}" class="mdHeatTotal" />
                             </HBox>
                             <HBox class="mdHeatRow" renderType="Bare">
-                                <Text text="Sur" class="mdZone" />
-                                <Text text="61%" class="mdHeatYellow" />
-                                <Text text="61%" class="mdHeatYellow" />
-                                <Text text="72%" class="mdHeatOrange" />
-                                <Text text="78%" class="mdHeatYellow" />
-                                <Text text="84%" class="mdHeatGreen" />
-                                <Text text="71%" class="mdHeatTotal" />
+                                <Text text="{dash>/zonePeriods/rows/2/zone}" class="mdZone" />
+                                <Text text="{dash>/zonePeriods/rows/2/periods/0/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/2/periods/0/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/2/periods/1/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/2/periods/1/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/2/periods/2/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/2/periods/2/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/2/periods/3/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/2/periods/3/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/2/periods/4/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/2/periods/4/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/2/total}" class="mdHeatTotal" />
                             </HBox>
                             <HBox class="mdHeatRow" renderType="Bare">
-                                <Text text="Este" class="mdZone" />
-                                <Text text="54%" class="mdHeatOrange" />
-                                <Text text="62%" class="mdHeatYellow" />
-                                <Text text="71%" class="mdHeatYellow" />
-                                <Text text="66%" class="mdHeatOrange" />
-                                <Text text="72%" class="mdHeatYellow" />
-                                <Text text="66%" class="mdHeatTotal" />
+                                <Text text="{dash>/zonePeriods/rows/3/zone}" class="mdZone" />
+                                <Text text="{dash>/zonePeriods/rows/3/periods/0/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/3/periods/0/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/3/periods/1/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/3/periods/1/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/3/periods/2/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/3/periods/2/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/3/periods/3/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/3/periods/3/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/3/periods/4/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/3/periods/4/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/3/total}" class="mdHeatTotal" />
                             </HBox>
                             <HBox class="mdHeatRow" renderType="Bare">
-                                <Text text="Oeste" class="mdZone" />
-                                <Text text="46%" class="mdHeatRed" />
-                                <Text text="53%" class="mdHeatOrange" />
-                                <Text text="61%" class="mdHeatYellow" />
-                                <Text text="71%" class="mdHeatYellow" />
-                                <Text text="70%" class="mdHeatYellow" />
-                                <Text text="60%" class="mdHeatTotal" />
+                                <Text text="{dash>/zonePeriods/rows/4/zone}" class="mdZone" />
+                                <Text text="{dash>/zonePeriods/rows/4/periods/0/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/4/periods/0/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/4/periods/1/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/4/periods/1/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/4/periods/2/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/4/periods/2/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/4/periods/3/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/4/periods/3/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/4/periods/4/value}" class="mdHeatCell">
+                                    <customData>
+                                        <core:CustomData key="tone" value="{dash>/zonePeriods/rows/4/periods/4/tone}" writeToDom="true" />
+                                    </customData>
+                                </Text>
+                                <Text text="{dash>/zonePeriods/rows/4/total}" class="mdHeatTotal" />
                             </HBox>
                         </VBox>
                         <HBox class="mdHeatLegend" alignItems="Center" justifyContent="Center">
@@ -321,22 +385,22 @@
                                     <core:Icon src="sap-icon://employee" />
                                     <VBox>
                                         <Text text="Turnos activos" />
-                                        <Text text="76" class="mdFactValue" />
+                                        <Text text="{dash>/staff/activeTurns}" class="mdFactValue" />
                                     </VBox>
                                 </HBox>
                                 <HBox class="mdStaffFact" alignItems="Center">
                                     <core:Icon src="sap-icon://calendar" />
                                     <VBox>
                                         <Text text="Total técnicos" />
-                                        <Text text="21" class="mdFactValue" />
+                                        <Text text="{dash>/staff/technicians}" class="mdFactValue" />
                                     </VBox>
                                 </HBox>
                                 <HBox class="mdStaffFact" alignItems="Center">
                                     <core:Icon src="sap-icon://history" />
                                     <VBox>
                                         <Text text="Turnos actuales" />
-                                        <Text text="Diurno, Nocturno y" />
-                                        <Text text="fin de semana" />
+                                        <Text text="{dash>/staff/currentShiftLine1}" />
+                                        <Text text="{dash>/staff/currentShiftLine2}" />
                                     </VBox>
                                 </HBox>
                             </VBox>
@@ -344,140 +408,152 @@
                                 <VBox class="mdStaffBarRow">
                                     <HBox justifyContent="SpaceBetween">
                                         <Text text="Capacidad disponible de plantillas" />
-                                        <Text text="6,400 h" />
+                                        <Text text="{dash>/staff/capacity}" />
                                     </HBox>
                                     <HBox class="mdStaffTrack">
-                                        <HBox class="mdStaffFill mdStaffBlue" width="100%" />
+                                        <HBox class="mdStaffFill mdStaffBlue" width="{dash>/staff/capacityWidth}" />
                                     </HBox>
                                 </VBox>
                                 <VBox class="mdStaffBarRow">
                                     <HBox justifyContent="SpaceBetween">
                                         <Text text="Horas programadas en órdenes" />
-                                        <Text text="5,800 h" />
+                                        <Text text="{dash>/staff/planned}" />
                                     </HBox>
                                     <HBox class="mdStaffTrack">
-                                        <HBox class="mdStaffFill mdStaffBlue" width="91%" />
+                                        <HBox class="mdStaffFill mdStaffBlue" width="{dash>/staff/plannedWidth}" />
                                     </HBox>
                                 </VBox>
                                 <VBox class="mdStaffBarRow">
                                     <HBox justifyContent="SpaceBetween">
                                         <Text text="Horas reales utilizadas" />
-                                        <Text text="5,842 h" />
+                                        <Text text="{dash>/staff/actual}" />
                                     </HBox>
                                     <HBox class="mdStaffTrack">
-                                        <HBox class="mdStaffFill mdStaffGreen" width="92%" />
+                                        <HBox class="mdStaffFill mdStaffGreen" width="{dash>/staff/actualWidth}" />
                                     </HBox>
                                 </VBox>
                                 <HBox class="mdStaffScale" justifyContent="SpaceBetween">
-                                    <Text text="0" />
-                                    <Text text="2,000" />
-                                    <Text text="4,000" />
-                                    <Text text="6,000" />
+                                    <Text text="{dash>/staff/scale0}" />
+                                    <Text text="{dash>/staff/scale1}" />
+                                    <Text text="{dash>/staff/scale2}" />
+                                    <Text text="{dash>/staff/scale3}" />
                                 </HBox>
                             </VBox>
                             <VBox class="mdStaffKpis" justifyContent="SpaceBetween">
                                 <VBox class="mdStaffKpi mdStaffKpiRed">
                                     <Text text="Capacidad comprometida" />
-                                    <Text text="92.1%" class="mdStaffRedValue" />
-                                    <Text text="(5,800 / 6,400 h)" class="mdStaffKpiDetail" />
+                                    <Text text="{dash>/staff/committed}" class="mdStaffRedValue" />
+                                    <Text text="{dash>/staff/committedDetail}" class="mdStaffKpiDetail" />
                                     <core:Icon src="sap-icon://performance" class="mdStaffKpiIcon" />
                                 </VBox>
                                 <VBox class="mdStaffKpi mdStaffKpiGreen">
                                     <Text text="Margen disponible" />
-                                    <Text text="500 h" class="mdStaffGreenValue" />
-                                    <Text text="(8% disponible - Programado)" class="mdStaffKpiDetail" />
+                                    <Text text="{dash>/staff/margin}" class="mdStaffGreenValue" />
+                                    <Text text="{dash>/staff/marginDetail}" class="mdStaffKpiDetail" />
                                     <core:Icon src="sap-icon://performance" class="mdStaffKpiIcon" />
                                 </VBox>
                             </VBox>
                         </HBox>
                         <HBox class="mdShiftCards" renderType="Bare" wrap="NoWrap">
                             <VBox class="mdShiftCard mdShiftNormal">
+                                <customData>
+                                    <core:CustomData key="tone" value="{dash>/staff/shifts/0/tone}" writeToDom="true" />
+                                </customData>
                                 <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
                                     <HBox alignItems="Center">
                                         <core:Icon src="sap-icon://lightbulb" />
-                                        <Text text="Diurno" class="mdShiftTitle" />
+                                        <Text text="{dash>/staff/shifts/0/title}" class="mdShiftTitle" />
                                     </HBox>
-                                    <Text text="94.6%" class="mdShiftPercent" />
+                                    <Text text="{dash>/staff/shifts/0/percent}" class="mdShiftPercent" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Técnicos" />
-                                    <Text text="21" />
+                                    <Text text="{dash>/staff/shifts/0/technicians}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Capacidad" />
-                                    <Text text="4,200 h" />
+                                    <Text text="{dash>/staff/shifts/0/capacity}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Programado" />
-                                    <Text text="4,155 h" />
+                                    <Text text="{dash>/staff/shifts/0/programmed}" />
                                 </HBox>
-                                <Text text="Normal" class="mdState mdStateGreen" />
+                                <Text text="{dash>/staff/shifts/0/state}" class="mdState mdStateGreen" />
                             </VBox>
                             <VBox class="mdShiftCard mdShiftWarning">
+                                <customData>
+                                    <core:CustomData key="tone" value="{dash>/staff/shifts/1/tone}" writeToDom="true" />
+                                </customData>
                                 <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
                                     <HBox alignItems="Center">
                                         <core:Icon src="sap-icon://lateness" />
-                                        <Text text="Nocturno" class="mdShiftTitle" />
+                                        <Text text="{dash>/staff/shifts/1/title}" class="mdShiftTitle" />
                                     </HBox>
-                                    <Text text="92.9%" class="mdShiftPercent" />
+                                    <Text text="{dash>/staff/shifts/1/percent}" class="mdShiftPercent" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Técnicos" />
-                                    <Text text="20" />
+                                    <Text text="{dash>/staff/shifts/1/technicians}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Capacidad" />
-                                    <Text text="1,500 h" />
+                                    <Text text="{dash>/staff/shifts/1/capacity}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Programado" />
-                                    <Text text="1,097 h" />
+                                    <Text text="{dash>/staff/shifts/1/programmed}" />
                                 </HBox>
-                                <Text text="Con exceso moderado" class="mdState mdStateOrange" />
+                                <Text text="{dash>/staff/shifts/1/state}" class="mdState mdStateOrange" />
                             </VBox>
                             <VBox class="mdShiftCard mdShiftError">
+                                <customData>
+                                    <core:CustomData key="tone" value="{dash>/staff/shifts/2/tone}" writeToDom="true" />
+                                </customData>
                                 <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
                                     <HBox alignItems="Center">
                                         <core:Icon src="sap-icon://calendar" />
-                                        <Text text="Fin de semana" class="mdShiftTitle" />
+                                        <Text text="{dash>/staff/shifts/2/title}" class="mdShiftTitle" />
                                     </HBox>
-                                    <Text text="99.7%" class="mdShiftPercent" />
+                                    <Text text="{dash>/staff/shifts/2/percent}" class="mdShiftPercent" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Técnicos" />
-                                    <Text text="14" />
+                                    <Text text="{dash>/staff/shifts/2/technicians}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Capacidad" />
-                                    <Text text="600 h" />
+                                    <Text text="{dash>/staff/shifts/2/capacity}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Programado" />
-                                    <Text text="598 h" />
+                                    <Text text="{dash>/staff/shifts/2/programmed}" />
                                 </HBox>
-                                <Text text="Sobrecargado" class="mdState mdStateRed" />
+                                <Text text="{dash>/staff/shifts/2/state}" class="mdState mdStateRed" />
                             </VBox>
                             <VBox class="mdShiftCard mdShiftWarning">
+                                <customData>
+                                    <core:CustomData key="tone" value="{dash>/staff/shifts/3/tone}" writeToDom="true" />
+                                </customData>
                                 <HBox class="mdShiftHeader" justifyContent="SpaceBetween" alignItems="Center">
                                     <HBox alignItems="Center">
                                         <core:Icon src="sap-icon://group" />
-                                        <Text text="Total" class="mdShiftTitle" />
+                                        <Text text="{dash>/staff/shifts/3/title}" class="mdShiftTitle" />
                                     </HBox>
-                                    <Text text="95.4%" class="mdShiftPercent" />
+                                    <Text text="{dash>/staff/shifts/3/percent}" class="mdShiftPercent" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Técnicos" />
-                                    <Text text="76" />
+                                    <Text text="{dash>/staff/shifts/3/technicians}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Capacidad" />
-                                    <Text text="6,400 h" />
+                                    <Text text="{dash>/staff/shifts/3/capacity}" />
                                 </HBox>
                                 <HBox class="mdShiftData" justifyContent="SpaceBetween">
                                     <Text text="Programado" />
-                                    <Text text="6,134 h" />
+                                    <Text text="{dash>/staff/shifts/3/programmed}" />
                                 </HBox>
-                                <Text text="Con exceso moderado" class="mdState mdStateOrange" />
+                                <Text text="{dash>/staff/shifts/3/state}" class="mdState mdStateOrange" />
                             </VBox>
                         </HBox>
                     </VBox>
@@ -529,11 +605,11 @@
                         </VBox>
                         <VBox class="mdBottomText">
                             <Text text="Preventivo" class="mdBottomTitle" />
-                            <Text text="248 / 260" class="mdBottomValue" />
+                            <Text text="{dash>/composition/preventive/orders}" class="mdBottomValue" />
                             <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
                         </VBox>
                         <VBox class="mdMiniRing mdRingGreen" alignItems="Center" justifyContent="Center">
-                            <Text text="95.4%" />
+                            <Text text="{dash>/composition/preventive/compliance}" />
                         </VBox>
                     </HBox>
                     <HBox class="mdBottomCard mdBottomCardBlue" alignItems="Center">
@@ -542,11 +618,11 @@
                         </VBox>
                         <VBox class="mdBottomText">
                             <Text text="Correctivo" class="mdBottomTitle" />
-                            <Text text="88 / 95" class="mdBottomValue" />
+                            <Text text="{dash>/composition/corrective/orders}" class="mdBottomValue" />
                             <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
                         </VBox>
                         <VBox class="mdMiniRing mdRingBlue" alignItems="Center" justifyContent="Center">
-                            <Text text="92.6%" />
+                            <Text text="{dash>/composition/corrective/compliance}" />
                         </VBox>
                     </HBox>
                     <HBox class="mdBottomCard mdBottomCardPurple" alignItems="Center">
@@ -555,11 +631,11 @@
                         </VBox>
                         <VBox class="mdBottomText">
                             <Text text="Call Center" class="mdBottomTitle" />
-                            <Text text="63 / 66" class="mdBottomValue" />
-                            <Text text="Ejecutadas / Planeadas" class="mdBottomSub" />
+                            <Text text="{dash>/summary/callCenter}" class="mdBottomValue" />
+                            <Text text="Atendidas / Solicitudes" class="mdBottomSub" />
                         </VBox>
                         <VBox class="mdMiniRing mdRingPurple" alignItems="Center" justifyContent="Center">
-                            <Text text="95.3%" />
+                            <Text text="{dash>/summary/callCenterCompliance}" />
                         </VBox>
                     </HBox>
                     <HBox class="mdBottomCard mdBottomCardRed mdBlockedCard" alignItems="Center">

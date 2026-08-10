@@ -1,959 +1,2114 @@
 /* ==========================================================================
    ANÁLISIS DE OT PREVENTIVAS EJECUTADAS
-   CSS COMPLETO Y COMPATIBLE CON EL VIEW XML ENTREGADO
+   RESPONSIVO / SIN SCROLL EN ESCRITORIO
    ========================================================================== */
 
-.otpePage {
-    --otpe-bg: #f7f9fc;
-    --otpe-card: #ffffff;
-    --otpe-text: #14213d;
-    --otpe-muted: #64748b;
-    --otpe-border: #e3eaf3;
-    --otpe-blue: #1677ff;
-    --otpe-green: #16a34a;
-    --otpe-red: #ef4444;
-    --otpe-purple: #7c3aed;
-    --otpe-shadow:
-        0 0.3rem 0.9rem
-        rgba(15, 23, 42, 0.06);
-
-    background: var(--otpe-bg) !important;
-}
-
-.otpePage.sapMPage,
-.otpePage .sapMPageBgStandard,
-.otpePage .sapMPageScroll,
-.otpePage .sapMPageEnableScrolling,
-.otpePage .otpeScroll {
-    background: var(--otpe-bg) !important;
-}
 
 /* ==========================================================================
-   CONTENEDOR
+   VARIABLES
    ========================================================================== */
 
-.otpePage .otpeContainer {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0.7rem 0.75rem 1rem !important;
-    box-sizing: border-box !important;
-    gap: 0.6rem !important;
-    background: var(--otpe-bg) !important;
+.otpEjPage {
+    --otpEj-bg: #f6f8fc;
+    --otpEj-card: #ffffff;
+    --otpEj-navy: #172554;
+    --otpEj-text: #334155;
+    --otpEj-muted: #718096;
+    --otpEj-border: #dce4ef;
+
+    --otpEj-blue: #1677ff;
+    --otpEj-green: #18a957;
+    --otpEj-red: #ff445d;
+    --otpEj-purple: #8247f5;
+
+    background: var(--otpEj-bg) !important;
 }
 
-.otpePage .otpeHeader,
-.otpePage .otpeFilters,
-.otpePage .otpeKpiGrid,
-.otpePage .otpeToolbar,
-.otpePage .otpeTableCard {
+
+/* ==========================================================================
+   PÁGINA
+   ========================================================================== */
+
+.otpEjView,
+.otpEjPage,
+.otpEjPage.sapMPage,
+.otpEjPage .sapMPage,
+.otpEjPage .sapMPageBgStandard,
+.otpEjPage .sapMPageCont,
+.otpEjPage .sapMPageEnableScrolling,
+.otpEjPage .sapMPageScroll {
     width: 100% !important;
-    max-width: none !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+
     margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    background: var(--otpEj-bg) !important;
 }
+
+.otpEjPage,
+.otpEjPage * {
+    box-sizing: border-box !important;
+}
+
+
+/* ==========================================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================================== */
+
+.otpEjPage .otpEjPageContainer {
+    display: grid !important;
+
+    grid-template-rows:
+        auto
+        clamp(48px, 6.5vh, 56px)
+        clamp(70px, 9.5vh, 82px)
+        clamp(31px, 4.4vh, 38px)
+        minmax(0, 1fr);
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: clamp(5px, 0.68vh, 8px) !important;
+
+    /*
+     * Esta separación evita que el dashboard
+     * comience pegado al menú lateral.
+     */
+    padding:
+        clamp(7px, 0.8vh, 10px)
+        clamp(10px, 0.8vw, 15px)
+        clamp(7px, 0.7vh, 10px)
+        clamp(20px, 1.55vw, 28px) !important;
+
+    margin: 0 !important;
+
+    overflow: hidden !important;
+
+    background: var(--otpEj-bg) !important;
+}
+
+
+/* ==========================================================================
+   WRAPPERS SAPUI5
+   ========================================================================== */
+
+.otpEjPage .otpEjPageContainer > .sapMFlexItem,
+.otpEjPage .otpEjFilters > .sapMFlexItem,
+.otpEjPage .otpEjKpiGrid > .sapMFlexItem,
+.otpEjPage .otpEjToolbar > .sapMFlexItem,
+.otpEjPage .otpEjTableCard > .sapMFlexItem,
+.otpEjPage .otpEjTableViewport > .sapMFlexItem,
+.otpEjPage .otpEjRespHeader > .sapMFlexItem,
+.otpEjPage .otpEjRespRow > .sapMFlexItem,
+.otpEjPage .otpEjSubHeader > .sapMFlexItem,
+.otpEjPage .otpEjSubRow > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    max-width: 100% !important;
+}
+
 
 /* ==========================================================================
    HEADER
    ========================================================================== */
 
-.otpePage .otpeHeader {
-    min-height: 2.9rem !important;
+.otpEjPage .otpEjHeader {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-.otpePage .otpeTitleRow {
-    gap: 0.28rem !important;
+.otpEjPage .otpEjTitleRow {
+    width: 100% !important;
+
+    gap: clamp(3px, 0.3vw, 6px) !important;
 }
 
-.otpePage .otpeTitle,
-.otpePage .otpeTitleGreen {
-    font-size: 1.3rem !important;
-    line-height: 1.45rem !important;
+.otpEjPage .otpEjTitle.sapMTitle,
+.otpEjPage .otpEjTitleGreen.sapMTitle {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size:
+        clamp(
+            1.08rem,
+            calc(0.72vw + 0.47vh),
+            1.38rem
+        ) !important;
+
+    line-height: 1.06 !important;
     font-weight: 900 !important;
-    letter-spacing: -0.015rem !important;
+
+    letter-spacing: -0.025em !important;
 }
 
-.otpePage .otpeTitle {
-    color: var(--otpe-text) !important;
+.otpEjPage .otpEjTitle.sapMTitle {
+    color: var(--otpEj-navy) !important;
 }
 
-.otpePage .otpeTitleGreen {
-    color: #188f43 !important;
+.otpEjPage .otpEjTitleGreen.sapMTitle {
+    color: #168a40 !important;
 }
 
-.otpePage .otpeBreadcrumb {
-    gap: 0.35rem !important;
-    margin-top: 0.14rem !important;
+
+/* Breadcrumb */
+
+.otpEjPage .otpEjBreadcrumb {
+    width: 100% !important;
+
+    min-height: 13px !important;
+
+    margin-top: clamp(2px, 0.3vh, 4px) !important;
+
+    gap: clamp(4px, 0.35vw, 6px) !important;
 }
 
-.otpePage .otpeBreadLink,
-.otpePage .otpeBreadText {
-    font-size: 0.58rem !important;
-    line-height: 0.7rem !important;
+.otpEjPage .otpEjBreadLink.sapMLnk,
+.otpEjPage .otpEjBreadText.sapMText {
+    color: #0a6ff5 !important;
+
+    font-size:
+        clamp(
+            0.44rem,
+            calc(0.18vw + 0.15vh),
+            0.54rem
+        ) !important;
+
     font-weight: 800 !important;
+    line-height: 1.1 !important;
+
+    text-decoration: none !important;
 }
 
-.otpePage .otpeBreadLink {
-    color: #0b63f6 !important;
-}
-
-.otpePage .otpeBreadText {
-    color: #2563eb !important;
-}
-
-.otpePage .otpeBreadIcon {
+.otpEjPage .otpEjBreadIcon {
     color: #94a3b8 !important;
-    font-size: 0.48rem !important;
+
+    font-size: 0.46rem !important;
 }
 
-.otpePage .otpeDateNote {
-    margin-top: 0.25rem !important;
-    color: #334155 !important;
-    font-size: 0.55rem !important;
-    line-height: 0.68rem !important;
-    font-weight: 800 !important;
-    white-space: nowrap !important;
-}
 
 /* ==========================================================================
    FILTROS
+   ESTILO VISTA JEFATURA
    ========================================================================== */
 
-.otpePage .otpeFilters {
+.otpEjPage .otpEjFilters {
     display: grid !important;
 
     grid-template-columns:
-        minmax(8rem, 1fr)
-        minmax(9rem, 1.18fr)
-        minmax(9rem, 1.18fr)
-        minmax(7rem, 0.9fr)
-        minmax(7.5rem, 0.96fr)
-        minmax(8rem, 1.02fr)
-        7.35rem !important;
+        minmax(0, 1.02fr)
+        minmax(0, 1.18fr)
+        minmax(0, 1.18fr)
+        minmax(0, 0.92fr)
+        minmax(0, 1fr)
+        minmax(0, 1.06fr)
+        minmax(108px, 0.62fr);
 
-    column-gap: 0.55rem !important;
-    row-gap: 0.55rem !important;
-    justify-content: stretch !important;
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: clamp(5px, 0.58vw, 10px) !important;
+
     align-items: stretch !important;
-
-    padding: 0 !important;
-    box-sizing: border-box !important;
 }
 
-.otpePage .otpeFilters > .sapMFlexItem {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    margin: 0 !important;
-}
 
-.otpePage .otpeFilterItem,
-.otpePage .otpeFilterPeriod,
-.otpePage .otpeFilterDate,
-.otpePage .otpeFilterNormal {
+/* Cada filtro es su propia card */
+
+.otpEjPage .otpEjFilterCard {
+    display: flex !important;
+    flex-direction: column !important;
+
     width: 100% !important;
+    height: 100% !important;
+
     min-width: 0 !important;
-    max-width: none !important;
-    height: 3.35rem !important;
+    min-height: 0 !important;
+
+    padding:
+        clamp(5px, 0.65vh, 8px)
+        clamp(7px, 0.62vw, 11px) !important;
 
     margin: 0 !important;
-    padding: 0.38rem 0.58rem 0.28rem !important;
-    box-sizing: border-box !important;
+
     justify-content: center !important;
-    overflow: visible !important;
 
-    border: 1px solid #dce5f0 !important;
-    border-radius: 0.55rem !important;
+    overflow: hidden !important;
+
     background: #ffffff !important;
 
+    border: 1px solid #dbe3ef !important;
+    border-radius: 9px !important;
+
     box-shadow:
-        0 0.18rem 0.55rem
+        0 2px 7px
         rgba(15, 23, 42, 0.05) !important;
 }
 
-.otpePage .otpeFilterLabel {
-    width: 100% !important;
-    margin: 0 0 0.08rem !important;
 
-    color: #334155 !important;
-    font-size: 0.54rem !important;
-    line-height: 0.64rem !important;
-    font-weight: 900 !important;
+/* Label */
+
+.otpEjPage .otpEjFilterLabel.sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+
+    min-height: 10px !important;
+
+    margin: 0 0 2px !important;
+    padding: 0 !important;
+
+    color: #718096 !important;
+
+    font-size:
+        clamp(
+            0.43rem,
+            calc(0.18vw + 0.14vh),
+            0.51rem
+        ) !important;
+
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+
     white-space: nowrap !important;
 }
 
-.otpePage .otpeFilterItem .sapMSlt,
-.otpePage .otpeFilterItem .sapMInputBase {
+
+/* ==========================================================================
+   SELECT
+   ========================================================================== */
+
+.otpEjPage .otpEjSelect.sapMSlt {
+    --sapContent_IconColor: #0a6ff5;
+
+    position: relative !important;
+
     width: 100% !important;
-    min-width: 0 !important;
-    height: 1.75rem !important;
-    min-height: 1.75rem !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
     margin: 0 !important;
-}
-
-.otpePage .otpeFilterItem .sapMSlt,
-.otpePage
-.otpeFilterItem
-.sapMInputBaseContentWrapper {
-    width: 100% !important;
-    height: 1.75rem !important;
-    min-height: 1.75rem !important;
-
     padding: 0 !important;
-    overflow: visible !important;
-    border: 0 !important;
+
     background: transparent !important;
+    background-color: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
     box-shadow: none !important;
 }
 
-.otpePage .otpeFilterItem .sapMSltLabel,
-.otpePage .otpeFilterItem .sapMInputBaseInner {
+
+/* Texto select */
+
+.otpEjPage
+.otpEjSelect.sapMSlt
+.sapMSltLabel {
     width: 100% !important;
-    height: 1.75rem !important;
-    min-height: 1.75rem !important;
-    line-height: 1.75rem !important;
 
-    padding: 0 1.45rem 0 0 !important;
-    box-sizing: border-box !important;
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
 
-    color: #1f2937 !important;
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    padding:
+        0
+        clamp(23px, 1.75vw, 28px)
+        0
+        0 !important;
+
+    color: var(--otpEj-navy) !important;
+
     background: transparent !important;
-    font-size: 0.65rem !important;
-    font-weight: 800 !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-
-.otpePage .otpeFilterItem .sapMSltArrow {
-    width: 1.45rem !important;
-    height: 1.75rem !important;
-    line-height: 1.75rem !important;
-    color: #0f172a !important;
-    font-size: 0.7rem !important;
-}
-
-.otpePage
-.otpeFilterItem
-.sapMInputBaseIconContainer {
-    width: 1.55rem !important;
-    height: 1.75rem !important;
-}
-
-.otpePage .otpeFilterItem .sapMInputBaseIcon,
-.otpePage
-.otpeFilterItem
-.sapMInputBaseIconContainer
-.sapUiIcon {
-    width: 1.55rem !important;
-    height: 1.75rem !important;
-    line-height: 1.75rem !important;
-    color: var(--otpe-blue) !important;
-    font-size: 0.72rem !important;
-}
-
-.otpePage .otpeApplyBtn {
-    width: 7.35rem !important;
-    min-width: 7.35rem !important;
-    max-width: 7.35rem !important;
-    height: 2.85rem !important;
-
-    align-self: center !important;
-    justify-self: end !important;
-    margin: 0 !important;
-
-    border-radius: 0.5rem !important;
-
-    box-shadow:
-        0 0.28rem 0.62rem
-        rgba(22, 119, 255, 0.22) !important;
-}
-
-.otpePage .otpeApplyBtn .sapMBtnInner {
-    width: 100% !important;
-    height: 2.85rem !important;
-    min-height: 2.85rem !important;
-
-    padding: 0 0.5rem !important;
-    border: 0 !important;
-    border-radius: 0.5rem !important;
-
-    background:
-        linear-gradient(
-            180deg,
-            #1787ff 0%,
-            #066ce6 100%
+    font-size:
+        clamp(
+            0.50rem,
+            calc(0.22vw + 0.18vh),
+            0.61rem
         ) !important;
-}
 
-.otpePage .otpeApplyBtn .sapMBtnContent,
-.otpePage .otpeApplyBtn .sapMBtnIcon {
-    color: #ffffff !important;
-    font-size: 0.6rem !important;
-    line-height: 2.75rem !important;
     font-weight: 900 !important;
+
+    line-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
+
 
 /* ==========================================================================
-   KPI
+   FLECHA AZUL
    ========================================================================== */
 
-.otpePage .otpeKpiGrid {
-    display: grid !important;
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr)) !important;
-    gap: 0.62rem !important;
-    align-items: stretch !important;
+.otpEjPage
+.otpEjFilters
+.otpEjFilterCard
+.otpEjSelect.sapMSlt
+.sapMSltArrow {
+    width:
+        clamp(22px, 1.8vw, 27px) !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    padding: 0 !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
+
+    font-size: 0.70rem !important;
+
+    line-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    -webkit-text-fill-color: #0a6ff5 !important;
 }
 
-.otpePage .otpeKpiGrid > .sapMFlexItem {
+
+/* El glifo real de la flecha */
+
+.otpEjPage
+.otpEjFilters
+.otpEjFilterCard
+.otpEjSelect.sapMSlt
+.sapMSltArrow::before {
+    color: #0a6ff5 !important;
+
+    -webkit-text-fill-color: #0a6ff5 !important;
+}
+
+
+/* Refuerzo Horizon / Quartz */
+
+.otpEjPage
+.otpEjFilters
+.otpEjSelect.sapMSlt
+.sapMSltArrow.sapUiIcon,
+.otpEjPage
+.otpEjFilters
+.otpEjSelect.sapMSlt
+.sapUiIcon.sapMSltArrow {
+    color: #0a6ff5 !important;
+
+    -webkit-text-fill-color: #0a6ff5 !important;
+}
+
+
+/* Hover / focus */
+
+.otpEjPage
+.otpEjSelect.sapMSlt:hover
+.sapMSltArrow,
+.otpEjPage
+.otpEjSelect.sapMSlt.sapMSltPressed
+.sapMSltArrow,
+.otpEjPage
+.otpEjSelect.sapMSlt.sapMSltFocused
+.sapMSltArrow {
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    -webkit-text-fill-color: #0a6ff5 !important;
+}
+
+
+/* ==========================================================================
+   DATEPICKER
+   ========================================================================== */
+
+.otpEjPage .otpEjDatePicker.sapMInputBase {
     width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
     margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.otpePage .otpeKpiCard {
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseContentWrapper {
     width: 100% !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+
+/* Fecha */
+
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseInner {
+    width: 100% !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    padding:
+        0
+        clamp(23px, 1.8vw, 28px)
+        0
+        0 !important;
+
+    color: var(--otpEj-navy) !important;
+
+    background: transparent !important;
+
+    font-size:
+        clamp(
+            0.50rem,
+            calc(0.22vw + 0.18vh),
+            0.61rem
+        ) !important;
+
+    font-weight: 900 !important;
+
+    line-height:
+        clamp(21px, 2.8vh, 25px) !important;
+}
+
+
+/* Calendario */
+
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseIconContainer {
+    width:
+        clamp(22px, 1.8vw, 27px) !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseIcon,
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseIconContainer
+.sapUiIcon {
+    width:
+        clamp(22px, 1.8vw, 27px) !important;
+
+    height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    padding: 0 !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    font-size: 0.72rem !important;
+
+    line-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    -webkit-text-fill-color: #0a6ff5 !important;
+}
+
+
+/* ==========================================================================
+   BOTÓN APLICAR FILTROS
+   ========================================================================== */
+
+/*
+ * El wrapper exterior NO tiene fondo blanco.
+ */
+
+.otpEjPage
+.otpEjFilters
+> .sapMFlexItem:last-child {
+    display: flex !important;
+
+    width: 100% !important;
+
     min-width: 0 !important;
-    height: 5.65rem !important;
 
-    padding: 0.65rem 0.9rem !important;
-    box-sizing: border-box !important;
-    gap: 0.72rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
     align-items: center !important;
-    overflow: hidden !important;
 
-    border: 1px solid var(--otpe-border) !important;
-    border-left-width: 0.27rem !important;
-    border-radius: 0.62rem !important;
-    background: var(--otpe-card) !important;
-    box-shadow: var(--otpe-shadow) !important;
+    background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.otpePage .otpeKpiBlue {
-    border-left-color: var(--otpe-blue) !important;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(22, 119, 255, 0.12),
-            #ffffff 52%
-        ) !important;
-}
+.otpEjPage .otpEjApplyBtn {
+    display: flex !important;
 
-.otpePage .otpeKpiGreen {
-    border-left-color: var(--otpe-green) !important;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(22, 163, 74, 0.12),
-            #ffffff 52%
-        ) !important;
-}
+    width: 100% !important;
+    height: 100% !important;
 
-.otpePage .otpeKpiRed {
-    border-left-color: var(--otpe-red) !important;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(239, 68, 68, 0.12),
-            #ffffff 52%
-        ) !important;
-}
+    min-width: 0 !important;
 
-.otpePage .otpeKpiPurple {
-    border-left-color: var(--otpe-purple) !important;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(124, 58, 237, 0.12),
-            #ffffff 52%
-        ) !important;
-}
-
-.otpePage .otpeKpiIconCircle {
-    width: 2.8rem !important;
-    min-width: 2.8rem !important;
-    height: 2.8rem !important;
-    border-radius: 50% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
     align-items: center !important;
     justify-content: center !important;
-    flex-shrink: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.otpePage .otpeKpiIcon {
-    font-size: 1.3rem !important;
+
+/* Botón azul */
+
+.otpEjPage
+.otpEjApplyBtn
+.sapMBtnInner {
+    width: 100% !important;
+
+    height:
+        clamp(34px, 4.7vh, 40px) !important;
+
+    min-height:
+        clamp(34px, 4.7vh, 40px) !important;
+
+    padding:
+        0
+        clamp(8px, 0.7vw, 12px) !important;
+
+    background: #0a6ff5 !important;
+    background-color: #0a6ff5 !important;
+
+    border: 1px solid #0a6ff5 !important;
+    border-radius: 8px !important;
+
+    box-shadow:
+        0 4px 10px
+        rgba(10, 111, 245, 0.23) !important;
+
+    text-shadow: none !important;
 }
 
-.otpePage .otpeKpiNumber {
-    font-size: 1.7rem !important;
-    line-height: 1.75rem !important;
+.otpEjPage
+.otpEjApplyBtn
+.sapMBtnContent,
+.otpEjPage
+.otpEjApplyBtn
+.sapMBtnIcon {
+    color: #ffffff !important;
+
+    font-size:
+        clamp(
+            0.49rem,
+            calc(0.21vw + 0.17vh),
+            0.59rem
+        ) !important;
+
     font-weight: 900 !important;
+
+    line-height:
+        clamp(34px, 4.7vh, 40px) !important;
+
+    text-shadow: none !important;
 }
 
-.otpePage .otpeKpiLabel {
-    color: var(--otpe-text) !important;
-    font-size: 0.72rem !important;
-    line-height: 0.84rem !important;
+.otpEjPage
+.otpEjApplyBtn
+.sapMBtnIcon {
+    font-size: 0.68rem !important;
+}
+
+
+/* ==========================================================================
+   KPI - ESTILO VISTA JEFATURA
+   ========================================================================== */
+
+.otpEjPage .otpEjKpiGrid {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap:
+        clamp(6px, 0.72vw, 12px) !important;
+
+    align-items: stretch !important;
+}
+
+.otpEjPage .otpEjKpiCard {
+    --otpEj-accent: #1677ff;
+    --otpEj-rgb: 22, 119, 255;
+
+    position: relative !important;
+
+    display: flex !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        clamp(7px, 0.9vh, 11px)
+        clamp(9px, 0.85vw, 14px) !important;
+
+    gap:
+        clamp(7px, 0.65vw, 11px) !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(var(--otpEj-rgb), 0.17) 0%,
+            rgba(var(--otpEj-rgb), 0.07) 38%,
+            rgba(var(--otpEj-rgb), 0.025) 67%,
+            #ffffff 91%
+        ) !important;
+
+    border:
+        1px solid
+        rgba(var(--otpEj-rgb), 0.23) !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 3px 10px
+        rgba(15, 23, 42, 0.05) !important;
+}
+
+
+/* Franja izquierda */
+
+.otpEjPage .otpEjKpiCard::before {
+    position: absolute !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 3px !important;
+
+    background:
+        var(--otpEj-accent) !important;
+
+    border-radius:
+        9px 0 0 9px !important;
+
+    content: "" !important;
+}
+
+
+/* Colores */
+
+.otpEjPage .otpEjKpiBlue {
+    --otpEj-accent: #2e8cff;
+    --otpEj-rgb: 46, 140, 255;
+}
+
+.otpEjPage .otpEjKpiGreen {
+    --otpEj-accent: #18a957;
+    --otpEj-rgb: 24, 169, 87;
+}
+
+.otpEjPage .otpEjKpiRed {
+    --otpEj-accent: #ff445d;
+    --otpEj-rgb: 255, 68, 93;
+}
+
+.otpEjPage .otpEjKpiPurple {
+    --otpEj-accent: #8247f5;
+    --otpEj-rgb: 130, 71, 245;
+}
+
+
+/* Círculo */
+
+.otpEjPage .otpEjKpiIconCircle {
+    display: flex !important;
+
+    flex:
+        0 0
+        clamp(36px, 5.5vh, 45px) !important;
+
+    width:
+        clamp(36px, 5.5vh, 45px) !important;
+
+    height:
+        clamp(36px, 5.5vh, 45px) !important;
+
+    min-width:
+        clamp(36px, 5.5vh, 45px) !important;
+
+    min-height:
+        clamp(36px, 5.5vh, 45px) !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    color:
+        var(--otpEj-accent) !important;
+
+    background:
+        rgba(var(--otpEj-rgb), 0.13) !important;
+
+    border-radius: 50% !important;
+}
+
+.otpEjPage .otpEjKpiIcon {
+    color:
+        var(--otpEj-accent) !important;
+
+    font-size:
+        clamp(
+            0.95rem,
+            1.08vw,
+            1.24rem
+        ) !important;
+}
+
+
+/* Contenido KPI */
+
+.otpEjPage .otpEjKpiContent {
+    min-width: 0 !important;
+
+    justify-content: center !important;
+}
+
+.otpEjPage .otpEjKpiNumber.sapMText {
+    display: block !important;
+
+    max-width: 100% !important;
+
+    overflow: hidden !important;
+
+    color:
+        var(--otpEj-accent) !important;
+
+    font-size:
+        clamp(
+            1.05rem,
+            calc(0.74vw + 0.62vh),
+            1.42rem
+        ) !important;
+
     font-weight: 900 !important;
+    line-height: 1 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.otpePage .otpeKpiSubLabel,
-.otpePage .otpeKpiSubLabelRed {
-    font-size: 0.57rem !important;
-    line-height: 0.68rem !important;
+.otpEjPage .otpEjKpiLabel.sapMText {
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    color:
+        var(--otpEj-navy) !important;
+
+    font-size:
+        clamp(
+            0.49rem,
+            calc(0.22vw + 0.17vh),
+            0.60rem
+        ) !important;
+
+    font-weight: 900 !important;
+    line-height: 1.05 !important;
+
+    white-space: nowrap !important;
+}
+
+.otpEjPage .otpEjKpiSubLabel.sapMText {
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    color: #69778d !important;
+
+    font-size:
+        clamp(
+            0.41rem,
+            calc(0.17vw + 0.14vh),
+            0.50rem
+        ) !important;
+
     font-weight: 700 !important;
+    line-height: 1.05 !important;
+
+    white-space: nowrap !important;
 }
 
-.otpePage .otpeKpiSubLabel {
-    color: var(--otpe-muted) !important;
-}
+.otpEjPage
+.otpEjKpiSubRed.sapMText {
+    color: #ef334e !important;
 
-.otpePage .otpeKpiSubLabelRed {
-    color: #dc2626 !important;
     font-weight: 800 !important;
 }
 
-.otpePage .otpeBlueText {
-    color: var(--otpe-blue) !important;
-}
-
-.otpePage .otpeGreenText {
-    color: var(--otpe-green) !important;
-}
-
-.otpePage .otpeRedText {
-    color: var(--otpe-red) !important;
-}
-
-.otpePage .otpePurpleText {
-    color: var(--otpe-purple) !important;
-}
-
-.otpePage .otpeBlueBg {
-    background: #eff6ff !important;
-}
-
-.otpePage .otpeGreenBg {
-    background: #f0fdf4 !important;
-}
-
-.otpePage .otpeRedBg {
-    background: #fef2f2 !important;
-}
-
-.otpePage .otpePurpleBg {
-    background: #faf5ff !important;
-}
 
 /* ==========================================================================
    TOOLBAR
    ========================================================================== */
 
-.otpePage .otpeToolbar {
-    min-height: 2.2rem !important;
-
+.otpEjPage .otpEjToolbar {
     display: grid !important;
-    grid-template-columns:
-        minmax(0, 1fr) auto !important;
 
-    gap: 0.75rem !important;
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap:
+        clamp(7px, 0.7vw, 12px) !important;
+
     align-items: center !important;
 }
 
-.otpePage .otpeToolbar > .sapMFlexItem {
+.otpEjPage .otpEjTabs {
     min-width: 0 !important;
+
+    gap:
+        clamp(4px, 0.42vw, 7px) !important;
 }
 
-.otpePage .otpeTabs {
-    gap: 0.4rem !important;
-}
+.otpEjPage .otpEjTabsLabel.sapMText {
+    margin-right: 3px !important;
 
-.otpePage .otpeTabsLabel {
-    margin-right: 0.15rem !important;
+    color:
+        var(--otpEj-navy) !important;
 
-    color: var(--otpe-text) !important;
-    font-size: 0.6rem !important;
-    line-height: 0.72rem !important;
+    font-size: 0.50rem !important;
+
     font-weight: 900 !important;
 }
 
-.otpePage .otpeTabBtn {
-    height: 1.9rem !important;
+
+/* Tabs */
+
+.otpEjPage .otpEjTabBtn {
+    height:
+        clamp(27px, 3.7vh, 31px) !important;
+
+    min-height:
+        clamp(27px, 3.7vh, 31px) !important;
+
+    padding: 0 !important;
 }
 
-.otpePage .otpeTabBtn .sapMBtnInner {
-    height: 1.9rem !important;
-    min-height: 1.9rem !important;
-    padding: 0 0.58rem !important;
-    border-radius: 0.42rem !important;
+.otpEjPage
+.otpEjTabBtn
+.sapMBtnInner {
+    height:
+        clamp(27px, 3.7vh, 31px) !important;
+
+    min-height:
+        clamp(27px, 3.7vh, 31px) !important;
+
+    padding:
+        0
+        clamp(7px, 0.65vw, 11px) !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid #cbd5e1 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow: none !important;
+
+    text-shadow: none !important;
 }
 
-.otpePage .otpeTabBtn .sapMBtnContent {
-    font-size: 0.57rem !important;
-    line-height: 1.8rem !important;
+.otpEjPage
+.otpEjTabBtn
+.sapMBtnContent {
+    color: #0a6ff5 !important;
+
+    font-size:
+        clamp(
+            0.45rem,
+            calc(0.19vw + 0.15vh),
+            0.54rem
+        ) !important;
+
     font-weight: 900 !important;
+
+    line-height:
+        calc(
+            clamp(27px, 3.7vh, 31px) - 2px
+        ) !important;
 }
 
-.otpePage .otpeTabActive .sapMBtnInner {
-    border-color: #0b63f6 !important;
-    background: #0b63f6 !important;
+.otpEjPage
+.otpEjTabActive
+.sapMBtnInner {
+    background: #0a6ff5 !important;
+
+    border-color: #0a6ff5 !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(10, 111, 245, 0.22) !important;
 }
 
-.otpePage .otpeTabActive .sapMBtnContent {
+.otpEjPage
+.otpEjTabActive
+.sapMBtnContent {
     color: #ffffff !important;
 }
 
-.otpePage .otpeInfoBox {
-    min-width: 18.5rem !important;
-    min-height: 2rem !important;
 
-    padding: 0.35rem 0.7rem !important;
-    box-sizing: border-box !important;
-    gap: 0.42rem !important;
+/* Información derecha */
 
-    border: 1px solid #e5e7eb !important;
-    border-radius: 0.5rem !important;
+.otpEjPage .otpEjInfoBox {
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    height:
+        clamp(27px, 3.7vh, 31px) !important;
+
+    padding:
+        0
+        clamp(8px, 0.7vw, 12px) !important;
+
+    gap:
+        clamp(5px, 0.45vw, 8px) !important;
+
     background: #f8fafc !important;
+
+    border:
+        1px solid #e2e8f0 !important;
+
+    border-radius: 8px !important;
 }
 
-.otpePage .otpeInfoIcon {
-    color: #64748b !important;
-    font-size: 0.72rem !important;
+.otpEjPage .otpEjInfoIcon {
+    color: #718096 !important;
+
+    font-size: 0.59rem !important;
 }
 
-.otpePage .otpeInfoText {
-    color: #64748b !important;
-    font-size: 0.55rem !important;
-    line-height: 0.66rem !important;
+.otpEjPage .otpEjInfoText.sapMText {
+    color: #718096 !important;
+
+    font-size:
+        clamp(
+            0.41rem,
+            calc(0.17vw + 0.14vh),
+            0.49rem
+        ) !important;
+
     font-weight: 700 !important;
+
+    white-space: nowrap !important;
 }
+
 
 /* ==========================================================================
-   TARJETA / BUSCADOR
+   CARD PRINCIPAL
    ========================================================================== */
 
-.otpePage .otpeTableCard {
-    padding: 0.75rem 0.8rem 0.65rem !important;
-    box-sizing: border-box !important;
+.otpEjPage .otpEjTableCard {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        clamp(7px, 0.75vh, 10px)
+        clamp(8px, 0.72vw, 12px)
+        clamp(5px, 0.55vh, 7px) !important;
+
     overflow: hidden !important;
 
-    border: 1px solid #e5e7eb !important;
-    border-radius: 0.68rem !important;
     background: #ffffff !important;
-    box-shadow: var(--otpe-shadow) !important;
+
+    border:
+        1px solid #e2e8f0 !important;
+
+    border-radius: 10px !important;
+
+    box-shadow:
+        0 4px 12px
+        rgba(15, 23, 42, 0.05) !important;
 }
 
-.otpePage .otpeTableTop {
-    min-height: 2rem !important;
-    margin-bottom: 0.48rem !important;
+.otpEjPage
+.otpEjTableCard
+> .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    max-width: 100% !important;
 }
 
-.otpePage .otpeTableTitle {
-    color: var(--otpe-text) !important;
-    font-size: 0.78rem !important;
-    line-height: 0.92rem !important;
+
+/* ==========================================================================
+   CABECERA CARD
+   ========================================================================== */
+
+.otpEjPage .otpEjTableTop {
+    display: grid !important;
+
+    flex:
+        0 0
+        clamp(31px, 4.1vh, 36px) !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(220px, 320px);
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap:
+        clamp(8px, 0.8vw, 13px) !important;
+
+    align-items: center !important;
+}
+
+.otpEjPage
+.otpEjTableTitle.sapMTitle {
+    margin: 0 !important;
+
+    color:
+        var(--otpEj-navy) !important;
+
+    font-size:
+        clamp(
+            0.60rem,
+            calc(0.25vw + 0.20vh),
+            0.72rem
+        ) !important;
+
     font-weight: 900 !important;
+    line-height: 1.08 !important;
 }
 
-.otpePage .otpeSearch {
-    width: 15rem !important;
-    min-width: 15rem !important;
-    max-width: 15rem !important;
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.otpEjPage .otpEjSearch {
+    justify-self: end !important;
+
+    width: 100% !important;
+
+    max-width: 320px !important;
+
+    height:
+        clamp(29px, 3.8vh, 33px) !important;
 }
 
-.otpePage .otpeSearch .sapMSFF {
-    height: 1.8rem !important;
-    min-height: 1.8rem !important;
-    border-radius: 0.45rem !important;
+.otpEjPage
+.otpEjSearch
+.sapMSFF {
+    height:
+        clamp(29px, 3.8vh, 33px) !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid #d7e0eb !important;
+
+    border-radius: 9px !important;
+
+    box-shadow: none !important;
 }
 
-.otpePage .otpeSearch .sapMSFI {
-    height: 1.72rem !important;
-    padding-left: 0.55rem !important;
-    font-size: 0.63rem !important;
+.otpEjPage
+.otpEjSearch
+.sapMSFI {
+    height:
+        calc(
+            clamp(29px, 3.8vh, 33px) - 2px
+        ) !important;
+
+    padding-left:
+        clamp(10px, 0.9vw, 14px) !important;
+
+    color: #43516a !important;
+
+    background: transparent !important;
+
+    font-size:
+        clamp(
+            0.48rem,
+            calc(0.21vw + 0.16vh),
+            0.57rem
+        ) !important;
+
+    line-height:
+        calc(
+            clamp(29px, 3.8vh, 33px) - 2px
+        ) !important;
 }
 
-.otpePage .otpeSearch .sapMSFB {
-    width: 1.8rem !important;
-    height: 1.8rem !important;
-    line-height: 1.8rem !important;
-    font-size: 0.78rem !important;
+.otpEjPage
+.otpEjSearch
+.sapMSFI::placeholder {
+    color: #94a3b8 !important;
+
+    opacity: 1 !important;
 }
+
+.otpEjPage
+.otpEjSearch
+.sapMSFB {
+    width:
+        clamp(29px, 3.8vh, 33px) !important;
+
+    height:
+        calc(
+            clamp(29px, 3.8vh, 33px) - 2px
+        ) !important;
+
+    color:
+        var(--otpEj-navy) !important;
+
+    background: transparent !important;
+
+    line-height:
+        calc(
+            clamp(29px, 3.8vh, 33px) - 2px
+        ) !important;
+}
+
 
 /* ==========================================================================
    TABLA PRINCIPAL
-   OCHO COLUMNAS:
-   icono | responsable | OT | % | clientes | elevadores | tiempo | flecha
    ========================================================================== */
 
-.otpePage .otpeRespHeader,
-.otpePage .otpeRespRow {
+.otpEjPage .otpEjTableViewport {
+    --otpEj-columns:
+        minmax(42px, 0.42fr)
+        minmax(130px, 1.42fr)
+        minmax(82px, 0.82fr)
+        minmax(110px, 1.08fr)
+        minmax(92px, 0.90fr)
+        minmax(100px, 0.96fr)
+        minmax(125px, 1.18fr)
+        minmax(24px, 0.24fr);
+
+    display: flex !important;
+    flex: 1 1 0 !important;
+    flex-direction: column !important;
+
     width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* ==========================================================================
+   HEADER Y FILAS
+   ========================================================================== */
+
+.otpEjPage .otpEjRespHeader,
+.otpEjPage .otpEjRespRow {
     display: grid !important;
 
     grid-template-columns:
-        2.6rem
-        minmax(10rem, 1.5fr)
-        minmax(6rem, 0.78fr)
-        minmax(7.8rem, 1fr)
-        minmax(6.8rem, 0.85fr)
-        minmax(7.5rem, 0.92fr)
-        minmax(9.5rem, 1.1fr)
-        2rem !important;
+        var(--otpEj-columns) !important;
 
-    column-gap: 0.35rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
     align-items: center !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
 }
 
-.otpePage .otpeRespHeader > .sapMFlexItem,
-.otpePage .otpeRespRow > .sapMFlexItem {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    margin: 0 !important;
+
+/* Header */
+
+.otpEjPage .otpEjRespHeader {
+    flex:
+        0 0
+        clamp(27px, 3.7vh, 32px) !important;
+
+    min-height:
+        clamp(27px, 3.7vh, 32px) !important;
+
+    background: #f1f3f6 !important;
+
+    border:
+        1px solid #e5eaf1 !important;
+
+    border-radius:
+        7px 7px 0 0 !important;
 }
 
-.otpePage .otpeRespHeader {
-    min-height: 2.2rem !important;
-    padding: 0 0.35rem !important;
 
-    border: 1px solid #edf2f7 !important;
-    background: #f8fafc !important;
-}
+/* Filas */
 
-.otpePage .otpeRespHeader .sapMText {
-    display: block !important;
-    width: 100% !important;
+.otpEjPage .otpEjRespRow {
+    min-height:
+        clamp(25px, 3.3vh, 30px) !important;
 
-    color: var(--otpe-text) !important;
-    font-size: 0.62rem !important;
-    line-height: 0.74rem !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    white-space: normal !important;
-}
-
-.otpePage .otpeRespRow {
-    min-height: 2.15rem !important;
-    padding: 0 0.35rem !important;
-
-    border-right: 1px solid #edf2f7 !important;
-    border-bottom: 1px solid #edf2f7 !important;
-    border-left: 1px solid #edf2f7 !important;
     background: #ffffff !important;
+
+    border-right:
+        1px solid #e5eaf1 !important;
+
+    border-bottom:
+        1px solid #e5eaf1 !important;
+
+    border-left:
+        1px solid #e5eaf1 !important;
 }
 
-.otpePage .otpeRespRow .sapMText {
-    display: block !important;
+
+/* Celdas */
+
+.otpEjPage
+.otpEjRespHeader
+> .sapMFlexItem,
+.otpEjPage
+.otpEjRespRow
+> .sapMFlexItem {
+    display: flex !important;
+
     width: 100% !important;
 
-    color: var(--otpe-text) !important;
-    font-size: 0.59rem !important;
-    line-height: 0.72rem !important;
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    padding:
+        0
+        clamp(3px, 0.35vw, 6px) !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+
+/* Header text */
+
+.otpEjPage
+.otpEjRespHeader
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #56657b !important;
+
+    font-size:
+        clamp(
+            0.39rem,
+            calc(0.16vw + 0.13vh),
+            0.47rem
+        ) !important;
+
+    font-weight: 900 !important;
+    line-height: 1.08 !important;
+
+    text-align: center !important;
+}
+
+
+/* Texto filas */
+
+.otpEjPage
+.otpEjRespRow
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color:
+        var(--otpEj-navy) !important;
+
+    font-size:
+        clamp(
+            0.41rem,
+            calc(0.18vw + 0.14vh),
+            0.51rem
+        ) !important;
+
     font-weight: 800 !important;
+    line-height: 1.08 !important;
+
     text-align: center !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
     text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.otpePage .otpeRespIconCell {
+
+/* ==========================================================================
+   RESPONSABLE
+   ========================================================================== */
+
+.otpEjPage .otpEjRespLeadCell {
+    display: flex !important;
+
     width: 100% !important;
-    min-width: 0 !important;
-    gap: 0.12rem !important;
-}
-
-.otpePage .otpeExpandBtn {
-    width: 1.2rem !important;
-    min-width: 1.2rem !important;
-    height: 1.2rem !important;
-}
-
-.otpePage .otpeExpandBtn .sapMBtnInner {
-    width: 1.2rem !important;
-    min-width: 1.2rem !important;
-    height: 1.2rem !important;
-    min-height: 1.2rem !important;
+    height: 100% !important;
 
     padding: 0 !important;
-    border: 0 !important;
+
+    gap: 2px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.otpEjPage .otpEjExpandBtn,
+.otpEjPage .otpEjRowArrowBtn {
+    width: 18px !important;
+
+    min-width: 18px !important;
+
+    height: 22px !important;
+
+    padding: 0 !important;
+}
+
+.otpEjPage
+.otpEjExpandBtn
+.sapMBtnInner,
+.otpEjPage
+.otpEjRowArrowBtn
+.sapMBtnInner {
+    width: 18px !important;
+
+    min-width: 18px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+
+    padding: 0 !important;
+
     background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.otpePage .otpeExpandBtn .sapMBtnIcon {
-    width: 1.2rem !important;
-    line-height: 1.12rem !important;
-    color: #0b63f6 !important;
-    font-size: 0.62rem !important;
+.otpEjPage
+.otpEjExpandBtn
+.sapMBtnIcon {
+    width: 18px !important;
+
+    margin: 0 !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: 0.54rem !important;
+
+    line-height: 22px !important;
 }
 
-.otpePage .otpeRespIcon {
+.otpEjPage
+.otpEjRowArrowBtn
+.sapMBtnIcon {
+    width: 18px !important;
+
+    margin: 0 !important;
+
     color: #64748b !important;
-    font-size: 0.7rem !important;
+
+    font-size: 0.52rem !important;
+
+    line-height: 22px !important;
 }
 
-.otpePage .otpeRespName {
-    color: var(--otpe-text) !important;
-    font-size: 0.59rem !important;
+.otpEjPage .otpEjRespIcon {
+    color: #718096 !important;
+
+    font-size: 0.66rem !important;
+}
+
+.otpEjPage
+.otpEjRespName.sapMText {
+    color:
+        var(--otpEj-navy) !important;
+
     font-weight: 900 !important;
+
     text-align: left !important;
 }
 
-.otpePage .otpeStrong {
-    color: var(--otpe-text) !important;
+
+/* Colores datos */
+
+.otpEjPage
+.otpEjGreenStrong.sapMText {
+    color: #16a34a !important;
+
     font-weight: 900 !important;
 }
 
-.otpePage .otpeGreenStrong {
-    color: var(--otpe-green) !important;
+.otpEjPage
+.otpEjBlueStrong.sapMText {
+    color: #1677ff !important;
+
     font-weight: 900 !important;
 }
 
-.otpePage .otpeBlueStrong {
-    color: var(--otpe-blue) !important;
+.otpEjPage
+.otpEjStrong.sapMText {
+    color:
+        var(--otpEj-navy) !important;
+
     font-weight: 900 !important;
 }
 
-.otpePage .otpeRowEndIcon {
-    color: #64748b !important;
-    font-size: 0.62rem !important;
-    justify-self: center !important;
-}
-
-.otpePage .otpeTotalRow {
-    background: #f8fafc !important;
-}
 
 /* ==========================================================================
-   SUBTABLA
+   LISTADO RESPONSABLES
    ========================================================================== */
 
-.otpePage .otpeSubTable {
-    width: calc(100% - 4rem) !important;
-    margin: 0 2rem !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
+.otpEjPage .otpEjRespList {
+    width: 100% !important;
 
-    border-right: 1px solid #edf2f7 !important;
-    border-bottom: 1px solid #edf2f7 !important;
-    border-left: 1px solid #edf2f7 !important;
-    border-radius: 0 0 0.45rem 0.45rem !important;
-    background: #ffffff !important;
+    min-width: 0 !important;
 }
 
-.otpePage .otpeSubHeader,
-.otpePage .otpeSubRow {
+.otpEjPage
+.otpEjRespList
+> .sapMFlexItem,
+.otpEjPage
+.otpEjRespBlock {
     width: 100% !important;
+
+    min-width: 0 !important;
+}
+
+
+/* ==========================================================================
+   SUBTABLA EXPANDIDA
+   MISMO ANCHO DE LA TABLA PRINCIPAL
+   ========================================================================== */
+
+.otpEjPage .otpEjSubTable {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border-right:
+        1px solid #e5eaf1 !important;
+
+    border-bottom:
+        1px solid #e5eaf1 !important;
+
+    border-left:
+        1px solid #e5eaf1 !important;
+
+    border-radius: 0 !important;
+}
+
+.otpEjPage
+.otpEjSubTable
+> .sapMFlexItem,
+.otpEjPage
+.otpEjSubRows
+> .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+}
+
+
+/* ==========================================================================
+   SUBTABLA COLUMNAS
+   ========================================================================== */
+
+.otpEjPage .otpEjSubHeader,
+.otpEjPage .otpEjSubRow {
     display: grid !important;
 
     grid-template-columns:
-        minmax(5.2rem, 0.75fr)
-        minmax(9rem, 1.15fr)
-        minmax(5.5rem, 0.75fr)
-        minmax(7.5rem, 0.95fr)
-        minmax(7rem, 0.9fr) !important;
+        minmax(90px, 0.80fr)
+        minmax(130px, 1.25fr)
+        minmax(95px, 0.85fr)
+        minmax(110px, 1fr)
+        minmax(100px, 0.90fr);
 
-    column-gap: 0.3rem !important;
-    align-items: center !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-}
-
-.otpePage .otpeSubHeader > .sapMFlexItem,
-.otpePage .otpeSubRow > .sapMFlexItem {
     width: 100% !important;
+
     min-width: 0 !important;
-    max-width: none !important;
-    margin: 0 !important;
+
+    align-items: center !important;
 }
 
-.otpePage .otpeSubHeader {
-    min-height: 1.7rem !important;
-    padding: 0 0.35rem !important;
 
-    border-bottom: 1px solid #edf2f7 !important;
-    background: #f8fafc !important;
-}
+/* Header */
 
-.otpePage .otpeSubHeader .sapMText {
-    display: block !important;
-    width: 100% !important;
+.otpEjPage .otpEjSubHeader {
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
 
-    color: #475569 !important;
-    font-size: 0.56rem !important;
-    line-height: 0.68rem !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
-.otpePage .otpeSubRow {
-    min-height: 1.65rem !important;
-    padding: 0 0.35rem !important;
+    background: #f7f9fc !important;
 
     border-bottom:
-        1px solid #f1f5f9 !important;
+        1px solid #e8edf4 !important;
 }
 
-.otpePage .otpeSubRow:last-child {
+
+/* Filas */
+
+.otpEjPage .otpEjSubRow {
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    background: #ffffff !important;
+
+    border-bottom:
+        1px solid #eef2f6 !important;
+}
+
+.otpEjPage
+.otpEjSubRow:last-child {
     border-bottom: 0 !important;
 }
 
-.otpePage .otpeSubRow .sapMText {
-    display: block !important;
+
+/* Celdas */
+
+.otpEjPage
+.otpEjSubHeader
+> .sapMFlexItem,
+.otpEjPage
+.otpEjSubRow
+> .sapMFlexItem {
+    display: flex !important;
+
     width: 100% !important;
 
-    color: var(--otpe-text) !important;
-    font-size: 0.56rem !important;
-    line-height: 0.68rem !important;
-    font-weight: 800 !important;
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    padding:
+        0
+        clamp(3px, 0.4vw, 7px) !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+
+/* Header detalle */
+
+.otpEjPage
+.otpEjSubHeader
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #64748b !important;
+
+    font-size:
+        clamp(
+            0.37rem,
+            calc(0.16vw + 0.11vh),
+            0.44rem
+        ) !important;
+
+    font-weight: 900 !important;
+
+    text-align: center !important;
+}
+
+
+/* Filas detalle */
+
+.otpEjPage
+.otpEjSubRow
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color:
+        var(--otpEj-navy) !important;
+
+    font-size:
+        clamp(
+            0.38rem,
+            calc(0.16vw + 0.12vh),
+            0.46rem
+        ) !important;
+
+    font-weight: 700 !important;
+
     text-align: center !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
     text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
+
+.otpEjPage
+.otpEjOrderText.sapMText {
+    color: #0a6ff5 !important;
+
+    font-weight: 900 !important;
+}
+
+
+/* ==========================================================================
+   TOTAL
+   ========================================================================== */
+
+.otpEjPage .otpEjTotalRow {
+    background: #f4f6f9 !important;
+
+    border-radius:
+        0 0 7px 7px !important;
+}
+
 
 /* ==========================================================================
    FOOTER
    ========================================================================== */
 
-.otpePage .otpeTableFooter {
-    min-height: 1.6rem !important;
-    gap: 0.35rem !important;
-    margin-top: 0.42rem !important;
+.otpEjPage .otpEjTableFooter {
+    display: flex !important;
+
+    flex:
+        0 0
+        clamp(21px, 2.8vh, 25px) !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    min-height:
+        clamp(21px, 2.8vh, 25px) !important;
+
+    margin-top:
+        clamp(3px, 0.4vh, 5px) !important;
+
+    gap:
+        clamp(4px, 0.4vw, 7px) !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
 }
 
-.otpePage .otpeTableFooter .sapMText {
-    color: #334155 !important;
-    font-size: 0.58rem !important;
-    line-height: 0.7rem !important;
-    font-weight: 800 !important;
-}
+.otpEjPage .otpEjFooterIcon {
+    flex: 0 0 auto !important;
 
-.otpePage .otpeFooterIcon {
     color: #64748b !important;
-    font-size: 0.68rem !important;
+
+    font-size: 0.58rem !important;
 }
+
+.otpEjPage
+.otpEjFooterText.sapMText {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #64748b !important;
+
+    font-size:
+        clamp(
+            0.38rem,
+            calc(0.16vw + 0.12vh),
+            0.45rem
+        ) !important;
+
+    font-weight: 700 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
 
 /* ==========================================================================
-   RESPONSIVE
+   1366 x 768 / ESCRITORIO
    ========================================================================== */
 
-@media screen and (max-width: 68rem) {
-    .otpePage .otpeFilters {
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr)) !important;
+@media screen and (min-width: 1181px) {
+
+    .otpEjPage .otpEjPageContainer {
+        /*
+         * Dashboard separado del SideNavigation.
+         */
+        padding-left:
+            clamp(22px, 1.7vw, 30px) !important;
+
+        padding-right:
+            clamp(10px, 0.8vw, 15px) !important;
     }
 
-    .otpePage .otpeApplyBtn {
+    .otpEjPage .otpEjTableCard,
+    .otpEjPage .otpEjTableViewport,
+    .otpEjPage .otpEjRespHeader,
+    .otpEjPage .otpEjRespRow,
+    .otpEjPage .otpEjSubTable,
+    .otpEjPage .otpEjSubHeader,
+    .otpEjPage .otpEjSubRow {
         width: 100% !important;
-        min-width: 0 !important;
-        max-width: none !important;
-        justify-self: stretch !important;
-    }
 
-    .otpePage .otpeKpiGrid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    .otpePage .otpeToolbar {
-        grid-template-columns: 1fr !important;
-    }
-
-    .otpePage .otpeInfoBox {
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    .otpePage .otpeTableCard {
-        overflow-x: auto !important;
-    }
-
-    .otpePage .otpeRespHeader,
-    .otpePage .otpeRespRow,
-    .otpePage .otpeSubHeader,
-    .otpePage .otpeSubRow {
-        min-width: 58rem !important;
-    }
-}
-
-@media screen and (max-width: 48rem) {
-    .otpePage .otpeContainer {
-        padding: 0.65rem !important;
-    }
-
-    .otpePage .otpeDateNote {
-        display: none !important;
-    }
-
-    .otpePage .otpeFilters {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    .otpePage .otpeKpiGrid {
-        grid-template-columns: 1fr !important;
-    }
-}
-
-@media screen and (max-width: 32rem) {
-    .otpePage .otpeFilters {
-        grid-template-columns: 1fr !important;
-    }
-
-    .otpePage .otpeSearch {
-        width: 100% !important;
-        min-width: 0 !important;
         max-width: 100% !important;
     }
 }
+
+
 /* ==========================================================================
-   AJUSTE FINAL DE COLORES - PREVENTIVAS EJECUTADAS
-   Pegar AL FINAL del CSS actual.
+   POCA ALTURA
    ========================================================================== */
 
-/* OT ejecutadas en verde */
-.otpePage .otpeRespRow .sapMText.otpeGreenStrong,
-.otpePage .otpeRespRow .otpeGreenStrong.sapMText,
-.otpePage .otpeRespRow > .sapMFlexItem:nth-child(3) .sapMText {
-    color: #16a34a !important;
-    font-weight: 900 !important;
+@media screen and (min-width: 1101px) and (max-height: 680px) {
+
+    .otpEjPage .otpEjPageContainer {
+        grid-template-rows:
+            auto
+            45px
+            63px
+            29px
+            minmax(0, 1fr);
+
+        gap: 4px !important;
+
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+
+    .otpEjPage .otpEjFilterCard {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .otpEjPage .otpEjKpiIconCircle {
+        flex-basis: 33px !important;
+
+        width: 33px !important;
+        height: 33px !important;
+
+        min-width: 33px !important;
+        min-height: 33px !important;
+    }
+
+    .otpEjPage .otpEjKpiIcon {
+        font-size: 0.86rem !important;
+    }
+
+    .otpEjPage .otpEjRespHeader {
+        flex-basis: 24px !important;
+
+        min-height: 24px !important;
+    }
+
+    .otpEjPage .otpEjRespRow {
+        min-height: 22px !important;
+    }
+
+    .otpEjPage .otpEjSubHeader,
+    .otpEjPage .otpEjSubRow {
+        min-height: 18px !important;
+    }
+
+    .otpEjPage .otpEjTableFooter {
+        flex-basis: 18px !important;
+
+        min-height: 18px !important;
+    }
 }
 
-/* Porcentaje del total ejecutado en azul */
-.otpePage .otpeRespRow .sapMText.otpeBlueStrong,
-.otpePage .otpeRespRow .otpeBlueStrong.sapMText,
-.otpePage .otpeRespRow > .sapMFlexItem:nth-child(4) .sapMText {
-    color: #1677ff !important;
-    font-weight: 900 !important;
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media screen and (max-width: 1100px) {
+
+    .otpEjPage .sapMPageCont,
+    .otpEjPage .sapMPageEnableScrolling,
+    .otpEjPage .sapMPageScroll {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        overflow-y: auto !important;
+    }
+
+    .otpEjPage .otpEjPageContainer {
+        grid-template-rows: auto !important;
+
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        gap: 8px !important;
+
+        padding:
+            10px
+            12px
+            16px
+            20px !important;
+
+        overflow: visible !important;
+    }
+
+    .otpEjPage .otpEjFilters {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            ) !important;
+
+        min-height: 108px !important;
+    }
+
+    .otpEjPage .otpEjApplyBtn {
+        min-height: 48px !important;
+    }
+
+    .otpEjPage .otpEjKpiGrid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        min-height: 150px !important;
+    }
+
+    .otpEjPage .otpEjKpiCard {
+        min-height: 70px !important;
+    }
+
+    .otpEjPage .otpEjToolbar {
+        grid-template-columns:
+            1fr !important;
+
+        min-height: 65px !important;
+    }
+
+    .otpEjPage .otpEjInfoBox {
+        width: 100% !important;
+    }
+
+    .otpEjPage .otpEjTableCard {
+        min-height: 420px !important;
+    }
+
+    .otpEjPage .otpEjTableViewport {
+        overflow-x: auto !important;
+
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .otpEjPage .otpEjRespHeader,
+    .otpEjPage .otpEjRespRow,
+    .otpEjPage .otpEjSubTable {
+        width: 900px !important;
+
+        min-width: 900px !important;
+    }
 }
 
-/* Tiempo promedio de ejecución en verde */
-.otpePage .otpeRespRow > .sapMFlexItem:nth-child(7) .sapMText {
-    color: #16a34a !important;
-    font-weight: 900 !important;
+
+/* ==========================================================================
+   TABLET VERTICAL
+   ========================================================================== */
+
+@media screen and (orientation: portrait),
+       screen and (max-width: 840px) {
+
+    .otpEjPage .otpEjFilters {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        min-height: 210px !important;
+    }
+
+    .otpEjPage .otpEjKpiGrid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+    }
+
+    .otpEjPage .otpEjToolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    .otpEjPage .otpEjTabs {
+        flex-wrap: wrap !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        grid-template-columns:
+            1fr !important;
+
+        min-height: 66px !important;
+    }
+
+    .otpEjPage .otpEjSearch {
+        justify-self: stretch !important;
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+    }
 }
 
-/* Refuerzo específico para la fila Total */
-.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(3) .sapMText {
-    color: #16a34a !important;
-    font-weight: 900 !important;
-}
 
-.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(4) .sapMText {
-    color: #1677ff !important;
-    font-weight: 900 !important;
-}
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
 
-.otpePage .otpeTotalRow > .sapMFlexItem:nth-child(7) .sapMText {
-    color: #16a34a !important;
-    font-weight: 900 !important;
+@media screen and (max-width: 480px) {
+
+    .otpEjPage .otpEjPageContainer {
+        padding:
+            8px
+            8px
+            18px
+            12px !important;
+    }
+
+    .otpEjPage .otpEjFilters,
+    .otpEjPage .otpEjKpiGrid {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .otpEjPage .otpEjFilters {
+        min-height: 420px !important;
+    }
+
+    .otpEjPage .otpEjKpiGrid {
+        min-height: 290px !important;
+    }
+
+    .otpEjPage .otpEjInfoText.sapMText {
+        white-space: normal !important;
+    }
 }
