@@ -1,450 +1,754 @@
 <mvc:View
-    controllerName="mantenimiento.controller.AnalisisReparacionesPlaneadasNoEjecutadas"
+    controllerName="mantenimiento.controller.AnalisisOTPreventivasNoEjecutadas"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
-    displayBlock="true">
+    displayBlock="true"
+    height="100%"
+    class="otneView">
 
-    <Page showHeader="false" class="otpePage sapUiSizeCompact">
-        <ScrollContainer
-            width="100%"
-            height="100%"
-            vertical="true"
-            horizontal="false"
-            focusable="true"
-            class="otpeScroll">
+    <Page
+        id="analisisOTPreventivasNoEjecutadasPage"
+        showHeader="false"
+        enableScrolling="true"
+        class="otnePage sapUiSizeCompact">
 
-            <VBox class="otpeContainer">
+        <content>
 
-                <!-- ENCABEZADO -->
-                <HBox class="otpeHeader" alignItems="Start" justifyContent="SpaceBetween">
-                    <HBox class="otpeHeaderLeft" alignItems="Start">
-                        <VBox class="otpeHeaderText">
-                            <HBox alignItems="Center" wrap="Wrap" class="otpeTitleRow">
-                                <Title
-                                    text="Análisis de Reparaciones Planeadas"
-                                    level="H1"
-                                    class="otpeTitle" />
-                                <Title
-                                    text="No Ejecutadas"
-                                    level="H1"
-                                    class="otpeTitleRed" />
-                            </HBox>
+            <VBox
+                width="100%"
+                height="100%"
+                fitContainer="true"
+                class="otneContainer">
 
-                            <HBox class="otpeBreadcrumb" alignItems="Center" wrap="Wrap">
-                                <Link text="Órdenes" class="otpeBreadLink" />
-                                <core:Icon
-                                    src="sap-icon://navigation-right-arrow"
-                                    class="otpeBreadIcon" />
-                                <Link
-                                    text="Composición de órdenes del periodo"
-                                    class="otpeBreadLink" />
-                                <core:Icon
-                                    src="sap-icon://navigation-right-arrow"
-                                    class="otpeBreadIcon" />
-                                <Text text="Reparaciones" class="otpeBreadText" />
-                            </HBox>
-                        </VBox>
-                    </HBox>
+                <!-- =====================================================
+                     HEADER
+                     ===================================================== -->
 
-                    <HBox class="otpeHeaderDate" alignItems="Center" justifyContent="End">
-                        <Text text="{otpe>/filters/fechaHasta}" class="otpeHeaderDateText" />
-                    </HBox>
+                <HBox
+                    width="100%"
+                    alignItems="Start"
+                    justifyContent="SpaceBetween"
+                    class="otneHeader">
+
+                    <VBox
+                        width="100%"
+                        class="otneHeaderLeft">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            wrap="Wrap"
+                            class="otneTitleRow">
+
+                            <Title
+                                text="{otne>/header/titlePrefix}"
+                                level="H1"
+                                class="otneTitle" />
+
+                            <Title
+                                text="{otne>/header/titleStatus}"
+                                level="H1"
+                                class="otneTitleRed" />
+
+                        </HBox>
+
+                        <HBox
+                            alignItems="Center"
+                            wrap="Wrap"
+                            class="otneBreadcrumb">
+
+                            <Link
+                                text="Órdenes"
+                                class="otneBreadLink" />
+
+                            <core:Icon
+                                src="sap-icon://navigation-right-arrow"
+                                class="otneBreadIcon" />
+
+                            <Link
+                                text="Composición de órdenes del periodo"
+                                class="otneBreadLink" />
+
+                            <core:Icon
+                                src="sap-icon://navigation-right-arrow"
+                                class="otneBreadIcon" />
+
+                            <Text
+                                text="Preventivas"
+                                class="otneBreadText" />
+
+                        </HBox>
+
+                    </VBox>
+
+                    <Text
+                        text="{otne>/header/dateNote}"
+                        class="otneDateNote" />
+
                 </HBox>
 
-                <!-- FILTROS -->
+
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
+
                 <HBox
-                    class="otpeFilters"
-                    wrap="NoWrap"
+                    width="100%"
                     alignItems="Stretch"
-                    justifyContent="Start">
+                    class="otneFilters">
 
-                    <VBox class="otpeFilterItem otpeFilterPeriod">
-                        <Label text="Periodo" class="otpeFilterLabel" />
+                    <!-- Periodo -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Periodo"
+                            class="otneFilterLabel" />
+
                         <Select
                             width="100%"
-                            selectedKey="{otpe>/filters/periodo}"
-                            items="{otpe>/catalogos/periodos}">
-                            <core:Item key="{otpe>key}" text="{otpe>text}" />
+                            selectedKey="{otne>/filters/periodo}"
+                            items="{otne>/catalogos/periodos}"
+                            class="otneFilterControl">
+
+                            <core:Item
+                                key="{otne>key}"
+                                text="{otne>text}" />
+
                         </Select>
+
                     </VBox>
 
-                    <VBox class="otpeFilterItem otpeFilterDate">
-                        <Label text="Fecha desde" class="otpeFilterLabel" />
+
+                    <!-- Fecha desde -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Fecha desde"
+                            class="otneFilterLabel" />
+
                         <DatePicker
                             width="100%"
-                            value="{otpe>/filters/fechaDesde}"
+                            value="{otne>/filters/fechaDesde}"
+                            valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
-                            valueFormat="dd/MM/yyyy" />
+                            class="otneFilterControl" />
+
                     </VBox>
 
-                    <VBox class="otpeFilterItem otpeFilterDate">
-                        <Label text="Fecha hasta" class="otpeFilterLabel" />
+
+                    <!-- Fecha hasta -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Fecha hasta"
+                            class="otneFilterLabel" />
+
                         <DatePicker
                             width="100%"
-                            value="{otpe>/filters/fechaHasta}"
+                            value="{otne>/filters/fechaHasta}"
+                            valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
-                            valueFormat="dd/MM/yyyy" />
+                            class="otneFilterControl" />
+
                     </VBox>
 
-                    <VBox class="otpeFilterItem otpeFilterNormal">
-                        <Label text="Zona" class="otpeFilterLabel" />
+
+                    <!-- Zona -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Zona"
+                            class="otneFilterLabel" />
+
                         <Select
                             width="100%"
-                            selectedKey="{otpe>/filters/zona}"
-                            items="{otpe>/catalogos/zonas}">
-                            <core:Item key="{otpe>key}" text="{otpe>text}" />
+                            selectedKey="{otne>/filters/zona}"
+                            items="{otne>/catalogos/zonas}"
+                            class="otneFilterControl">
+
+                            <core:Item
+                                key="{otne>key}"
+                                text="{otne>text}" />
+
                         </Select>
+
                     </VBox>
 
-                    <VBox class="otpeFilterItem otpeFilterNormal">
-                        <Label text="Cliente" class="otpeFilterLabel" />
+
+                    <!-- Cliente -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Cliente"
+                            class="otneFilterLabel" />
+
                         <Select
                             width="100%"
-                            selectedKey="{otpe>/filters/cliente}"
-                            items="{otpe>/catalogos/clientes}">
-                            <core:Item key="{otpe>key}" text="{otpe>text}" />
+                            selectedKey="{otne>/filters/cliente}"
+                            items="{otne>/catalogos/clientes}"
+                            class="otneFilterControl">
+
+                            <core:Item
+                                key="{otne>key}"
+                                text="{otne>text}" />
+
                         </Select>
+
                     </VBox>
 
-                    <VBox class="otpeFilterItem otpeFilterResponsible">
-                        <Label text="Responsable" class="otpeFilterLabel" />
+
+                    <!-- Responsable -->
+
+                    <VBox class="otneFilterItem">
+
+                        <Label
+                            text="Responsable"
+                            class="otneFilterLabel" />
+
                         <Select
                             width="100%"
-                            selectedKey="{otpe>/filters/responsable}"
-                            items="{otpe>/catalogos/responsables}">
-                            <core:Item key="{otpe>key}" text="{otpe>text}" />
+                            selectedKey="{otne>/filters/responsable}"
+                            items="{otne>/catalogos/responsables}"
+                            class="otneFilterControl">
+
+                            <core:Item
+                                key="{otne>key}"
+                                text="{otne>text}" />
+
                         </Select>
+
                     </VBox>
+
+
+                    <!-- Aplicar filtros -->
 
                     <Button
                         text="Aplicar filtros"
                         icon="sap-icon://filter"
                         type="Emphasized"
-                        class="otpeApplyBtn"
-                        press=".onApplyFilters" />
+                        press=".onApplyFilters"
+                        class="otneApplyBtn" />
+
                 </HBox>
 
-                <!-- INDICADORES -->
-                <HBox class="otpeKpiGrid" wrap="NoWrap" alignItems="Stretch">
-                    <HBox class="otpeKpiCard otpeKpiBlue" alignItems="Center">
-                        <VBox
-                            class="otpeKpiIconCircle otpeBlueBg"
+
+                <!-- =====================================================
+                     KPIS - ESTILO VISTA JEFATURA
+                     ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="otneKpiGrid">
+
+                    <!-- PLANEADAS -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="otneKpiCard otneKpiBlue">
+
+                        <HBox
                             alignItems="Center"
-                            justifyContent="Center">
+                            justifyContent="Center"
+                            class="otneKpiIconCircle">
+
                             <core:Icon
                                 src="sap-icon://appointment-2"
-                                class="otpeKpiIcon otpeBlueText" />
-                        </VBox>
-                        <VBox class="otpeKpiContent" justifyContent="Center">
+                                class="otneKpiIcon" />
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="otneKpiContent">
+
                             <Text
-                                text="{otpe>/kpis/planeadas}"
-                                class="otpeKpiNumber otpeBlueText" />
-                            <Text text="Planeadas" class="otpeKpiLabel" />
-                            <Text text="Órdenes del periodo" class="otpeKpiSubLabel" />
+                                text="{otne>/kpis/planeadas}"
+                                class="otneKpiNumber" />
+
+                            <Text
+                                text="{otne>/kpis/planeadasLabel}"
+                                class="otneKpiLabel" />
+
+                            <Text
+                                text="{otne>/kpis/planeadasDescription}"
+                                class="otneKpiSubLabel" />
+
                         </VBox>
+
                     </HBox>
 
-                    <HBox class="otpeKpiCard otpeKpiGreen" alignItems="Center">
-                        <VBox
-                            class="otpeKpiIconCircle otpeGreenBg"
+
+                    <!-- EJECUTADAS -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="otneKpiCard otneKpiGreen">
+
+                        <HBox
                             alignItems="Center"
-                            justifyContent="Center">
+                            justifyContent="Center"
+                            class="otneKpiIconCircle">
+
                             <core:Icon
                                 src="sap-icon://sys-enter-2"
-                                class="otpeKpiIcon otpeGreenText" />
-                        </VBox>
-                        <VBox class="otpeKpiContent" justifyContent="Center">
+                                class="otneKpiIcon" />
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="otneKpiContent">
+
                             <Text
-                                text="{otpe>/kpis/ejecutadas}"
-                                class="otpeKpiNumber otpeGreenText" />
-                            <Text text="Ejecutadas" class="otpeKpiLabel" />
-                            <Text text="92.6% del total" class="otpeKpiSubLabel" />
+                                text="{otne>/kpis/ejecutadas}"
+                                class="otneKpiNumber" />
+
+                            <Text
+                                text="{otne>/kpis/ejecutadasLabel}"
+                                class="otneKpiLabel" />
+
+                            <Text
+                                text="{otne>/kpis/ejecutadasDescription}"
+                                class="otneKpiSubLabel" />
+
                         </VBox>
+
                     </HBox>
 
-                    <HBox class="otpeKpiCard otpeKpiRed" alignItems="Center">
-                        <VBox
-                            class="otpeKpiIconCircle otpeRedBg"
+
+                    <!-- NO EJECUTADAS -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="otneKpiCard otneKpiRed">
+
+                        <HBox
                             alignItems="Center"
-                            justifyContent="Center">
+                            justifyContent="Center"
+                            class="otneKpiIconCircle">
+
                             <core:Icon
                                 src="sap-icon://decline"
-                                class="otpeKpiIcon otpeRedText" />
-                        </VBox>
-                        <VBox class="otpeKpiContent" justifyContent="Center">
+                                class="otneKpiIcon" />
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="otneKpiContent">
+
                             <Text
-                                text="{otpe>/kpis/noEjecutadas}"
-                                class="otpeKpiNumber otpeRedText" />
-                            <Text text="No ejecutadas" class="otpeKpiLabel" />
+                                text="{otne>/kpis/noEjecutadas}"
+                                class="otneKpiNumber" />
+
                             <Text
-                                text="7.4% del total planeado"
-                                class="otpeKpiSubLabelRed" />
+                                text="{otne>/kpis/noEjecutadasLabel}"
+                                class="otneKpiLabel" />
+
+                            <Text
+                                text="{otne>/kpis/noEjecutadasDescription}"
+                                class="otneKpiSubLabel otneKpiSubLabelRed" />
+
                         </VBox>
+
                     </HBox>
 
-                    <HBox class="otpeKpiCard otpeKpiPurple" alignItems="Center">
-                        <VBox
-                            class="otpeKpiIconCircle otpePurpleBg"
+
+                    <!-- CUMPLIMIENTO -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="otneKpiCard otneKpiPurple">
+
+                        <HBox
                             alignItems="Center"
-                            justifyContent="Center">
+                            justifyContent="Center"
+                            class="otneKpiIconCircle">
+
                             <core:Icon
                                 src="sap-icon://target-group"
-                                class="otpeKpiIcon otpePurpleText" />
-                        </VBox>
-                        <VBox class="otpeKpiContent" justifyContent="Center">
+                                class="otneKpiIcon" />
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="otneKpiContent">
+
                             <Text
-                                text="{otpe>/kpis/cumplimiento}"
-                                class="otpeKpiNumber otpePurpleText" />
-                            <Text text="Cumplimiento" class="otpeKpiLabel" />
-                            <Text text="88 de 95 OT" class="otpeKpiSubLabel" />
+                                text="{otne>/kpis/cumplimiento}"
+                                class="otneKpiNumber" />
+
+                            <Text
+                                text="{otne>/kpis/cumplimientoLabel}"
+                                class="otneKpiLabel" />
+
+                            <Text
+                                text="{otne>/kpis/cumplimientoDescription}"
+                                class="otneKpiSubLabel" />
+
                         </VBox>
+
                     </HBox>
+
                 </HBox>
 
-                <!-- ESTADO DEL ANÁLISIS -->
+
+                <!-- =====================================================
+                     SELECTOR DE ANÁLISIS
+                     ===================================================== -->
+
                 <HBox
-                    class="otpeToolbar"
+                    width="100%"
                     alignItems="Center"
                     justifyContent="SpaceBetween"
-                    wrap="NoWrap">
-                    <HBox class="otpeTabs" alignItems="Center" wrap="NoWrap">
-                        <Text text="Ver análisis por:" class="otpeTabsLabel" />
+                    class="otneToolbar">
+
+                    <HBox
+                        alignItems="Center"
+                        wrap="Wrap"
+                        class="otneTabs">
+
+                        <Text
+                            text="Ver análisis por:"
+                            class="otneTabsLabel" />
+
                         <Button
-                            text="No ejecutadas (7)"
-                            type="Emphasized"
-                            class="otpeTabBtn otpeTabActive"
-                            press=".onSelectNoEjecutadas" />
+                            text="{otne>/analysisTabs/noEjecutadas}"
+                            type="{= ${otne>/ui/selectedAnalysis} === 'NO_EJECUTADAS' ? 'Emphasized' : 'Default'}"
+                            press=".onSelectNoEjecutadas"
+                            class="otneTabBtn" />
+
                         <Button
-                            text="Ejecutadas (88)"
-                            type="Default"
-                            class="otpeTabBtn"
-                            press=".onSelectEjecutadas" />
+                            text="{otne>/analysisTabs/ejecutadas}"
+                            type="{= ${otne>/ui/selectedAnalysis} === 'EJECUTADAS' ? 'Emphasized' : 'Default'}"
+                            press=".onSelectEjecutadas"
+                            class="otneTabBtn" />
+
                         <Button
-                            text="Todas (95)"
-                            type="Default"
-                            class="otpeTabBtn"
-                            press=".onSelectTodas" />
+                            text="{otne>/analysisTabs/todas}"
+                            type="{= ${otne>/ui/selectedAnalysis} === 'TODAS' ? 'Emphasized' : 'Default'}"
+                            press=".onSelectTodas"
+                            class="otneTabBtn" />
+
                     </HBox>
 
-                    <HBox class="otpeInfoBox" alignItems="Center">
-                        <core:Icon src="sap-icon://hint" class="otpeInfoIcon" />
+
+                    <HBox
+                        alignItems="Center"
+                        class="otneInfoBox">
+
+                        <core:Icon
+                            src="sap-icon://hint"
+                            class="otneInfoIcon" />
+
                         <Text
-                            text="Seleccione otro estado para analizar las OT ejecutadas."
-                            class="otpeInfoText" />
+                            text="{otne>/ui/analysisInfo}"
+                            class="otneInfoText" />
+
                     </HBox>
+
                 </HBox>
 
-                <!-- TABLA DE CAUSAS -->
-                <VBox class="otpeTableCard">
+
+                <!-- =====================================================
+                     CARD TABLA
+                     ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="otneTableCard">
+
+                    <!-- CABECERA -->
+
                     <HBox
-                        class="otpeTableTop"
+                        width="100%"
                         alignItems="Center"
-                        justifyContent="SpaceBetween">
+                        justifyContent="SpaceBetween"
+                        class="otneTableTop">
+
                         <Title
-                            text="Causas de incumplimiento de Reparaciones Planeadas"
+                            text="Causas de no ejecución de OT Preventivas"
                             level="H2"
-                            class="otpeTableTitle" />
+                            class="otneTableTitle" />
+
                         <SearchField
-                            width="220px"
+                            width="100%"
                             placeholder="Buscar causa..."
-                            class="otpeSearch"
-                            liveChange=".onSearchCausa" />
+                            liveChange=".onSearchCause"
+                            search=".onSearchCause"
+                            class="otneSearch" />
+
                     </HBox>
 
-                    <VBox class="otpeTableViewport">
-                        <HBox class="otpeCauseHeader">
+
+                    <!-- TABLA -->
+
+                    <VBox
+                        width="100%"
+                        class="otneTableViewport">
+
+                        <!-- HEADER -->
+
+                        <HBox
+                            width="100%"
+                            class="otneCauseHeader">
+
                             <Text text="" />
-                            <Text text="Causa de incumplimiento" />
-                            <Text text="Material principal asociado" />
-                            <Text text="OT no ejecutadas" />
-                            <Text text="% del total no ejecutadas" />
-                            <Text text="Equipos afectados" />
-                            <Text text="Clientes afectados" />
-                            <Text text="Días detenidas (promedio)" />
+
+                            <Text
+                                text="Causa de no ejecución"
+                                wrapping="true" />
+
+                            <Text
+                                text="OT no ejecutadas"
+                                wrapping="true" />
+
+                            <Text
+                                text="% del total no ejecutadas"
+                                wrapping="true" />
+
+                            <Text
+                                text="Clientes afectados"
+                                wrapping="true" />
+
+                            <Text
+                                text="Elevadores afectados"
+                                wrapping="true" />
+
+                            <Text
+                                text="Días detenidas (promedio)"
+                                wrapping="true" />
+
                             <Text text="" />
+
                         </HBox>
 
-                        <!-- CAUSA 1 -->
-                        <HBox class="otpeCauseRow otpeCauseExpanded">
-                            <HBox
-                                class="otpeCauseLead"
-                                alignItems="Center"
-                                justifyContent="Center">
-                                <Button
-                                    icon="{= ${otpe>/causas/0/expanded} ? 'sap-icon://slim-arrow-down' : 'sap-icon://slim-arrow-right'}"
-                                    type="Transparent"
-                                    class="otpeExpandBtn"
-                                    press=".onToggleCausa">
-                                    <customData>
-                                        <core:CustomData
-                                            key="path"
-                                            value="/causas/0/expanded" />
-                                    </customData>
-                                </Button>
-                                <core:Icon src="sap-icon://product" class="otpeCauseIcon" />
-                            </HBox>
-                            <Text text="{otpe>/causas/0/causa}" class="otpeCauseName" />
-                            <Text text="{otpe>/causas/0/material}" class="otpeStrong" />
-                            <Text
-                                text="{otpe>/causas/0/otNoEjecutadas}"
-                                class="otpeRedStrong" />
-                            <Text
-                                text="{otpe>/causas/0/porcentaje}"
-                                class="otpeBlueStrong" />
-                            <Text text="{otpe>/causas/0/equipos}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/0/clientes}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/0/dias}" class="otpeRedStrong" />
-                            <core:Icon
-                                src="sap-icon://slim-arrow-up"
-                                class="otpeRowEndIcon" />
-                        </HBox>
 
-                        <VBox visible="{otpe>/causas/0/expanded}" class="otpeSubTable">
-                            <HBox class="otpeSubHeader">
-                                <Text text="OT" />
-                                <Text text="Equipo" />
-                                <Text text="Cliente" />
-                                <Text text="Material faltante" />
-                                <Text text="Fecha programada" />
-                                <Text text="Días detenida desde hace" />
-                                <Text text="Responsable" />
-                            </HBox>
+                        <!-- LISTA -->
 
-                            <HBox class="otpeSubRow">
-                                <Text text="OT-2024-0432" />
-                                <Text text="EV0871" />
-                                <Text text="Torre Reforma" />
-                                <Text text="Sensor de puerta" />
-                                <Text text="02/05/2024" />
-                                <Text text="8 días" class="otpeRedStrong" />
-                                <Text text="Juan Pérez" />
-                            </HBox>
+                        <List
+                            items="{otne>/causes}"
+                            showSeparators="None"
+                            noDataText="No se encontraron causas"
+                            class="otneCauseList">
 
-                            <HBox class="otpeSubRow">
-                                <Text text="OT-2024-0411" />
-                                <Text text="EV1024" />
-                                <Text text="Plaza Satélite" />
-                                <Text text="Rodamiento guía" />
-                                <Text text="05/05/2024" />
-                                <Text text="6 días" class="otpeRedStrong" />
-                                <Text text="Juan Pérez" />
-                            </HBox>
+                            <CustomListItem
+                                class="otneCauseListItem">
 
-                            <HBox class="otpeSubRow">
-                                <Text text="OT-2024-0388" />
-                                <Text text="EV0636" />
-                                <Text text="Hospital Ángeles" />
-                                <Text text="Tarjeta electrónica" />
-                                <Text text="07/05/2024" />
-                                <Text text="5 días" class="otpeRedStrong" />
-                                <Text text="Carlos Herrera" />
-                            </HBox>
+                                <VBox width="100%">
 
-                            <HBox class="otpeSubRow">
-                                <Text text="OT-2024-0370" />
-                                <Text text="EV0582" />
-                                <Text text="Torre Mayor" />
-                                <Text text="Contactor principal" />
-                                <Text text="09/05/2024" />
-                                <Text text="3 días" class="otpeRedStrong" />
-                                <Text text="Pedro López" />
-                            </HBox>
-                        </VBox>
+                                    <!-- FILA PRINCIPAL -->
 
-                        <!-- CAUSA 2 -->
-                        <HBox class="otpeCauseRow">
-                            <HBox
-                                class="otpeCauseLead"
-                                alignItems="Center"
-                                justifyContent="Center">
-                                <Button
-                                    icon="{= ${otpe>/causas/1/expanded} ? 'sap-icon://slim-arrow-down' : 'sap-icon://slim-arrow-right'}"
-                                    type="Transparent"
-                                    class="otpeExpandBtn"
-                                    press=".onToggleCausa">
-                                    <customData>
-                                        <core:CustomData
-                                            key="path"
-                                            value="/causas/1/expanded" />
-                                    </customData>
-                                </Button>
-                                <core:Icon
-                                    src="sap-icon://shipping-status"
-                                    class="otpeCauseIcon" />
-                            </HBox>
-                            <Text text="{otpe>/causas/1/causa}" class="otpeCauseName" />
-                            <Text text="{otpe>/causas/1/material}" class="otpeStrong" />
-                            <Text
-                                text="{otpe>/causas/1/otNoEjecutadas}"
-                                class="otpeRedStrong" />
-                            <Text
-                                text="{otpe>/causas/1/porcentaje}"
-                                class="otpeBlueStrong" />
-                            <Text text="{otpe>/causas/1/equipos}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/1/clientes}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/1/dias}" class="otpeRedStrong" />
-                            <core:Icon
-                                src="sap-icon://slim-arrow-down"
-                                class="otpeRowEndIcon" />
-                        </HBox>
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        class="otneCauseRow">
 
-                        <!-- CAUSA 3 -->
-                        <HBox class="otpeCauseRow">
-                            <HBox
-                                class="otpeCauseLead"
-                                alignItems="Center"
-                                justifyContent="Center">
-                                <Button
-                                    icon="{= ${otpe>/causas/2/expanded} ? 'sap-icon://slim-arrow-down' : 'sap-icon://slim-arrow-right'}"
-                                    type="Transparent"
-                                    class="otpeExpandBtn"
-                                    press=".onToggleCausa">
-                                    <customData>
-                                        <core:CustomData
-                                            key="path"
-                                            value="/causas/2/expanded" />
-                                    </customData>
-                                </Button>
-                                <core:Icon src="sap-icon://calendar" class="otpeCauseIcon" />
-                            </HBox>
-                            <Text text="{otpe>/causas/2/causa}" class="otpeCauseName" />
-                            <Text text="{otpe>/causas/2/material}" class="otpeStrong" />
-                            <Text
-                                text="{otpe>/causas/2/otNoEjecutadas}"
-                                class="otpeRedStrong" />
-                            <Text
-                                text="{otpe>/causas/2/porcentaje}"
-                                class="otpeBlueStrong" />
-                            <Text text="{otpe>/causas/2/equipos}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/2/clientes}" class="otpeStrong" />
-                            <Text text="{otpe>/causas/2/dias}" class="otpeRedStrong" />
-                            <core:Icon
-                                src="sap-icon://slim-arrow-down"
-                                class="otpeRowEndIcon" />
-                        </HBox>
+                                        <HBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="otneCauseLead">
+
+                                            <Button
+                                                icon="{= ${otne>expanded} ? 'sap-icon://slim-arrow-down' : 'sap-icon://slim-arrow-right'}"
+                                                type="Transparent"
+                                                press=".onToggleCause"
+                                                class="otneExpandBtn" />
+
+                                            <core:Icon
+                                                src="{otne>icon}"
+                                                class="otneCauseIcon" />
+
+                                        </HBox>
+
+                                        <Text
+                                            text="{otne>name}"
+                                            tooltip="{otne>name}"
+                                            class="otneCauseName" />
+
+                                        <Text
+                                            text="{otne>ot}"
+                                            class="otneRedStrong" />
+
+                                        <Text
+                                            text="{otne>pct}"
+                                            class="otneBlueStrong" />
+
+                                        <Text
+                                            text="{otne>clientes}"
+                                            class="otneStrong" />
+
+                                        <Text
+                                            text="{otne>elevadores}"
+                                            class="otneStrong" />
+
+                                        <Text
+                                            text="{otne>dias}"
+                                            class="otneDaysText" />
+
+                                        <core:Icon
+                                            src="{= ${otne>expanded} ? 'sap-icon://slim-arrow-up' : 'sap-icon://slim-arrow-right'}"
+                                            class="otneRowEndIcon" />
+
+                                    </HBox>
+
+
+                                    <!-- DETALLE EXPANDIDO -->
+
+                                    <VBox
+                                        width="100%"
+                                        visible="{otne>expanded}"
+                                        class="otneSubTable">
+
+                                        <HBox
+                                            width="100%"
+                                            class="otneSubHeader">
+
+                                            <Text text="OT" />
+
+                                            <Text text="Cliente" />
+
+                                            <Text text="Elevador" />
+
+                                            <Text text="Responsable" />
+
+                                            <Text text="Fecha programada" />
+
+                                            <Text text="Días detenida desde hace" />
+
+                                        </HBox>
+
+
+                                        <VBox
+                                            width="100%"
+                                            items="{
+                                                path: 'otne>details',
+                                                templateShareable: false
+                                            }"
+                                            class="otneSubRows">
+
+                                            <items>
+
+                                                <HBox
+                                                    width="100%"
+                                                    class="otneSubRow">
+
+                                                    <Text
+                                                        text="{otne>ot}"
+                                                        class="otneOrderText" />
+
+                                                    <Text
+                                                        text="{otne>cliente}"
+                                                        tooltip="{otne>cliente}" />
+
+                                                    <Text
+                                                        text="{otne>elevador}" />
+
+                                                    <Text
+                                                        text="{otne>responsable}"
+                                                        tooltip="{otne>responsable}" />
+
+                                                    <Text
+                                                        text="{otne>fechaProgramada}" />
+
+                                                    <Text
+                                                        text="{otne>diasDetenida}"
+                                                        class="otneSubDaysText" />
+
+                                                </HBox>
+
+                                            </items>
+
+                                        </VBox>
+
+                                    </VBox>
+
+                                </VBox>
+
+                            </CustomListItem>
+
+                        </List>
+
 
                         <!-- TOTAL -->
-                        <HBox class="otpeCauseRow otpeTotalRow">
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="otneCauseRow otneTotalRow">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center">
+
+                                <core:Icon
+                                    src="sap-icon://bar-chart"
+                                    class="otneTotalIcon" />
+
+                            </HBox>
+
+                            <Text
+                                text="{otne>/totals/name}"
+                                class="otneCauseName" />
+
+                            <Text
+                                text="{otne>/totals/ot}"
+                                class="otneRedStrong" />
+
+                            <Text
+                                text="{otne>/totals/pct}"
+                                class="otneBlueStrong" />
+
+                            <Text
+                                text="{otne>/totals/clientes}"
+                                class="otneStrong" />
+
+                            <Text
+                                text="{otne>/totals/elevadores}"
+                                class="otneStrong" />
+
+                            <Text
+                                text="{otne>/totals/dias}"
+                                class="otneDaysText" />
+
                             <Text text="" />
-                            <Text text="Total" class="otpeCauseName" />
-                            <Text text="-" class="otpeStrong" />
-                            <Text text="7" class="otpeRedStrong" />
-                            <Text text="100%" class="otpeBlueStrong" />
-                            <Text text="7" class="otpeStrong" />
-                            <Text text="6" class="otpeGreenStrong" />
-                            <Text text="5 días" class="otpeRedStrong" />
-                            <Text text="" />
+
                         </HBox>
+
                     </VBox>
 
-                    <HBox class="otpeTableFooter" alignItems="Center">
-                        <core:Icon src="sap-icon://hint" class="otpeFooterIcon" />
+
+                    <!-- FOOTER -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        class="otneTableFooter">
+
+                        <core:Icon
+                            src="sap-icon://hint"
+                            class="otneFooterIcon" />
+
                         <Text
-                            text="Las causas están ordenadas por el número de OT no ejecutadas (descendente)." />
+                            text="{otne>/footerText}"
+                            wrapping="true" />
+
                     </HBox>
+
                 </VBox>
+
             </VBox>
-        </ScrollContainer>
+
+        </content>
+
     </Page>
+
 </mvc:View>

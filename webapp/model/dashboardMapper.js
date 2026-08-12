@@ -2,8 +2,10 @@ sap.ui.define([], function () {
     "use strict";
 
     const OFFICIAL_ORDER_TYPES = new Set(["SM01", "SM02", "SM03"]);
-    const EXECUTED_STATUS = "E0015";
-    const NON_EXECUTED_STATUSES = new Set(["E0013", "E0014"]);
+    // Estados que representan trabajo terminado para los indicadores del dashboard.
+    // Los demás estados, incluido el vacío, se consideran no ejecutados por la
+    // regla funcional confirmada para este dashboard.
+    const EXECUTED_STATUSES = new Set(["E0015", "E0016", "E0019"]);
     // El servicio puede entregar el STAT de SAP o el código homologado de la
     // aplicación. Todos los cálculos se realizan contra el STAT canónico.
     const APP_STATUS_TO_SAP_STATUS = Object.freeze({
@@ -133,9 +135,18 @@ sap.ui.define([], function () {
         return APP_STATUS_TO_SAP_STATUS[sapStatus] || APP_STATUS_TO_SAP_STATUS[appStatus] || "";
     }
 
+    function isExecutedOrder(order) {
+        return EXECUTED_STATUSES.has(getStatusCode(order));
+    }
+
+    function isNonExecutedOrder(order) {
+        return !isExecutedOrder(order);
+    }
+
     function hasRecognizedStatus(order) {
-        const status = getStatusCode(order);
-        return status === EXECUTED_STATUS || NON_EXECUTED_STATUSES.has(status);
+        // Se conserva el nombre de la función porque se usa en las gráficas;
+        // una OT oficial siempre queda clasificada: ejecutada o no ejecutada.
+        return Boolean(order && order.OrderId);
     }
 
     function getOfficialOrders(orders) {
@@ -162,8 +173,8 @@ sap.ui.define([], function () {
     function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
         const officialOrders = getOfficialOrders(orders);
         const planned = officialOrders.length;
-        const executed = officialOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
-        const nonExecuted = officialOrders.filter((order) => NON_EXECUTED_STATUSES.has(getStatusCode(order))).length;
+        const executed = officialOrders.filter(isExecutedOrder).length;
+        const nonExecuted = officialOrders.filter(isNonExecutedOrder).length;
         const classified = officialOrders.filter(hasRecognizedStatus).length;
         const hasStatusData = classified > 0;
         const complianceValue = hasStatusData ? percentage(executed, planned) : null;
@@ -223,7 +234,7 @@ sap.ui.define([], function () {
     function buildCauses(orders, causes) {
         const nonExecutedOrderIds = new Set(
             getOfficialOrders(orders)
-                .filter((order) => NON_EXECUTED_STATUSES.has(getStatusCode(order)))
+                .filter(isNonExecutedOrder)
                 .map((order) => String(order.OrderId))
         );
         const totals = new Map();
@@ -393,7 +404,7 @@ sap.ui.define([], function () {
     function buildExecution(orders, periods) {
         const values = periods.map((period) => {
             const periodOrders = ordersInPeriod(orders, period);
-            const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+            const executed = periodOrders.filter(isExecutedOrder).length;
             const classified = periodOrders.filter(hasRecognizedStatus).length;
             return {
                 planned: periodOrders.length,
@@ -470,11 +481,11 @@ sap.ui.define([], function () {
             const zoneOrders = officialOrders.filter((order) => String(order.Zona || order.ZoneId || "Sin zona") === zone);
             const cells = periods.map((period) => {
                 const periodOrders = ordersInPeriod(zoneOrders, period);
-                const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+                const executed = periodOrders.filter(isExecutedOrder).length;
                 const classified = periodOrders.filter(hasRecognizedStatus).length;
                 return heatValue(executed, periodOrders.length, classified);
             });
-            const executedTotal = zoneOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+            const executedTotal = zoneOrders.filter(isExecutedOrder).length;
             const classifiedTotal = zoneOrders.filter(hasRecognizedStatus).length;
             return {
                 zone,
@@ -654,7 +665,7 @@ sap.ui.define([], function () {
             : officialOrders.filter((order) => normalize(order.OrderTypeCode) === "SM02");
 
         const card = (items) => {
-            const executed = items.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+            const executed = items.filter(isExecutedOrder).length;
             const classified = items.filter(hasRecognizedStatus).length;
             return {
                 orders: `${classified > 0 ? executed : "--"} / ${items.length}`,
@@ -710,11 +721,11 @@ sap.ui.define([], function () {
             if (!date) {
                 return;
             }
-            const key = `${MONTH_KEYS[date.getMonth()]}_${date.getFullYear()}`;
+            const key = String(date.getFullYear());
             periods.set(key, {
                 key,
-                text: `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()} (Mensual)`,
-                sortValue: date.getFullYear() * 100 + date.getMonth()
+                text: `${date.getFullYear()} (Anual)`,
+                sortValue: date.getFullYear()
             });
         });
 

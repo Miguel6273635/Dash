@@ -31,34 +31,16 @@ sap.ui.define([
 
         onPeriodoChange: function () {
             var sKey = this._getSelectedKey("slPeriodo") || "";
-            var aParts = sKey.match(/^([A-ZÁÉÍÓÚÑ]+)_(\d{4})$/);
-            var mMonths = {
-                ENERO: 0,
-                FEBRERO: 1,
-                MARZO: 2,
-                ABRIL: 3,
-                MAYO: 4,
-                JUNIO: 5,
-                JULIO: 6,
-                AGOSTO: 7,
-                SEPTIEMBRE: 8,
-                OCTUBRE: 9,
-                NOVIEMBRE: 10,
-                DICIEMBRE: 11
-            };
             var oModel = this.getView().getModel("dash");
-            var iMonth;
             var iYear;
-            var iLastDay;
-            var sMonth;
 
-            if (aParts && Object.prototype.hasOwnProperty.call(mMonths, aParts[1])) {
-                iMonth = mMonths[aParts[1]];
-                iYear = Number(aParts[2]);
-                iLastDay = new Date(iYear, iMonth + 1, 0).getDate();
-                sMonth = String(iMonth + 1).padStart(2, "0");
-                oModel.setProperty("/filtros/fechaInicio", "01/" + sMonth + "/" + iYear);
-                oModel.setProperty("/filtros/fechaFin", String(iLastDay).padStart(2, "0") + "/" + sMonth + "/" + iYear);
+            // El periodo representa un año completo. Al seleccionar un año,
+            // las fechas se ajustan y la consulta se ejecuta al pulsar
+            // "Aplicar filtros".
+            if (/^\d{4}$/.test(sKey)) {
+                iYear = Number(sKey);
+                oModel.setProperty("/filtros/fechaInicio", "01/01/" + iYear);
+                oModel.setProperty("/filtros/fechaFin", "31/12/" + iYear);
             }
 
             this.onFilterChange();
@@ -75,11 +57,22 @@ sap.ui.define([
                 ? oSource.data("section")
                 : "general";
             var oRouter = UIComponent.getRouterFor(this);
+            var sRouteName;
 
-            if (oRouter && oRouter.getRoute("MantenimientoDetalle")) {
-                oRouter.navTo("MantenimientoDetalle", {
-                    section: sSection
-                });
+            if (oRouter) {
+                // Compatible con el manifest compacto de esta entrega y con
+                // el manifest original de la aplicación, que usa el prefijo
+                // Route en los nombres de ruta.
+                sRouteName = oRouter.getRoute("RouteMantenimientoDetalle")
+                    ? "RouteMantenimientoDetalle"
+                    : oRouter.getRoute("MantenimientoDetalle")
+                        ? "MantenimientoDetalle"
+                        : null;
+            }
+
+            if (sRouteName) {
+                this.getView().getModel("dash").setProperty("/navigation/section", sSection);
+                oRouter.navTo(sRouteName);
                 return;
             }
 
@@ -148,8 +141,25 @@ sap.ui.define([
             Object.keys(oData.filterOptions || {}).forEach(function (sName) {
                 var aOptions = oData.filterOptions[sName];
 
+                // Se conservan los años iniciales para que el usuario pueda
+                // cambiar de año aunque la consulta actual sólo haya devuelto
+                // registros de un periodo.
+                if (sName === "periodos" && Array.isArray(aOptions) && aOptions.length > 0) {
+                    var mPeriods = new Map();
+
+                    (oCurrentOptions.periodos || []).concat(aOptions).forEach(function (oPeriod) {
+                        if (oPeriod && oPeriod.key) {
+                            mPeriods.set(String(oPeriod.key), oPeriod);
+                        }
+                    });
+                    oCurrentOptions.periodos = Array.from(mPeriods.values()).sort(function (oLeft, oRight) {
+                        return Number(oLeft.key) - Number(oRight.key);
+                    });
+                    return;
+                }
+
                 // Un catálogo que solo contiene "Todos" no sustituye el respaldo local.
-                if (Array.isArray(aOptions) && (sName === "periodos" ? aOptions.length > 0 : aOptions.length > 1)) {
+                if (Array.isArray(aOptions) && aOptions.length > 1) {
                     oCurrentOptions[sName] = aOptions;
                 }
             });
@@ -225,9 +235,10 @@ sap.ui.define([
         _getDashboardData: function () {
             return {
                 filtros: {
-                    periodo: "MAYO_2024",
-                    fechaInicio: "01/05/2024",
-                    fechaFin: "31/05/2024",
+                    // Primera carga del Dashboard: año completo 2026.
+                    periodo: "2026",
+                    fechaInicio: "01/01/2026",
+                    fechaFin: "31/12/2026",
                     zona: "TODAS",
                     supervisor: "TODOS",
                     tipoOrden: "TODOS",
@@ -237,9 +248,9 @@ sap.ui.define([
                 },
                 filterOptions: {
                     periodos: [
-                        { key: "ABRIL_2024", text: "Abril 2024 (Mensual)" },
-                        { key: "MAYO_2024", text: "Mayo 2024 (Mensual)" },
-                        { key: "JUNIO_2024", text: "Junio 2024 (Mensual)" }
+                        { key: "2024", text: "2024 (Anual)" },
+                        { key: "2025", text: "2025 (Anual)" },
+                        { key: "2026", text: "2026 (Anual)" }
                     ],
                     zonas: [
                         { key: "TODAS", text: "Todas" },

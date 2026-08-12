@@ -1,6 +1,7 @@
 /* ==========================================================================
    ANÁLISIS DE OT PREVENTIVAS EJECUTADAS
-   RESPONSIVO / SIN SCROLL EN ESCRITORIO
+   RESPONSIVE MASTER
+   ESCRITORIO SIN SCROLL
    ========================================================================== */
 
 
@@ -11,12 +12,13 @@
 .otpEjPage {
     --otpEj-bg: #f6f8fc;
     --otpEj-card: #ffffff;
+
     --otpEj-navy: #172554;
     --otpEj-text: #334155;
     --otpEj-muted: #718096;
     --otpEj-border: #dce4ef;
 
-    --otpEj-blue: #1677ff;
+    --otpEj-blue: #0a6ff5;
     --otpEj-green: #18a957;
     --otpEj-red: #ff445d;
     --otpEj-purple: #8247f5;
@@ -38,16 +40,19 @@
 .otpEjPage .sapMPageEnableScrolling,
 .otpEjPage .sapMPageScroll {
     width: 100% !important;
+    max-width: none !important;
+
     height: 100% !important;
+    max-height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
-    max-height: 100% !important;
 
     margin: 0 !important;
     padding: 0 !important;
 
-    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
 
     background: var(--otpEj-bg) !important;
 }
@@ -59,38 +64,44 @@
 
 
 /* ==========================================================================
-   CONTENEDOR PRINCIPAL
+   CONTENEDOR GENERAL
    ========================================================================== */
 
 .otpEjPage .otpEjPageContainer {
     display: grid !important;
 
+    grid-template-columns:
+        minmax(0, 1fr) !important;
+
     grid-template-rows:
         auto
-        clamp(48px, 6.5vh, 56px)
-        clamp(70px, 9.5vh, 82px)
-        clamp(31px, 4.4vh, 38px)
-        minmax(0, 1fr);
+        clamp(48px, 6.4vh, 56px)
+        clamp(70px, 9.2vh, 82px)
+        clamp(31px, 4.1vh, 37px)
+        minmax(0, 1fr) !important;
 
     width: 100% !important;
+    max-width: 100% !important;
+
     height: 100% !important;
+    max-height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
-    gap: clamp(5px, 0.68vh, 8px) !important;
+    margin: 0 !important;
 
-    /*
-     * Esta separación evita que el dashboard
-     * comience pegado al menú lateral.
-     */
     padding:
         clamp(7px, 0.8vh, 10px)
         clamp(10px, 0.8vw, 15px)
-        clamp(7px, 0.7vh, 10px)
-        clamp(20px, 1.55vw, 28px) !important;
+        clamp(6px, 0.65vh, 9px)
+        clamp(18px, 1.25vw, 24px) !important;
 
-    margin: 0 !important;
+    gap:
+        clamp(5px, 0.64vh, 8px) !important;
+
+    justify-items: stretch !important;
+    align-items: stretch !important;
 
     overflow: hidden !important;
 
@@ -110,14 +121,17 @@
 .otpEjPage .otpEjTableViewport > .sapMFlexItem,
 .otpEjPage .otpEjRespHeader > .sapMFlexItem,
 .otpEjPage .otpEjRespRow > .sapMFlexItem,
+.otpEjPage .otpEjSubTable > .sapMFlexItem,
 .otpEjPage .otpEjSubHeader > .sapMFlexItem,
 .otpEjPage .otpEjSubRow > .sapMFlexItem {
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
-    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 
@@ -127,17 +141,22 @@
 
 .otpEjPage .otpEjHeader {
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
 
-    padding: 0 !important;
     margin: 0 !important;
+    padding: 0 2px !important;
+
+    overflow: hidden !important;
 }
 
 .otpEjPage .otpEjTitleRow {
     width: 100% !important;
+    min-width: 0 !important;
 
-    gap: clamp(3px, 0.3vw, 6px) !important;
+    gap:
+        clamp(3px, 0.3vw, 6px) !important;
 }
 
 .otpEjPage .otpEjTitle.sapMTitle,
@@ -147,15 +166,18 @@
 
     font-size:
         clamp(
-            1.08rem,
-            calc(0.72vw + 0.47vh),
-            1.38rem
+            1.02rem,
+            calc(0.68vw + 0.44vh),
+            1.35rem
         ) !important;
 
     line-height: 1.06 !important;
+
     font-weight: 900 !important;
 
     letter-spacing: -0.025em !important;
+
+    white-space: nowrap !important;
 }
 
 .otpEjPage .otpEjTitle.sapMTitle {
@@ -167,30 +189,36 @@
 }
 
 
-/* Breadcrumb */
+/* ==========================================================================
+   BREADCRUMB
+   ========================================================================== */
 
 .otpEjPage .otpEjBreadcrumb {
     width: 100% !important;
 
+    min-width: 0 !important;
     min-height: 13px !important;
 
-    margin-top: clamp(2px, 0.3vh, 4px) !important;
+    margin-top:
+        clamp(2px, 0.28vh, 4px) !important;
 
-    gap: clamp(4px, 0.35vw, 6px) !important;
+    gap:
+        clamp(4px, 0.35vw, 6px) !important;
 }
 
 .otpEjPage .otpEjBreadLink.sapMLnk,
 .otpEjPage .otpEjBreadText.sapMText {
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
     font-size:
         clamp(
-            0.44rem,
-            calc(0.18vw + 0.15vh),
+            0.43rem,
+            calc(0.18vw + 0.14vh),
             0.54rem
         ) !important;
 
     font-weight: 800 !important;
+
     line-height: 1.1 !important;
 
     text-decoration: none !important;
@@ -205,7 +233,6 @@
 
 /* ==========================================================================
    FILTROS
-   ESTILO VISTA JEFATURA
    ========================================================================== */
 
 .otpEjPage .otpEjFilters {
@@ -218,21 +245,44 @@
         minmax(0, 0.92fr)
         minmax(0, 1fr)
         minmax(0, 1.06fr)
-        minmax(108px, 0.62fr);
+        minmax(105px, 0.62fr) !important;
 
     width: 100% !important;
+    max-width: 100% !important;
+
     height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
-    gap: clamp(5px, 0.58vw, 10px) !important;
+    margin: 0 !important;
+
+    gap:
+        clamp(5px, 0.58vw, 10px) !important;
 
     align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.otpEjPage .otpEjFilters > .sapMFlexItem {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    flex: none !important;
+
+    margin: 0 !important;
 }
 
 
-/* Cada filtro es su propia card */
+/* ==========================================================================
+   FILTER CARD - VISTA JEFATURA
+   ========================================================================== */
 
 .otpEjPage .otpEjFilterCard {
     display: flex !important;
@@ -244,11 +294,11 @@
     min-width: 0 !important;
     min-height: 0 !important;
 
-    padding:
-        clamp(5px, 0.65vh, 8px)
-        clamp(7px, 0.62vw, 11px) !important;
-
     margin: 0 !important;
+
+    padding:
+        clamp(5px, 0.62vh, 8px)
+        clamp(7px, 0.62vw, 11px) !important;
 
     justify-content: center !important;
 
@@ -256,7 +306,9 @@
 
     background: #ffffff !important;
 
-    border: 1px solid #dbe3ef !important;
+    border:
+        1px solid #dbe3ef !important;
+
     border-radius: 9px !important;
 
     box-shadow:
@@ -274,7 +326,9 @@
 
     min-height: 10px !important;
 
-    margin: 0 0 2px !important;
+    margin:
+        0 0 2px !important;
+
     padding: 0 !important;
 
     color: #718096 !important;
@@ -287,6 +341,7 @@
         ) !important;
 
     font-weight: 800 !important;
+
     line-height: 1.05 !important;
 
     white-space: nowrap !important;
@@ -322,9 +377,6 @@
     box-shadow: none !important;
 }
 
-
-/* Texto select */
-
 .otpEjPage
 .otpEjSelect.sapMSlt
 .sapMSltLabel {
@@ -349,7 +401,7 @@
     font-size:
         clamp(
             0.50rem,
-            calc(0.22vw + 0.18vh),
+            calc(0.22vw + 0.17vh),
             0.61rem
         ) !important;
 
@@ -366,13 +418,11 @@
 
 
 /* ==========================================================================
-   FLECHA AZUL
+   FLECHA SELECT AZUL
    ========================================================================== */
 
 .otpEjPage
-.otpEjFilters
-.otpEjFilterCard
-.otpEjSelect.sapMSlt
+.otpEjFilterControl.sapMSlt
 .sapMSltArrow {
     width:
         clamp(22px, 1.8vw, 27px) !important;
@@ -382,7 +432,7 @@
 
     padding: 0 !important;
 
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
     background: transparent !important;
     background-color: transparent !important;
@@ -396,55 +446,29 @@
     line-height:
         clamp(21px, 2.8vh, 25px) !important;
 
-    -webkit-text-fill-color: #0a6ff5 !important;
+    -webkit-text-fill-color:
+        var(--otpEj-blue) !important;
 }
 
-
-/* El glifo real de la flecha */
-
 .otpEjPage
-.otpEjFilters
-.otpEjFilterCard
-.otpEjSelect.sapMSlt
+.otpEjFilterControl.sapMSlt
 .sapMSltArrow::before {
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
-    -webkit-text-fill-color: #0a6ff5 !important;
+    -webkit-text-fill-color:
+        var(--otpEj-blue) !important;
 }
 
-
-/* Refuerzo Horizon / Quartz */
-
 .otpEjPage
-.otpEjFilters
-.otpEjSelect.sapMSlt
+.otpEjFilterControl.sapMSlt
 .sapMSltArrow.sapUiIcon,
 .otpEjPage
-.otpEjFilters
-.otpEjSelect.sapMSlt
+.otpEjFilterControl.sapMSlt
 .sapUiIcon.sapMSltArrow {
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
-    -webkit-text-fill-color: #0a6ff5 !important;
-}
-
-
-/* Hover / focus */
-
-.otpEjPage
-.otpEjSelect.sapMSlt:hover
-.sapMSltArrow,
-.otpEjPage
-.otpEjSelect.sapMSlt.sapMSltPressed
-.sapMSltArrow,
-.otpEjPage
-.otpEjSelect.sapMSlt.sapMSltFocused
-.sapMSltArrow {
-    color: #0a6ff5 !important;
-
-    background: transparent !important;
-
-    -webkit-text-fill-color: #0a6ff5 !important;
+    -webkit-text-fill-color:
+        var(--otpEj-blue) !important;
 }
 
 
@@ -452,7 +476,10 @@
    DATEPICKER
    ========================================================================== */
 
-.otpEjPage .otpEjDatePicker.sapMInputBase {
+.otpEjPage .otpEjDatePicker.sapMInputBase,
+.otpEjPage
+.otpEjDatePicker
+.sapMInputBaseContentWrapper {
     width: 100% !important;
 
     height:
@@ -467,33 +494,10 @@
     background: transparent !important;
 
     border: 0 !important;
-
-    box-shadow: none !important;
-}
-
-.otpEjPage
-.otpEjDatePicker
-.sapMInputBaseContentWrapper {
-    width: 100% !important;
-
-    height:
-        clamp(21px, 2.8vh, 25px) !important;
-
-    min-height:
-        clamp(21px, 2.8vh, 25px) !important;
-
-    padding: 0 !important;
-
-    background: transparent !important;
-
-    border: 0 !important;
     border-radius: 0 !important;
 
     box-shadow: none !important;
 }
-
-
-/* Fecha */
 
 .otpEjPage
 .otpEjDatePicker
@@ -516,7 +520,7 @@
     font-size:
         clamp(
             0.50rem,
-            calc(0.22vw + 0.18vh),
+            calc(0.22vw + 0.17vh),
             0.61rem
         ) !important;
 
@@ -527,7 +531,7 @@
 }
 
 
-/* Calendario */
+/* Calendario azul */
 
 .otpEjPage
 .otpEjDatePicker
@@ -560,7 +564,7 @@
 
     padding: 0 !important;
 
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
     background: transparent !important;
 
@@ -571,17 +575,14 @@
     line-height:
         clamp(21px, 2.8vh, 25px) !important;
 
-    -webkit-text-fill-color: #0a6ff5 !important;
+    -webkit-text-fill-color:
+        var(--otpEj-blue) !important;
 }
 
 
 /* ==========================================================================
-   BOTÓN APLICAR FILTROS
+   BOTÓN APLICAR
    ========================================================================== */
-
-/*
- * El wrapper exterior NO tiene fondo blanco.
- */
 
 .otpEjPage
 .otpEjFilters
@@ -589,6 +590,7 @@
     display: flex !important;
 
     width: 100% !important;
+    height: 100% !important;
 
     min-width: 0 !important;
 
@@ -625,9 +627,6 @@
     box-shadow: none !important;
 }
 
-
-/* Botón azul */
-
 .otpEjPage
 .otpEjApplyBtn
 .sapMBtnInner {
@@ -643,10 +642,11 @@
         0
         clamp(8px, 0.7vw, 12px) !important;
 
-    background: #0a6ff5 !important;
-    background-color: #0a6ff5 !important;
+    background: var(--otpEj-blue) !important;
 
-    border: 1px solid #0a6ff5 !important;
+    border:
+        1px solid var(--otpEj-blue) !important;
+
     border-radius: 8px !important;
 
     box-shadow:
@@ -679,34 +679,53 @@
     text-shadow: none !important;
 }
 
-.otpEjPage
-.otpEjApplyBtn
-.sapMBtnIcon {
-    font-size: 0.68rem !important;
-}
-
 
 /* ==========================================================================
-   KPI - ESTILO VISTA JEFATURA
+   KPI GRID
    ========================================================================== */
 
 .otpEjPage .otpEjKpiGrid {
     display: grid !important;
 
     grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+        repeat(4, minmax(0, 1fr)) !important;
 
     width: 100% !important;
+    max-width: 100% !important;
+
     height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
+    margin: 0 !important;
+
     gap:
         clamp(6px, 0.72vw, 12px) !important;
 
     align-items: stretch !important;
+
+    overflow: hidden !important;
 }
+
+.otpEjPage
+.otpEjKpiGrid
+> .sapMFlexItem {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    flex: none !important;
+}
+
+
+/* ==========================================================================
+   KPI CARD
+   ========================================================================== */
 
 .otpEjPage .otpEjKpiCard {
     --otpEj-accent: #1677ff;
@@ -722,9 +741,11 @@
     min-width: 0 !important;
     min-height: 0 !important;
 
+    margin: 0 !important;
+
     padding:
-        clamp(7px, 0.9vh, 11px)
-        clamp(9px, 0.85vw, 14px) !important;
+        clamp(7px, 0.88vh, 11px)
+        clamp(9px, 0.82vw, 14px) !important;
 
     gap:
         clamp(7px, 0.65vw, 11px) !important;
@@ -753,9 +774,6 @@
         rgba(15, 23, 42, 0.05) !important;
 }
 
-
-/* Franja izquierda */
-
 .otpEjPage .otpEjKpiCard::before {
     position: absolute !important;
 
@@ -773,9 +791,6 @@
 
     content: "" !important;
 }
-
-
-/* Colores */
 
 .otpEjPage .otpEjKpiBlue {
     --otpEj-accent: #2e8cff;
@@ -805,19 +820,19 @@
 
     flex:
         0 0
-        clamp(36px, 5.5vh, 45px) !important;
+        clamp(36px, 5.4vh, 45px) !important;
 
     width:
-        clamp(36px, 5.5vh, 45px) !important;
+        clamp(36px, 5.4vh, 45px) !important;
 
     height:
-        clamp(36px, 5.5vh, 45px) !important;
+        clamp(36px, 5.4vh, 45px) !important;
 
     min-width:
-        clamp(36px, 5.5vh, 45px) !important;
+        clamp(36px, 5.4vh, 45px) !important;
 
     min-height:
-        clamp(36px, 5.5vh, 45px) !important;
+        clamp(36px, 5.4vh, 45px) !important;
 
     align-items: center !important;
     justify-content: center !important;
@@ -844,7 +859,7 @@
 }
 
 
-/* Contenido KPI */
+/* Texto KPI */
 
 .otpEjPage .otpEjKpiContent {
     min-width: 0 !important;
@@ -857,68 +872,65 @@
 
     max-width: 100% !important;
 
-    overflow: hidden !important;
-
     color:
         var(--otpEj-accent) !important;
 
     font-size:
         clamp(
             1.05rem,
-            calc(0.74vw + 0.62vh),
+            calc(0.74vw + 0.60vh),
             1.42rem
         ) !important;
 
     font-weight: 900 !important;
+
     line-height: 1 !important;
+
+    overflow: hidden !important;
 
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
 
 .otpEjPage .otpEjKpiLabel.sapMText {
-    display: block !important;
-
     margin-top: 2px !important;
 
-    color:
-        var(--otpEj-navy) !important;
+    color: var(--otpEj-navy) !important;
 
     font-size:
         clamp(
             0.49rem,
-            calc(0.22vw + 0.17vh),
+            calc(0.22vw + 0.16vh),
             0.60rem
         ) !important;
 
     font-weight: 900 !important;
+
     line-height: 1.05 !important;
 
     white-space: nowrap !important;
 }
 
 .otpEjPage .otpEjKpiSubLabel.sapMText {
-    display: block !important;
-
     margin-top: 2px !important;
 
     color: #69778d !important;
 
     font-size:
         clamp(
-            0.41rem,
-            calc(0.17vw + 0.14vh),
-            0.50rem
+            0.40rem,
+            calc(0.17vw + 0.13vh),
+            0.49rem
         ) !important;
 
     font-weight: 700 !important;
+
     line-height: 1.05 !important;
 
     white-space: nowrap !important;
 }
 
-.otpEjPage
-.otpEjKpiSubRed.sapMText {
+.otpEjPage .otpEjKpiSubRed.sapMText {
     color: #ef334e !important;
 
     font-weight: 800 !important;
@@ -934,63 +946,72 @@
 
     grid-template-columns:
         minmax(0, 1fr)
-        auto;
+        auto !important;
 
     width: 100% !important;
+    max-width: 100% !important;
+
     height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
+    margin: 0 !important;
+
     gap:
-        clamp(7px, 0.7vw, 12px) !important;
+        clamp(6px, 0.6vw, 10px) !important;
 
     align-items: center !important;
+
+    overflow: hidden !important;
 }
 
 .otpEjPage .otpEjTabs {
     min-width: 0 !important;
 
     gap:
-        clamp(4px, 0.42vw, 7px) !important;
+        clamp(4px, 0.4vw, 6px) !important;
 }
 
 .otpEjPage .otpEjTabsLabel.sapMText {
     margin-right: 3px !important;
 
-    color:
-        var(--otpEj-navy) !important;
+    color: var(--otpEj-navy) !important;
 
-    font-size: 0.50rem !important;
+    font-size:
+        clamp(
+            0.45rem,
+            0.44vw,
+            0.52rem
+        ) !important;
 
     font-weight: 900 !important;
+
+    white-space: nowrap !important;
 }
 
 
-/* Tabs */
+/* ==========================================================================
+   TABS
+   ========================================================================== */
 
 .otpEjPage .otpEjTabBtn {
     height:
-        clamp(27px, 3.7vh, 31px) !important;
-
-    min-height:
-        clamp(27px, 3.7vh, 31px) !important;
-
-    padding: 0 !important;
+        clamp(27px, 3.6vh, 31px) !important;
 }
 
 .otpEjPage
 .otpEjTabBtn
 .sapMBtnInner {
     height:
-        clamp(27px, 3.7vh, 31px) !important;
+        clamp(27px, 3.6vh, 31px) !important;
 
     min-height:
-        clamp(27px, 3.7vh, 31px) !important;
+        clamp(27px, 3.6vh, 31px) !important;
 
     padding:
         0
-        clamp(7px, 0.65vw, 11px) !important;
+        clamp(7px, 0.6vw, 10px) !important;
 
     background: #ffffff !important;
 
@@ -1000,36 +1021,35 @@
     border-radius: 7px !important;
 
     box-shadow: none !important;
-
-    text-shadow: none !important;
 }
 
 .otpEjPage
 .otpEjTabBtn
 .sapMBtnContent {
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
     font-size:
         clamp(
-            0.45rem,
-            calc(0.19vw + 0.15vh),
-            0.54rem
+            0.44rem,
+            calc(0.18vw + 0.14vh),
+            0.52rem
         ) !important;
 
     font-weight: 900 !important;
 
     line-height:
         calc(
-            clamp(27px, 3.7vh, 31px) - 2px
+            clamp(27px, 3.6vh, 31px) - 2px
         ) !important;
 }
 
 .otpEjPage
 .otpEjTabActive
 .sapMBtnInner {
-    background: #0a6ff5 !important;
+    background: var(--otpEj-blue) !important;
 
-    border-color: #0a6ff5 !important;
+    border-color:
+        var(--otpEj-blue) !important;
 
     box-shadow:
         0 2px 7px
@@ -1043,22 +1063,22 @@
 }
 
 
-/* Información derecha */
+/* ==========================================================================
+   INFO BOX
+   ========================================================================== */
 
 .otpEjPage .otpEjInfoBox {
-    width: auto !important;
-
-    min-width: 0 !important;
-
     height:
-        clamp(27px, 3.7vh, 31px) !important;
+        clamp(27px, 3.6vh, 31px) !important;
+
+    min-height:
+        clamp(27px, 3.6vh, 31px) !important;
 
     padding:
         0
-        clamp(8px, 0.7vw, 12px) !important;
+        clamp(8px, 0.7vw, 11px) !important;
 
-    gap:
-        clamp(5px, 0.45vw, 8px) !important;
+    gap: 6px !important;
 
     background: #f8fafc !important;
 
@@ -1069,19 +1089,19 @@
 }
 
 .otpEjPage .otpEjInfoIcon {
-    color: #718096 !important;
+    color: #64748b !important;
 
-    font-size: 0.59rem !important;
+    font-size: 0.60rem !important;
 }
 
 .otpEjPage .otpEjInfoText.sapMText {
-    color: #718096 !important;
+    color: #64748b !important;
 
     font-size:
         clamp(
-            0.41rem,
-            calc(0.17vw + 0.14vh),
-            0.49rem
+            0.39rem,
+            calc(0.17vw + 0.13vh),
+            0.47rem
         ) !important;
 
     font-weight: 700 !important;
@@ -1091,24 +1111,43 @@
 
 
 /* ==========================================================================
-   CARD PRINCIPAL
+   CARD TABLA
    ========================================================================== */
 
 .otpEjPage .otpEjTableCard {
-    display: flex !important;
-    flex-direction: column !important;
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr) !important;
+
+    /*
+     * 1 = título/buscador
+     * 2 = tabla
+     * 3 = footer
+     */
+    grid-template-rows:
+        clamp(39px, 5.0vh, 44px)
+        minmax(0, 1fr)
+        clamp(20px, 2.7vh, 25px) !important;
 
     width: 100% !important;
     max-width: 100% !important;
+
     height: 100% !important;
+    max-height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
+
+    margin: 0 !important;
 
     padding:
         clamp(7px, 0.75vh, 10px)
         clamp(8px, 0.72vw, 12px)
         clamp(5px, 0.55vh, 7px) !important;
+
+    justify-items: stretch !important;
+    align-items: stretch !important;
 
     overflow: hidden !important;
 
@@ -1124,15 +1163,26 @@
         rgba(15, 23, 42, 0.05) !important;
 }
 
+
+/* Wrappers de las tres áreas */
+
 .otpEjPage
 .otpEjTableCard
 > .sapMFlexItem {
+    grid-column: 1 / -1 !important;
+
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
-    max-width: 100% !important;
+    margin: 0 !important;
+
+    justify-self: stretch !important;
+    align-self: stretch !important;
+
+    flex-basis: auto !important;
 }
 
 
@@ -1143,40 +1193,56 @@
 .otpEjPage .otpEjTableTop {
     display: grid !important;
 
-    flex:
-        0 0
-        clamp(31px, 4.1vh, 36px) !important;
-
     grid-template-columns:
         minmax(0, 1fr)
-        minmax(220px, 320px);
+        clamp(215px, 19vw, 285px) !important;
 
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        0
+        clamp(5px, 0.55vh, 7px)
+        0 !important;
+
+    gap:
+        clamp(10px, 0.85vw, 15px) !important;
+
+    align-items: center !important;
+
+    overflow: visible !important;
+}
+
+.otpEjPage .otpEjTableTitle.sapMTitle {
     width: 100% !important;
 
     min-width: 0 !important;
 
-    gap:
-        clamp(8px, 0.8vw, 13px) !important;
-
-    align-items: center !important;
-}
-
-.otpEjPage
-.otpEjTableTitle.sapMTitle {
     margin: 0 !important;
+    padding: 0 !important;
 
-    color:
-        var(--otpEj-navy) !important;
+    color: var(--otpEj-navy) !important;
 
     font-size:
         clamp(
-            0.60rem,
-            calc(0.25vw + 0.20vh),
-            0.72rem
+            0.61rem,
+            calc(0.26vw + 0.20vh),
+            0.73rem
         ) !important;
 
     font-weight: 900 !important;
-    line-height: 1.08 !important;
+
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
 }
 
 
@@ -1186,27 +1252,42 @@
 
 .otpEjPage .otpEjSearch {
     justify-self: end !important;
+    align-self: center !important;
 
     width: 100% !important;
+    max-width: 285px !important;
 
-    max-width: 320px !important;
+    min-width: 200px !important;
 
     height:
-        clamp(29px, 3.8vh, 33px) !important;
+        clamp(26px, 3.3vh, 29px) !important;
+
+    min-height:
+        clamp(26px, 3.3vh, 29px) !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .otpEjPage
 .otpEjSearch
 .sapMSFF {
+    width: 100% !important;
+
     height:
-        clamp(29px, 3.8vh, 33px) !important;
+        clamp(26px, 3.3vh, 29px) !important;
+
+    min-height:
+        clamp(26px, 3.3vh, 29px) !important;
+
+    margin: 0 !important;
 
     background: #ffffff !important;
 
     border:
         1px solid #d7e0eb !important;
 
-    border-radius: 9px !important;
+    border-radius: 8px !important;
 
     box-shadow: none !important;
 }
@@ -1216,33 +1297,40 @@
 .sapMSFI {
     height:
         calc(
-            clamp(29px, 3.8vh, 33px) - 2px
+            clamp(26px, 3.3vh, 29px) - 2px
         ) !important;
 
-    padding-left:
-        clamp(10px, 0.9vw, 14px) !important;
+    padding:
+        0
+        31px
+        0
+        11px !important;
 
-    color: #43516a !important;
+    color: #526176 !important;
 
     background: transparent !important;
 
     font-size:
         clamp(
-            0.48rem,
-            calc(0.21vw + 0.16vh),
-            0.57rem
+            0.50rem,
+            calc(0.19vw + 0.15vh),
+            0.59rem
         ) !important;
+
+    font-weight: 500 !important;
 
     line-height:
         calc(
-            clamp(29px, 3.8vh, 33px) - 2px
+            clamp(26px, 3.3vh, 29px) - 2px
         ) !important;
 }
 
 .otpEjPage
 .otpEjSearch
 .sapMSFI::placeholder {
-    color: #94a3b8 !important;
+    color: #8b9ab0 !important;
+
+    font-style: italic !important;
 
     opacity: 1 !important;
 }
@@ -1250,47 +1338,49 @@
 .otpEjPage
 .otpEjSearch
 .sapMSFB {
-    width:
-        clamp(29px, 3.8vh, 33px) !important;
+    width: 29px !important;
 
     height:
         calc(
-            clamp(29px, 3.8vh, 33px) - 2px
+            clamp(26px, 3.3vh, 29px) - 2px
         ) !important;
 
-    color:
-        var(--otpEj-navy) !important;
+    color: #244c74 !important;
 
     background: transparent !important;
 
+    font-size: 0.72rem !important;
+
     line-height:
         calc(
-            clamp(29px, 3.8vh, 33px) - 2px
+            clamp(26px, 3.3vh, 29px) - 2px
         ) !important;
 }
 
 
 /* ==========================================================================
-   TABLA PRINCIPAL
+   VIEWPORT TABLA
    ========================================================================== */
 
 .otpEjPage .otpEjTableViewport {
-    --otpEj-columns:
-        minmax(42px, 0.42fr)
-        minmax(130px, 1.42fr)
-        minmax(82px, 0.82fr)
+    --otpEj-cols:
+        minmax(32px, 0.30fr)
+        minmax(130px, 1.65fr)
+        minmax(85px, 0.83fr)
+        minmax(100px, 1fr)
+        minmax(105px, 1.03fr)
         minmax(110px, 1.08fr)
-        minmax(92px, 0.90fr)
-        minmax(100px, 0.96fr)
-        minmax(125px, 1.18fr)
-        minmax(24px, 0.24fr);
+        minmax(130px, 1.28fr)
+        minmax(24px, 0.22fr);
 
     display: flex !important;
-    flex: 1 1 0 !important;
     flex-direction: column !important;
 
     width: 100% !important;
     max-width: 100% !important;
+
+    height: 100% !important;
+    max-height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
@@ -1298,12 +1388,28 @@
     margin: 0 !important;
     padding: 0 !important;
 
+    align-items: stretch !important;
+
     overflow: hidden !important;
+}
+
+.otpEjPage
+.otpEjTableViewport
+> .sapMFlexItem {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    align-self: stretch !important;
 }
 
 
 /* ==========================================================================
-   HEADER Y FILAS
+   HEADER / RESPONSABLE
    ========================================================================== */
 
 .otpEjPage .otpEjRespHeader,
@@ -1311,26 +1417,23 @@
     display: grid !important;
 
     grid-template-columns:
-        var(--otpEj-columns) !important;
+        var(--otpEj-cols) !important;
 
     width: 100% !important;
     max-width: 100% !important;
 
     min-width: 0 !important;
 
+    margin: 0 !important;
+
     align-items: center !important;
 }
 
-
-/* Header */
-
 .otpEjPage .otpEjRespHeader {
-    flex:
-        0 0
-        clamp(27px, 3.7vh, 32px) !important;
+    flex: 0 0 auto !important;
 
     min-height:
-        clamp(27px, 3.7vh, 32px) !important;
+        clamp(29px, 3.6vh, 33px) !important;
 
     background: #f1f3f6 !important;
 
@@ -1341,12 +1444,91 @@
         7px 7px 0 0 !important;
 }
 
+.otpEjPage
+.otpEjRespHeader
+> .sapMFlexItem,
+.otpEjPage
+.otpEjRespRow
+> .sapMFlexItem {
+    display: flex !important;
 
-/* Filas */
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    padding:
+        0
+        clamp(3px, 0.36vw, 6px) !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+.otpEjPage
+.otpEjRespHeader
+.sapMText,
+.otpEjPage
+.otpEjHeaderText.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #56657b !important;
+
+    font-size:
+        clamp(
+            0.40rem,
+            calc(0.17vw + 0.13vh),
+            0.49rem
+        ) !important;
+
+    font-weight: 900 !important;
+
+    line-height: 1.08 !important;
+
+    text-align: center !important;
+}
+
+
+/* ==========================================================================
+   LISTA RESPONSABLES
+   ========================================================================== */
+
+.otpEjPage .otpEjRespList {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
+.otpEjPage .otpEjRespBlock {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================================
+   FILAS RESPONSABLE
+   ========================================================================== */
 
 .otpEjPage .otpEjRespRow {
     min-height:
-        clamp(25px, 3.3vh, 30px) !important;
+        clamp(28px, 3.55vh, 32px) !important;
 
     background: #ffffff !important;
 
@@ -1360,61 +1542,6 @@
         1px solid #e5eaf1 !important;
 }
 
-
-/* Celdas */
-
-.otpEjPage
-.otpEjRespHeader
-> .sapMFlexItem,
-.otpEjPage
-.otpEjRespRow
-> .sapMFlexItem {
-    display: flex !important;
-
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    height: 100% !important;
-
-    padding:
-        0
-        clamp(3px, 0.35vw, 6px) !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    overflow: hidden !important;
-}
-
-
-/* Header text */
-
-.otpEjPage
-.otpEjRespHeader
-.sapMText {
-    display: block !important;
-
-    width: 100% !important;
-
-    color: #56657b !important;
-
-    font-size:
-        clamp(
-            0.39rem,
-            calc(0.16vw + 0.13vh),
-            0.47rem
-        ) !important;
-
-    font-weight: 900 !important;
-    line-height: 1.08 !important;
-
-    text-align: center !important;
-}
-
-
-/* Texto filas */
-
 .otpEjPage
 .otpEjRespRow
 .sapMText {
@@ -1422,44 +1549,62 @@
 
     width: 100% !important;
 
-    overflow: hidden !important;
-
-    color:
-        var(--otpEj-navy) !important;
+    color: var(--otpEj-navy) !important;
 
     font-size:
         clamp(
-            0.41rem,
+            0.42rem,
             calc(0.18vw + 0.14vh),
-            0.51rem
+            0.52rem
         ) !important;
 
     font-weight: 800 !important;
+
     line-height: 1.08 !important;
 
     text-align: center !important;
+
+    overflow: hidden !important;
 
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
 
+.otpEjPage .otpEjRespName.sapMText {
+    text-align: left !important;
+
+    font-weight: 900 !important;
+}
+
+.otpEjPage .otpEjStrong.sapMText {
+    font-weight: 900 !important;
+}
+
+.otpEjPage .otpEjGreenStrong.sapMText {
+    color: #16a34a !important;
+
+    font-weight: 900 !important;
+}
+
+.otpEjPage .otpEjBlueStrong.sapMText {
+    color: var(--otpEj-blue) !important;
+
+    font-weight: 900 !important;
+}
+
 
 /* ==========================================================================
-   RESPONSABLE
+   CELDA INICIAL
    ========================================================================== */
 
 .otpEjPage .otpEjRespLeadCell {
     display: flex !important;
 
     width: 100% !important;
-    height: 100% !important;
 
-    padding: 0 !important;
+    min-width: 0 !important;
 
-    gap: 2px !important;
-
-    align-items: center !important;
-    justify-content: center !important;
+    gap: 1px !important;
 }
 
 .otpEjPage .otpEjExpandBtn,
@@ -1468,8 +1613,7 @@
 
     min-width: 18px !important;
 
-    height: 22px !important;
-
+    margin: 0 !important;
     padding: 0 !important;
 }
 
@@ -1483,9 +1627,10 @@
 
     min-width: 18px !important;
 
-    height: 22px !important;
-    min-height: 22px !important;
+    height: 23px !important;
+    min-height: 23px !important;
 
+    margin: 0 !important;
     padding: 0 !important;
 
     background: transparent !important;
@@ -1502,11 +1647,11 @@
 
     margin: 0 !important;
 
-    color: #0a6ff5 !important;
+    color: var(--otpEj-blue) !important;
 
-    font-size: 0.54rem !important;
+    font-size: 0.53rem !important;
 
-    line-height: 22px !important;
+    line-height: 23px !important;
 }
 
 .otpEjPage
@@ -1516,79 +1661,22 @@
 
     margin: 0 !important;
 
-    color: #64748b !important;
+    color: #718096 !important;
 
-    font-size: 0.52rem !important;
+    font-size: 0.50rem !important;
 
-    line-height: 22px !important;
+    line-height: 23px !important;
 }
 
 .otpEjPage .otpEjRespIcon {
     color: #718096 !important;
 
-    font-size: 0.66rem !important;
-}
-
-.otpEjPage
-.otpEjRespName.sapMText {
-    color:
-        var(--otpEj-navy) !important;
-
-    font-weight: 900 !important;
-
-    text-align: left !important;
-}
-
-
-/* Colores datos */
-
-.otpEjPage
-.otpEjGreenStrong.sapMText {
-    color: #16a34a !important;
-
-    font-weight: 900 !important;
-}
-
-.otpEjPage
-.otpEjBlueStrong.sapMText {
-    color: #1677ff !important;
-
-    font-weight: 900 !important;
-}
-
-.otpEjPage
-.otpEjStrong.sapMText {
-    color:
-        var(--otpEj-navy) !important;
-
-    font-weight: 900 !important;
+    font-size: 0.64rem !important;
 }
 
 
 /* ==========================================================================
-   LISTADO RESPONSABLES
-   ========================================================================== */
-
-.otpEjPage .otpEjRespList {
-    width: 100% !important;
-
-    min-width: 0 !important;
-}
-
-.otpEjPage
-.otpEjRespList
-> .sapMFlexItem,
-.otpEjPage
-.otpEjRespBlock {
-    width: 100% !important;
-
-    min-width: 0 !important;
-}
-
-
-/* ==========================================================================
-   SUBTABLA EXPANDIDA
-   MISMO ANCHO DE LA TABLA PRINCIPAL
+   SUBTABLA
    ========================================================================== */
 
 .otpEjPage .otpEjSubTable {
@@ -1603,6 +1691,8 @@
     margin: 0 !important;
     padding: 0 !important;
 
+    align-items: stretch !important;
+
     overflow: hidden !important;
 
     background: #ffffff !important;
@@ -1615,50 +1705,39 @@
 
     border-left:
         1px solid #e5eaf1 !important;
-
-    border-radius: 0 !important;
 }
 
-.otpEjPage
-.otpEjSubTable
-> .sapMFlexItem,
-.otpEjPage
-.otpEjSubRows
-> .sapMFlexItem {
+.otpEjPage .otpEjSubRows {
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
 }
-
-
-/* ==========================================================================
-   SUBTABLA COLUMNAS
-   ========================================================================== */
 
 .otpEjPage .otpEjSubHeader,
 .otpEjPage .otpEjSubRow {
     display: grid !important;
 
     grid-template-columns:
-        minmax(90px, 0.80fr)
-        minmax(130px, 1.25fr)
-        minmax(95px, 0.85fr)
-        minmax(110px, 1fr)
-        minmax(100px, 0.90fr);
+        minmax(85px, 0.82fr)
+        minmax(125px, 1.25fr)
+        minmax(95px, 0.92fr)
+        minmax(105px, 1fr)
+        minmax(105px, 1fr) !important;
 
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
+
+    margin: 0 !important;
 
     align-items: center !important;
 }
 
-
-/* Header */
-
 .otpEjPage .otpEjSubHeader {
     min-height:
-        clamp(21px, 2.8vh, 25px) !important;
+        clamp(22px, 2.85vh, 26px) !important;
 
     background: #f7f9fc !important;
 
@@ -1666,26 +1745,15 @@
         1px solid #e8edf4 !important;
 }
 
-
-/* Filas */
-
 .otpEjPage .otpEjSubRow {
     min-height:
-        clamp(21px, 2.8vh, 25px) !important;
+        clamp(22px, 2.8vh, 26px) !important;
 
     background: #ffffff !important;
 
     border-bottom:
         1px solid #eef2f6 !important;
 }
-
-.otpEjPage
-.otpEjSubRow:last-child {
-    border-bottom: 0 !important;
-}
-
-
-/* Celdas */
 
 .otpEjPage
 .otpEjSubHeader
@@ -1696,6 +1764,7 @@
     display: flex !important;
 
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
 
@@ -1703,16 +1772,13 @@
 
     padding:
         0
-        clamp(3px, 0.4vw, 7px) !important;
+        clamp(3px, 0.38vw, 7px) !important;
 
     align-items: center !important;
     justify-content: center !important;
 
     overflow: hidden !important;
 }
-
-
-/* Header detalle */
 
 .otpEjPage
 .otpEjSubHeader
@@ -1725,18 +1791,17 @@
 
     font-size:
         clamp(
-            0.37rem,
-            calc(0.16vw + 0.11vh),
-            0.44rem
+            0.38rem,
+            calc(0.16vw + 0.12vh),
+            0.46rem
         ) !important;
 
     font-weight: 900 !important;
 
+    line-height: 1.08 !important;
+
     text-align: center !important;
 }
-
-
-/* Filas detalle */
 
 .otpEjPage
 .otpEjSubRow
@@ -1745,29 +1810,29 @@
 
     width: 100% !important;
 
-    overflow: hidden !important;
-
-    color:
-        var(--otpEj-navy) !important;
+    color: var(--otpEj-navy) !important;
 
     font-size:
         clamp(
-            0.38rem,
-            calc(0.16vw + 0.12vh),
-            0.46rem
+            0.39rem,
+            calc(0.17vw + 0.13vh),
+            0.48rem
         ) !important;
 
     font-weight: 700 !important;
 
+    line-height: 1.08 !important;
+
     text-align: center !important;
+
+    overflow: hidden !important;
 
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
 
-.otpEjPage
-.otpEjOrderText.sapMText {
-    color: #0a6ff5 !important;
+.otpEjPage .otpEjOrderText.sapMText {
+    color: var(--otpEj-blue) !important;
 
     font-weight: 900 !important;
 }
@@ -1778,7 +1843,10 @@
    ========================================================================== */
 
 .otpEjPage .otpEjTotalRow {
-    background: #f4f6f9 !important;
+    min-height:
+        clamp(28px, 3.5vh, 32px) !important;
+
+    background: #f5f7fa !important;
 
     border-radius:
         0 0 7px 7px !important;
@@ -1792,22 +1860,14 @@
 .otpEjPage .otpEjTableFooter {
     display: flex !important;
 
-    flex:
-        0 0
-        clamp(21px, 2.8vh, 25px) !important;
-
     width: 100% !important;
+    max-width: 100% !important;
 
     min-width: 0 !important;
 
-    min-height:
-        clamp(21px, 2.8vh, 25px) !important;
+    margin: 0 !important;
 
-    margin-top:
-        clamp(3px, 0.4vh, 5px) !important;
-
-    gap:
-        clamp(4px, 0.4vw, 7px) !important;
+    gap: 6px !important;
 
     align-items: center !important;
 
@@ -1822,22 +1882,21 @@
     font-size: 0.58rem !important;
 }
 
-.otpEjPage
-.otpEjFooterText.sapMText {
+.otpEjPage .otpEjFooterText.sapMText {
     min-width: 0 !important;
-
-    overflow: hidden !important;
 
     color: #64748b !important;
 
     font-size:
         clamp(
-            0.38rem,
-            calc(0.16vw + 0.12vh),
+            0.37rem,
+            calc(0.16vw + 0.11vh),
             0.45rem
         ) !important;
 
     font-weight: 700 !important;
+
+    overflow: hidden !important;
 
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
@@ -1845,32 +1904,138 @@
 
 
 /* ==========================================================================
-   1366 x 768 / ESCRITORIO
+   MONITOR GRANDE
    ========================================================================== */
 
-@media screen and (min-width: 1181px) {
+@media screen and (min-width: 1600px) {
 
     .otpEjPage .otpEjPageContainer {
-        /*
-         * Dashboard separado del SideNavigation.
-         */
         padding-left:
-            clamp(22px, 1.7vw, 30px) !important;
+            clamp(20px, 1.35vw, 28px) !important;
 
         padding-right:
-            clamp(10px, 0.8vw, 15px) !important;
+            clamp(12px, 0.85vw, 18px) !important;
     }
 
-    .otpEjPage .otpEjTableCard,
-    .otpEjPage .otpEjTableViewport,
-    .otpEjPage .otpEjRespHeader,
-    .otpEjPage .otpEjRespRow,
-    .otpEjPage .otpEjSubTable,
-    .otpEjPage .otpEjSubHeader,
-    .otpEjPage .otpEjSubRow {
-        width: 100% !important;
+    .otpEjPage .otpEjFilters {
+        gap:
+            clamp(7px, 0.62vw, 12px) !important;
+    }
 
-        max-width: 100% !important;
+    .otpEjPage .otpEjKpiGrid {
+        gap:
+            clamp(8px, 0.75vw, 14px) !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        grid-template-columns:
+            minmax(0, 1fr)
+            clamp(235px, 18vw, 300px) !important;
+    }
+
+    .otpEjPage .otpEjSearch {
+        max-width: 300px !important;
+    }
+}
+
+
+/* ==========================================================================
+   LAPTOP / ESCRITORIO MÁS ANGOSTO
+   841 - 1180
+   TODAVÍA SIN SCROLL
+   ========================================================================== */
+
+@media screen and (min-width: 841px) and (max-width: 1180px) {
+
+    .otpEjPage .otpEjPageContainer {
+        padding-left:
+            clamp(11px, 1vw, 16px) !important;
+
+        padding-right:
+            clamp(7px, 0.7vw, 11px) !important;
+
+        gap: 5px !important;
+    }
+
+    .otpEjPage .otpEjFilters {
+        grid-template-columns:
+            minmax(0, 0.95fr)
+            minmax(0, 1.05fr)
+            minmax(0, 1.05fr)
+            minmax(0, 0.82fr)
+            minmax(0, 0.88fr)
+            minmax(0, 0.94fr)
+            minmax(92px, 0.62fr) !important;
+
+        gap: 5px !important;
+    }
+
+    .otpEjPage .otpEjFilterCard {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    .otpEjPage .otpEjFilterLabel.sapMLabel {
+        font-size: 0.44rem !important;
+    }
+
+    .otpEjPage
+    .otpEjSelect.sapMSlt
+    .sapMSltLabel,
+    .otpEjPage
+    .otpEjDatePicker
+    .sapMInputBaseInner {
+        font-size: 0.51rem !important;
+    }
+
+    .otpEjPage .otpEjKpiGrid {
+        gap: 6px !important;
+    }
+
+    .otpEjPage .otpEjKpiCard {
+        padding-left: 7px !important;
+        padding-right: 7px !important;
+    }
+
+    .otpEjPage .otpEjKpiIconCircle {
+        flex-basis: 34px !important;
+
+        width: 34px !important;
+        height: 34px !important;
+
+        min-width: 34px !important;
+        min-height: 34px !important;
+    }
+
+    .otpEjPage .otpEjKpiIcon {
+        font-size: 0.88rem !important;
+    }
+
+    .otpEjPage .otpEjKpiNumber.sapMText {
+        font-size: 1rem !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(200px, 250px) !important;
+    }
+
+    .otpEjPage .otpEjSearch {
+        min-width: 190px !important;
+        max-width: 250px !important;
+    }
+
+    .otpEjPage .otpEjTableViewport {
+        --otpEj-cols:
+            minmax(29px, 0.28fr)
+            minmax(105px, 1.55fr)
+            minmax(70px, 0.80fr)
+            minmax(82px, 0.95fr)
+            minmax(85px, 0.98fr)
+            minmax(88px, 1fr)
+            minmax(105px, 1.18fr)
+            minmax(20px, 0.20fr);
     }
 }
 
@@ -1879,143 +2044,335 @@
    POCA ALTURA
    ========================================================================== */
 
-@media screen and (min-width: 1101px) and (max-height: 680px) {
+@media screen and (min-width: 841px) and (max-height: 680px) {
 
     .otpEjPage .otpEjPageContainer {
         grid-template-rows:
             auto
-            45px
-            63px
-            29px
-            minmax(0, 1fr);
+            43px
+            60px
+            27px
+            minmax(0, 1fr) !important;
 
         gap: 4px !important;
 
-        padding-top: 5px !important;
-        padding-bottom: 5px !important;
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .otpEjPage .otpEjTitle.sapMTitle,
+    .otpEjPage .otpEjTitleGreen.sapMTitle {
+        font-size: 0.98rem !important;
+    }
+
+    .otpEjPage .otpEjBreadcrumb {
+        margin-top: 1px !important;
     }
 
     .otpEjPage .otpEjFilterCard {
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+    }
+
+    .otpEjPage
+    .otpEjApplyBtn
+    .sapMBtnInner,
+    .otpEjPage
+    .otpEjApplyBtn
+    .sapMBtnContent,
+    .otpEjPage
+    .otpEjApplyBtn
+    .sapMBtnIcon {
+        height: 31px !important;
+        min-height: 31px !important;
+        line-height: 31px !important;
+    }
+
+    .otpEjPage .otpEjKpiCard {
         padding-top: 4px !important;
         padding-bottom: 4px !important;
     }
 
     .otpEjPage .otpEjKpiIconCircle {
-        flex-basis: 33px !important;
+        flex-basis: 31px !important;
 
-        width: 33px !important;
-        height: 33px !important;
+        width: 31px !important;
+        height: 31px !important;
 
-        min-width: 33px !important;
-        min-height: 33px !important;
+        min-width: 31px !important;
+        min-height: 31px !important;
     }
 
     .otpEjPage .otpEjKpiIcon {
-        font-size: 0.86rem !important;
+        font-size: 0.82rem !important;
+    }
+
+    .otpEjPage .otpEjKpiNumber.sapMText {
+        font-size: 0.96rem !important;
+    }
+
+    .otpEjPage .otpEjKpiLabel.sapMText {
+        font-size: 0.46rem !important;
+    }
+
+    .otpEjPage .otpEjKpiSubLabel.sapMText {
+        font-size: 0.38rem !important;
+    }
+
+    .otpEjPage .otpEjTableCard {
+        grid-template-rows:
+            34px
+            minmax(0, 1fr)
+            18px !important;
+
+        padding-top: 5px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        padding-bottom: 4px !important;
     }
 
     .otpEjPage .otpEjRespHeader {
-        flex-basis: 24px !important;
-
-        min-height: 24px !important;
+        min-height: 25px !important;
     }
 
     .otpEjPage .otpEjRespRow {
-        min-height: 22px !important;
+        min-height: 24px !important;
     }
 
-    .otpEjPage .otpEjSubHeader,
+    .otpEjPage .otpEjSubHeader {
+        min-height: 19px !important;
+    }
+
     .otpEjPage .otpEjSubRow {
-        min-height: 18px !important;
+        min-height: 19px !important;
     }
 
-    .otpEjPage .otpEjTableFooter {
-        flex-basis: 18px !important;
+    .otpEjPage .otpEjTotalRow {
+        min-height: 23px !important;
+    }
 
-        min-height: 18px !important;
+    .otpEjPage
+    .otpEjRespHeader
+    .sapMText {
+        font-size: 0.38rem !important;
+    }
+
+    .otpEjPage
+    .otpEjRespRow
+    .sapMText {
+        font-size: 0.40rem !important;
+    }
+
+    .otpEjPage
+    .otpEjSubHeader
+    .sapMText,
+    .otpEjPage
+    .otpEjSubRow
+    .sapMText {
+        font-size: 0.37rem !important;
     }
 }
 
 
 /* ==========================================================================
-   TABLET
+   TABLET / VERTICAL
+   AQUÍ SÍ PUEDE CRECER Y HACER SCROLL
    ========================================================================== */
 
-@media screen and (max-width: 1100px) {
+@media screen and (orientation: portrait),
+       screen and (max-width: 840px) {
 
+    .otpEjView,
+    .otpEjPage,
+    .otpEjPage.sapMPage,
+    .otpEjPage .sapMPage,
     .otpEjPage .sapMPageCont,
     .otpEjPage .sapMPageEnableScrolling,
     .otpEjPage .sapMPageScroll {
         height: auto !important;
 
         min-height: 100% !important;
+        max-height: none !important;
 
+        overflow-x: hidden !important;
         overflow-y: auto !important;
     }
 
     .otpEjPage .otpEjPageContainer {
-        grid-template-rows: auto !important;
+        display: grid !important;
+
+        grid-template-columns:
+            1fr !important;
+
+        grid-template-rows:
+            auto !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
 
         height: auto !important;
 
         min-height: 100% !important;
+        max-height: none !important;
 
-        gap: 8px !important;
+        margin: 0 !important;
 
         padding:
             10px
-            12px
-            16px
-            20px !important;
+            10px
+            16px !important;
+
+        gap: 8px !important;
 
         overflow: visible !important;
     }
 
+
+    /* Filtros */
+
     .otpEjPage .otpEjFilters {
         grid-template-columns:
-            repeat(
-                4,
-                minmax(0, 1fr)
-            ) !important;
+            repeat(2, minmax(0, 1fr)) !important;
 
-        min-height: 108px !important;
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        gap: 7px !important;
+
+        overflow: visible !important;
     }
 
+    .otpEjPage .otpEjFilters > .sapMFlexItem {
+        height: 54px !important;
+
+        min-height: 54px !important;
+    }
+
+    .otpEjPage
+    .otpEjFilters
+    > .sapMFlexItem:last-child {
+        grid-column:
+            1 / -1 !important;
+    }
+
+    .otpEjPage .otpEjFilterCard,
     .otpEjPage .otpEjApplyBtn {
-        min-height: 48px !important;
+        height: 54px !important;
+
+        min-height: 54px !important;
     }
+
+
+    /* KPI */
 
     .otpEjPage .otpEjKpiGrid {
         grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            ) !important;
+            repeat(2, minmax(0, 1fr)) !important;
 
-        min-height: 150px !important;
+        height: auto !important;
+
+        gap: 7px !important;
+
+        overflow: visible !important;
+    }
+
+    .otpEjPage .otpEjKpiGrid > .sapMFlexItem {
+        height: 76px !important;
+
+        min-height: 76px !important;
     }
 
     .otpEjPage .otpEjKpiCard {
-        min-height: 70px !important;
+        height: 76px !important;
+
+        min-height: 76px !important;
     }
+
+
+    /* Toolbar */
 
     .otpEjPage .otpEjToolbar {
         grid-template-columns:
             1fr !important;
 
-        min-height: 65px !important;
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        gap: 6px !important;
+
+        overflow: visible !important;
+    }
+
+    .otpEjPage .otpEjTabs {
+        flex-wrap: wrap !important;
     }
 
     .otpEjPage .otpEjInfoBox {
         width: 100% !important;
     }
 
+
+    /* Card */
+
     .otpEjPage .otpEjTableCard {
-        min-height: 420px !important;
+        display: flex !important;
+        flex-direction: column !important;
+
+        width: 100% !important;
+
+        height: auto !important;
+        max-height: none !important;
+
+        min-height: 430px !important;
+
+        overflow: hidden !important;
     }
 
+
+    /* Header tabla */
+
+    .otpEjPage .otpEjTableTop {
+        display: grid !important;
+
+        grid-template-columns:
+            1fr !important;
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        min-height: 66px !important;
+
+        padding-bottom: 7px !important;
+
+        gap: 5px !important;
+    }
+
+    .otpEjPage .otpEjSearch {
+        justify-self: stretch !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+    }
+
+
+    /* Tabla */
+
     .otpEjPage .otpEjTableViewport {
+        width: 100% !important;
+
+        height: auto !important;
+
+        min-height: 340px !important;
+
         overflow-x: auto !important;
+        overflow-y: hidden !important;
 
         -webkit-overflow-scrolling: touch !important;
     }
@@ -2027,55 +2384,11 @@
 
         min-width: 900px !important;
     }
-}
 
+    .otpEjPage .otpEjTableFooter {
+        margin-top: 5px !important;
 
-/* ==========================================================================
-   TABLET VERTICAL
-   ========================================================================== */
-
-@media screen and (orientation: portrait),
-       screen and (max-width: 840px) {
-
-    .otpEjPage .otpEjFilters {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            ) !important;
-
-        min-height: 210px !important;
-    }
-
-    .otpEjPage .otpEjKpiGrid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            ) !important;
-    }
-
-    .otpEjPage .otpEjToolbar {
-        grid-template-columns: 1fr !important;
-    }
-
-    .otpEjPage .otpEjTabs {
-        flex-wrap: wrap !important;
-    }
-
-    .otpEjPage .otpEjTableTop {
-        grid-template-columns:
-            1fr !important;
-
-        min-height: 66px !important;
-    }
-
-    .otpEjPage .otpEjSearch {
-        justify-self: stretch !important;
-
-        width: 100% !important;
-
-        max-width: 100% !important;
+        min-height: 24px !important;
     }
 }
 
@@ -2084,31 +2397,421 @@
    MÓVIL
    ========================================================================== */
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 520px) {
 
     .otpEjPage .otpEjPageContainer {
         padding:
             8px
             8px
-            18px
-            12px !important;
+            18px !important;
     }
 
-    .otpEjPage .otpEjFilters,
+    .otpEjPage .otpEjFilters {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .otpEjPage
+    .otpEjFilters
+    > .sapMFlexItem:last-child {
+        grid-column:
+            1 !important;
+    }
+
     .otpEjPage .otpEjKpiGrid {
         grid-template-columns:
             1fr !important;
     }
 
-    .otpEjPage .otpEjFilters {
-        min-height: 420px !important;
-    }
+    .otpEjPage .otpEjKpiGrid > .sapMFlexItem,
+    .otpEjPage .otpEjKpiCard {
+        height: 74px !important;
 
-    .otpEjPage .otpEjKpiGrid {
-        min-height: 290px !important;
+        min-height: 74px !important;
     }
 
     .otpEjPage .otpEjInfoText.sapMText {
         white-space: normal !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        min-height: 70px !important;
+    }
+
+    .otpEjPage .otpEjFooterText.sapMText {
+        white-space: normal !important;
+    }
+}
+/* ==========================================================================
+   FIX FINAL - BUSCADOR SEPARADO DE LA TABLA
+   ANALISIS OT PREVENTIVAS EJECUTADAS
+   ========================================================================== */
+
+
+/* ==========================================================================
+   CARD PRINCIPAL
+   ========================================================================== */
+
+.otpEjPage .otpEjTableCard {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr) !important;
+
+    /*
+     * Fila 1 = título + buscador
+     * Fila 2 = tabla
+     * Fila 3 = footer
+     */
+    grid-template-rows:
+        48px
+        minmax(0, 1fr)
+        22px !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* ==========================================================================
+   1. WRAPPER SAPUI5 DEL TÍTULO + BUSCADOR
+   ========================================================================== */
+
+.otpEjPage
+.otpEjTableCard
+> .sapMFlexItem:first-child {
+    grid-row: 1 !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 48px !important;
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-self: stretch !important;
+
+    overflow: visible !important;
+}
+
+
+/* ==========================================================================
+   2. CABECERA CARD
+   ========================================================================== */
+
+.otpEjPage .otpEjTableTop {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        clamp(210px, 18vw, 275px) !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 48px !important;
+    min-height: 48px !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    /*
+     * Este espacio es el que separa visualmente
+     * el buscador de la cabecera gris.
+     */
+    padding:
+        0
+        0
+        10px
+        0 !important;
+
+    gap:
+        clamp(10px, 0.8vw, 15px) !important;
+
+    align-items: center !important;
+
+    overflow: visible !important;
+}
+
+
+/* ==========================================================================
+   3. TÍTULO
+   ========================================================================== */
+
+.otpEjPage .otpEjTableTitle.sapMTitle {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #172554 !important;
+
+    font-size:
+        clamp(
+            0.61rem,
+            calc(0.26vw + 0.20vh),
+            0.73rem
+        ) !important;
+
+    font-weight: 900 !important;
+
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* ==========================================================================
+   4. BUSCADOR
+   ========================================================================== */
+
+.otpEjPage .otpEjSearch {
+    justify-self: end !important;
+    align-self: center !important;
+
+    width: 100% !important;
+    max-width: 275px !important;
+
+    min-width: 205px !important;
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* Caja exterior */
+
+.otpEjPage
+.otpEjSearch
+.sapMSFF {
+    width: 100% !important;
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #d6dfeb !important;
+    border-radius: 8px !important;
+
+    box-shadow: none !important;
+}
+
+
+/* Campo */
+
+.otpEjPage
+.otpEjSearch
+.sapMSFI {
+    height: 26px !important;
+    min-height: 26px !important;
+
+    padding:
+        0
+        31px
+        0
+        11px !important;
+
+    color: #526176 !important;
+
+    background: transparent !important;
+
+    font-size:
+        clamp(
+            0.50rem,
+            calc(0.19vw + 0.15vh),
+            0.58rem
+        ) !important;
+
+    font-weight: 500 !important;
+
+    line-height: 26px !important;
+}
+
+
+/* Placeholder */
+
+.otpEjPage
+.otpEjSearch
+.sapMSFI::placeholder {
+    color: #8b9ab0 !important;
+
+    font-size:
+        clamp(
+            0.50rem,
+            calc(0.19vw + 0.15vh),
+            0.58rem
+        ) !important;
+
+    font-weight: 500 !important;
+    font-style: italic !important;
+
+    opacity: 1 !important;
+}
+
+
+/* Lupa */
+
+.otpEjPage
+.otpEjSearch
+.sapMSFB {
+    width: 28px !important;
+
+    height: 26px !important;
+
+    color: #244c74 !important;
+
+    background: transparent !important;
+
+    font-size: 0.70rem !important;
+
+    line-height: 26px !important;
+}
+
+
+/* ==========================================================================
+   5. WRAPPER SAPUI5 DE LA TABLA
+   ========================================================================== */
+
+.otpEjPage
+.otpEjTableCard
+> .sapMFlexItem:nth-child(2) {
+    grid-row: 2 !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-self: stretch !important;
+
+    overflow: hidden !important;
+}
+
+
+/* ==========================================================================
+   6. VIEWPORT TABLA
+   ========================================================================== */
+
+.otpEjPage .otpEjTableViewport {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    position: relative !important;
+
+    overflow: hidden !important;
+}
+
+
+/* La cabecera gris comienza DESPUÉS del buscador */
+
+.otpEjPage .otpEjRespHeader {
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    position: relative !important;
+
+    z-index: 1 !important;
+}
+
+
+/* ==========================================================================
+   7. WRAPPER DEL FOOTER
+   ========================================================================== */
+
+.otpEjPage
+.otpEjTableCard
+> .sapMFlexItem:last-child {
+    grid-row: 3 !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    align-self: stretch !important;
+}
+
+
+/* ==========================================================================
+   POCA ALTURA
+   ========================================================================== */
+
+@media screen and (min-width: 841px) and (max-height: 680px) {
+
+    .otpEjPage .otpEjTableCard {
+        grid-template-rows:
+            40px
+            minmax(0, 1fr)
+            19px !important;
+    }
+
+    .otpEjPage
+    .otpEjTableCard
+    > .sapMFlexItem:first-child {
+        height: 40px !important;
+        min-height: 40px !important;
+    }
+
+    .otpEjPage .otpEjTableTop {
+        height: 40px !important;
+        min-height: 40px !important;
+
+        padding-bottom: 6px !important;
+    }
+
+    .otpEjPage .otpEjSearch,
+    .otpEjPage
+    .otpEjSearch
+    .sapMSFF {
+        height: 26px !important;
+        min-height: 26px !important;
+    }
+
+    .otpEjPage
+    .otpEjSearch
+    .sapMSFI,
+    .otpEjPage
+    .otpEjSearch
+    .sapMSFB {
+        height: 24px !important;
+        min-height: 24px !important;
+
+        line-height: 24px !important;
     }
 }

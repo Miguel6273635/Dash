@@ -1,268 +1,269 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "mantenimiento/model/ReparacionesPlaneadasService"
 ], function (
     Controller,
     JSONModel,
-    MessageToast
+    MessageToast,
+    ReparacionesPlaneadasService
 ) {
     "use strict";
 
     return Controller.extend(
         "mantenimiento.controller.AnalisisReparacionesPlaneadasNoEjecutadas",
         {
-
             onInit: function () {
-                var oData = this._getMockData();
-
-                var oModel = new JSONModel(oData);
-                oModel.setSizeLimit(200);
-
-                this.getView().setModel(
-                    oModel,
-                    "otpe"
+                var oInitialData = ReparacionesPlaneadasService.createEmpty(
+                    this._getDefaultFilters(),
+                    "NO_EJECUTADAS"
                 );
-            },
+                var oModel = new JSONModel(oInitialData);
 
-            onToggleMenu: function () {
-                MessageToast.show(
-                    "Menú lateral disponible desde la barra principal."
-                );
+                this._iLoadRequest = 0;
+                this._oRawData = null;
+
+                oModel.setSizeLimit(1000);
+                this.getView().setModel(oModel, "otpe");
+                this._setAllCauses(oInitialData.causas);
+                this._loadData(false);
             },
 
             onApplyFilters: function () {
-                var oModel =
-                    this.getView().getModel("otpe");
+                this._loadData(true);
+            },
 
-                var oFilters =
-                    oModel.getProperty("/filters");
+            onPeriodoChange: function (oEvent) {
+                var sKey = oEvent.getSource().getSelectedKey();
+                var aMatch = String(sKey || "").match(/^([A-ZÁÉÍÓÚÑ]+)_(\d{4})$/);
+                var mMonths = {
+                    ENERO: 0,
+                    FEBRERO: 1,
+                    MARZO: 2,
+                    ABRIL: 3,
+                    MAYO: 4,
+                    JUNIO: 5,
+                    JULIO: 6,
+                    AGOSTO: 7,
+                    SEPTIEMBRE: 8,
+                    OCTUBRE: 9,
+                    NOVIEMBRE: 10,
+                    DICIEMBRE: 11
+                };
+                var oModel = this.getView().getModel("otpe");
+                var iMonth;
+                var iYear;
+                var iLastDay;
+                var sMonth;
 
-                console.log(
-                    "Filtros:",
-                    oFilters
+                if (!aMatch || !Object.prototype.hasOwnProperty.call(mMonths, aMatch[1])) {
+                    return;
+                }
+
+                iMonth = mMonths[aMatch[1]];
+                iYear = Number(aMatch[2]);
+                iLastDay = new Date(iYear, iMonth + 1, 0).getDate();
+                sMonth = String(iMonth + 1).padStart(2, "0");
+
+                oModel.setProperty(
+                    "/filters/fechaDesde",
+                    "01/" + sMonth + "/" + iYear
                 );
+                oModel.setProperty(
+                    "/filters/fechaHasta",
+                    String(iLastDay).padStart(2, "0") +
+                    "/" + sMonth + "/" + iYear
+                );
+            },
 
-                MessageToast.show(
-                    "Filtros aplicados"
+            onSelectNoEjecutadas: function () {
+                this._setAnalysisView("NO_EJECUTADAS");
+            },
+
+            onSelectEjecutadas: function () {
+                this._setAnalysisView("EJECUTADAS");
+            },
+
+            onSelectTodas: function () {
+                this._setAnalysisView("TODAS");
+            },
+
+            onSearchCausa: function (oEvent) {
+                var sValue = oEvent.getParameter("query") ||
+                    oEvent.getParameter("newValue") ||
+                    "";
+                var sSearch = this._normalizeText(sValue);
+                var aCauses = this._aAllCauses;
+
+                if (sSearch) {
+                    aCauses = aCauses.filter(function (oCause) {
+                        return [oCause.causa, oCause.material].some(function (sText) {
+                            return this._normalizeText(sText).includes(sSearch);
+                        }.bind(this));
+                    }.bind(this));
+                }
+
+                this.getView().getModel("otpe").setProperty(
+                    "/causas",
+                    this._clone(aCauses)
                 );
             },
 
             onToggleCausa: function (oEvent) {
-                var oButton = oEvent.getSource();
-                var sPath = oButton.data("path");
+                var oSource = oEvent.getSource();
+                var oContext = oSource.getBindingContext("otpe");
+                var oModel = this.getView().getModel("otpe");
+                var sPath = oContext
+                    ? oContext.getPath() + "/expanded"
+                    : oSource.data("path");
 
                 if (!sPath) {
                     return;
                 }
 
-                var oModel =
-                    this.getView().getModel("otpe");
-
-                var bExpanded =
-                    !!oModel.getProperty(sPath);
-
-                /*
-                 * Cierra las demás causas antes de abrir una.
-                 * Así la pantalla mantiene siempre un alto controlado.
-                 */
-
-                oModel.setProperty(
-                    "/causas/0/expanded",
-                    false
-                );
-
-                oModel.setProperty(
-                    "/causas/1/expanded",
-                    false
-                );
-
-                oModel.setProperty(
-                    "/causas/2/expanded",
-                    false
-                );
-
-                oModel.setProperty(
-                    sPath,
-                    !bExpanded
-                );
+                oModel.setProperty(sPath, !oModel.getProperty(sPath));
             },
 
-            onSelectNoEjecutadas: function () {
-                MessageToast.show(
-                    "Ya estás viendo las reparaciones planeadas no ejecutadas."
-                );
-            },
+            _setAnalysisView: function (sAnalysis) {
+                var oModel = this.getView().getModel("otpe");
+                var mFilters = this._getFilters();
+                var oData;
 
-            onSelectEjecutadas: function () {
-                var oRouter =
-                    this.getOwnerComponent().getRouter();
-
-                if (
-                    oRouter.getRoute(
-                        "RouteAnalisisReparacionesPlaneadasEjecutadas"
-                    )
-                ) {
-                    oRouter.navTo(
-                        "RouteAnalisisReparacionesPlaneadasEjecutadas"
-                    );
-
+                if (!this._oRawData) {
+                    oModel.setProperty("/ui/selectedAnalysis", sAnalysis);
                     return;
                 }
 
-                MessageToast.show(
-                    "Falta registrar RouteAnalisisReparacionesPlaneadasEjecutadas en el manifest."
+                oData = ReparacionesPlaneadasService.build(
+                    this._oRawData,
+                    mFilters,
+                    sAnalysis
                 );
+
+                this._applyData(oData);
             },
 
-            onSelectTodas: function () {
-                MessageToast.show(
-                    "Vista de todas las reparaciones pendiente de conectar."
-                );
+            _loadData: function (bNotify) {
+                var oODataModel = this._getODataModel();
+                var mFilters = this._getFilters();
+                var sAnalysis = this.getView()
+                    .getModel("otpe")
+                    .getProperty("/ui/selectedAnalysis") || "NO_EJECUTADAS";
+                var iRequest = ++this._iLoadRequest;
+
+                this.getView().setBusy(true);
+
+                ReparacionesPlaneadasService.load(
+                    oODataModel,
+                    mFilters,
+                    sAnalysis
+                ).then(function (oResult) {
+                    if (iRequest !== this._iLoadRequest) {
+                        return;
+                    }
+
+                    this._oRawData = oResult.rawData;
+                    this._applyData(oResult.data);
+
+                    if (bNotify) {
+                        MessageToast.show(
+                            "Análisis de reparaciones actualizado con datos de SAP"
+                        );
+                    }
+                }.bind(this)).catch(function (oError) {
+                    if (iRequest !== this._iLoadRequest) {
+                        return;
+                    }
+
+                    this._onLoadError(oError, bNotify);
+                }.bind(this)).finally(function () {
+                    if (iRequest === this._iLoadRequest) {
+                        this.getView().setBusy(false);
+                    }
+                }.bind(this));
             },
 
-            onSearchCausa: function (oEvent) {
-                var sValue =
-                    oEvent.getParameter("newValue") ||
-                    "";
-
-                console.log(
-                    "Buscar causa:",
-                    sValue
-                );
+            _applyData: function (oData) {
+                this.getView().getModel("otpe").setData(oData);
+                this._setAllCauses(oData.causas);
             },
 
-            _getMockData: function () {
+            _onLoadError: function (oError, bNotify) {
+                var oModel = this.getView().getModel("otpe");
+                var sMessage = oError && oError.message ||
+                    "No fue posible consultar SAP";
+
+                if (!this._oRawData) {
+                    this._applyData(
+                        ReparacionesPlaneadasService.createEmpty(
+                            this._getFilters(),
+                            oModel.getProperty("/ui/selectedAnalysis") ||
+                            "NO_EJECUTADAS"
+                        )
+                    );
+                }
+
+                if (window.console && window.console.error) {
+                    window.console.error(
+                        "Error al consultar el OData de reparaciones",
+                        oError
+                    );
+                }
+
+                if (bNotify) {
+                    MessageToast.show(sMessage);
+                }
+            },
+
+            _getODataModel: function () {
+                var oComponent = this.getOwnerComponent && this.getOwnerComponent();
+
+                return (oComponent && oComponent.getModel("dashboardOData")) ||
+                    this.getView().getModel("dashboardOData");
+            },
+
+            _getFilters: function () {
+                var mFilters = this.getView()
+                    .getModel("otpe")
+                    .getProperty("/filters") || {};
+
                 return {
-                    filters: {
-                        periodo: "Mayo 2024",
-                        fechaDesde: "01/05/2024",
-                        fechaHasta: "31/05/2024",
-                        zona: "Todas",
-                        cliente: "Todos",
-                        responsable: "Todos"
-                    },
-
-                    catalogos: {
-                        periodos: [
-                            {
-                                key: "Mayo 2024",
-                                text: "Mayo 2024"
-                            },
-                            {
-                                key: "Junio 2024",
-                                text: "Junio 2024"
-                            }
-                        ],
-
-                        zonas: [
-                            {
-                                key: "Todas",
-                                text: "Todas"
-                            },
-                            {
-                                key: "Norte",
-                                text: "Norte"
-                            },
-                            {
-                                key: "Centro",
-                                text: "Centro"
-                            },
-                            {
-                                key: "Sur",
-                                text: "Sur"
-                            },
-                            {
-                                key: "Este",
-                                text: "Este"
-                            },
-                            {
-                                key: "Oeste",
-                                text: "Oeste"
-                            }
-                        ],
-
-                        clientes: [
-                            {
-                                key: "Todos",
-                                text: "Todos"
-                            },
-                            {
-                                key: "Torre Reforma",
-                                text: "Torre Reforma"
-                            },
-                            {
-                                key: "Plaza Satélite",
-                                text: "Plaza Satélite"
-                            },
-                            {
-                                key: "Hospital Ángeles",
-                                text: "Hospital Ángeles"
-                            }
-                        ],
-
-                        responsables: [
-                            {
-                                key: "Todos",
-                                text: "Todos"
-                            },
-                            {
-                                key: "Juan Pérez",
-                                text: "Juan Pérez"
-                            },
-                            {
-                                key: "Carlos Herrera",
-                                text: "Carlos Herrera"
-                            },
-                            {
-                                key: "Pedro López",
-                                text: "Pedro López"
-                            }
-                        ]
-                    },
-
-                    kpis: {
-                        planeadas: "95",
-                        ejecutadas: "88",
-                        noEjecutadas: "7",
-                        cumplimiento: "92.6%"
-                    },
-
-                    causas: [
-                        {
-                            causa: "Falta de refacciones",
-                            material: "Sensor de puerta",
-                            otNoEjecutadas: "4",
-                            porcentaje: "57%",
-                            equipos: "4",
-                            clientes: "3",
-                            dias: "6 días",
-                            expanded: true
-                        },
-                        {
-                            causa: "Espera de proveedor",
-                            material: "Rodamiento guía",
-                            otNoEjecutadas: "2",
-                            porcentaje: "29%",
-                            equipos: "2",
-                            clientes: "2",
-                            dias: "5 días",
-                            expanded: false
-                        },
-                        {
-                            causa: "Reprogramación",
-                            material: "-",
-                            otNoEjecutadas: "1",
-                            porcentaje: "14%",
-                            equipos: "1",
-                            clientes: "1",
-                            dias: "4 días",
-                            expanded: false
-                        }
-                    ]
+                    periodo: mFilters.periodo,
+                    fechaDesde: mFilters.fechaDesde,
+                    fechaHasta: mFilters.fechaHasta,
+                    zona: mFilters.zona,
+                    cliente: mFilters.cliente,
+                    responsable: mFilters.responsable
                 };
-            }
+            },
 
+            _getDefaultFilters: function () {
+                return {
+                    periodo: "MAYO_2024",
+                    fechaDesde: "01/05/2024",
+                    fechaHasta: "31/05/2024",
+                    zona: "TODAS",
+                    cliente: "TODOS",
+                    responsable: "TODOS"
+                };
+            },
+
+            _setAllCauses: function (aCauses) {
+                this._aAllCauses = this._clone(aCauses || []);
+            },
+
+            _normalizeText: function (sValue) {
+                return String(sValue || "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                    .trim();
+            },
+
+            _clone: function (vValue) {
+                return JSON.parse(JSON.stringify(vValue));
+            }
         }
     );
 });
