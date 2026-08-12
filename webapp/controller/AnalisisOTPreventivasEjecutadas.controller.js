@@ -1,370 +1,209 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
-], function (
-    Controller,
-    JSONModel,
-    MessageToast
-) {
+    "sap/m/MessageToast",
+    "mantenimiento/model/PreventivasEjecutadasService"
+], function (Controller, JSONModel, MessageToast, PreventivasEjecutadasService) {
     "use strict";
 
-    return Controller.extend(
-        "mantenimiento.controller.AnalisisOTPreventivasEjecutadas",
-        {
+    return Controller.extend("mantenimiento.controller.AnalisisOTPreventivasEjecutadas", {
+        onInit: function () {
+            var oInitialData = PreventivasEjecutadasService.createEmpty(
+                this._getDefaultFilters(),
+                "EJECUTADAS"
+            );
+            var oModel = new JSONModel(oInitialData);
 
-            onInit: function () {
-                var oModel = new JSONModel(
-                    this._getInitialData()
-                );
+            this._iLoadRequest = 0;
+            this._oRawData = null;
+            this._aAllResponsables = [];
+            oModel.setSizeLimit(1000);
+            this.getView().setModel(oModel, "otpe");
+            this._setAllResponsables(oInitialData.responsables);
+            this._loadData(false);
+        },
 
-                oModel.setSizeLimit(1000);
+        onApplyFilters: function () {
+            this._loadData(true);
+        },
 
-                this.getView().setModel(
-                    oModel,
-                    "otpe"
-                );
-            },
+        onPeriodoChange: function (oEvent) {
+            var sKey = String(oEvent.getSource().getSelectedKey() || "");
+            var oModel = this.getView().getModel("otpe");
+            var aAnnualMatch = sKey.match(/^(\d{4})$/);
+            var aMonthlyMatch = sKey.match(/^(\d{4})-(\d{2})$/);
+            var iYear;
+            var iMonth;
+            var iLastDay;
 
-            onApplyFilters: function () {
-                var oModel =
-                    this.getView().getModel("otpe");
+            if (aAnnualMatch) {
+                iYear = Number(aAnnualMatch[1]);
+                oModel.setProperty("/filters/fechaDesde", "01/01/" + iYear);
+                oModel.setProperty("/filters/fechaHasta", "31/12/" + iYear);
+                return;
+            }
+            if (aMonthlyMatch) {
+                iYear = Number(aMonthlyMatch[1]);
+                iMonth = Number(aMonthlyMatch[2]);
+                iLastDay = new Date(iYear, iMonth, 0).getDate();
+                oModel.setProperty("/filters/fechaDesde", "01/" + String(iMonth).padStart(2, "0") + "/" + iYear);
+                oModel.setProperty("/filters/fechaHasta", String(iLastDay).padStart(2, "0") + "/" +
+                    String(iMonth).padStart(2, "0") + "/" + iYear);
+            }
+        },
 
-                var oFilters =
-                    oModel.getProperty("/filters");
+        onSelectNoEjecutadas: function () {
+            this._setAnalysisView("NO_EJECUTADAS");
+        },
 
-                console.log(
-                    "Filtros Preventivas Ejecutadas:",
-                    oFilters
-                );
+        onSelectEjecutadas: function () {
+            this._setAnalysisView("EJECUTADAS");
+        },
 
-                MessageToast.show(
-                    "Filtros aplicados correctamente."
-                );
-            },
+        onSelectTodas: function () {
+            this._setAnalysisView("TODAS");
+        },
 
-            onSelectNoEjecutadas: function () {
-                MessageToast.show(
-                    "Vista: No ejecutadas."
-                );
-            },
+        onSearchResponsable: function (oEvent) {
+            var sValue = oEvent.getParameter("newValue") || oEvent.getParameter("query") ||
+                oEvent.getParameter("value") || "";
+            var sSearch = this._normalizeText(sValue);
+            var aResponsables = this._aAllResponsables;
 
-            onSelectEjecutadas: function () {
-                MessageToast.show(
-                    "Vista: Ejecutadas."
-                );
-            },
+            if (sSearch) {
+                aResponsables = aResponsables.filter(function (oResponsable) {
+                    return this._normalizeText(oResponsable.nombre).includes(sSearch);
+                }.bind(this));
+            }
+            this.getView().getModel("otpe").setProperty("/responsables", this._clone(aResponsables));
+        },
 
-            onSelectTodas: function () {
-                MessageToast.show(
-                    "Vista: Todas."
-                );
-            },
+        onToggleResponsable: function (oEvent) {
+            var oSource = oEvent.getSource();
+            var oContext = oSource.getBindingContext("otpe");
+            var oModel = this.getView().getModel("otpe");
+            var sPath;
+            var bExpanded;
 
-            onSearchResponsable: function (oEvent) {
-                var sValue =
-                    oEvent.getParameter("newValue") ||
-                    oEvent.getParameter("query") ||
-                    "";
+            if (!oContext) {
+                return;
+            }
+            sPath = oContext.getPath();
+            bExpanded = Boolean(oModel.getProperty(sPath + "/expanded"));
+            (oModel.getProperty("/responsables") || []).forEach(function (oResponsable, iIndex) {
+                oModel.setProperty("/responsables/" + iIndex + "/expanded", false);
+            });
+            if (!bExpanded) {
+                oModel.setProperty(sPath + "/expanded", true);
+            }
+        },
 
-                var sSearch =
-                    sValue
-                        .trim()
-                        .toLowerCase();
+        _setAnalysisView: function (sAnalysis) {
+            var oModel = this.getView().getModel("otpe");
+            var oData;
 
-                var oModel =
-                    this.getView().getModel("otpe");
+            if (!this._oRawData) {
+                oModel.setProperty("/ui/selectedAnalysis", sAnalysis);
+                return;
+            }
+            oData = PreventivasEjecutadasService.build(this._oRawData, this._getFilters(), sAnalysis);
+            this._applyData(oData);
+        },
 
-                var aResponsables =
-                    oModel.getProperty("/responsables") ||
-                    [];
+        _loadData: function (bNotify) {
+            var oODataModel = this._getODataModel();
+            var oViewModel = this.getView().getModel("otpe");
+            var mFilters = this._getFilters();
+            var sAnalysis = oViewModel.getProperty("/ui/selectedAnalysis") || "EJECUTADAS";
+            var iRequest = ++this._iLoadRequest;
 
-                aResponsables.forEach(function (
-                    oResponsable,
-                    iIndex
-                ) {
-                    var sNombre =
-                        String(
-                            oResponsable.nombre || ""
-                        ).toLowerCase();
-
-                    var bVisible =
-                        !sSearch ||
-                        sNombre.indexOf(sSearch) !== -1;
-
-                    oModel.setProperty(
-                        "/responsables/" +
-                        iIndex +
-                        "/visible",
-                        bVisible
-                    );
-
-                    if (!bVisible) {
-                        oModel.setProperty(
-                            "/responsables/" +
-                            iIndex +
-                            "/expanded",
-                            false
-                        );
-                    }
-                });
-            },
-
-            onToggleResponsable: function (oEvent) {
-                var oSource =
-                    oEvent.getSource();
-
-                var oContext =
-                    oSource.getBindingContext("otpe");
-
-                if (!oContext) {
+            this.getView().setBusy(true);
+            PreventivasEjecutadasService.load(oODataModel, mFilters, sAnalysis).then(function (oResult) {
+                if (iRequest !== this._iLoadRequest) {
                     return;
                 }
-
-                var oModel =
-                    this.getView().getModel("otpe");
-
-                var sPath =
-                    oContext.getPath();
-
-                var bExpanded =
-                    Boolean(
-                        oModel.getProperty(
-                            sPath + "/expanded"
-                        )
-                    );
-
-                var aResponsables =
-                    oModel.getProperty("/responsables") ||
-                    [];
-
-                /*
-                 * Solo dejamos un responsable desplegado.
-                 * Esto mantiene controlada la altura de la
-                 * pantalla y evita scroll en escritorio.
-                 */
-                aResponsables.forEach(function (
-                    oResponsable,
-                    iIndex
-                ) {
-                    oModel.setProperty(
-                        "/responsables/" +
-                        iIndex +
-                        "/expanded",
-                        false
-                    );
-                });
-
-                if (!bExpanded) {
-                    oModel.setProperty(
-                        sPath + "/expanded",
-                        true
-                    );
+                this._oRawData = oResult.rawData;
+                this._applyData(oResult.data);
+                if (bNotify) {
+                    MessageToast.show("Análisis de OT Preventivas ejecutadas actualizado con datos de SAP");
                 }
-            },
+            }.bind(this)).catch(function (oError) {
+                if (iRequest !== this._iLoadRequest) {
+                    return;
+                }
+                this._onLoadError(oError, bNotify);
+            }.bind(this)).finally(function () {
+                if (iRequest === this._iLoadRequest) {
+                    this.getView().setBusy(false);
+                }
+            }.bind(this));
+        },
 
-            _getInitialData: function () {
-                return {
-                    filters: {
-                        periodo: "2024-05",
-                        fechaDesde: "01/05/2024",
-                        fechaHasta: "31/05/2024",
-                        zona: "TODAS",
-                        cliente: "TODOS",
-                        responsable: "TODOS"
-                    },
+        _applyData: function (oData) {
+            this.getView().getModel("otpe").setData(oData);
+            this._setAllResponsables(oData.responsables);
+        },
 
-                    catalogos: {
-                        periodos: [
-                            {
-                                key: "2024-05",
-                                text: "Mayo 2024"
-                            },
-                            {
-                                key: "2024-06",
-                                text: "Junio 2024"
-                            },
-                            {
-                                key: "2024-07",
-                                text: "Julio 2024"
-                            }
-                        ],
+        _onLoadError: function (oError, bNotify) {
+            var oModel = this.getView().getModel("otpe");
+            var sMessage = oError && oError.message || "No fue posible consultar SAP";
 
-                        zonas: [
-                            {
-                                key: "TODAS",
-                                text: "Todas"
-                            },
-                            {
-                                key: "NORTE",
-                                text: "Norte"
-                            },
-                            {
-                                key: "CENTRO",
-                                text: "Centro"
-                            },
-                            {
-                                key: "SUR",
-                                text: "Sur"
-                            },
-                            {
-                                key: "ESTE",
-                                text: "Este"
-                            },
-                            {
-                                key: "OESTE",
-                                text: "Oeste"
-                            }
-                        ],
-
-                        clientes: [
-                            {
-                                key: "TODOS",
-                                text: "Todos"
-                            },
-                            {
-                                key: "TORRE_REFORMA",
-                                text: "Torre Reforma"
-                            },
-                            {
-                                key: "PLAZA_SATELITE",
-                                text: "Plaza Satélite"
-                            },
-                            {
-                                key: "HOSPITAL_ANGELES",
-                                text: "Hospital Ángeles"
-                            }
-                        ],
-
-                        responsables: [
-                            {
-                                key: "TODOS",
-                                text: "Todos"
-                            },
-                            {
-                                key: "JUAN_PEREZ",
-                                text: "Juan Pérez"
-                            },
-                            {
-                                key: "MARIA_GONZALEZ",
-                                text: "María González"
-                            },
-                            {
-                                key: "CARLOS_HERRERA",
-                                text: "Carlos Herrera"
-                            },
-                            {
-                                key: "PEDRO_LOPEZ",
-                                text: "Pedro López"
-                            }
-                        ]
-                    },
-
-                    kpis: {
-                        planeadas: 260,
-                        ejecutadas: 248,
-                        noEjecutadas: 12,
-                        cumplimiento: "95.4%"
-                    },
-
-                    infoMessage:
-                        "Análisis basado en 248 OT preventivas ejecutadas.",
-
-                    totales: {
-                        ot: 248,
-                        pct: "100%",
-                        clientes: 87,
-                        elevadores: 201,
-                        tiempo: "1.5 días"
-                    },
-
-                    responsables: [
-                        {
-                            nombre: "Juan Pérez",
-                            ot: 54,
-                            pct: "22%",
-                            clientes: 18,
-                            elevadores: 42,
-                            tiempo: "1.2 días",
-                            expanded: true,
-                            visible: true,
-
-                            ordenes: [
-                                {
-                                    ot: "OT-0412",
-                                    cliente: "Torre Reforma",
-                                    elevador: "EV0871",
-                                    fecha: "03/05/2024",
-                                    tiempo: "1 día"
-                                },
-                                {
-                                    ot: "OT-0425",
-                                    cliente: "Plaza Satélite",
-                                    elevador: "EV1024",
-                                    fecha: "04/05/2024",
-                                    tiempo: "2 días"
-                                },
-                                {
-                                    ot: "OT-0437",
-                                    cliente: "Hospital Ángeles",
-                                    elevador: "EV0636",
-                                    fecha: "05/05/2024",
-                                    tiempo: "1 día"
-                                }
-                            ]
-                        },
-
-                        {
-                            nombre: "María González",
-                            ot: 49,
-                            pct: "20%",
-                            clientes: 16,
-                            elevadores: 38,
-                            tiempo: "1.4 días",
-                            expanded: false,
-                            visible: true,
-                            ordenes: []
-                        },
-
-                        {
-                            nombre: "Carlos Herrera",
-                            ot: 43,
-                            pct: "17%",
-                            clientes: 15,
-                            elevadores: 35,
-                            tiempo: "1.6 días",
-                            expanded: false,
-                            visible: true,
-                            ordenes: []
-                        },
-
-                        {
-                            nombre: "Pedro López",
-                            ot: 38,
-                            pct: "15%",
-                            clientes: 14,
-                            elevadores: 31,
-                            tiempo: "1.5 días",
-                            expanded: false,
-                            visible: true,
-                            ordenes: []
-                        },
-
-                        {
-                            nombre: "Otros responsables",
-                            ot: 64,
-                            pct: "26%",
-                            clientes: 24,
-                            elevadores: 55,
-                            tiempo: "1.8 días",
-                            expanded: false,
-                            visible: true,
-                            ordenes: []
-                        }
-                    ]
-                };
+            if (!this._oRawData) {
+                this._applyData(PreventivasEjecutadasService.createEmpty(
+                    this._getFilters(),
+                    oModel.getProperty("/ui/selectedAnalysis") || "EJECUTADAS"
+                ));
             }
+            if (window.console && window.console.error) {
+                window.console.error("Error al consultar el OData de OT Preventivas ejecutadas", oError);
+            }
+            if (bNotify) {
+                MessageToast.show(sMessage);
+            }
+        },
 
+        _getODataModel: function () {
+            var oComponent = this.getOwnerComponent && this.getOwnerComponent();
+
+            return oComponent && oComponent.getModel("dashboardOData") ||
+                this.getView().getModel("dashboardOData");
+        },
+
+        _getFilters: function () {
+            var mFilters = this.getView().getModel("otpe").getProperty("/filters") || {};
+
+            return {
+                periodo: mFilters.periodo,
+                fechaDesde: mFilters.fechaDesde,
+                fechaHasta: mFilters.fechaHasta,
+                zona: mFilters.zona,
+                cliente: mFilters.cliente,
+                responsable: mFilters.responsable
+            };
+        },
+
+        _getDefaultFilters: function () {
+            return {
+                periodo: "2026",
+                fechaDesde: "01/01/2026",
+                fechaHasta: "31/12/2026",
+                zona: "TODAS",
+                cliente: "TODOS",
+                responsable: "TODOS"
+            };
+        },
+
+        _setAllResponsables: function (aResponsables) {
+            this._aAllResponsables = this._clone(aResponsables || []);
+        },
+
+        _normalizeText: function (sValue) {
+            return String(sValue || "").normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        },
+
+        _clone: function (vValue) {
+            return JSON.parse(JSON.stringify(vValue));
         }
-    );
+    });
 });
