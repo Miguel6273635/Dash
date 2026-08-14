@@ -2,12 +2,12 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "mantenimiento/model/ReparacionesPlaneadasService"
+    "mantenimiento/model/AnalisisReparacionesPlaneadasNoEjecutadasService"
 ], function (
     Controller,
     JSONModel,
     MessageToast,
-    ReparacionesPlaneadasService
+    AnalisisReparacionesPlaneadasNoEjecutadasService
 ) {
     "use strict";
 
@@ -15,28 +15,58 @@ sap.ui.define([
         "mantenimiento.controller.AnalisisReparacionesPlaneadasNoEjecutadas",
         {
             onInit: function () {
-                var oInitialData = ReparacionesPlaneadasService.createEmpty(
-                    this._getDefaultFilters(),
-                    "NO_EJECUTADAS"
-                );
+                var mDefaultFilters = this._getDefaultFilters();
+
+                var oInitialData =
+                    AnalisisReparacionesPlaneadasNoEjecutadasService.createEmpty(
+                        mDefaultFilters,
+                        "NO_EJECUTADAS"
+                    );
+
                 var oModel = new JSONModel(oInitialData);
 
                 this._iLoadRequest = 0;
                 this._oRawData = null;
+                this._aAllCauses = [];
 
-                oModel.setSizeLimit(1000);
+                /*
+                 * Temporalmente permanece desactivado.
+                 * Cuando se integre el mapper con OData, cambiar a true.
+                 */
+                this._bODataEnabled = false;
+
+                oModel.setSizeLimit(5000);
+
                 this.getView().setModel(oModel, "otpe");
                 this._setAllCauses(oInitialData.causas);
-                this._loadData(false);
+
+                /*
+                 * No consultamos OData durante la apertura.
+                 * Así la vista puede mostrarse aunque la integración
+                 * del EntitySet todavía no esté terminada.
+                 */
+                if (this._bODataEnabled) {
+                    this._loadData(false);
+                }
             },
 
             onApplyFilters: function () {
+                if (!this._bODataEnabled) {
+                    MessageToast.show(
+                        "La pantalla está lista. La conexión OData se integrará posteriormente."
+                    );
+                    return;
+                }
+
                 this._loadData(true);
             },
 
             onPeriodoChange: function (oEvent) {
                 var sKey = oEvent.getSource().getSelectedKey();
-                var aMatch = String(sKey || "").match(/^([A-ZÁÉÍÓÚÑ]+)_(\d{4})$/);
+                var aMatch = String(sKey || "").match(
+                    /^([A-ZÁÉÍÓÚÑ]+)_(\d{4})$/
+                );
+
                 var mMonths = {
                     ENERO: 0,
                     FEBRERO: 1,
@@ -51,13 +81,20 @@ sap.ui.define([
                     NOVIEMBRE: 10,
                     DICIEMBRE: 11
                 };
+
                 var oModel = this.getView().getModel("otpe");
                 var iMonth;
                 var iYear;
                 var iLastDay;
                 var sMonth;
 
-                if (!aMatch || !Object.prototype.hasOwnProperty.call(mMonths, aMatch[1])) {
+                if (
+                    !aMatch ||
+                    !Object.prototype.hasOwnProperty.call(
+                        mMonths,
+                        aMatch[1]
+                    )
+                ) {
                     return;
                 }
 
@@ -70,10 +107,11 @@ sap.ui.define([
                     "/filters/fechaDesde",
                     "01/" + sMonth + "/" + iYear
                 );
+
                 oModel.setProperty(
                     "/filters/fechaHasta",
                     String(iLastDay).padStart(2, "0") +
-                    "/" + sMonth + "/" + iYear
+                        "/" + sMonth + "/" + iYear
                 );
             },
 
@@ -90,39 +128,48 @@ sap.ui.define([
             },
 
             onSearchCausa: function (oEvent) {
-                var sValue = oEvent.getParameter("query") ||
+                var sValue =
+                    oEvent.getParameter("query") ||
                     oEvent.getParameter("newValue") ||
                     "";
+
                 var sSearch = this._normalizeText(sValue);
-                var aCauses = this._aAllCauses;
+                var aCauses = this._aAllCauses || [];
 
                 if (sSearch) {
                     aCauses = aCauses.filter(function (oCause) {
-                        return [oCause.causa, oCause.material].some(function (sText) {
-                            return this._normalizeText(sText).includes(sSearch);
+                        return [
+                            oCause.causa,
+                            oCause.material
+                        ].some(function (sText) {
+                            return this
+                                ._normalizeText(sText)
+                                .includes(sSearch);
                         }.bind(this));
                     }.bind(this));
                 }
 
-                this.getView().getModel("otpe").setProperty(
-                    "/causas",
-                    this._clone(aCauses)
-                );
+                this.getView()
+                    .getModel("otpe")
+                    .setProperty("/causas", this._clone(aCauses));
             },
 
             onToggleCausa: function (oEvent) {
                 var oSource = oEvent.getSource();
                 var oContext = oSource.getBindingContext("otpe");
                 var oModel = this.getView().getModel("otpe");
-                var sPath = oContext
-                    ? oContext.getPath() + "/expanded"
-                    : oSource.data("path");
+                var sPath;
 
-                if (!sPath) {
+                if (!oContext) {
                     return;
                 }
 
-                oModel.setProperty(sPath, !oModel.getProperty(sPath));
+                sPath = oContext.getPath() + "/expanded";
+
+                oModel.setProperty(
+                    sPath,
+                    !oModel.getProperty(sPath)
+                );
             },
 
             _setAnalysisView: function (sAnalysis) {
@@ -130,31 +177,96 @@ sap.ui.define([
                 var mFilters = this._getFilters();
                 var oData;
 
+                /*
+                 * Mientras no existan datos OData, únicamente actualizamos
+                 * el estado visual de la pestaña seleccionada.
+                 */
                 if (!this._oRawData) {
-                    oModel.setProperty("/ui/selectedAnalysis", sAnalysis);
+                    oModel.setProperty(
+                        "/ui/selectedAnalysis",
+                        sAnalysis
+                    );
+
+                    this._setAnalysisTexts(sAnalysis);
                     return;
                 }
 
-                oData = ReparacionesPlaneadasService.build(
-                    this._oRawData,
-                    mFilters,
-                    sAnalysis
-                );
+                oData =
+                    AnalisisReparacionesPlaneadasNoEjecutadasService.build(
+                        this._oRawData,
+                        mFilters,
+                        sAnalysis
+                    );
 
                 this._applyData(oData);
+            },
+
+            _setAnalysisTexts: function (sAnalysis) {
+                var oModel = this.getView().getModel("otpe");
+
+                if (sAnalysis === "EJECUTADAS") {
+                    oModel.setProperty(
+                        "/ui/analysisLabel",
+                        "Ejecutadas"
+                    );
+
+                    oModel.setProperty(
+                        "/ui/analysisInfo",
+                        "Mostrando reparaciones planeadas ejecutadas"
+                    );
+
+                    return;
+                }
+
+                if (sAnalysis === "TODAS") {
+                    oModel.setProperty(
+                        "/ui/analysisLabel",
+                        "Todas"
+                    );
+
+                    oModel.setProperty(
+                        "/ui/analysisInfo",
+                        "Mostrando todas las reparaciones planeadas"
+                    );
+
+                    return;
+                }
+
+                oModel.setProperty(
+                    "/ui/analysisLabel",
+                    "No ejecutadas"
+                );
+
+                oModel.setProperty(
+                    "/ui/analysisInfo",
+                    "Mostrando reparaciones planeadas no ejecutadas"
+                );
             },
 
             _loadData: function (bNotify) {
                 var oODataModel = this._getODataModel();
                 var mFilters = this._getFilters();
+
                 var sAnalysis = this.getView()
                     .getModel("otpe")
-                    .getProperty("/ui/selectedAnalysis") || "NO_EJECUTADAS";
+                    .getProperty("/ui/selectedAnalysis") ||
+                    "NO_EJECUTADAS";
+
                 var iRequest = ++this._iLoadRequest;
+
+                if (!oODataModel) {
+                    this._onLoadError(
+                        new Error(
+                            "No se encontró el modelo dashboardOData"
+                        ),
+                        true
+                    );
+                    return;
+                }
 
                 this.getView().setBusy(true);
 
-                ReparacionesPlaneadasService.load(
+                AnalisisReparacionesPlaneadasNoEjecutadasService.load(
                     oODataModel,
                     mFilters,
                     sAnalysis
@@ -168,7 +280,7 @@ sap.ui.define([
 
                     if (bNotify) {
                         MessageToast.show(
-                            "Análisis de reparaciones actualizado con datos de SAP"
+                            "Análisis actualizado con datos de SAP"
                         );
                     }
                 }.bind(this)).catch(function (oError) {
@@ -185,26 +297,41 @@ sap.ui.define([
             },
 
             _applyData: function (oData) {
-                this.getView().getModel("otpe").setData(oData);
+                if (!oData) {
+                    return;
+                }
+
+                this.getView()
+                    .getModel("otpe")
+                    .setData(oData);
+
                 this._setAllCauses(oData.causas);
             },
 
             _onLoadError: function (oError, bNotify) {
                 var oModel = this.getView().getModel("otpe");
-                var sMessage = oError && oError.message ||
-                    "No fue posible consultar SAP";
+
+                var sMessage =
+                    oError && oError.message
+                        ? oError.message
+                        : "No fue posible consultar SAP";
 
                 if (!this._oRawData) {
                     this._applyData(
-                        ReparacionesPlaneadasService.createEmpty(
-                            this._getFilters(),
-                            oModel.getProperty("/ui/selectedAnalysis") ||
-                            "NO_EJECUTADAS"
-                        )
+                        AnalisisReparacionesPlaneadasNoEjecutadasService
+                            .createEmpty(
+                                this._getFilters(),
+                                oModel.getProperty(
+                                    "/ui/selectedAnalysis"
+                                ) || "NO_EJECUTADAS"
+                            )
                     );
                 }
 
-                if (window.console && window.console.error) {
+                if (
+                    window.console &&
+                    typeof window.console.error === "function"
+                ) {
                     window.console.error(
                         "Error al consultar el OData de reparaciones",
                         oError
@@ -217,10 +344,14 @@ sap.ui.define([
             },
 
             _getODataModel: function () {
-                var oComponent = this.getOwnerComponent && this.getOwnerComponent();
+                var oComponent =
+                    this.getOwnerComponent &&
+                    this.getOwnerComponent();
 
-                return (oComponent && oComponent.getModel("dashboardOData")) ||
-                    this.getView().getModel("dashboardOData");
+                return (
+                    oComponent &&
+                    oComponent.getModel("dashboardOData")
+                ) || this.getView().getModel("dashboardOData");
             },
 
             _getFilters: function () {
@@ -239,10 +370,40 @@ sap.ui.define([
             },
 
             _getDefaultFilters: function () {
+                var aMonthNames = [
+                    "ENERO",
+                    "FEBRERO",
+                    "MARZO",
+                    "ABRIL",
+                    "MAYO",
+                    "JUNIO",
+                    "JULIO",
+                    "AGOSTO",
+                    "SEPTIEMBRE",
+                    "OCTUBRE",
+                    "NOVIEMBRE",
+                    "DICIEMBRE"
+                ];
+
+                var oNow = new Date();
+                var iYear = oNow.getFullYear();
+                var iMonth = oNow.getMonth();
+                var iLastDay = new Date(
+                    iYear,
+                    iMonth + 1,
+                    0
+                ).getDate();
+
+                var sMonth = String(iMonth + 1).padStart(2, "0");
+
                 return {
-                    periodo: "MAYO_2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
+                    periodo:
+                        aMonthNames[iMonth] + "_" + iYear,
+                    fechaDesde:
+                        "01/" + sMonth + "/" + iYear,
+                    fechaHasta:
+                        String(iLastDay).padStart(2, "0") +
+                        "/" + sMonth + "/" + iYear,
                     zona: "TODAS",
                     cliente: "TODOS",
                     responsable: "TODOS"
@@ -250,7 +411,8 @@ sap.ui.define([
             },
 
             _setAllCauses: function (aCauses) {
-                this._aAllCauses = this._clone(aCauses || []);
+                this._aAllCauses =
+                    this._clone(aCauses || []);
             },
 
             _normalizeText: function (sValue) {
@@ -262,6 +424,10 @@ sap.ui.define([
             },
 
             _clone: function (vValue) {
+                if (vValue === undefined || vValue === null) {
+                    return vValue;
+                }
+
                 return JSON.parse(JSON.stringify(vValue));
             }
         }

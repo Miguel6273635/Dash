@@ -1,336 +1,190 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/json/JSONModel",
-  "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
+  "sap/m/MessageToast",
+  "mantenimiento/model/ReparacionesPlaneadasEjecutadasService"
+], function (Controller, JSONModel, MessageToast, ReparacionesPlaneadasEjecutadasService) {
   "use strict";
 
   return Controller.extend("mantenimiento.controller.AnalisisReparacionesPlaneadasEjecutadas", {
-
     onInit: function () {
-      const oData = this._getMockData();
-      this.getView().setModel(new JSONModel(oData), "repa");
-      this._applyFilters();
+      var oInitialData = ReparacionesPlaneadasEjecutadasService.createEmpty(
+        this._getDefaultFilters(),
+        "EJECUTADAS"
+      );
+      var oModel = new JSONModel(oInitialData);
+
+      this._iLoadRequest = 0;
+      this._oRawData = null;
+      this._aAllMaterials = [];
+      oModel.setSizeLimit(1000);
+      this.getView().setModel(oModel, "repa");
+      this._setAllMaterials(oInitialData.materiales);
+      this._loadData(false);
     },
 
     onAplicarFiltros: function () {
-      this._applyFilters();
-      MessageToast.show("Filtros aplicados");
+      this._loadData(true);
+    },
+
+    onPeriodoChange: function (oEvent) {
+      var sKey = String(oEvent.getSource().getSelectedKey() || "");
+      var oModel = this.getView().getModel("repa");
+      var aAnnualMatch = sKey.match(/^(\d{4})$/);
+      var aMonthlyMatch = sKey.match(/^(\d{4})-(\d{2})$/);
+      var iYear;
+      var iMonth;
+      var iLastDay;
+
+      if (aAnnualMatch) {
+        iYear = Number(aAnnualMatch[1]);
+        oModel.setProperty("/filters/fechaDesde", "01/01/" + iYear);
+        oModel.setProperty("/filters/fechaHasta", "31/12/" + iYear);
+        return;
+      }
+      if (aMonthlyMatch) {
+        iYear = Number(aMonthlyMatch[1]);
+        iMonth = Number(aMonthlyMatch[2]);
+        iLastDay = new Date(iYear, iMonth, 0).getDate();
+        oModel.setProperty("/filters/fechaDesde", "01/" + String(iMonth).padStart(2, "0") + "/" + iYear);
+        oModel.setProperty("/filters/fechaHasta", String(iLastDay).padStart(2, "0") + "/" +
+          String(iMonth).padStart(2, "0") + "/" + iYear);
+      }
     },
 
     onBuscarMaterial: function (oEvent) {
-      const sQuery = (oEvent.getParameter("newValue") || "").trim();
-      this.getView().getModel("repa").setProperty("/searchQuery", sQuery);
-      this._applyFilters();
+      var sValue = oEvent.getParameter("newValue") || oEvent.getParameter("query") ||
+        oEvent.getParameter("value") || "";
+      var sSearch = this._normalizeText(sValue);
+      var aMateriales = this._aAllMaterials;
+
+      if (sSearch) {
+        aMateriales = aMateriales.filter(function (oMaterial) {
+          return this._normalizeText(oMaterial.material).includes(sSearch);
+        }.bind(this));
+      }
+      this.getView().getModel("repa").setProperty("/materiales", this._clone(aMateriales));
     },
 
     onToggleMaterial: function (oEvent) {
-      const oContext = oEvent.getSource().getBindingContext("repa");
+      var oContext = oEvent.getSource().getBindingContext("repa");
+      var oModel = this.getView().getModel("repa");
+      var sPath;
+      var bExpanded;
+
       if (!oContext) {
         return;
       }
-
-      const sPath = oContext.getPath();
-      const oModel = this.getView().getModel("repa");
-      const bExpanded = oModel.getProperty(sPath + "/expanded");
-
+      sPath = oContext.getPath();
+      bExpanded = Boolean(oModel.getProperty(sPath + "/expanded"));
       oModel.setProperty(sPath + "/expanded", !bExpanded);
-      oModel.setProperty(
-        sPath + "/chevronIcon",
-        !bExpanded ? "sap-icon://navigation-down-arrow" : "sap-icon://navigation-right-arrow"
-      );
+      oModel.setProperty(sPath + "/chevronIcon", !bExpanded
+        ? "sap-icon://navigation-down-arrow"
+        : "sap-icon://navigation-right-arrow");
     },
 
     onVerNoEjecutadas: function () {
-      MessageToast.show("Después conectamos la vista de reparaciones no ejecutadas");
+      MessageToast.show("La vista de Reparaciones No Ejecutadas conserva el mismo periodo y filtros.");
     },
 
     onVerTodas: function () {
-      MessageToast.show("Después conectamos la vista de todas las reparaciones");
+      MessageToast.show("La vista Todas se habilita cuando se configure su ruta de navegación.");
     },
 
-    _applyFilters: function () {
-      const oModel = this.getView().getModel("repa");
-      const aOrdenesOriginales = oModel.getProperty("/ordenesOriginales") || [];
-      const aMaterialesActuales = oModel.getProperty("/materiales") || [];
+    _loadData: function (bNotify) {
+      var oODataModel = this._getODataModel();
+      var oViewModel = this.getView().getModel("repa");
+      var mFilters = this._getFilters();
+      var sAnalysis = oViewModel.getProperty("/ui/selectedAnalysis") || "EJECUTADAS";
+      var iRequest = ++this._iLoadRequest;
 
-      const mExpanded = {};
-      aMaterialesActuales.forEach(function (oMat) {
-        mExpanded[oMat.material] = oMat.expanded;
-      });
-
-      const sPeriodo = this.byId("selPeriodo").getSelectedKey();
-      const dDesde = this.byId("dpDesde").getDateValue();
-      const dHasta = this.byId("dpHasta").getDateValue();
-      const sZona = this.byId("selZona").getSelectedKey();
-      const sCliente = this.byId("selCliente").getSelectedKey();
-      const sResponsable = this.byId("selResponsable").getSelectedKey();
-      const sSearch = (oModel.getProperty("/searchQuery") || "").toLowerCase();
-
-      let aFiltradas = aOrdenesOriginales.filter(function (oOrden) {
-        const dFecha = this._parseDate(oOrden.fecha);
-        const bPeriodo =
-          sPeriodo === "todos" ||
-          (sPeriodo === "mayo" && dFecha.getMonth() === 4) ||
-          (sPeriodo === "junio" && dFecha.getMonth() === 5);
-
-        const bFechaDesde = !dDesde || dFecha >= dDesde;
-        const bFechaHasta = !dHasta || dFecha <= dHasta;
-        const bZona = sZona === "todas" || oOrden.zona === sZona;
-        const bCliente = sCliente === "todos" || oOrden.cliente === sCliente;
-        const bResponsable = sResponsable === "todos" || oOrden.tecnico === sResponsable;
-        const bSearch = !sSearch || oOrden.material.toLowerCase().includes(sSearch);
-
-        return bPeriodo && bFechaDesde && bFechaHasta && bZona && bCliente && bResponsable && bSearch;
+      this.getView().setBusy(true);
+      ReparacionesPlaneadasEjecutadasService.load(oODataModel, mFilters, sAnalysis).then(function (oResult) {
+        if (iRequest !== this._iLoadRequest) {
+          return;
+        }
+        this._oRawData = oResult.rawData;
+        this._applyData(oResult.data);
+        if (bNotify) {
+          MessageToast.show("Análisis de reparaciones ejecutadas actualizado con datos de SAP");
+        }
+      }.bind(this)).catch(function (oError) {
+        if (iRequest !== this._iLoadRequest) {
+          return;
+        }
+        this._onLoadError(oError, bNotify);
+      }.bind(this)).finally(function () {
+        if (iRequest === this._iLoadRequest) {
+          this.getView().setBusy(false);
+        }
       }.bind(this));
-
-      const aEjecutadasFiltradas = aFiltradas.filter(function (oOrden) {
-        return oOrden.estado === "EJECUTADA";
-      });
-
-      const aNoEjecutadasFiltradas = aFiltradas.filter(function (oOrden) {
-        return oOrden.estado === "NO_EJECUTADA";
-      });
-
-      const mAgrupadas = {};
-
-      aFiltradas.forEach(function (oOrden) {
-        if (!mAgrupadas[oOrden.material]) {
-          mAgrupadas[oOrden.material] = {
-            material: oOrden.material,
-            icon: oOrden.icon,
-            ejecutadasRows: [],
-            noEjecutadasRows: []
-          };
-        }
-
-        if (oOrden.estado === "EJECUTADA") {
-          mAgrupadas[oOrden.material].ejecutadasRows.push(oOrden);
-        } else {
-          mAgrupadas[oOrden.material].noEjecutadasRows.push(oOrden);
-        }
-      });
-
-      const iTotalEjecutadas = aEjecutadasFiltradas.length;
-      const iTotalPlaneadas = aFiltradas.length;
-      const iTotalNoEjecutadas = aNoEjecutadasFiltradas.length;
-
-      const aMateriales = Object.keys(mAgrupadas)
-        .map(function (sMaterial) {
-          const oGrupo = mAgrupadas[sMaterial];
-          const aRows = oGrupo.ejecutadasRows.slice().sort(function (a, b) {
-            return this._parseDate(a.fecha) - this._parseDate(b.fecha);
-          }.bind(this));
-
-          if (!aRows.length) {
-            return null;
-          }
-
-          const aEquiposUnicos = [...new Set(aRows.map(function (o) { return o.equipo; }))];
-          const aClientesUnicos = [...new Set(aRows.map(function (o) { return o.cliente; }))];
-          const nPromedioDias = aRows.reduce(function (acc, o) {
-            return acc + this._parseDays(o.dias);
-          }.bind(this), 0) / aRows.length;
-
-          const nPorcentaje = iTotalEjecutadas > 0
-            ? (aRows.length / iTotalEjecutadas) * 100
-            : 0;
-
-          return {
-            material: oGrupo.material,
-            icon: oGrupo.icon,
-            ejecutadas: aRows.length,
-            porcentaje: this._formatPercent(nPorcentaje),
-            equipos: aEquiposUnicos.length,
-            clientes: aClientesUnicos.length,
-            dias: this._formatAverageDays(nPromedioDias),
-            expanded: mExpanded[oGrupo.material] !== undefined ? mExpanded[oGrupo.material] : (oGrupo.material === "Sensor de puerta"),
-            chevronIcon: (mExpanded[oGrupo.material] !== undefined ? mExpanded[oGrupo.material] : (oGrupo.material === "Sensor de puerta"))
-              ? "sap-icon://navigation-down-arrow"
-              : "sap-icon://navigation-right-arrow",
-            ordenes: aRows.map(function (o) {
-              return {
-                ot: o.ot,
-                equipo: o.equipo,
-                cliente: o.cliente,
-                fecha: o.fecha,
-                tecnico: o.tecnico,
-                dias: o.dias
-              };
-            })
-          };
-        }.bind(this))
-        .filter(Boolean)
-        .sort(function (a, b) {
-          return b.ejecutadas - a.ejecutadas;
-        });
-
-      const nCumplimiento = iTotalPlaneadas > 0 ? (iTotalEjecutadas / iTotalPlaneadas) * 100 : 0;
-
-      oModel.setProperty("/materiales", aMateriales);
-      oModel.setProperty("/kpis", {
-        planeadas: iTotalPlaneadas,
-        ejecutadas: iTotalEjecutadas,
-        noEjecutadas: iTotalNoEjecutadas,
-        cumplimiento: this._formatPercent(nCumplimiento),
-        resumen: iTotalEjecutadas + " de " + iTotalPlaneadas + " OT"
-      });
-
-      oModel.setProperty(
-        "/infoMessage",
-        "Análisis basado en " + iTotalEjecutadas + " OT ejecutadas en el periodo seleccionado."
-      );
     },
 
-    _parseDate: function (sFecha) {
-      if (!sFecha) {
-        return null;
+    _applyData: function (oData) {
+      this.getView().getModel("repa").setData(oData);
+      this._setAllMaterials(oData.materiales);
+    },
+
+    _onLoadError: function (oError, bNotify) {
+      var oModel = this.getView().getModel("repa");
+      var sMessage = oError && oError.message || "No fue posible consultar SAP";
+
+      if (!this._oRawData) {
+        this._applyData(ReparacionesPlaneadasEjecutadasService.createEmpty(
+          this._getFilters(),
+          oModel.getProperty("/ui/selectedAnalysis") || "EJECUTADAS"
+        ));
       }
-      const aPartes = sFecha.split("/");
-      return new Date(
-        parseInt(aPartes[2], 10),
-        parseInt(aPartes[1], 10) - 1,
-        parseInt(aPartes[0], 10)
-      );
-    },
-
-    _parseDays: function (sDias) {
-      if (!sDias) {
-        return 0;
+      if (window.console && window.console.error) {
+        window.console.error("Error al consultar el OData de reparaciones ejecutadas", oError);
       }
-      const n = parseFloat(String(sDias).replace(",", "."));
-      return isNaN(n) ? 0 : n;
+      if (bNotify) {
+        MessageToast.show(sMessage);
+      }
     },
 
-    _formatPercent: function (n) {
-      return (Math.round(n * 10) / 10).toFixed(1).replace(".0", "") + "%";
+    _getODataModel: function () {
+      var oComponent = this.getOwnerComponent && this.getOwnerComponent();
+
+      return oComponent && oComponent.getModel("dashboardOData") ||
+        this.getView().getModel("dashboardOData");
     },
 
-    _formatAverageDays: function (n) {
-      const s = (Math.round(n * 10) / 10).toFixed(1).replace(".0", "");
-      return s + (s === "1" ? " día" : " días");
-    },
-
-    _getMockData: function () {
-      const mZonaCliente = {
-        "Torre Reforma": "norte",
-        "Plaza Satélite": "norte",
-        "Hospital Ángeles": "centro",
-        "Torre Mayor": "centro",
-        "Centro Ejecutivo Sur": "sur",
-        "Corporativo Norte": "norte",
-        "Plaza Central": "centro",
-        "Torre Prisma": "sur",
-        "Hospital Norte": "norte"
-      };
-
-      const aConfig = [
-        {
-          material: "Sensor de puerta",
-          icon: "sap-icon://iphone",
-          ejecutadas: 24,
-          noEjecutadas: 2,
-          clientes: ["Torre Reforma", "Plaza Satélite", "Hospital Ángeles", "Torre Mayor"],
-          responsables: ["Juan Pérez", "María González", "Carlos Herrera"],
-          dias: [1, 2, 1, 2]
-        },
-        {
-          material: "Rodamiento guía",
-          icon: "sap-icon://target-group",
-          ejecutadas: 18,
-          noEjecutadas: 1,
-          clientes: ["Centro Ejecutivo Sur", "Corporativo Norte", "Torre Reforma"],
-          responsables: ["Luis Ramírez", "Carlos Herrera", "Juan Pérez"],
-          dias: [3, 2, 2, 4]
-        },
-        {
-          material: "Tarjeta electrónica",
-          icon: "sap-icon://it-system",
-          ejecutadas: 14,
-          noEjecutadas: 1,
-          clientes: ["Plaza Central", "Hospital Ángeles", "Plaza Satélite"],
-          responsables: ["María González", "Carlos Herrera"],
-          dias: [4, 3, 2]
-        },
-        {
-          material: "Contactor principal",
-          icon: "sap-icon://energy-saving-lightbulb",
-          ejecutadas: 11,
-          noEjecutadas: 1,
-          clientes: ["Torre Prisma", "Torre Reforma", "Hospital Norte"],
-          responsables: ["Juan Pérez", "Carlos Herrera"],
-          dias: [2, 3, 2]
-        },
-        {
-          material: "Otros materiales",
-          icon: "sap-icon://add-equipment",
-          ejecutadas: 21,
-          noEjecutadas: 2,
-          clientes: ["Hospital Norte", "Torre Mayor", "Plaza Central", "Plaza Satélite"],
-          responsables: ["Carlos Herrera", "María González", "Juan Pérez"],
-          dias: [3, 2, 4, 2]
-        }
-      ];
-
-      const aOrdenes = [];
-      let iOt = 412;
-      let iEquipo = 871;
-
-      aConfig.forEach(function (oCfg) {
-        for (let i = 0; i < oCfg.ejecutadas; i++) {
-          const sCliente = oCfg.clientes[i % oCfg.clientes.length];
-          const sResponsable = oCfg.responsables[i % oCfg.responsables.length];
-          const iDia = (i % 28) + 1;
-          const iDuracion = oCfg.dias[i % oCfg.dias.length];
-
-          aOrdenes.push({
-            material: oCfg.material,
-            icon: oCfg.icon,
-            estado: "EJECUTADA",
-            ot: "OT-2024-" + String(iOt++).padStart(4, "0"),
-            equipo: "EV" + String(iEquipo++).padStart(4, "0"),
-            cliente: sCliente,
-            zona: mZonaCliente[sCliente],
-            fecha: String(iDia).padStart(2, "0") + "/05/2024",
-            tecnico: sResponsable,
-            dias: iDuracion + (iDuracion === 1 ? " día" : " días")
-          });
-        }
-
-        for (let j = 0; j < oCfg.noEjecutadas; j++) {
-          const sClienteNo = oCfg.clientes[j % oCfg.clientes.length];
-          const sResponsableNo = oCfg.responsables[j % oCfg.responsables.length];
-          const iDiaNo = ((j + 10) % 28) + 1;
-
-          aOrdenes.push({
-            material: oCfg.material,
-            icon: oCfg.icon,
-            estado: "NO_EJECUTADA",
-            ot: "OT-2024-" + String(iOt++).padStart(4, "0"),
-            equipo: "EV" + String(iEquipo++).padStart(4, "0"),
-            cliente: sClienteNo,
-            zona: mZonaCliente[sClienteNo],
-            fecha: String(iDiaNo).padStart(2, "0") + "/05/2024",
-            tecnico: sResponsableNo,
-            dias: "0 días"
-          });
-        }
-      });
+    _getFilters: function () {
+      var mFilters = this.getView().getModel("repa").getProperty("/filters") || {};
 
       return {
-        searchQuery: "",
-        infoMessage: "",
-        kpis: {
-          planeadas: 0,
-          ejecutadas: 0,
-          noEjecutadas: 0,
-          cumplimiento: "0%",
-          resumen: ""
-        },
-        materiales: [],
-        ordenesOriginales: aOrdenes
+        periodo: mFilters.periodo,
+        fechaDesde: mFilters.fechaDesde,
+        fechaHasta: mFilters.fechaHasta,
+        zona: mFilters.zona,
+        cliente: mFilters.cliente,
+        responsable: mFilters.responsable
       };
-    }
+    },
 
+    _getDefaultFilters: function () {
+      return {
+        periodo: "2026",
+        fechaDesde: "01/01/2026",
+        fechaHasta: "31/12/2026",
+        zona: "TODAS",
+        cliente: "TODOS",
+        responsable: "TODOS"
+      };
+    },
+
+    _setAllMaterials: function (aMaterials) {
+      this._aAllMaterials = this._clone(aMaterials || []);
+    },
+
+    _normalizeText: function (sValue) {
+      return String(sValue || "").normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    },
+
+    _clone: function (vValue) {
+      return JSON.parse(JSON.stringify(vValue));
+    }
   });
 });
