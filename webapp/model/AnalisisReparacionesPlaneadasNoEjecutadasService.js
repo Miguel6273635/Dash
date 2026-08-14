@@ -1,610 +1,590 @@
-sap.ui.define([], function () {
+/* global Promise */
+
+sap.ui.define([
+    "mantenimiento/model/AnalisisReparacionesPlaneadasNoEjecutadasMapper"
+], function (AnalisisReparacionesPlaneadasNoEjecutadasMapper) {
     "use strict";
 
-    var aPreferredEntitySets = [
-        "ReparacionesPlaneadasSet",
-        "ReparacionesSet",
-        "OrdenesMantenimientoSet"
-    ];
-
-    var mMonthNames = {
-        0: "ENERO",
-        1: "FEBRERO",
-        2: "MARZO",
-        3: "ABRIL",
-        4: "MAYO",
-        5: "JUNIO",
-        6: "JULIO",
-        7: "AGOSTO",
-        8: "SEPTIEMBRE",
-        9: "OCTUBRE",
-        10: "NOVIEMBRE",
-        11: "DICIEMBRE"
+    var ID_CHUNK_SIZE = 30;
+    var MAX_CONCURRENT_CHUNKS = 4;
+    var FIXED_PERIOD = "ANUAL_2026";
+    var FIXED_START_DATE = "01/01/2026";
+    var FIXED_END_DATE = "31/12/2026";
+    var LOG_PREFIX = "[ARPNO][Service]";
+    var SELECTS = {
+        DashboardOrdersSet: [
+            "OrderId", "OrderTypeCode", "OrderTypeText", "PlannedStartDate",
+            "PlannedFinishDate", "SapUserStatusCode", "AppStatusCode", "StatusText",
+            "CustomerId", "CustomerName", "EquipmentId", "EquipmentName",
+            "SupervisorId", "Mecanico", "Turno", "Zona", "FechaInicioProg",
+            "FechaInicioReal"
+        ],
+        DashboardOrderCausesSet: [
+            "OrderCauseId", "OrderId", "CauseCode", "CauseText", "CauseContextCode",
+            "OriginCode", "IsPrimary", "ValidFrom", "ValidTo"
+        ],
+        DashboardOrderMaterialsSet: [
+            "MaterialRequirementId", "OrderId", "MaterialId", "MaterialName",
+            "PlannedQuantity", "RequiredDate", "MaterialCriticalityCode",
+            "AvailableStockQuantity", "DataValidationStatusCode", "IsPublishable"
+        ],
+        DashboardOrderResourcesSet: [
+            "OrderResourceId", "OrderId", "ResourceId", "PersonnelNumber", "RoleCode",
+            "AssignmentTypeCode", "ValidFrom", "ValidTo"
+        ],
+        DashboardResourceDailySet: [
+            "ResourceDateId", "ResourceId", "ResourceName", "WorkDate", "ZoneId",
+            "ZoneName", "SupervisorId", "SupervisorName", "ShiftId", "ShiftName"
+        ],
+        DashboardFilterCatalogSet: [
+            "FilterCatalogId", "FilterDomain", "ValueId", "ValueText", "ParentValueId",
+            "ScopeTypeCode", "ScopeId", "ValidFrom", "ValidTo", "SortOrder", "Active"
+        ]
     };
 
-    function pick(oRecord, aNames, vDefault) {
-        var i;
-        var vValue;
+    function log(sLevel, sMessage, oDetails) {
+        var oConsole = window.console;
+        var sMethod = oConsole && typeof oConsole[sLevel] === "function"
+            ? sLevel
+            : "log";
 
-        for (i = 0; i < aNames.length; i += 1) {
-            vValue = oRecord[aNames[i]];
-
-            if (vValue !== undefined && vValue !== null && vValue !== "") {
-                return vValue;
-            }
+        if (!oConsole || typeof oConsole[sMethod] !== "function") {
+            return;
         }
-
-        return vDefault;
+        if (oDetails === undefined) {
+            oConsole[sMethod](LOG_PREFIX + " " + sMessage);
+            return;
+        }
+        oConsole[sMethod](LOG_PREFIX + " " + sMessage, oDetails);
     }
 
-    function normalizeText(vValue) {
-        return String(vValue || "")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toUpperCase()
-            .trim();
+    function getServiceUrl(oModel) {
+        return String(oModel && oModel.sServiceUrl || "");
+    }
+
+    function buildDebugUrl(oModel, sEntitySet, mUrlParameters) {
+        var sBaseUrl = getServiceUrl(oModel);
+        var aQuery = Object.keys(mUrlParameters || {}).filter(function (sKey) {
+            return mUrlParameters[sKey] !== undefined && mUrlParameters[sKey] !== null;
+        }).map(function (sKey) {
+            return encodeURIComponent(sKey) + "=" + encodeURIComponent(mUrlParameters[sKey]);
+        });
+
+        if (sBaseUrl && !sBaseUrl.endsWith("/")) {
+            sBaseUrl += "/";
+        }
+        return sBaseUrl + sEntitySet + (aQuery.length ? "?" + aQuery.join("&") : "");
+    }
+
+    function decodeDebugUrl(sUrl) {
+        try {
+            return decodeURIComponent(sUrl);
+        } catch {
+            return sUrl;
+        }
+    }
+
+    function getErrorDetails(oError, sFallbackUrl) {
+        var vResponseBody = oError && oError.responseText || "";
+
+        if (vResponseBody) {
+            try {
+                vResponseBody = JSON.parse(vResponseBody);
+            } catch {
+                // Se conserva el texto original cuando SAP no devuelve JSON.
+            }
+        }
+        return {
+            message: oError && oError.message || "Error OData sin mensaje",
+            statusCode: oError && oError.statusCode,
+            statusText: oError && oError.statusText,
+            requestUri: oError && oError.requestUri || sFallbackUrl,
+            responseBody: vResponseBody,
+            headers: oError && oError.headers,
+            rawError: oError
+        };
     }
 
     function parseDate(vValue) {
-        var aParts;
-        var aMatch;
+        var aDateParts;
         var oDate;
-
-        if (vValue instanceof Date) {
-            return vValue;
-        }
+        var sValue;
 
         if (!vValue) {
             return null;
         }
-
-        aMatch = String(vValue).match(/\/Date\((\d+)(?:[+-]\d+)?\)\//);
-
-        if (aMatch) {
-            return new Date(Number(aMatch[1]));
+        if (vValue instanceof Date) {
+            return Number.isNaN(vValue.getTime())
+                ? null
+                : new Date(vValue.getFullYear(), vValue.getMonth(), vValue.getDate());
         }
 
-        if (/^\d{2}\/\d{2}\/\d{4}$/.test(String(vValue))) {
-            aParts = String(vValue).split("/");
-            return new Date(
-                Number(aParts[2]),
-                Number(aParts[1]) - 1,
-                Number(aParts[0])
+        sValue = String(vValue).trim();
+        aDateParts = sValue.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if (aDateParts) {
+            oDate = new Date(
+                Number(aDateParts[3]),
+                Number(aDateParts[2]) - 1,
+                Number(aDateParts[1])
             );
+        } else {
+            aDateParts = sValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            oDate = aDateParts
+                ? new Date(
+                    Number(aDateParts[1]),
+                    Number(aDateParts[2]) - 1,
+                    Number(aDateParts[3])
+                )
+                : null;
         }
 
-        oDate = new Date(vValue);
-
-        return isNaN(oDate.getTime()) ? null : oDate;
+        return oDate && !Number.isNaN(oDate.getTime()) ? oDate : null;
     }
 
-    function formatDate(vValue) {
-        var oDate = parseDate(vValue);
+    function addDays(oDate, iDays) {
+        var oResult = new Date(oDate.getTime());
 
-        if (!oDate) {
-            return "—";
+        oResult.setDate(oResult.getDate() + iDays);
+        return oResult;
+    }
+
+    function formatODataDate(oDate) {
+        if (!(oDate instanceof Date) || Number.isNaN(oDate.getTime())) {
+            return null;
         }
-
         return [
-            String(oDate.getDate()).padStart(2, "0"),
+            oDate.getFullYear(),
             String(oDate.getMonth() + 1).padStart(2, "0"),
-            oDate.getFullYear()
-        ].join("/");
+            String(oDate.getDate()).padStart(2, "0")
+        ].join("-") + "T00:00:00";
     }
 
-    function toNumber(vValue) {
-        var nValue = Number(vValue);
+    function getFilterContext(mFilters) {
+        var mValues = mFilters || {};
+        var oStartDate = parseDate(FIXED_START_DATE);
+        var oEndDate = parseDate(FIXED_END_DATE);
 
-        return isNaN(nValue) ? 0 : nValue;
-    }
-
-    function uniqueCount(aRecords, sProperty) {
-        var mValues = {};
-
-        aRecords.forEach(function (oRecord) {
-            var sValue = String(oRecord[sProperty] || "").trim();
-
-            if (sValue) {
-                mValues[sValue] = true;
+        return {
+            startDate: oStartDate,
+            endDate: oEndDate,
+            endExclusive: oEndDate ? addDays(oEndDate, 1) : null,
+            filters: {
+                periodo: FIXED_PERIOD,
+                fechaDesde: FIXED_START_DATE,
+                fechaHasta: FIXED_END_DATE,
+                zona: mValues.zona || "TODAS",
+                cliente: mValues.cliente || "TODOS",
+                responsable: mValues.responsable || "TODOS"
             }
-        });
-
-        return Object.keys(mValues).length;
-    }
-
-    function createCatalog(aRecords, sProperty, sAllKey, sAllText) {
-        var mValues = {};
-        var aCatalog = [{
-            key: sAllKey,
-            text: sAllText
-        }];
-
-        aRecords.forEach(function (oRecord) {
-            var sValue = String(oRecord[sProperty] || "").trim();
-
-            if (sValue) {
-                mValues[sValue] = true;
-            }
-        });
-
-        Object.keys(mValues).sort().forEach(function (sValue) {
-            aCatalog.push({
-                key: sValue,
-                text: sValue
-            });
-        });
-
-        return aCatalog;
-    }
-
-    function createPeriods() {
-        var aPeriods = [];
-        var oNow = new Date();
-        var i;
-
-        for (i = 0; i < 24; i += 1) {
-            var oDate = new Date(
-                oNow.getFullYear(),
-                oNow.getMonth() - i,
-                1
-            );
-            var sKey = mMonthNames[oDate.getMonth()] +
-                "_" + oDate.getFullYear();
-
-            aPeriods.push({
-                key: sKey,
-                text: mMonthNames[oDate.getMonth()] +
-                    " " + oDate.getFullYear()
-            });
-        }
-
-        return aPeriods;
-    }
-
-    function isExecuted(oRecord) {
-        var sStatus = normalizeText(oRecord.estado);
-        var sExecuted = normalizeText(oRecord.ejecutada);
-
-        if (
-            sExecuted === "X" ||
-            sExecuted === "SI" ||
-            sExecuted === "TRUE" ||
-            sExecuted === "1"
-        ) {
-            return true;
-        }
-
-        return [
-            "EJECUTADA",
-            "EJECUTADO",
-            "FINALIZADA",
-            "FINALIZADO",
-            "CERRADA",
-            "CERRADO",
-            "COMPLETADA",
-            "COMPLETADO",
-            "TECO"
-        ].some(function (sValue) {
-            return sStatus.indexOf(sValue) !== -1;
-        });
-    }
-
-    function normalizeRecord(oRecord, iIndex) {
-        var oNormalized = {
-            ot: String(pick(oRecord, [
-                "Ot",
-                "OT",
-                "Orden",
-                "OrdenMantenimiento",
-                "Aufnr",
-                "AUFNR"
-            ], "OT-" + (iIndex + 1))),
-
-            equipo: String(pick(oRecord, [
-                "Equipo",
-                "EquipoId",
-                "Equnr",
-                "EQUNR"
-            ], "Sin equipo")),
-
-            cliente: String(pick(oRecord, [
-                "Cliente",
-                "ClienteNombre",
-                "Kunnr",
-                "KUNNR"
-            ], "Sin cliente")),
-
-            material: String(pick(oRecord, [
-                "Material",
-                "MaterialDescripcion",
-                "Matnr",
-                "MATNR"
-            ], "Sin material")),
-
-            causa: String(pick(oRecord, [
-                "Causa",
-                "CausaIncumplimiento",
-                "Motivo",
-                "MotivoDescripcion"
-            ], "Sin causa registrada")),
-
-            zona: String(pick(oRecord, [
-                "Zona",
-                "ZonaDescripcion",
-                "Region"
-            ], "Sin zona")),
-
-            responsable: String(pick(oRecord, [
-                "Responsable",
-                "ResponsableNombre",
-                "Supervisor",
-                "Mecanico"
-            ], "Sin responsable")),
-
-            estado: String(pick(oRecord, [
-                "Estado",
-                "Status",
-                "Estatus",
-                "Txt04"
-            ], "")),
-
-            ejecutada: pick(oRecord, [
-                "Ejecutada",
-                "EsEjecutada",
-                "Finalizada"
-            ], ""),
-
-            fechaProgramadaRaw: pick(oRecord, [
-                "FechaProgramada",
-                "FechaPlanificada",
-                "FechaInicio",
-                "Gstrp"
-            ], null),
-
-            diasDetenida: toNumber(pick(oRecord, [
-                "DiasDetenida",
-                "DiasDetencion",
-                "DiasParada"
-            ], 0))
         };
-
-        oNormalized.fechaProgramada =
-            formatDate(oNormalized.fechaProgramadaRaw);
-        oNormalized.esEjecutada = isExecuted(oNormalized);
-
-        return oNormalized;
     }
 
-    function filterRecords(aRecords, mFilters) {
-        var oFrom = parseDate(mFilters.fechaDesde);
-        var oTo = parseDate(mFilters.fechaHasta);
+    function buildOrdersFilter(oContext) {
+        var aClauses = [];
+        var sStartDate = formatODataDate(oContext.startDate);
+        var sEndDate = formatODataDate(oContext.endDate);
 
-        if (oTo) {
-            oTo.setHours(23, 59, 59, 999);
+        if (sStartDate) {
+            aClauses.push("PlannedStartDate eq datetime'" + sStartDate + "'");
         }
-
-        return aRecords.filter(function (oRecord) {
-            var oDate = parseDate(oRecord.fechaProgramadaRaw);
-
-            if (oFrom && oDate && oDate < oFrom) {
-                return false;
-            }
-
-            if (oTo && oDate && oDate > oTo) {
-                return false;
-            }
-
-            if (
-                mFilters.zona &&
-                mFilters.zona !== "TODAS" &&
-                oRecord.zona !== mFilters.zona
-            ) {
-                return false;
-            }
-
-            if (
-                mFilters.cliente &&
-                mFilters.cliente !== "TODOS" &&
-                oRecord.cliente !== mFilters.cliente
-            ) {
-                return false;
-            }
-
-            if (
-                mFilters.responsable &&
-                mFilters.responsable !== "TODOS" &&
-                oRecord.responsable !== mFilters.responsable
-            ) {
-                return false;
-            }
-
-            return true;
-        });
-    }
-
-    function groupCauses(aRecords) {
-        var mGroups = {};
-
-        aRecords.forEach(function (oRecord) {
-            var sKey = oRecord.causa || "Sin causa registrada";
-
-            if (!mGroups[sKey]) {
-                mGroups[sKey] = {
-                    causa: sKey,
-                    records: []
-                };
-            }
-
-            mGroups[sKey].records.push(oRecord);
-        });
-
-        return Object.keys(mGroups).map(function (sKey) {
-            var oGroup = mGroups[sKey];
-            var aGroupRecords = oGroup.records;
-            var iTotalDays = aGroupRecords.reduce(function (iTotal, oRecord) {
-                return iTotal + oRecord.diasDetenida;
-            }, 0);
-
-            return {
-                causa: oGroup.causa,
-                material: aGroupRecords[0].material,
-                otNoEjecutadas: aGroupRecords.length,
-                equipos: uniqueCount(aGroupRecords, "equipo"),
-                clientes: uniqueCount(aGroupRecords, "cliente"),
-                dias: aGroupRecords.length
-                    ? (iTotalDays / aGroupRecords.length).toFixed(1) + " días"
-                    : "0 días",
-                diasValor: aGroupRecords.length
-                    ? iTotalDays / aGroupRecords.length
-                    : 0,
-                icon: "sap-icon://wrench",
-                expanded: false,
-                details: aGroupRecords
-            };
-        }).sort(function (oA, oB) {
-            return oB.otNoEjecutadas - oA.otNoEjecutadas;
-        });
-    }
-
-    function getEntitySets(oMetadata) {
-        var aEntitySets = [];
-        var aSchemas = oMetadata &&
-            oMetadata.dataServices &&
-            oMetadata.dataServices.schema || [];
-
-        aSchemas.forEach(function (oSchema) {
-            (oSchema.entityContainer || []).forEach(function (oContainer) {
-                (oContainer.entitySet || []).forEach(function (oEntitySet) {
-                    if (oEntitySet.name) {
-                        aEntitySets.push(oEntitySet.name);
-                    }
-                });
-            });
-        });
-
-        return aEntitySets;
-    }
-
-    function findEntitySet(oModel) {
-        var aEntitySets = getEntitySets(oModel.getServiceMetadata());
-        var sEntitySet;
-        var i;
-
-        for (i = 0; i < aPreferredEntitySets.length; i += 1) {
-            if (aEntitySets.indexOf(aPreferredEntitySets[i]) !== -1) {
-                return aPreferredEntitySets[i];
-            }
+        if (sEndDate) {
+            aClauses.push("PlannedFinishDate eq datetime'" + sEndDate + "'");
         }
-
-        sEntitySet = aEntitySets.find(function (sName) {
-            return /repar.*plane|plane.*repar/i.test(sName);
-        });
-
-        if (!sEntitySet) {
-            sEntitySet = aEntitySets.find(function (sName) {
-                return /reparacion/i.test(sName);
-            });
-        }
-
-        if (!sEntitySet) {
-            throw new Error(
-                "No se encontró un EntitySet de reparaciones planeadas. " +
-                "EntitySets disponibles: " + aEntitySets.join(", ")
-            );
-        }
-
-        return sEntitySet;
+        return aClauses.join(" and ");
     }
 
-    function readOData(oModel, sEntitySet) {
+    function escapeODataString(vValue) {
+        return String(vValue).replace(/'/g, "''");
+    }
+
+    function uniqueStrings(aValues) {
+        return Array.from(new Set((aValues || []).map(function (vValue) {
+            return String(vValue || "").trim();
+        }).filter(Boolean)));
+    }
+
+    function splitIntoChunks(aValues, iChunkSize) {
+        var aChunks = [];
+        var iIndex;
+
+        for (iIndex = 0; iIndex < aValues.length; iIndex += iChunkSize) {
+            aChunks.push(aValues.slice(iIndex, iIndex + iChunkSize));
+        }
+        return aChunks;
+    }
+
+    function buildIdFilter(sProperty, aValues) {
+        var aUniqueValues = uniqueStrings(aValues);
+        var aClauses = aUniqueValues.map(function (sValue) {
+            return sProperty + " eq '" + escapeODataString(sValue) + "'";
+        });
+
+        if (aClauses.length === 0) {
+            return "";
+        }
+        return aClauses.length === 1 ? aClauses[0] : "(" + aClauses.join(" or ") + ")";
+    }
+
+    function combineFilters() {
+        var aFilters = Array.prototype.slice.call(arguments).filter(Boolean);
+
+        return aFilters.map(function (sFilter) {
+            return "(" + sFilter + ")";
+        }).join(" and ");
+    }
+
+    function decodeUrlPart(sValue) {
+        try {
+            return decodeURIComponent(String(sValue || "").replace(/\+/g, "%20"));
+        } catch {
+            return String(sValue || "");
+        }
+    }
+
+    function getNextPageParameters(sNextLink) {
+        var sQuery = String(sNextLink || "").split("?")[1] || "";
+        var mPaging = {};
+
+        sQuery.split("&").forEach(function (sPart) {
+            var iSeparator = sPart.indexOf("=");
+            var sKey = decodeUrlPart(iSeparator >= 0 ? sPart.slice(0, iSeparator) : sPart);
+            var sValue = decodeUrlPart(iSeparator >= 0 ? sPart.slice(iSeparator + 1) : "");
+
+            if (sKey === "$skiptoken" || sKey === "$skip") {
+                mPaging[sKey] = sValue;
+            }
+        });
+        return Object.keys(mPaging).length ? mPaging : null;
+    }
+
+    function readPage(oModel, sEntitySet, mUrlParameters) {
+        var sDebugUrl = buildDebugUrl(oModel, sEntitySet, mUrlParameters);
+        var iStartedAt = Date.now();
+
+        log("info", "REQUEST " + sEntitySet, {
+            uri: sDebugUrl,
+            uriDecodificada: decodeDebugUrl(sDebugUrl),
+            parametros: Object.assign({}, mUrlParameters)
+        });
+
         return new Promise(function (resolve, reject) {
             oModel.read("/" + sEntitySet, {
-                urlParameters: {
-                    "$top": "5000"
-                },
-                success: function (oData) {
-                    resolve(oData && oData.results || []);
+                urlParameters: mUrlParameters,
+                success: function (oData, oResponse) {
+                    var aRecords = Array.isArray(oData && oData.results)
+                        ? oData.results
+                        : [];
+
+                    log("info", "RESPONSE " + sEntitySet, {
+                        statusCode: oResponse && oResponse.statusCode,
+                        statusText: oResponse && oResponse.statusText,
+                        requestUri: oResponse && oResponse.requestUri || sDebugUrl,
+                        duracionMs: Date.now() - iStartedAt,
+                        cantidad: aRecords.length,
+                        siguientePagina: oData && oData.__next || null,
+                        muestraPrimeros3: aRecords.slice(0, 3),
+                        respuestaRaw: oData
+                    });
+
+                    resolve({
+                        records: aRecords,
+                        next: oData && oData.__next
+                    });
                 },
                 error: function (oError) {
-                    var sMessage = "No fue posible consultar /" + sEntitySet;
+                    var sMessage = "No fue posible consultar " + sEntitySet;
 
-                    if (oError && oError.responseText) {
-                        try {
-                            var oResponse = JSON.parse(oError.responseText);
-                            sMessage =
-                                oResponse.error.message.value || sMessage;
-                        } catch (oParseError) {
-                            // Se conserva el mensaje general.
-                        }
+                    log("error", "ERROR " + sEntitySet, Object.assign(
+                        {
+                            duracionMs: Date.now() - iStartedAt,
+                            uriDecodificada: decodeDebugUrl(sDebugUrl)
+                        },
+                        getErrorDetails(oError, sDebugUrl)
+                    ));
+
+                    if (oError && oError.message) {
+                        sMessage += ": " + oError.message;
                     }
-
                     reject(new Error(sMessage));
                 }
             });
         });
     }
 
-    function createEmpty(mFilters, sAnalysis) {
+    function readEntitySet(oModel, sEntitySet, mParameters) {
+        var mBaseParameters = Object.assign({ "$format": "json" }, mParameters || {});
+        var mSeenPages = {};
+
+        function readNext(mPageParameters, aAccumulated) {
+            return readPage(oModel, sEntitySet, mPageParameters).then(function (oPage) {
+                var aRecords = aAccumulated.concat(oPage.records);
+                var mNext = getNextPageParameters(oPage.next);
+                var sPageKey;
+
+                if (!mNext) {
+                    return aRecords;
+                }
+                sPageKey = JSON.stringify(mNext);
+                if (mSeenPages[sPageKey]) {
+                    throw new Error("SAP devolvió una paginación repetida para " + sEntitySet);
+                }
+                mSeenPages[sPageKey] = true;
+                return readNext(Object.assign({}, mBaseParameters, mNext), aRecords);
+            });
+        }
+
+        return readNext(mBaseParameters, []);
+    }
+
+    function readByIds(oModel, sEntitySet, sIdProperty, aIds, mParameters) {
+        var aChunks = splitIntoChunks(uniqueStrings(aIds), ID_CHUNK_SIZE);
+
+        function readChunkGroup(iStart, aAccumulated) {
+            var aGroup = aChunks.slice(iStart, iStart + MAX_CONCURRENT_CHUNKS);
+
+            if (aGroup.length === 0) {
+                return Promise.resolve(aAccumulated);
+            }
+            return Promise.all(aGroup.map(function (aChunk) {
+                var mChunkParameters = Object.assign({}, mParameters || {});
+
+                mChunkParameters.$filter = combineFilters(
+                    buildIdFilter(sIdProperty, aChunk),
+                    mChunkParameters.$filter
+                );
+                return readEntitySet(oModel, sEntitySet, mChunkParameters);
+            })).then(function (aResults) {
+                var aMerged = aResults.reduce(function (aAll, aCurrent) {
+                    return aAll.concat(aCurrent);
+                }, aAccumulated);
+
+                return readChunkGroup(iStart + MAX_CONCURRENT_CHUNKS, aMerged);
+            });
+        }
+
+        return aChunks.length ? readChunkGroup(0, []) : Promise.resolve([]);
+    }
+
+    function readOptional(sEntitySet, oPromise) {
+        return oPromise.then(function (aRecords) {
+            return { entitySet: sEntitySet, records: aRecords, error: null };
+        }).catch(function (oError) {
+            return {
+                entitySet: sEntitySet,
+                records: [],
+                error: oError && oError.message || "Error de lectura"
+            };
+        });
+    }
+
+    function createRawData(oContext) {
         return {
-            filters: Object.assign({}, mFilters),
-
-            ui: {
-                selectedAnalysis: sAnalysis || "NO_EJECUTADAS",
-                analysisLabel: "No ejecutadas",
-                analysisInfo: "Mostrando reparaciones planeadas no ejecutadas"
+            orders: [],
+            causes: [],
+            materials: [],
+            assignments: [],
+            resources: [],
+            catalogs: [],
+            range: {
+                startDate: oContext.startDate,
+                endDate: oContext.endDate,
+                endExclusive: oContext.endExclusive
             },
-
-            catalogos: {
-                periodos: createPeriods(),
-                zonas: [{
-                    key: "TODAS",
-                    text: "Todas"
-                }],
-                clientes: [{
-                    key: "TODOS",
-                    text: "Todos"
-                }],
-                responsables: [{
-                    key: "TODOS",
-                    text: "Todos"
-                }]
-            },
-
-            kpis: {
-                planeadas: 0,
-                ejecutadas: 0,
-                noEjecutadas: 0,
-                cumplimiento: "0%"
-            },
-
-            analysisTabs: {
-                noEjecutadas: "No ejecutadas (0)",
-                ejecutadas: "Ejecutadas (0)",
-                todas: "Todas (0)"
-            },
-
-            causas: [],
-
-            totals: {
-                otNoEjecutadas: 0,
-                porcentaje: "0%",
-                equipos: 0,
-                clientes: 0,
-                dias: "0 días"
-            },
-
-            tableSubtitle: "Sin información disponible",
-            footerText: "Los datos se obtienen del servicio SAP."
+            meta: {
+                source: "BTP_DESTINATION_ODATA_V2",
+                destination: "QAS_MITSU_DASH",
+                servicePath: "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV/",
+                unavailableEntitySets: []
+            }
         };
     }
 
-    function build(aRawData, mFilters, sAnalysis) {
-        var aNormalized = (aRawData || []).map(normalizeRecord);
-        var aFiltered = filterRecords(aNormalized, mFilters || {});
-        var aExecuted = aFiltered.filter(function (oRecord) {
-            return oRecord.esEjecutada;
-        });
-        var aNotExecuted = aFiltered.filter(function (oRecord) {
-            return !oRecord.esEjecutada;
-        });
-        var aSelected;
-        var aCauses;
-        var iTotalDays;
-        var iPercentage;
-        var oData = createEmpty(mFilters, sAnalysis);
-
-        if (sAnalysis === "EJECUTADAS") {
-            aSelected = aExecuted;
-            oData.ui.analysisLabel = "Ejecutadas";
-            oData.ui.analysisInfo =
-                "Mostrando reparaciones planeadas ejecutadas";
-        } else if (sAnalysis === "TODAS") {
-            aSelected = aFiltered;
-            oData.ui.analysisLabel = "Todas";
-            oData.ui.analysisInfo =
-                "Mostrando todas las reparaciones planeadas";
-        } else {
-            aSelected = aNotExecuted;
-            oData.ui.selectedAnalysis = "NO_EJECUTADAS";
+    function applyOptionalResult(oRawData, sProperty, oResult) {
+        oRawData[sProperty] = oResult.records;
+        if (oResult.error) {
+            oRawData.meta.unavailableEntitySets.push({
+                entitySet: oResult.entitySet,
+                message: oResult.error
+            });
         }
+    }
 
-        aCauses = groupCauses(aSelected);
+    function build(oRawData, mFilters, sAnalysis) {
+        var oData = AnalisisReparacionesPlaneadasNoEjecutadasMapper.buildData(
+            oRawData,
+            mFilters,
+            sAnalysis
+        );
 
-        aCauses.forEach(function (oCause) {
-            oCause.porcentajeValor = aSelected.length
-                ? (oCause.otNoEjecutadas / aSelected.length) * 100
-                : 0;
-            oCause.porcentaje = oCause.porcentajeValor.toFixed(1) + "%";
-        });
-
-        iTotalDays = aSelected.reduce(function (iTotal, oRecord) {
-            return iTotal + oRecord.diasDetenida;
-        }, 0);
-
-        iPercentage = aFiltered.length
-            ? (aExecuted.length / aFiltered.length) * 100
-            : 0;
-
-        oData.catalogos.zonas =
-            createCatalog(aNormalized, "zona", "TODAS", "Todas");
-        oData.catalogos.clientes =
-            createCatalog(aNormalized, "cliente", "TODOS", "Todos");
-        oData.catalogos.responsables =
-            createCatalog(aNormalized, "responsable", "TODOS", "Todos");
-
-        oData.kpis = {
-            planeadas: aFiltered.length,
-            ejecutadas: aExecuted.length,
-            noEjecutadas: aNotExecuted.length,
-            cumplimiento: iPercentage.toFixed(1) + "%"
-        };
-
-        oData.analysisTabs = {
-            noEjecutadas: "No ejecutadas (" + aNotExecuted.length + ")",
-            ejecutadas: "Ejecutadas (" + aExecuted.length + ")",
-            todas: "Todas (" + aFiltered.length + ")"
-        };
-
-        oData.causas = aCauses;
-
-        oData.totals = {
-            otNoEjecutadas: aSelected.length,
-            porcentaje: aSelected.length ? "100%" : "0%",
-            equipos: uniqueCount(aSelected, "equipo"),
-            clientes: uniqueCount(aSelected, "cliente"),
-            dias: aSelected.length
-                ? (iTotalDays / aSelected.length).toFixed(1) + " días"
-                : "0 días"
-        };
-
-        oData.tableSubtitle =
-            aSelected.length + " órdenes encontradas";
-
+        oData.meta = Object.assign({}, oData.meta, oRawData.meta || {});
+        oData.filters.periodo = FIXED_PERIOD;
+        oData.filters.fechaDesde = FIXED_START_DATE;
+        oData.filters.fechaHasta = FIXED_END_DATE;
+        oData.catalogos.periodos = [{
+            key: FIXED_PERIOD,
+            text: "Año 2026"
+        }];
         return oData;
     }
 
-    function load(oODataModel, mFilters, sAnalysis) {
-        if (!oODataModel) {
-            return Promise.reject(
-                new Error("No se encontró el modelo OData dashboardOData")
-            );
+    function createEmpty(mFilters, sAnalysis) {
+        var oContext = getFilterContext(mFilters);
+
+        return build(createRawData(oContext), oContext.filters, sAnalysis);
+    }
+
+    function validateContext(oContext) {
+        if (!oContext.startDate || !oContext.endDate) {
+            throw new Error("Selecciona una fecha desde y una fecha hasta válidas");
+        }
+        if (oContext.startDate > oContext.endDate) {
+            throw new Error("La fecha desde no puede ser posterior a la fecha hasta");
+        }
+    }
+
+    function load(oModel, mFilters, sAnalysis) {
+        var oContext;
+        var oRawData;
+        var oCatalogPromise;
+
+        if (!oModel || typeof oModel.read !== "function") {
+            return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
         }
 
-        return oODataModel.metadataLoaded().then(function () {
-            var sEntitySet = findEntitySet(oODataModel);
+        oContext = getFilterContext(mFilters);
+        try {
+            validateContext(oContext);
+        } catch (oError) {
+            return Promise.reject(oError);
+        }
 
-            return readOData(oODataModel, sEntitySet);
-        }).then(function (aRawData) {
+        oRawData = createRawData(oContext);
+        oRawData.meta.ordersFilter = buildOrdersFilter(oContext);
+        log("info", "INICIO DE CARGA", {
+            serviceUrl: getServiceUrl(oModel),
+            rangoFijo: {
+                fechaDesde: FIXED_START_DATE,
+                fechaHasta: FIXED_END_DATE
+            },
+            filtroDashboardOrdersSet: oRawData.meta.ordersFilter,
+            filtrosPantalla: oContext.filters
+        });
+        oCatalogPromise = readOptional(
+            "DashboardFilterCatalogSet",
+            readEntitySet(oModel, "DashboardFilterCatalogSet", {
+                "$select": SELECTS.DashboardFilterCatalogSet.join(","),
+                "$filter": "Active eq true",
+                "$orderby": "FilterDomain,SortOrder"
+            })
+        );
+
+        return Promise.all([
+            readEntitySet(oModel, "DashboardOrdersSet", {
+                "$select": SELECTS.DashboardOrdersSet.join(","),
+                "$filter": oRawData.meta.ordersFilter,
+                "$orderby": "PlannedStartDate,OrderId"
+            }),
+            oCatalogPromise
+        ]).then(function (aInitialResults) {
+            var aOrderIds;
+
+            oRawData.orders = aInitialResults[0];
+            applyOptionalResult(oRawData, "catalogs", aInitialResults[1]);
+            aOrderIds = uniqueStrings(oRawData.orders.map(function (oOrder) {
+                return oOrder.OrderId;
+            }));
+
+            return Promise.all([
+                readOptional(
+                    "DashboardOrderCausesSet",
+                    readByIds(
+                        oModel,
+                        "DashboardOrderCausesSet",
+                        "OrderId",
+                        aOrderIds,
+                        { "$select": SELECTS.DashboardOrderCausesSet.join(",") }
+                    )
+                ),
+                readOptional(
+                    "DashboardOrderMaterialsSet",
+                    readByIds(
+                        oModel,
+                        "DashboardOrderMaterialsSet",
+                        "OrderId",
+                        aOrderIds,
+                        { "$select": SELECTS.DashboardOrderMaterialsSet.join(",") }
+                    )
+                ),
+                readOptional(
+                    "DashboardOrderResourcesSet",
+                    readByIds(
+                        oModel,
+                        "DashboardOrderResourcesSet",
+                        "OrderId",
+                        aOrderIds,
+                        { "$select": SELECTS.DashboardOrderResourcesSet.join(",") }
+                    )
+                )
+            ]);
+        }).then(function (aRelatedResults) {
+            var aResourceIds;
+            var sResourceDateFilter = combineFilters(
+                "WorkDate ge datetime'" + formatODataDate(oContext.startDate) + "'",
+                "WorkDate lt datetime'" + formatODataDate(oContext.endExclusive) + "'"
+            );
+
+            applyOptionalResult(oRawData, "causes", aRelatedResults[0]);
+            applyOptionalResult(oRawData, "materials", aRelatedResults[1]);
+            applyOptionalResult(oRawData, "assignments", aRelatedResults[2]);
+            aResourceIds = uniqueStrings(oRawData.assignments.map(function (oAssignment) {
+                return oAssignment.ResourceId;
+            }));
+
+            return readOptional(
+                "DashboardResourceDailySet",
+                readByIds(
+                    oModel,
+                    "DashboardResourceDailySet",
+                    "ResourceId",
+                    aResourceIds,
+                    {
+                        "$select": SELECTS.DashboardResourceDailySet.join(","),
+                        "$filter": sResourceDateFilter,
+                        "$orderby": "ResourceId,WorkDate"
+                    }
+                )
+            );
+        }).then(function (oResourceResult) {
+            applyOptionalResult(oRawData, "resources", oResourceResult);
+            oRawData.meta.generatedAt = new Date().toISOString();
+            oRawData.meta.records = {
+                orders: oRawData.orders.length,
+                causes: oRawData.causes.length,
+                materials: oRawData.materials.length,
+                assignments: oRawData.assignments.length,
+                resources: oRawData.resources.length,
+                catalogs: oRawData.catalogs.length
+            };
+
+            log("info", "FIN DE CARGA", {
+                generadoEn: oRawData.meta.generatedAt,
+                registros: oRawData.meta.records,
+                entidadesNoDisponibles: oRawData.meta.unavailableEntitySets,
+                filtroDashboardOrdersSet: oRawData.meta.ordersFilter
+            });
+
             return {
-                rawData: aRawData,
-                data: build(aRawData, mFilters, sAnalysis)
+                data: build(oRawData, oContext.filters, sAnalysis),
+                rawData: oRawData
             };
         });
     }
 
     return {
-        createEmpty: createEmpty,
+        load: load,
         build: build,
-        load: load
+        createEmpty: createEmpty,
+        buildOrdersFilter: buildOrdersFilter,
+        getFilterContext: getFilterContext
     };
 });
