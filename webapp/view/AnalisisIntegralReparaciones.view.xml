@@ -59,11 +59,14 @@
                         alignItems="Stretch">
                         <VBox class="repaIntegralFilterItem repaIntegralFilterPeriod">
                             <Label text="Periodo" />
-                            <Select id="selPeriodoIntegral" selectedKey="mayo" width="100%">
+                            <Select
+                                id="selPeriodoIntegral"
+                                selectedKey="{intRep>/filters/periodo}"
+                                items="{intRep>/catalogos/periodos}"
+                                change=".onPeriodoChange"
+                                width="100%">
                                 <items>
-                                    <core:Item key="mayo" text="Mayo 2024" />
-                                    <core:Item key="junio" text="Junio 2024" />
-                                    <core:Item key="todos" text="Todos" />
+                                    <core:Item key="{intRep>key}" text="{intRep>text}" />
                                 </items>
                             </Select>
                         </VBox>
@@ -72,7 +75,7 @@
                             <Label text="Fecha desde" />
                             <DatePicker
                                 id="dpDesdeIntegral"
-                                value="01/05/2024"
+                                value="{intRep>/filters/fechaDesde}"
                                 valueFormat="dd/MM/yyyy"
                                 displayFormat="dd/MM/yyyy"
                                 width="100%" />
@@ -82,7 +85,7 @@
                             <Label text="Fecha hasta" />
                             <DatePicker
                                 id="dpHastaIntegral"
-                                value="31/05/2024"
+                                value="{intRep>/filters/fechaHasta}"
                                 valueFormat="dd/MM/yyyy"
                                 displayFormat="dd/MM/yyyy"
                                 width="100%" />
@@ -90,44 +93,39 @@
 
                         <VBox class="repaIntegralFilterItem repaIntegralFilterNormal">
                             <Label text="Zona" />
-                            <Select id="selZonaIntegral" selectedKey="todas" width="100%">
+                            <Select
+                                id="selZonaIntegral"
+                                selectedKey="{intRep>/filters/zona}"
+                                items="{intRep>/catalogos/zonas}"
+                                width="100%">
                                 <items>
-                                    <core:Item key="todas" text="Todas" />
-                                    <core:Item key="norte" text="Norte" />
-                                    <core:Item key="centro" text="Centro" />
-                                    <core:Item key="sur" text="Sur" />
+                                    <core:Item key="{intRep>key}" text="{intRep>text}" />
                                 </items>
                             </Select>
                         </VBox>
 
                         <VBox class="repaIntegralFilterItem repaIntegralFilterNormal">
                             <Label text="Cliente" />
-                            <Select id="selClienteIntegral" selectedKey="todos" width="100%">
+                            <Select
+                                id="selClienteIntegral"
+                                selectedKey="{intRep>/filters/cliente}"
+                                items="{intRep>/catalogos/clientes}"
+                                width="100%">
                                 <items>
-                                    <core:Item key="todos" text="Todos" />
-                                    <core:Item key="Torre Reforma" text="Torre Reforma" />
-                                    <core:Item key="Plaza Satélite" text="Plaza Satélite" />
-                                    <core:Item key="Hospital Ángeles" text="Hospital Ángeles" />
-                                    <core:Item key="Torre Mayor" text="Torre Mayor" />
-                                    <core:Item key="Centro Ejecutivo Sur" text="Centro Ejecutivo Sur" />
-                                    <core:Item key="Corporativo Norte" text="Corporativo Norte" />
-                                    <core:Item key="Plaza Central" text="Plaza Central" />
-                                    <core:Item key="Torre Prisma" text="Torre Prisma" />
-                                    <core:Item key="Hospital Norte" text="Hospital Norte" />
-                                    <core:Item key="Plaza Universidad" text="Plaza Universidad" />
+                                    <core:Item key="{intRep>key}" text="{intRep>text}" />
                                 </items>
                             </Select>
                         </VBox>
 
                         <VBox class="repaIntegralFilterItem repaIntegralFilterResponsible">
                             <Label text="Responsable" />
-                            <Select id="selResponsableIntegral" selectedKey="todos" width="100%">
+                            <Select
+                                id="selResponsableIntegral"
+                                selectedKey="{intRep>/filters/responsable}"
+                                items="{intRep>/catalogos/responsables}"
+                                width="100%">
                                 <items>
-                                    <core:Item key="todos" text="Todos" />
-                                    <core:Item key="Juan Pérez" text="Juan Pérez" />
-                                    <core:Item key="María González" text="María González" />
-                                    <core:Item key="Carlos Herrera" text="Carlos Herrera" />
-                                    <core:Item key="Luis Ramírez" text="Luis Ramírez" />
+                                    <core:Item key="{intRep>key}" text="{intRep>text}" />
                                 </items>
                             </Select>
                         </VBox>
@@ -144,6 +142,14 @@
                                 class="repaIntegralFilterButton" />
                         </VBox>
                     </HBox>
+
+                    <MessageStrip
+                        visible="{= !!${intRep>/ui/errorMessage} }"
+                        text="{intRep>/ui/errorMessage}"
+                        type="Warning"
+                        showIcon="true"
+                        showCloseButton="false"
+                        class="sapUiTinyMarginBottom" />
 
                     <!-- INDICADORES -->
                     <HBox class="repaIntegralKpiRow" wrap="NoWrap" alignItems="Stretch">
@@ -236,17 +242,17 @@
                             <Text text="Ver análisis por:" class="repaIntegralTabsLabel" />
                             <Button
                                 text="{intRep>/tabs/planeadas}"
-                                type="Emphasized"
+                                type="{= ${intRep>/ui/selectedAnalysis} === 'PLANNED' ? 'Emphasized' : 'Transparent' }"
                                 press=".onVerPlaneadas"
-                                class="repaIntegralTabButton repaIntegralTabButtonActive" />
+                                class="repaIntegralTabButton" />
                             <Button
                                 text="{intRep>/tabs/ejecutadas}"
-                                type="Transparent"
+                                type="{= ${intRep>/ui/selectedAnalysis} === 'EXECUTED' ? 'Emphasized' : 'Transparent' }"
                                 press=".onVerEjecutadas"
                                 class="repaIntegralTabButton" />
                             <Button
                                 text="{intRep>/tabs/noEjecutadas}"
-                                type="Transparent"
+                                type="{= ${intRep>/ui/selectedAnalysis} === 'NON_EXECUTED' ? 'Emphasized' : 'Transparent' }"
                                 press=".onVerNoEjecutadas"
                                 class="repaIntegralTabButton" />
                         </HBox>
@@ -270,6 +276,7 @@
                             <SearchField
                                 width="220px"
                                 placeholder="Buscar material..."
+                                value="{intRep>/filters/busquedaMaterial}"
                                 liveChange=".onBuscarMaterial"
                                 class="repaIntegralSearch" />
                         </HBox>

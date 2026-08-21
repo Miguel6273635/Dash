@@ -2364,161 +2364,143 @@
 }
 
 /* ==========================================================================
-   4. KPI
+   KPI CARDS (Diseño Vista Jefatura)
    ========================================================================== */
-
 .DetalleCapacidadZona .dczKpiRow {
-    display: grid !important;
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-
     width: 100% !important;
-    max-width: none !important;
-
-    gap: 0.62rem !important;
-    align-items: stretch !important;
-
-    margin-bottom: 0.72rem !important;
-}
-
-.DetalleCapacidadZona .dczKpiRow > .sapMFlexItem {
-    width: 100% !important;
-    min-width: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 9px !important;
+    margin-top: 10px !important;
+    margin-bottom: 14px !important;
 }
 
 .DetalleCapacidadZona .dczKpiCard {
-    width: 100% !important;
-    min-width: 0 !important;
-
-    height: 4.75rem !important;
-    min-height: 4.75rem !important;
-    max-height: 4.75rem !important;
-
-    padding: 0.55rem 0.68rem !important;
-
-    border: 1px solid #e2e8f0 !important;
-    border-left-width: 0.24rem !important;
-    border-radius: 0.58rem !important;
-
-    box-shadow:
-        0 0.28rem 0.8rem
-        rgba(15, 23, 42, 0.055) !important;
+    position: relative !important;
+    flex: 1 1 135px !important;
+    min-width: 128px !important;
+    min-height: 76px !important;
+    padding: 10px 9px 10px 12px !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    border-radius: 7px !important;
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06) !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
 }
 
-.DetalleCapacidadZona .dczKpiBlue {
-    border-left-color: #2563eb !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(37, 99, 235, 0.14) 0%,
-            rgba(37, 99, 235, 0.055) 40%,
-            #ffffff 100%
-        ) !important;
+/* Barra lateral izquierda de la tarjeta (::before) */
+.DetalleCapacidadZona .dczKpiCard::before {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 3px !important;
+    border-radius: 8px 0 0 8px !important;
+    content: "" !important;
 }
 
-.DetalleCapacidadZona .dczKpiTeal {
-    border-left-color: #14b8a6 !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(20, 184, 166, 0.14) 0%,
-            rgba(20, 184, 166, 0.055) 40%,
-            #ffffff 100%
-        ) !important;
-}
-
-.DetalleCapacidadZona .dczKpiGreen {
-    border-left-color: #16a34a !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(22, 163, 74, 0.14) 0%,
-            rgba(22, 163, 74, 0.055) 40%,
-            #ffffff 100%
-        ) !important;
-}
-
-.DetalleCapacidadZona .dczKpiOrange {
-    border-left-color: #f59e0b !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(245, 158, 11, 0.14) 0%,
-            rgba(245, 158, 11, 0.055) 40%,
-            #ffffff 100%
-        ) !important;
-}
-
-.DetalleCapacidadZona .dczKpiRed {
-    border-left-color: #ef4444 !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(239, 68, 68, 0.14) 0%,
-            rgba(239, 68, 68, 0.055) 40%,
-            #ffffff 100%
-        ) !important;
-}
-
+/* Contenedor circular del ícono */
 .DetalleCapacidadZona .dczKpiIcon {
-    flex: 0 0 2.7rem !important;
-
-    width: 2.7rem !important;
-    min-width: 2.7rem !important;
-    height: 2.7rem !important;
-    min-height: 2.7rem !important;
-
-    margin-right: 0.65rem !important;
-
+    flex: 0 0 43px !important;
+    width: 43px !important;
+    height: 43px !important;
+    margin-right: 8px !important;
     border-radius: 50% !important;
 }
 
 .DetalleCapacidadZona .dczKpiIcon .sapUiIcon {
-    font-size: 1.32rem !important;
+    font-size: 1.28rem !important;
+}
+
+/* Evitar que el texto empuje la tarjeta si es muy largo */
+.DetalleCapacidadZona .dczKpiCard > .sapMFlexItem:nth-child(2) {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
 }
 
 .DetalleCapacidadZona .dczKpiLabel {
-    color: #64748b !important;
-
-    font-size: 0.56rem !important;
-    line-height: 0.7rem !important;
-    font-weight: 850 !important;
+    width: 100% !important;
+    color: #43516a !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    margin-bottom: 2px !important;
+    display: block !important;
 }
 
 .DetalleCapacidadZona .dczKpiNumber {
-    font-size: 1.28rem !important;
-    line-height: 1.42rem !important;
-    font-weight: 900 !important;
-
-    white-space: nowrap !important;
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+    display: block !important;
 }
 
+/* --- 1. KPI AZUL (Zona, Capacidad) --- */
+.DetalleCapacidadZona .dczKpiBlue {
+    background: linear-gradient(90deg, rgba(46, 140, 255, 0.20) 0%, rgba(46, 140, 255, 0.11) 22%, rgba(46, 140, 255, 0.04) 48%, rgba(255, 255, 255, 0.98) 76%, #ffffff 100%) !important;
+    border: 1px solid rgba(46, 140, 255, 0.18) !important;
+}
+.DetalleCapacidadZona .dczKpiBlue::before { background: #2e8cff !important; }
+.DetalleCapacidadZona .dczKpiIconBlue { background: rgba(46, 140, 255, 0.13) !important; }
+.DetalleCapacidadZona .dczKpiIconBlue .sapUiIcon,
+.DetalleCapacidadZona .dczKpiBlue .dczKpiNumber { color: #1877e8 !important; }
+
+/* --- 2. KPI CYAN/TEAL (Horas Programadas) --- */
+.DetalleCapacidadZona .dczKpiTeal {
+    background: linear-gradient(90deg, rgba(27, 198, 200, 0.20) 0%, rgba(27, 198, 200, 0.11) 22%, rgba(27, 198, 200, 0.04) 48%, rgba(255, 255, 255, 0.98) 76%, #ffffff 100%) !important;
+    border: 1px solid rgba(27, 198, 200, 0.18) !important;
+}
+.DetalleCapacidadZona .dczKpiTeal::before { background: #1bc6c8 !important; }
+.DetalleCapacidadZona .dczKpiIconTeal { background: rgba(27, 198, 200, 0.13) !important; }
+.DetalleCapacidadZona .dczKpiIconTeal .sapUiIcon,
+.DetalleCapacidadZona .dczKpiTeal .dczKpiNumber { color: #11b6ba !important; }
+
+/* --- 3. KPI VERDE (Horas Reales) --- */
+.DetalleCapacidadZona .dczKpiGreen {
+    background: linear-gradient(90deg, rgba(99, 191, 66, 0.20) 0%, rgba(99, 191, 66, 0.11) 22%, rgba(99, 191, 66, 0.04) 48%, rgba(255, 255, 255, 0.98) 76%, #ffffff 100%) !important;
+    border: 1px solid rgba(99, 191, 66, 0.18) !important;
+}
+.DetalleCapacidadZona .dczKpiGreen::before { background: #63bf42 !important; }
+.DetalleCapacidadZona .dczKpiIconGreen { background: rgba(99, 191, 66, 0.13) !important; }
+.DetalleCapacidadZona .dczKpiIconGreen .sapUiIcon,
+.DetalleCapacidadZona .dczKpiGreen .dczKpiNumber { color: #58b33a !important; }
+
+/* --- 4. KPI NARANJA (Utilización) --- */
+.DetalleCapacidadZona .dczKpiOrange {
+    background: linear-gradient(90deg, rgba(255, 158, 49, 0.22) 0%, rgba(255, 158, 49, 0.12) 22%, rgba(255, 158, 49, 0.04) 48%, rgba(255, 255, 255, 0.98) 76%, #ffffff 100%) !important;
+    border: 1px solid rgba(255, 158, 49, 0.20) !important;
+}
+.DetalleCapacidadZona .dczKpiOrange::before { background: #ff9e31 !important; }
+.DetalleCapacidadZona .dczKpiIconOrange { background: rgba(255, 158, 49, 0.14) !important; }
+.DetalleCapacidadZona .dczKpiIconOrange .sapUiIcon,
+.DetalleCapacidadZona .dczKpiOrange .dczKpiNumber { color: #f28c1c !important; }
+
+/* --- 5. KPI ROJA (Estado) --- */
+.DetalleCapacidadZona .dczKpiRed {
+    background: linear-gradient(90deg, rgba(255, 77, 83, 0.20) 0%, rgba(255, 77, 83, 0.11) 22%, rgba(255, 77, 83, 0.04) 48%, rgba(255, 255, 255, 0.98) 76%, #ffffff 100%) !important;
+    border: 1px solid rgba(255, 77, 83, 0.18) !important;
+}
+.DetalleCapacidadZona .dczKpiRed::before { background: #ff4d53 !important; }
+.DetalleCapacidadZona .dczKpiIconRed { background: rgba(255, 77, 83, 0.13) !important; }
+.DetalleCapacidadZona .dczKpiIconRed .sapUiIcon,
+.DetalleCapacidadZona .dczKpiRed .dczKpiNumber { color: #ef3f47 !important; }
+
+/* --- BARRA DE UTILIZACIÓN --- */
 .DetalleCapacidadZona .dczUtilTrack {
-    width: 6.5rem !important;
-    max-width: 100% !important;
-
-    height: 0.28rem !important;
-    min-height: 0.28rem !important;
-
-    margin-top: 0.25rem !important;
-
-    background: #fed7aa !important;
-    border-radius: 999px !important;
-
-    overflow: hidden !important;
+    width: 100px !important;
+    height: 4px !important;
+    background: rgba(255, 158, 49, 0.2) !important;
+    border-radius: 4px !important;
+    margin-top: 6px !important;
 }
 
 .DetalleCapacidadZona .dczUtilFill {
-    height: 0.28rem !important;
-    min-height: 0.28rem !important;
-
-    background: #f59e0b !important;
-    border-radius: 999px !important;
+    height: 4px !important;
+    background: #f28c1c !important;
+    border-radius: 4px !important;
 }
+
 
 /* ==========================================================================
    5. TARJETA Y TABLA PRINCIPAL
@@ -2897,4 +2879,46 @@
     .DetalleCapacidadZona .dczApplyButtonBox {
         justify-self: start !important;
     }
+}
+/* ==========================================================================
+   CORRECCIÓN FINAL: UNIFICACIÓN DE TAMAÑO DE LETRA EN TODAS LAS TABLAS
+   ========================================================================== */
+
+/* 1. Unificar todos los Encabezados (Th) de todas las tablas */
+.DetalleCapacidadZona .dczOrdersTable th .sapMText,
+.DetalleCapacidadZona .dczSummaryTable th .sapMText {
+    font-size: 11px !important;
+    line-height: 14px !important;
+    font-weight: 900 !important;
+}
+
+/* 2. Unificar todo el texto interno (Td), filas de totales y estados */
+.DetalleCapacidadZona .dczOrdersTable td .sapMText,
+.DetalleCapacidadZona .dczOrdersTable .dczTableText,
+.DetalleCapacidadZona .dczOrdersTable .dczTableTextCenter,
+.DetalleCapacidadZona .dczOrdersTable .dczBlueStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczRedStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczOrangeStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczGreenStrong,
+.DetalleCapacidadZona .dczOrdersTable .dczStatusText,
+.DetalleCapacidadZona .dczSummaryTable td .sapMText,
+.DetalleCapacidadZona .dczSummaryTable .dczTableText,
+.DetalleCapacidadZona .dczSummaryTable .dczTableTextCenter,
+.DetalleCapacidadZona .dczSummaryTable .dczRedStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczOrangeStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczGreenStrong,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilRed,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilOrange,
+.DetalleCapacidadZona .dczSummaryTable .dczUtilGreen,
+.DetalleCapacidadZona .dczSummaryTable .dczStatusText,
+.DetalleCapacidadZona .dczSummaryNameCell .sapMText,
+.DetalleCapacidadZona .dczSummaryTotalRow .sapMText {
+    font-size: 12px !important;
+    line-height: 16px !important;
+}
+
+/* 3. Asegurar que los íconos de color (semáforos) no se deformen con el nuevo tamaño */
+.DetalleCapacidadZona .dczStatusCell {
+    height: 100% !important;
+    min-height: 16px !important;
 }

@@ -1,667 +1,223 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/dom/includeStylesheet",
     "sap/m/ActionSheet",
-    "sap/m/Button"
+    "sap/m/Button",
+    "sap/m/MessageToast",
+    "sap/ui/dom/includeStylesheet",
+    "mantenimiento/model/AnalisisElevadoresService"
 ], function (
     Controller,
     JSONModel,
-    includeStylesheet,
     ActionSheet,
-    Button
+    Button,
+    MessageToast,
+    includeStylesheet,
+    AnalisisElevadoresService
 ) {
     "use strict";
 
-    return Controller.extend(
-        "mantenimiento.controller.AnalisisElevadores",
-        {
-
-            /* ==========================================================
-               INICIALIZACIÓN
-               ========================================================== */
-
-            onInit: function () {
-                var sCssPath = sap.ui.require.toUrl(
+    return Controller.extend("mantenimiento.controller.AnalisisElevadores", {
+        onInit: function () {
+            includeStylesheet(
+                sap.ui.require.toUrl(
                     "mantenimiento/css/AnalisisElevadores.css"
-                );
+                ) + "?v=20260818-live-data"
+            );
 
-                includeStylesheet(sCssPath);
+            this._iLoadRequest = 0;
+            this._iPageSize = 5;
+            this._sTextoBusqueda = "";
+            this._sPeriodoSeleccionado = "2026";
+            this._oFiltrosAplicados = this._getDefaultFilters();
 
-                /*
-                 * Periodo seleccionado visualmente.
-                 * La tabla inicia mostrando todos los registros.
-                 */
-                this._sPeriodoSeleccionado = "Mayo 2024";
+            this.getView().setModel(new JSONModel(
+                AnalisisElevadoresService.createEmpty(this._oFiltrosAplicados)
+            ), "dashboardModel");
+            this.getView().getModel("dashboardModel").setSizeLimit(1000);
+            this._loadData(false);
+        },
 
-                /*
-                 * Filtros que ya fueron confirmados con
-                 * el botón Aplicar filtros.
-                 */
-                this._oFiltrosAplicados = {
-                    periodo: "Todos",
-                    zona: "Todas",
-                    supervisor: "Todos",
-                    tipoOrden: "Todos"
-                };
+        onAfterRendering: function () {
+            var oPeriodo = this.byId("chipPeriodo");
 
-                /*
-                 * Configuración inicial de búsqueda y paginación.
-                 */
-                this._sTextoBusqueda = "";
-                this._iPageSize = 5;
-                this._aRegistrosFiltrados = [];
-                this._bPeriodoClickAsignado = false;
+            if (!oPeriodo || this._bPeriodoClickAsignado) {
+                return;
+            }
+            oPeriodo.addEventDelegate({
+                onclick: function () {
+                    this._abrirMenuPeriodo(oPeriodo);
+                }.bind(this)
+            });
+            this._bPeriodoClickAsignado = true;
+        },
 
-                var aElevadores = [
-                    {
-                        elevador: "EV-1024",
-                        cliente: "Torre Reforma",
-                        zona: "Centro",
-                        causa: "Carta de no mantenimiento",
-                        otAfectadas: 8,
-                        brecha: "-8",
-                        estado: "Critico",
-                        supervisor: "Juan Pérez",
-                        tipoOrden: "Correctivo",
-                        mes: "Mayo 2024"
-                    },
-                    {
-                        elevador: "EV-0871",
-                        cliente: "Torre Reforma",
-                        zona: "Centro",
-                        causa: "Carta de no mantenimiento",
-                        otAfectadas: 7,
-                        brecha: "-7",
-                        estado: "Critico",
-                        supervisor: "María García",
-                        tipoOrden: "Emergencia",
-                        mes: "Mayo 2024"
-                    },
-                    {
-                        elevador: "EV-0442",
-                        cliente: "Plaza Satélite",
-                        zona: "Norte",
-                        causa: "Falta de refacciones",
-                        otAfectadas: 6,
-                        brecha: "-6",
-                        estado: "Alto",
-                        supervisor: "Luis Sánchez",
-                        tipoOrden: "Correctivo",
-                        mes: "Abril 2024"
-                    },
-                    {
-                        elevador: "EV-0615",
-                        cliente: "Hospital San José",
-                        zona: "Norte",
-                        causa: "Carta de no mantenimiento",
-                        otAfectadas: 5,
-                        brecha: "-5",
-                        estado: "Alto",
-                        supervisor: "Juan Pérez",
-                        tipoOrden: "Preventivo",
-                        mes: "Abril 2024"
-                    },
-                    {
-                        elevador: "EV-0521",
-                        cliente: "Torre Mayor",
-                        zona: "Norte",
-                        causa: "Falta de refacciones",
-                        otAfectadas: 4,
-                        brecha: "-4",
-                        estado: "Medio",
-                        supervisor: "María García",
-                        tipoOrden: "Correctivo",
-                        mes: "Marzo 2024"
-                    },
-                    {
-                        elevador: "EV-0722",
-                        cliente: "Centro Santa Fe",
-                        zona: "Centro",
-                        causa: "Cliente no disponible",
-                        otAfectadas: 3,
-                        brecha: "-3",
-                        estado: "Medio",
-                        supervisor: "Luis Sánchez",
-                        tipoOrden: "Preventivo",
-                        mes: "Marzo 2024"
-                    },
-                    {
-                        elevador: "EV-0144",
-                        cliente: "Residencial Bosques",
-                        zona: "Sur",
-                        causa: "Reprogramación",
-                        otAfectadas: 3,
-                        brecha: "-3",
-                        estado: "Medio",
-                        supervisor: "Juan Pérez",
-                        tipoOrden: "Correctivo",
-                        mes: "Mayo 2024"
-                    },
-                    {
-                        elevador: "EV-0833",
-                        cliente: "Plaza Galerías",
-                        zona: "Centro",
-                        causa: "Reprogramación",
-                        otAfectadas: 2,
-                        brecha: "-2",
-                        estado: "Bajo",
-                        supervisor: "María García",
-                        tipoOrden: "Preventivo",
-                        mes: "Abril 2024"
-                    },
-                    {
-                        elevador: "EV-0911",
-                        cliente: "Edificio Insurgentes",
-                        zona: "Sur",
-                        causa: "Falta de refacciones",
-                        otAfectadas: 2,
-                        brecha: "-2",
-                        estado: "Bajo",
-                        supervisor: "Luis Sánchez",
-                        tipoOrden: "Emergencia",
-                        mes: "Marzo 2024"
+        onAplicarFiltros: function () {
+            this._sTextoBusqueda = "";
+            this.byId("searchElevadores").setValue("");
+            this._oFiltrosAplicados = {
+                periodo: this._sPeriodoSeleccionado || "2026",
+                fechaDesde: "01/01/" + (this._sPeriodoSeleccionado || "2026"),
+                fechaHasta: "31/12/" + (this._sPeriodoSeleccionado || "2026"),
+                zona: this.byId("selectZona").getSelectedKey() || "TODAS",
+                supervisor: this.byId("selectSupervisor").getSelectedKey() || "TODOS",
+                tipoOrden: this.byId("selectTipoOrden").getSelectedKey() || "TODOS"
+            };
+            this._loadData(true);
+        },
+
+        onSearch: function (oEvent) {
+            var sValue = oEvent.getParameter("newValue");
+
+            this._sTextoBusqueda = String(
+                sValue === undefined ? oEvent.getSource().getValue() : sValue
+            ).trim();
+            this._actualizarPaginaVisible();
+        },
+
+        onPageSizeChange: function (oEvent) {
+            var iSize = Number(oEvent.getSource().getSelectedKey());
+
+            this._iPageSize = Number.isFinite(iSize) && iSize > 0 ? iSize : 5;
+            this._actualizarPaginaVisible();
+        },
+
+        _getDefaultFilters: function () {
+            return {
+                periodo: "2026",
+                fechaDesde: "01/01/2026",
+                fechaHasta: "31/12/2026",
+                zona: "TODAS",
+                supervisor: "TODOS",
+                tipoOrden: "TODOS"
+            };
+        },
+
+        _getODataModel: function () {
+            var oComponent = this.getOwnerComponent();
+
+            return (oComponent && oComponent.getModel("dashboardOData")) ||
+                this.getView().getModel("dashboardOData");
+        },
+
+        _loadData: function (bNotify) {
+            var oODataModel = this._getODataModel();
+            var oViewModel = this.getView().getModel("dashboardModel");
+            var mFilters = Object.assign({}, this._oFiltrosAplicados);
+            var iRequest = ++this._iLoadRequest;
+
+            this.getView().setBusy(true);
+            AnalisisElevadoresService.load(oODataModel, mFilters).then(
+                function (oResult) {
+                    if (iRequest !== this._iLoadRequest) {
+                        return;
                     }
-                ];
-
-                var oData = {
-                    /*
-                     * Lista completa.
-                     */
-                    elevadores: aElevadores,
-
-                    /*
-                     * Lista mostrada en la tabla.
-                     * Inicia con cinco registros.
-                     */
-                    elevadoresVisibles: aElevadores.slice(0, 5),
-
-                    opcionesPeriodo: [
-                        {
-                            key: "Todos",
-                            text: "Todos"
-                        },
-                        {
-                            key: "Mayo 2024",
-                            text: "Mayo 2024 (Semanal)"
-                        },
-                        {
-                            key: "Abril 2024",
-                            text: "Abril 2024 (Semanal)"
-                        },
-                        {
-                            key: "Marzo 2024",
-                            text: "Marzo 2024 (Semanal)"
-                        }
-                    ],
-
-                    opcionesZona: [
-                        {
-                            key: "Todas",
-                            text: "Todas"
-                        },
-                        {
-                            key: "Norte",
-                            text: "Norte"
-                        },
-                        {
-                            key: "Centro",
-                            text: "Centro"
-                        },
-                        {
-                            key: "Sur",
-                            text: "Sur"
-                        }
-                    ],
-
-                    opcionesSupervisor: [
-                        {
-                            key: "Todos",
-                            text: "Todos"
-                        },
-                        {
-                            key: "Juan Pérez",
-                            text: "Juan Pérez"
-                        },
-                        {
-                            key: "María García",
-                            text: "María García"
-                        },
-                        {
-                            key: "Luis Sánchez",
-                            text: "Luis Sánchez"
-                        }
-                    ],
-
-                    opcionesTipoOrden: [
-                        {
-                            key: "Todos",
-                            text: "Todos"
-                        },
-                        {
-                            key: "Correctivo",
-                            text: "Correctivo"
-                        },
-                        {
-                            key: "Preventivo",
-                            text: "Preventivo"
-                        },
-                        {
-                            key: "Emergencia",
-                            text: "Emergencia"
-                        }
-                    ],
-
-                    kpis: {
-                        elevadores: "9",
-                        otAfectadas: "40",
-                        brecha: "-40 OT",
-                        criticos: "2"
-                    },
-
-                    paginacion: {
-                        texto: "1–5 de 9"
-                    }
-                };
-
-                this.getView().setModel(
-                    new JSONModel(oData),
-                    "dashboardModel"
-                );
-
-                this._aRegistrosFiltrados = aElevadores.slice(0);
-
-                this._actualizarIndicadores(
-                    this._aRegistrosFiltrados
-                );
-
-                this._actualizarPaginaVisible();
-            },
-
-            /* ==========================================================
-               EVENTO DEL FILTRO PERIODO
-               ========================================================== */
-
-            onAfterRendering: function () {
-                var oPeriodo = this.byId("chipPeriodo");
-
-                if (
-                    !oPeriodo ||
-                    this._bPeriodoClickAsignado
-                ) {
+                    this._oRawData = oResult.rawData;
+                    oViewModel.setData(oResult.data);
+                    this._setFiltersOnControls(oResult.data.filters);
+                    this._actualizarPaginaVisible();
+                }.bind(this)
+            ).catch(function (oError) {
+                if (iRequest !== this._iLoadRequest) {
                     return;
                 }
-
-                oPeriodo.addEventDelegate({
-                    onclick: function () {
-                        this._abrirMenuPeriodo(oPeriodo);
-                    }.bind(this)
-                });
-
-                this._bPeriodoClickAsignado = true;
-            },
-
-            /**
-             * Abre las opciones del periodo.
-             *
-             * @param {sap.ui.core.Control} oSource Control de periodo.
-             */
-            _abrirMenuPeriodo: function (oSource) {
-                var oModel = this.getView().getModel(
-                    "dashboardModel"
+                oViewModel.setData(
+                    AnalisisElevadoresService.createEmpty(mFilters)
                 );
-
-                var aOpciones = oModel.getProperty(
-                    "/opcionesPeriodo"
-                ) || [];
-
-                var oActionSheet;
-                var aBotones = [];
-                var i;
-
-                for (i = 0; i < aOpciones.length; i += 1) {
-                    aBotones.push(
-                        this._crearBotonPeriodo(
-                            aOpciones[i]
-                        )
+                this._setFiltersOnControls(mFilters);
+                if (bNotify) {
+                    MessageToast.show(
+                        oError && oError.message ?
+                            oError.message :
+                            "No fue posible cargar los elevadores"
                     );
                 }
-
-                oActionSheet = new ActionSheet({
-                    title: "Seleccionar periodo",
-                    buttons: aBotones,
-
-                    afterClose: function () {
-                        oActionSheet.destroy();
-                    }
-                });
-
-                this.getView().addDependent(oActionSheet);
-                oActionSheet.openBy(oSource);
-            },
-
-            /**
-             * Crea cada botón del selector de periodo.
-             *
-             * @param {Object} oOpcion Opción del periodo.
-             * @returns {sap.m.Button} Botón generado.
-             */
-            _crearBotonPeriodo: function (oOpcion) {
-                return new Button({
-                    text: oOpcion.text,
-
-                    press: function () {
-                        this._sPeriodoSeleccionado =
-                            oOpcion.key;
-
-                        this.byId("textPeriodo").setText(
-                            oOpcion.text
-                        );
-                    }.bind(this)
-                });
-            },
-
-            /* ==========================================================
-               APLICAR FILTROS
-               ========================================================== */
-
-            onAplicarFiltros: function () {
-                var oZona = this.byId("selectZona");
-                var oSupervisor = this.byId(
-                    "selectSupervisor"
-                );
-                var oTipoOrden = this.byId(
-                    "selectTipoOrden"
-                );
-
-                this._oFiltrosAplicados = {
-                    periodo:
-                        this._sPeriodoSeleccionado ||
-                        "Todos",
-
-                    zona:
-                        oZona.getSelectedKey() ||
-                        "Todas",
-
-                    supervisor:
-                        oSupervisor.getSelectedKey() ||
-                        "Todos",
-
-                    tipoOrden:
-                        oTipoOrden.getSelectedKey() ||
-                        "Todos"
-                };
-
-                this._filtrarRegistros();
-            },
-
-            /* ==========================================================
-               BÚSQUEDA
-               ========================================================== */
-
-            onSearch: function (oEvent) {
-                var sValue = oEvent.getParameter(
-                    "newValue"
-                );
-
-                if (sValue === undefined) {
-                    sValue = oEvent.getSource().getValue();
+            }.bind(this)).finally(function () {
+                if (iRequest === this._iLoadRequest) {
+                    this.getView().setBusy(false);
                 }
+            }.bind(this));
+        },
 
-                this._sTextoBusqueda = (
-                    sValue || ""
-                ).trim();
+        _setFiltersOnControls: function (mFilters) {
+            var sPeriod = String(mFilters.periodo || "2026");
 
-                this._filtrarRegistros();
-            },
+            this._sPeriodoSeleccionado = sPeriod;
+            this.byId("textPeriodo").setText(
+                mFilters.periodoTexto || sPeriod + " (Anual)"
+            );
+            this.byId("selectZona").setSelectedKey(mFilters.zona || "TODAS");
+            this.byId("selectSupervisor").setSelectedKey(
+                mFilters.supervisor || "TODOS"
+            );
+            this.byId("selectTipoOrden").setSelectedKey(
+                mFilters.tipoOrden || "TODOS"
+            );
+        },
 
-            /* ==========================================================
-               PAGINACIÓN
-               ========================================================== */
+        _abrirMenuPeriodo: function (oSource) {
+            var oModel = this.getView().getModel("dashboardModel");
+            var aOpciones = oModel.getProperty("/opcionesPeriodo") || [];
+            var oActionSheet;
 
-            onPageSizeChange: function (oEvent) {
-                var sSelectedKey = oEvent.getSource()
-                    .getSelectedKey();
-
-                var iPageSize = parseInt(
-                    sSelectedKey,
-                    10
-                );
-
-                if (
-                    isNaN(iPageSize) ||
-                    iPageSize <= 0
-                ) {
-                    iPageSize = 5;
-                }
-
-                this._iPageSize = iPageSize;
-
-                this._actualizarPaginaVisible();
-            },
-
-            /**
-             * Actualiza los registros mostrados en la tabla.
-             */
-            _actualizarPaginaVisible: function () {
-                var oModel = this.getView().getModel(
-                    "dashboardModel"
-                );
-
-                var aRegistros =
-                    this._aRegistrosFiltrados || [];
-
-                var iTotal = aRegistros.length;
-
-                var iFinal = Math.min(
-                    this._iPageSize,
-                    iTotal
-                );
-
-                var aVisibles = aRegistros.slice(
-                    0,
-                    this._iPageSize
-                );
-
-                var sTextoPagina;
-
-                if (iTotal === 0) {
-                    sTextoPagina = "0 de 0";
-                } else {
-                    sTextoPagina =
-                        "1–" +
-                        iFinal +
-                        " de " +
-                        iTotal;
-                }
-
-                oModel.setProperty(
-                    "/elevadoresVisibles",
-                    aVisibles
-                );
-
-                oModel.setProperty(
-                    "/paginacion/texto",
-                    sTextoPagina
-                );
-            },
-
-            /* ==========================================================
-               FILTRADO COMBINADO
-               ========================================================== */
-
-            _filtrarRegistros: function () {
-                var oModel = this.getView().getModel(
-                    "dashboardModel"
-                );
-
-                var aElevadores = oModel.getProperty(
-                    "/elevadores"
-                ) || [];
-
-                var oFiltros = this._oFiltrosAplicados;
-                var sBusqueda = this._normalizarTexto(
-                    this._sTextoBusqueda
-                );
-
-                this._aRegistrosFiltrados =
-                    aElevadores.filter(
-                        function (oElevador) {
-                            var bPeriodo =
-                                oFiltros.periodo ===
-                                    "Todos" ||
-                                oElevador.mes ===
-                                    oFiltros.periodo;
-
-                            var bZona =
-                                oFiltros.zona ===
-                                    "Todas" ||
-                                oFiltros.zona ===
-                                    "Todos" ||
-                                oElevador.zona ===
-                                    oFiltros.zona;
-
-                            var bSupervisor =
-                                oFiltros.supervisor ===
-                                    "Todos" ||
-                                oElevador.supervisor ===
-                                    oFiltros.supervisor;
-
-                            var bTipoOrden =
-                                oFiltros.tipoOrden ===
-                                    "Todos" ||
-                                oElevador.tipoOrden ===
-                                    oFiltros.tipoOrden;
-
-                            var sTextoRegistro =
-                                this._normalizarTexto(
-                                    [
-                                        oElevador.elevador,
-                                        oElevador.cliente,
-                                        oElevador.zona,
-                                        oElevador.causa,
-                                        oElevador.supervisor,
-                                        oElevador.tipoOrden
-                                    ].join(" ")
-                                );
-
-                            var bBusqueda =
-                                !sBusqueda ||
-                                sTextoRegistro.indexOf(
-                                    sBusqueda
-                                ) !== -1;
-
-                            return (
-                                bPeriodo &&
-                                bZona &&
-                                bSupervisor &&
-                                bTipoOrden &&
-                                bBusqueda
-                            );
+            oActionSheet = new ActionSheet({
+                title: "Seleccionar periodo",
+                buttons: aOpciones.map(function (oOpcion) {
+                    return new Button({
+                        text: oOpcion.text,
+                        press: function () {
+                            this._sPeriodoSeleccionado = String(oOpcion.key);
+                            this.byId("textPeriodo").setText(oOpcion.text);
+                            oActionSheet.close();
                         }.bind(this)
-                    );
-
-                this._actualizarIndicadores(
-                    this._aRegistrosFiltrados
-                );
-
-                this._actualizarPaginaVisible();
-            },
-
-            /**
-             * Normaliza textos para permitir búsquedas sin considerar
-             * mayúsculas, minúsculas o acentos.
-             *
-             * @param {string} sTexto Texto original.
-             * @returns {string} Texto normalizado.
-             */
-            _normalizarTexto: function (sTexto) {
-                var sResultado = String(
-                    sTexto || ""
-                ).toLowerCase();
-
-                /*
-                 * Se usa normalize únicamente cuando está disponible.
-                 */
-                if (sResultado.normalize) {
-                    sResultado = sResultado
-                        .normalize("NFD")
-                        .replace(
-                            /[\u0300-\u036f]/g,
-                            ""
-                        );
+                    });
+                }.bind(this)),
+                afterClose: function () {
+                    oActionSheet.destroy();
                 }
+            });
+            this.getView().addDependent(oActionSheet);
+            oActionSheet.openBy(oSource);
+        },
 
-                return sResultado;
-            },
+        _actualizarPaginaVisible: function () {
+            var oModel = this.getView().getModel("dashboardModel");
+            var aElevadores = oModel.getProperty("/elevadores") || [];
+            var sSearch = this._normalizarTexto(this._sTextoBusqueda);
+            var aFiltered = aElevadores.filter(function (oElevador) {
+                var sRecord = [
+                    oElevador.elevador,
+                    oElevador.cliente,
+                    oElevador.zona,
+                    oElevador.causa,
+                    oElevador.estado
+                ].join(" ");
 
-            /* ==========================================================
-               ACTUALIZACIÓN DE KPI
-               ========================================================== */
+                return !sSearch ||
+                    this._normalizarTexto(sRecord).indexOf(sSearch) >= 0;
+            }.bind(this));
+            var iVisible = Math.min(this._iPageSize, aFiltered.length);
+            var sPagination = aFiltered.length ?
+                "1–" + iVisible + " de " + aFiltered.length :
+                "0 de 0";
 
-            _actualizarIndicadores: function (aRegistros) {
-                var oModel = this.getView().getModel(
-                    "dashboardModel"
-                );
+            oModel.setProperty(
+                "/elevadoresVisibles",
+                aFiltered.slice(0, this._iPageSize)
+            );
+            oModel.setProperty("/paginacion/texto", sPagination);
+        },
 
-                var iElevadores = aRegistros.length;
-                var iOtAfectadas = 0;
-                var iBrecha = 0;
-                var iCriticos = 0;
-                var i;
+        _normalizarTexto: function (vValue) {
+            var sText = String(vValue || "").toLowerCase();
 
-                for (i = 0; i < aRegistros.length; i += 1) {
-                    iOtAfectadas += Number(
-                        aRegistros[i].otAfectadas || 0
-                    );
+            return sText.normalize ?
+                sText.normalize("NFD").replace(/[\u0300-\u036f]/g, "") :
+                sText;
+        },
 
-                    iBrecha += Number(
-                        aRegistros[i].brecha || 0
-                    );
-
-                    if (
-                        aRegistros[i].estado === "Critico"
-                    ) {
-                        iCriticos += 1;
-                    }
-                }
-
-                oModel.setProperty(
-                    "/kpis/elevadores",
-                    String(iElevadores)
-                );
-
-                oModel.setProperty(
-                    "/kpis/otAfectadas",
-                    String(iOtAfectadas)
-                );
-
-                oModel.setProperty(
-                    "/kpis/brecha",
-                    String(iBrecha) + " OT"
-                );
-
-                oModel.setProperty(
-                    "/kpis/criticos",
-                    String(iCriticos)
-                );
-            },
-
-            /* ==========================================================
-               FORMATEADOR DE ESTADO
-               ========================================================== */
-
-            formatEstadoTexto: function (sEstado) {
-                if (!sEstado) {
-                    return "";
-                }
-
-                if (sEstado === "Critico") {
-                    return "Crítico";
-                }
-
-                return sEstado;
-            }
+        formatEstadoTexto: function (sEstado) {
+            return sEstado || "Sin clasificar";
         }
-    );
+    });
 });

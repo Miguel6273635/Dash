@@ -15,9 +15,12 @@ sap.ui.define([
 
     return Controller.extend("mantenimiento.controller.DetalleCumplimientoOrdenes", {
         onInit: function () {
+            // Se cambia la versión sólo para invalidar la hoja simplificada
+            // que el navegador pudo conservar en caché. El contenido que se
+            // carga es el CSS original proporcionado para esta pantalla.
             includeStylesheet(sap.ui.require.toUrl(
                 "mantenimiento/css/DetalleCumplimientoOrdenes.css"
-            ));
+            ) + "?v=20260818-original-layout");
 
             this._iLoadRequest = 0;
             this._oRawData = null;

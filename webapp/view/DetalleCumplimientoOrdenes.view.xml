@@ -2,207 +2,480 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Page showHeader="false" enableScrolling="true" class="DetalleCumplimientoOrdenes">
+    <Page id="pageDetalleCumplimientoOrdenes" showHeader="false" enableScrolling="true" class="DetalleCumplimientoOrdenes">
         <content>
-            <VBox class="dcgoDashboard sapUiSizeCompact">
-                <Title text="Detalle de cumplimiento general de las órdenes" level="H1" class="dcgoPageTitle"/>
-                <HBox width="100%" wrap="Wrap" alignItems="End" class="dcgoFilterRow">
+            <VBox id="dashboardViewport" fitContainer="false" class="dcgoDashboard sapUiSizeCompact">
+                <!-- =====================================================
+                     TÍTULO DE LA PANTALLA
+                ====================================================== -->
+                <VBox class="dcgoHeaderBlock">
+                    <Title text="Detalle de cumplimiento general de las órdenes" level="H1" class="dcgoPageTitle"/>
+                </VBox>
+                <!-- =====================================================
+                     FILTROS
+                ====================================================== -->
+                <HBox width="100%" wrap="NoWrap" alignItems="End" class="dcgoFilterRow">
+                    <!-- PERIODO -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Periodo" class="dcgoFilterLabel"/>
-                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/periodo}" change=".onPeriodoChange" items="{path: 'cumplimientoModel>/catalogos/periodos'}">
-                            <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/periodo}" change=".onPeriodoChange" items="{path: 'cumplimientoModel>/catalogos/periodos'}" class="dcgoFilterControl">
+                            <items>
+                                <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                            </items>
                         </Select>
                     </VBox>
+                    <!-- FECHA DESDE -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Fecha desde" class="dcgoFilterLabel"/>
-                        <DatePicker width="100%" value="{cumplimientoModel>/filters/fechaDesde}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy"/>
+                        <DatePicker width="100%" value="{cumplimientoModel>/filters/fechaDesde}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" class="dcgoFilterControl"/>
                     </VBox>
+                    <!-- FECHA HASTA -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Fecha hasta" class="dcgoFilterLabel"/>
-                        <DatePicker width="100%" value="{cumplimientoModel>/filters/fechaHasta}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy"/>
+                        <DatePicker width="100%" value="{cumplimientoModel>/filters/fechaHasta}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" class="dcgoFilterControl"/>
                     </VBox>
+                    <!-- ZONA -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Zona" class="dcgoFilterLabel"/>
-                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/zona}" items="{path: 'cumplimientoModel>/catalogos/zonas'}">
-                            <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/zona}" items="{path: 'cumplimientoModel>/catalogos/zonas'}" class="dcgoFilterControl">
+                            <items>
+                                <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                            </items>
                         </Select>
                     </VBox>
+                    <!-- SUPERVISOR -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Supervisor" class="dcgoFilterLabel"/>
-                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/supervisor}" items="{path: 'cumplimientoModel>/catalogos/supervisores'}">
-                            <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/supervisor}" items="{path: 'cumplimientoModel>/catalogos/supervisores'}" class="dcgoFilterControl">
+                            <items>
+                                <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                            </items>
                         </Select>
                     </VBox>
+                    <!-- TIPO DE SERVICIO -->
                     <VBox class="dcgoFilterCard">
                         <Label text="Tipo de servicio" class="dcgoFilterLabel"/>
-                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/tipoServicio}" items="{path: 'cumplimientoModel>/catalogos/tiposServicio'}">
-                            <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                        <Select width="100%" selectedKey="{cumplimientoModel>/filters/tipoServicio}" items="{path: 'cumplimientoModel>/catalogos/tiposServicio'}" class="dcgoFilterControl">
+                            <items>
+                                <core:Item key="{cumplimientoModel>key}" text="{cumplimientoModel>text}"/>
+                            </items>
                         </Select>
                     </VBox>
-                    <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onAplicarFiltros" class="dcgoApplyButton"/>
+                    <!-- BOTÓN -->
+                    <VBox class="dcgoApplyButtonBox">
+                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onAplicarFiltros" class="dcgoApplyButton"/>
+                    </VBox>
                 </HBox>
-                <HBox width="100%" wrap="Wrap" class="dcgoKpiRow">
+                <!-- =====================================================
+                     KPI
+                ====================================================== -->
+                <HBox width="100%" wrap="NoWrap" alignItems="Stretch" class="dcgoKpiRow">
+                    <!-- ÓRDENES PLANEADAS -->
                     <VBox class="dcgoKpiCard dcgoKpiPurple">
-                        <core:Icon src="sap-icon://calendar" class="dcgoKpiIcon"/>
-                        <VBox>
-                            <Text text="Órdenes planeadas" class="dcgoKpiTitle"/>
-                            <ObjectNumber number="{cumplimientoModel>/kpis/ordenesPlaneadas}" unit="OT" class="dcgoKpiValue"/>
-                            <Text text="Planificadas en el periodo" class="dcgoKpiHelper"/>
-                        </VBox>
+                        <HBox width="100%" alignItems="Center" class="dcgoKpiContent">
+                            <VBox alignItems="Center" justifyContent="Center" class="dcgoKpiIconCircle">
+                                <core:Icon src="sap-icon://calendar" class="dcgoKpiIcon"/>
+                            </VBox>
+                            <VBox class="dcgoKpiTextBlock">
+                                <Text text="Órdenes planeadas" class="dcgoKpiLabel"/>
+                                <HBox alignItems="End">
+                                    <Text text="{cumplimientoModel>/kpis/ordenesPlaneadas}" class="dcgoKpiValue"/>
+                                    <Text text="OT" class="dcgoKpiUnit"/>
+                                </HBox>
+                                <Text text="Planificadas en el periodo" class="dcgoKpiHelper"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
+                    <!-- ÓRDENES EJECUTADAS -->
                     <VBox class="dcgoKpiCard dcgoKpiGreen">
-                        <core:Icon src="sap-icon://complete" class="dcgoKpiIcon"/>
-                        <VBox>
-                            <Text text="Órdenes ejecutadas" class="dcgoKpiTitle"/>
-                            <ObjectNumber number="{cumplimientoModel>/kpis/ordenesEjecutadas}" unit="OT" class="dcgoKpiValue"/>
-                            <Text text="{cumplimientoModel>/kpis/ejecucionDescripcion}" class="dcgoKpiHelper"/>
-                        </VBox>
+                        <HBox width="100%" alignItems="Center" class="dcgoKpiContent">
+                            <VBox alignItems="Center" justifyContent="Center" class="dcgoKpiIconCircle">
+                                <core:Icon src="sap-icon://complete" class="dcgoKpiIcon"/>
+                            </VBox>
+                            <VBox class="dcgoKpiTextBlock">
+                                <Text text="Órdenes ejecutadas" class="dcgoKpiLabel"/>
+                                <HBox alignItems="End">
+                                    <Text text="{cumplimientoModel>/kpis/ordenesEjecutadas}" class="dcgoKpiValue"/>
+                                    <Text text="OT" class="dcgoKpiUnit"/>
+                                </HBox>
+                                <Text text="{cumplimientoModel>/kpis/ejecucionDescripcion}" class="dcgoKpiHelper dcgoPositiveText"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
+                    <!-- BRECHA -->
                     <VBox class="dcgoKpiCard dcgoKpiRed">
-                        <core:Icon src="sap-icon://message-error" class="dcgoKpiIcon"/>
-                        <VBox>
-                            <Text text="Brecha" class="dcgoKpiTitle"/>
-                            <ObjectNumber number="{cumplimientoModel>/kpis/brecha}" unit="OT" class="dcgoKpiValue"/>
-                            <Text text="{cumplimientoModel>/kpis/brechaDescripcion}" class="dcgoKpiHelper"/>
-                        </VBox>
+                        <HBox width="100%" alignItems="Center" class="dcgoKpiContent">
+                            <VBox alignItems="Center" justifyContent="Center" class="dcgoKpiIconCircle">
+                                <core:Icon src="sap-icon://message-error" class="dcgoKpiIcon"/>
+                            </VBox>
+                            <VBox class="dcgoKpiTextBlock">
+                                <Text text="Brecha" class="dcgoKpiLabel"/>
+                                <HBox alignItems="End">
+                                    <Text text="{cumplimientoModel>/kpis/brecha}" class="dcgoKpiValue"/>
+                                    <Text text="OT" class="dcgoKpiUnit"/>
+                                </HBox>
+                                <Text text="{cumplimientoModel>/kpis/brechaDescripcion}" class="dcgoKpiHelper"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
-                    <VBox class="dcgoKpiCard dcgoKpiLime">
-                        <core:Icon src="sap-icon://target-group" class="dcgoKpiIcon"/>
-                        <VBox>
-                            <Text text="Cumplimiento general" class="dcgoKpiTitle"/>
-                            <Text text="{cumplimientoModel>/kpis/cumplimientoGeneral}" class="dcgoKpiValue"/>
-                            <Text text="Ejecutadas / planeadas" class="dcgoKpiHelper"/>
-                        </VBox>
+                    <!-- CUMPLIMIENTO -->
+                    <VBox class="dcgoKpiCard dcgoKpiGreen">
+                        <HBox width="100%" alignItems="Center" class="dcgoKpiContent">
+                            <VBox alignItems="Center" justifyContent="Center" class="dcgoKpiIconCircle">
+                                <core:Icon src="sap-icon://target-group" class="dcgoKpiIcon"/>
+                            </VBox>
+                            <VBox class="dcgoKpiTextBlock">
+                                <Text text="Cumplimiento general" class="dcgoKpiLabel"/>
+                                <Text text="{cumplimientoModel>/kpis/cumplimientoGeneral}" class="dcgoKpiValue"/>
+                                <Text text="Ejecutadas / planeadas en el periodo" class="dcgoKpiHelper dcgoPositiveText"/>
+                            </VBox>
+                        </HBox>
                     </VBox>
                 </HBox>
-                <HBox width="100%" wrap="Wrap" class="dcgoDashboardGrid">
-                    <VBox class="dcgoCard dcgoWideCard">
-                        <Title text="Descomposición de la brecha" level="H3" class="dcgoCardTitle"/>
-                        <Text text="Plan inicial menos las OT no ejecutadas, agrupadas por causa principal." class="dcgoCardSubtitle"/>
-                        <List inset="false" showSeparators="Inner" class="dcgoWaterfallList" items="{path: 'cumplimientoModel>/graficas/descomposicionBrecha'}">
-                            <CustomListItem>
-                                <HBox width="100%" justifyContent="SpaceBetween" class="dcgoWaterfallRow">
-                                    <Text text="{cumplimientoModel>concepto}"/>
-                                    <ObjectNumber number="{cumplimientoModel>valor}" state="{= ${cumplimientoModel>tipo} === 'brecha' ? 'Error' : 'None' }"/>
+                <!-- =====================================================
+                     GRID PRINCIPAL
+                ====================================================== -->
+                <VBox class="dcgoDashboardGrid">
+                    <!-- =================================================
+                         DESCOMPOSICIÓN DE LA BRECHA
+                    ================================================== -->
+                    <VBox class="dcgoCard dcgoBrechaCard">
+                        <!-- TÍTULO Y LEYENDA -->
+                        <HBox width="100%" justifyContent="SpaceBetween" alignItems="Center" class="dcgoWfHeaderRow">
+                            <HBox alignItems="Center" class="dcgoWfTitleGroup">
+                                <Title text="Descomposición de la brecha" level="H3" class="dcgoWfTitle"/>
+                                <core:Icon src="sap-icon://hint" tooltip="Información de la descomposición de la brecha" class="dcgoWfTitleIcon"/>
+                            </HBox>
+                            <HBox alignItems="Center" class="dcgoWfLegendRow">
+                                <HBox alignItems="Center" class="dcgoWfLegendItem">
+                                    <VBox class="dcgoWfLegendSwatch dcgoWfLegendPlan"/>
+                                    <Text text="Plan" class="dcgoWfLegendText"/>
                                 </HBox>
-                            </CustomListItem>
-                        </List>
-                        <Text text="{cumplimientoModel>/graficas/descomposicionBrechaPie}" class="dcgoCardFooter"/>
-                    </VBox>
-                    <VBox class="dcgoCard dcgoWideCard">
-                        <HBox alignItems="Center">
-                            <Title text="Elevadores con mayor desviación" level="H3" class="dcgoCardTitle"/>
-                            <core:Icon src="sap-icon://hint" tooltip="OT no ejecutadas por equipo" class="dcgoInfoIcon"/>
+                                <HBox alignItems="Center" class="dcgoWfLegendItem">
+                                    <VBox class="dcgoWfLegendSwatch dcgoWfLegendGap"/>
+                                    <Text text="Brecha" class="dcgoWfLegendText"/>
+                                </HBox>
+                                <HBox alignItems="Center" class="dcgoWfLegendItem">
+                                    <VBox class="dcgoWfLegendSwatch dcgoWfLegendResult"/>
+                                    <Text text="Resultado real" class="dcgoWfLegendText"/>
+                                </HBox>
+                            </HBox>
                         </HBox>
-                        <List inset="false" showSeparators="Inner" items="{path: 'cumplimientoModel>/graficas/elevadoresDesviacion'}">
-                            <CustomListItem>
-                                <HBox width="100%" alignItems="Center" class="dcgoEquipmentRow">
-                                    <VBox class="dcgoEquipmentName">
-                                        <Text text="{cumplimientoModel>elevador}"/>
-                                        <Text text="{cumplimientoModel>cliente}" class="dcgoMutedText"/>
+                        <!-- CUERPO DE LA GRÁFICA -->
+                        <HBox width="100%" class="dcgoWfChartBody">
+                            <!-- EJE Y -->
+                            <VBox justifyContent="SpaceBetween" class="dcgoWfAxis">
+                                <Text text="600"/>
+                                <Text text="500"/>
+                                <Text text="400"/>
+                                <Text text="300"/>
+                                <Text text="200"/>
+                                <Text text="100"/>
+                                <Text text="0"/>
+                            </VBox>
+                            <!-- GRÁFICA Y ETIQUETAS -->
+                            <VBox class="dcgoWfChartContent">
+                                <!-- ÁREA DE TRAZADO -->
+                                <HBox width="100%" class="dcgoWfPlot">
+                                    <!-- PLAN INICIAL -->
+                                    <VBox class="dcgoWfPoint dcgoWfPlan">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/0/valor}" class="dcgoWfValue"/>
                                     </VBox>
-                                    <ProgressIndicator percentValue="{cumplimientoModel>barWidth}" displayValue="" showValue="false" state="Information" class="dcgoEquipmentBar"/>
-                                    <ObjectNumber number="{cumplimientoModel>otNoEjecutadas}" unit="OT" state="Error"/>
+                                    <!-- FALTA DE MANTENIMIENTO -->
+                                    <VBox class="dcgoWfPoint dcgoWfGap1">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/1/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                    <!-- FALTA DE REFACCIONES -->
+                                    <VBox class="dcgoWfPoint dcgoWfGap2">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/2/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                    <!-- CLIENTE NO DISPONIBLE -->
+                                    <VBox class="dcgoWfPoint dcgoWfGap3">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/3/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                    <!-- REPROGRAMACIÓN -->
+                                    <VBox class="dcgoWfPoint dcgoWfGap4">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/4/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                    <!-- MECÁNICO NO DISPONIBLE -->
+                                    <VBox class="dcgoWfPoint dcgoWfGap5">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/5/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                    <!-- RESULTADO REAL -->
+                                    <VBox class="dcgoWfPoint dcgoWfResult">
+                                        <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/6/valor}" class="dcgoWfValue"/>
+                                    </VBox>
+                                </HBox>
+                                <!-- ETIQUETAS DEL EJE X -->
+                                <HBox width="100%" alignItems="Start" class="dcgoWfLabels">
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/0/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/1/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/2/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/3/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/4/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/5/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                    <Text text="{cumplimientoModel>/graficas/descomposicionBrecha/6/concepto}" wrapping="true" maxLines="2" textAlign="Center"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                        <!-- TEXTO INFERIOR SIN ICONO -->
+                        <HBox width="100%" alignItems="Center" class="dcgoWfFooter">
+                            <Text text="{cumplimientoModel>/graficas/descomposicionBrechaPie}" wrapping="false" class="dcgoWfFooterText"/>
+                        </HBox>
+                    </VBox>
+                    <!-- =================================================
+     ELEVADORES CON MAYOR DESVIACIÓN ================================================== -->
+                    <VBox class="dcgoCard dcgoElevadoresCard">
+                        <!-- TÍTULO -->
+                        <HBox width="100%" alignItems="Center" class="dcgoElevadoresTitleRow">
+                            <Title text="Elevadores con mayor desviación" level="H3" class="dcgoElevadoresTitle"/>
+                            <core:Icon src="sap-icon://hint" tooltip="Equipos con mayor cantidad de órdenes no ejecutadas" class="dcgoElevadoresInfoIcon"/>
+                        </HBox>
+                        <!-- CABECERA -->
+                        <HBox width="100%" alignItems="Center" class="dcgoElevadoresHeader">
+                            <Text text="Elevador / Equipo" wrapping="false" class="dcgoElevadoresHeaderText"/>
+                            <Text text="Cliente / Sitio" wrapping="false" class="dcgoElevadoresHeaderText"/>
+                            <Text text="OT no ejecutadas" wrapping="false" class="dcgoElevadoresHeaderText dcgoElevadoresHeaderMetric"/>
+                        </HBox>
+                        <!-- LISTA DE ELEVADORES -->
+                        <List width="100%" inset="false" showSeparators="None" class="dcgoElevadoresList" items="{
+            path: 'cumplimientoModel>/graficas/elevadoresDesviacion',
+            templateShareable: false
+        }">
+                            <CustomListItem>
+                                <HBox width="100%" alignItems="Center" class="dcgoElevadorRow">
+                                    <Text text="{cumplimientoModel>elevador}" wrapping="false" class="dcgoElevadorCode"/>
+                                    <Text text="{cumplimientoModel>cliente}" wrapping="false" class="dcgoElevadorClient"/>
+                                    <HBox width="100%" alignItems="Center" class="dcgoElevadorBarTrack">
+                                        <VBox width="100%" class="dcgoElevadorBarFill">
+                                            <layoutData>
+                                                <FlexItemData growFactor="0" shrinkFactor="0" baseSize="{
+                    path: 'cumplimientoModel>barWidth',
+                    formatter: '.formatBarWidth'
+                }"/>
+                                            </layoutData>
+                                        </VBox>
+                                    </HBox>
+                                    <Text text="{cumplimientoModel>otNoEjecutadas}" wrapping="false" class="dcgoElevadorValue"/>
                                 </HBox>
                             </CustomListItem>
                         </List>
+                        <!-- ENLACE -->
+                        <HBox width="100%" justifyContent="End" alignItems="Center" class="dcgoElevadoresFooter">
+                            <Link text="Ver todos los elevadores" press=".onVerElevadores" class="dcgoElevadoresLink"/>
+                            <core:Icon src="sap-icon://slim-arrow-right" class="dcgoElevadoresLinkIcon"/>
+                        </HBox>
                     </VBox>
-                    <VBox class="dcgoCard dcgoWideCard">
-                        <Title text="Causas por zona" level="H3" class="dcgoCardTitle"/>
-                        <Table inset="false" fixedLayout="true" items="{path: 'cumplimientoModel>/graficas/causasZona'}" class="dcgoCompactTable">
-                            <columns>
-                                <Column>
-                                    <Text text="Causa"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Norte"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Centro"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Sur"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Este"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Oeste"/>
-                                </Column>
-                                <Column hAlign="Center">
-                                    <Text text="Total"/>
-                                </Column>
-                            </columns>
-                            <items>
-                                <ColumnListItem>
-                                    <cells>
-                                        <Text text="{cumplimientoModel>causa}"/>
-                                        <Text text="{cumplimientoModel>norte}" textAlign="Center"/>
-                                        <Text text="{cumplimientoModel>centro}" textAlign="Center"/>
-                                        <Text text="{cumplimientoModel>sur}" textAlign="Center"/>
-                                        <Text text="{cumplimientoModel>este}" textAlign="Center"/>
-                                        <Text text="{cumplimientoModel>oeste}" textAlign="Center"/>
-                                        <ObjectNumber number="{cumplimientoModel>total}"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
-                        </Table>
+                    <!-- =================================================
+     CAUSAS POR ZONA ================================================== -->
+                    <VBox class="dcgoCard dcgoCausasZonaCard">
+                        <!-- TÍTULO -->
+                        <HBox width="100%" alignItems="Center" class="dcgoCausasTitleRow">
+                            <Title text="Causas por zona" level="H3" class="dcgoCausasTitle"/>
+                            <core:Icon src="sap-icon://hint" tooltip="Distribución de causas por zona operativa" class="dcgoCausasInfoIcon"/>
+                        </HBox>
+                        <!-- CABECERA -->
+                        <HBox width="100%" alignItems="Center" class="dcgoCausasGridHeader">
+                            <Text text="Causa" wrapping="false" class="dcgoCausasHeaderCause"/>
+                            <Text text="Norte" wrapping="false" class="dcgoCausasHeaderZone"/>
+                            <Text text="Centro" wrapping="false" class="dcgoCausasHeaderZone"/>
+                            <Text text="Sur" wrapping="false" class="dcgoCausasHeaderZone"/>
+                            <Text text="Este" wrapping="false" class="dcgoCausasHeaderZone"/>
+                            <Text text="Oeste" wrapping="false" class="dcgoCausasHeaderZone"/>
+                            <Text text="Total" wrapping="false" class="dcgoCausasHeaderTotal"/>
+                        </HBox>
+                        <!-- MATRIZ:
+         Se utiliza VBox en lugar de List para evitar alturas,
+         paddings y recortes internos de sap.m.List.
+    -->
+                        <VBox width="100%" class="dcgoCausasMatrix" items="{
+            path: 'cumplimientoModel>/graficas/causasZona',
+            templateShareable: false
+        }">
+                            <HBox width="100%" alignItems="Stretch" class="dcgoCausasGridRow">
+                                <!-- CAUSA -->
+                                <Text text="{cumplimientoModel>causa}" wrapping="false" class="dcgoCausaName"/>
+                                <!-- NORTE -->
+                                <Text text="{cumplimientoModel>norte}" class="dcgoHeatCell">
+                                    <customData>
+                                        <core:CustomData key="level" value="{
+                            path: 'cumplimientoModel>norte',
+                            formatter: '.formatHeatLevel'
+                        }" writeToDom="true"/>
+                                    </customData>
+                                </Text>
+                                <!-- CENTRO -->
+                                <Text text="{cumplimientoModel>centro}" class="dcgoHeatCell">
+                                    <customData>
+                                        <core:CustomData key="level" value="{
+                            path: 'cumplimientoModel>centro',
+                            formatter: '.formatHeatLevel'
+                        }" writeToDom="true"/>
+                                    </customData>
+                                </Text>
+                                <!-- SUR -->
+                                <Text text="{cumplimientoModel>sur}" class="dcgoHeatCell">
+                                    <customData>
+                                        <core:CustomData key="level" value="{
+                            path: 'cumplimientoModel>sur',
+                            formatter: '.formatHeatLevel'
+                        }" writeToDom="true"/>
+                                    </customData>
+                                </Text>
+                                <!-- ESTE -->
+                                <Text text="{cumplimientoModel>este}" class="dcgoHeatCell">
+                                    <customData>
+                                        <core:CustomData key="level" value="{
+                            path: 'cumplimientoModel>este',
+                            formatter: '.formatHeatLevel'
+                        }" writeToDom="true"/>
+                                    </customData>
+                                </Text>
+                                <!-- OESTE -->
+                                <Text text="{cumplimientoModel>oeste}" class="dcgoHeatCell">
+                                    <customData>
+                                        <core:CustomData key="level" value="{
+                            path: 'cumplimientoModel>oeste',
+                            formatter: '.formatHeatLevel'
+                        }" writeToDom="true"/>
+                                    </customData>
+                                </Text>
+                                <!-- TOTAL -->
+                                <Text text="{cumplimientoModel>total}" class="dcgoHeatTotal"/>
+                            </HBox>
+                        </VBox>
+                        <!-- LEYENDA -->
+                        <HBox width="100%" alignItems="Center" justifyContent="Center" class="dcgoCausasLegendRow">
+                            <Text text="Menor impacto" wrapping="false" class="dcgoCausasLegendText"/>
+                            <VBox class="dcgoCausasLegendGradient"/>
+                            <Text text="Mayor impacto" wrapping="false" class="dcgoCausasLegendText"/>
+                        </HBox>
                     </VBox>
-                    <VBox class="dcgoCard dcgoWideCard">
-                        <Title text="Seguimiento operativo por responsable" level="H3" class="dcgoCardTitle"/>
-                        <Text text="OT desviadas por origen de la causa" class="dcgoCardSubtitle"/>
+                    <!-- =================================================
+     SEGUIMIENTO OPERATIVO POR RESPONSABLE ================================================== -->
+                    <VBox class="dcgoCard dcgoRespCard">
+                        <VBox class="dcgoRespHeader">
+                            <HBox width="100%" alignItems="Center" class="dcgoRespTitleRow">
+                                <Title text="Seguimiento operativo por responsable" level="H3" class="dcgoRespTitle"/>
+                                <core:Icon src="sap-icon://hint" tooltip="OT desviadas por categoría de causa" class="dcgoRespInfoIcon"/>
+                            </HBox>
+                            <Text text="OT desviadas por categoría de causa" wrapping="false" class="dcgoRespSubtitle"/>
+                        </VBox>
                         <core:HTML id="htmlResponsables" sanitizeContent="false" class="dcgoRespHtml"/>
                     </VBox>
-                    <VBox class="dcgoCard dcgoTrendCard">
-                        <Title text="Tendencia de ejecución" level="H3" class="dcgoCardTitle"/>
-                        <Text text="Órdenes planeadas, ejecutadas y cumplimiento por mes" class="dcgoCardSubtitle"/>
-                        <core:HTML id="htmlTendenciaEjecucion" sanitizeContent="false" class="dcgoTrendHtml"/>
-                        <Table inset="false" fixedLayout="true" items="{path: 'cumplimientoModel>/graficas/tendenciaEjecucion'}" class="dcgoCompactTable">
-                            <columns>
-                                <Column>
-                                    <Text text="Mes"/>
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Plan"/>
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Ejecutadas"/>
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Brecha"/>
-                                </Column>
-                                <Column hAlign="End">
-                                    <Text text="Cumplimiento"/>
-                                </Column>
-                            </columns>
-                            <items>
-                                <ColumnListItem>
-                                    <cells>
-                                        <Text text="{cumplimientoModel>mes}"/>
-                                        <Text text="{cumplimientoModel>otPlaneadas}" textAlign="End"/>
-                                        <Text text="{cumplimientoModel>otEjecutadas}" textAlign="End"/>
-                                        <ObjectNumber number="{cumplimientoModel>brecha}" state="Error"/>
-                                        <Text text="{= ${cumplimientoModel>cumplimiento} + '%' }" textAlign="End"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
-                        </Table>
+                    <!-- =================================================
+                         TENDENCIA DE EJECUCIÓN
+                    ================================================== -->
+                    <VBox class="dcgoCard dcgoTendenciaCard">
+                        <VBox class="dcgoCardHeader">
+                            <HBox alignItems="Center" class="dcgoCardTitleLine">
+                                <Title text="Tendencia de ejecución" level="H3" class="dcgoCardTitle"/>
+                                <core:Icon src="sap-icon://hint" class="dcgoTitleInfoIcon"/>
+                            </HBox>
+                            <Text text="Comportamiento mensual de órdenes planeadas, ejecutadas y cumplimiento" class="dcgoCardSubtitle"/>
+                        </VBox>
+                        <HBox alignItems="Center" class="dcgoLegendRow">
+                            <HBox alignItems="Center" class="dcgoLegendItem">
+                                <VBox class="dcgoLegendLine dcgoLegendGray"/>
+                                <Text text="OT planeadas"/>
+                            </HBox>
+                            <HBox alignItems="Center" class="dcgoLegendItem">
+                                <VBox class="dcgoLegendLine dcgoLegendBlue"/>
+                                <Text text="OT ejecutadas"/>
+                            </HBox>
+                            <HBox alignItems="Center" class="dcgoLegendItem">
+                                <VBox class="dcgoLegendLine dcgoLegendGreen"/>
+                                <Text text="% cumplimiento"/>
+                            </HBox>
+                        </HBox>
+                        <VBox class="dcgoChartArea dcgoTrendChartArea">
+                            <core:HTML id="htmlTendenciaEjecucion" sanitizeContent="false" class="dcgoTrendHtml"/>
+                        </VBox>
+                        <VBox class="dcgoTrendMatrix">
+                            <HBox class="dcgoTrendMatrixHeader">
+                                <Text text=""/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/0/mesCorto}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/1/mesCorto}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/2/mesCorto}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/3/mesCorto}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/4/mesCorto}"/>
+                            </HBox>
+                            <HBox class="dcgoTrendMatrixRow">
+                                <Text text="OT planeadas" class="dcgoTrendMatrixLabel"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/0/otPlaneadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/1/otPlaneadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/2/otPlaneadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/3/otPlaneadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/4/otPlaneadas}"/>
+                            </HBox>
+                            <HBox class="dcgoTrendMatrixRow">
+                                <Text text="OT ejecutadas" class="dcgoTrendMatrixLabel dcgoBlueText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/0/otEjecutadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/1/otEjecutadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/2/otEjecutadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/3/otEjecutadas}"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/4/otEjecutadas}"/>
+                            </HBox>
+                            <HBox class="dcgoTrendMatrixRow">
+                                <Text text="Brecha" class="dcgoTrendMatrixLabel dcgoRedText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/0/brecha}" class="dcgoRedText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/1/brecha}" class="dcgoRedText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/2/brecha}" class="dcgoRedText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/3/brecha}" class="dcgoRedText"/>
+                                <Text text="{cumplimientoModel>/graficas/tendenciaEjecucion/4/brecha}" class="dcgoRedText"/>
+                            </HBox>
+                            <HBox class="dcgoTrendMatrixRow">
+                                <Text text="Cumplimiento" class="dcgoTrendMatrixLabel dcgoGreenText"/>
+                                <Text text="{= ${cumplimientoModel>/graficas/tendenciaEjecucion/0/cumplimiento} + '%' }" class="dcgoGreenText"/>
+                                <Text text="{= ${cumplimientoModel>/graficas/tendenciaEjecucion/1/cumplimiento} + '%' }" class="dcgoGreenText"/>
+                                <Text text="{= ${cumplimientoModel>/graficas/tendenciaEjecucion/2/cumplimiento} + '%' }" class="dcgoGreenText"/>
+                                <Text text="{= ${cumplimientoModel>/graficas/tendenciaEjecucion/3/cumplimiento} + '%' }" class="dcgoGreenText"/>
+                                <Text text="{= ${cumplimientoModel>/graficas/tendenciaEjecucion/4/cumplimiento} + '%' }" class="dcgoGreenText"/>
+                            </HBox>
+                        </VBox>
                     </VBox>
-                    <VBox class="dcgoCard dcgoWideCard">
-                        <Title text="Clasificación de fallas / servicios afectados" level="H3" class="dcgoCardTitle"/>
-                        <HBox alignItems="Center" class="dcgoFailuresBody">
-                            <core:HTML id="htmlFallasDonut" sanitizeContent="false" class="dcgoDonutHtml"/>
-                            <List inset="false" showSeparators="Inner" class="dcgoFailuresList" items="{path: 'cumplimientoModel>/graficas/fallasServicios'}">
+                    <!-- =================================================
+                         CLASIFICACIÓN DE FALLAS
+                    ================================================== -->
+                    <VBox class="dcgoCard dcgoFallasCard">
+                        <VBox class="dcgoCardHeader">
+                            <HBox alignItems="Center" class="dcgoCardTitleLine">
+                                <Title text="Clasificación de fallas / servicios afectados" level="H3" class="dcgoCardTitle"/>
+                                <core:Icon src="sap-icon://hint" class="dcgoTitleInfoIcon"/>
+                            </HBox>
+                            <Text text="Distribución de OT por tipo de falla" class="dcgoCardSubtitle"/>
+                        </VBox>
+                        <HBox width="100%" alignItems="Center" class="dcgoFallasBody">
+                            <VBox class="dcgoDonutContainer">
+                                <core:HTML id="htmlFallasDonut" sanitizeContent="false" class="dcgoDonutHtml"/>
+                            </VBox>
+                            <List showSeparators="None" class="dcgoFallasLegend" items="{
+                                    path: 'cumplimientoModel>/graficas/fallasServicios',
+                                    templateShareable: false
+                                }">
                                 <CustomListItem>
-                                    <HBox width="100%" justifyContent="SpaceBetween">
-                                        <Text text="{cumplimientoModel>falla}"/>
-                                        <Text text="{= ${cumplimientoModel>total} + ' (' + ${cumplimientoModel>porcentaje} + '%)' }"/>
+                                    <HBox width="100%" alignItems="Center" class="dcgoFallaLegendRow">
+                                        <customData>
+                                            <core:CustomData key="color" value="{
+                                                    path: 'cumplimientoModel>falla',
+                                                    formatter: '.formatFallaColorKey'
+                                                }" writeToDom="true"/>
+                                        </customData>
+                                        <VBox class="dcgoFallaSwatch"/>
+                                        <Text text="{cumplimientoModel>falla}" wrapping="false" class="dcgoFallaName"/>
+                                        <Text text="{cumplimientoModel>total}" class="dcgoFallaTotal"/>
+                                        <Text text="{= ${cumplimientoModel>porcentaje} + '%' }" class="dcgoFallaPercentage"/>
                                     </HBox>
                                 </CustomListItem>
                             </List>
                         </HBox>
+                        <Link text="Ver detalle de fallas" class="dcgoCardLink" press=".onVerDetalleFallas"/>
                     </VBox>
-                </HBox>
+                </VBox>
+                <!-- =====================================================
+                     PIE DE PÁGINA
+                ====================================================== -->
+                <Text text="Este dashboard fue generado por Tellus Technologies" class="dcgoFooter"/>
             </VBox>
         </content>
     </Page>

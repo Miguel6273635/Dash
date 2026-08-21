@@ -1,118 +1,152 @@
-<mvc:View
-    controllerName="mantenimiento.controller.CausasZona"
+<mvc:View controllerName="mantenimiento.controller.CausasZona"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
-    xmlns:viz.data="sap.viz.ui5.data"
-    height="100%">
-
+    xmlns:viz.data="sap.viz.ui5.data" height="100%">
     <Page id="causasZonaPage" showHeader="false" enableScrolling="true" class="CausasZonaView">
         <content>
             <VBox class="czContainer">
-
                 <Link text="← Volver a cumplimiento general de órdenes" press=".onNavBack" class="czBackLink"/>
-
                 <HBox class="czHeaderRow" justifyContent="SpaceBetween" alignItems="Start" wrap="Wrap">
                     <VBox class="czHeadingBox">
                         <Title text="Causas por zona" level="H1" class="czTitle"/>
                         <Text text="Detalle de las causas de incumplimiento del plan por zona y semana." class="czSubtitle"/>
                     </VBox>
-
                     <HBox class="czFilters" alignItems="Start" wrap="Wrap">
                         <VBox class="czFieldBox">
                             <Label text="Semana" labelFor="causasZonaWeekSelect" class="czFilterLabel"/>
-                            <Select id="causasZonaWeekSelect" selectedKey="s18" width="15rem" class="czSelect">
+                            <Select id="causasZonaWeekSelect" selectedKey="{/filtros/semana}" width="15rem" class="czSelect" items="{/opcionesSemana}">
                                 <items>
-                                    <core:Item key="s18" text="18 (29 abr - 5 may 2024)"/>
+                                    <core:Item key="{key}" text="{text}"/>
                                 </items>
                             </Select>
                         </VBox>
-
                         <VBox class="czFieldBox">
                             <Label text="Zona" labelFor="causasZonaZoneSelect" class="czFilterLabel"/>
-                            <Select id="causasZonaZoneSelect" selectedKey="Norte" width="10.5rem" class="czSelect">
+                            <Select id="causasZonaZoneSelect" selectedKey="{/filtros/zona}" width="10.5rem" class="czSelect" items="{/opcionesZona}">
                                 <items>
-                                    <core:Item key="Norte" text="Norte"/>
-                                    <core:Item key="Centro" text="Centro"/>
-                                    <core:Item key="Sur" text="Sur"/>
+                                    <core:Item key="{key}" text="{text}"/>
                                 </items>
                             </Select>
                         </VBox>
-
                         <VBox class="czButtonField">
-                            <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized"
-                                press=".onApplyFilters" class="czFilterButton"/>
+                            <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="czFilterButton"/>
                         </VBox>
                     </HBox>
                 </HBox>
-
                 <HBox class="czKpiRow" wrap="Wrap">
                     <VBox class="czKpiCard czKpiBlue">
                         <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czBlueSoft"><core:Icon src="sap-icon://inspection"/></VBox>
-                            <VBox><Text text="OT PLANEADAS" class="czKpiLabel"/><Title text="84" class="czKpiNumber czBlueText"/><Text text="100% del plan" class="czKpiSub"/></VBox>
+                            <VBox class="czKpiIconBox czBlueSoft">
+                                <core:Icon src="sap-icon://inspection"/>
+                            </VBox>
+                            <VBox>
+                                <Text text="OT PLANEADAS" class="czKpiLabel"/>
+                                <Title text="{/kpis/planeadas}" class="czKpiNumber czBlueText"/>
+                                <Text text="{/kpis/planeadasSub}" class="czKpiSub"/>
+                            </VBox>
                         </HBox>
-                        <VBox class="czProgressTrack"><VBox class="czProgressFill czProgressBlue" width="100%"/></VBox>
+                        <VBox class="czProgressTrack">
+                            <VBox class="czProgressFill czProgressBlue" width="{/kpis/planeadasPct}"/>
+                        </VBox>
                     </VBox>
                     <VBox class="czKpiCard czKpiGreen">
                         <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czGreenSoft"><core:Icon src="sap-icon://accept"/></VBox>
-                            <VBox><Text text="OT EJECUTADAS" class="czKpiLabel"/><Title text="62" class="czKpiNumber czGreenText"/><Text text="74% del plan" class="czKpiSub"/></VBox>
+                            <VBox class="czKpiIconBox czGreenSoft">
+                                <core:Icon src="sap-icon://accept"/>
+                            </VBox>
+                            <VBox>
+                                <Text text="OT EJECUTADAS" class="czKpiLabel"/>
+                                <Title text="{/kpis/ejecutadas}" class="czKpiNumber czGreenText"/>
+                                <Text text="{/kpis/ejecutadasSub}" class="czKpiSub"/>
+                            </VBox>
                         </HBox>
-                        <VBox class="czProgressTrack"><VBox class="czProgressFill czProgressGreen" width="74%"/></VBox>
+                        <VBox class="czProgressTrack">
+                            <VBox class="czProgressFill czProgressGreen" width="{/kpis/ejecutadasPct}"/>
+                        </VBox>
                     </VBox>
                     <VBox class="czKpiCard czKpiRed">
                         <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czRedSoft"><core:Icon src="sap-icon://message-error"/></VBox>
-                            <VBox><Text text="OT NO EJECUTADAS" class="czKpiLabel"/><Title text="22" class="czKpiNumber czRedText"/><Text text="26% del plan" class="czKpiSub"/></VBox>
+                            <VBox class="czKpiIconBox czRedSoft">
+                                <core:Icon src="sap-icon://message-error"/>
+                            </VBox>
+                            <VBox>
+                                <Text text="OT NO EJECUTADAS" class="czKpiLabel"/>
+                                <Title text="{/kpis/noEjecutadas}" class="czKpiNumber czRedText"/>
+                                <Text text="{/kpis/noEjecutadasSub}" class="czKpiSub"/>
+                            </VBox>
                         </HBox>
-                        <VBox class="czProgressTrack"><VBox class="czProgressFill czProgressRed" width="26%"/></VBox>
+                        <VBox class="czProgressTrack">
+                            <VBox class="czProgressFill czProgressRed" width="{/kpis/noEjecutadasPct}"/>
+                        </VBox>
                     </VBox>
                     <VBox class="czKpiCard czKpiPurple">
                         <HBox alignItems="Center">
-                            <VBox class="czKpiIconBox czPurpleSoft"><core:Icon src="sap-icon://line-charts"/></VBox>
-                            <VBox><Text text="CUMPLIMIENTO" class="czKpiLabel"/><Title text="74%" class="czKpiNumber czPurpleText"/><Text text="-22 OT vs plan" class="czKpiSub czRedText"/></VBox>
+                            <VBox class="czKpiIconBox czPurpleSoft">
+                                <core:Icon src="sap-icon://line-charts"/>
+                            </VBox>
+                            <VBox>
+                                <Text text="CUMPLIMIENTO" class="czKpiLabel"/>
+                                <Title text="{/kpis/cumplimiento}" class="czKpiNumber czPurpleText"/>
+                                <Text text="{/kpis/cumplimientoSub}" class="czKpiSub czRedText"/>
+                            </VBox>
                         </HBox>
-                        <VBox class="czProgressTrack"><VBox class="czProgressFill czProgressPurple" width="74%"/></VBox>
+                        <VBox class="czProgressTrack">
+                            <VBox class="czProgressFill czProgressPurple" width="{/kpis/cumplimientoPct}"/>
+                        </VBox>
                     </VBox>
                 </HBox>
-
                 <l:Grid defaultSpan="XL12 L12 M12 S12" hSpacing="1" vSpacing="1" class="czContentGrid">
                     <l:content>
                         <VBox class="czPanel czTablePanel">
-                            <layoutData><l:GridData span="XL8 L8 M12 S12"/></layoutData>
+                            <layoutData>
+                                <l:GridData span="XL8 L8 M12 S12"/>
+                            </layoutData>
                             <HBox class="czPanelHeader" alignItems="Center">
                                 <Title text="DETALLE DE INCUMPLIMIENTO POR ZONA {/SelectedZone} ({/TotalOTs})" class="czSectionTitle"/>
                                 <core:Icon src="sap-icon://hint" class="czInfoIcon"/>
                             </HBox>
-
                             <OverflowToolbar class="czTableToolbar">
-                                <SegmentedButton selectedKey="todas" selectionChange=".onTypeFilterChange" class="czSegments">
+                                <SegmentedButton id="causasZonaTypeSegments" selectedKey="TODAS" selectionChange=".onTypeFilterChange" class="czSegments">
                                     <items>
-                                        <SegmentedButtonItem key="todas" text="Todas"/>
-                                        <SegmentedButtonItem key="Preventivo" text="Preventivas"/>
-                                        <SegmentedButtonItem key="Correctivo" text="Correctivas"/>
-                                        <SegmentedButtonItem key="Call Center" text="Call Center"/>
+                                        <SegmentedButtonItem key="TODAS" text="Todas"/>
+                                        <SegmentedButtonItem key="SM01" text="Preventivas"/>
+                                        <SegmentedButtonItem key="SM02" text="Correctivas"/>
+                                        <SegmentedButtonItem key="SM03" text="Call Center"/>
                                     </items>
                                 </SegmentedButton>
                                 <ToolbarSpacer/>
                                 <Text text="Filtro activo: {/ActiveFilterLabel}" class="czFilterActiveText"/>
                             </OverflowToolbar>
-
-                            <Table id="causasZonaIncumplimientoTable" width="100%" fixedLayout="true"
-                                items="{/IncumplimientosData}" alternateRowColors="true" class="czInnerTable">
+                            <Table id="causasZonaIncumplimientoTable" width="100%" fixedLayout="true" items="{/IncumplimientosData}" alternateRowColors="true" class="czInnerTable">
                                 <columns>
-                                    <Column width="11%"><Text text="OT"/></Column>
-                                    <Column width="9%"><Text text="Equipo"/></Column>
-                                    <Column width="11%"><Text text="Tipo OT"/></Column>
-                                    <Column width="15%"><Text text="Cliente"/></Column>
-                                    <Column width="22%"><Text text="Causa incumplimiento"/></Column>
-                                    <Column width="16%"><Text text="Responsable"/></Column>
-                                    <Column width="6%" hAlign="Center"><Text text="Días"/></Column>
-                                    <Column width="10%"><Text text="Estado"/></Column>
+                                    <Column width="11%">
+                                        <Text text="OT"/>
+                                    </Column>
+                                    <Column width="9%">
+                                        <Text text="Equipo"/>
+                                    </Column>
+                                    <Column width="11%">
+                                        <Text text="Tipo OT"/>
+                                    </Column>
+                                    <Column width="15%">
+                                        <Text text="Cliente"/>
+                                    </Column>
+                                    <Column width="22%">
+                                        <Text text="Causa incumplimiento"/>
+                                    </Column>
+                                    <Column width="16%">
+                                        <Text text="Responsable"/>
+                                    </Column>
+                                    <Column width="6%" hAlign="Center">
+                                        <Text text="Días"/>
+                                    </Column>
+                                    <Column width="10%">
+                                        <Text text="Estado"/>
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem vAlign="Middle">
@@ -122,29 +156,38 @@
                                             <ObjectStatus text="{TipoOT}" state="{= ${TipoOT} === 'Preventivo' ? 'Information' : (${TipoOT} === 'Correctivo' ? 'Success' : 'Warning') }" class="statusTag"/>
                                             <Text text="{Cliente}" class="czRowText" wrapping="true"/>
                                             <ObjectStatus text="{CausaIncumplimiento}" state="{= ${StatusCausa} === 'Error' ? 'Error' : (${StatusCausa} === 'Warning' ? 'Warning' : 'Information') }" class="statusTag"/>
-                                            <HBox alignItems="Center"><core:Icon src="sap-icon://employee" class="czEmployeeIcon"/><Text text="{Responsable}" class="czRowText" wrapping="true"/></HBox>
+                                            <HBox alignItems="Center">
+                                                <core:Icon src="sap-icon://employee" class="czEmployeeIcon"/>
+                                                <Text text="{Responsable}" class="czRowText" wrapping="true"/>
+                                            </HBox>
                                             <Text text="{DiasAtraso}" class="czRedNumber"/>
                                             <ObjectStatus text="{Estado}" state="Error" class="statusTag"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
                             </Table>
-
                             <OverflowToolbar class="czTableFooter">
-                                <Text text="Mostrando 1 a {/VisibleCount} de {/TotalOTs} órdenes" class="czFooterText"/>
+                                <Text text="Mostrando {/paginacion/inicio} a {/paginacion/fin} de {/TotalOTs} órdenes" class="czFooterText"/>
                                 <ToolbarSpacer/>
-                                <Button icon="sap-icon://slim-arrow-left" type="Transparent"/>
-                                <Button text="1" type="Emphasized"/>
-                                <Button text="2" type="Transparent"/>
-                                <Button text="3" type="Transparent"/>
-                                <Button icon="sap-icon://slim-arrow-right" type="Transparent"/>
+                                <Button icon="sap-icon://slim-arrow-left" type="Transparent" press=".onPreviousPage"/>
+                                <Button text="1" type="Emphasized" press=".onGoToPage"/>
+                                <Button text="2" type="Transparent" press=".onGoToPage"/>
+                                <Button text="3" type="Transparent" press=".onGoToPage"/>
+                                <Button icon="sap-icon://slim-arrow-right" type="Transparent" press=".onNextPage"/>
                                 <ToolbarSpacer/>
-                                <Select width="8rem" selectedKey="10"><items><core:Item key="10" text="10 por página"/></items></Select>
+                                <Select id="causasZonaPageSizeSelect" width="8rem" selectedKey="10" change=".onPageSizeChange">
+                                    <items>
+                                        <core:Item key="10" text="10 por página"/>
+                                        <core:Item key="20" text="20 por página"/>
+                                        <core:Item key="50" text="50 por página"/>
+                                    </items>
+                                </Select>
                             </OverflowToolbar>
                         </VBox>
-
                         <VBox class="czChartsColumn">
-                            <layoutData><l:GridData span="XL4 L4 M12 S12"/></layoutData>
+                            <layoutData>
+                                <l:GridData span="XL4 L4 M12 S12"/>
+                            </layoutData>
                             <VBox class="czPanel czChartPanel">
                                 <HBox class="czPanelHeader" alignItems="Center">
                                     <Title text="DISTRIBUCIÓN POR CAUSA" class="czSectionTitle"/>
@@ -153,15 +196,24 @@
                                 <viz:VizFrame id="causasZonaBarChart" uiConfig="{applicationSet:'fiori'}" height="196px" width="100%" vizType="bar">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{/ResumenCausas}">
-                                            <viz.data:dimensions><viz.data:DimensionDefinition name="Causa" value="{Causa}"/></viz.data:dimensions>
-                                            <viz.data:measures><viz.data:MeasureDefinition name="OT" value="{Cantidad}"/></viz.data:measures>
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Causa" value="{Causa}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="OT" value="{Cantidad}"/>
+                                            </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
-                                    <viz:feeds><viz.feeds:FeedItem uid="valueAxis" type="Measure" values="OT"/><viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Causa"/></viz:feeds>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="OT"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Causa"/>
+                                    </viz:feeds>
                                 </viz:VizFrame>
-                                <HBox justifyContent="SpaceBetween" class="czChartTotal"><Text text="Total"/><Text text="{/TotalOTs} (100%)"/></HBox>
+                                <HBox justifyContent="SpaceBetween" class="czChartTotal">
+                                    <Text text="Total"/>
+                                    <Text text="{/TotalOTs} (100%)"/>
+                                </HBox>
                             </VBox>
-
                             <VBox class="czPanel czChartPanel czDonutPanel">
                                 <HBox class="czPanelHeader" alignItems="Center">
                                     <Title text="DISTRIBUCIÓN POR TIPO DE OT" class="czSectionTitle"/>
@@ -170,19 +222,31 @@
                                 <viz:VizFrame id="causasZonaDonutChart" uiConfig="{applicationSet:'fiori'}" height="226px" width="100%" vizType="donut">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{/ResumenTipos}">
-                                            <viz.data:dimensions><viz.data:DimensionDefinition name="Tipo" value="{Tipo}"/></viz.data:dimensions>
-                                            <viz.data:measures><viz.data:MeasureDefinition name="OT" value="{Cantidad}"/></viz.data:measures>
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Tipo" value="{Tipo}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="OT" value="{Cantidad}"/>
+                                            </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
-                                    <viz:feeds><viz.feeds:FeedItem uid="size" type="Measure" values="OT"/><viz.feeds:FeedItem uid="color" type="Dimension" values="Tipo"/></viz:feeds>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="OT"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Tipo"/>
+                                    </viz:feeds>
                                 </viz:VizFrame>
-                                <HBox justifyContent="SpaceBetween" class="czChartTotal"><Text text="Total"/><Text text="{/TotalOTs} (100%)"/></HBox>
+                                <HBox justifyContent="SpaceBetween" class="czChartTotal">
+                                    <Text text="Total"/>
+                                    <Text text="{/TotalOTs} (100%)"/>
+                                </HBox>
                             </VBox>
                         </VBox>
                     </l:content>
                 </l:Grid>
-
-                <HBox alignItems="Center" class="czUpdateNote"><core:Icon src="sap-icon://hint"/><Text text="Las cifras se actualizan diariamente con corte a las 08:00 a.m."/></HBox>
+                <HBox alignItems="Center" class="czUpdateNote">
+                    <core:Icon src="sap-icon://hint"/>
+                    <Text text="Las cifras se actualizan diariamente con corte a las 08:00 a.m."/>
+                </HBox>
             </VBox>
         </content>
     </Page>
