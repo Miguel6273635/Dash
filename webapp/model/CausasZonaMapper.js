@@ -98,6 +98,22 @@ sap.ui.define([
             normalizedComparable(oOrder._zoneName) === sZoneKey;
     }
 
+    function matchesCustomer(oOrder, sCustomer) {
+        var sCustomerKey = normalizedComparable(sCustomer);
+
+        return !sCustomerKey || ["TODOS", "TODAS", "ALL"].indexOf(sCustomerKey) >= 0 ||
+            normalizedComparable(oOrder.CustomerId) === sCustomerKey ||
+            normalizedComparable(oOrder.CustomerName) === sCustomerKey;
+    }
+
+    function matchesResponsible(oOrder, sResponsible) {
+        var sResponsibleKey = normalizedComparable(sResponsible);
+
+        return !sResponsibleKey || ["TODOS", "TODAS", "ALL"].indexOf(sResponsibleKey) >= 0 ||
+            normalizedComparable(oOrder._responsibleId) === sResponsibleKey ||
+            normalizedComparable(oOrder._responsibleName) === sResponsibleKey;
+    }
+
     function assignmentRank(oAssignment) {
         var sRole = normalize(oAssignment && oAssignment.RoleCode);
         var sAssignmentType = normalize(
@@ -193,17 +209,38 @@ sap.ui.define([
     function buildPrincipalCauses(aCauses, oReferenceDate) {
         var mCauses = new Map();
 
+        /*
+         * En QAS, DashboardOrderCausesSet todavía entrega IsPrimary=false y
+         * CauseContextCode vacío. No podemos exigir esos dos valores porque
+         * se perderían causas reales y la gráfica quedaría vacía. Primero se
+         * prefiere una causa marcada para no ejecución/primaria si existe;
+         * en caso contrario se usa la mejor causa disponible de la OT.
+         */
         asArray(aCauses).filter(function (oCause) {
-            return oCause && oCause.OrderId && isTrue(oCause.IsPrimary) &&
-                isActive(oCause, oReferenceDate) && isNonExecutionCause(oCause);
+            return oCause && oCause.OrderId && isActive(oCause, oReferenceDate);
         }).forEach(function (oCause) {
             var sOrderId = String(oCause.OrderId);
             var oCurrent = mCauses.get(sOrderId);
             var oCurrentFrom = parseDate(oCurrent && oCurrent.ValidFrom);
             var oCandidateFrom = parseDate(oCause.ValidFrom);
+            var iCurrentRank = oCurrent ?
+                (isNonExecutionCause(oCurrent) ? 2 : 0) +
+                (isTrue(oCurrent.IsPrimary) ? 1 : 0) : -1;
+            var iCandidateRank =
+                (isNonExecutionCause(oCause) ? 2 : 0) +
+                (isTrue(oCause.IsPrimary) ? 1 : 0);
 
-            if (!oCurrent || (
+            if (!oCurrent || iCandidateRank > iCurrentRank || (
+                iCandidateRank === iCurrentRank &&
                 oCandidateFrom && (!oCurrentFrom || oCandidateFrom > oCurrentFrom)
+            ) || (
+                iCandidateRank === iCurrentRank &&
+                (!oCandidateFrom || !oCurrentFrom ||
+                    oCandidateFrom.getTime() === oCurrentFrom.getTime()) &&
+                String(oCause.CauseCode || oCause.CauseText || "").localeCompare(
+                    String(oCurrent.CauseCode || oCurrent.CauseText || ""),
+                    "es"
+                ) < 0
             )) {
                 mCauses.set(sOrderId, oCause);
             }
@@ -235,6 +272,19 @@ sap.ui.define([
         ) || "Sin tipo");
     }
 
+    function typeColorClass(sType) {
+        switch (normalizedComparable(sType)) {
+        case "PREVENTIVO":
+            return "czTypeBlue";
+        case "CORRECTIVO":
+            return "czTypeGreen";
+        case "CALL CENTER":
+            return "czTypeAmber";
+        default:
+            return "czTypeSlate";
+        }
+    }
+
     function enrichOrders(oRawData) {
         var oRange = oRawData.range || {};
         var mAssignments = buildAssignmentsByOrder(oRawData.assignments);
@@ -260,11 +310,14 @@ sap.ui.define([
             ) : {};
 
             mOrders.set(String(oOrder.OrderId), Object.assign({}, oOrder, {
-                _zoneId: oResource.ZoneId || oOrder.Zona || "",
-                _zoneName: oResource.ZoneName || oResource.ZoneId ||
-                    oOrder.Zona || "Sin zona",
+                /* Zona de la OT es el dato funcional del tablero. El recurso
+                 * sólo se utiliza cuando SAP aún no informa Zona en la OT. */
+                _zoneId: oOrder.Zona || oResource.ZoneId || "",
+                _zoneName: oOrder.Zona || oResource.ZoneName ||
+                    oResource.ZoneId || "Sin zona",
                 _responsibleId: oResource.ResourceId ||
-                    (oAssignment && oAssignment.ResourceId) || "",
+                    (oAssignment && oAssignment.ResourceId) ||
+                    oOrder.Mecanico || "",
                 _responsibleName: oResource.ResourceName ||
                     oOrder.Mecanico || "Sin responsable asignado"
             }));
@@ -403,6 +456,11 @@ sap.ui.define([
         }).forEach(function (iYear) {
             var i;
 
+            aOptions.push({
+                key: iYear + "-ANUAL",
+                text: String(iYear) + " (Anual)"
+            });
+
             for (i = 1; i <= isoWeekCount(iYear); i += 1) {
                 var oStart = getIsoWeekStart(iYear, i);
                 var oEnd = new Date(
@@ -442,30 +500,33 @@ sap.ui.define([
     }
 
     function buildZoneOptions(aOrders, aCatalogs, oCutoffDate) {
-        var aCatalogsOptions = asArray(aCatalogs).filter(function (oCatalog) {
-            return oCatalog && oCatalog.ValueId && !isFalse(oCatalog.Active) &&
-                normalize(oCatalog.FilterDomain) === "ZONE" &&
-                isActive(oCatalog, oCutoffDate);
-        }).sort(function (oLeft, oRight) {
-            return Number(oLeft.SortOrder || 0) - Number(oRight.SortOrder || 0);
-        }).map(function (oCatalog) {
-            return {
-                key: String(oCatalog.ValueId),
-                text: String(oCatalog.ValueText || oCatalog.ValueId)
-            };
-        });
+        /* DashboardFilterCatalogSet no es confiable para zona en QAS: puede
+         * traer textos de otro dominio, por ejemplo "MANTENIMIENTO
+         * REPARACIONES". La fuente válida de esta vista es OrdersSet.Zona.
+         * Si la OT no la tiene, se usa como respaldo la zona del recurso. */
         var aDerivedOptions = asArray(aOrders).map(function (oOrder) {
+            var sOrderZone = String(oOrder && oOrder.Zona || "").trim();
+            var sFallbackZone = String(oOrder && (
+                oOrder._zoneId || oOrder._zoneName
+            ) || "").trim();
+            var sZone = sOrderZone || sFallbackZone;
+
             return {
-                key: oOrder._zoneId,
-                text: oOrder._zoneName
+                key: sZone || "SIN_ZONA",
+                text: sZone || "Sin zona"
             };
         });
 
-        return uniqueOptions(
-            aCatalogsOptions.length ? aCatalogsOptions : aDerivedOptions,
-            ALL_ZONES,
-            "Todas"
-        );
+        return uniqueOptions(aDerivedOptions, ALL_ZONES, "Todas");
+    }
+
+    function selectedOptionKey(aOptions, sRequestedKey, sDefaultKey) {
+        var sRequested = normalizedComparable(sRequestedKey);
+        var bExists = asArray(aOptions).some(function (oOption) {
+            return normalizedComparable(oOption.key) === sRequested;
+        });
+
+        return bExists ? sRequestedKey : sDefaultKey;
     }
 
     function selectedZoneText(aOptions, sSelectedZone) {
@@ -477,26 +538,56 @@ sap.ui.define([
         return oSelected ? oSelected.text : String(sSelectedZone || "Todas");
     }
 
+    function buildCustomerOptions(aOrders) {
+        return uniqueOptions(asArray(aOrders).map(function (oOrder) {
+            return {
+                key: String(oOrder.CustomerId || oOrder.CustomerName || ""),
+                text: String(oOrder.CustomerName || oOrder.CustomerId || "Sin cliente")
+            };
+        }), "TODOS", "Todos");
+    }
+
+    function buildResponsibleOptions(aOrders) {
+        return uniqueOptions(asArray(aOrders).map(function (oOrder) {
+            return {
+                key: String(oOrder._responsibleId || oOrder._responsibleName || ""),
+                text: String(oOrder._responsibleName || oOrder._responsibleId ||
+                    "Sin responsable asignado")
+            };
+        }), "TODOS", "Todos");
+    }
+
     function buildData(oRawData, mFilters) {
         var oRaw = oRawData || {};
         var oRange = oRaw.range || {};
         var mValues = Object.assign({
-            semana: "2026-W01",
-            zona: ALL_ZONES
+            semana: "2026-ANUAL",
+            fechaDesde: "01/01/2026",
+            fechaHasta: "31/12/2026",
+            zona: ALL_ZONES,
+            cliente: "TODOS",
+            responsable: "TODOS"
         }, mFilters || {});
         var aEnriched = enrichOrders(oRaw);
-        var aFiltered = aEnriched.filter(function (oOrder) {
-            return matchesZone(oOrder, mValues.zona);
-        });
-        var aExecuted = aFiltered.filter(orderIsExecuted);
-        var aNonExecuted = aFiltered.filter(orderIsNonExecuted);
-        var mCauses = buildPrincipalCauses(oRaw.causes, oRange.endDate);
-        var aRows = buildRows(aNonExecuted, mCauses, oRange.endDate);
         var aZoneOptions = buildZoneOptions(
             aEnriched,
             oRaw.catalogs,
             oRange.endDate
         );
+        var sSelectedZone = selectedOptionKey(
+            aZoneOptions,
+            mValues.zona,
+            ALL_ZONES
+        );
+        var aFiltered = aEnriched.filter(function (oOrder) {
+            return matchesZone(oOrder, sSelectedZone) &&
+                matchesCustomer(oOrder, mValues.cliente) &&
+                matchesResponsible(oOrder, mValues.responsable);
+        });
+        var aExecuted = aFiltered.filter(orderIsExecuted);
+        var aNonExecuted = aFiltered.filter(orderIsNonExecuted);
+        var mCauses = buildPrincipalCauses(oRaw.causes, oRange.endDate);
+        var aRows = buildRows(aNonExecuted, mCauses, oRange.endDate);
         var iPlanned = aFiltered.length;
         var iExecuted = aExecuted.length;
         var iNonExecuted = aNonExecuted.length;
@@ -505,23 +596,29 @@ sap.ui.define([
 
         return {
             filtros: {
-                semana: String(mValues.semana || "2026-W01"),
-                zona: mValues.zona || ALL_ZONES
+                semana: String(mValues.semana || "2026-ANUAL"),
+                fechaDesde: String(mValues.fechaDesde || ""),
+                fechaHasta: String(mValues.fechaHasta || ""),
+                zona: sSelectedZone,
+                cliente: mValues.cliente || "TODOS",
+                responsable: mValues.responsable || "TODOS"
             },
             opcionesSemana: buildWeekOptions(mValues.semana),
             opcionesZona: aZoneOptions,
+            opcionesCliente: buildCustomerOptions(aEnriched),
+            opcionesResponsable: buildResponsibleOptions(aEnriched),
             kpis: {
                 planeadas: String(iPlanned),
-                planeadasSub: "100% del plan",
+                planeadasSub: "Órdenes del período",
                 planeadasPct: "100%",
                 ejecutadas: String(iExecuted),
-                ejecutadasSub: formatPercentage(iCompliance) + " del plan",
+                ejecutadasSub: formatPercentage(iCompliance) + " del total",
                 ejecutadasPct: formatPercentage(iCompliance),
                 noEjecutadas: String(iNonExecuted),
-                noEjecutadasSub: formatPercentage(iNonExecutedPct) + " del plan",
+                noEjecutadasSub: formatPercentage(iNonExecutedPct) + " del total planeado",
                 noEjecutadasPct: formatPercentage(iNonExecutedPct),
                 cumplimiento: formatPercentage(iCompliance),
-                cumplimientoSub: "-" + iNonExecuted + " OT vs plan",
+                cumplimientoSub: iExecuted + " de " + iPlanned + " OT",
                 cumplimientoPct: formatPercentage(iCompliance)
             },
             IncumplimientosFull: aRows,
@@ -537,10 +634,17 @@ sap.ui.define([
                 "TipoOTCode",
                 "TipoOT",
                 "Tipo"
-            ),
+            ).map(function (oType) {
+                oType.ColorClass = typeColorClass(oType.Tipo);
+                /* Texto listo para UI: evita que el control Viz interprete
+                 * la medida con una unidad de otra gráfica. */
+                oType.Detalle = String(oType.Cantidad) + " OT (" +
+                    formatPercentage(oType.Porcentaje) + ")";
+                return oType;
+            }),
             TotalOTs: iNonExecuted,
             VisibleCount: Math.min(10, iNonExecuted),
-            SelectedZone: selectedZoneText(aZoneOptions, mValues.zona),
+            SelectedZone: selectedZoneText(aZoneOptions, sSelectedZone),
             ActiveFilterLabel: "Todas",
             paginacion: {
                 pagina: 1,

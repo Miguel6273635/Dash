@@ -1,252 +1,809 @@
-<mvc:View controllerName="mantenimiento.controller.VistaDireccion"
+<mvc:View
+    controllerName="mantenimiento.controller.VistaDireccion"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">
-    <Page id="vistaDireccionPage" showHeader="false" enableScrolling="true" class="vdPage">
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%">
+
+    <Page
+        id="vistaDireccionPage"
+        showHeader="false"
+        enableScrolling="false"
+        busy="{view>/busy}"
+        busyIndicatorDelay="0"
+        class="vdPage">
+
         <content>
-            <VBox class="vdDashboard">
-                <!-- =====================================================
+
+            <VBox
+                width="100%"
+                height="100%"
+                fitContainer="true"
+                class="vdDashboard">
+
+                <!-- =================================================
                      ENCABEZADO
-                     ===================================================== -->
+                     ================================================= -->
+
                 <VBox class="vdHeaderBlock">
-                    <Title text="Vista Dirección" level="H1" class="vdMainTitle" />
-                    <HBox alignItems="Center" class="vdSubtitleRow">
-                        <Text text="Resumen ejecutivo de" class="vdSubtitle" />
-                        <Text text="jefatura" class="vdSubtitleValue" />
+
+                    <Title
+                        text="Vista Dirección"
+                        level="H1"
+                        class="vdMainTitle" />
+
+                    <HBox
+                        alignItems="Center"
+                        class="vdSubtitleRow">
+
+                        <Text
+                            text="Resumen ejecutivo de"
+                            class="vdSubtitle" />
+
+                        <Text
+                            text="jefatura"
+                            class="vdSubtitleValue" />
+
                     </HBox>
+
                 </VBox>
-                <!-- =====================================================
+
+                <!-- =================================================
                      FILTROS
-                     ===================================================== -->
-                <FlexBox width="100%" wrap="NoWrap" alignItems="Stretch" class="vdFiltersRow">
-                    <VBox class="vdFilterCard vdFilterPeriod">
-                        <Label text="Periodo" />
-                        <Select width="100%" selectedKey="{view>/filters/periodo}">
-                            <core:Item key="mayo2025" text="Mayo 2025" />
-                            <core:Item key="abril2025" text="Abril 2025" />
-                            <core:Item key="marzo2025" text="Marzo 2025" />
+                     ================================================= -->
+
+                <FlexBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="vdFiltersRow">
+
+                    <!-- PERIODO -->
+                    <VBox
+                        class="vdFilterCard vdFilterPeriod">
+
+                        <Label
+                            text="Periodo" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/periodo}"
+                            change=".onPeriodoChange"
+                            items="{view>/catalogs/periods}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+
                         </Select>
+
                     </VBox>
-                    <VBox class="vdFilterCard vdFilterDate">
-                        <Label text="Fecha desde" />
-                        <DatePicker width="100%" value="{view>/filters/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" />
+
+                    <!-- FECHA DESDE -->
+                    <VBox
+                        class="vdFilterCard vdFilterDate">
+
+                        <Label
+                            text="Fecha desde" />
+
+                        <DatePicker
+                            width="100%"
+                            value="{view>/filters/fechaDesde}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            change=".onDateChange" />
+
                     </VBox>
-                    <VBox class="vdFilterCard vdFilterDate">
-                        <Label text="Fecha hasta" />
-                        <DatePicker width="100%" value="{view>/filters/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" />
+
+                    <!-- FECHA HASTA -->
+                    <VBox
+                        class="vdFilterCard vdFilterDate">
+
+                        <Label
+                            text="Fecha hasta" />
+
+                        <DatePicker
+                            width="100%"
+                            value="{view>/filters/fechaHasta}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            change=".onDateChange" />
+
                     </VBox>
-                    <VBox class="vdFilterCard vdFilterDirection">
-                        <Label text="Dirección" />
-                        <Select width="100%" selectedKey="{view>/filters/direccion}">
-                            <core:Item key="norte" text="Dirección de Norte" />
-                            <core:Item key="centro" text="Dirección Centro" />
-                            <core:Item key="sur" text="Dirección Sur" />
+
+                    <!-- DIRECCIÓN -->
+                    <VBox
+                        class="vdFilterCard vdFilterDirection">
+
+                        <Label
+                            text="Dirección" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/direccion}"
+                            change=".onDirectionChange"
+                            items="{view>/catalogs/directions}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+
                         </Select>
+
                     </VBox>
-                    <VBox class="vdFilterCard vdFilterDepartment">
-                        <Label text="Jefatura" />
-                        <Select width="100%" selectedKey="{view>/filters/jefatura}">
-                            <core:Item key="todas" text="Todas" />
-                            <core:Item key="norte" text="Jefatura Norte" />
-                            <core:Item key="centro" text="Jefatura Centro" />
-                            <core:Item key="oriente" text="Jefatura Oriente" />
-                            <core:Item key="poniente" text="Jefatura Poniente" />
-                            <core:Item key="metropolitana" text="Jefatura Metropolitana" />
+
+                    <!-- JEFATURA -->
+                    <VBox
+                        class="vdFilterCard vdFilterDepartment">
+
+                        <Label
+                            text="Jefatura" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/jefatura}"
+                            items="{view>/catalogs/headships}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+
                         </Select>
+
                     </VBox>
-                    <VBox class="vdFilterCard vdFilterShift">
-                        <Label text="Turno" />
-                        <Select width="100%" selectedKey="{view>/filters/turno}">
-                            <core:Item key="todos" text="Todos" />
-                            <core:Item key="matutino" text="Matutino" />
-                            <core:Item key="vespertino" text="Vespertino" />
-                            <core:Item key="nocturno" text="Nocturno" />
+
+                    <!-- TURNO -->
+                    <VBox
+                        class="vdFilterCard vdFilterShift">
+
+                        <Label
+                            text="Turno" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{view>/filters/turno}"
+                            items="{view>/catalogs/shifts}">
+
+                            <core:Item
+                                key="{view>key}"
+                                text="{view>text}" />
+
                         </Select>
+
                     </VBox>
-                    <VBox class="vdFilterButtonWrap">
-                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="vdApplyButton" />
+
+                    <!-- BOTÓN -->
+                    <VBox
+                        class="vdFilterButtonWrap">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="vdApplyButton" />
+
                     </VBox>
+
                 </FlexBox>
-                <!-- =====================================================
+
+                <!-- =================================================
                      KPIs
-                     ===================================================== -->
-                <FlexBox items="{view>/kpis}" wrap="Wrap" class="vdKpiRow">
+                     ================================================= -->
+
+                <FlexBox
+                    width="100%"
+                    items="{view>/kpis}"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="vdKpiRow">
+
                     <items>
-                        <VBox class="vdKpiCard">
+
+                        <VBox
+                            class="vdKpiCard">
+
                             <customData>
-                                <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
+
+                                <core:CustomData
+                                    key="tone"
+                                    value="{view>tone}"
+                                    writeToDom="true" />
+
                             </customData>
-                            <HBox alignItems="Center" class="vdKpiMain">
-                                <HBox alignItems="Center" justifyContent="Center" class="vdKpiIconWrap">
-                                    <core:Icon src="{view>icon}" size="1.55rem" class="vdKpiIcon" />
+
+                            <HBox
+                                width="100%"
+                                alignItems="Center"
+                                class="vdKpiMain">
+
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="vdKpiIconWrap">
+
+                                    <core:Icon
+                                        src="{view>icon}"
+                                        size="1.55rem"
+                                        class="vdKpiIcon" />
+
                                 </HBox>
-                                <VBox class="vdKpiTextBlock">
-                                    <Text text="{view>title}" class="vdKpiLabel" />
-                                    <Text text="{view>value}" class="vdKpiValue" />
-                                    <Text text="{view>footer}" visible="{view>showFooter}" class="vdKpiFooter" />
+
+                                <VBox
+                                    class="vdKpiTextBlock">
+
+                                    <Text
+                                        text="{view>title}"
+                                        wrapping="true"
+                                        class="vdKpiLabel" />
+
+                                    <Text
+                                        text="{view>value}"
+                                        wrapping="false"
+                                        class="vdKpiValue" />
+
+                                    <Text
+                                        text="{view>footer}"
+                                        visible="{view>showFooter}"
+                                        wrapping="false"
+                                        class="vdKpiFooter" />
+
                                 </VBox>
+
                             </HBox>
-                            <Text text="{view>note}" visible="{view>showNote}" class="vdKpiNote" />
+
+                            <Text
+                                text="{view>note}"
+                                visible="{view>showNote}"
+                                wrapping="true"
+                                class="vdKpiNote" />
+
                         </VBox>
+
                     </items>
+
                 </FlexBox>
-                <!-- =====================================================
-                     CONTENIDO PRINCIPAL
-                     ===================================================== -->
-                <FlexBox wrap="NoWrap" alignItems="Stretch" class="vdMainRow">
-                    <!-- =================================================
+
+                <!-- =================================================
+                     CONTENIDO
+                     ================================================= -->
+
+                <FlexBox
+                    width="100%"
+                    fitContainer="true"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="vdMainRow">
+
+                    <layoutData>
+
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%" />
+
+                    </layoutData>
+
+                    <!-- =============================================
                          UTILIZACIÓN DE JEFATURAS
-                         ================================================= -->
-                    <VBox class="vdPanel vdUtilCard">
+                         ============================================= -->
+
+                    <VBox
+                        fitContainer="true"
+                        class="vdPanel vdUtilCard">
+
                         <layoutData>
-                            <FlexItemData growFactor="46" baseSize="0%" />
+
+                            <FlexItemData
+                                growFactor="46"
+                                shrinkFactor="1"
+                                baseSize="0%" />
+
                         </layoutData>
-                        <Title text="Utilización de jefaturas" level="H3" class="vdSectionTitle" />
-                        <!-- Niveles -->
-                        <FlexBox items="{view>/riskLevels}" wrap="NoWrap" class="vdRiskRow">
+
+                        <Title
+                            text="Utilización de jefaturas"
+                            level="H3"
+                            class="vdSectionTitle" />
+
+                        <!-- NIVELES -->
+                        <FlexBox
+                            width="100%"
+                            items="{view>/riskLevels}"
+                            wrap="NoWrap"
+                            class="vdRiskRow">
+
                             <items>
-                                <VBox class="vdRiskCard">
+
+                                <VBox
+                                    class="vdRiskCard">
+
                                     <customData>
-                                        <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
+
+                                        <core:CustomData
+                                            key="tone"
+                                            value="{view>tone}"
+                                            writeToDom="true" />
+
                                     </customData>
-                                    <HBox justifyContent="SpaceBetween" alignItems="Start">
-                                        <HBox alignItems="Center">
-                                            <HBox alignItems="Center" justifyContent="Center" class="vdRiskIconWrap">
-                                                <core:Icon src="{view>icon}" size="0.75rem" class="vdRiskIcon" />
+
+                                    <HBox
+                                        width="100%"
+                                        justifyContent="SpaceBetween"
+                                        alignItems="Start">
+
+                                        <HBox
+                                            alignItems="Center">
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vdRiskIconWrap">
+
+                                                <core:Icon
+                                                    src="{view>icon}"
+                                                    size="0.75rem"
+                                                    class="vdRiskIcon" />
+
                                             </HBox>
+
                                             <VBox>
-                                                <Text text="{view>label}" class="vdRiskLabel" />
-                                                <Text text="{view>range}" class="vdRiskRange" />
+
+                                                <Text
+                                                    text="{view>label}"
+                                                    wrapping="false"
+                                                    class="vdRiskLabel" />
+
+                                                <Text
+                                                    text="{view>range}"
+                                                    wrapping="false"
+                                                    class="vdRiskRange" />
+
                                             </VBox>
+
                                         </HBox>
-                                        <Text text="{view>count}" class="vdRiskCount" />
+
+                                        <Text
+                                            text="{view>count}"
+                                            wrapping="false"
+                                            class="vdRiskCount" />
+
                                     </HBox>
+
                                 </VBox>
+
                             </items>
+
                         </FlexBox>
-                        <!-- Jefaturas -->
-                        <FlexBox items="{view>/jefaturas}" wrap="Wrap" class="vdChiefGrid">
+
+                        <!-- JEFATURAS -->
+                        <FlexBox
+                            width="100%"
+                            items="{view>/jefaturas}"
+                            wrap="Wrap"
+                            class="vdChiefGrid">
+
                             <items>
-                                <VBox class="vdChiefCard">
+
+                                <VBox
+                                    class="vdChiefCard">
+
                                     <customData>
-                                        <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
+
+                                        <core:CustomData
+                                            key="tone"
+                                            value="{view>tone}"
+                                            writeToDom="true" />
+
                                     </customData>
-                                    <Text text="{view>name}" class="vdChiefName" />
-                                    <Text text="{view>utilization}" class="vdChiefValue" />
-                                    <HBox alignItems="Center">
-                                        <core:Icon src="sap-icon://employee" size="0.65rem" class="vdChiefMetaIcon" />
-                                        <Text text="{view>resourceText}" class="vdChiefMeta" />
+
+                                    <Text
+                                        text="{view>name}"
+                                        wrapping="false"
+                                        class="vdChiefName" />
+
+                                    <Text
+                                        text="{view>utilization}"
+                                        wrapping="false"
+                                        class="vdChiefValue" />
+
+                                    <HBox
+                                        alignItems="Center">
+
+                                        <core:Icon
+                                            src="sap-icon://employee"
+                                            size="0.65rem"
+                                            class="vdChiefMetaIcon" />
+
+                                        <Text
+                                            text="{view>resourceText}"
+                                            wrapping="false"
+                                            class="vdChiefMeta" />
+
                                     </HBox>
+
                                 </VBox>
+
                             </items>
+
                         </FlexBox>
+
                     </VBox>
-                    <!-- =================================================
+
+                    <!-- =============================================
                          COLUMNA DERECHA
-                         ================================================= -->
-                    <VBox class="vdRightColumn">
+                         ============================================= -->
+
+                    <VBox
+                        fitContainer="true"
+                        class="vdRightColumn">
+
                         <layoutData>
-                            <FlexItemData growFactor="54" baseSize="0%" />
+
+                            <FlexItemData
+                                growFactor="54"
+                                shrinkFactor="1"
+                                baseSize="0%" />
+
                         </layoutData>
-                        <FlexBox wrap="NoWrap" alignItems="Stretch" class="vdRightTop">
-                            <!-- =========================================
+
+                        <!-- =========================================
+                             PARTE SUPERIOR
+                             ========================================= -->
+
+                        <FlexBox
+                            width="100%"
+                            wrap="NoWrap"
+                            alignItems="Stretch"
+                            class="vdRightTop">
+
+                            <!-- =====================================
                                  PRESIÓN POR TIPO DE SERVICIO
-                                 ========================================= -->
-                            <VBox class="vdPanel vdServiceCard">
+                                 ===================================== -->
+
+                            <VBox
+                                fitContainer="true"
+                                class="vdPanel vdServiceCard">
+
                                 <layoutData>
-                                    <FlexItemData growFactor="54" baseSize="0%" />
+
+                                    <FlexItemData
+                                        growFactor="54"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+
                                 </layoutData>
-                                <Title text="Presión por tipo de servicio" level="H3" class="vdSectionTitle" />
-                                <HBox alignItems="Center" justifyContent="SpaceBetween" class="vdServiceContent">
-                                    <core:HTML content="&lt;div class='vdDonutWrap'&gt;&lt;div class='vdDonut'&gt;&lt;div class='vdDonutCenter'&gt;&lt;span&gt;Carga&lt;/span&gt;&lt;strong&gt;por servicio&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" />
-                                    <VBox items="{view>/serviceTypes}" class="vdServiceLegend">
-                                        <items>
-                                            <HBox justifyContent="SpaceBetween" alignItems="Center" class="vdServiceLegendRow">
-                                                <customData>
-                                                    <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
-                                                </customData>
-                                                <HBox alignItems="Center">
-                                                    <HBox alignItems="Center" justifyContent="Center" class="vdServiceIconWrap">
-                                                        <core:Icon src="{view>icon}" size="0.75rem" class="vdServiceIcon" />
-                                                    </HBox>
-                                                    <Text text="{view>label}" class="vdServiceName" />
-                                                </HBox>
-                                                <VBox alignItems="End">
-                                                    <Text text="{view>percent}" class="vdServicePercent" />
-                                                    <Text text="{view>hours}" class="vdServiceHours" />
-                                                </VBox>
-                                            </HBox>
-                                        </items>
-                                    </VBox>
-                                </HBox>
-                                <HBox justifyContent="SpaceBetween" alignItems="Center" class="vdServiceFooter">
-                                    <HBox alignItems="Center">
-                                        <core:Icon src="sap-icon://history" size="0.75rem" class="vdServiceFooterIcon" />
-                                        <Text text="Total carga programada" class="vdServiceFooterLabel" />
-                                    </HBox>
-                                    <Text text="6,305 h" class="vdServiceFooterValue" />
-                                </HBox>
-                            </VBox>
-                            <!-- =========================================
-                                 ACCIONES RÁPIDAS
-                                 ========================================= -->
-                            <List showSeparators="None" items="{view>/actions}" class="vdActionList">
-                                <layoutData>
-                                    <FlexItemData growFactor="46" baseSize="0%" />
-                                </layoutData>
-                                <items>
-                                    <CustomListItem type="Active" press=".onActionPress" class="vdActionItem">
-                                        <customData>
-                                            <core:CustomData key="action" value="{view>action}" writeToDom="false" />
-                                            <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
-                                        </customData>
-                                        <HBox alignItems="Center" justifyContent="SpaceBetween" class="vdActionContent">
-                                            <HBox alignItems="Center">
-                                                <HBox alignItems="Center" justifyContent="Center" class="vdActionIconWrap">
-                                                    <core:Icon src="{view>icon}" size="1.45rem" class="vdActionIcon" />
-                                                </HBox>
-                                                <VBox class="vdActionTexts">
-                                                    <Text text="{view>title}" class="vdActionTitle" />
-                                                    <Text text="{view>description}" class="vdActionDescription" />
-                                                </VBox>
-                                            </HBox>
-                                            <core:Icon src="sap-icon://navigation-right-arrow" size="0.75rem" class="vdActionArrow" />
-                                        </HBox>
-                                    </CustomListItem>
-                                </items>
-                            </List>
-                        </FlexBox>
-                        <!-- =============================================
-                             CONSUMO DE MATERIALES
-                             ============================================= -->
-                        <VBox class="vdPanel vdMaterialsPanel">
-                            <Title text="Consumo de materiales más representativo" level="H3" class="vdSectionTitle" />
-                            <FlexBox items="{view>/materials}" wrap="NoWrap" class="vdMaterialGrid">
-                                <items>
-                                    <VBox class="vdMaterialCard">
-                                        <customData>
-                                            <core:CustomData key="tone" value="{view>tone}" writeToDom="true" />
-                                        </customData>
-                                        <HBox alignItems="Center" class="vdMaterialMain">
-                                            <HBox alignItems="Center" justifyContent="Center" class="vdMaterialIconWrap">
-                                                <core:Icon src="{view>icon}" size="1.55rem" class="vdMaterialIcon" />
-                                            </HBox>
-                                            <VBox>
-                                                <Text text="{view>name}" class="vdMaterialName" />
-                                                <Text text="{view>percent}" class="vdMaterialPercent" />
-                                                <Text text="del consumo" class="vdMaterialCaption" />
+
+                                <Title
+                                    text="Presión por tipo de servicio"
+                                    level="H3"
+                                    class="vdSectionTitle" />
+
+                                <HBox
+                                    width="100%"
+                                    alignItems="Center"
+                                    justifyContent="SpaceBetween"
+                                    class="vdServiceContent">
+
+                                    <!-- DONA SIN core:HTML -->
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="vdDonutWrap">
+
+                                        <VBox
+                                            id="serviceDonut"
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vdDonut">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vdDonutCenter">
+
+                                                <Text
+                                                    text="Carga"
+                                                    class="vdDonutCenterLabel" />
+
+                                                <Text
+                                                    text="por servicio"
+                                                    class="vdDonutCenterValue" />
+
                                             </VBox>
-                                        </HBox>
-                                        <HBox class="vdMaterialTrack">
-                                            <HBox width="{view>barWidth}" class="vdMaterialBar" />
-                                        </HBox>
+
+                                        </VBox>
+
+                                    </HBox>
+
+                                    <!-- LEYENDA -->
+                                    <VBox
+                                        width="100%"
+                                        items="{view>/serviceTypes}"
+                                        class="vdServiceLegend">
+
+                                        <items>
+
+                                            <HBox
+                                                width="100%"
+                                                justifyContent="SpaceBetween"
+                                                alignItems="Center"
+                                                class="vdServiceLegendRow">
+
+                                                <customData>
+
+                                                    <core:CustomData
+                                                        key="tone"
+                                                        value="{view>tone}"
+                                                        writeToDom="true" />
+
+                                                </customData>
+
+                                                <HBox
+                                                    alignItems="Center">
+
+                                                    <HBox
+                                                        alignItems="Center"
+                                                        justifyContent="Center"
+                                                        class="vdServiceIconWrap">
+
+                                                        <core:Icon
+                                                            src="{view>icon}"
+                                                            size="0.75rem"
+                                                            class="vdServiceIcon" />
+
+                                                    </HBox>
+
+                                                    <Text
+                                                        text="{view>label}"
+                                                        wrapping="false"
+                                                        class="vdServiceName" />
+
+                                                </HBox>
+
+                                                <VBox
+                                                    alignItems="End">
+
+                                                    <Text
+                                                        text="{view>percent}"
+                                                        wrapping="false"
+                                                        class="vdServicePercent" />
+
+                                                    <Text
+                                                        text="{view>hours}"
+                                                        wrapping="false"
+                                                        class="vdServiceHours" />
+
+                                                </VBox>
+
+                                            </HBox>
+
+                                        </items>
+
                                     </VBox>
+
+                                </HBox>
+
+                                <!-- TOTAL -->
+                                <HBox
+                                    width="100%"
+                                    justifyContent="SpaceBetween"
+                                    alignItems="Center"
+                                    class="vdServiceFooter">
+
+                                    <HBox
+                                        alignItems="Center">
+
+                                        <core:Icon
+                                            src="sap-icon://history"
+                                            size="0.75rem"
+                                            class="vdServiceFooterIcon" />
+
+                                        <Text
+                                            text="Total carga programada"
+                                            class="vdServiceFooterLabel" />
+
+                                    </HBox>
+
+                                    <Text
+                                        text="{view>/serviceTotalHours}"
+                                        wrapping="false"
+                                        class="vdServiceFooterValue" />
+
+                                </HBox>
+
+                            </VBox>
+
+                            <!-- =====================================
+                                 ACCIONES
+                                 ===================================== -->
+
+                            <List
+                                showSeparators="None"
+                                items="{view>/actions}"
+                                class="vdActionList">
+
+                                <layoutData>
+
+                                    <FlexItemData
+                                        growFactor="46"
+                                        shrinkFactor="1"
+                                        baseSize="0%" />
+
+                                </layoutData>
+
+                                <items>
+
+                                    <CustomListItem
+                                        type="Active"
+                                        press=".onActionPress"
+                                        class="vdActionItem">
+
+                                        <customData>
+
+                                            <core:CustomData
+                                                key="action"
+                                                value="{view>action}"
+                                                writeToDom="false" />
+
+                                            <core:CustomData
+                                                key="tone"
+                                                value="{view>tone}"
+                                                writeToDom="true" />
+
+                                        </customData>
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            justifyContent="SpaceBetween"
+                                            class="vdActionContent">
+
+                                            <HBox
+                                                alignItems="Center">
+
+                                                <HBox
+                                                    alignItems="Center"
+                                                    justifyContent="Center"
+                                                    class="vdActionIconWrap">
+
+                                                    <core:Icon
+                                                        src="{view>icon}"
+                                                        size="1.45rem"
+                                                        class="vdActionIcon" />
+
+                                                </HBox>
+
+                                                <VBox
+                                                    class="vdActionTexts">
+
+                                                    <Text
+                                                        text="{view>title}"
+                                                        wrapping="false"
+                                                        class="vdActionTitle" />
+
+                                                    <Text
+                                                        text="{view>description}"
+                                                        wrapping="false"
+                                                        class="vdActionDescription" />
+
+                                                </VBox>
+
+                                            </HBox>
+
+                                            <core:Icon
+                                                src="sap-icon://navigation-right-arrow"
+                                                size="0.75rem"
+                                                class="vdActionArrow" />
+
+                                        </HBox>
+
+                                    </CustomListItem>
+
                                 </items>
+
+                            </List>
+
+                        </FlexBox>
+
+                        <!-- =========================================
+                             MATERIALES
+                             ========================================= -->
+
+                        <VBox
+                            width="100%"
+                            class="vdPanel vdMaterialsPanel">
+
+                            <Title
+                                text="Consumo de materiales más representativo"
+                                level="H3"
+                                class="vdSectionTitle" />
+
+                            <FlexBox
+                                width="100%"
+                                items="{view>/materials}"
+                                wrap="NoWrap"
+                                alignItems="Stretch"
+                                class="vdMaterialGrid">
+
+                                <items>
+
+                                    <VBox
+                                        class="vdMaterialCard">
+
+                                        <customData>
+
+                                            <core:CustomData
+                                                key="tone"
+                                                value="{view>tone}"
+                                                writeToDom="true" />
+
+                                        </customData>
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="vdMaterialMain">
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vdMaterialIconWrap">
+
+                                                <core:Icon
+                                                    src="{view>icon}"
+                                                    size="1.55rem"
+                                                    class="vdMaterialIcon" />
+
+                                            </HBox>
+
+                                            <VBox>
+
+                                                <Text
+                                                    text="{view>name}"
+                                                    wrapping="false"
+                                                    class="vdMaterialName" />
+
+                                                <Text
+                                                    text="{view>percent}"
+                                                    wrapping="false"
+                                                    class="vdMaterialPercent" />
+
+                                                <Text
+                                                    text="del consumo"
+                                                    wrapping="false"
+                                                    class="vdMaterialCaption" />
+
+                                            </VBox>
+
+                                        </HBox>
+
+                                        <HBox
+                                            width="100%"
+                                            class="vdMaterialTrack">
+
+                                            <HBox
+                                                width="{view>barWidth}"
+                                                class="vdMaterialBar" />
+
+                                        </HBox>
+
+                                    </VBox>
+
+                                </items>
+
                             </FlexBox>
+
                         </VBox>
+
                     </VBox>
+
                 </FlexBox>
+
             </VBox>
+
         </content>
+
     </Page>
+
 </mvc:View>

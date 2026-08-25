@@ -54,6 +54,48 @@ sap.ui.define([
         return { startDate: oStart, endDate: oEnd };
     }
 
+    function parsePeriod(sPeriod) {
+        var aAnnualMatch = String(sPeriod || "").match(/^(\d{4})-ANUAL$/);
+        var iYear;
+
+        if (aAnnualMatch) {
+            iYear = Number(aAnnualMatch[1]);
+            return {
+                startDate: new Date(iYear, 0, 1),
+                endDate: new Date(iYear, 11, 31, 23, 59, 59),
+                isAnnual: true
+            };
+        }
+
+        return parseWeek(sPeriod);
+    }
+
+    function parseDisplayDate(sValue) {
+        var aMatch = String(sValue || "").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        var oDate;
+
+        if (!aMatch) {
+            return null;
+        }
+        oDate = new Date(
+            Number(aMatch[3]),
+            Number(aMatch[2]) - 1,
+            Number(aMatch[1])
+        );
+        return oDate.getFullYear() === Number(aMatch[3]) &&
+            oDate.getMonth() === Number(aMatch[2]) - 1 &&
+            oDate.getDate() === Number(aMatch[1]) ? oDate : null;
+    }
+
+    function formatDisplayDate(oDate) {
+        if (!(oDate instanceof Date) || Number.isNaN(oDate.getTime())) {
+            return "";
+        }
+        return String(oDate.getDate()).padStart(2, "0") + "/" +
+            String(oDate.getMonth() + 1).padStart(2, "0") + "/" +
+            oDate.getFullYear();
+    }
+
     function formatODataDate(oDate) {
         if (!(oDate instanceof Date) || Number.isNaN(oDate.getTime())) {
             return null;
@@ -75,15 +117,23 @@ sap.ui.define([
 
     function getFilterContext(mFilters) {
         var mValues = mFilters || {};
-        var sWeek = String(mValues.semana || "2026-W01");
-        var oWeekRange = parseWeek(sWeek);
+        var sWeek = String(mValues.semana || "2026-ANUAL");
+        var oWeekRange = parsePeriod(sWeek);
+        var oStartDate = parseDisplayDate(mValues.fechaDesde) ||
+            (oWeekRange && oWeekRange.startDate);
+        var oEndDate = parseDisplayDate(mValues.fechaHasta) ||
+            (oWeekRange && oWeekRange.endDate);
 
         return {
-            startDate: oWeekRange && oWeekRange.startDate,
-            endDate: oWeekRange && oWeekRange.endDate,
+            startDate: oStartDate,
+            endDate: oEndDate,
             filters: {
                 semana: sWeek,
-                zona: mValues.zona || "TODAS"
+                fechaDesde: formatDisplayDate(oStartDate),
+                fechaHasta: formatDisplayDate(oEndDate),
+                zona: mValues.zona || "TODAS",
+                cliente: mValues.cliente || "TODOS",
+                responsable: mValues.responsable || "TODOS"
             }
         };
     }

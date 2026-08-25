@@ -1,349 +1,148 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/json/JSONModel",
-  "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
+  "sap/ui/dom/includeStylesheet",
+  "sap/m/MessageToast",
+  "mantenimiento/model/DetalleHorasTipoOrdenService"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Service) {
   "use strict";
 
   return Controller.extend("mantenimiento.controller.DetalleHorasTipoOrden", {
-
     onInit: function () {
-      var oData = this._getMockData();
-      this.getView().setModel(new JSONModel(oData), "dhto");
+      this._requestId = 0;
+      this._allOrders = [];
+      this._filters = { periodo: "2026", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "TODOS", supervisor: "TODOS", turno: "TODOS", tipoOrden: "SM01", estado: "TODOS" };
+      this._loadStyles();
+      this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "dhto");
+      this.getView().getModel("dhto").setSizeLimit(2000);
+      this._bindDateEvents();
+      this._load(false);
+    },
 
-      console.group("DETALLE DE HORAS POR TIPO DE ORDEN - MOCK");
-      console.log(JSON.stringify(oData, null, 2));
-      console.groupEnd();
+    _loadStyles: function () {
+      var id = "detalleHorasTipoOrdenStylesheet";
+      if (!document.getElementById(id)) {
+        includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleHorasTipoOrden.css") + "?v=20260824-odata", id);
+      }
+    },
+
+    _model: function () { return this.getView().getModel("dhto"); },
+    _getODataModel: function () {
+      var component = this.getOwnerComponent();
+      return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
+    },
+    _readFilters: function () {
+      var filters = this._model().getProperty("/filters") || {};
+      return { periodo: filters.periodo || "2026", fechaDesde: filters.fechaDesde || "01/01/2026", fechaHasta: filters.fechaHasta || "31/12/2026", zona: filters.zona || "TODOS", supervisor: filters.supervisor || "TODOS", turno: filters.turno || "TODOS", tipoOrden: filters.tipoOrden || "SM01", estado: filters.estado || "TODOS" };
+    },
+
+    /* La vista original no nombra los controles de periodo/fecha; se enlazan sin tocar el diseño. */
+    _bindDateEvents: function () {
+      var selects = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.Select"); });
+      var dates = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.DatePicker"); });
+      if (selects[0]) { selects[0].attachChange(this.onPeriodoChange, this); }
+      dates.forEach(function (control) { control.attachChange(this.onFechaChange, this); }.bind(this));
+    },
+
+    onPeriodoChange: function (event) {
+      var year = String(event.getSource().getSelectedKey() || "");
+      if (!/^\d{4}$/.test(year)) { return; }
+      this._model().setProperty("/filters/periodo", year);
+      this._model().setProperty("/filters/fechaDesde", "01/01/" + year);
+      this._model().setProperty("/filters/fechaHasta", "31/12/" + year);
+    },
+    onFechaChange: function () {
+      var filters = this._readFilters();
+      var from = String(filters.fechaDesde).match(/^\d{2}\/\d{2}\/(\d{4})$/);
+      var until = String(filters.fechaHasta).match(/^\d{2}\/\d{2}\/(\d{4})$/);
+      if (from && until && from[1] === until[1]) { this._model().setProperty("/filters/periodo", from[1]); }
     },
 
     onApplyFilters: function () {
-      var oModel = this.getView().getModel("dhto");
-      var oFilters = oModel.getProperty("/filters");
+      var filters = this._readFilters();
+      var start = this._localDate(filters.fechaDesde);
+      var end = this._localDate(filters.fechaHasta);
+      if (!start || !end || start > end) { MessageToast.show("Revisa que la fecha desde sea menor o igual a la fecha hasta."); return; }
+      this._filters = filters;
+      this._load(true);
+    },
 
-      console.group("FILTROS - DETALLE HORAS TIPO ORDEN");
-      console.log(JSON.stringify(oFilters, null, 2));
-      console.groupEnd();
+    _load: function (notify) {
+      var requestId = ++this._requestId;
+      var view = this.getView();
+      view.setBusy(true);
+      Service.load(this._getODataModel(), this._filters).then(function (response) {
+        if (requestId !== this._requestId) { return; }
+        this._model().setData(response.data);
+        this._allOrders = response.data.ordenes || [];
+        this._model().setProperty("/ordenes", this._allOrders);
+        this._updateTotals();
+        if (notify) { MessageToast.show("Detalle de horas actualizado con datos de SAP"); }
+      }.bind(this), function (error) {
+        if (requestId !== this._requestId) { return; }
+        var empty = Service.createEmpty(this._filters);
+        this._model().setData(empty);
+        this._allOrders = [];
+        this._updateTotals();
+        MessageToast.show(error && error.message ? error.message : "No fue posible consultar el detalle de horas");
+      }.bind(this)).then(function () {
+        if (requestId === this._requestId) { view.setBusy(false); }
+      }.bind(this));
+    },
 
-      MessageToast.show("Filtros aplicados");
+    onSearchOrden: function (event) {
+      var term = String(event.getParameter("newValue") || event.getParameter("query") || "").trim().toLowerCase();
+      var visible = this._allOrders.filter(function (order) {
+        return !term || [order.ot, order.cliente, order.elevador, order.zona, order.responsable, order.turno, order.estado].join(" ").toLowerCase().indexOf(term) >= 0;
+      });
+      this._model().setProperty("/ordenes", visible);
     },
 
     onExportar: function () {
-      MessageToast.show("Exportación pendiente de conectar");
+      var rows = this._model().getProperty("/ordenes") || [];
+      var header = ["OT", "Cliente", "Elevador / Equipo", "Zona", "Responsable", "Turno", "Horas plan", "Horas reales", "Variación h", "Variación %", "Estado"];
+      var csv = [header].concat(rows.map(function (row) { return [row.ot, row.cliente, row.elevador, row.zona, row.responsable, row.turno, row.horasPlan, row.horasReales, row.variacionH, row.variacionPct, row.estado].map(function (value) { return '"' + String(value || "").replace(/"/g, '""') + '"'; }); })).map(function (row) { return row.join(";"); }).join("\r\n");
+      var url = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+      var anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "detalle-horas-tipo-orden.csv";
+      anchor.click();
+      URL.revokeObjectURL(url);
+    },
+    onColumnas: function () { MessageToast.show("La tabla muestra las columnas definidas para plan, real, variación y estado."); },
+
+    _updateTotals: function () {
+      var kpis = this._model().getProperty("/kpis") || {};
+      this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("dhtoSummaryTotal"); }).forEach(function (container) {
+        var items = container.getItems ? container.getItems() : [];
+        if (items[1]) { items[1].setText(kpis.otRelacionadas || "0"); }
+        if (items[2]) { items[2].setText(kpis.horasProgramadas || "0 h"); }
+        if (items[3]) { items[3].setText(kpis.horasReales || "0 h"); }
+        if (items[4]) { items[4].setText(kpis.variacionHoras || "Sin datos"); }
+        if (items[5]) { items[5].setText(kpis.variacionPct || "Sin datos"); }
+        if (items[6] && items[6].getItems) {
+          var statusItems = items[6].getItems();
+          if (statusItems[0]) {
+            ["dhtoDotRed", "dhtoDotOrange", "dhtoDotGreen"].forEach(function (className) { statusItems[0].removeStyleClass(className); });
+            if (kpis.dot) { statusItems[0].addStyleClass(kpis.dot); }
+          }
+          if (statusItems[1]) { statusItems[1].setText(kpis.text || "Sin datos"); }
+        }
+      });
     },
 
-    onColumnas: function () {
-      MessageToast.show("Configuración de columnas pendiente");
+    _find: function (root, predicate) {
+      var result = [];
+      function visit(control) {
+        var content;
+        if (!control) { return; }
+        if (predicate(control)) { result.push(control); }
+        if (control.getItems) { (control.getItems() || []).forEach(visit); }
+        if (control.getContent && !(control.isA && control.isA("sap.ui.core.HTML"))) { content = control.getContent(); if (Array.isArray(content)) { content.forEach(visit); } }
+      }
+      visit(root);
+      return result;
     },
-
-    onSearchOrden: function (oEvent) {
-      var sValue = oEvent.getParameter("newValue") || "";
-      console.log("Buscar orden:", sValue);
-    },
-
-    _getMockData: function () {
-      return {
-        filters: {
-          periodo: "Mayo 2024",
-          fechaDesde: "01/05/2024",
-          fechaHasta: "31/05/2024",
-          zona: "Todas",
-          supervisor: "Todos",
-          turno: "Todos",
-          tipoOrden: "Reparación / correctivo",
-          estado: "Todos"
-        },
-
-        catalogos: {
-          periodos: [
-            { key: "Mayo 2024", text: "Mayo 2024" },
-            { key: "Junio 2024", text: "Junio 2024" }
-          ],
-          zonas: [
-            { key: "Todas", text: "Todas" },
-            { key: "Norte", text: "Norte" },
-            { key: "Centro", text: "Centro" },
-            { key: "Sur", text: "Sur" }
-          ],
-          supervisores: [
-            { key: "Todos", text: "Todos" },
-            { key: "Supervisor 1", text: "Supervisor 1" },
-            { key: "Supervisor 2", text: "Supervisor 2" }
-          ],
-          turnos: [
-            { key: "Todos", text: "Todos" },
-            { key: "Diurno", text: "Diurno" },
-            { key: "Nocturno", text: "Nocturno" },
-            { key: "Fin de semana", text: "Fin de semana" }
-          ],
-          tiposOrden: [
-            { key: "Reparación / correctivo", text: "Reparación / correctivo" },
-            { key: "Preventiva", text: "Preventiva" },
-            { key: "Call Center", text: "Call Center" }
-          ],
-          estados: [
-            { key: "Todos", text: "Todos" },
-            { key: "Sobrecargado", text: "Sobrecargado" },
-            { key: "Cerca de plan", text: "Cerca de plan" },
-            { key: "Dentro de plan", text: "Dentro de plan" }
-          ]
-        },
-
-        kpis: {
-          horasProgramadas: "1,700 h",
-          horasReales: "1,910 h",
-          variacionHoras: "+210 h",
-          variacionPct: "+12.4%",
-          otRelacionadas: "95"
-        },
-
-        ordenes: [
-          {
-            ot: "OT-2024-0458",
-            cliente: "Torre Reforma",
-            elevador: "EV-1024",
-            zona: "Norte",
-            responsable: "Juan Pérez",
-            turno: "Diurno",
-            horasPlan: "3.0",
-            horasReales: "4.2",
-            variacionH: "+1.2",
-            variacionPct: "+40.0%",
-            estado: "Sobrecargado",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotRed"
-          },
-          {
-            ot: "OT-2024-0332",
-            cliente: "Plaza Satélite",
-            elevador: "EV-0017",
-            zona: "Centro",
-            responsable: "María López",
-            turno: "Diurno",
-            horasPlan: "2.5",
-            horasReales: "3.6",
-            variacionH: "+1.1",
-            variacionPct: "+44.0%",
-            estado: "Sobrecargado",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotRed"
-          },
-          {
-            ot: "OT-2024-0378",
-            cliente: "Hospital Ángeles",
-            elevador: "EV-0516",
-            zona: "Sur",
-            responsable: "Carlos Ruiz",
-            turno: "Nocturno",
-            horasPlan: "2.0",
-            horasReales: "2.9",
-            variacionH: "+0.9",
-            variacionPct: "+45.0%",
-            estado: "Sobrecargado",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotRed"
-          },
-          {
-            ot: "OT-2024-0389",
-            cliente: "Torre Mayor",
-            elevador: "EV-0265",
-            zona: "Norte",
-            responsable: "Pedro López",
-            turno: "Diurno",
-            horasPlan: "1.8",
-            horasReales: "2.2",
-            variacionH: "+0.4",
-            variacionPct: "+22.2%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            ot: "OT-2024-0411",
-            cliente: "Plaza Galerías",
-            elevador: "EV-0912",
-            zona: "Centro",
-            responsable: "Ana Martínez",
-            turno: "Fin de semana",
-            horasPlan: "2.0",
-            horasReales: "2.3",
-            variacionH: "+0.3",
-            variacionPct: "+15.0%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            ot: "OT-2024-0373",
-            cliente: "Plaza Central",
-            elevador: "EV-0730",
-            zona: "Sur",
-            responsable: "Luis Martínez",
-            turno: "Nocturno",
-            horasPlan: "1.5",
-            horasReales: "1.7",
-            variacionH: "+0.2",
-            variacionPct: "+13.3%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            ot: "OT-2024-0321",
-            cliente: "Corporativo ABC",
-            elevador: "EV-0442",
-            zona: "Centro",
-            responsable: "Jorge Hernández",
-            turno: "Diurno",
-            horasPlan: "1.6",
-            horasReales: "1.5",
-            variacionH: "-0.1",
-            variacionPct: "-6.3%",
-            estado: "Dentro de plan",
-            colorClass: "dhtoGreenStrong",
-            statusDotClass: "dhtoDotGreen"
-          },
-          {
-            ot: "OT-2024-0299",
-            cliente: "Universidad Anáhuac",
-            elevador: "EV-0512",
-            zona: "Sur",
-            responsable: "Carlos Ruiz",
-            turno: "Diurno",
-            horasPlan: "1.3",
-            horasReales: "1.1",
-            variacionH: "-0.2",
-            variacionPct: "-15.4%",
-            estado: "Dentro de plan",
-            colorClass: "dhtoGreenStrong",
-            statusDotClass: "dhtoDotGreen"
-          },
-          {
-            ot: "OT-2024-0344",
-            cliente: "Parque Interlomas",
-            elevador: "EV-0883",
-            zona: "Norte",
-            responsable: "María López",
-            turno: "Nocturno",
-            horasPlan: "1.2",
-            horasReales: "1.0",
-            variacionH: "-0.2",
-            variacionPct: "-16.7%",
-            estado: "Dentro de plan",
-            colorClass: "dhtoGreenStrong",
-            statusDotClass: "dhtoDotGreen"
-          },
-          {
-            ot: "OT-2024-0310",
-            cliente: "Centro Comercial Perisur",
-            elevador: "EV-0761",
-            zona: "Sur",
-            responsable: "Pedro López",
-            turno: "Fin de semana",
-            horasPlan: "1.1",
-            horasReales: "0.9",
-            variacionH: "-0.2",
-            variacionPct: "-18.2%",
-            estado: "Dentro de plan",
-            colorClass: "dhtoGreenStrong",
-            statusDotClass: "dhtoDotGreen"
-          }
-        ],
-
-        resumenZona: [
-          {
-            zona: "Norte",
-            ot: "34",
-            horasPlan: "640",
-            horasReales: "745",
-            variacionH: "+105",
-            variacionPct: "+16.4%",
-            estado: "Sobrecargado",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotRed"
-          },
-          {
-            zona: "Centro",
-            ot: "33",
-            horasPlan: "640",
-            horasReales: "720",
-            variacionH: "+80",
-            variacionPct: "+12.5%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            zona: "Sur",
-            ot: "28",
-            horasPlan: "420",
-            horasReales: "445",
-            variacionH: "+25",
-            variacionPct: "+6.0%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          }
-        ],
-
-        resumenResponsable: [
-          {
-            responsable: "Juan Pérez",
-            ot: "25",
-            horasPlan: "440",
-            horasReales: "515",
-            variacionH: "+75",
-            variacionPct: "+17.0%",
-            estado: "Sobrecargado",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotRed"
-          },
-          {
-            responsable: "María López",
-            ot: "21",
-            horasPlan: "380",
-            horasReales: "430",
-            variacionH: "+50",
-            variacionPct: "+13.2%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            responsable: "Carlos Ruiz",
-            ot: "19",
-            horasPlan: "340",
-            horasReales: "380",
-            variacionH: "+40",
-            variacionPct: "+11.1%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            responsable: "Pedro López",
-            ot: "15",
-            horasPlan: "280",
-            horasReales: "300",
-            variacionH: "+20",
-            variacionPct: "+7.1%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          },
-          {
-            responsable: "Ana Martínez",
-            ot: "15",
-            horasPlan: "260",
-            horasReales: "285",
-            variacionH: "+25",
-            variacionPct: "+9.6%",
-            estado: "Cerca de plan",
-            colorClass: "dhtoRedStrong",
-            statusDotClass: "dhtoDotOrange"
-          }
-        ]
-      };
-    }
-
+    _localDate: function (value) { var match = String(value || "").match(/^(\d{2})\/(\d{2})\/(\d{4})$/); return match ? new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1])) : null; }
   });
 });

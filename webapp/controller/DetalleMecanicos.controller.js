@@ -3,508 +3,791 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    "mantenimiento/model/DetalleMecanicosService",
+    "mantenimiento/model/DetalleMecanicosMapper"
 ], function (
     Controller,
     JSONModel,
     includeStylesheet,
     MessageToast,
-    MessageBox
+    MessageBox,
+    Service,
+    Mapper
 ) {
     "use strict";
 
     return Controller.extend(
         "mantenimiento.controller.DetalleMecanicos",
         {
-
             onInit: function () {
+                var iYear =
+                    new Date()
+                        .getFullYear();
+
                 this._loadScreenStyles();
 
-                this._oModel = new JSONModel(
-                    this._getInitialData()
-                );
-
-                this._oModel.setSizeLimit(1000);
-
-                this.getView().setModel(
-                    this._oModel,
-                    "detalle"
-                );
-            },
-
-            /**
-             * Carga el CSS exclusivo de la pantalla.
-             * La versión evita que el navegador conserve estilos anteriores.
-             */
-            _loadScreenStyles: function () {
-                var sStyleId = "detalleMecanicosStyles";
-                var oOldStyle = document.getElementById(sStyleId);
-
-                if (oOldStyle && oOldStyle.parentNode) {
-                    oOldStyle.parentNode.removeChild(oOldStyle);
-                }
-
-                var sCssUrl = sap.ui.require.toUrl(
-                    "mantenimiento/css/DetalleMecanicos.css"
-                );
-
-                sCssUrl += "?version=20260805_04";
-
-                includeStylesheet(
-                    sCssUrl,
-                    sStyleId
-                );
-            },
-
-            onApplyFilters: function () {
-                var oFilters = this._cloneObject(
-                    this._oModel.getProperty("/filters")
-                );
-
-                if (!oFilters.fechaDesde || !oFilters.fechaHasta) {
-                    MessageBox.warning(
-                        "Selecciona fecha desde y fecha hasta."
+                this._oModel =
+                    new JSONModel(
+                        this._getInitialData(
+                            iYear
+                        )
                     );
 
-                    return;
-                }
-
-                this._loadData(oFilters);
-            },
-
-            _loadData: function (oFilters) {
-                this._oModel.setProperty(
-                    "/loading",
-                    true
+                this._oModel.setSizeLimit(
+                    5000
                 );
 
-                /*
-                 * Sustituir este bloque por la llamada OData
-                 * cuando el servicio backend esté disponible.
-                 */
-                window.setTimeout(
-                    function () {
-                        var oData = this._getInitialData();
+                this.getView()
+                    .setModel(
+                        this._oModel,
+                        "detalle"
+                    );
 
-                        oData.filters = this._cloneObject(
+                this._iLoadRequest =
+                    0;
+
+                this._loadData(
+                    this._getFilters(),
+                    false
+                );
+            },
+
+            _loadScreenStyles:
+                function () {
+                    var sStyleId =
+                        "detalleMecanicosStyles";
+
+                    var oOldStyle =
+                        document.getElementById(
+                            sStyleId
+                        );
+
+                    var sCssUrl;
+
+                    if (
+                        oOldStyle &&
+                        oOldStyle.parentNode
+                    ) {
+                        oOldStyle.parentNode
+                            .removeChild(
+                                oOldStyle
+                            );
+                    }
+
+                    sCssUrl =
+                        sap.ui.require.toUrl(
+                            "mantenimiento/css/DetalleMecanicos.css"
+                        );
+
+                    sCssUrl +=
+                        "?version=20260821_01";
+
+                    includeStylesheet(
+                        sCssUrl,
+                        sStyleId
+                    );
+                },
+
+            _getODataModel:
+                function () {
+                    var oComponent =
+                        this.getOwnerComponent();
+
+                    return (
+                        oComponent &&
+                        oComponent.getModel(
+                            "dashboardOData"
+                        )
+                    ) ||
+                    (
+                        oComponent &&
+                        oComponent.getModel()
+                    );
+                },
+
+            _buildYearCatalog:
+                function (
+                    iSelectedYear
+                ) {
+                    var iCurrentYear =
+                        new Date()
+                            .getFullYear();
+
+                    var iStart =
+                        Math.min(
+                            iCurrentYear - 5,
+                            Number(
+                                iSelectedYear
+                            ) - 2
+                        );
+
+                    var iEnd =
+                        Math.max(
+                            iCurrentYear + 1,
+                            Number(
+                                iSelectedYear
+                            ) + 2
+                        );
+
+                    var aYears =
+                        [];
+
+                    var iYear;
+
+                    for (
+                        iYear = iEnd;
+                        iYear >= iStart;
+                        iYear--
+                    ) {
+                        aYears.push({
+                            key:
+                                String(
+                                    iYear
+                                ),
+
+                            text:
+                                String(
+                                    iYear
+                                )
+                        });
+                    }
+
+                    return aYears;
+                },
+
+            _getFilters:
+                function () {
+                    var mFilters =
+                        this._oModel
+                            .getProperty(
+                                "/filters"
+                            ) || {};
+
+                    return {
+                        periodo:
+                            mFilters.periodo,
+
+                        fechaDesde:
+                            mFilters.fechaDesde,
+
+                        fechaHasta:
+                            mFilters.fechaHasta,
+
+                        zona:
+                            mFilters.zona,
+
+                        supervisor:
+                            mFilters.supervisor,
+
+                        turno:
+                            mFilters.turno,
+
+                        tipoServicio:
+                            mFilters.tipoServicio,
+
+                        especialidad:
+                            mFilters.especialidad,
+
+                        estado:
+                            mFilters.estado
+                    };
+                },
+
+            onApplyFilters:
+                function () {
+                    var oFilters =
+                        this._getFilters();
+
+                    if (
+                        !oFilters.fechaDesde ||
+                        !oFilters.fechaHasta
+                    ) {
+                        MessageBox.warning(
+                            "Selecciona fecha desde y fecha hasta."
+                        );
+
+                        return;
+                    }
+
+                    this._loadData(
+                        oFilters,
+                        true
+                    );
+                },
+
+            onPeriodoChange:
+                function (
+                    oEvent
+                ) {
+                    var sYear =
+                        oEvent
+                            .getSource()
+                            .getSelectedKey();
+
+                    var iYear =
+                        Number(
+                            sYear
+                        );
+
+                    if (
+                        !Number.isInteger(
+                            iYear
+                        ) ||
+                        iYear < 1900 ||
+                        iYear > 9999
+                    ) {
+                        return;
+                    }
+
+                    this._oModel
+                        .setProperty(
+                            "/filters/periodo",
+                            String(
+                                iYear
+                            )
+                        );
+
+                    this._oModel
+                        .setProperty(
+                            "/filters/fechaDesde",
+                            "01/01/" +
+                            iYear
+                        );
+
+                    this._oModel
+                        .setProperty(
+                            "/filters/fechaHasta",
+                            "31/12/" +
+                            iYear
+                        );
+                },
+
+            onFechaChange:
+                function () {
+                    var sDesde =
+                        this._oModel
+                            .getProperty(
+                                "/filters/fechaDesde"
+                            ) ||
+                        "";
+
+                    var sHasta =
+                        this._oModel
+                            .getProperty(
+                                "/filters/fechaHasta"
+                            ) ||
+                        "";
+
+                    var aDesde =
+                        sDesde.match(
+                            /^(\d{2})\/(\d{2})\/(\d{4})$/
+                        );
+
+                    var aHasta =
+                        sHasta.match(
+                            /^(\d{2})\/(\d{2})\/(\d{4})$/
+                        );
+
+                    if (
+                        aDesde &&
+                        aHasta &&
+                        aDesde[3] ===
+                            aHasta[3]
+                    ) {
+                        this._oModel
+                            .setProperty(
+                                "/filters/periodo",
+                                aDesde[3]
+                            );
+                    }
+                },
+
+            _loadData:
+                function (
+                    oFilters,
+                    bNotify
+                ) {
+                    var iRequest =
+                        ++this
+                            ._iLoadRequest;
+
+                    var oODataModel =
+                        this._getODataModel();
+
+                    this._oModel
+                        .setProperty(
+                            "/loading",
+                            true
+                        );
+
+                    console.log(
+                        "[DM CONTROLLER] _loadData:",
+                        oFilters
+                    );
+
+                    Service
+                        .getDashboardData(
+                            oODataModel,
                             oFilters
+                        )
+                        .then(
+                            function (
+                                oRawData
+                            ) {
+                                var oMapped;
+
+                                if (
+                                    iRequest !==
+                                    this._iLoadRequest
+                                ) {
+                                    return;
+                                }
+
+                                oMapped =
+                                    Mapper.mapData(
+                                        oRawData,
+                                        oFilters
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/catalogos",
+                                        oMapped.catalogos
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/kpis",
+                                        oMapped.kpis
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/turnos",
+                                        oMapped.turnos
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/utilTurno",
+                                        oMapped.utilTurno
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/utilTotal",
+                                        oMapped.utilTotal
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/zonas",
+                                        oMapped.zonas
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/estadoPlantilla",
+                                        oMapped.estadoPlantilla
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/servicios",
+                                        oMapped.servicios
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/presion",
+                                        oMapped.presion
+                                    );
+
+                                this._oModel
+                                    .setProperty(
+                                        "/meta",
+                                        oMapped.meta
+                                    );
+
+                                if (bNotify) {
+                                    MessageToast.show(
+                                        "Detalle de mecánicos actualizado"
+                                    );
+                                }
+                            }.bind(this)
+                        )
+                        .catch(
+                            function (
+                                oError
+                            ) {
+                                if (
+                                    iRequest !==
+                                    this._iLoadRequest
+                                ) {
+                                    return;
+                                }
+
+                                console.error(
+                                    "[DM CONTROLLER] Error:",
+                                    oError
+                                );
+
+                                MessageBox.error(
+                                    oError &&
+                                    oError.message
+                                        ? oError.message
+                                        : "Error al consultar los datos de SAP."
+                                );
+                            }.bind(this)
+                        )
+                        .finally(
+                            function () {
+                                if (
+                                    iRequest ===
+                                    this._iLoadRequest
+                                ) {
+                                    this._oModel
+                                        .setProperty(
+                                            "/loading",
+                                            false
+                                        );
+                                }
+                            }.bind(this)
                         );
+                },
 
-                        oData.loading = false;
+            _getInitialData:
+                function (
+                    iYear
+                ) {
+                    return {
+                        loading:
+                            false,
 
-                        this._oModel.setData(oData);
+                        filters: {
+                            periodo:
+                                String(
+                                    iYear
+                                ),
 
-                        MessageToast.show(
-                            "Filtros aplicados correctamente."
-                        );
-                    }.bind(this),
-                    120
-                );
-            },
+                            fechaDesde:
+                                "01/01/" +
+                                iYear,
 
-            _cloneObject: function (oObject) {
-                return JSON.parse(
-                    JSON.stringify(oObject)
-                );
-            },
+                            fechaHasta:
+                                "31/12/" +
+                                iYear,
 
-            _getInitialData: function () {
-                return {
-                    loading: false,
+                            zona:
+                                "TODAS",
 
-                    filters: {
-                        periodo: "2024-05",
-                        fechaDesde: "01/05/2024",
-                        fechaHasta: "31/05/2024",
-                        zona: "TODAS",
-                        supervisor: "TODOS",
-                        turno: "TODOS",
-                        tipoServicio: "TODAS",
-                        especialidad: "TODAS",
-                        estado: "TODOS"
-                    },
+                            supervisor:
+                                "TODOS",
 
-                    catalogos: {
-                        periodos: [
-                            {
-                                key: "2024-05",
-                                text: "Mayo 2024"
-                            },
-                            {
-                                key: "2024-06",
-                                text: "Junio 2024"
-                            },
-                            {
-                                key: "2024-07",
-                                text: "Julio 2024"
-                            }
-                        ],
+                            turno:
+                                "TODOS",
 
-                        zonas: [
-                            {
-                                key: "TODAS",
-                                text: "Todas"
-                            },
-                            {
-                                key: "NORTE",
-                                text: "Norte"
-                            },
-                            {
-                                key: "CENTRO",
-                                text: "Centro"
-                            },
-                            {
-                                key: "SUR",
-                                text: "Sur"
-                            },
-                            {
-                                key: "ESTE",
-                                text: "Este"
-                            },
-                            {
-                                key: "OESTE",
-                                text: "Oeste"
-                            }
-                        ],
+                            tipoServicio:
+                                "TODAS",
 
-                        supervisores: [
-                            {
-                                key: "TODOS",
-                                text: "Todos"
-                            },
-                            {
-                                key: "SUP01",
-                                text: "Supervisor 01"
-                            },
-                            {
-                                key: "SUP02",
-                                text: "Supervisor 02"
-                            }
-                        ],
+                            especialidad:
+                                "TODAS",
+
+                            estado:
+                                "TODOS"
+                        },
+
+                        catalogos: {
+                            periodos:
+                                this._buildYearCatalog(
+                                    iYear
+                                ),
+
+                            zonas: [
+                                {
+                                    key:
+                                        "TODAS",
+
+                                    text:
+                                        "Todas"
+                                }
+                            ],
+
+                            supervisores: [
+                                {
+                                    key:
+                                        "TODOS",
+
+                                    text:
+                                        "Todos"
+                                }
+                            ],
+
+                            turnos: [
+                                {
+                                    key:
+                                        "TODOS",
+
+                                    text:
+                                        "Todos"
+                                }
+                            ],
+
+                            tiposServicio: [
+                                {
+                                    key:
+                                        "TODAS",
+
+                                    text:
+                                        "Todas"
+                                }
+                            ],
+
+                            especialidades: [
+                                {
+                                    key:
+                                        "TODAS",
+
+                                    text:
+                                        "Todas"
+                                }
+                            ],
+
+                            estados: [
+                                {
+                                    key:
+                                        "TODOS",
+
+                                    text:
+                                        "Todos"
+                                }
+                            ]
+                        },
+
+                        kpis: {
+                            activos:
+                                "Sin datos",
+
+                            disponibles:
+                                "Sin datos",
+
+                            disponiblesPct:
+                                "Sin datos",
+
+                            sobrecapacidad:
+                                "Sin datos",
+
+                            sobrecapacidadPct:
+                                "Sin datos",
+
+                            cobertura:
+                                "Sin datos"
+                        },
 
                         turnos: [
                             {
-                                key: "TODOS",
-                                text: "Todos"
+                                label:
+                                    "Diurno",
+                                value:
+                                    "Sin datos",
+                                pct:
+                                    0,
+                                pctText:
+                                    "Sin datos",
+                                tone:
+                                    "blue"
                             },
                             {
-                                key: "DIURNO",
-                                text: "Diurno"
+                                label:
+                                    "Nocturno",
+                                value:
+                                    "Sin datos",
+                                pct:
+                                    0,
+                                pctText:
+                                    "Sin datos",
+                                tone:
+                                    "green"
                             },
                             {
-                                key: "NOCTURNO",
-                                text: "Nocturno"
-                            },
-                            {
-                                key: "FIN_SEMANA",
-                                text: "Fin de semana"
+                                label:
+                                    "Fin de semana",
+                                value:
+                                    "Sin datos",
+                                pct:
+                                    0,
+                                pctText:
+                                    "Sin datos",
+                                tone:
+                                    "purple"
                             }
                         ],
 
-                        tiposServicio: [
+                        utilTurno: [
                             {
-                                key: "TODAS",
-                                text: "Todas"
+                                turno:
+                                    "Diurno",
+                                capacidad:
+                                    "Sin datos",
+                                carga:
+                                    "Sin datos",
+                                utilizacion:
+                                    "Sin datos",
+                                percentValue:
+                                    0,
+                                tone:
+                                    "green"
                             },
                             {
-                                key: "MANTENIMIENTO",
-                                text: "Mantenimiento planeado"
+                                turno:
+                                    "Nocturno",
+                                capacidad:
+                                    "Sin datos",
+                                carga:
+                                    "Sin datos",
+                                utilizacion:
+                                    "Sin datos",
+                                percentValue:
+                                    0,
+                                tone:
+                                    "orange"
                             },
                             {
-                                key: "REPARACION",
-                                text: "Reparación / correctivo"
-                            },
-                            {
-                                key: "CALL_CENTER",
-                                text: "Call Center"
+                                turno:
+                                    "Fin de semana",
+                                capacidad:
+                                    "Sin datos",
+                                carga:
+                                    "Sin datos",
+                                utilizacion:
+                                    "Sin datos",
+                                percentValue:
+                                    0,
+                                tone:
+                                    "red"
                             }
                         ],
 
-                        especialidades: [
+                        utilTotal: {
+                            capacidad:
+                                "Sin datos",
+
+                            carga:
+                                "Sin datos",
+
+                            utilizacion:
+                                "Sin datos",
+
+                            percentValue:
+                                0,
+
+                            tone:
+                                "gray"
+                        },
+
+                        zonas:
+                            [],
+
+                        presion:
+                            [],
+
+                        estadoPlantilla: [
                             {
-                                key: "TODAS",
-                                text: "Todas"
+                                label:
+                                    "Disponibles",
+                                value:
+                                    "0",
+                                pct:
+                                    "0.0%",
+                                tone:
+                                    "green"
                             },
                             {
-                                key: "MECANICA",
-                                text: "Mecánica"
+                                label:
+                                    "Dentro de capacidad",
+                                value:
+                                    "0",
+                                pct:
+                                    "0.0%",
+                                tone:
+                                    "blue"
                             },
                             {
-                                key: "ELECTRICA",
-                                text: "Eléctrica"
+                                label:
+                                    "Cerca de saturación",
+                                value:
+                                    "0",
+                                pct:
+                                    "0.0%",
+                                tone:
+                                    "orange"
                             },
                             {
-                                key: "ELECTRONICA",
-                                text: "Electrónica"
+                                label:
+                                    "Sobre capacidad",
+                                value:
+                                    "0",
+                                pct:
+                                    "0.0%",
+                                tone:
+                                    "red"
                             },
                             {
-                                key: "HIDRAULICA",
-                                text: "Hidráulica"
+                                label:
+                                    "Inactivos",
+                                value:
+                                    "0",
+                                pct:
+                                    "0.0%",
+                                tone:
+                                    "gray"
                             }
                         ],
 
-                        estados: [
+                        servicios: [
                             {
-                                key: "TODOS",
-                                text: "Todos"
+                                label:
+                                    "Sin datos",
+                                programadas:
+                                    "Sin datos",
+                                reales:
+                                    "Sin datos",
+                                programadasLevel:
+                                    "8",
+                                realesLevel:
+                                    "8"
                             },
                             {
-                                key: "DISPONIBLES",
-                                text: "Disponibles"
+                                label:
+                                    "Sin datos",
+                                programadas:
+                                    "Sin datos",
+                                reales:
+                                    "Sin datos",
+                                programadasLevel:
+                                    "8",
+                                realesLevel:
+                                    "8"
                             },
                             {
-                                key: "DENTRO_CAPACIDAD",
-                                text: "Dentro de capacidad"
-                            },
-                            {
-                                key: "CERCA_SATURACION",
-                                text: "Cerca de saturación"
-                            },
-                            {
-                                key: "SOBRE_CAPACIDAD",
-                                text: "Sobre capacidad"
+                                label:
+                                    "Sin datos",
+                                programadas:
+                                    "Sin datos",
+                                reales:
+                                    "Sin datos",
+                                programadasLevel:
+                                    "8",
+                                realesLevel:
+                                    "8"
                             }
-                        ]
-                    },
+                        ],
 
-                    kpis: {
-                        activos: 76,
-                        disponibles: 14,
-                        disponiblesPct: "18.4% de la plantilla",
-                        sobrecapacidad: 9,
-                        sobrecapacidadPct: "11.8% de la plantilla",
-                        cobertura: "94%"
-                    },
-
-                    turnos: [
-                        {
-                            label: "Diurno",
-                            value: 48,
-                            pct: 63.2,
-                            pctText: "63.2%",
-                            tone: "blue"
-                        },
-                        {
-                            label: "Nocturno",
-                            value: 16,
-                            pct: 21.1,
-                            pctText: "21.1%",
-                            tone: "green"
-                        },
-                        {
-                            label: "Fin de semana",
-                            value: 12,
-                            pct: 15.8,
-                            pctText: "15.8%",
-                            tone: "purple"
-                        }
-                    ],
-
-                    utilTurno: [
-                        {
-                            turno: "Diurno",
-                            capacidad: "4,032 h",
-                            carga: "3,420 h",
-                            utilizacion: "84.9%",
-                            percentValue: 84.9,
-                            tone: "green"
-                        },
-                        {
-                            turno: "Nocturno",
-                            capacidad: "1,344 h",
-                            carga: "1,278 h",
-                            utilizacion: "95.1%",
-                            percentValue: 95.1,
-                            tone: "orange"
-                        },
-                        {
-                            turno: "Fin de semana",
-                            capacidad: "1,024 h",
-                            carga: "1,202 h",
-                            utilizacion: "117.4%",
-                            percentValue: 100,
-                            tone: "red"
-                        }
-                    ],
-
-                    utilTotal: {
-                        capacidad: "6,400 h",
-                        carga: "5,900 h",
-                        utilizacion: "92.1%",
-                        percentValue: 92.1,
-                        tone: "green"
-                    },
-
-                    /*
-                     * Datos para la card:
-                     * Cobertura de mecánicos por zona.
-                     *
-                     * cobertura:
-                     * texto mostrado junto a la gráfica.
-                     *
-                     * percentValue:
-                     * valor usado por ProgressIndicator.
-                     * SAPUI5 acepta un máximo visual de 100.
-                     *
-                     * tone:
-                     * controla el color de la barra, porcentaje,
-                     * punto y texto del estado.
-                     */
-                    zonas: [
-                        {
-                            zona: "Norte",
-                            mecanicos: "18",
-                            horasDisponibles: "1,800 h",
-                            carga: "1,450 h",
-                            cobertura: "100%",
-                            percentValue: 100,
-                            estado: "Balanceado",
-                            tone: "green"
-                        },
-                        {
-                            zona: "Centro",
-                            mecanicos: "15",
-                            horasDisponibles: "1,500 h",
-                            carga: "1,300 h",
-                            cobertura: "100%",
-                            percentValue: 100,
-                            estado: "Balanceado",
-                            tone: "green"
-                        },
-                        {
-                            zona: "Sur",
-                            mecanicos: "14",
-                            horasDisponibles: "1,200 h",
-                            carga: "960 h",
-                            cobertura: "120%",
-                            percentValue: 100,
-                            estado: "Balance adecuado",
-                            tone: "orange"
-                        },
-                        {
-                            zona: "Este",
-                            mecanicos: "12",
-                            horasDisponibles: "1,100 h",
-                            carga: "780 h",
-                            cobertura: "100%",
-                            percentValue: 100,
-                            estado: "Capacidad disponible",
-                            tone: "green"
-                        },
-                        {
-                            zona: "Oeste",
-                            mecanicos: "17",
-                            horasDisponibles: "1,200 h",
-                            carga: "620 h",
-                            cobertura: "100%",
-                            percentValue: 100,
-                            estado: "Capacidad disponible",
-                            tone: "green"
-                        }
-                    ],
-
-                    estadoPlantilla: [
-                        {
-                            label: "Disponibles",
-                            value: "14",
-                            pct: "18.4%",
-                            tone: "green"
-                        },
-                        {
-                            label: "Dentro de capacidad",
-                            value: "43",
-                            pct: "56.6%",
-                            tone: "blue"
-                        },
-                        {
-                            label: "Cerca de saturación",
-                            value: "10",
-                            pct: "13.2%",
-                            tone: "orange"
-                        },
-                        {
-                            label: "Sobre capacidad",
-                            value: "9",
-                            pct: "11.8%",
-                            tone: "red"
-                        },
-                        {
-                            label: "Inactivos",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "gray"
-                        }
-                    ],
-
-                    servicios: [
-                        {
-                            label: "Mantenimiento planeado",
-                            programadas: "3,200",
-                            reales: "3,050",
-                            programadasLevel: "100",
-                            realesLevel: "95"
-                        },
-                        {
-                            label: "Reparación / correctivo",
-                            programadas: "1,700",
-                            reales: "1,910",
-                            programadasLevel: "54",
-                            realesLevel: "60"
-                        },
-                        {
-                            label: "Call Center",
-                            programadas: "1,000",
-                            reales: "882",
-                            programadasLevel: "32",
-                            realesLevel: "28"
-                        }
-                    ],
-
-                    presion: [
-                        {
-                            zona: "Sur",
-                            utilizacion: "117.4%",
-                            percentValue: 100,
-                            ordenes: "8.8",
-                            estado: "Crítico",
-                            tone: "red"
-                        },
-                        {
-                            zona: "Norte",
-                            utilizacion: "101.3%",
-                            percentValue: 100,
-                            ordenes: "7.1",
-                            estado: "Sobrecargado",
-                            tone: "red"
-                        },
-                        {
-                            zona: "Centro",
-                            utilizacion: "95.1%",
-                            percentValue: 95.1,
-                            ordenes: "6.4",
-                            estado: "Cerca de saturación",
-                            tone: "orange"
-                        },
-                        {
-                            zona: "Este",
-                            utilizacion: "64.6%",
-                            percentValue: 64.6,
-                            ordenes: "4.2",
-                            estado: "Balanceado",
-                            tone: "green"
-                        },
-                        {
-                            zona: "Oeste",
-                            utilizacion: "48.3%",
-                            percentValue: 48.3,
-                            ordenes: "3.1",
-                            estado: "Capacidad disponible",
-                            tone: "green"
-                        }
-                    ]
-                };
-            }
-
+                        meta:
+                            {}
+                    };
+                }
         }
     );
 });

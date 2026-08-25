@@ -1,495 +1,196 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/dom/includeStylesheet",
+    "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/m/MessageToast",
-    "sap/ui/export/Spreadsheet"
-], function (
-    Controller,
-    JSONModel,
-    Filter,
-    FilterOperator,
-    MessageToast,
-    Spreadsheet
-) {
+    "mantenimiento/model/DetalleCapacidadCargaService"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Filter, FilterOperator, Service) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleCapacidadCarga", {
-
         onInit: function () {
-            var oData = {
-                filtros: {
-                    periodo: "MAYO_2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
-                    zona: "TODAS",
-                    turno: "TODOS",
-                    supervisor: "TODOS"
-                },
-
-                catalogos: {
-                    periodos: [
-                        { key: "MAYO_2024", text: "Mayo 2024" },
-                        { key: "ABRIL_2024", text: "Abril 2024" },
-                        { key: "JUNIO_2024", text: "Junio 2024" }
-                    ],
-                    zonas: [
-                        { key: "TODAS", text: "Todas" },
-                        { key: "NORTE", text: "Norte" },
-                        { key: "CENTRO", text: "Centro" },
-                        { key: "SUR", text: "Sur" },
-                        { key: "OESTE", text: "Oeste" }
-                    ],
-                    turnos: [
-                        { key: "TODOS", text: "Todos" },
-                        { key: "DIURNO", text: "Diurno" },
-                        { key: "NOCTURNO", text: "Nocturno" },
-                        { key: "FIN_SEMANA", text: "Fin de semana" }
-                    ],
-                    supervisores: [
-                        { key: "TODOS", text: "Todos" },
-                        { key: "SUP_01", text: "Supervisor 01" },
-                        { key: "SUP_02", text: "Supervisor 02" },
-                        { key: "SUP_03", text: "Supervisor 03" }
-                    ]
-                },
-
-                kpis: {
-                    capacidadDisponible: {
-                        valor: "6,400 h"
-                    },
-                    horasProgramadas: {
-                        valor: "5,900 h",
-                        subtitulo: "92.2% de la capacidad"
-                    },
-                    horasReales: {
-                        valor: "5,842 h",
-                        subtitulo: "91.2% de la capacidad"
-                    },
-                    margenDisponible: {
-                        valor: "+500 h",
-                        subtitulo: "7.8% de la capacidad"
-                    },
-                    utilizacionReal: {
-                        valor: "91.2%",
-                        subtitulo: "< 100% de la capacidad"
-                    }
-                },
-
-                resumenTurno: [
-                    {
-                        icon: "sap-icon://light-mode",
-                        turno: "Diurno",
-                        capacidad: "4,032 h",
-                        programadas: "3,470 h",
-                        reales: "3,380 h",
-                        utilizacion: "84.9%",
-                        estado: "Normal"
-                    },
-                    {
-                        icon: "sap-icon://lateness",
-                        turno: "Nocturno",
-                        capacidad: "1,344 h",
-                        programadas: "1,278 h",
-                        reales: "1,310 h",
-                        utilizacion: "95.1%",
-                        estado: "Cerca de saturación"
-                    },
-                    {
-                        icon: "sap-icon://calendar",
-                        turno: "Fin de semana",
-                        capacidad: "1,024 h",
-                        programadas: "1,202 h",
-                        reales: "1,152 h",
-                        utilizacion: "117.4%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        icon: "sap-icon://sum",
-                        turno: "Total",
-                        capacidad: "6,400 h",
-                        programadas: "5,900 h",
-                        reales: "5,842 h",
-                        utilizacion: "91.2%",
-                        estado: "-"
-                    }
-                ],
-
-                detalles: [
-                    {
-                        zona: "Norte",
-                        turno: "Diurno",
-                        capacidad: "900",
-                        programadas: "860",
-                        reales: "875",
-                        margen: "25",
-                        utilizacion: "97.2%",
-                        variacionProgH: "+15",
-                        variacionProgP: "+1.7%",
-                        estado: "Cerca de saturación"
-                    },
-                    {
-                        zona: "Norte",
-                        turno: "Nocturno",
-                        capacidad: "300",
-                        programadas: "320",
-                        reales: "355",
-                        margen: "-55",
-                        utilizacion: "118.3%",
-                        variacionProgH: "+35",
-                        variacionProgP: "+10.9%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Norte",
-                        turno: "Fin de semana",
-                        capacidad: "300",
-                        programadas: "340",
-                        reales: "365",
-                        margen: "-65",
-                        utilizacion: "121.7%",
-                        variacionProgH: "+25",
-                        variacionProgP: "+7.4%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Centro",
-                        turno: "Diurno",
-                        capacidad: "1,100",
-                        programadas: "940",
-                        reales: "920",
-                        margen: "180",
-                        utilizacion: "83.6%",
-                        variacionProgH: "-20",
-                        variacionProgP: "-2.1%",
-                        estado: "Normal"
-                    },
-                    {
-                        zona: "Centro",
-                        turno: "Nocturno",
-                        capacidad: "400",
-                        programadas: "360",
-                        reales: "380",
-                        margen: "20",
-                        utilizacion: "95.0%",
-                        variacionProgH: "+20",
-                        variacionProgP: "+5.6%",
-                        estado: "Cerca de saturación"
-                    },
-                    {
-                        zona: "Centro",
-                        turno: "Fin de semana",
-                        capacidad: "300",
-                        programadas: "320",
-                        reales: "315",
-                        margen: "-15",
-                        utilizacion: "105.0%",
-                        variacionProgH: "-5",
-                        variacionProgP: "-1.6%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Sur",
-                        turno: "Diurno",
-                        capacidad: "1,000",
-                        programadas: "930",
-                        reales: "900",
-                        margen: "100",
-                        utilizacion: "90.0%",
-                        variacionProgH: "-30",
-                        variacionProgP: "-3.2%",
-                        estado: "Normal"
-                    },
-                    {
-                        zona: "Sur",
-                        turno: "Nocturno",
-                        capacidad: "300",
-                        programadas: "320",
-                        reales: "335",
-                        margen: "-35",
-                        utilizacion: "111.7%",
-                        variacionProgH: "+15",
-                        variacionProgP: "+4.7%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Sur",
-                        turno: "Fin de semana",
-                        capacidad: "258",
-                        programadas: "280",
-                        reales: "270",
-                        margen: "-12",
-                        utilizacion: "104.7%",
-                        variacionProgH: "-10",
-                        variacionProgP: "-3.6%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Oeste",
-                        turno: "Diurno",
-                        capacidad: "398",
-                        programadas: "690",
-                        reales: "615",
-                        margen: "-217",
-                        utilizacion: "154.5%",
-                        variacionProgH: "-75",
-                        variacionProgP: "-10.9%",
-                        estado: "Sobrecargado"
-                    },
-                    {
-                        zona: "Oeste",
-                        turno: "Nocturno",
-                        capacidad: "374",
-                        programadas: "350",
-                        reales: "330",
-                        margen: "44",
-                        utilizacion: "88.2%",
-                        variacionProgH: "-20",
-                        variacionProgP: "-5.7%",
-                        estado: "Normal"
-                    },
-                    {
-                        zona: "Oeste",
-                        turno: "Fin de semana",
-                        capacidad: "274",
-                        programadas: "262",
-                        reales: "237",
-                        margen: "37",
-                        utilizacion: "86.5%",
-                        variacionProgH: "-25",
-                        variacionProgP: "-9.5%",
-                        estado: "Normal"
-                    }
-                ],
-
-                paginacion: {
-                    pageSize: "10",
-                    paginaActual: 1
-                }
+            this._requestId = 0;
+            this._filters = {
+                periodo: "2026",
+                fechaDesde: "01/01/2026",
+                fechaHasta: "31/12/2026",
+                zona: "TODOS",
+                turno: "TODOS",
+                supervisor: "TODOS"
             };
+            this._loadStyles();
+            this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)));
+            this.getView().getModel().setSizeLimit(2000);
+            this._wireFilterEvents();
+            this._load(false);
+        },
 
-            var oModel = new JSONModel(oData);
-            this.getView().setModel(oModel);
+        _loadStyles: function () {
+            var id = "detalleCapacidadCargaStylesheet";
+            if (!document.getElementById(id)) {
+                includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleCapacidadCarga.css") + "?v=20260824-odata", id);
+            }
+        },
+
+        _getODataModel: function () {
+            var component = this.getOwnerComponent();
+            return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
+        },
+
+        _currentFilters: function () {
+            var current = this.getView().getModel().getProperty("/filtros") || {};
+            return {
+                periodo: current.periodo || "2026",
+                fechaDesde: current.fechaDesde || "01/01/2026",
+                fechaHasta: current.fechaHasta || "31/12/2026",
+                zona: current.zona || "TODOS",
+                turno: current.turno || "TODOS",
+                supervisor: current.supervisor || "TODOS"
+            };
+        },
+
+        /* La vista recibida no trae IDs en los filtros; se enlazan aquí sin cambiar su diseño XML. */
+        _wireFilterEvents: function () {
+            var combos = this._findDescendants(this.getView(), function (control) {
+                return control.isA && control.isA("sap.m.ComboBox");
+            });
+            var dates = this._findDescendants(this.getView(), function (control) {
+                return control.isA && control.isA("sap.m.DatePicker");
+            });
+            if (combos[0]) { combos[0].attachChange(this.onPeriodoChange, this); }
+            dates.forEach(function (control) { control.attachChange(this.onFechaChange, this); }.bind(this));
+        },
+
+        onPeriodoChange: function (event) {
+            var year = String(event.getSource().getSelectedKey() || "");
+            var model = this.getView().getModel();
+            if (!/^\d{4}$/.test(year)) { return; }
+            model.setProperty("/filtros/periodo", year);
+            model.setProperty("/filtros/fechaDesde", "01/01/" + year);
+            model.setProperty("/filtros/fechaHasta", "31/12/" + year);
+        },
+
+        onFechaChange: function () {
+            var filters = this._currentFilters();
+            var from = String(filters.fechaDesde).match(/^\d{2}\/\d{2}\/(\d{4})$/);
+            var to = String(filters.fechaHasta).match(/^\d{2}\/\d{2}\/(\d{4})$/);
+            if (from && to && from[1] === to[1]) {
+                this.getView().getModel().setProperty("/filtros/periodo", from[1]);
+            }
         },
 
         onApplyFilters: function () {
-            MessageToast.show("Filtros aplicados");
-
-            /*
-             * Aquí después conectas tu OData.
-             *
-             * Ejemplo:
-             * var oFiltros = this.getView().getModel().getProperty("/filtros");
-             * this._consultarDetalleCapacidad(oFiltros);
-             */
+            this._filters = this._currentFilters();
+            this._load(true);
         },
 
-        onSearch: function (oEvent) {
-            var sQuery = oEvent.getParameter("query");
+        _load: function (notify) {
+            var requestId = ++this._requestId;
+            var view = this.getView();
+            view.setBusy(true);
+            Service.load(this._getODataModel(), this._filters).then(function (response) {
+                if (requestId !== this._requestId) { return; }
+                view.getModel().setData(response.data);
+                this._renderDonut(response.data.charts);
+                if (notify) { MessageToast.show("Detalle de capacidad actualizado con datos de SAP"); }
+            }.bind(this), function (error) {
+                if (requestId !== this._requestId) { return; }
+                view.getModel().setData(Service.createEmpty(this._filters));
+                MessageToast.show(error && error.message ? error.message : "No fue posible consultar el detalle de capacidad");
+            }.bind(this)).then(function () {
+                if (requestId === this._requestId) { view.setBusy(false); }
+            }.bind(this));
+        },
 
-            if (sQuery === undefined) {
-                sQuery = oEvent.getParameter("newValue") || "";
+        _renderDonut: function (charts) {
+            var values = this._findDescendants(this.getView(), function (control) {
+                return control.hasStyleClass && control.hasStyleClass("dccLegendValue");
+            });
+            var html = this._findDescendants(this.getView(), function (control) {
+                return control.isA && control.isA("sap.ui.core.HTML");
+            })[0];
+            if (html) {
+                html.setContent('<div class="dccDonut"><div class="dccDonutHole"><span>Capacidad</span><strong>' + this._escape(charts.total) + '</strong></div><span class="dccDonutPercent dccPctOrange">' + this._escape(charts.plannedPct) + '</span><span class="dccDonutPercent dccPctGreen">' + this._escape(charts.capacityPct) + '</span><span class="dccDonutPercent dccPctBlue">' + this._escape(charts.actualPct) + '</span></div>');
             }
+            [charts.capacity, charts.planned, charts.actual].forEach(function (value, index) {
+                if (values[index]) { values[index].setText(value); }
+            });
+        },
 
-            var oTable = this.byId("detalleTable");
-            var oBinding = oTable.getBinding("items");
-
-            if (!sQuery) {
-                oBinding.filter([]);
-                return;
+        _findDescendants: function (root, predicate) {
+            var result = [];
+            function visit(control) {
+                var content;
+                if (!control) { return; }
+                if (predicate(control)) { result.push(control); }
+                if (control.getItems) { (control.getItems() || []).forEach(visit); }
+                if (control.getContent && !(control.isA && control.isA("sap.ui.core.HTML"))) {
+                    content = control.getContent();
+                    if (Array.isArray(content)) { content.forEach(visit); }
+                }
             }
+            visit(root);
+            return result;
+        },
 
-            var oFilter = new Filter({
+        _escape: function (value) {
+            return String(value || "").replace(/[&<>"']/g, function (character) {
+                return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character];
+            });
+        },
+
+        onSearch: function (event) {
+            var value = event.getParameter("newValue") || event.getParameter("query") || "";
+            var table = this.byId("detalleTable");
+            var binding = table && table.getBinding("items");
+            if (!binding) { return; }
+            if (!value) { binding.filter([]); return; }
+            binding.filter([new Filter({
                 filters: [
-                    new Filter("zona", FilterOperator.Contains, sQuery),
-                    new Filter("turno", FilterOperator.Contains, sQuery),
-                    new Filter("estado", FilterOperator.Contains, sQuery)
+                    new Filter("zona", FilterOperator.Contains, value),
+                    new Filter("turno", FilterOperator.Contains, value),
+                    new Filter("estado", FilterOperator.Contains, value)
                 ],
                 and: false
-            });
-
-            oBinding.filter([oFilter]);
+            })]);
         },
 
         onColumns: function () {
-            MessageToast.show("Configuración de columnas pendiente");
-        },
-
-        onChangePageSize: function () {
-            MessageToast.show("Tamaño de página actualizado");
+            MessageToast.show("Las columnas visibles corresponden al detalle de capacidad, plan, real y utilización.");
         },
 
         onExport: function () {
-            var oModel = this.getView().getModel();
-            var aData = oModel.getProperty("/detalles");
-
-            var aColumns = [
-                { label: "Zona", property: "zona" },
-                { label: "Turno", property: "turno" },
-                { label: "Capacidad disponible (h)", property: "capacidad" },
-                { label: "Horas programadas (h)", property: "programadas" },
-                { label: "Horas reales (h)", property: "reales" },
-                { label: "Margen (h)", property: "margen" },
-                { label: "Utilización real / capacidad", property: "utilizacion" },
-                { label: "Variación vs programada (h)", property: "variacionProgH" },
-                { label: "Variación vs programada (%)", property: "variacionProgP" },
-                { label: "Estado", property: "estado" }
-            ];
-
-            var oSheet = new Spreadsheet({
-                workbook: {
-                    columns: aColumns
-                },
-                dataSource: aData,
-                fileName: "Detalle_Capacidad_vs_Carga_Programada.xlsx"
-            });
-
-            oSheet.build()
-                .then(function () {
-                    MessageToast.show("Archivo exportado correctamente");
-                })
-                .finally(function () {
-                    oSheet.destroy();
+            var rows = this.getView().getModel().getProperty("/detalles") || [];
+            var headers = ["Zona", "Turno", "Capacidad disponible (h)", "Horas programadas (h)", "Horas reales (h)", "Margen (h)", "Utilización real / capacidad", "Variación vs programada (h)", "Variación vs programada (%)", "Estado"];
+            var csv = [headers].concat(rows.map(function (row) {
+                return [row.zona, row.turno, row.capacidad, row.programadas, row.reales, row.margen, row.utilizacion, row.variacionProgH, row.variacionProgP, row.estado].map(function (value) {
+                    return '"' + String(value || "").replace(/"/g, '""') + '"';
                 });
+            })).map(function (row) { return row.join(";"); }).join("\r\n");
+            var anchor = document.createElement("a");
+            var url = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+            anchor.href = url;
+            anchor.download = "detalle-capacidad-carga.csv";
+            anchor.click();
+            URL.revokeObjectURL(url);
         },
 
-        /* ========================================================= */
-        /* Formatters - Resumen por turno                            */
-        /* ========================================================= */
-
-        formatTurnoIconColor: function (sTurno) {
-            switch (sTurno) {
-                case "Diurno":
-                    return "#f59e0b";
-                case "Nocturno":
-                    return "#2563eb";
-                case "Fin de semana":
-                    return "#0d6efd";
-                case "Total":
-                    return "#2563eb";
-                default:
-                    return "#64748b";
-            }
+        onChangePageSize: function (event) {
+            this.getView().getModel().setProperty("/paginacion/pageSize", event.getSource().getSelectedKey());
         },
 
-        formatEstadoColor: function (sEstado) {
-            switch (sEstado) {
-                case "Normal":
-                    return "#16a34a";
-                case "Cerca de saturación":
-                    return "#f59e0b";
-                case "Sobrecargado":
-                    return "#ef4444";
-                default:
-                    return "#64748b";
-            }
+        formatUtilizacionState: function (value) {
+            var numberValue = Number(String(value || "").replace("%", ""));
+            if (!Number.isFinite(numberValue)) { return "None"; }
+            return numberValue >= 100 ? "Error" : numberValue >= 90 ? "Warning" : "Success";
         },
-
-        formatEstadoCircleVisible: function (sEstado) {
-            return sEstado === "Normal" ||
-                sEstado === "Cerca de saturación" ||
-                sEstado === "Sobrecargado";
-        },
-
-        /* ========================================================= */
-        /* Formatters generales                                      */
-        /* ========================================================= */
-
-        formatUtilizacionState: function (sValue) {
-            var fValue = this._parsePercent(sValue);
-
-            if (fValue >= 100) {
-                return "Error";
-            }
-
-            if (fValue >= 95) {
-                return "Warning";
-            }
-
-            return "Success";
-        },
-
-        formatMargenState: function (sValue) {
-            var fValue = this._parseNumber(sValue);
-
-            if (fValue < 0) {
-                return "Error";
-            }
-
-            if (fValue <= 30) {
-                return "Warning";
-            }
-
-            return "Success";
-        },
-
-        formatTrendState: function (sValue) {
-            var fValue = this._parseNumber(sValue);
-
-            if (fValue > 0) {
-                return "Error";
-            }
-
-            if (fValue < 0) {
-                return "Success";
-            }
-
-            return "None";
-        },
-
-        formatEstadoState: function (sEstado) {
-            switch (sEstado) {
-                case "Normal":
-                    return "Success";
-                case "Cerca de saturación":
-                    return "Warning";
-                case "Sobrecargado":
-                    return "Error";
-                default:
-                    return "None";
-            }
-        },
-
-        formatEstadoIcon: function (sEstado) {
-            switch (sEstado) {
-                case "Normal":
-                    return "sap-icon://sys-enter-2";
-                case "Cerca de saturación":
-                    return "sap-icon://alert";
-                case "Sobrecargado":
-                    return "sap-icon://error";
-                default:
-                    return "";
-            }
-        },
-
-        _parsePercent: function (sValue) {
-            if (!sValue) {
-                return 0;
-            }
-
-            return parseFloat(
-                String(sValue)
-                    .replace("%", "")
-                    .replace(",", "")
-                    .trim()
-            ) || 0;
-        },
-
-        _parseNumber: function (sValue) {
-            if (!sValue) {
-                return 0;
-            }
-
-            return parseFloat(
-                String(sValue)
-                    .replace("%", "")
-                    .replace(",", "")
-                    .replace("+", "")
-                    .trim()
-            ) || 0;
-        }
-
+        formatMargenState: function (value) { return String(value || "").indexOf("-") === 0 ? "Error" : "Success"; },
+        formatTrendState: function (value) { return String(value || "").indexOf("+") === 0 ? "Error" : "Success"; },
+        formatEstadoState: function (value) { return value === "Sobrecargado" ? "Error" : value === "Cerca de saturación" ? "Warning" : value === "Normal" ? "Success" : "None"; },
+        formatEstadoColor: function (value) { return value === "Sobrecargado" ? "#ef4444" : value === "Cerca de saturación" ? "#f59e0b" : value === "Normal" ? "#16a34a" : "#94a3b8"; },
+        formatEstadoCircleVisible: function (value) { return value !== "Sin datos"; },
+        formatTurnoIconColor: function (value) { return String(value || "").toUpperCase().indexOf("NOCT") >= 0 ? "#7c3aed" : String(value || "").toUpperCase().indexOf("FIN") >= 0 ? "#ef4444" : "#2563eb"; }
     });
 });

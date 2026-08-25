@@ -8,16 +8,16 @@
         id="vistaSupervisorPage"
         showHeader="false"
         enableScrolling="false"
+        busy="{supervisor>/busy}"
+        busyIndicatorDelay="0"
         class="vistaSupervisorPage">
 
         <content>
+
             <VBox class="vsDashboard">
 
-                <!-- ===================================================== -->
-                <!-- ENCABEZADO                                            -->
-                <!-- ===================================================== -->
-
                 <VBox class="vsHeaderBlock">
+
                     <Title
                         text="Vista Supervisor"
                         level="H1"
@@ -26,107 +26,111 @@
                     <Text
                         text="Resumen ejecutivo de recursos asignados"
                         class="vsPageSubtitle" />
+
                 </VBox>
 
-                <!-- ===================================================== -->
-                <!-- FILTROS                                               -->
-                <!-- ===================================================== -->
+                <!-- FILTROS -->
 
                 <HBox
                     class="vsFilterRow"
                     alignItems="End">
 
-                    <VBox class="vsFilterCard vsFilterPeriod">
+                    <VBox
+                        class="vsFilterCard vsFilterPeriod">
+
                         <Label
                             text="Periodo"
                             class="vsFilterLabel" />
 
                         <Select
-                            id="periodSelect"
                             width="100%"
                             selectedKey="{supervisor>/filters/period}"
-                            change=".onFilterChange"
+                            change=".onPeriodChange"
+                            items="{supervisor>/catalogs/periods}"
                             class="vsFilterControl">
 
-                            <core:Item key="05-2025" text="Mayo 2025" />
-                            <core:Item key="04-2025" text="Abril 2025" />
-                            <core:Item key="03-2025" text="Marzo 2025" />
+                            <core:Item
+                                key="{supervisor>key}"
+                                text="{supervisor>text}" />
+
                         </Select>
+
                     </VBox>
 
                     <VBox class="vsFilterCard">
+
                         <Label
                             text="Fecha desde"
                             class="vsFilterLabel" />
 
                         <DatePicker
-                            id="dateFrom"
                             width="100%"
                             value="{supervisor>/filters/dateFrom}"
                             valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
-                            change=".onFilterChange"
+                            change=".onDateChange"
                             class="vsFilterControl" />
+
                     </VBox>
 
                     <VBox class="vsFilterCard">
+
                         <Label
                             text="Fecha hasta"
                             class="vsFilterLabel" />
 
                         <DatePicker
-                            id="dateTo"
                             width="100%"
                             value="{supervisor>/filters/dateTo}"
                             valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
-                            change=".onFilterChange"
+                            change=".onDateChange"
                             class="vsFilterControl" />
+
                     </VBox>
 
-                    <VBox class="vsFilterCard vsFilterWide">
+                    <VBox
+                        class="vsFilterCard vsFilterWide">
+
                         <Label
                             text="Supervisor"
                             class="vsFilterLabel" />
 
                         <Select
-                            id="supervisorSelect"
                             width="100%"
                             selectedKey="{supervisor>/filters/supervisor}"
                             change=".onFilterChange"
+                            items="{supervisor>/catalogs/supervisors}"
                             class="vsFilterControl">
 
                             <core:Item
-                                key="SERGIO_RAMIREZ"
-                                text="SERGIO RAMIREZ" />
+                                key="{supervisor>key}"
+                                text="{supervisor>text}" />
 
-                            <core:Item
-                                key="RICARDO_MARTINEZ"
-                                text="RICARDO MARTÍNEZ" />
-
-                            <core:Item
-                                key="ANA_RODRIGUEZ"
-                                text="ANA RODRÍGUEZ" />
                         </Select>
+
                     </VBox>
 
-                    <VBox class="vsFilterCard vsFilterShift">
+                    <VBox
+                        class="vsFilterCard vsFilterShift">
+
                         <Label
                             text="Turno"
                             class="vsFilterLabel" />
 
                         <Select
-                            id="shiftSelect"
                             width="100%"
                             selectedKey="{supervisor>/filters/shift}"
                             change=".onFilterChange"
+                            items="{supervisor>/catalogs/shifts}"
                             class="vsFilterControl">
 
-                            <core:Item key="ALL" text="Todos" />
-                            <core:Item key="MORNING" text="Matutino" />
-                            <core:Item key="EVENING" text="Vespertino" />
-                            <core:Item key="NIGHT" text="Nocturno" />
+                            <core:Item
+                                key="{supervisor>key}"
+                                text="{supervisor>text}" />
+
                         </Select>
+
                     </VBox>
 
                     <VBox
@@ -139,18 +143,18 @@
                             type="Emphasized"
                             press=".onApplyFilters"
                             class="vsApplyButton" />
+
                     </VBox>
+
                 </HBox>
 
-                <!-- ===================================================== -->
-                <!-- KPIS                                                  -->
-                <!-- ===================================================== -->
+                <!-- KPIs -->
 
                 <HBox class="vsKpiRow">
 
-                    <!-- RECURSOS ASIGNADOS -->
+                    <VBox
+                        class="vsKpiCard vsKpiBlue vsKpiAssigned">
 
-                    <VBox class="vsKpiCard vsKpiBlue vsKpiAssigned">
                         <HBox
                             class="vsKpiContent"
                             alignItems="Center">
@@ -163,9 +167,11 @@
                                 <core:Icon
                                     src="sap-icon://group"
                                     class="vsKpiIcon" />
+
                             </HBox>
 
                             <VBox class="vsKpiTextBlock">
+
                                 <Text
                                     text="Recursos asignados"
                                     class="vsKpiLabel" />
@@ -177,9 +183,11 @@
                                 <Text
                                     text="Total asignados"
                                     class="vsKpiHelper" />
+
                             </VBox>
 
                             <VBox class="vsAssignedBreakdown">
+
                                 <HBox
                                     class="vsBreakdownRow"
                                     alignItems="Center">
@@ -195,6 +203,7 @@
                                     <Text
                                         text="mecánicos"
                                         class="vsBreakdownLabel" />
+
                                 </HBox>
 
                                 <HBox
@@ -212,14 +221,20 @@
                                     <Text
                                         text="ayudantes"
                                         class="vsBreakdownLabel" />
+
                                 </HBox>
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- CAPACIDAD DISPONIBLE -->
+                    <!-- CAPACIDAD -->
 
-                    <VBox class="vsKpiCard vsKpiGreen">
+                    <VBox
+                        class="vsKpiCard vsKpiGreen">
+
                         <HBox
                             class="vsKpiContent"
                             alignItems="Center">
@@ -232,36 +247,36 @@
                                 <core:Icon
                                     src="sap-icon://history"
                                     class="vsKpiIcon" />
+
                             </HBox>
 
                             <VBox class="vsKpiTextBlock">
+
                                 <Text
                                     text="Capacidad disponible"
                                     class="vsKpiLabel" />
 
-                                <HBox
-                                    alignItems="End"
-                                    class="vsKpiValueLine">
-
-                                    <Text
-                                        text="{supervisor>/kpis/availableCapacity}"
-                                        class="vsKpiValue" />
-
-                                    <Text
-                                        text="h"
-                                        class="vsKpiUnit" />
-                                </HBox>
+                                <Text
+                                    text="{supervisor>/kpis/availableCapacity}"
+                                    class="vsKpiValue" />
 
                                 <Text
                                     text="Total disponible"
                                     class="vsKpiHelper" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- CARGA PROGRAMADA -->
+                    <!-- CARGA -->
 
-                    <VBox class="vsKpiCard vsKpiOrange">
+                    <VBox
+                        busy="{supervisor>/operationalBusy}"
+                        busyIndicatorDelay="0"
+                        class="vsKpiCard vsKpiOrange">
+
                         <HBox
                             class="vsKpiContent"
                             alignItems="Center">
@@ -274,36 +289,34 @@
                                 <core:Icon
                                     src="sap-icon://task"
                                     class="vsKpiIcon" />
+
                             </HBox>
 
                             <VBox class="vsKpiTextBlock">
+
                                 <Text
                                     text="Carga programada"
                                     class="vsKpiLabel" />
 
-                                <HBox
-                                    alignItems="End"
-                                    class="vsKpiValueLine">
-
-                                    <Text
-                                        text="{supervisor>/kpis/scheduledLoad}"
-                                        class="vsKpiValue" />
-
-                                    <Text
-                                        text="h"
-                                        class="vsKpiUnit" />
-                                </HBox>
+                                <Text
+                                    text="{supervisor>/kpis/scheduledLoad}"
+                                    class="vsKpiValue" />
 
                                 <Text
                                     text="Total programada"
                                     class="vsKpiHelper" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- RECURSOS SOBRE CAPACIDAD -->
+                    <!-- SOBRE CAPACIDAD -->
 
-                    <VBox class="vsKpiCard vsKpiPurple">
+                    <VBox
+                        class="vsKpiCard vsKpiPurple">
+
                         <HBox
                             class="vsKpiContent"
                             alignItems="Center">
@@ -316,9 +329,11 @@
                                 <core:Icon
                                     src="sap-icon://message-warning"
                                     class="vsKpiIcon" />
+
                             </HBox>
 
                             <VBox class="vsKpiTextBlock">
+
                                 <Text
                                     text="Recursos sobre capacidad"
                                     class="vsKpiLabel" />
@@ -330,13 +345,18 @@
                                 <Text
                                     text="Total recursos"
                                     class="vsKpiHelper" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
 
-                    <!-- CUMPLIMIENTO OPERATIVO -->
+                    <!-- CUMPLIMIENTO -->
 
-                    <VBox class="vsKpiCard vsKpiRed">
+                    <VBox
+                        class="vsKpiCard vsKpiRed">
+
                         <HBox
                             class="vsKpiContent"
                             alignItems="Center">
@@ -349,9 +369,11 @@
                                 <core:Icon
                                     src="sap-icon://target-group"
                                     class="vsKpiIcon" />
+
                             </HBox>
 
                             <VBox class="vsKpiTextBlock">
+
                                 <Text
                                     text="Cumplimiento operativo"
                                     class="vsKpiLabel" />
@@ -361,46 +383,52 @@
                                     class="vsComplianceLine">
 
                                     <Text
-                                        text="{supervisor>/kpis/compliance}%"
+                                        text="{supervisor>/kpis/compliance}"
                                         class="vsKpiValue" />
 
                                     <Text
-                                        text="Meta: {supervisor>/kpis/complianceTarget}%"
+                                        text="{supervisor>/kpis/complianceTarget}"
                                         class="vsKpiMeta" />
+
                                 </HBox>
 
                                 <Text
-                                    text="{supervisor>/kpis/complianceGap} puntos por debajo de la meta"
+                                    text="{supervisor>/kpis/complianceGap}"
                                     class="vsKpiAlert" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
                 </HBox>
 
-                <!-- ===================================================== -->
-                <!-- CONTENIDO PRINCIPAL                                   -->
-                <!-- ===================================================== -->
+                <!-- CONTENIDO -->
 
                 <HBox
                     width="100%"
                     fitContainer="true"
                     class="vsMainRow"
-                    alignItems="Stretch"
-                    justifyContent="Start">
+                    alignItems="Stretch">
 
-                    <!-- ================================================= -->
-                    <!-- UTILIZACIÓN DE RECURSOS                           -->
-                    <!-- ================================================= -->
+                    <!-- UTILIZACIÓN -->
 
                     <VBox class="vsLeftColumn">
+
                         <layoutData>
+
                             <FlexItemData
                                 growFactor="42"
                                 shrinkFactor="1"
                                 baseSize="0%" />
+
                         </layoutData>
 
-                        <VBox class="vsCard vsUtilizationCard">
+                        <VBox
+                            busy="{supervisor>/operationalBusy}"
+                            busyIndicatorDelay="0"
+                            class="vsCard vsUtilizationCard">
 
                             <Title
                                 text="Utilización de recursos"
@@ -415,9 +443,11 @@
 
                                 <!-- CRÍTICO -->
 
-                                <VBox class="vsUtilColumn vsUtilCritical">
+                                <VBox
+                                    class="vsUtilColumn vsUtilCritical">
 
                                     <VBox class="vsUtilHeader">
+
                                         <HBox
                                             class="vsUtilHeaderTop"
                                             alignItems="Center">
@@ -430,24 +460,25 @@
                                                 <core:Icon
                                                     src="sap-icon://trend-up"
                                                     class="vsUtilIcon" />
+
                                             </HBox>
 
-                                            <HBox alignItems="Center">
-                                                <Text
-                                                    text="Crítico"
-                                                    class="vsUtilTitle" />
+                                            <Text
+                                                text="Crítico"
+                                                class="vsUtilTitle" />
 
-                                                <Text
-                                                    text="2"
-                                                    class="vsUtilBadge" />
-                                            </HBox>
+                                            <Text
+                                                text="{supervisor>/utilizationMeta/criticalCount}"
+                                                class="vsUtilBadge" />
+
                                         </HBox>
 
                                         <Text
-                                            text=">120%"
+                                            text="{supervisor>/utilizationMeta/criticalRange}"
                                             class="vsUtilRange" />
 
                                         <HBox class="vsUtilRule" />
+
                                     </VBox>
 
                                     <VBox
@@ -455,13 +486,15 @@
                                         items="{supervisor>/utilization/critical}">
 
                                         <items>
+
                                             <VBox class="vsResourceTile">
+
                                                 <Text
                                                     text="{supervisor>name}"
                                                     class="vsResourceName" />
 
                                                 <Text
-                                                    text="{supervisor>utilization}%"
+                                                    text="{supervisor>utilizationText}"
                                                     class="vsResourcePercent" />
 
                                                 <HBox
@@ -475,17 +508,24 @@
                                                     <Text
                                                         text="{supervisor>resourceText}"
                                                         class="vsResourceText" />
+
                                                 </HBox>
+
                                             </VBox>
+
                                         </items>
+
                                     </VBox>
+
                                 </VBox>
 
                                 <!-- ALTO -->
 
-                                <VBox class="vsUtilColumn vsUtilHigh">
+                                <VBox
+                                    class="vsUtilColumn vsUtilHigh">
 
                                     <VBox class="vsUtilHeader">
+
                                         <HBox
                                             class="vsUtilHeaderTop"
                                             alignItems="Center">
@@ -498,24 +538,25 @@
                                                 <core:Icon
                                                     src="sap-icon://bar-chart"
                                                     class="vsUtilIcon" />
+
                                             </HBox>
 
-                                            <HBox alignItems="Center">
-                                                <Text
-                                                    text="Alto"
-                                                    class="vsUtilTitle" />
+                                            <Text
+                                                text="Alto"
+                                                class="vsUtilTitle" />
 
-                                                <Text
-                                                    text="3"
-                                                    class="vsUtilBadge" />
-                                            </HBox>
+                                            <Text
+                                                text="{supervisor>/utilizationMeta/highCount}"
+                                                class="vsUtilBadge" />
+
                                         </HBox>
 
                                         <Text
-                                            text="101% - 120%"
+                                            text="{supervisor>/utilizationMeta/highRange}"
                                             class="vsUtilRange" />
 
                                         <HBox class="vsUtilRule" />
+
                                     </VBox>
 
                                     <VBox
@@ -523,13 +564,15 @@
                                         items="{supervisor>/utilization/high}">
 
                                         <items>
+
                                             <VBox class="vsResourceTile">
+
                                                 <Text
                                                     text="{supervisor>name}"
                                                     class="vsResourceName" />
 
                                                 <Text
-                                                    text="{supervisor>utilization}%"
+                                                    text="{supervisor>utilizationText}"
                                                     class="vsResourcePercent" />
 
                                                 <HBox
@@ -543,17 +586,24 @@
                                                     <Text
                                                         text="{supervisor>resourceText}"
                                                         class="vsResourceText" />
+
                                                 </HBox>
+
                                             </VBox>
+
                                         </items>
+
                                     </VBox>
+
                                 </VBox>
 
                                 <!-- NORMAL -->
 
-                                <VBox class="vsUtilColumn vsUtilNormal">
+                                <VBox
+                                    class="vsUtilColumn vsUtilNormal">
 
                                     <VBox class="vsUtilHeader">
+
                                         <HBox
                                             class="vsUtilHeaderTop"
                                             alignItems="Center">
@@ -566,24 +616,25 @@
                                                 <core:Icon
                                                     src="sap-icon://favorite"
                                                     class="vsUtilIcon" />
+
                                             </HBox>
 
-                                            <HBox alignItems="Center">
-                                                <Text
-                                                    text="Normal"
-                                                    class="vsUtilTitle" />
+                                            <Text
+                                                text="Normal"
+                                                class="vsUtilTitle" />
 
-                                                <Text
-                                                    text="4"
-                                                    class="vsUtilBadge" />
-                                            </HBox>
+                                            <Text
+                                                text="{supervisor>/utilizationMeta/normalCount}"
+                                                class="vsUtilBadge" />
+
                                         </HBox>
 
                                         <Text
-                                            text="71% - 100%"
+                                            text="{supervisor>/utilizationMeta/normalRange}"
                                             class="vsUtilRange" />
 
                                         <HBox class="vsUtilRule" />
+
                                     </VBox>
 
                                     <VBox
@@ -591,13 +642,15 @@
                                         items="{supervisor>/utilization/normal}">
 
                                         <items>
+
                                             <VBox class="vsResourceTile">
+
                                                 <Text
                                                     text="{supervisor>name}"
                                                     class="vsResourceName" />
 
                                                 <Text
-                                                    text="{supervisor>utilization}%"
+                                                    text="{supervisor>utilizationText}"
                                                     class="vsResourcePercent" />
 
                                                 <HBox
@@ -611,17 +664,24 @@
                                                     <Text
                                                         text="{supervisor>resourceText}"
                                                         class="vsResourceText" />
+
                                                 </HBox>
+
                                             </VBox>
+
                                         </items>
+
                                     </VBox>
+
                                 </VBox>
 
                                 <!-- BAJO -->
 
-                                <VBox class="vsUtilColumn vsUtilLow">
+                                <VBox
+                                    class="vsUtilColumn vsUtilLow">
 
                                     <VBox class="vsUtilHeader">
+
                                         <HBox
                                             class="vsUtilHeaderTop"
                                             alignItems="Center">
@@ -634,24 +694,25 @@
                                                 <core:Icon
                                                     src="sap-icon://accept"
                                                     class="vsUtilIcon" />
+
                                             </HBox>
 
-                                            <HBox alignItems="Center">
-                                                <Text
-                                                    text="Bajo"
-                                                    class="vsUtilTitle" />
+                                            <Text
+                                                text="Bajo"
+                                                class="vsUtilTitle" />
 
-                                                <Text
-                                                    text="5"
-                                                    class="vsUtilBadge" />
-                                            </HBox>
+                                            <Text
+                                                text="{supervisor>/utilizationMeta/lowCount}"
+                                                class="vsUtilBadge" />
+
                                         </HBox>
 
                                         <Text
-                                            text="0% - 70%"
+                                            text="{supervisor>/utilizationMeta/lowRange}"
                                             class="vsUtilRange" />
 
                                         <HBox class="vsUtilRule" />
+
                                     </VBox>
 
                                     <VBox
@@ -659,13 +720,15 @@
                                         items="{supervisor>/utilization/low}">
 
                                         <items>
+
                                             <VBox class="vsResourceTile">
+
                                                 <Text
                                                     text="{supervisor>name}"
                                                     class="vsResourceName" />
 
                                                 <Text
-                                                    text="{supervisor>utilization}%"
+                                                    text="{supervisor>utilizationText}"
                                                     class="vsResourcePercent" />
 
                                                 <HBox
@@ -679,30 +742,42 @@
                                                     <Text
                                                         text="{supervisor>resourceText}"
                                                         class="vsResourceText" />
+
                                                 </HBox>
+
                                             </VBox>
+
                                         </items>
+
                                     </VBox>
+
                                 </VBox>
+
                             </HBox>
+
                         </VBox>
+
                     </VBox>
 
-                    <!-- ================================================= -->
-                    <!-- COLUMNA DERECHA                                   -->
-                    <!-- ================================================= -->
+                    <!-- DERECHA -->
 
                     <VBox class="vsRightColumn">
+
                         <layoutData>
+
                             <FlexItemData
                                 growFactor="58"
                                 shrinkFactor="1"
                                 baseSize="0%" />
+
                         </layoutData>
 
-                        <!-- PRESIÓN POR TIPO DE SERVICIO -->
+                        <!-- SERVICIOS -->
 
-                        <VBox class="vsCard vsPressureCard">
+                        <VBox
+                            busy="{supervisor>/operationalBusy}"
+                            busyIndicatorDelay="0"
+                            class="vsCard vsPressureCard">
 
                             <Title
                                 text="Presión por tipo de servicio"
@@ -715,6 +790,7 @@
                                 justifyContent="Center">
 
                                 <HBox
+                                    id="serviceDonut"
                                     class="vsDonut"
                                     alignItems="Center"
                                     justifyContent="Center">
@@ -731,7 +807,9 @@
                                         <Text
                                             text="por servicio"
                                             class="vsDonutText" />
+
                                     </VBox>
+
                                 </HBox>
 
                                 <VBox class="vsServiceList">
@@ -741,34 +819,22 @@
                                         alignItems="Center"
                                         justifyContent="SpaceBetween">
 
-                                        <HBox
-                                            class="vsServiceIdentity"
-                                            alignItems="Center">
-
-                                            <HBox
-                                                class="vsServiceIconCircle vsServiceBlue"
-                                                alignItems="Center"
-                                                justifyContent="Center">
-
-                                                <core:Icon
-                                                    src="sap-icon://document-text"
-                                                    class="vsServiceIcon" />
-                                            </HBox>
-
-                                            <Text
-                                                text="Planeado"
-                                                class="vsServiceName" />
-                                        </HBox>
+                                        <Text
+                                            text="{supervisor>/serviceTypes/0/label}"
+                                            class="vsServiceName" />
 
                                         <VBox alignItems="End">
+
                                             <Text
-                                                text="45%"
+                                                text="{supervisor>/serviceTypes/0/percentage}"
                                                 class="vsServicePercent" />
 
                                             <Text
-                                                text="321 h"
+                                                text="{supervisor>/serviceTypes/0/hours}"
                                                 class="vsServiceHours" />
+
                                         </VBox>
+
                                     </HBox>
 
                                     <HBox
@@ -776,34 +842,22 @@
                                         alignItems="Center"
                                         justifyContent="SpaceBetween">
 
-                                        <HBox
-                                            class="vsServiceIdentity"
-                                            alignItems="Center">
-
-                                            <HBox
-                                                class="vsServiceIconCircle vsServiceRed"
-                                                alignItems="Center"
-                                                justifyContent="Center">
-
-                                                <core:Icon
-                                                    src="sap-icon://wrench"
-                                                    class="vsServiceIcon" />
-                                            </HBox>
-
-                                            <Text
-                                                text="Correctivo"
-                                                class="vsServiceName" />
-                                        </HBox>
+                                        <Text
+                                            text="{supervisor>/serviceTypes/1/label}"
+                                            class="vsServiceName" />
 
                                         <VBox alignItems="End">
+
                                             <Text
-                                                text="35%"
+                                                text="{supervisor>/serviceTypes/1/percentage}"
                                                 class="vsServicePercent" />
 
                                             <Text
-                                                text="250 h"
+                                                text="{supervisor>/serviceTypes/1/hours}"
                                                 class="vsServiceHours" />
+
                                         </VBox>
+
                                     </HBox>
 
                                     <HBox
@@ -811,36 +865,26 @@
                                         alignItems="Center"
                                         justifyContent="SpaceBetween">
 
-                                        <HBox
-                                            class="vsServiceIdentity"
-                                            alignItems="Center">
-
-                                            <HBox
-                                                class="vsServiceIconCircle vsServicePurple"
-                                                alignItems="Center"
-                                                justifyContent="Center">
-
-                                                <core:Icon
-                                                    src="sap-icon://headset"
-                                                    class="vsServiceIcon" />
-                                            </HBox>
-
-                                            <Text
-                                                text="Call Center"
-                                                class="vsServiceName" />
-                                        </HBox>
+                                        <Text
+                                            text="{supervisor>/serviceTypes/2/label}"
+                                            class="vsServiceName" />
 
                                         <VBox alignItems="End">
+
                                             <Text
-                                                text="20%"
+                                                text="{supervisor>/serviceTypes/2/percentage}"
                                                 class="vsServicePercent" />
 
                                             <Text
-                                                text="142 h"
+                                                text="{supervisor>/serviceTypes/2/hours}"
                                                 class="vsServiceHours" />
+
                                         </VBox>
+
                                     </HBox>
+
                                 </VBox>
+
                             </HBox>
 
                             <HBox
@@ -857,14 +901,19 @@
                                     class="vsPressureFooterLabel" />
 
                                 <Text
-                                    text="713 h"
+                                    text="{supervisor>/serviceTotalHours}"
                                     class="vsPressureFooterValue" />
+
                             </HBox>
+
                         </VBox>
 
-                        <!-- MATERIALES CON MAYOR CONSUMO -->
+                        <!-- MATERIALES -->
 
-                        <VBox class="vsCard vsMaterialsCard">
+                        <VBox
+                            busy="{supervisor>/materialsBusy}"
+                            busyIndicatorDelay="0"
+                            class="vsCard vsMaterialsCard">
 
                             <Title
                                 text="Materiales con mayor consumo"
@@ -873,24 +922,12 @@
 
                             <HBox class="vsMaterialsGrid">
 
-                                <!-- ACEITE -->
-
                                 <VBox
                                     class="vsMaterialTile vsMaterialOrange"
                                     alignItems="Center">
 
-                                    <HBox
-                                        class="vsMaterialIconCircle vsMaterialDropCircle"
-                                        alignItems="Center"
-                                        justifyContent="Center">
-
-                                        <core:Icon
-                                            src="sap-icon://nutrition-activity"
-                                            class="vsMaterialIcon vsMaterialDropIcon" />
-                                    </HBox>
-
                                     <Text
-                                        text="Aceite"
+                                        text="{supervisor>/materials/0/name}"
                                         class="vsMaterialName" />
 
                                     <HBox
@@ -898,35 +935,25 @@
                                         alignItems="End">
 
                                         <Text
-                                            text="38"
+                                            text="{supervisor>/materials/0/quantity}"
                                             class="vsMaterialValue" />
 
                                         <Text
-                                            text="pzas"
+                                            text="{supervisor>/materials/0/unit}"
                                             class="vsMaterialUnit" />
+
                                     </HBox>
 
                                     <HBox class="vsMaterialLine" />
-                                </VBox>
 
-                                <!-- REFACCIONES -->
+                                </VBox>
 
                                 <VBox
                                     class="vsMaterialTile vsMaterialBlue"
                                     alignItems="Center">
 
-                                    <HBox
-                                        class="vsMaterialIconCircle"
-                                        alignItems="Center"
-                                        justifyContent="Center">
-
-                                        <core:Icon
-                                            src="sap-icon://action-settings"
-                                            class="vsMaterialIcon" />
-                                    </HBox>
-
                                     <Text
-                                        text="Refacciones"
+                                        text="{supervisor>/materials/1/name}"
                                         class="vsMaterialName" />
 
                                     <HBox
@@ -934,35 +961,25 @@
                                         alignItems="End">
 
                                         <Text
-                                            text="24"
+                                            text="{supervisor>/materials/1/quantity}"
                                             class="vsMaterialValue" />
 
                                         <Text
-                                            text="pzas"
+                                            text="{supervisor>/materials/1/unit}"
                                             class="vsMaterialUnit" />
+
                                     </HBox>
 
                                     <HBox class="vsMaterialLine" />
-                                </VBox>
 
-                                <!-- LUBRICANTES -->
+                                </VBox>
 
                                 <VBox
                                     class="vsMaterialTile vsMaterialPurple"
                                     alignItems="Center">
 
-                                    <HBox
-                                        class="vsMaterialIconCircle vsMaterialDropCircle"
-                                        alignItems="Center"
-                                        justifyContent="Center">
-
-                                        <core:Icon
-                                            src="sap-icon://nutrition-activity"
-                                            class="vsMaterialIcon vsMaterialDropIcon" />
-                                    </HBox>
-
                                     <Text
-                                        text="Lubricantes"
+                                        text="{supervisor>/materials/2/name}"
                                         class="vsMaterialName" />
 
                                     <HBox
@@ -970,35 +987,25 @@
                                         alignItems="End">
 
                                         <Text
-                                            text="19"
+                                            text="{supervisor>/materials/2/quantity}"
                                             class="vsMaterialValue" />
 
                                         <Text
-                                            text="pzas"
+                                            text="{supervisor>/materials/2/unit}"
                                             class="vsMaterialUnit" />
+
                                     </HBox>
 
                                     <HBox class="vsMaterialLine" />
-                                </VBox>
 
-                                <!-- HERRAMIENTAS -->
+                                </VBox>
 
                                 <VBox
                                     class="vsMaterialTile vsMaterialGreen"
                                     alignItems="Center">
 
-                                    <HBox
-                                        class="vsMaterialIconCircle"
-                                        alignItems="Center"
-                                        justifyContent="Center">
-
-                                        <core:Icon
-                                            src="sap-icon://wrench"
-                                            class="vsMaterialIcon" />
-                                    </HBox>
-
                                     <Text
-                                        text="Herramientas"
+                                        text="{supervisor>/materials/3/name}"
                                         class="vsMaterialName" />
 
                                     <HBox
@@ -1006,21 +1013,31 @@
                                         alignItems="End">
 
                                         <Text
-                                            text="12"
+                                            text="{supervisor>/materials/3/quantity}"
                                             class="vsMaterialValue" />
 
                                         <Text
-                                            text="pzas"
+                                            text="{supervisor>/materials/3/unit}"
                                             class="vsMaterialUnit" />
+
                                     </HBox>
 
                                     <HBox class="vsMaterialLine" />
+
                                 </VBox>
+
                             </HBox>
+
                         </VBox>
+
                     </VBox>
+
                 </HBox>
+
             </VBox>
+
         </content>
+
     </Page>
+
 </mvc:View>

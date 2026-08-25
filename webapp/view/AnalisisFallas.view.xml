@@ -1,136 +1,134 @@
-<mvc:View
-    controllerName="mantenimiento.controller.AnalisisFallas"
+<mvc:View controllerName="mantenimiento.controller.AnalisisFallas"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
-    xmlns:microchart="sap.suite.ui.microchart"
-    displayBlock="true">
-
+    xmlns:microchart="sap.suite.ui.microchart" displayBlock="true">
     <Page id="analisisFallasPage" showHeader="false" class="AnalisisFallas">
         <content>
             <VBox class="cmPageContainer">
-
-                <!-- ENCABEZADO Y FILTROS -->
                 <HBox class="afTopBar" alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap">
                     <VBox class="afTitleBlock">
                         <Title text="Análisis de fallas y servicios afectados" level="H1" class="cmMainTitle"/>
                         <Text text="Identifique qué tipos de fallas están impactando más el cumplimiento y dónde se concentran." class="cmSubtitle"/>
                     </VBox>
-
                     <HBox class="afFilters" alignItems="Stretch" justifyContent="End" wrap="Wrap">
                         <HBox class="afFilterCard afWeekFilter" alignItems="Center">
                             <core:Icon src="sap-icon://calendar" class="afFilterIcon"/>
                             <VBox class="afFilterContent">
-                                <Text text="Semana" class="afFilterLabel"/>
-                                <Select id="analisisFallasWeekSelect" selectedKey="semana18" class="afFilterSelect">
-                                    <core:Item key="semana18" text="Semana 18 (29 abr - 5 may 2024)"/>
-                                    <core:Item key="semana17" text="Semana 17 (22 - 28 abr 2024)"/>
-                                    <core:Item key="semana16" text="Semana 16 (15 - 21 abr 2024)"/>
+                                <Text text="Periodo" class="afFilterLabel"/>
+                                <Select id="analisisFallasPeriodSelect" selectedKey="{fallasModel>/filtros/periodo}" change=".onPeriodoChange" class="afFilterSelect" items="{fallasModel>/opcionesPeriodo}">
+                                    <items>
+                                        <core:Item key="{fallasModel>key}" text="{fallasModel>text}"/>
+                                    </items>
                                 </Select>
                             </VBox>
                         </HBox>
-
                         <HBox class="afFilterCard afZoneFilter" alignItems="Center">
                             <core:Icon src="sap-icon://map" class="afFilterIcon"/>
                             <VBox class="afFilterContent">
                                 <Text text="Zona" class="afFilterLabel"/>
-                                <Select id="analisisFallasZoneSelect" selectedKey="norte" class="afFilterSelect">
-                                    <core:Item key="norte" text="Norte"/>
-                                    <core:Item key="sur" text="Sur"/>
-                                    <core:Item key="centro" text="Centro"/>
+                                <Select id="analisisFallasZoneSelect" selectedKey="{fallasModel>/filtros/zona}" class="afFilterSelect" items="{fallasModel>/opcionesZona}">
+                                    <items>
+                                        <core:Item key="{fallasModel>key}" text="{fallasModel>text}"/>
+                                    </items>
                                 </Select>
                             </VBox>
                         </HBox>
-
-                        <Button id="analisisFallasApplyButton"
-                                text="Aplicar filtros"
-                                icon="sap-icon://filter"
-                                type="Emphasized"
-                                press=".onApplyFilters"
-                                class="afApplyButton"/>
+                        <Button id="analisisFallasApplyButton" text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="afApplyButton"/>
                     </HBox>
                 </HBox>
-
-                <!-- INDICADORES -->
                 <HBox class="cmKpiRow" wrap="Wrap">
                     <HBox class="cmKpiCard cmKpiPurple" alignItems="Center">
-                        <VBox class="cmKpiIcon cmKpiIconPurple"><core:Icon src="sap-icon://form"/></VBox>
+                        <VBox class="cmKpiIcon cmKpiIconPurple">
+                            <core:Icon src="sap-icon://form"/>
+                        </VBox>
                         <VBox class="cmKpiContent">
                             <Text text="OT afectadas" class="cmKpiLabel"/>
-                            <Text text="22" class="cmKpiNumber cmPurpleText"/>
+                            <Text text="{fallasModel>/resumen/TotalOTAfectadas}" class="cmKpiNumber cmPurpleText"/>
                             <Text text="Del total de desviaciones" class="cmKpiDescription"/>
                         </VBox>
                     </HBox>
-
                     <HBox class="cmKpiCard cmKpiGreen" alignItems="Center">
-                        <VBox class="cmKpiIcon cmKpiIconGreen"><core:Icon src="sap-icon://wrench"/></VBox>
+                        <VBox class="cmKpiIcon cmKpiIconGreen">
+                            <core:Icon src="sap-icon://wrench"/>
+                        </VBox>
                         <VBox class="cmKpiContent">
                             <Text text="Clasificación principal" class="cmKpiLabel"/>
-                            <Text text="Falla mecánica" class="cmKpiTextValue cmGreenText"/>
-                            <Text text="32% del total" class="cmKpiDescription"/>
+                            <Text text="{fallasModel>/resumen/ClasificacionPrincipalTexto}" class="cmKpiTextValue cmGreenText"/>
+                            <Text text="{fallasModel>/resumen/ClasificacionPrincipalPorcentaje}" class="cmKpiDescription"/>
                         </VBox>
                     </HBox>
-
                     <HBox class="cmKpiCard cmKpiOrange" alignItems="Center">
-                        <VBox class="cmKpiIcon cmKpiIconOrange"><core:Icon src="sap-icon://product"/></VBox>
+                        <VBox class="cmKpiIcon cmKpiIconOrange">
+                            <core:Icon src="sap-icon://product"/>
+                        </VBox>
                         <VBox class="cmKpiContent">
                             <Text text="Equipos afectados" class="cmKpiLabel"/>
-                            <Text text="15" class="cmKpiNumber cmOrangeText"/>
+                            <Text text="{fallasModel>/resumen/TotalEquiposAfectados}" class="cmKpiNumber cmOrangeText"/>
                             <Text text="Equipos únicos" class="cmKpiDescription"/>
                         </VBox>
                     </HBox>
-
                     <HBox class="cmKpiCard cmKpiBlue" alignItems="Center">
-                        <VBox class="cmKpiIcon cmKpiIconBlue"><core:Icon src="sap-icon://business-objects-mobile"/></VBox>
+                        <VBox class="cmKpiIcon cmKpiIconBlue">
+                            <core:Icon src="sap-icon://business-objects-mobile"/>
+                        </VBox>
                         <VBox class="cmKpiContent">
                             <Text text="Clientes afectados" class="cmKpiLabel"/>
-                            <Text text="9" class="cmKpiNumber cmBlueText"/>
+                            <Text text="{fallasModel>/resumen/TotalClientesAfectados}" class="cmKpiNumber cmBlueText"/>
                             <Text text="Clientes únicos" class="cmKpiDescription"/>
                         </VBox>
                     </HBox>
                 </HBox>
-
-                <!-- TABLA -->
                 <f:Card class="afTableCard">
                     <f:content>
                         <VBox>
-                        <HBox alignItems="Center" class="afTableTitleBar">
-                            <VBox class="afTableTitleIcon"><core:Icon src="sap-icon://shield"/></VBox>
-                            <Title level="H4" text="CLASIFICACIÓN DE FALLAS" class="afTableTitle"/>
-                            <core:Icon src="sap-icon://information" class="afInfoIcon"/>
-                        </HBox>
-                            <Table id="fallasTable"
-                                   items="{path: 'fallasModel>/clasificaciones'}"
-                                   fixedLayout="true"
-                                   inset="false"
-                                   class="afTable">
+                            <HBox alignItems="Center" class="afTableTitleBar">
+                                <VBox class="afTableTitleIcon">
+                                    <core:Icon src="sap-icon://shield"/>
+                                </VBox>
+                                <Title level="H4" text="CLASIFICACIÓN DE FALLAS" class="afTableTitle"/>
+                                <core:Icon src="sap-icon://information" class="afInfoIcon"/>
+                            </HBox>
+                            <Table id="fallasTable" items="{path: 'fallasModel>/clasificaciones'}" fixedLayout="true" inset="false" class="afTable">
                                 <columns>
-                                    <Column width="5%" hAlign="Center"><Text text="#"/></Column>
-                                    <Column width="24%" hAlign="Begin"><Text text="Clasificación de falla"/></Column>
-                                    <Column width="13%" hAlign="Center">
-                                        <HBox alignItems="Center" justifyContent="Center" width="100%">
-                                            <Text text="OT afectadas"/><core:Icon src="sap-icon://sort" class="afSortIcon"/>
-                                        </HBox>
+                                    <Column width="5%" hAlign="Center">
+                                        <Text text="#"/>
                                     </Column>
-                                    <Column width="15%" hAlign="Center"><Text text="Equipos afectados"/></Column>
-                                    <Column width="15%" hAlign="Center"><Text text="Clientes afectados"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="% del impacto"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="Tendencia"/></Column>
+                                    <Column width="24%" hAlign="Begin">
+                                        <Text text="Clasificación de falla"/>
+                                    </Column>
+                                    <Column width="13%" hAlign="Center">
+                                        <Text text="OT afectadas"/>
+                                    </Column>
+                                    <Column width="15%" hAlign="Center">
+                                        <Text text="Equipos afectados"/>
+                                    </Column>
+                                    <Column width="15%" hAlign="Center">
+                                        <Text text="Clientes afectados"/>
+                                    </Column>
+                                    <Column width="14%" hAlign="Center">
+                                        <Text text="% del impacto"/>
+                                    </Column>
+                                    <Column width="14%" hAlign="Center">
+                                        <Text text="Tendencia"/>
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem type="Inactive" vAlign="Middle">
                                         <cells>
                                             <Text text="{fallasModel>id}" class="afIndexText"/>
                                             <HBox alignItems="Center" class="afClassificationCell">
-                                                <VBox class="icon-falla"><core:Icon src="{fallasModel>icon}"/></VBox>
+                                                <VBox class="icon-falla">
+                                                    <core:Icon src="{fallasModel>icon}"/>
+                                                </VBox>
                                                 <Text text="{fallasModel>nombre}" class="afClassificationText" wrapping="false"/>
                                             </HBox>
                                             <Text text="{fallasModel>otAfectadas}" class="afMetric afOtMetric"/>
                                             <Text text="{fallasModel>equiposAfectados}" class="afMetric"/>
                                             <Text text="{fallasModel>clientesAfectados}" class="afMetric"/>
                                             <VBox class="afImpactCell">
-                                                <Text text="{= ${fallasModel>impacto} + '%'}" class="impactoText"/>
+                                                <Text text="{fallasModel>impactoTexto}" class="impactoText"/>
                                                 <ProgressIndicator percentValue="{fallasModel>impacto}" displayValue="" state="{fallasModel>impactoState}" class="impactoProgress"/>
                                             </VBox>
                                             <VBox alignItems="Center" class="tendenciaCell">
@@ -145,15 +143,10 @@
                                     </ColumnListItem>
                                 </items>
                             </Table>
-
                             <Toolbar class="afTableFooter">
-                                <Text text="Mostrando 1 a 6 de 6 clasificaciones" class="afFooterText"/>
+                                <Text text="{= 'Mostrando ' + ${fallasModel>/totalClasificaciones} + ' clasificaciones calculadas'}" class="afFooterText"/>
                                 <ToolbarSpacer/>
-                                <Select selectedKey="10" width="9rem" class="afPageSizeSelect">
-                                    <core:Item key="10" text="10 por página"/>
-                                    <core:Item key="20" text="20 por página"/>
-                                    <core:Item key="50" text="50 por página"/>
-                                </Select>
+                                <Text text="{fallasModel>/filtros/periodoTexto}" class="afFooterText"/>
                             </Toolbar>
                         </VBox>
                     </f:content>

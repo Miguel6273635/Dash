@@ -2,71 +2,391 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/ui/dom/includeStylesheet"
+    "sap/m/MessageBox",
+    "sap/ui/dom/includeStylesheet",
+    "mantenimiento/model/VistaDireccionService",
+    "mantenimiento/model/VistaDireccionMapper"
 ], function (
     Controller,
     JSONModel,
     MessageToast,
-    includeStylesheet
+    MessageBox,
+    includeStylesheet,
+    VistaDireccionService,
+    VistaDireccionMapper
 ) {
     "use strict";
 
     return Controller.extend(
         "mantenimiento.controller.VistaDireccion",
         {
-            /**
-             * Inicialización de Vista Dirección.
-             */
             onInit: function () {
+                this._loadStyles();
 
-                /*
-                 * El namespace "mantenimiento" representa la raíz
-                 * de la carpeta webapp.
-                 *
-                 * Ruta física:
-                 * webapp/css/VistaDireccion.css
-                 *
-                 * Ruta UI5:
-                 * mantenimiento/css/VistaDireccion.css
-                 */
-                includeStylesheet(
-                    sap.ui.require.toUrl(
-                        "mantenimiento/css/VistaDireccion.css"
-                    ) + "?version=20260805_03",
-                    "vistaDireccionCss"
+                this._oViewModel = new JSONModel(
+                    this._getInitialData()
                 );
 
-                var oViewModel = new JSONModel({
+                this._oViewModel.setSizeLimit(5000);
 
-                    /* =====================================================
-                       FILTROS
-                       ===================================================== */
+                this.getView().setModel(
+                    this._oViewModel,
+                    "view"
+                );
+
+                this._iRequest = 0;
+
+                this._loadData(false);
+            },
+
+            _loadStyles: function () {
+                var sStyleId = "vistaDireccionCss";
+                var oOldStyle = document.getElementById(sStyleId);
+                var sCssUrl;
+
+                if (oOldStyle && oOldStyle.parentNode) {
+                    oOldStyle.parentNode.removeChild(oOldStyle);
+                }
+
+                sCssUrl =
+                    sap.ui.require.toUrl(
+                        "mantenimiento/css/VistaDireccion.css"
+                    ) +
+                    "?version=20260821_01";
+
+                includeStylesheet(
+                    sCssUrl,
+                    sStyleId
+                );
+            },
+
+            _getODataModel: function () {
+                var oComponent = this.getOwnerComponent();
+
+                return (
+                    oComponent &&
+                    oComponent.getModel("dashboardOData")
+                ) || (
+                    oComponent &&
+                    oComponent.getModel()
+                );
+            },
+
+            _getFilters: function () {
+                return Object.assign(
+                    {},
+                    this._oViewModel.getProperty("/filters") || {}
+                );
+            },
+
+            onPeriodoChange: function (oEvent) {
+                var sYear =
+                    oEvent.getSource().getSelectedKey();
+
+                var iYear =
+                    Number(sYear);
+
+                if (
+                    !Number.isInteger(iYear) ||
+                    iYear < 1900 ||
+                    iYear > 9999
+                ) {
+                    return;
+                }
+
+                this._oViewModel.setProperty(
+                    "/filters/periodo",
+                    String(iYear)
+                );
+
+                this._oViewModel.setProperty(
+                    "/filters/fechaDesde",
+                    "01/01/" + iYear
+                );
+
+                this._oViewModel.setProperty(
+                    "/filters/fechaHasta",
+                    "31/12/" + iYear
+                );
+            },
+
+            onDateChange: function () {
+                var sDesde =
+                    this._oViewModel.getProperty(
+                        "/filters/fechaDesde"
+                    ) || "";
+
+                var sHasta =
+                    this._oViewModel.getProperty(
+                        "/filters/fechaHasta"
+                    ) || "";
+
+                var aDesde =
+                    sDesde.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
+
+                var aHasta =
+                    sHasta.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
+
+                if (
+                    aDesde &&
+                    aHasta &&
+                    aDesde[3] === aHasta[3]
+                ) {
+                    this._oViewModel.setProperty(
+                        "/filters/periodo",
+                        aDesde[3]
+                    );
+                }
+            },
+
+            onDirectionChange: function () {
+                var sDirection =
+                    this._oViewModel.getProperty(
+                        "/filters/direccion"
+                    );
+
+                var aAll =
+                    this._oViewModel.getProperty(
+                        "/catalogs/headshipsAll"
+                    ) || [];
+
+                var aFiltered =
+                    aAll.filter(function (oItem, iIndex) {
+                        if (iIndex === 0) {
+                            return true;
+                        }
+
+                        if (
+                            !sDirection ||
+                            sDirection === "TODAS"
+                        ) {
+                            return true;
+                        }
+
+                        return (
+                            !oItem.parentKey ||
+                            oItem.parentKey === sDirection
+                        );
+                    });
+
+                this._oViewModel.setProperty(
+                    "/catalogs/headships",
+                    aFiltered
+                );
+
+                this._oViewModel.setProperty(
+                    "/filters/jefatura",
+                    "TODAS"
+                );
+            },
+
+            onApplyFilters: function () {
+                var oFilters = this._getFilters();
+
+                if (
+                    !oFilters.fechaDesde ||
+                    !oFilters.fechaHasta
+                ) {
+                    MessageBox.warning(
+                        "Selecciona Fecha desde y Fecha hasta."
+                    );
+                    return;
+                }
+
+                this._loadData(true);
+            },
+
+            _loadData: function (bNotify) {
+                var iRequest = ++this._iRequest;
+                var oFilters = this._getFilters();
+                var oODataModel = this._getODataModel();
+
+                this._oViewModel.setProperty(
+                    "/busy",
+                    true
+                );
+
+                VistaDireccionService
+                    .getDashboardData(
+                        oODataModel,
+                        oFilters
+                    )
+                    .then(function (oRawData) {
+                        var oMapped;
+
+                        if (iRequest !== this._iRequest) {
+                            return;
+                        }
+
+                        oMapped =
+                            VistaDireccionMapper.mapData(
+                                oRawData,
+                                oFilters
+                            );
+
+                        this._oViewModel.setProperty(
+                            "/catalogs",
+                            oMapped.catalogs
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/kpis",
+                            oMapped.kpis
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/riskLevels",
+                            oMapped.riskLevels
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/jefaturas",
+                            oMapped.jefaturas
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/serviceTypes",
+                            oMapped.serviceTypes
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/serviceTotalHours",
+                            oMapped.serviceTotalHours
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/materials",
+                            oMapped.materials
+                        );
+
+                        this._oViewModel.setProperty(
+                            "/meta",
+                            oMapped.meta
+                        );
+
+                        if (bNotify) {
+                            MessageToast.show(
+                                "Vista Dirección actualizada"
+                            );
+                        }
+                    }.bind(this))
+                    .catch(function (oError) {
+                        if (iRequest !== this._iRequest) {
+                            return;
+                        }
+
+                        console.error(
+                            "[VD CONTROLLER] Error:",
+                            oError
+                        );
+
+                        MessageBox.error(
+                            oError && oError.message
+                                ? oError.message
+                                : "No fue posible cargar Vista Dirección."
+                        );
+                    }.bind(this))
+                    .finally(function () {
+                        if (iRequest === this._iRequest) {
+                            this._oViewModel.setProperty(
+                                "/busy",
+                                false
+                            );
+                        }
+                    }.bind(this));
+            },
+
+            onActionPress: function (oEvent) {
+                var sAction =
+                    oEvent.getSource().data("action");
+
+                var mMessages = {
+                    direccion:
+                        "Navegación al detalle de la dirección",
+                    asignaciones:
+                        "Navegación a la gestión de asignaciones",
+                    balance:
+                        "Navegación al balance de capacidad"
+                };
+
+                MessageToast.show(
+                    mMessages[sAction] ||
+                    "Acción seleccionada"
+                );
+            },
+
+            _getInitialData: function () {
+                var iDefaultYear = 2026;
+
+                return {
+                    busy: false,
+
                     filters: {
-                        periodo: "mayo2025",
-                        fechaDesde: "01/05/2025",
-                        fechaHasta: "31/05/2025",
-                        direccion: "norte",
-                        jefatura: "todas",
-                        turno: "todos"
+                        periodo: String(iDefaultYear),
+                        fechaDesde: "01/01/" + iDefaultYear,
+                        fechaHasta: "31/12/" + iDefaultYear,
+                        direccion: "TODAS",
+                        jefatura: "TODAS",
+                        turno: "TODOS"
                     },
 
-                    /* =====================================================
-                       KPIs
-                       ===================================================== */
+                    catalogs: {
+                        periods: [
+                            { key: "2028", text: "2028" },
+                            { key: "2027", text: "2027" },
+                            { key: "2026", text: "2026" },
+                            { key: "2025", text: "2025" },
+                            { key: "2024", text: "2024" },
+                            { key: "2023", text: "2023" },
+                            { key: "2022", text: "2022" },
+                            { key: "2021", text: "2021" }
+                        ],
+                        directions: [
+                            {
+                                key: "TODAS",
+                                text: "Todas"
+                            }
+                        ],
+                        headshipsAll: [
+                            {
+                                key: "TODAS",
+                                text: "Todas",
+                                parentKey: ""
+                            }
+                        ],
+                        headships: [
+                            {
+                                key: "TODAS",
+                                text: "Todas",
+                                parentKey: ""
+                            }
+                        ],
+                        shifts: [
+                            {
+                                key: "TODOS",
+                                text: "Todos"
+                            }
+                        ]
+                    },
+
                     kpis: [
                         {
                             title: "Jefaturas activas",
-                            value: "4",
-                            footer: "de 4",
+                            value: "Sin datos",
+                            footer: "",
                             note: "",
-                            showFooter: true,
+                            showFooter: false,
                             showNote: false,
                             icon: "sap-icon://group",
                             tone: "blue"
                         },
                         {
                             title: "Recursos totales",
-                            value: "92",
+                            value: "Sin datos",
                             footer: "",
                             note: "",
                             showFooter: false,
@@ -75,18 +395,18 @@ sap.ui.define([
                             tone: "cyan"
                         },
                         {
-                          title: "Capacidad disponible",
-                          value: "6,880 h",
-                          footer: "",
-                          note: "",
-                          showFooter: false,
-                          showNote: false,
-                          icon: "sap-icon://performance",
-                          tone: "green"
-                         },
+                            title: "Capacidad disponible",
+                            value: "Sin datos",
+                            footer: "",
+                            note: "",
+                            showFooter: false,
+                            showNote: false,
+                            icon: "sap-icon://performance",
+                            tone: "green"
+                        },
                         {
                             title: "Carga programada",
-                            value: "6,305 h",
+                            value: "Sin datos",
                             footer: "",
                             note: "",
                             showFooter: false,
@@ -96,7 +416,7 @@ sap.ui.define([
                         },
                         {
                             title: "Recursos sobre capacidad",
-                            value: "11",
+                            value: "Sin datos",
                             footer: "",
                             note: "",
                             showFooter: false,
@@ -106,274 +426,128 @@ sap.ui.define([
                         },
                         {
                             title: "Cumplimiento operativo",
-                            value: "70%",
-                            footer: "Meta: 80%",
-                            note: "-10 puntos por debajo de la meta",
-                            showFooter: true,
-                            showNote: true,
+                            value: "Sin datos",
+                            footer: "",
+                            note: "",
+                            showFooter: false,
+                            showNote: false,
                             icon: "sap-icon://performance",
                             tone: "danger"
                         }
                     ],
 
-                    /* =====================================================
-                       CLASIFICACIÓN DE UTILIZACIÓN
-                       ===================================================== */
                     riskLevels: [
                         {
                             label: "Crítico",
                             range: "> 120%",
-                            count: "1",
+                            count: "0",
                             icon: "sap-icon://trend-up",
                             tone: "red"
                         },
                         {
                             label: "Alto",
                             range: "101% - 120%",
-
-                            /*
-                             * Jefatura Centro y Jefatura Metropolitana.
-                             */
-                            count: "2",
-
+                            count: "0",
                             icon: "sap-icon://trend-up",
                             tone: "orange"
                         },
                         {
                             label: "Normal",
                             range: "71% - 100%",
-                            count: "1",
+                            count: "0",
                             icon: "sap-icon://status-critical",
                             tone: "yellow"
                         },
                         {
                             label: "Bajo",
                             range: "0% - 70%",
-                            count: "1",
+                            count: "0",
                             icon: "sap-icon://status-positive",
                             tone: "green"
                         }
                     ],
 
-                    /* =====================================================
-                       JEFATURAS
-                       
-                       El orden es importante porque el CSS posiciona:
-                       
-                       1. Norte          → columna Crítico
-                       2. Centro         → columna Alto
-                       3. Oriente        → columna Normal
-                       4. Poniente       → columna Bajo
-                       5. Metropolitana  → segunda fila de Alto
-                       ===================================================== */
-                    jefaturas: [
-                        {
-                            name: "Jefatura Norte",
-                            utilization: "132%",
-                            resourceText: "2 supervisores",
-                            tone: "red"
-                        },
-                        {
-                            name: "Jefatura Centro",
-                            utilization: "116%",
-                            resourceText: "3 supervisores",
-                            tone: "orange"
-                        },
-                        {
-                            name: "Jefatura Oriente",
-                            utilization: "78%",
-                            resourceText: "18 recursos",
-                            tone: "yellow"
-                        },
-                        {
-                            name: "Jefatura Poniente",
-                            utilization: "65%",
-                            resourceText: "16 recursos",
-                            tone: "green"
-                        },
-                        {
-                            name: "Jefatura Metropolitana",
-                            utilization: "109%",
-                            resourceText: "2 supervisores",
-                            tone: "orange"
-                        }
-                    ],
+                    jefaturas: [],
 
-                    /* =====================================================
-                       PRESIÓN POR TIPO DE SERVICIO
-                       ===================================================== */
                     serviceTypes: [
                         {
-                            label: "Planeado",
-                            percent: "45%",
-                            hours: "2,837 h",
+                            label: "Sin datos",
+                            percent: "Sin datos",
+                            hours: "Sin datos",
                             icon: "sap-icon://document-text",
                             tone: "blue"
                         },
                         {
-                            label: "Correctivo",
-                            percent: "35%",
-                            hours: "2,207 h",
+                            label: "Sin datos",
+                            percent: "Sin datos",
+                            hours: "Sin datos",
                             icon: "sap-icon://wrench",
                             tone: "red"
                         },
                         {
-                            label: "Call Center",
-                            percent: "20%",
-                            hours: "1,261 h",
+                            label: "Sin datos",
+                            percent: "Sin datos",
+                            hours: "Sin datos",
                             icon: "sap-icon://customer-and-contacts",
                             tone: "purple"
                         }
                     ],
 
-                    /* =====================================================
-                       ACCIONES RÁPIDAS
-                       ===================================================== */
+                    serviceTotalHours: "Sin datos",
+
                     actions: [
                         {
                             action: "direccion",
                             title: "Ver dirección",
-                            description: "Consultar detalle de desempeño",
+                            description:
+                                "Consultar detalle de desempeño",
                             icon: "sap-icon://group",
                             tone: "blue"
                         },
                         {
                             action: "asignaciones",
                             title: "Asignaciones",
-                            description: "Gestionar asignaciones de recursos",
+                            description:
+                                "Gestionar asignaciones de recursos",
                             icon: "sap-icon://task",
                             tone: "purple"
                         },
                         {
                             action: "balance",
                             title: "Balance de capacidad",
-                            description: "Analizar capacidad vs demanda",
-
-                            /*
-                             * El CSS sustituye este icono por el medidor.
-                             */
+                            description:
+                                "Analizar capacidad vs demanda",
                             icon: "sap-icon://gauge",
                             tone: "green"
                         }
                     ],
 
-                    /* =====================================================
-                       CONSUMO DE MATERIALES
-                       ===================================================== */
                     materials: [
                         {
-                            name: "Lubricantes",
-                            percent: "28%",
-                            barWidth: "28%",
-
-                            /*
-                             * El CSS oculta este icono y dibuja la gota.
-                             */
+                            name: "Sin datos",
+                            percent: "Sin datos",
+                            barWidth: "0%",
                             icon: "sap-icon://drop",
                             tone: "orange"
                         },
                         {
-                            name: "Refacciones",
-                            percent: "22%",
-                            barWidth: "22%",
+                            name: "Sin datos",
+                            percent: "Sin datos",
+                            barWidth: "0%",
                             icon: "sap-icon://wrench",
                             tone: "cyan"
                         },
                         {
-                            name: "Consumibles",
-                            percent: "18%",
-                            barWidth: "18%",
+                            name: "Sin datos",
+                            percent: "Sin datos",
+                            barWidth: "0%",
                             icon: "sap-icon://product",
                             tone: "purple"
                         }
-                    ]
-                });
+                    ],
 
-                this.getView().setModel(oViewModel, "view");
-            },
-
-            /**
-             * Maneja el botón Aplicar filtros.
-             */
-            onApplyFilters: function () {
-                var oViewModel = this.getView().getModel("view");
-                var oFilters = oViewModel.getProperty("/filters");
-
-                MessageToast.show(
-                    "Filtros aplicados: " +
-                    oFilters.fechaDesde +
-                    " al " +
-                    oFilters.fechaHasta
-                );
-
-                /*
-                 * Ejemplo para integrar posteriormente el servicio OData:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getModel()
-                 *     .read("/VistaDireccionSet", {
-                 *         filters: [],
-                 *
-                 *         success: function (oData) {
-                 *             oViewModel.setProperty(
-                 *                 "/kpis",
-                 *                 oData.results
-                 *             );
-                 *         },
-                 *
-                 *         error: function () {
-                 *             MessageToast.show(
-                 *                 "Error al consultar la información"
-                 *             );
-                 *         }
-                 *     });
-                 */
-            },
-
-            /**
-             * Maneja las cards de navegación lateral.
-             *
-             * @param {sap.ui.base.Event} oEvent Evento de selección
-             */
-            onActionPress: function (oEvent) {
-                var sAction = oEvent
-                    .getSource()
-                    .data("action");
-
-                var mMessages = {
-                    direccion: "Navegación al detalle de la dirección",
-                    asignaciones: "Navegación a la gestión de asignaciones",
-                    balance: "Navegación al balance de capacidad"
+                    meta: {}
                 };
-
-                MessageToast.show(
-                    mMessages[sAction] || "Acción seleccionada"
-                );
-
-                /*
-                 * Cuando tengas las rutas declaradas:
-                 *
-                 * var oRouter = this
-                 *     .getOwnerComponent()
-                 *     .getRouter();
-                 *
-                 * switch (sAction) {
-                 *     case "direccion":
-                 *         oRouter.navTo("RouteVistaJefatura");
-                 *         break;
-                 *
-                 *     case "asignaciones":
-                 *         oRouter.navTo("RouteAsignaciones");
-                 *         break;
-                 *
-                 *     case "balance":
-                 *         oRouter.navTo("RouteBalanceCapacidad");
-                 *         break;
-                 *
-                 *     default:
-                 *         break;
-                 * }
-                 */
             }
         }
     );

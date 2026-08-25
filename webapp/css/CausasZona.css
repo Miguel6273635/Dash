@@ -672,3 +672,408 @@
     display: none;
   }
 }
+
+/* ========================================================================== */
+/* Cabecera, filtros y KPIs: patrón visual de Análisis de OT Preventivas.     */
+/* El resto de la tabla y las gráficas conserva el diseño anterior.           */
+/* ========================================================================== */
+
+.CausasZonaView .czContainer {
+  padding: 10px 16px 12px;
+}
+
+.CausasZonaView .czHeaderRow {
+  align-items: start !important;
+  min-height: 34px;
+  margin: 0 0 5px;
+}
+
+.CausasZonaView .czHeadingBox {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.CausasZonaView .czTitle {
+  font-size: clamp(1.08rem, 1.35vw, 1.38rem) !important;
+  line-height: 1.06 !important;
+  margin: 0 !important;
+}
+
+.CausasZonaView .czSubtitle {
+  margin-top: 3px;
+  font-size: 10px;
+}
+
+.CausasZonaView .czBackLink {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 9px;
+}
+
+.CausasZonaView .czFilters {
+  display: grid !important;
+  grid-template-columns:
+    minmax(145px, 1.02fr)
+    minmax(155px, 1.16fr)
+    minmax(155px, 1.16fr)
+    minmax(125px, .88fr)
+    minmax(145px, .96fr)
+    minmax(145px, 1fr)
+    minmax(130px, .64fr);
+  width: 100%;
+  gap: 10px;
+  margin: 0 0 8px;
+  align-items: stretch !important;
+}
+
+.CausasZonaView .czFilters > .sapMFlexItem {
+  width: 100% !important;
+  height: 68px;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+.CausasZonaView .czFieldBox {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  width: 100%;
+  height: 68px;
+  padding: 7px 11px 6px;
+  border-color: #d9e2ee;
+  border-radius: 10px;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, .05);
+}
+
+.CausasZonaView .czButtonField {
+  height: 68px;
+}
+
+.CausasZonaView .czFilterLabel {
+  height: auto;
+  margin: 0 0 3px !important;
+  color: #60718c !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+}
+
+.CausasZonaView .czSelect.sapMSlt,
+.CausasZonaView .czDatePicker.sapMInputBase,
+.CausasZonaView .czDatePicker .sapMInputBaseContentWrapper {
+  width: 100% !important;
+  height: 27px !important;
+  min-height: 27px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.CausasZonaView .czSelect .sapMSltLabel,
+.CausasZonaView .czDatePicker .sapMInputBaseInner {
+  height: 27px !important;
+  padding: 0 25px 0 0 !important;
+  color: #172554 !important;
+  font-size: 10px !important;
+  line-height: 27px !important;
+  font-weight: 800 !important;
+}
+
+.CausasZonaView .czSelect .sapMSltArrow,
+.CausasZonaView .czDatePicker .sapMInputBaseIcon,
+.CausasZonaView .czDatePicker .sapMInputBaseIconContainer {
+  height: 27px !important;
+  color: #1677ff !important;
+  line-height: 27px !important;
+}
+
+.CausasZonaView .czFilterButton,
+.CausasZonaView .czFilterButton.sapMBtnBase {
+  width: 100% !important;
+  height: 68px !important;
+}
+
+.CausasZonaView .czFilterButton .sapMBtnInner {
+  width: 100%;
+  min-width: 0;
+  height: 50px !important;
+  margin-top: 9px;
+  border-radius: 9px;
+  background: #1677ff;
+  box-shadow: 0 4px 10px rgba(22, 119, 255, .23);
+}
+
+.CausasZonaView .czFilterButton .sapMBtnContent,
+.CausasZonaView .czFilterButton .sapMBtnIcon {
+  height: 48px;
+  font-size: 10px;
+  line-height: 48px !important;
+}
+
+.CausasZonaView .czKpiRow {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.CausasZonaView .czKpiRow > .sapMFlexItem {
+  width: 100% !important;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 !important;
+}
+
+.CausasZonaView .czKpiCard {
+  --cz-accent: #2e8cff;
+  --cz-rgb: 46, 140, 255;
+  position: relative !important;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 102px;
+  height: 102px;
+  padding: 12px 14px;
+  gap: 11px;
+  overflow: hidden;
+  border: 1px solid rgba(var(--cz-rgb), .23);
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(var(--cz-rgb), .17), rgba(var(--cz-rgb), .06) 44%, #fff 94%);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, .05);
+}
+
+.CausasZonaView .czKpiCard::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background: var(--cz-accent);
+  content: "";
+}
+
+.CausasZonaView .czKpiBlue { --cz-accent: #2e8cff; --cz-rgb: 46, 140, 255; }
+.CausasZonaView .czKpiGreen { --cz-accent: #18a957; --cz-rgb: 24, 169, 87; }
+.CausasZonaView .czKpiRed { --cz-accent: #ff445d; --cz-rgb: 255, 68, 93; }
+.CausasZonaView .czKpiPurple { --cz-accent: #8247f5; --cz-rgb: 130, 71, 245; }
+
+.CausasZonaView .czKpiIconCircle {
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(var(--cz-rgb), .13);
+}
+
+.CausasZonaView .czKpiIcon {
+  color: var(--cz-accent) !important;
+  font-size: 1.25rem;
+}
+
+.CausasZonaView .czKpiContent { min-width: 0; }
+
+.CausasZonaView .czKpiNumber.sapMText {
+  margin: 0 !important;
+  color: var(--cz-accent) !important;
+  font-size: clamp(1.25rem, 1.65vw, 1.7rem) !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.CausasZonaView .czKpiLabel.sapMText {
+  margin-top: 3px;
+  color: #172554 !important;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.CausasZonaView .czKpiSub.sapMText {
+  margin-top: 2px;
+  color: #718096;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.CausasZonaView .czKpiSubRed.sapMText { color: #ef334e !important; }
+
+@media (max-width: 1300px) {
+  .CausasZonaView .czFilters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .CausasZonaView .czKpiRow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  .CausasZonaView .czContainer { padding: 10px; }
+  .CausasZonaView .czFilters,
+  .CausasZonaView .czKpiRow { grid-template-columns: minmax(0, 1fr); }
+  .CausasZonaView .czKpiCard { height: 94px; min-height: 94px; }
+}
+
+/* Tabla de incumplimientos: todos los registros en un área desplazable. */
+.CausasZonaView .czTablePanel {
+  height: auto;
+  min-height: 0;
+}
+
+.CausasZonaView .czTableScroll.sapMScrollCont {
+  width: 100% !important;
+  height: min(430px, 48vh) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border-top: 1px solid #edf1f6;
+  border-bottom: 1px solid #edf1f6;
+  scrollbar-color: #9aabc2 #f2f5f9;
+  scrollbar-width: thin;
+}
+
+.CausasZonaView .czTableScroll .sapMScrollContScroll {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+.CausasZonaView .czTableScroll::-webkit-scrollbar {
+  width: 9px;
+}
+
+.CausasZonaView .czTableScroll::-webkit-scrollbar-track {
+  background: #f2f5f9;
+}
+
+.CausasZonaView .czTableScroll::-webkit-scrollbar-thumb {
+  border: 2px solid #f2f5f9;
+  border-radius: 8px;
+  background: #9aabc2;
+}
+
+.CausasZonaView .czTableScroll .sapMListTblHeaderCell {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f6f8fb;
+}
+
+.CausasZonaView .czTableFooter {
+  min-height: 40px;
+  height: 40px;
+  padding: 0 13px;
+}
+
+.CausasZonaView .czScrollHint {
+  color: #7b8ca4;
+  font-size: .86rem;
+}
+
+/* Distribución por tipo de OT */
+.CausasZonaView .czDonutPanel {
+  height: 174px;
+  padding: 10px 12px 6px;
+}
+
+.CausasZonaView .czDonutContent {
+  width: 100%;
+  min-height: 119px;
+  gap: 4px;
+}
+
+.CausasZonaView .czDonutCanvas {
+  position: relative !important;
+  flex: 0 0 36%;
+  width: 36%;
+  height: 120px;
+}
+
+.CausasZonaView .czPureDonut {
+  box-sizing: border-box;
+  width: 92px;
+  height: 92px;
+  margin: 10px auto 0;
+  /* Aro más fino, como la referencia funcional. */
+  padding: 16px;
+  border-radius: 50%;
+}
+
+.CausasZonaView .czPureDonutHole {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.CausasZonaView .czEmptyDonut {
+  background: #e7edf5;
+}
+
+.CausasZonaView .czDonutCanvas > .sapMFlexItem:last-child {
+  position: absolute !important;
+  top: 38px;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  pointer-events: none;
+}
+
+.CausasZonaView .czDonutTotalNumber.sapMText {
+  color: #172554;
+  font-size: 16px;
+  line-height: 17px;
+  font-weight: 900;
+}
+
+.CausasZonaView .czDonutTotalLabel.sapMText {
+  color: #6b7a90;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+
+.CausasZonaView .czTypeLegend {
+  flex: 1 1 64%;
+  min-width: 0;
+  gap: 1px;
+}
+
+.CausasZonaView .czTypeLegendRow {
+  width: 100%;
+  min-height: 20px;
+  padding: 1px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.CausasZonaView .czTypeDot {
+  width: 7px;
+  min-width: 7px;
+  height: 7px;
+  margin-right: 5px;
+  border-radius: 2px;
+}
+
+.CausasZonaView .czTypeBlue { background: #1764e8; }
+.CausasZonaView .czTypeGreen { background: #16a34a; }
+.CausasZonaView .czTypeAmber { background: #f4b400; }
+.CausasZonaView .czTypeSlate { background: #718199; }
+
+.CausasZonaView .czTypeLegendName.sapMText {
+  max-width: 80px;
+  overflow: hidden;
+  color: #43516a;
+  font-size: 8px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CausasZonaView .czTypeLegendValue.sapMText {
+  margin-left: 4px;
+  color: #172554;
+  font-size: 8px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .CausasZonaView .czDonutContent { flex-direction: column !important; }
+  .CausasZonaView .czDonutCanvas { width: 100%; flex-basis: 195px; }
+  .CausasZonaView .czTypeLegend { width: 100%; }
+}

@@ -21,6 +21,24 @@ sap.ui.define([
         SM02: "Correctivo",
         SM03: "Call Center"
     };
+    var TYPE_LEGEND = [
+        { type: "Preventivo", colorClass: "czTypeBlue" },
+        { type: "Correctivo", colorClass: "czTypeGreen" },
+        { type: "Call Center", colorClass: "czTypeAmber" }
+    ];
+
+    function typeColor(sType) {
+        switch (String(sType || "").toUpperCase()) {
+        case "PREVENTIVO":
+            return "#1764e8";
+        case "CORRECTIVO":
+            return "#16a34a";
+        case "CALL CENTER":
+            return "#f4b400";
+        default:
+            return "#718199";
+        }
+    }
 
     return Controller.extend("mantenimiento.controller.CausasZona", {
         onInit: function () {
@@ -36,8 +54,13 @@ sap.ui.define([
             this._iCurrentPage = 1;
             this._sTypeFilter = "TODAS";
             this._mFilters = {
-                semana: "2026-W01",
-                zona: "TODAS"
+                /* La primera carga usa el mismo periodo anual validado en QAS. */
+                semana: "2026-ANUAL",
+                fechaDesde: "01/01/2026",
+                fechaHasta: "31/12/2026",
+                zona: "TODAS",
+                cliente: "TODOS",
+                responsable: "TODOS"
             };
 
             /*
@@ -60,14 +83,32 @@ sap.ui.define([
         onApplyFilters: function () {
             this._mFilters = {
                 semana: this.byId("causasZonaWeekSelect").getSelectedKey() ||
-                    "2026-W01",
+                    "2026-ANUAL",
+                fechaDesde: this.byId("causasZonaStartDate").getValue(),
+                fechaHasta: this.byId("causasZonaEndDate").getValue(),
                 zona: this.byId("causasZonaZoneSelect").getSelectedKey() ||
-                    "TODAS"
+                    "TODAS",
+                cliente: this.byId("causasZonaCustomerSelect").getSelectedKey() ||
+                    "TODOS",
+                responsable: this.byId("causasZonaResponsibleSelect").getSelectedKey() ||
+                    "TODOS"
             };
             this._iCurrentPage = 1;
             this._sTypeFilter = "TODAS";
             this.byId("causasZonaTypeSegments").setSelectedKey("TODAS");
             this._loadData(true);
+        },
+
+        onPeriodoChange: function (oEvent) {
+            var sPeriodo = oEvent.getSource().getSelectedKey() || "2026-ANUAL";
+            var oContext = CausasZonaService.getFilterContext({ semana: sPeriodo });
+            var oModel = this.getView().getModel();
+
+            if (!oContext.startDate || !oContext.endDate) {
+                return;
+            }
+            oModel.setProperty("/filtros/fechaDesde", this._formatDate(oContext.startDate));
+            oModel.setProperty("/filtros/fechaHasta", this._formatDate(oContext.endDate));
         },
 
         onTypeFilterChange: function (oEvent) {
@@ -140,6 +181,7 @@ sap.ui.define([
                     return;
                 }
                 this._oRawData = oResult.rawData;
+                this._prepareTypeLegend(oResult.data);
                 oViewModel.setData(oResult.data);
                 this._setFiltersOnControls(oResult.data.filtros);
                 this._actualizarTabla();
@@ -166,53 +208,74 @@ sap.ui.define([
 
         _setFiltersOnControls: function (mFilters) {
             this.byId("causasZonaWeekSelect").setSelectedKey(
-                mFilters.semana || "2026-W01"
+                mFilters.semana || "2026-ANUAL"
             );
             this.byId("causasZonaZoneSelect").setSelectedKey(
                 mFilters.zona || "TODAS"
             );
+            this.byId("causasZonaCustomerSelect").setSelectedKey(
+                mFilters.cliente || "TODOS"
+            );
+            this.byId("causasZonaResponsibleSelect").setSelectedKey(
+                mFilters.responsable || "TODOS"
+            );
+        },
+
+        _formatDate: function (oDate) {
+            return String(oDate.getDate()).padStart(2, "0") + "/" +
+                String(oDate.getMonth() + 1).padStart(2, "0") + "/" +
+                oDate.getFullYear();
+        },
+
+        _prepareTypeLegend: function (oData) {
+            var aSummary = oData.ResumenTipos || [];
+
+            oData.TiposLeyenda = TYPE_LEGEND.map(function (oLegend) {
+                var oType = aSummary.filter(function (oItem) {
+                    return String(oItem.Tipo || "").toUpperCase() ===
+                        oLegend.type.toUpperCase();
+                })[0] || { Cantidad: 0, Porcentaje: 0 };
+                var iQuantity = Number(oType.Cantidad || 0);
+                var iPercentage = Number(oType.Porcentaje || 0);
+
+                return {
+                    Tipo: oLegend.type,
+                    ColorClass: oLegend.colorClass,
+                    Cantidad: iQuantity,
+                    Porcentaje: iPercentage,
+                    LegendText: iQuantity + " OT (" +
+                        iPercentage.toFixed(0) + "%)"
+                };
+            });
         },
 
         _actualizarTabla: function () {
             var oModel = this.getView().getModel();
             var aRows = oModel.getProperty("/IncumplimientosFull") || [];
-            var iPageSize = Number(
-                oModel.getProperty("/paginacion/tamanoPagina")
-            ) || 10;
             var aFilteredRows = this._sTypeFilter === "TODAS" ?
                 aRows :
                 aRows.filter(function (oRow) {
                     return oRow.TipoOTCode === this._sTypeFilter;
                 }.bind(this));
-            var iTotalPages = Math.max(
-                1,
-                Math.ceil(aFilteredRows.length / iPageSize)
-            );
-            var iStart;
-            var iEnd;
+            var iTotal = aFilteredRows.length;
 
-            this._iCurrentPage = Math.min(this._iCurrentPage, iTotalPages);
-            iStart = (this._iCurrentPage - 1) * iPageSize;
-            iEnd = Math.min(iStart + iPageSize, aFilteredRows.length);
-
-            oModel.setProperty("/IncumplimientosData", aFilteredRows.slice(
-                iStart,
-                iEnd
-            ));
-            oModel.setProperty("/VisibleCount", iEnd);
+            /* La tabla conserva todas las OT del filtro y el usuario navega
+             * con su barra vertical; no se ocultan registros por páginas. */
+            oModel.setProperty("/IncumplimientosData", aFilteredRows);
+            oModel.setProperty("/VisibleCount", iTotal);
             oModel.setProperty(
                 "/ActiveFilterLabel",
                 TYPE_LABELS[this._sTypeFilter] || "Todas"
             );
-            oModel.setProperty("/paginacion/pagina", this._iCurrentPage);
-            oModel.setProperty("/paginacion/totalPaginas", iTotalPages);
-            oModel.setProperty("/paginacion/inicio", aFilteredRows.length ? iStart + 1 : 0);
-            oModel.setProperty("/paginacion/fin", iEnd);
+            oModel.setProperty("/paginacion/pagina", 1);
+            oModel.setProperty("/paginacion/totalPaginas", 1);
+            oModel.setProperty("/paginacion/inicio", iTotal ? 1 : 0);
+            oModel.setProperty("/paginacion/fin", iTotal);
         },
 
         _configureCharts: function () {
             var oBar = this.byId("causasZonaBarChart");
-            var oDonut = this.byId("causasZonaDonutChart");
+            var aTypes = this.getView().getModel().getProperty("/ResumenTipos") || [];
 
             if (oBar) {
                 oBar.setVizProperties({
@@ -257,35 +320,40 @@ sap.ui.define([
                     }
                 });
             }
-            if (oDonut) {
-                oDonut.setVizProperties({
-                    general: { background: { color: "transparent" } },
-                    plotArea: {
-                        background: { color: "transparent" },
-                        dataLabel: {
-                            visible: true,
-                            type: "percentage",
-                            style: {
-                                color: "#26324f",
-                                fontSize: "11px",
-                                fontWeight: "bold"
-                            }
-                        },
-                        colorPalette: ["#1764e8", "#16a34a", "#f4b400"],
-                        innerRadius: "56%"
-                    },
-                    legend: {
-                        visible: true,
-                        position: "right",
-                        title: { visible: false },
-                        label: {
-                            style: { color: "#44516a", fontSize: "9px" }
-                        }
-                    },
-                    title: { visible: false },
-                    interaction: { selectability: { mode: "NONE" } }
-                });
+            this._renderTypeDonut(aTypes);
+        },
+
+        _renderTypeDonut: function (aTypes) {
+            var oGraphic = this.byId("causasZonaDonutGraphic");
+            var iTotal = aTypes.reduce(function (iSum, oType) {
+                return iSum + Number(oType.Cantidad || 0);
+            }, 0);
+            var iStart = 0;
+            var aSegments;
+
+            if (!oGraphic) {
+                return;
             }
+            if (!iTotal) {
+                oGraphic.setContent(
+                    "<div class='czPureDonut czEmptyDonut'><div " +
+                    "class='czPureDonutHole'></div></div>"
+                );
+                return;
+            }
+            aSegments = aTypes.map(function (oType) {
+                var iEnd = iStart + Number(oType.Cantidad || 0) / iTotal * 100;
+                var sSegment = typeColor(oType.Tipo) + " " +
+                    iStart.toFixed(3) + "% " + iEnd.toFixed(3) + "%";
+
+                iStart = iEnd;
+                return sSegment;
+            });
+            oGraphic.setContent(
+                "<div class='czPureDonut' style=\"background:conic-gradient(" +
+                aSegments.join(",") + ")\"><div class='czPureDonutHole'>" +
+                "</div></div>"
+            );
         },
 
         onNavBack: function () {

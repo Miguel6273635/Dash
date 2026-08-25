@@ -1,457 +1,1391 @@
-<mvc:View controllerName="mantenimiento.controller.VistaJefatura"
+<mvc:View
+    controllerName="mantenimiento.controller.VistaJefatura"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="vistaJefaturaPage" showHeader="false" enableScrolling="true" class="vjPage">
+
+    <Page
+        id="vistaJefaturaPage"
+        showHeader="false"
+        enableScrolling="true"
+        busy="{dashboard>/busy}"
+        busyIndicatorDelay="0"
+        class="vjPage">
+
         <content>
+
             <VBox class="vjDashboard sapUiSizeCompact">
-                <!-- Encabezado -->
+
+                <!-- ENCABEZADO -->
+
                 <VBox class="vjHeaderBlock">
-                    <Title text="Vista Jefatura" level="H1" class="vjPageTitle" />
-                    <Text text="Resumen ejecutivo de supervisores" class="vjPageSubtitle" />
+
+                    <Title
+                        text="Vista Jefatura"
+                        level="H1"
+                        class="vjPageTitle" />
+
+                    <Text
+                        text="Resumen ejecutivo de supervisores"
+                        class="vjPageSubtitle" />
+
                 </VBox>
-                <!-- Filtros -->
-                <HBox width="100%" wrap="NoWrap" alignItems="Stretch" class="vjFilterRow">
+
+                <!-- FILTROS -->
+
+                <HBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="vjFilterRow">
+
                     <VBox class="vjFilterCard vjFilterPeriod">
-                        <Label text="Periodo" class="vjFilterLabel" />
-                        <Select width="100%" selectedKey="{dashboard>/filters/period}" change=".onFilterChange" class="vjFilterControl">
-                            <core:Item key="2025-05" text="Mayo 2025" />
-                            <core:Item key="2025-06" text="Junio 2025" />
-                            <core:Item key="2025-07" text="Julio 2025" />
+
+                        <Label
+                            text="Periodo"
+                            class="vjFilterLabel" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/period}"
+                            change=".onPeriodChange"
+                            items="{dashboard>/catalogs/periods}"
+                            class="vjFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}" />
+
                         </Select>
+
                     </VBox>
+
                     <VBox class="vjFilterCard vjFilterDate">
-                        <Label text="Fecha desde" class="vjFilterLabel" />
-                        <DatePicker width="100%" value="{dashboard>/filters/dateFrom}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" change=".onFilterChange" class="vjFilterControl" />
+
+                        <Label
+                            text="Fecha desde"
+                            class="vjFilterLabel" />
+
+                        <DatePicker
+                            width="100%"
+                            value="{dashboard>/filters/dateFrom}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
+                            class="vjFilterControl" />
+
                     </VBox>
+
                     <VBox class="vjFilterCard vjFilterDate">
-                        <Label text="Fecha hasta" class="vjFilterLabel" />
-                        <DatePicker width="100%" value="{dashboard>/filters/dateTo}" valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" change=".onFilterChange" class="vjFilterControl" />
+
+                        <Label
+                            text="Fecha hasta"
+                            class="vjFilterLabel" />
+
+                        <DatePicker
+                            width="100%"
+                            value="{dashboard>/filters/dateTo}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
+                            class="vjFilterControl" />
+
                     </VBox>
+
                     <VBox class="vjFilterCard vjFilterWide">
-                        <Label text="Jefatura" class="vjFilterLabel" />
-                        <Select width="100%" selectedKey="{dashboard>/filters/management}" change=".onFilterChange" class="vjFilterControl">
-                            <core:Item key="NORTE" text="JEFATURA NORTE" />
-                            <core:Item key="CENTRO" text="JEFATURA CENTRO" />
-                            <core:Item key="SUR" text="JEFATURA SUR" />
+
+                        <Label
+                            text="Jefatura"
+                            class="vjFilterLabel" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/headship}"
+                            change=".onHeadshipChange"
+                            items="{dashboard>/catalogs/headships}"
+                            class="vjFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}" />
+
                         </Select>
+
                     </VBox>
+
                     <VBox class="vjFilterCard vjFilterSupervisor">
-                        <Label text="Supervisor" class="vjFilterLabel" />
-                        <Select width="100%" selectedKey="{dashboard>/filters/supervisor}" change=".onFilterChange" class="vjFilterControl">
-                            <core:Item key="ALL" text="Todos" />
-                            <core:Item key="SERGIO" text="Sergio Ramírez" />
-                            <core:Item key="MARIA" text="María Gómez" />
-                            <core:Item key="PATRICIA" text="Patricia Soto" />
-                            <core:Item key="LUIS" text="Luis Herrera" />
+
+                        <Label
+                            text="Supervisor"
+                            class="vjFilterLabel" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/supervisor}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogs/supervisors}"
+                            class="vjFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}" />
+
                         </Select>
+
                     </VBox>
+
                     <VBox class="vjFilterCard vjFilterShift">
-                        <Label text="Turno" class="vjFilterLabel" />
-                        <Select width="100%" selectedKey="{dashboard>/filters/shift}" change=".onFilterChange" class="vjFilterControl">
-                            <core:Item key="ALL" text="Todos" />
-                            <core:Item key="MORNING" text="Matutino" />
-                            <core:Item key="AFTERNOON" text="Vespertino" />
-                            <core:Item key="NIGHT" text="Nocturno" />
+
+                        <Label
+                            text="Turno"
+                            class="vjFilterLabel" />
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/shift}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogs/shifts}"
+                            class="vjFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}" />
+
                         </Select>
+
                     </VBox>
+
                     <VBox class="vjApplyButtonBox">
-                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="vjApplyButton" />
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="vjApplyButton" />
+
                     </VBox>
+
                 </HBox>
+
                 <!-- KPIs -->
-                <HBox width="100%" wrap="Wrap" class="vjKpiRow">
+
+                <HBox
+                    width="100%"
+                    wrap="Wrap"
+                    class="vjKpiRow">
+
+                    <!-- SUPERVISORES -->
+
                     <VBox class="vjKpiCard vjKpiBlue">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://group" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://group"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Supervisores activos" class="vjKpiLabel" />
-                                <Text text="8" class="vjKpiValue" />
-                                <Text text="de 8" class="vjKpiHelper" />
+
+                                <Text
+                                    text="Supervisores activos"
+                                    class="vjKpiLabel" />
+
+                                <Text
+                                    text="{dashboard>/summary/activeSupervisors}"
+                                    class="vjKpiValue" />
+
+                                <Text
+                                    text="{dashboard>/summary/activeSupervisorsHelper}"
+                                    class="vjKpiHelper" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
+                    <!-- RECURSOS -->
+
                     <VBox class="vjKpiCard vjKpiCyan">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://employee" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://employee"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Recursos totales" class="vjKpiLabel" />
-                                <Text text="92" class="vjKpiValue" />
+
+                                <Text
+                                    text="Recursos totales"
+                                    class="vjKpiLabel" />
+
+                                <Text
+                                    text="{dashboard>/summary/resourcesTotal}"
+                                    class="vjKpiValue" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
+                    <!-- CAPACIDAD -->
+
                     <VBox class="vjKpiCard vjKpiGreen">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://history" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://history"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Capacidad disponible" class="vjKpiLabel" />
-                                <Text text="6,880 h" class="vjKpiValue" />
+
+                                <Text
+                                    text="Capacidad disponible"
+                                    class="vjKpiLabel" />
+
+                                <Text
+                                    text="{dashboard>/summary/capacityAvailable}"
+                                    class="vjKpiValue" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
+                    <!-- CARGA -->
+
                     <VBox class="vjKpiCard vjKpiOrange">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://task" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://task"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Carga programada" class="vjKpiLabel" />
-                                <Text text="6,305 h" class="vjKpiValue" />
+
+                                <Text
+                                    text="Carga programada"
+                                    class="vjKpiLabel" />
+
+                                <Text
+                                    text="{dashboard>/summary/plannedLoad}"
+                                    class="vjKpiValue" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
+                    <!-- SOBRE CAPACIDAD -->
+
                     <VBox class="vjKpiCard vjKpiRed">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://message-warning" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://message-warning"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Recursos sobre capacidad" class="vjKpiLabel" />
-                                <Text text="11" class="vjKpiValue" />
+
+                                <Text
+                                    text="Recursos sobre capacidad"
+                                    class="vjKpiLabel" />
+
+                                <Text
+                                    text="{dashboard>/summary/overCapacity}"
+                                    class="vjKpiValue" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
+                    <!-- CUMPLIMIENTO -->
+
                     <VBox class="vjKpiCard vjKpiRed vjKpiCompliance">
-                        <HBox alignItems="Center" class="vjKpiContent">
-                            <VBox alignItems="Center" justifyContent="Center" class="vjKpiIconCircle">
-                                <core:Icon src="sap-icon://target-group" class="vjKpiIcon" />
+
+                        <HBox
+                            alignItems="Center"
+                            class="vjKpiContent">
+
+                            <VBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="vjKpiIconCircle">
+
+                                <core:Icon
+                                    src="sap-icon://target-group"
+                                    class="vjKpiIcon" />
+
                             </VBox>
+
                             <VBox class="vjKpiTextBlock">
-                                <Text text="Cumplimiento operativo" class="vjKpiLabel" />
-                                <HBox alignItems="Center" class="vjComplianceLine">
-                                    <Text text="70%" class="vjKpiValue" />
-                                    <Text text="Meta: 80%" class="vjKpiMeta" />
+
+                                <Text
+                                    text="Cumplimiento operativo"
+                                    class="vjKpiLabel" />
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="vjComplianceLine">
+
+                                    <Text
+                                        text="{dashboard>/summary/compliance}"
+                                        class="vjKpiValue" />
+
+                                    <Text
+                                        text="{dashboard>/summary/complianceMeta}"
+                                        class="vjKpiMeta" />
+
                                 </HBox>
-                                <Text text="13 puntos por debajo de la meta" class="vjKpiAlert" />
+
+                                <Text
+                                    text="{dashboard>/summary/complianceAlert}"
+                                    class="vjKpiAlert" />
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
+
                 </HBox>
-                <!-- Contenido principal -->
-                <HBox width="100%" alignItems="Stretch" class="vjMainRow">
-                    <!-- Utilización de supervisores -->
+
+                <!-- CONTENIDO PRINCIPAL -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    class="vjMainRow">
+
+                    <!-- UTILIZACIÓN -->
+
                     <VBox class="vjCard vjUtilizationCard vjLeftColumn">
-                        <Title text="Utilización de supervisores" level="H3" class="vjSectionTitle" />
-                        <Text text="Resumen de desempeño por nivel de utilización" class="vjSectionSubtitle" />
-                        <HBox width="100%" alignItems="Start" class="vjUtilizationGrid">
-                            <!-- Crítico -->
+
+                        <Title
+                            text="Utilización de supervisores"
+                            level="H3"
+                            class="vjSectionTitle" />
+
+                        <Text
+                            text="Resumen de desempeño por nivel de utilización"
+                            class="vjSectionSubtitle" />
+
+                        <HBox
+                            width="100%"
+                            alignItems="Start"
+                            class="vjUtilizationGrid">
+
+                            <!-- CRÍTICO -->
+
                             <VBox class="vjUtilColumn vjUtilCritical">
+
                                 <VBox class="vjUtilHeader">
-                                    <HBox alignItems="Center" class="vjUtilHeaderTop">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjUtilIconCircle">
-                                            <core:Icon src="sap-icon://trend-up" class="vjUtilIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjUtilHeaderTop">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjUtilIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://trend-up"
+                                                class="vjUtilIcon" />
+
                                         </VBox>
+
                                         <VBox>
+
                                             <HBox alignItems="Center">
-                                                <Text text="Crítico" class="vjUtilTitle" />
-                                                <Text text="1" class="vjUtilBadge" />
+
+                                                <Text
+                                                    text="Crítico"
+                                                    class="vjUtilTitle" />
+
+                                                <Text
+                                                    text="{dashboard>/utilizationMeta/criticalCount}"
+                                                    class="vjUtilBadge" />
+
                                             </HBox>
-                                            <Text text=">120%" class="vjUtilRange" />
+
+                                            <Text
+                                                text="{dashboard>/utilizationMeta/criticalRange}"
+                                                class="vjUtilRange" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjUtilRule" />
+
                                 </VBox>
-                                <VBox items="{dashboard>/utilization/critical}" class="vjSupervisorList">
+
+                                <VBox
+                                    items="{dashboard>/utilization/critical}"
+                                    class="vjSupervisorList">
+
                                     <items>
+
                                         <VBox class="vjSupervisorTile">
-                                            <Text text="{dashboard>name}" class="vjSupervisorName" />
-                                            <Text text="{dashboard>percentage}" class="vjSupervisorValue" />
-                                            <HBox alignItems="Center" class="vjResourceLine">
-                                                <core:Icon src="sap-icon://employee" class="vjResourceIcon" />
-                                                <Text text="{dashboard>resources} recursos" class="vjResourceText" />
+
+                                            <Text
+                                                text="{dashboard>name}"
+                                                class="vjSupervisorName" />
+
+                                            <Text
+                                                text="{dashboard>percentage}"
+                                                class="vjSupervisorValue" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="vjResourceLine">
+
+                                                <core:Icon
+                                                    src="sap-icon://employee"
+                                                    class="vjResourceIcon" />
+
+                                                <Text
+                                                    text="{dashboard>resources} recursos"
+                                                    class="vjResourceText" />
+
                                             </HBox>
+
                                         </VBox>
+
                                     </items>
+
                                 </VBox>
+
                             </VBox>
-                            <!-- Alto -->
+
+                            <!-- ALTO -->
+
                             <VBox class="vjUtilColumn vjUtilHigh">
+
                                 <VBox class="vjUtilHeader">
-                                    <HBox alignItems="Center" class="vjUtilHeaderTop">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjUtilIconCircle">
-                                            <core:Icon src="sap-icon://vertical-bar-chart" class="vjUtilIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjUtilHeaderTop">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjUtilIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://vertical-bar-chart"
+                                                class="vjUtilIcon" />
+
                                         </VBox>
+
                                         <VBox>
+
                                             <HBox alignItems="Center">
-                                                <Text text="Alto" class="vjUtilTitle" />
-                                                <Text text="2" class="vjUtilBadge" />
+
+                                                <Text
+                                                    text="Alto"
+                                                    class="vjUtilTitle" />
+
+                                                <Text
+                                                    text="{dashboard>/utilizationMeta/highCount}"
+                                                    class="vjUtilBadge" />
+
                                             </HBox>
-                                            <Text text="101% - 120%" class="vjUtilRange" />
+
+                                            <Text
+                                                text="{dashboard>/utilizationMeta/highRange}"
+                                                class="vjUtilRange" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjUtilRule" />
+
                                 </VBox>
-                                <VBox items="{dashboard>/utilization/high}" class="vjSupervisorList">
+
+                                <VBox
+                                    items="{dashboard>/utilization/high}"
+                                    class="vjSupervisorList">
+
                                     <items>
+
                                         <VBox class="vjSupervisorTile">
-                                            <Text text="{dashboard>name}" class="vjSupervisorName" />
-                                            <Text text="{dashboard>percentage}" class="vjSupervisorValue" />
-                                            <HBox alignItems="Center" class="vjResourceLine">
-                                                <core:Icon src="sap-icon://employee" class="vjResourceIcon" />
-                                                <Text text="{dashboard>resources} recursos" class="vjResourceText" />
+
+                                            <Text
+                                                text="{dashboard>name}"
+                                                class="vjSupervisorName" />
+
+                                            <Text
+                                                text="{dashboard>percentage}"
+                                                class="vjSupervisorValue" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="vjResourceLine">
+
+                                                <core:Icon
+                                                    src="sap-icon://employee"
+                                                    class="vjResourceIcon" />
+
+                                                <Text
+                                                    text="{dashboard>resources} recursos"
+                                                    class="vjResourceText" />
+
                                             </HBox>
+
                                         </VBox>
+
                                     </items>
+
                                 </VBox>
+
                             </VBox>
-                            <!-- Normal -->
+
+                            <!-- NORMAL -->
+
                             <VBox class="vjUtilColumn vjUtilNormal">
+
                                 <VBox class="vjUtilHeader">
-                                    <HBox alignItems="Center" class="vjUtilHeaderTop">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjUtilIconCircle">
-                                            <core:Icon src="sap-icon://line-chart" class="vjUtilIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjUtilHeaderTop">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjUtilIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://line-chart"
+                                                class="vjUtilIcon" />
+
                                         </VBox>
+
                                         <VBox>
+
                                             <HBox alignItems="Center">
-                                                <Text text="Normal" class="vjUtilTitle" />
-                                                <Text text="2" class="vjUtilBadge" />
+
+                                                <Text
+                                                    text="Normal"
+                                                    class="vjUtilTitle" />
+
+                                                <Text
+                                                    text="{dashboard>/utilizationMeta/normalCount}"
+                                                    class="vjUtilBadge" />
+
                                             </HBox>
-                                            <Text text="71% - 100%" class="vjUtilRange" />
+
+                                            <Text
+                                                text="{dashboard>/utilizationMeta/normalRange}"
+                                                class="vjUtilRange" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjUtilRule" />
+
                                 </VBox>
-                                <VBox items="{dashboard>/utilization/normal}" class="vjSupervisorList">
+
+                                <VBox
+                                    items="{dashboard>/utilization/normal}"
+                                    class="vjSupervisorList">
+
                                     <items>
+
                                         <VBox class="vjSupervisorTile">
-                                            <Text text="{dashboard>name}" class="vjSupervisorName" />
-                                            <Text text="{dashboard>percentage}" class="vjSupervisorValue" />
-                                            <HBox alignItems="Center" class="vjResourceLine">
-                                                <core:Icon src="sap-icon://employee" class="vjResourceIcon" />
-                                                <Text text="{dashboard>resources} recursos" class="vjResourceText" />
+
+                                            <Text
+                                                text="{dashboard>name}"
+                                                class="vjSupervisorName" />
+
+                                            <Text
+                                                text="{dashboard>percentage}"
+                                                class="vjSupervisorValue" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="vjResourceLine">
+
+                                                <core:Icon
+                                                    src="sap-icon://employee"
+                                                    class="vjResourceIcon" />
+
+                                                <Text
+                                                    text="{dashboard>resources} recursos"
+                                                    class="vjResourceText" />
+
                                             </HBox>
+
                                         </VBox>
+
                                     </items>
+
                                 </VBox>
+
                             </VBox>
-                            <!-- Bajo -->
+
+                            <!-- BAJO -->
+
                             <VBox class="vjUtilColumn vjUtilLow">
+
                                 <VBox class="vjUtilHeader">
-                                    <HBox alignItems="Center" class="vjUtilHeaderTop">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjUtilIconCircle">
-                                            <core:Icon src="sap-icon://message-success" class="vjUtilIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjUtilHeaderTop">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjUtilIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://message-success"
+                                                class="vjUtilIcon" />
+
                                         </VBox>
+
                                         <VBox>
+
                                             <HBox alignItems="Center">
-                                                <Text text="Bajo" class="vjUtilTitle" />
-                                                <Text text="3" class="vjUtilBadge" />
+
+                                                <Text
+                                                    text="Bajo"
+                                                    class="vjUtilTitle" />
+
+                                                <Text
+                                                    text="{dashboard>/utilizationMeta/lowCount}"
+                                                    class="vjUtilBadge" />
+
                                             </HBox>
-                                            <Text text="0% - 71%" class="vjUtilRange" />
+
+                                            <Text
+                                                text="{dashboard>/utilizationMeta/lowRange}"
+                                                class="vjUtilRange" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjUtilRule" />
+
                                 </VBox>
-                                <VBox items="{dashboard>/utilization/low}" class="vjSupervisorList">
+
+                                <VBox
+                                    items="{dashboard>/utilization/low}"
+                                    class="vjSupervisorList">
+
                                     <items>
+
                                         <VBox class="vjSupervisorTile">
-                                            <Text text="{dashboard>name}" class="vjSupervisorName" />
-                                            <Text text="{dashboard>percentage}" class="vjSupervisorValue" />
-                                            <HBox alignItems="Center" class="vjResourceLine">
-                                                <core:Icon src="sap-icon://employee" class="vjResourceIcon" />
-                                                <Text text="{dashboard>resources} recursos" class="vjResourceText" />
+
+                                            <Text
+                                                text="{dashboard>name}"
+                                                class="vjSupervisorName" />
+
+                                            <Text
+                                                text="{dashboard>percentage}"
+                                                class="vjSupervisorValue" />
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="vjResourceLine">
+
+                                                <core:Icon
+                                                    src="sap-icon://employee"
+                                                    class="vjResourceIcon" />
+
+                                                <Text
+                                                    text="{dashboard>resources} recursos"
+                                                    class="vjResourceText" />
+
                                             </HBox>
+
                                         </VBox>
+
                                     </items>
+
                                 </VBox>
+
                             </VBox>
+
                         </HBox>
+
                     </VBox>
-                    <!-- Columna derecha -->
+
+                    <!-- COLUMNA DERECHA -->
+
                     <VBox class="vjRightColumn">
-                        <HBox width="100%" alignItems="Stretch" class="vjRightTopRow">
-                            <!-- Presión por servicio -->
+
+                        <HBox
+                            width="100%"
+                            alignItems="Stretch"
+                            class="vjRightTopRow">
+
+                            <!-- SERVICIO -->
+
                             <VBox class="vjCard vjServiceCard">
-                                <Title text="Presión por tipo de servicio" level="H3" class="vjSectionTitle" />
-                                <HBox width="100%" alignItems="Center" justifyContent="Center" class="vjServiceContent">
-                                    <VBox alignItems="Center" justifyContent="Center" class="vjDonutChart">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjDonutCenter">
-                                            <Text text="Carga" class="vjDonutText" />
-                                            <Text text="por servicio" class="vjDonutText" />
+
+                                <Title
+                                    text="Presión por tipo de servicio"
+                                    level="H3"
+                                    class="vjSectionTitle" />
+
+                                <HBox
+                                    width="100%"
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="vjServiceContent">
+
+                                    <VBox
+                                        id="serviceDonut"
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="vjDonutChart">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjDonutCenter">
+
+                                            <Text
+                                                text="Carga"
+                                                class="vjDonutText" />
+
+                                            <Text
+                                                text="por servicio"
+                                                class="vjDonutText" />
+
                                         </VBox>
+
                                     </VBox>
+
                                     <VBox class="vjServiceLegend">
-                                        <HBox alignItems="Center" class="vjLegendRow vjLegendPlanned">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjLegendIconBox">
-                                                <core:Icon src="sap-icon://document-text" class="vjLegendIcon" />
+
+                                        <!-- SERVICIO 1 -->
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="vjLegendRow vjLegendPlanned">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjLegendIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://document-text"
+                                                    class="vjLegendIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjLegendTextBlock">
-                                                <Text text="Planeado" class="vjLegendLabel" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/0/label}"
+                                                    class="vjLegendLabel" />
+
                                             </VBox>
-                                            <VBox alignItems="End" class="vjLegendNumbers">
-                                                <Text text="45%" class="vjLegendValue" />
-                                                <Text text="2,837 h" class="vjLegendHours" />
+
+                                            <VBox
+                                                alignItems="End"
+                                                class="vjLegendNumbers">
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/0/percentage}"
+                                                    class="vjLegendValue" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/0/hours}"
+                                                    class="vjLegendHours" />
+
                                             </VBox>
+
                                         </HBox>
-                                        <HBox alignItems="Center" class="vjLegendRow vjLegendCorrective">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjLegendIconBox">
-                                                <core:Icon src="sap-icon://wrench" class="vjLegendIcon" />
+
+                                        <!-- SERVICIO 2 -->
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="vjLegendRow vjLegendCorrective">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjLegendIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://wrench"
+                                                    class="vjLegendIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjLegendTextBlock">
-                                                <Text text="Correctivo" class="vjLegendLabel" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/1/label}"
+                                                    class="vjLegendLabel" />
+
                                             </VBox>
-                                            <VBox alignItems="End" class="vjLegendNumbers">
-                                                <Text text="35%" class="vjLegendValue" />
-                                                <Text text="2,207 h" class="vjLegendHours" />
+
+                                            <VBox
+                                                alignItems="End"
+                                                class="vjLegendNumbers">
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/1/percentage}"
+                                                    class="vjLegendValue" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/1/hours}"
+                                                    class="vjLegendHours" />
+
                                             </VBox>
+
                                         </HBox>
-                                        <HBox alignItems="Center" class="vjLegendRow vjLegendCallCenter">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjLegendIconBox">
-                                                <core:Icon src="sap-icon://customer-and-contacts" class="vjLegendIcon" />
+
+                                        <!-- SERVICIO 3 -->
+
+                                        <HBox
+                                            alignItems="Center"
+                                            class="vjLegendRow vjLegendCallCenter">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjLegendIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://customer-and-contacts"
+                                                    class="vjLegendIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjLegendTextBlock">
-                                                <Text text="Call Center" class="vjLegendLabel" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/2/label}"
+                                                    class="vjLegendLabel" />
+
                                             </VBox>
-                                            <VBox alignItems="End" class="vjLegendNumbers">
-                                                <Text text="20%" class="vjLegendValue" />
-                                                <Text text="1,261 h" class="vjLegendHours" />
+
+                                            <VBox
+                                                alignItems="End"
+                                                class="vjLegendNumbers">
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/2/percentage}"
+                                                    class="vjLegendValue" />
+
+                                                <Text
+                                                    text="{dashboard>/serviceTypes/2/hours}"
+                                                    class="vjLegendHours" />
+
                                             </VBox>
+
                                         </HBox>
+
                                     </VBox>
+
                                 </HBox>
-                                <HBox justifyContent="Center" alignItems="Center" class="vjServiceTotal">
-                                    <core:Icon src="sap-icon://history" class="vjServiceTotalIcon" />
-                                    <Text text="Total carga programada:" class="vjServiceTotalLabel" />
-                                    <Text text="6,305 h" class="vjServiceTotalValue" />
+
+                                <HBox
+                                    justifyContent="Center"
+                                    alignItems="Center"
+                                    class="vjServiceTotal">
+
+                                    <core:Icon
+                                        src="sap-icon://history"
+                                        class="vjServiceTotalIcon" />
+
+                                    <Text
+                                        text="Total carga programada:"
+                                        class="vjServiceTotalLabel" />
+
+                                    <Text
+                                        text="{dashboard>/serviceTotalHours}"
+                                        class="vjServiceTotalValue" />
+
                                 </HBox>
+
                             </VBox>
-                            <!-- Acciones -->
+
+                            <!-- ACCIONES -->
+
                             <VBox class="vjCard vjActionsCard">
-                                <List showSeparators="Inner" inset="false" class="vjActionList">
-                                    <CustomListItem type="Active" press=".onViewSupervisor" class="vjActionItem vjActionBlue">
-                                        <HBox width="100%" alignItems="Center" class="vjActionContent">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjActionIconBox">
-                                                <core:Icon src="sap-icon://group" class="vjActionIcon" />
+
+                                <List
+                                    showSeparators="Inner"
+                                    inset="false"
+                                    class="vjActionList">
+
+                                    <CustomListItem
+                                        type="Active"
+                                        press=".onViewSupervisor"
+                                        class="vjActionItem vjActionBlue">
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="vjActionContent">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjActionIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://group"
+                                                    class="vjActionIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjActionTextBlock">
-                                                <Text text="Ver supervisor" class="vjActionTitle" />
-                                                <Text text="Consultar detalle de desempeño" class="vjActionSubtitle" />
+
+                                                <Text
+                                                    text="Ver supervisor"
+                                                    class="vjActionTitle" />
+
+                                                <Text
+                                                    text="Consultar detalle de desempeño"
+                                                    class="vjActionSubtitle" />
+
                                             </VBox>
-                                            <core:Icon src="sap-icon://slim-arrow-right" class="vjActionArrow" />
+
+                                            <core:Icon
+                                                src="sap-icon://slim-arrow-right"
+                                                class="vjActionArrow" />
+
                                         </HBox>
+
                                     </CustomListItem>
-                                    <CustomListItem type="Active" press=".onAssignments" class="vjActionItem vjActionPurple">
-                                        <HBox width="100%" alignItems="Center" class="vjActionContent">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjActionIconBox">
-                                                <core:Icon src="sap-icon://task" class="vjActionIcon" />
+
+                                    <CustomListItem
+                                        type="Active"
+                                        press=".onAssignments"
+                                        class="vjActionItem vjActionPurple">
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="vjActionContent">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjActionIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://task"
+                                                    class="vjActionIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjActionTextBlock">
-                                                <Text text="Asignaciones" class="vjActionTitle" />
-                                                <Text text="Gestionar asignaciones de recursos" class="vjActionSubtitle" />
+
+                                                <Text
+                                                    text="Asignaciones"
+                                                    class="vjActionTitle" />
+
+                                                <Text
+                                                    text="Gestionar asignaciones de recursos"
+                                                    class="vjActionSubtitle" />
+
                                             </VBox>
-                                            <core:Icon src="sap-icon://slim-arrow-right" class="vjActionArrow" />
+
+                                            <core:Icon
+                                                src="sap-icon://slim-arrow-right"
+                                                class="vjActionArrow" />
+
                                         </HBox>
+
                                     </CustomListItem>
-                                    <CustomListItem type="Active" press=".onCapacityBalance" class="vjActionItem vjActionGreen">
-                                        <HBox width="100%" alignItems="Center" class="vjActionContent">
-                                            <VBox alignItems="Center" justifyContent="Center" class="vjActionIconBox">
-                                                <core:Icon src="sap-icon://performance" class="vjActionIcon" />
+
+                                    <CustomListItem
+                                        type="Active"
+                                        press=".onCapacityBalance"
+                                        class="vjActionItem vjActionGreen">
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="vjActionContent">
+
+                                            <VBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="vjActionIconBox">
+
+                                                <core:Icon
+                                                    src="sap-icon://performance"
+                                                    class="vjActionIcon" />
+
                                             </VBox>
+
                                             <VBox class="vjActionTextBlock">
-                                                <Text text="Balance de capacidad" class="vjActionTitle" />
-                                                <Text text="Analizar capacidad vs demanda" class="vjActionSubtitle" />
+
+                                                <Text
+                                                    text="Balance de capacidad"
+                                                    class="vjActionTitle" />
+
+                                                <Text
+                                                    text="Analizar capacidad vs demanda"
+                                                    class="vjActionSubtitle" />
+
                                             </VBox>
-                                            <core:Icon src="sap-icon://slim-arrow-right" class="vjActionArrow" />
+
+                                            <core:Icon
+                                                src="sap-icon://slim-arrow-right"
+                                                class="vjActionArrow" />
+
                                         </HBox>
+
                                     </CustomListItem>
+
                                 </List>
+
                             </VBox>
+
                         </HBox>
-                        <!-- Materiales -->
-                        <VBox class="vjCard vjMaterialsCard">
-                            <Title text="Consumo de materiales más representativo" level="H3" class="vjSectionTitle" />
-                            <Text text="Resumen visual del consumo en el periodo" class="vjSectionSubtitle" />
-                            <HBox width="100%" alignItems="Stretch" class="vjMaterialsGrid">
-                                <!-- Refacciones -->
+
+                        <!-- MATERIALES -->
+
+                        <VBox
+                            busy="{dashboard>/materialsBusy}"
+                            busyIndicatorDelay="0"
+                            class="vjCard vjMaterialsCard">
+
+                            <Title
+                                text="Consumo de materiales más representativo"
+                                level="H3"
+                                class="vjSectionTitle" />
+
+                            <Text
+                                text="Resumen visual del consumo en el periodo"
+                                class="vjSectionSubtitle" />
+
+                            <HBox
+                                width="100%"
+                                alignItems="Stretch"
+                                class="vjMaterialsGrid">
+
+                                <!-- MATERIAL 1 -->
+
                                 <VBox class="vjMaterialTile vjMaterialBlue">
-                                    <HBox alignItems="Center" class="vjMaterialMain">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjMaterialIconCircle">
-                                            <core:Icon src="sap-icon://action-settings" class="vjMaterialIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialMain">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjMaterialIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://action-settings"
+                                                class="vjMaterialIcon" />
+
                                         </VBox>
+
                                         <VBox class="vjMaterialText">
-                                            <Text text="Refacciones" class="vjMaterialLabel" />
-                                            <Text text="92%" class="vjMaterialValue" />
-                                            <Text text="del consumo" class="vjMaterialHelper" />
+
+                                            <Text
+                                                text="{dashboard>/materials/0/name}"
+                                                class="vjMaterialLabel" />
+
+                                            <Text
+                                                text="{dashboard>/materials/0/percentage}"
+                                                class="vjMaterialValue" />
+
+                                            <Text
+                                                text="del plan"
+                                                class="vjMaterialHelper" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjMaterialBar">
-                                        <VBox width="92%" class="vjMaterialBarFill" />
+
+                                        <VBox
+                                            width="{dashboard>/materials/0/barWidth}"
+                                            class="vjMaterialBarFill" />
+
                                     </VBox>
-                                    <HBox alignItems="Center" class="vjMaterialStatus vjStatusGood">
-                                        <core:Icon src="sap-icon://message-success" class="vjStatusIcon" />
-                                        <Text text="En control" class="vjStatusText" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialStatus vjStatusGood">
+
+                                        <core:Icon
+                                            src="{dashboard>/materials/0/statusIcon}"
+                                            class="vjStatusIcon" />
+
+                                        <Text
+                                            text="{dashboard>/materials/0/status}"
+                                            class="vjStatusText" />
+
                                     </HBox>
+
                                 </VBox>
-                                <!-- Consumibles -->
+
+                                <!-- MATERIAL 2 -->
+
                                 <VBox class="vjMaterialTile vjMaterialPurple">
-                                    <HBox alignItems="Center" class="vjMaterialMain">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjMaterialIconCircle">
-                                            <core:Icon src="sap-icon://product" class="vjMaterialIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialMain">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjMaterialIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://product"
+                                                class="vjMaterialIcon" />
+
                                         </VBox>
+
                                         <VBox class="vjMaterialText">
-                                            <Text text="Consumibles" class="vjMaterialLabel" />
-                                            <Text text="97%" class="vjMaterialValue" />
-                                            <Text text="del consumo" class="vjMaterialHelper" />
+
+                                            <Text
+                                                text="{dashboard>/materials/1/name}"
+                                                class="vjMaterialLabel" />
+
+                                            <Text
+                                                text="{dashboard>/materials/1/percentage}"
+                                                class="vjMaterialValue" />
+
+                                            <Text
+                                                text="del plan"
+                                                class="vjMaterialHelper" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjMaterialBar">
-                                        <VBox width="97%" class="vjMaterialBarFill" />
+
+                                        <VBox
+                                            width="{dashboard>/materials/1/barWidth}"
+                                            class="vjMaterialBarFill" />
+
                                     </VBox>
-                                    <HBox alignItems="Center" class="vjMaterialStatus vjStatusWarning">
-                                        <core:Icon src="sap-icon://message-warning" class="vjStatusIcon" />
-                                        <Text text="Cerca del plan" class="vjStatusText" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialStatus vjStatusWarning">
+
+                                        <core:Icon
+                                            src="{dashboard>/materials/1/statusIcon}"
+                                            class="vjStatusIcon" />
+
+                                        <Text
+                                            text="{dashboard>/materials/1/status}"
+                                            class="vjStatusText" />
+
                                     </HBox>
+
                                 </VBox>
-                                <!-- Lubricantes -->
+
+                                <!-- MATERIAL 3 -->
+
                                 <VBox class="vjMaterialTile vjMaterialLubricants">
-                                    <HBox alignItems="Center" class="vjMaterialMain">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjMaterialIconCircle">
-                                            <core:Icon src="sap-icon://nutrition-activity" class="vjMaterialIcon vjMaterialLubricantIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialMain">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjMaterialIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://nutrition-activity"
+                                                class="vjMaterialIcon vjMaterialLubricantIcon" />
+
                                         </VBox>
+
                                         <VBox class="vjMaterialText">
-                                            <Text text="Lubricantes" class="vjMaterialLabel" />
-                                            <Text text="105%" class="vjMaterialValue" />
-                                            <Text text="del consumo" class="vjMaterialHelper" />
+
+                                            <Text
+                                                text="{dashboard>/materials/2/name}"
+                                                class="vjMaterialLabel" />
+
+                                            <Text
+                                                text="{dashboard>/materials/2/percentage}"
+                                                class="vjMaterialValue" />
+
+                                            <Text
+                                                text="del plan"
+                                                class="vjMaterialHelper" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjMaterialBar">
-                                        <VBox width="100%" class="vjMaterialBarFill" />
+
+                                        <VBox
+                                            width="{dashboard>/materials/2/barWidth}"
+                                            class="vjMaterialBarFill" />
+
                                     </VBox>
-                                    <HBox alignItems="Center" class="vjMaterialStatus vjStatusCritical">
-                                        <core:Icon src="sap-icon://message-error" class="vjStatusIcon" />
-                                        <Text text="Sobre plan" class="vjStatusText" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialStatus vjStatusCritical">
+
+                                        <core:Icon
+                                            src="{dashboard>/materials/2/statusIcon}"
+                                            class="vjStatusIcon" />
+
+                                        <Text
+                                            text="{dashboard>/materials/2/status}"
+                                            class="vjStatusText" />
+
                                     </HBox>
+
                                 </VBox>
-                                <!-- Herramientas -->
+
+                                <!-- MATERIAL 4 -->
+
                                 <VBox class="vjMaterialTile vjMaterialGreen">
-                                    <HBox alignItems="Center" class="vjMaterialMain">
-                                        <VBox alignItems="Center" justifyContent="Center" class="vjMaterialIconCircle">
-                                            <core:Icon src="sap-icon://wrench" class="vjMaterialIcon" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialMain">
+
+                                        <VBox
+                                            alignItems="Center"
+                                            justifyContent="Center"
+                                            class="vjMaterialIconCircle">
+
+                                            <core:Icon
+                                                src="sap-icon://wrench"
+                                                class="vjMaterialIcon" />
+
                                         </VBox>
+
                                         <VBox class="vjMaterialText">
-                                            <Text text="Herramientas" class="vjMaterialLabel" />
-                                            <Text text="88%" class="vjMaterialValue" />
-                                            <Text text="del consumo" class="vjMaterialHelper" />
+
+                                            <Text
+                                                text="{dashboard>/materials/3/name}"
+                                                class="vjMaterialLabel" />
+
+                                            <Text
+                                                text="{dashboard>/materials/3/percentage}"
+                                                class="vjMaterialValue" />
+
+                                            <Text
+                                                text="del plan"
+                                                class="vjMaterialHelper" />
+
                                         </VBox>
+
                                     </HBox>
+
                                     <VBox class="vjMaterialBar">
-                                        <VBox width="88%" class="vjMaterialBarFill" />
+
+                                        <VBox
+                                            width="{dashboard>/materials/3/barWidth}"
+                                            class="vjMaterialBarFill" />
+
                                     </VBox>
-                                    <HBox alignItems="Center" class="vjMaterialStatus vjStatusGood">
-                                        <core:Icon src="sap-icon://message-success" class="vjStatusIcon" />
-                                        <Text text="En control" class="vjStatusText" />
+
+                                    <HBox
+                                        alignItems="Center"
+                                        class="vjMaterialStatus vjStatusGood">
+
+                                        <core:Icon
+                                            src="{dashboard>/materials/3/statusIcon}"
+                                            class="vjStatusIcon" />
+
+                                        <Text
+                                            text="{dashboard>/materials/3/status}"
+                                            class="vjStatusText" />
+
                                     </HBox>
+
                                 </VBox>
+
                             </HBox>
+
                         </VBox>
+
                     </VBox>
+
                 </HBox>
+
             </VBox>
+
         </content>
+
     </Page>
+
 </mvc:View>

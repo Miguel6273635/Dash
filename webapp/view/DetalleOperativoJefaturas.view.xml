@@ -18,9 +18,7 @@
                 width="100%"
                 class="dojDashboard">
 
-                <!-- ======================================================
-                     ENCABEZADO
-                     ====================================================== -->
+                <!-- ENCABEZADO -->
 
                 <VBox class="dojHeaderBlock">
 
@@ -35,10 +33,7 @@
 
                 </VBox>
 
-                <!-- ======================================================
-                     FILTROS
-                     El posicionamiento lo controla dojFiltersBar con CSS Grid
-                     ====================================================== -->
+                <!-- FILTROS -->
 
                 <VBox
                     width="100%"
@@ -50,29 +45,18 @@
 
                         <Label
                             text="Periodo"
-                            labelFor="periodSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="periodSelect"
                             width="100%"
-                            selectedKey="2025-06">
+                            selectedKey="{/filters/period}"
+                            change=".onPeriodChange"
+                            items="{/catalogs/periods}">
 
                             <core:Item
-                                key="2025-04"
-                                text="Abril 2025"/>
-
-                            <core:Item
-                                key="2025-05"
-                                text="Mayo 2025"/>
-
-                            <core:Item
-                                key="2025-06"
-                                text="Junio 2025"/>
-
-                            <core:Item
-                                key="2025-07"
-                                text="Julio 2025"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
@@ -84,15 +68,15 @@
 
                         <Label
                             text="Fecha desde"
-                            labelFor="dateFromPicker"
                             class="dojFilterLabel"/>
 
                         <DatePicker
                             id="dateFromPicker"
                             width="100%"
-                            value="2025-06-01"
-                            valueFormat="yyyy-MM-dd"
+                            value="{/filters/dateFrom}"
+                            valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
                             placeholder="dd/mm/aaaa"/>
 
                     </VBox>
@@ -103,15 +87,15 @@
 
                         <Label
                             text="Fecha hasta"
-                            labelFor="dateToPicker"
                             class="dojFilterLabel"/>
 
                         <DatePicker
                             id="dateToPicker"
                             width="100%"
-                            value="2025-06-30"
-                            valueFormat="yyyy-MM-dd"
+                            value="{/filters/dateTo}"
+                            valueFormat="dd/MM/yyyy"
                             displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
                             placeholder="dd/mm/aaaa"/>
 
                     </VBox>
@@ -122,25 +106,18 @@
 
                         <Label
                             text="Gerencia"
-                            labelFor="managementSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="managementSelect"
                             width="100%"
-                            selectedKey="G01">
+                            selectedKey="{/filters/management}"
+                            change=".onManagementChange"
+                            items="{/catalogs/managements}">
 
                             <core:Item
-                                key="G01"
-                                text="G01 - Gerencia Norte"/>
-
-                            <core:Item
-                                key="G02"
-                                text="G02 - Gerencia Centro"/>
-
-                            <core:Item
-                                key="G03"
-                                text="G03 - Gerencia Sur"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
@@ -152,41 +129,18 @@
 
                         <Label
                             text="Jefatura"
-                            labelFor="managementHeadSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="managementHeadSelect"
                             width="100%"
-                            selectedKey="ALL">
+                            selectedKey="{/filters/headship}"
+                            change=".onFilterChange"
+                            items="{/catalogs/headships}">
 
                             <core:Item
-                                key="ALL"
-                                text="Todas"/>
-
-                            <core:Item
-                                key="J01"
-                                text="J01 - Taller Norte"/>
-
-                            <core:Item
-                                key="J02"
-                                text="J02 - Taller Centro"/>
-
-                            <core:Item
-                                key="J03"
-                                text="J03 - Taller Sur"/>
-
-                            <core:Item
-                                key="J04"
-                                text="J04 - Campo Norte"/>
-
-                            <core:Item
-                                key="J05"
-                                text="J05 - Campo Centro"/>
-
-                            <core:Item
-                                key="J06"
-                                text="J06 - Campo Sur"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
@@ -198,29 +152,18 @@
 
                         <Label
                             text="Zona"
-                            labelFor="zoneSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="zoneSelect"
                             width="100%"
-                            selectedKey="ALL">
+                            selectedKey="{/filters/zone}"
+                            change=".onFilterChange"
+                            items="{/catalogs/zones}">
 
                             <core:Item
-                                key="ALL"
-                                text="Todas"/>
-
-                            <core:Item
-                                key="NORTH"
-                                text="Norte"/>
-
-                            <core:Item
-                                key="CENTER"
-                                text="Centro"/>
-
-                            <core:Item
-                                key="SOUTH"
-                                text="Sur"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
@@ -232,99 +175,70 @@
 
                         <Label
                             text="Turno"
-                            labelFor="shiftSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="shiftSelect"
                             width="100%"
-                            selectedKey="ALL">
+                            selectedKey="{/filters/shift}"
+                            change=".onFilterChange"
+                            items="{/catalogs/shifts}">
 
                             <core:Item
-                                key="ALL"
-                                text="Todos"/>
-
-                            <core:Item
-                                key="MORNING"
-                                text="Matutino"/>
-
-                            <core:Item
-                                key="AFTERNOON"
-                                text="Vespertino"/>
-
-                            <core:Item
-                                key="NIGHT"
-                                text="Nocturno"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
                     </VBox>
 
-                    <!-- TIPO DE SERVICIO -->
+                    <!-- TIPO SERVICIO -->
 
                     <VBox class="dojFilter dojFilterService">
 
                         <Label
                             text="Tipo de servicio"
-                            labelFor="serviceTypeSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="serviceTypeSelect"
                             width="100%"
-                            selectedKey="ALL">
+                            selectedKey="{/filters/serviceType}"
+                            change=".onFilterChange"
+                            items="{/catalogs/serviceTypes}">
 
                             <core:Item
-                                key="ALL"
-                                text="Todos"/>
-
-                            <core:Item
-                                key="PREVENTIVE"
-                                text="Preventivo"/>
-
-                            <core:Item
-                                key="CORRECTIVE"
-                                text="Correctivo"/>
-
-                            <core:Item
-                                key="EMERGENCY"
-                                text="Emergencia"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
                     </VBox>
 
-                    <!-- TIPO DE RECURSO -->
+                    <!-- TIPO RECURSO -->
 
                     <VBox class="dojFilter dojFilterResource">
 
                         <Label
                             text="Tipo de recurso"
-                            labelFor="resourceTypeSelect"
                             class="dojFilterLabel"/>
 
                         <Select
                             id="resourceTypeSelect"
                             width="100%"
-                            selectedKey="ALL">
+                            selectedKey="{/filters/resourceType}"
+                            change=".onFilterChange"
+                            items="{/catalogs/resourceTypes}">
 
                             <core:Item
-                                key="ALL"
-                                text="Todos"/>
-
-                            <core:Item
-                                key="MECHANIC"
-                                text="Mecánicos"/>
-
-                            <core:Item
-                                key="ASSISTANT"
-                                text="Ayudantes"/>
+                                key="{key}"
+                                text="{text}"/>
 
                         </Select>
 
                     </VBox>
 
-                    <!-- ACCIONES DE FILTRO -->
+                    <!-- ACCIONES -->
 
                     <HBox
                         width="100%"
@@ -348,9 +262,7 @@
 
                 </VBox>
 
-                <!-- ======================================================
-                     INDICADORES KPI
-                     ====================================================== -->
+                <!-- KPIS -->
 
                 <FlexBox
                     width="100%"
@@ -359,7 +271,7 @@
                     renderType="Div"
                     class="dojKpiGrid">
 
-                    <!-- KPI 1: JEFATURAS ACTIVAS -->
+                    <!-- JEFATURAS -->
 
                     <HBox
                         alignItems="Center"
@@ -372,35 +284,29 @@
 
                             <core:Icon
                                 src="sap-icon://group"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Jefaturas activas"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
-                                text="{/kpis/activeManagements/value}"
-                                wrapping="false"
+                                text="{/kpis/activeHeadships/value}"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="Total jefaturas"
-                                wrapping="false"
+                                text="{/kpis/activeHeadships/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
 
                     </HBox>
 
-                    <!-- KPI 2: RECURSOS TOTALES -->
+                    <!-- RECURSOS -->
 
                     <HBox
                         alignItems="Center"
@@ -413,35 +319,29 @@
 
                             <core:Icon
                                 src="sap-icon://employee"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Recursos totales"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
                                 text="{/kpis/totalResources/value}"
-                                wrapping="false"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="Mecánicos y ayudantes"
-                                wrapping="false"
+                                text="{/kpis/totalResources/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
 
                     </HBox>
 
-                    <!-- KPI 3: CAPACIDAD DISPONIBLE -->
+                    <!-- CAPACIDAD -->
 
                     <HBox
                         alignItems="Center"
@@ -454,37 +354,33 @@
 
                             <core:Icon
                                 src="sap-icon://history"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Capacidad disponible"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
                                 text="{/kpis/availableCapacity/value}"
-                                wrapping="false"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="Total disponible"
-                                wrapping="false"
+                                text="{/kpis/availableCapacity/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
 
                     </HBox>
 
-                    <!-- KPI 4: CARGA PROGRAMADA -->
+                    <!-- CARGA -->
 
                     <HBox
+                        busy="{/operationalBusy}"
+                        busyIndicatorDelay="0"
                         alignItems="Center"
                         class="dojKpiCard dojKpiOrange">
 
@@ -495,35 +391,29 @@
 
                             <core:Icon
                                 src="sap-icon://activity-items"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Carga programada"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
                                 text="{/kpis/scheduledLoad/value}"
-                                wrapping="false"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="Total programada"
-                                wrapping="false"
+                                text="{/kpis/scheduledLoad/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
 
                     </HBox>
 
-                    <!-- KPI 5: UTILIZACIÓN PROMEDIO -->
+                    <!-- UTILIZACIÓN -->
 
                     <HBox
                         alignItems="Center"
@@ -536,35 +426,29 @@
 
                             <core:Icon
                                 src="sap-icon://trend-up"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Utilización promedio"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
                                 text="{/kpis/averageUtilization/value}"
-                                wrapping="false"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="Dentro del rango normal"
-                                wrapping="false"
+                                text="{/kpis/averageUtilization/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
 
                     </HBox>
 
-                    <!-- KPI 6: CUMPLIMIENTO OPERATIVO -->
+                    <!-- CUMPLIMIENTO -->
 
                     <HBox
                         alignItems="Center"
@@ -577,28 +461,22 @@
 
                             <core:Icon
                                 src="sap-icon://target-group"
-                                decorative="false"
                                 class="dojKpiIcon"/>
 
                         </VBox>
 
-                        <VBox
-                            justifyContent="Center"
-                            class="dojKpiContent">
+                        <VBox class="dojKpiContent">
 
                             <Text
                                 text="Cumplimiento operativo"
-                                wrapping="false"
                                 class="dojKpiLabel"/>
 
                             <Text
                                 text="{/kpis/operationalCompliance/value}"
-                                wrapping="false"
                                 class="dojKpiValue"/>
 
                             <Text
-                                text="10 pp por debajo de la meta"
-                                wrapping="false"
+                                text="{/kpis/operationalCompliance/description}"
                                 class="dojKpiDescription"/>
 
                         </VBox>
@@ -607,17 +485,13 @@
 
                 </FlexBox>
 
-                <!-- ======================================================
-                     CARD DE TABLA
-                     ====================================================== -->
+                <!-- TABLA -->
 
                 <VBox
+                    busy="{/operationalBusy}"
+                    busyIndicatorDelay="0"
                     width="100%"
                     class="dojTableCard">
-
-                    <!-- ==================================================
-                         CABECERA DE LA TABLA
-                         ================================================== -->
 
                     <Toolbar
                         design="Transparent"
@@ -634,7 +508,6 @@
 
                                 <core:Icon
                                     src="sap-icon://table-view"
-                                    decorative="false"
                                     class="dojTableIcon"/>
 
                             </VBox>
@@ -648,16 +521,11 @@
 
                         <ToolbarSpacer/>
 
-                        <!-- LEYENDA -->
-
                         <HBox
                             alignItems="Center"
-                            wrap="Wrap"
                             class="dojLegend">
 
-                            <HBox
-                                alignItems="Center"
-                                class="dojLegendItem">
+                            <HBox class="dojLegendItem">
 
                                 <Text
                                     text="●"
@@ -669,9 +537,7 @@
 
                             </HBox>
 
-                            <HBox
-                                alignItems="Center"
-                                class="dojLegendItem">
+                            <HBox class="dojLegendItem">
 
                                 <Text
                                     text="●"
@@ -683,9 +549,7 @@
 
                             </HBox>
 
-                            <HBox
-                                alignItems="Center"
-                                class="dojLegendItem">
+                            <HBox class="dojLegendItem">
 
                                 <Text
                                     text="●"
@@ -697,9 +561,7 @@
 
                             </HBox>
 
-                            <HBox
-                                alignItems="Center"
-                                class="dojLegendItem">
+                            <HBox class="dojLegendItem">
 
                                 <Text
                                     text="●"
@@ -715,10 +577,6 @@
 
                     </Toolbar>
 
-                    <!-- ==================================================
-                         TABLA
-                         ================================================== -->
-
                     <Table
                         id="jefaturasTable"
                         width="100%"
@@ -733,24 +591,18 @@
 
                         <columns>
 
-                            <Column
-                                width="14%"
-                                hAlign="Begin">
+                            <Column width="14%">
 
                                 <Text
                                     text="Jefatura"
-                                    wrapping="true"
                                     class="dojColumnHeader dojColumnHeaderLeft"/>
 
                             </Column>
 
-                            <Column
-                                width="11%"
-                                hAlign="Begin">
+                            <Column width="11%">
 
                                 <Text
                                     text="Jefe responsable"
-                                    wrapping="true"
                                     class="dojColumnHeader dojColumnHeaderLeft"/>
 
                             </Column>
@@ -761,7 +613,6 @@
 
                                 <Text
                                     text="Supervisores activos"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -773,7 +624,6 @@
 
                                 <Text
                                     text="Recursos totales"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -785,7 +635,6 @@
 
                                 <Text
                                     text="Capacidad disponible (h)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -797,7 +646,6 @@
 
                                 <Text
                                     text="Carga programada (h)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -809,7 +657,6 @@
 
                                 <Text
                                     text="Utilización (%)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -821,7 +668,6 @@
 
                                 <Text
                                     text="Estatus utilización"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -833,7 +679,6 @@
 
                                 <Text
                                     text="Recursos sobre capacidad"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -845,7 +690,6 @@
 
                                 <Text
                                     text="Cumplimiento operativo (%)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -857,7 +701,6 @@
 
                                 <Text
                                     text="Meta (%)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -869,7 +712,6 @@
 
                                 <Text
                                     text="Diferencia vs meta (pp)"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -881,7 +723,6 @@
 
                                 <Text
                                     text="Acción"
-                                    wrapping="true"
                                     textAlign="Center"
                                     class="dojColumnHeader"/>
 
@@ -897,8 +738,6 @@
 
                                 <cells>
 
-                                    <!-- JEFATURA -->
-
                                     <VBox>
 
                                         <Link
@@ -910,64 +749,42 @@
                                         <Text
                                             text="{jefatura}"
                                             visible="{isTotal}"
-                                            wrapping="false"
                                             class="dojCellText dojTotalLabel"/>
 
                                     </VBox>
 
-                                    <!-- JEFE RESPONSABLE -->
-
                                     <Text
                                         text="{manager}"
-                                        wrapping="false"
                                         class="dojCellText"/>
-
-                                    <!-- SUPERVISORES ACTIVOS -->
 
                                     <Text
                                         text="{supervisors}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- RECURSOS TOTALES -->
 
                                     <Text
                                         text="{resources}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- CAPACIDAD DISPONIBLE -->
 
                                     <Text
                                         text="{capacity}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- CARGA PROGRAMADA -->
 
                                     <Text
                                         text="{scheduledLoad}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
 
-                                    <!-- UTILIZACIÓN -->
-
                                     <Text
                                         text="{utilization}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell dojUtilizationValue"/>
 
-                                    <!-- ESTATUS DE UTILIZACIÓN -->
-
                                     <VBox
                                         width="100%"
-                                        alignItems="Center"
-                                        justifyContent="Center">
+                                        alignItems="Center">
 
                                         <ObjectStatus
                                             text="{status}"
@@ -978,51 +795,33 @@
                                         <Text
                                             text="{status}"
                                             visible="{isTotal}"
-                                            wrapping="false"
-                                            textAlign="Center"
                                             class="dojCellText"/>
 
                                     </VBox>
 
-                                    <!-- RECURSOS SOBRE CAPACIDAD -->
-
                                     <Text
                                         text="{overCapacity}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- CUMPLIMIENTO OPERATIVO -->
 
                                     <Text
                                         text="{compliance}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- META -->
 
                                     <Text
                                         text="{target}"
-                                        wrapping="false"
                                         textAlign="Center"
                                         class="dojCellText dojNumericCell"/>
-
-                                    <!-- DIFERENCIA VS META
-                                         ObjectStatus conserva el color semántico.
-                                         El CSS elimina fondo, borde y forma de píldora. -->
 
                                     <ObjectStatus
                                         text="{difference}"
                                         state="{differenceState}"
                                         class="dojDifferenceStatus"/>
 
-                                    <!-- ACCIÓN -->
-
                                     <VBox
                                         width="100%"
-                                        alignItems="Center"
-                                        justifyContent="Center">
+                                        alignItems="Center">
 
                                         <Button
                                             text="Ver jefatura"
@@ -1036,8 +835,6 @@
                                         <Text
                                             text="—"
                                             visible="{isTotal}"
-                                            wrapping="false"
-                                            textAlign="Center"
                                             class="dojCellText"/>
 
                                     </VBox>
@@ -1050,18 +847,13 @@
 
                     </Table>
 
-                    <!-- ==================================================
-                         PIE DE TABLA
-                         ================================================== -->
+                    <!-- FOOTER -->
 
                     <HBox
                         width="100%"
                         alignItems="Center"
                         justifyContent="SpaceBetween"
-                        wrap="Wrap"
                         class="dojTableFooter">
-
-                        <!-- INFORMACIÓN DE ACTUALIZACIÓN -->
 
                         <HBox
                             alignItems="Center"
@@ -1069,7 +861,6 @@
 
                             <core:Icon
                                 src="sap-icon://message-information"
-                                decorative="false"
                                 class="dojInformationIcon"/>
 
                             <Text
@@ -1078,46 +869,48 @@
 
                         </HBox>
 
-                        <!-- PAGINACIÓN -->
-
                         <HBox
                             alignItems="Center"
                             class="dojPagination">
 
                             <Text
-                                text="1 - 6 de 6"
+                                text="{/pagination/summary}"
                                 class="dojPaginationSummary"/>
 
                             <Button
                                 icon="sap-icon://media-rewind"
                                 type="Transparent"
-                                enabled="false"
+                                enabled="{/pagination/hasPrev}"
+                                press=".onFirstPage"
                                 tooltip="Primera página"
                                 class="dojPaginationArrow"/>
 
                             <Button
                                 icon="sap-icon://navigation-left-arrow"
                                 type="Transparent"
-                                enabled="false"
+                                enabled="{/pagination/hasPrev}"
+                                press=".onPreviousPage"
                                 tooltip="Página anterior"
                                 class="dojPaginationArrow"/>
 
                             <Button
-                                text="1"
+                                text="{/pagination/currentPage}"
                                 type="Emphasized"
                                 class="dojCurrentPageButton"/>
 
                             <Button
                                 icon="sap-icon://navigation-right-arrow"
                                 type="Transparent"
-                                enabled="false"
+                                enabled="{/pagination/hasNext}"
+                                press=".onNextPage"
                                 tooltip="Página siguiente"
                                 class="dojPaginationArrow"/>
 
                             <Button
                                 icon="sap-icon://media-forward"
                                 type="Transparent"
-                                enabled="false"
+                                enabled="{/pagination/hasNext}"
+                                press=".onLastPage"
                                 tooltip="Última página"
                                 class="dojPaginationArrow"/>
 

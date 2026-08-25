@@ -1315,3 +1315,504 @@
     line-height: 16px !important;
     flex: 0 0 auto !important;
 }
+
+
+/* ========================================================================== */
+/* AJUSTE VISUAL FINAL - DETALLE DESVIACIÓN DE HORAS                          */
+/* Referencia visual: Vista Jefatura                                           */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. APROVECHAR TODO EL ALTO DISPONIBLE                                       */
+/* -------------------------------------------------------------------------- */
+
+.DetalleDesviacionHoras .ddhPage {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Header, filtros y KPIs conservan su tamaño.
+   El bloque inferior absorbe el espacio restante para que no quede
+   una franja vacía al final de la pantalla. */
+.DetalleDesviacionHoras .ddhHeader {
+    flex: 0 0 29px !important;
+    height: 29px !important;
+    min-height: 29px !important;
+}
+
+.DetalleDesviacionHoras .ddhFiltersBar {
+    flex: 0 0 60px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiRow {
+    flex: 0 0 76px !important;
+    height: 76px !important;
+    min-height: 76px !important;
+    gap: 9px !important;
+    margin: 0 0 5px 0 !important;
+}
+
+.DetalleDesviacionHoras .ddhMainTableCard {
+    flex: 0 0 320px !important;
+    height: 320px !important;
+    min-height: 320px !important;
+    margin: 0 0 5px 0 !important;
+}
+
+/* Este bloque ocupa TODO el espacio sobrante de la página. */
+.DetalleDesviacionHoras .ddhBottomGrid {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 155px !important;
+    gap: 7px !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+
+.DetalleDesviacionHoras .ddhSummaryCard,
+.DetalleDesviacionHoras .ddhZonaSummaryCard,
+.DetalleDesviacionHoras .ddhTurnoSummaryCard,
+.DetalleDesviacionHoras .ddhTipoSummaryCard {
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. FILTROS - BAJAR UN POCO EL TÍTULO/LABEL                                  */
+/* -------------------------------------------------------------------------- */
+
+.DetalleDesviacionHoras .ddhFilterBox {
+    height: 60px !important;
+    min-height: 60px !important;
+    padding: 8px 8px 1px 8px !important;
+    justify-content: flex-start !important;
+}
+
+.DetalleDesviacionHoras .ddhFilterLabel {
+    display: block !important;
+    height: 15px !important;
+    min-height: 15px !important;
+    margin: 0 0 1px 0 !important;
+    color: #78869A !important;
+    font-size: 9.5px !important;
+    line-height: 15px !important;
+    font-weight: 600 !important;
+    transform: translateY(2px) !important;
+}
+
+.DetalleDesviacionHoras .ddhFilterBox .sapMSlt,
+.DetalleDesviacionHoras .ddhFilterBox .sapMInputBase,
+.DetalleDesviacionHoras .ddhFilterBox .sapMInputBaseContentWrapper {
+    height: 29px !important;
+    min-height: 29px !important;
+}
+
+.DetalleDesviacionHoras .ddhFilterBox .sapMSltLabel,
+.DetalleDesviacionHoras .ddhFilterBox .sapMInputBaseInner {
+    height: 29px !important;
+    min-height: 29px !important;
+    line-height: 29px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. KPIs - MISMO LENGUAJE VISUAL DE VISTA JEFATURA                          */
+/* -------------------------------------------------------------------------- */
+
+.DetalleDesviacionHoras .ddhKpiCard {
+    position: relative !important;
+    flex: 1 1 135px !important;
+    min-width: 128px !important;
+    width: auto !important;
+    height: 76px !important;
+    min-height: 76px !important;
+    padding: 10px 9px 10px 12px !important;
+    overflow: hidden !important;
+    border: 1px solid #E4EAF2 !important;
+    border-left: 1px solid #E4EAF2 !important;
+    border-radius: 7px !important;
+    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06) !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiCard::before {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 3px !important;
+    border-radius: 8px 0 0 8px !important;
+    content: "" !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiIcon {
+    flex: 0 0 43px !important;
+    width: 43px !important;
+    height: 43px !important;
+    min-width: 43px !important;
+    margin-right: 8px !important;
+    border-radius: 50% !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiIcon .sapUiIcon {
+    font-size: 1.28rem !important;
+}
+
+.DetalleDesviacionHoras .ddhPercentIcon {
+    font-size: 1.28rem !important;
+    line-height: 1.28rem !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiLabel {
+    width: 100% !important;
+    color: #43516A !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiNumber {
+    margin-top: 2px !important;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiSub {
+    margin-top: 3px !important;
+    color: #6F7C8F !important;
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+}
+
+/* KPI azul */
+.DetalleDesviacionHoras .ddhKpiBlue {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46, 140, 255, 0.20) 0%,
+            rgba(46, 140, 255, 0.11) 22%,
+            rgba(46, 140, 255, 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #FFFFFF 100%
+        ) !important;
+    border-color: rgba(46, 140, 255, 0.18) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiBlue::before {
+    background: #2E8CFF !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiBlue .ddhKpiIcon {
+    background: rgba(46, 140, 255, 0.13) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiBlue .sapUiIcon,
+.DetalleDesviacionHoras .ddhKpiBlue .ddhKpiNumber,
+.DetalleDesviacionHoras .ddhKpiBlue .ddhDarkText {
+    color: #1877E8 !important;
+}
+
+/* KPI verde */
+.DetalleDesviacionHoras .ddhKpiGreen {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99, 191, 66, 0.20) 0%,
+            rgba(99, 191, 66, 0.11) 22%,
+            rgba(99, 191, 66, 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #FFFFFF 100%
+        ) !important;
+    border-color: rgba(99, 191, 66, 0.18) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiGreen::before {
+    background: #63BF42 !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiGreen .ddhKpiIcon {
+    background: rgba(99, 191, 66, 0.13) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiGreen .sapUiIcon,
+.DetalleDesviacionHoras .ddhKpiGreen .ddhKpiNumber,
+.DetalleDesviacionHoras .ddhKpiGreen .ddhDarkText {
+    color: #58B33A !important;
+}
+
+/* KPI cyan */
+.DetalleDesviacionHoras .ddhKpiSky {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(27, 198, 200, 0.20) 0%,
+            rgba(27, 198, 200, 0.11) 22%,
+            rgba(27, 198, 200, 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #FFFFFF 100%
+        ) !important;
+    border-color: rgba(27, 198, 200, 0.18) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiSky::before {
+    background: #1BC6C8 !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiSky .ddhKpiIcon {
+    background: rgba(27, 198, 200, 0.13) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiSky .sapUiIcon,
+.DetalleDesviacionHoras .ddhKpiSky .ddhKpiNumber,
+.DetalleDesviacionHoras .ddhKpiSky .ddhDarkText {
+    color: #11B6BA !important;
+}
+
+/* KPI rojo */
+.DetalleDesviacionHoras .ddhKpiRed {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 77, 83, 0.20) 0%,
+            rgba(255, 77, 83, 0.11) 22%,
+            rgba(255, 77, 83, 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #FFFFFF 100%
+        ) !important;
+    border-color: rgba(255, 77, 83, 0.18) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiRed::before {
+    background: #FF4D53 !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiRed .ddhKpiIcon {
+    background: rgba(255, 77, 83, 0.13) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiRed .sapUiIcon,
+.DetalleDesviacionHoras .ddhKpiRed .ddhKpiNumber,
+.DetalleDesviacionHoras .ddhKpiRed .ddhRedText {
+    color: #EF3F47 !important;
+}
+
+/* KPI morado */
+.DetalleDesviacionHoras .ddhKpiPurple {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(124, 58, 237, 0.18) 0%,
+            rgba(124, 58, 237, 0.10) 22%,
+            rgba(124, 58, 237, 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #FFFFFF 100%
+        ) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiPurple::before {
+    background: #7C3AED !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiPurple .ddhKpiIcon {
+    background: rgba(124, 58, 237, 0.12) !important;
+}
+
+.DetalleDesviacionHoras .ddhKpiPurple .ddhPercentIcon,
+.DetalleDesviacionHoras .ddhKpiPurple .ddhKpiNumber,
+.DetalleDesviacionHoras .ddhKpiPurple .ddhPurpleText {
+    color: #7C3AED !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. TABLA PRINCIPAL - ALINEACIÓN EXACTA ENTRE ENCABEZADO Y DATOS             */
+/* -------------------------------------------------------------------------- */
+
+.DetalleDesviacionHoras .ddhOrdersGridHeader > .sapMFlexItem,
+.DetalleDesviacionHoras .ddhOrdersGridRow > .sapMFlexItem {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+}
+
+.DetalleDesviacionHoras .ddhOrdersGridHeader .sapMText,
+.DetalleDesviacionHoras .ddhOrdersGridRow .sapMText,
+.DetalleDesviacionHoras .ddhGridHeadText,
+.DetalleDesviacionHoras .ddhCellText,
+.DetalleDesviacionHoras .ddhBlueStrong {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    box-sizing: border-box !important;
+}
+
+.DetalleDesviacionHoras .ddhCenterCell,
+.DetalleDesviacionHoras .ddhSummaryStatusCell {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* Evita que el último campo "Estado" se desplace visualmente a la derecha. */
+.DetalleDesviacionHoras .ddhOrdersGridHeader > .sapMFlexItem:last-child,
+.DetalleDesviacionHoras .ddhOrdersGridRow > .sapMFlexItem:last-child {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. RESÚMENES - ESTIRAR TARJETAS HASTA EL FINAL                              */
+/* -------------------------------------------------------------------------- */
+
+.DetalleDesviacionHoras .ddhZonaSummaryGrid,
+.DetalleDesviacionHoras .ddhTurnoSummaryGrid,
+.DetalleDesviacionHoras .ddhTipoSummaryGrid {
+    width: 100% !important;
+}
+
+/* Laptop: conserva todos los bloques en una sola pantalla. */
+@media screen and (max-height: 800px) {
+    .DetalleDesviacionHoras .ddhKpiRow,
+    .DetalleDesviacionHoras .ddhKpiCard {
+        height: 70px !important;
+        min-height: 70px !important;
+    }
+
+    .DetalleDesviacionHoras .ddhKpiRow {
+        flex-basis: 70px !important;
+    }
+
+    .DetalleDesviacionHoras .ddhMainTableCard {
+        flex-basis: 305px !important;
+        height: 305px !important;
+        min-height: 305px !important;
+    }
+
+    .DetalleDesviacionHoras .ddhBottomGrid {
+        min-height: 145px !important;
+    }
+}
+
+
+/* ========================================================================== */
+/* AJUSTE PROPORCIONAL FINAL: MÁS TABLA / MENOS RESÚMENES                     */
+/* ========================================================================== */
+
+/*
+ * Distribución visual:
+ * - La tabla principal gana altura para mostrar más OT.
+ * - Los 3 resúmenes inferiores se compactan.
+ * - Se mantiene el dashboard sin scroll general.
+ */
+.DetalleDesviacionHoras .ddhMainTableCard {
+    flex: 0 0 370px !important;
+    height: 370px !important;
+    min-height: 370px !important;
+    margin-bottom: 5px !important;
+}
+
+/*
+ * Las tarjetas inferiores dejan de absorber todo el espacio sobrante.
+ * Se mantienen proporcionales y compactas.
+ */
+.DetalleDesviacionHoras .ddhBottomGrid {
+    flex: 1 1 auto !important;
+    height: auto !important;
+    min-height: 125px !important;
+    max-height: 165px !important;
+    gap: 7px !important;
+    align-items: stretch !important;
+}
+
+.DetalleDesviacionHoras .ddhSummaryCard,
+.DetalleDesviacionHoras .ddhZonaSummaryCard,
+.DetalleDesviacionHoras .ddhTurnoSummaryCard,
+.DetalleDesviacionHoras .ddhTipoSummaryCard {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 165px !important;
+    padding: 6px 7px !important;
+}
+
+/* Compactar ligeramente el encabezado de los resúmenes. */
+.DetalleDesviacionHoras .ddhSummaryTitleRow {
+    height: 20px !important;
+    min-height: 20px !important;
+    margin-bottom: 3px !important;
+}
+
+.DetalleDesviacionHoras .ddhSummaryIcon {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+}
+
+/* La tabla interna de cada resumen queda compacta y alineada arriba. */
+.DetalleDesviacionHoras .ddhZonaSummaryGrid,
+.DetalleDesviacionHoras .ddhTurnoSummaryGrid,
+.DetalleDesviacionHoras .ddhTipoSummaryGrid {
+    margin-top: 0 !important;
+}
+
+.DetalleDesviacionHoras .ddhZonaSummaryHeader,
+.DetalleDesviacionHoras .ddhTurnoSummaryHeader,
+.DetalleDesviacionHoras .ddhTipoSummaryHeader {
+    height: 22px !important;
+    min-height: 22px !important;
+}
+
+.DetalleDesviacionHoras .ddhZonaSummaryRow,
+.DetalleDesviacionHoras .ddhTurnoSummaryRow,
+.DetalleDesviacionHoras .ddhTipoSummaryRow {
+    height: 21px !important;
+    min-height: 21px !important;
+}
+
+.DetalleDesviacionHoras .ddhZonaSummaryTotal,
+.DetalleDesviacionHoras .ddhTurnoSummaryTotal,
+.DetalleDesviacionHoras .ddhTipoSummaryTotal {
+    height: 22px !important;
+    min-height: 22px !important;
+}
+
+/*
+ * Laptop / resolución vertical corta:
+ * conserva la misma proporción, reduciendo ambos bloques.
+ */
+@media screen and (max-height: 800px) {
+    .DetalleDesviacionHoras .ddhMainTableCard {
+        flex-basis: 350px !important;
+        height: 350px !important;
+        min-height: 350px !important;
+    }
+
+    .DetalleDesviacionHoras .ddhBottomGrid {
+        min-height: 115px !important;
+        max-height: 145px !important;
+    }
+
+    .DetalleDesviacionHoras .ddhSummaryCard,
+    .DetalleDesviacionHoras .ddhZonaSummaryCard,
+    .DetalleDesviacionHoras .ddhTurnoSummaryCard,
+    .DetalleDesviacionHoras .ddhTipoSummaryCard {
+        max-height: 145px !important;
+    }
+}

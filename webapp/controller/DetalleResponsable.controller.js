@@ -2,287 +2,144 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/ActionSheet",
-    "sap/m/Button"
-], function (
-    Controller,
-    JSONModel,
-    MessageToast,
-    ActionSheet,
-    Button
-) {
+    "sap/ui/dom/includeStylesheet",
+    "mantenimiento/model/DetalleResponsableService"
+], function (Controller, JSONModel, MessageToast, includeStylesheet, DetalleResponsableService) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleResponsable", {
-
         onInit: function () {
-            this._iPageSize = 5;
-            this._bSemanaClickAsignado = false;
+            var context = this._navigationContext();
 
-            var oRouter = this.getOwnerComponent().getRouter();
+            includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleResponsable.css") + "?v=20260821-live-data");
+            this._requestId = 0;
+            this._rawData = null;
+            this._filters = {
+                responsableId: context.responsableId || "",
+                periodKey: context.periodKey || "2026-ANUAL",
+                zona: context.zona || "TODAS",
+                origen: context.origen || "TODAS",
+                page: 1,
+                pageSize: 5
+            };
 
-            if (oRouter && oRouter.getRoute("RouteDetalleResponsable")) {
-                oRouter
-                    .getRoute("RouteDetalleResponsable")
-                    .attachPatternMatched(this._onObjectMatched, this);
-            } else {
-                this._loadDetalleResponsable("1");
-            }
+            this.getView().setModel(new JSONModel(
+                DetalleResponsableService.createEmpty(this._filters)
+            ), "detail");
+            this.getView().getModel("detail").setSizeLimit(1000);
+            this._load(false);
         },
 
         onAfterRendering: function () {
-            var oChipSemana = this.byId("chipSemana");
-
-            if (!oChipSemana || this._bSemanaClickAsignado) {
-                return;
-            }
-
-            oChipSemana.addEventDelegate({
-                onclick: function () {
-                    this._abrirMenuSemana(oChipSemana);
-                }.bind(this)
-            });
-
-            this._bSemanaClickAsignado = true;
-        },
-
-        _onObjectMatched: function (oEvent) {
-            var sResponsableId = oEvent.getParameter("arguments").responsableId || "1";
-            this._loadDetalleResponsable(sResponsableId);
-        },
-
-        _loadDetalleResponsable: function (sResponsableId) {
-            var oResponsable = this._getResponsableData(sResponsableId);
-
-            var oDetailModel = new JSONModel(oResponsable);
-            oDetailModel.setSizeLimit(1000);
-
-            this.getView().setModel(oDetailModel, "detail");
-            this._actualizarPaginacion();
-        },
-
-        _getResponsableData: function (sResponsableId) {
-            var mResponsables = {
-                "1": "Juan Pérez",
-                "2": "María González",
-                "3": "Carlos Herrera",
-                "4": "Pedro López",
-                "5": "Ana Martínez",
-                "6": "Luis Ramírez"
-            };
-
-            var sNombreResponsable = mResponsables[sResponsableId] || "Responsable ID: " + sResponsableId;
-
-            var aDesglose = [
-                {
-                    ot: "OT-100245",
-                    equipo: "EV-1024",
-                    cliente: "Torre Reforma",
-                    tipoOt: "Preventivo",
-                    causa: "Refacciones",
-                    retraso: 5,
-                    estado: "Pendiente"
-                },
-                {
-                    ot: "OT-100311",
-                    equipo: "EV-0871",
-                    cliente: "Torre Reforma",
-                    tipoOt: "Preventivo",
-                    causa: "Refacciones",
-                    retraso: 4,
-                    estado: "Pendiente"
-                },
-                {
-                    ot: "OT-100367",
-                    equipo: "EV-1210",
-                    cliente: "Corporativo ABC",
-                    tipoOt: "Correctivo",
-                    causa: "Cliente no disponible",
-                    retraso: 2,
-                    estado: "Reprogramada"
-                },
-                {
-                    ot: "OT-100412",
-                    equipo: "EV-1330",
-                    cliente: "Plaza Galerías",
-                    tipoOt: "Preventivo",
-                    causa: "Refacciones",
-                    retraso: 1,
-                    estado: "Pendiente"
-                },
-                {
-                    ot: "OT-100528",
-                    equipo: "EV-1024",
-                    cliente: "Torre Reforma",
-                    tipoOt: "Correctivo",
-                    causa: "Documentación",
-                    retraso: 1,
-                    estado: "En proceso"
-                },
-                {
-                    ot: "OT-100579",
-                    equipo: "EV-0988",
-                    cliente: "Corporativo ABC",
-                    tipoOt: "Preventivo",
-                    causa: "Planeación",
-                    retraso: 1,
-                    estado: "Pendiente"
-                }
-            ];
-
-            return {
-                responsableId: sResponsableId,
-                responsable: sNombreResponsable,
-                zona: "Norte",
-                semana: "Semana 18 (29 abr - 5 may 2024)",
-                origenActivo: "Todas",
-
-                filtros: {
-                    semanaKey: "18",
-                    semanaTexto: "Semana 18 (29 abr - 5 may 2024)",
-                    zonaKey: "norte"
-                },
-
-                opcionesSemana: [
-                    {
-                        key: "18",
-                        text: "Semana 18 (29 abr - 5 may 2024)"
-                    },
-                    {
-                        key: "17",
-                        text: "Semana 17 (22 abr - 28 abr 2024)"
-                    },
-                    {
-                        key: "16",
-                        text: "Semana 16 (15 abr - 21 abr 2024)"
-                    }
-                ],
-
-                opcionesZona: [
-                    {
-                        key: "norte",
-                        text: "Norte"
-                    },
-                    {
-                        key: "centro",
-                        text: "Centro"
-                    },
-                    {
-                        key: "sur",
-                        text: "Sur"
-                    },
-                    {
-                        key: "todas",
-                        text: "Todas"
-                    }
-                ],
-
-                kpi: {
-                    otDesviadas: 6,
-                    equiposAfectados: 4,
-                    clientesAfectados: 3,
-                    cumplimiento: 78
-                },
-
-                desgloseTotal: aDesglose,
-                desgloseVisibles: aDesglose.slice(0, 5),
-
-                paginacion: {
-                    texto: "Mostrando 1 a 5 de 6 OT desviadas"
-                }
-            };
-        },
-
-        _abrirMenuSemana: function (oSourceControl) {
-            var oModel = this.getView().getModel("detail");
-            var aOpciones = oModel.getProperty("/opcionesSemana") || [];
-            var aBotones = [];
-            var oActionSheet;
-
-            aBotones = aOpciones.map(function (oOpcion) {
-                return new Button({
-                    text: oOpcion.text,
-                    press: function () {
-                        oModel.setProperty("/filtros/semanaKey", oOpcion.key);
-                        oModel.setProperty("/filtros/semanaTexto", oOpcion.text);
-                    }
-                });
-            });
-
-            oActionSheet = new ActionSheet({
-                title: "Seleccionar semana",
-                buttons: aBotones,
-                afterClose: function () {
-                    oActionSheet.destroy();
-                }
-            });
-
-            this.getView().addDependent(oActionSheet);
-            oActionSheet.openBy(oSourceControl);
+            this._paintComplianceDonut();
         },
 
         onApplyFilters: function () {
-            var oModel = this.getView().getModel("detail");
-            var oZonaSelect = this.byId("selectZona");
-            var oZonaItem = oZonaSelect.getSelectedItem();
-
-            oModel.setProperty("/semana", oModel.getProperty("/filtros/semanaTexto"));
-
-            if (oZonaItem) {
-                oModel.setProperty("/zona", oZonaItem.getText());
-            }
-
-            MessageToast.show("Filtros aplicados correctamente");
+            this._filters.periodKey = this.byId("detallePeriodo").getSelectedKey() || "2026-W01";
+            this._filters.zona = this.byId("selectZona").getSelectedKey() || "TODAS";
+            this._filters.page = 1;
+            this._load(true);
         },
 
-        onPageSizeChange: function (oEvent) {
-            var sSelectedKey = oEvent.getSource().getSelectedKey();
-            var iPageSize = parseInt(sSelectedKey, 10);
-
-            if (isNaN(iPageSize) || iPageSize <= 0) {
-                iPageSize = 5;
-            }
-
-            this._iPageSize = iPageSize;
-            this._actualizarPaginacion();
+        onPageSizeChange: function (event) {
+            this._filters.pageSize = Number(event.getSource().getSelectedKey()) || 5;
+            this._filters.page = 1;
+            this._rebuildFromRaw();
         },
 
-        _actualizarPaginacion: function () {
-            var oModel = this.getView().getModel("detail");
+        onPreviousPage: function () {
+            this._filters.page = Math.max(1, this._filters.page - 1);
+            this._rebuildFromRaw();
+        },
 
-            if (!oModel) {
-                return;
-            }
-
-            var aTotal = oModel.getProperty("/desgloseTotal") || [];
-            var iTotal = aTotal.length;
-            var iFinal = Math.min(this._iPageSize, iTotal);
-            var aVisibles = aTotal.slice(0, this._iPageSize);
-            var sTexto;
-
-            if (iTotal === 0) {
-                sTexto = "Mostrando 0 a 0 de 0 OT desviadas";
-            } else {
-                sTexto = "Mostrando 1 a " + iFinal + " de " + iTotal + " OT desviadas";
-            }
-
-            oModel.setProperty("/desgloseVisibles", aVisibles);
-            oModel.setProperty("/paginacion/texto", sTexto);
+        onNextPage: function () {
+            var pagination = this.getView().getModel("detail").getProperty("/paginacion") || {};
+            this._filters.page = Math.min(Number(pagination.totalPages) || 1, this._filters.page + 1);
+            this._rebuildFromRaw();
         },
 
         onNavBack: function () {
             window.history.go(-1);
         },
 
-        onNavToOrder: function (oEvent) {
-            var sOrder = oEvent.getSource().getText();
+        onNavToOrder: function (event) {
+            MessageToast.show("Detalle de la orden: " + event.getSource().getText());
+        },
 
-            MessageToast.show("Navegando al detalle de la orden: " + sOrder);
+        _load: function (notify) {
+            var requestId = ++this._requestId;
+            var model = this.getView().getModel("detail");
 
-            /*
-             * Cuando tengas la ruta real del detalle de orden,
-             * reemplaza este MessageToast por la navegación.
-             */
+            this.getView().setBusy(true);
+            DetalleResponsableService.load(this._odata(), this._filters).then(function (result) {
+                if (requestId !== this._requestId) {
+                    return;
+                }
+                this._rawData = result.rawData;
+                model.setData(result.data);
+                this._syncControls(result.data);
+                this._paintComplianceDonutAsync();
+                if (notify) {
+                    MessageToast.show("Detalle actualizado con datos de SAP");
+                }
+            }.bind(this)).catch(function (error) {
+                if (requestId !== this._requestId) {
+                    return;
+                }
+                model.setData(DetalleResponsableService.createEmpty(this._filters));
+                this._syncControls(model.getData());
+                this._paintComplianceDonutAsync();
+                if (notify) {
+                    MessageToast.show(error.message || "No fue posible cargar el detalle del responsable");
+                }
+            }.bind(this)).finally(function () {
+                if (requestId === this._requestId) {
+                    this.getView().setBusy(false);
+                }
+            }.bind(this));
+        },
+
+        _rebuildFromRaw: function () {
+            var model = this.getView().getModel("detail");
+
+            if (!this._rawData) {
+                return;
+            }
+            model.setData(DetalleResponsableService.build(this._rawData, this._filters));
+            this._syncControls(model.getData());
+            this._paintComplianceDonutAsync();
+        },
+
+        _navigationContext: function () {
+            var component = this.getOwnerComponent();
+            var model = component && component.getModel("detalleResponsableNavigation");
+            return model && model.getData ? model.getData() || {} : {};
+        },
+
+        _odata: function () {
+            var component = this.getOwnerComponent();
+            return component && component.getModel("dashboardOData") || this.getView().getModel("dashboardOData");
+        },
+
+        _syncControls: function (data) {
+            var filters = data.filtros || {};
+            this.byId("detallePeriodo").setSelectedKey(filters.periodKey || "2026-ANUAL");
+            this.byId("selectZona").setSelectedKey(filters.zonaKey || "TODAS");
+            this.byId("pageSizeSelect").setSelectedKey(String(this._filters.pageSize || 5));
+        },
+
+        _paintComplianceDonutAsync: function () {
+            window.setTimeout(this._paintComplianceDonut.bind(this), 0);
+        },
+
+        _paintComplianceDonut: function () {
+            var donut = this.byId("cumplimientoChart");
+            var kpi = this.getView().getModel("detail").getProperty("/kpi") || {};
+            var value = Math.max(0, Math.min(100, Number(kpi.cumplimientoNumero || 0)));
+
+            if (donut && donut.getDomRef()) {
+                donut.getDomRef().style.setProperty("--detalle-compliance-angle", (value * 3.6) + "deg");
+            }
         }
     });
 });
