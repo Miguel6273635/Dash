@@ -1,634 +1,1048 @@
 <mvc:View
-  controllerName="mantenimiento.controller.Mecanicos"
-  xmlns:mvc="sap.ui.core.mvc"
-  xmlns="sap.m"
-  xmlns:core="sap.ui.core"
-  displayBlock="true">
+    controllerName="mantenimiento.controller.Mecanicos"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%">
 
-  <Page showHeader="false" class="mecPage">
-    <ScrollContainer
-      width="100%"
-      height="100%"
-      vertical="true"
-      horizontal="false"
-      class="mecScroll">
+    <Page
+        id="mecanicosPage"
+        showHeader="false"
+        enableScrolling="false"
+        busy="{dashboard>/loading}"
+        busyIndicatorDelay="0"
+        class="mecPage sapUiSizeCompact">
 
-      <VBox class="mecContainer">
+        <content>
 
-        <!-- ENCABEZADO + FILTROS -->
-        <VBox class="mecTopPanel">
+            <VBox class="mecDashboard">
 
-          <HBox class="mecHero" alignItems="Center" justifyContent="SpaceBetween">
-            <VBox>
-              <HBox alignItems="Center">
-                <Title
-                  text="Mecánicos"
-                  level="H1"
-                  class="mecTitle"/>
+                <!-- ENCABEZADO -->
+                <HBox
+                    class="mecHeader"
+                    alignItems="Center"
+                    justifyContent="SpaceBetween">
 
-                <core:Icon
-                  src="sap-icon://hint"
-                  class="mecInfoIcon"/>
-              </HBox>
+                    <VBox class="mecHeaderCopy">
+                        <HBox
+                            alignItems="Center"
+                            class="mecTitleRow">
 
-              <Text
-                text="Panorama general de la plantilla de mecánicos y su capacidad para cubrir la operación del período."
-                class="mecSubtitle"/>
-            </VBox>
+                            <Title
+                                text="Mecánicos"
+                                level="H1"
+                                class="mecTitle"/>
 
-            <HBox class="mecHeroBadge" alignItems="Center">
-              <core:Icon
-                src="sap-icon://calendar"
-                class="mecHeroBadgeIcon"/>
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecInfoIcon"/>
+                        </HBox>
 
-              <VBox>
-                <Text
-                  text="Periodo actual"
-                  class="mecHeroBadgeLabel"/>
+                        <Text
+                            text="Panorama general de la plantilla de mecánicos y su capacidad para cubrir la operación del período."
+                            class="mecSubtitle"/>
+                    </VBox>
 
-                <Text
-                  text="Mayo 2024"
-                  class="mecHeroBadgeText"/>
-              </VBox>
-            </HBox>
-          </HBox>
+                    <HBox
+                        class="mecPeriodBadge"
+                        alignItems="Center">
 
-          <HBox
-            class="mecFilters"
-            wrap="Wrap"
-            alignItems="Stretch"
-            justifyContent="Start">
+                        <core:Icon
+                            src="sap-icon://calendar"
+                            class="mecPeriodIcon"/>
 
-            <VBox class="filterItem">
-              <Label text="Periodo" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/periodo}"
-                items="{dashboard>/catalogos/periodos}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
+                        <VBox>
+                            <Text
+                                text="Periodo actual"
+                                class="mecPeriodLabel"/>
 
-            <VBox class="filterItem">
-              <Label text="Fecha desde" class="filterLabel"/>
-              <DatePicker
-                width="100%"
-                value="{dashboard>/filters/fechaDesde}"
-                displayFormat="dd/MM/yyyy"
-                valueFormat="dd/MM/yyyy"/>
-            </VBox>
-
-            <VBox class="filterItem">
-              <Label text="Fecha hasta" class="filterLabel"/>
-              <DatePicker
-                width="100%"
-                value="{dashboard>/filters/fechaHasta}"
-                displayFormat="dd/MM/yyyy"
-                valueFormat="dd/MM/yyyy"/>
-            </VBox>
-
-            <VBox class="filterItem">
-              <Label text="Zona" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/zona}"
-                items="{dashboard>/catalogos/zonas}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <VBox class="filterItem">
-              <Label text="Supervisor" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/supervisor}"
-                items="{dashboard>/catalogos/supervisores}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <VBox class="filterItem">
-              <Label text="Turno" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/turno}"
-                items="{dashboard>/catalogos/turnos}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <VBox class="filterItem filterItemLarge">
-              <Label text="Tipo de servicio" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/tipoServicio}"
-                items="{dashboard>/catalogos/tiposServicio}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <VBox class="filterItem filterItemMedium">
-              <Label text="Especialidad" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/especialidad}"
-                items="{dashboard>/catalogos/especialidades}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <VBox class="filterItem">
-              <Label text="Estado" class="filterLabel"/>
-              <Select
-                width="100%"
-                selectedKey="{dashboard>/filters/estado}"
-                items="{dashboard>/catalogos/estados}">
-                <core:Item key="{dashboard>key}" text="{dashboard>text}"/>
-              </Select>
-            </VBox>
-
-            <Button
-              text="Aplicar Filtros"
-              icon="sap-icon://filter"
-              type="Emphasized"
-              class="applyBtn"
-              press=".onApplyFilters"/>
-
-          </HBox>
-        </VBox>
-
-        <!-- KPI CARDS -->
-        <HBox class="kpiGrid" wrap="Wrap">
-          <HBox class="kpiCard kpiBlue">
-            <VBox class="kpiIconCircle blueIcon">
-              <core:Icon src="sap-icon://group" class="kpiIcon"/>
-            </VBox>
-            <VBox>
-              <Text text="{dashboard>/kpis/activos}" class="kpiNumber blueText"/>
-              <Text text="Mecánicos activos" class="kpiLabel"/>
-              <Text text="Plantilla activa en el periodo" class="kpiSubLabel"/>
-            </VBox>
-          </HBox>
-
-          <HBox class="kpiCard kpiGreen">
-            <VBox class="kpiIconCircle greenIcon">
-              <core:Icon src="sap-icon://employee-approvals" class="kpiIcon"/>
-            </VBox>
-            <VBox>
-              <Text text="{dashboard>/kpis/disponibles}" class="kpiNumber greenText"/>
-              <Text text="Mecánicos disponibles" class="kpiLabel"/>
-              <Text text="{dashboard>/kpis/disponiblesPct}" class="kpiSubLabel"/>
-            </VBox>
-          </HBox>
-
-          <HBox class="kpiCard kpiOrange">
-            <VBox class="kpiIconCircle orangeIcon">
-              <core:Icon src="sap-icon://warning" class="kpiIcon"/>
-            </VBox>
-            <VBox>
-              <Text text="{dashboard>/kpis/sobrecapacidad}" class="kpiNumber orangeText"/>
-              <Text text="Recursos sobre capacidad" class="kpiLabel"/>
-              <Text text="{dashboard>/kpis/sobrecapacidadPct}" class="kpiSubLabel"/>
-            </VBox>
-          </HBox>
-
-          <HBox class="kpiCard kpiPurple">
-            <VBox class="kpiIconCircle purpleIcon">
-              <core:Icon src="sap-icon://shield" class="kpiIcon"/>
-            </VBox>
-            <VBox>
-              <Text text="{dashboard>/kpis/cobertura}" class="kpiNumber purpleText"/>
-              <Text text="Cobertura de demanda programada" class="kpiLabel"/>
-              <Text text="Demanda cubierta con la plantilla actual" class="kpiSubLabel"/>
-            </VBox>
-          </HBox>
-        </HBox>
-
-        <!-- FILA PRINCIPAL -->
-        <HBox class="mainGrid" wrap="Wrap">
-
-          <!-- BALANCE GENERAL -->
-          <VBox class="card balanceCard">
-            <HBox alignItems="Center">
-              <Title text="Balance general de plantilla" level="H3" class="cardTitle"/>
-              <core:Icon src="sap-icon://hint" class="smallInfoIcon"/>
-            </HBox>
-
-            <Text
-              text="Comparativo de capacidad, carga y brecha del periodo"
-              class="cardSubtitle"/>
-
-            <HBox class="balanceStats">
-              <VBox alignItems="Center">
-                <core:Icon src="sap-icon://employee" class="balanceIcon greenText"/>
-                <Text text="Capacidad disponible" class="miniLabel"/>
-                <Text text="{dashboard>/balance/capacidad}" class="balanceNumber greenText"/>
-                <Text text="{dashboard>/balance/capacidadPct}" class="miniText greenText"/>
-              </VBox>
-
-              <VBox alignItems="Center">
-                <core:Icon src="sap-icon://calendar" class="balanceIcon blueText"/>
-                <Text text="Carga programada" class="miniLabel"/>
-                <Text text="{dashboard>/balance/carga}" class="balanceNumber blueText"/>
-                <Text text="{dashboard>/balance/cargaPct}" class="miniText blueText"/>
-              </VBox>
-
-              <VBox alignItems="Center">
-                <core:Icon src="sap-icon://trend-up" class="balanceIcon purpleText"/>
-                <Text text="Brecha" class="miniLabel"/>
-                <Text text="{dashboard>/balance/brecha}" class="balanceNumber purpleText"/>
-                <Text text="{dashboard>/balance/brechaPct}" class="miniText purpleText"/>
-              </VBox>
-            </HBox>
-
-            <VBox class="balanceLineBox">
-              <core:HTML sanitizeContent="false" content="{dashboard>/balanceHtml}"/>
-            </VBox>
-
-            <HBox class="successMessage" alignItems="Center">
-              <core:Icon src="sap-icon://sys-enter-2" class="successIcon"/>
-              <Text text="{dashboard>/balance/mensaje}" class="successText"/>
-            </HBox>
-          </VBox>
-
-          <!-- DISTRIBUCIÓN -->
-          <VBox class="card distributionCard">
-            <HBox alignItems="Center">
-              <Title text="Distribución de plantilla" level="H3" class="cardTitle"/>
-              <core:Icon src="sap-icon://hint" class="smallInfoIcon"/>
-            </HBox>
-
-            <Text text="Cómo está distribuida la plantilla" class="cardSubtitle"/>
-
-            <HBox class="distributionInner" wrap="Wrap">
-
-              <!-- COLUMNA 1: DISTRIBUCIÓN DE MECÁNICOS -->
-              <VBox class="innerCard">
-                <HBox alignItems="Center">
-                  <Text text="Distribución de mecánicos" class="sectionTitle"/>
-                  <core:Icon src="sap-icon://hint" class="tinyInfoIcon"/>
+                            <Text
+                                text="{dashboard>/header/periodoActual}"
+                                class="mecPeriodValue"/>
+                        </VBox>
+                    </HBox>
                 </HBox>
 
-                <Text
-                  text="Resumen de mecánicos por turno y condición"
-                  class="sectionSubtitle"/>
+                <!-- FILTROS -->
+                <HBox class="mecFilters">
 
-                <VBox class="distList">
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Periodo"
+                            class="mecFilterLabel"/>
 
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distIconWrapper bgBlue">
-                      <core:Icon src="sap-icon://light-mode" class="blueText"/>
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/periodo}"
+                            change=".onPeriodChange"
+                            items="{dashboard>/catalogos/periodos}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
                     </VBox>
 
-                    <VBox class="distBarBox">
-                      <Text text="{dashboard>/distribucionTurnos/0/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionTurnos/0/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barBlue"/>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Fecha desde"
+                            class="mecFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{dashboard>/filters/fechaDesde}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
+                            class="mecFilterControl"/>
                     </VBox>
 
-                    <Text text="{dashboard>/distribucionTurnos/0/value}" class="distValue blueText"/>
-                    <Text text="{dashboard>/distribucionTurnos/0/pctText}" class="distPct blueText"/>
-                  </HBox>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Fecha hasta"
+                            class="mecFilterLabel"/>
 
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distIconWrapper bgGreen">
-                      <core:Icon src="sap-icon://circle-task-2" class="greenText"/>
+                        <DatePicker
+                            width="100%"
+                            value="{dashboard>/filters/fechaHasta}"
+                            valueFormat="dd/MM/yyyy"
+                            displayFormat="dd/MM/yyyy"
+                            change=".onDateChange"
+                            class="mecFilterControl"/>
                     </VBox>
 
-                    <VBox class="distBarBox">
-                      <Text text="{dashboard>/distribucionTurnos/1/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionTurnos/1/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barGreen"/>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Zona"
+                            class="mecFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/zona}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/zonas}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
                     </VBox>
 
-                    <Text text="{dashboard>/distribucionTurnos/1/value}" class="distValue greenText"/>
-                    <Text text="{dashboard>/distribucionTurnos/1/pctText}" class="distPct greenText"/>
-                  </HBox>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Supervisor"
+                            class="mecFilterLabel"/>
 
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distIconWrapper bgPurple">
-                      <core:Icon src="sap-icon://calendar" class="purpleText"/>
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/supervisor}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/supervisores}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
                     </VBox>
 
-                    <VBox class="distBarBox">
-                      <Text text="{dashboard>/distribucionTurnos/2/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionTurnos/2/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barPurple"/>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Turno"
+                            class="mecFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/turno}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/turnos}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
                     </VBox>
 
-                    <Text text="{dashboard>/distribucionTurnos/2/value}" class="distValue purpleText"/>
-                    <Text text="{dashboard>/distribucionTurnos/2/pctText}" class="distPct purpleText"/>
-                  </HBox>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Tipo de servicio"
+                            class="mecFilterLabel"/>
 
-                </VBox>
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/tipoServicio}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/tiposServicio}"
+                            class="mecFilterControl">
 
-                <HBox class="totalRow" justifyContent="SpaceBetween" alignItems="Center">
-                  <HBox alignItems="Center">
-                    <core:Icon src="sap-icon://group" class="blueText totalIcon"/>
-                    <Text text="Total mecánicos" class="totalText"/>
-                  </HBox>
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
+                    </VBox>
 
-                  <Text text="{dashboard>/kpis/activos}" class="totalNumber"/>
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Especialidad"
+                            class="mecFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/especialidad}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/especialidades}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox class="mecFilterBox">
+                        <Label
+                            text="Estado"
+                            class="mecFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dashboard>/filters/estado}"
+                            change=".onFilterChange"
+                            items="{dashboard>/catalogos/estados}"
+                            class="mecFilterControl">
+
+                            <core:Item
+                                key="{dashboard>key}"
+                                text="{dashboard>text}"/>
+                        </Select>
+                    </VBox>
+
+                    <VBox
+                        class="mecApplyWrap"
+                        justifyContent="Center">
+
+                        <Button
+                            width="100%"
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="mecApplyButton"/>
+                    </VBox>
                 </HBox>
-              </VBox>
 
-              <!-- COLUMNA 2: POR ESTADO -->
-              <VBox class="innerCard">
-                <HBox alignItems="Center" class="cardHeaderSpace">
-                  <core:Icon src="sap-icon://group" class="sectionBlueIcon"/>
-                  <Text text="Por estado" class="sectionTitle stateSectionTitle"/>
-                </HBox>
+                <!-- KPIs -->
+                <HBox class="mecKpiGrid">
 
-                <HBox class="estadoRow" alignItems="Center">
-                  <VBox class="estadoDonutWrapper">
-                    <core:HTML sanitizeContent="false" content="{dashboard>/estadoDonutHtml}"/>
-                  </VBox>
+                    <HBox
+                        class="mecKpiCard mecKpiBlue"
+                        alignItems="Center">
 
-                  <VBox class="estadoLegend">
+                        <HBox
+                            class="mecKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
 
-                    <HBox class="estadoLegendItem" alignItems="Center">
-                      <VBox class="cssDot dotGreen"></VBox>
-                      <Text text="{dashboard>/estadoData/0/label}" class="estadoLegLabel"/>
-                      <Text text="{dashboard>/estadoData/0/value}" class="estadoLegValue"/>
-                      <Text text="{dashboard>/estadoData/0/pctText}" class="estadoLegPct"/>
+                            <core:Icon
+                                src="sap-icon://group"
+                                class="mecKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="mecKpiText">
+                            <Text
+                                text="{dashboard>/kpis/activos}"
+                                class="mecKpiValue"/>
+
+                            <Text
+                                text="Mecánicos activos"
+                                class="mecKpiLabel"/>
+
+                            <Text
+                                text="Plantilla activa en el periodo"
+                                class="mecKpiSub"/>
+                        </VBox>
                     </HBox>
 
-                    <HBox class="estadoLegendItem" alignItems="Center">
-                      <VBox class="cssDot dotBlue"></VBox>
-                      <Text text="{dashboard>/estadoData/1/label}" class="estadoLegLabel"/>
-                      <Text text="{dashboard>/estadoData/1/value}" class="estadoLegValue"/>
-                      <Text text="{dashboard>/estadoData/1/pctText}" class="estadoLegPct"/>
+                    <HBox
+                        class="mecKpiCard mecKpiGreen"
+                        alignItems="Center">
+
+                        <HBox
+                            class="mecKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://employee-approvals"
+                                class="mecKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="mecKpiText">
+                            <Text
+                                text="{dashboard>/kpis/disponibles}"
+                                class="mecKpiValue"/>
+
+                            <Text
+                                text="Mecánicos disponibles"
+                                class="mecKpiLabel"/>
+
+                            <Text
+                                text="{dashboard>/kpis/disponiblesPct}"
+                                class="mecKpiSub"/>
+                        </VBox>
                     </HBox>
 
-                    <HBox class="estadoLegendItem" alignItems="Center">
-                      <VBox class="cssDot dotOrange"></VBox>
-                      <Text text="{dashboard>/estadoData/2/label}" class="estadoLegLabel"/>
-                      <Text text="{dashboard>/estadoData/2/value}" class="estadoLegValue"/>
-                      <Text text="{dashboard>/estadoData/2/pctText}" class="estadoLegPct"/>
+                    <HBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecKpiCard mecKpiOrange"
+                        alignItems="Center">
+
+                        <HBox
+                            class="mecKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
+
+                            <core:Icon
+                                src="sap-icon://warning"
+                                class="mecKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="mecKpiText">
+                            <Text
+                                text="{dashboard>/kpis/sobrecapacidad}"
+                                class="mecKpiValue"/>
+
+                            <Text
+                                text="Recursos sobre capacidad"
+                                class="mecKpiLabel"/>
+
+                            <Text
+                                text="{dashboard>/kpis/sobrecapacidadPct}"
+                                class="mecKpiSub"/>
+                        </VBox>
                     </HBox>
 
-                    <HBox class="estadoLegendItem" alignItems="Center">
-                      <VBox class="cssDot dotRed"></VBox>
-                      <Text text="{dashboard>/estadoData/3/label}" class="estadoLegLabel"/>
-                      <Text text="{dashboard>/estadoData/3/value}" class="estadoLegValue"/>
-                      <Text text="{dashboard>/estadoData/3/pctText}" class="estadoLegPct"/>
-                    </HBox>
+                    <HBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecKpiCard mecKpiPurple"
+                        alignItems="Center">
 
-                    <HBox class="estadoLegendItem" alignItems="Center">
-                      <VBox class="cssDot dotGray"></VBox>
-                      <Text text="{dashboard>/estadoData/4/label}" class="estadoLegLabel"/>
-                      <Text text="{dashboard>/estadoData/4/value}" class="estadoLegValue"/>
-                      <Text text="{dashboard>/estadoData/4/pctText}" class="estadoLegPct"/>
-                    </HBox>
+                        <HBox
+                            class="mecKpiIconCircle"
+                            alignItems="Center"
+                            justifyContent="Center">
 
-                  </VBox>
+                            <core:Icon
+                                src="sap-icon://shield"
+                                class="mecKpiIcon"/>
+                        </HBox>
+
+                        <VBox class="mecKpiText">
+                            <Text
+                                text="{dashboard>/kpis/cobertura}"
+                                class="mecKpiValue"/>
+
+                            <Text
+                                text="Cobertura de demanda programada"
+                                class="mecKpiLabel"/>
+
+                            <Text
+                                text="{dashboard>/kpis/coberturaSub}"
+                                class="mecKpiSub"/>
+                        </VBox>
+                    </HBox>
                 </HBox>
 
-                <HBox class="estadoMessageBox" alignItems="Center">
-                  <VBox class="estadoMessageIconWrap">
-                    <core:Icon src="sap-icon://accept" class="estadoMessageIcon"/>
-                  </VBox>
+                <!-- FILA MEDIA -->
+                <HBox class="mecMiddleGrid">
 
-                  <Text
-                    text="{dashboard>/estadoMensaje}"
-                    class="estadoMessageText"/>
+                    <!-- BALANCE GENERAL -->
+                    <VBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecCard mecBalanceCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="mecCardTitleRow">
+
+                            <Title
+                                text="Balance general de plantilla"
+                                level="H3"
+                                class="mecCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecSmallInfo"/>
+                        </HBox>
+
+                        <Text
+                            text="Comparativo de capacidad, carga y brecha del periodo"
+                            class="mecCardSubtitle"/>
+
+                        <HBox
+                            class="mecBalanceStats"
+                            justifyContent="SpaceAround">
+
+                            <VBox
+                                alignItems="Center"
+                                class="mecBalanceMetric mecGreenMetric">
+
+                                <core:Icon
+                                    src="sap-icon://employee"
+                                    class="mecBalanceMetricIcon"/>
+
+                                <Text
+                                    text="Capacidad disponible"
+                                    class="mecMiniLabel"/>
+
+                                <Text
+                                    text="{dashboard>/balance/capacidad}"
+                                    class="mecBalanceValue"/>
+
+                                <Text
+                                    text="{dashboard>/balance/capacidadPct}"
+                                    class="mecMiniPct"/>
+                            </VBox>
+
+                            <VBox
+                                alignItems="Center"
+                                class="mecBalanceMetric mecBlueMetric">
+
+                                <core:Icon
+                                    src="sap-icon://calendar"
+                                    class="mecBalanceMetricIcon"/>
+
+                                <Text
+                                    text="Carga programada"
+                                    class="mecMiniLabel"/>
+
+                                <Text
+                                    text="{dashboard>/balance/carga}"
+                                    class="mecBalanceValue"/>
+
+                                <Text
+                                    text="{dashboard>/balance/cargaPct}"
+                                    class="mecMiniPct"/>
+                            </VBox>
+
+                            <VBox
+                                alignItems="Center"
+                                class="mecBalanceMetric mecPurpleMetric">
+
+                                <core:Icon
+                                    src="sap-icon://trend-up"
+                                    class="mecBalanceMetricIcon"/>
+
+                                <Text
+                                    text="Brecha"
+                                    class="mecMiniLabel"/>
+
+                                <Text
+                                    text="{dashboard>/balance/brecha}"
+                                    class="mecBalanceValue"/>
+
+                                <Text
+                                    text="{dashboard>/balance/brechaPct}"
+                                    class="mecMiniPct"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox class="mecBalanceProgressArea">
+                            <ProgressIndicator
+                                percentValue="{dashboard>/balance/utilizacionRaw}"
+                                displayValue=""
+                                showValue="false"
+                                class="mecBalanceProgress"/>
+
+                            <HBox
+                                class="mecBalanceScale"
+                                justifyContent="SpaceBetween">
+
+                                <Text text="0"/>
+                                <Text text="Carga"/>
+                                <Text text="Capacidad"/>
+                            </HBox>
+                        </VBox>
+
+                        <HBox
+                            class="mecBalanceMessage"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://sys-enter-2"
+                                class="mecBalanceMessageIcon"/>
+
+                            <Text
+                                text="{dashboard>/balance/mensaje}"
+                                wrapping="true"
+                                class="mecBalanceMessageText"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- DISTRIBUCIÓN -->
+                    <VBox class="mecCard mecDistributionCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="mecCardTitleRow">
+
+                            <Title
+                                text="Distribución de plantilla"
+                                level="H3"
+                                class="mecCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecSmallInfo"/>
+                        </HBox>
+
+                        <Text
+                            text="Cómo está distribuida la plantilla"
+                            class="mecCardSubtitle"/>
+
+                        <HBox class="mecDistributionColumns">
+
+                            <!-- POR TURNO -->
+                            <VBox class="mecDistributionColumn">
+                                <HBox
+                                    alignItems="Center"
+                                    class="mecMiniSectionHeader">
+
+                                    <HBox
+                                        class="mecMiniSectionIcon mecBlueSectionIcon"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <core:Icon
+                                            src="sap-icon://employee"/>
+                                    </HBox>
+
+                                    <Text
+                                        text="Distribución de mecánicos"
+                                        class="mecSectionTitle"/>
+                                </HBox>
+
+                                <VBox
+                                    class="mecDistList"
+                                    items="{dashboard>/distribucionTurnos}">
+
+                                    <items>
+                                        <HBox
+                                            class="mecDistRow"
+                                            alignItems="Center">
+
+                                            <VBox class="mecDistMain">
+                                                <Text
+                                                    text="{dashboard>label}"
+                                                    class="mecDistLabel"/>
+
+                                                <ProgressIndicator
+                                                    percentValue="{dashboard>pct}"
+                                                    displayValue=""
+                                                    showValue="false"
+                                                    class="mecDistProgress"/>
+                                            </VBox>
+
+                                            <Text
+                                                text="{dashboard>value}"
+                                                class="mecDistValue"/>
+
+                                            <Text
+                                                text="{dashboard>pctText}"
+                                                class="mecDistPct"/>
+                                        </HBox>
+                                    </items>
+                                </VBox>
+
+                                <HBox
+                                    class="mecDistTotal"
+                                    justifyContent="SpaceBetween">
+
+                                    <Text text="Total mecánicos"/>
+
+                                    <Text
+                                        text="{dashboard>/kpis/activos}"
+                                        class="mecStrong"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- POR ESPECIALIDAD -->
+                            <VBox class="mecDistributionColumn">
+                                <HBox
+                                    alignItems="Center"
+                                    class="mecMiniSectionHeader">
+
+                                    <VBox class="mecSectionAccent mecSectionAccentGreen"/>
+
+                                    <Text
+                                        text="Por especialidad"
+                                        class="mecSectionTitle"/>
+
+                                    <core:Icon
+                                        src="sap-icon://hint"
+                                        class="mecSectionHint"/>
+                                </HBox>
+
+                                <VBox
+                                    class="mecSpecialtyList mecSpecialtyOnlyList"
+                                    items="{dashboard>/distribucionEspecialidad}">
+
+                                    <items>
+                                        <HBox
+                                            class="mecSpecialtyRow mecSpecialtyTargetRow"
+                                            alignItems="Center">
+
+                                            <VBox class="mecSpecialtyBullet"/>
+
+                                            <VBox class="mecSpecialtyMain">
+                                                <Text
+                                                    text="{dashboard>label}"
+                                                    class="mecDistLabel"/>
+
+                                                <ProgressIndicator
+                                                    percentValue="{dashboard>pct}"
+                                                    displayValue=""
+                                                    showValue="false"
+                                                    class="mecDistProgress mecSpecialtyProgress"/>
+                                            </VBox>
+
+                                            <Text
+                                                text="{dashboard>value}"
+                                                class="mecDistValue"/>
+
+                                            <Text
+                                                text="{dashboard>pctText}"
+                                                class="mecDistPct"/>
+                                        </HBox>
+                                    </items>
+                                </VBox>
+                            </VBox>
+
+                            <!-- POR ZONA -->
+                            <VBox class="mecDistributionColumn mecZoneColumn">
+                                <HBox
+                                    alignItems="Center"
+                                    class="mecMiniSectionHeader">
+
+                                    <HBox
+                                        class="mecMiniSectionIcon mecBlueSectionIcon mecZoneHeaderIcon"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <core:Icon
+                                            src="sap-icon://map-2"/>
+                                    </HBox>
+
+                                    <Text
+                                        text="Por zona"
+                                        class="mecSectionTitle"/>
+
+                                    <core:Icon
+                                        src="sap-icon://hint"
+                                        class="mecSectionHint"/>
+                                </HBox>
+
+                                <HBox
+                                    class="mecZoneTargetBody"
+                                    alignItems="Center"
+                                    justifyContent="SpaceAround">
+
+                                    <HBox
+                                        id="zoneDonut"
+                                        class="mecZoneDonut mecZoneDonutLarge"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <VBox
+                                            class="mecDonutCenter"
+                                            alignItems="Center">
+
+                                            <Text
+                                                text="{dashboard>/zonaTotal}"
+                                                class="mecDonutValue mecDonutValueLarge"/>
+
+                                            <Text
+                                                text="Total"
+                                                class="mecDonutLabel"/>
+                                        </VBox>
+                                    </HBox>
+
+                                    <VBox
+                                        class="mecZoneLegend mecZoneLegendTarget"
+                                        items="{dashboard>/distribucionZona}">
+
+                                        <items>
+                                            <HBox
+                                                class="mecZoneLegendRow mecZoneLegendTargetRow"
+                                                alignItems="Center">
+
+                                                <VBox class="mecZoneLegendDot"/>
+
+                                                <Text
+                                                    text="{dashboard>label}"
+                                                    class="mecZoneLegendName"/>
+
+                                                <Text
+                                                    text="{dashboard>value}"
+                                                    class="mecZoneLegendValue"/>
+
+                                                <Text
+                                                    text="{dashboard>pctText}"
+                                                    class="mecZoneLegendPct"/>
+                                            </HBox>
+                                        </items>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
                 </HBox>
-              </VBox>
 
-              <!-- COLUMNA 3: POR ESPECIALIDAD -->
-              <VBox class="innerCard">
-                <HBox alignItems="Center" class="cardHeaderSpace">
-                  <VBox class="cssDot dotBlue specialTitleDot"></VBox>
-                  <Text text="Por especialidad" class="sectionTitle stateSectionTitle"/>
+                <!-- FILA INFERIOR -->
+                <HBox class="mecLowerGrid">
+
+                    <!-- SATURACIÓN -->
+                    <VBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecCard mecHeatCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="mecCardTitleRow">
+
+                            <Title
+                                text="Saturación por turno y zona"
+                                level="H3"
+                                class="mecCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecSmallInfo"/>
+                        </HBox>
+
+                        <Text
+                            text="Utilización de la plantilla; identifica zonas con sobrecarga."
+                            class="mecCardSubtitle"/>
+
+                        <VBox class="mecHeatTable">
+
+                            <HBox class="mecHeatHeader">
+                                <Text
+                                    text="Turno"
+                                    class="mecHeatRowLabel"/>
+
+                                <HBox
+                                    class="mecHeatCells"
+                                    items="{dashboard>/heatmapZones}">
+
+                                    <items>
+                                        <Text
+                                            text="{dashboard>label}"
+                                            class="mecHeatHeaderCell"/>
+                                    </items>
+                                </HBox>
+                            </HBox>
+
+                            <VBox
+                                class="mecHeatRows"
+                                items="{dashboard>/heatmapRows}">
+
+                                <items>
+                                    <HBox class="mecHeatRow">
+                                        <Text
+                                            text="{dashboard>shift}"
+                                            class="mecHeatRowLabel"/>
+
+                                        <HBox
+                                            class="mecHeatCells"
+                                            items="{dashboard>cells}">
+
+                                            <items>
+                                                <VBox
+                                                    class="mecHeatCell"
+                                                    alignItems="Center"
+                                                    justifyContent="Center">
+
+                                                    <customData>
+                                                        <core:CustomData
+                                                            key="state"
+                                                            value="{dashboard>stateCode}"
+                                                            writeToDom="true"/>
+                                                    </customData>
+
+                                                    <Text
+                                                        text="{dashboard>value}"
+                                                        class="mecHeatValue"/>
+                                                </VBox>
+                                            </items>
+                                        </HBox>
+                                    </HBox>
+                                </items>
+                            </VBox>
+                        </VBox>
+
+                        <HBox
+                            class="mecHeatLegend"
+                            justifyContent="SpaceBetween">
+
+                            <HBox alignItems="Center">
+                                <VBox class="mecLegendDot mecLegendGreen"/>
+                                <Text text="&lt; 90% Balanceado"/>
+                            </HBox>
+
+                            <HBox alignItems="Center">
+                                <VBox class="mecLegendDot mecLegendYellow"/>
+                                <Text text="90% - 100% Cerca"/>
+                            </HBox>
+
+                            <HBox alignItems="Center">
+                                <VBox class="mecLegendDot mecLegendOrange"/>
+                                <Text text="100% - 120% Alto"/>
+                            </HBox>
+
+                            <HBox alignItems="Center">
+                                <VBox class="mecLegendDot mecLegendRed"/>
+                                <Text text="&gt; 120% Crítico"/>
+                            </HBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- CAPACIDAD ESPECIALIDAD -->
+                    <VBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecCard mecCapacityCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="mecCardTitleRow">
+
+                            <Title
+                                text="Capacidad por especialidad"
+                                level="H3"
+                                class="mecCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecSmallInfo"/>
+                        </HBox>
+
+                        <Text
+                            text="Comparativo de capacidad disponible, carga programada y utilización"
+                            class="mecCardSubtitle"/>
+
+                        <HBox class="mecMiniTableHeader">
+                            <Text
+                                text="Especialidad"
+                                class="mecColName"/>
+
+                            <Text
+                                text="Cap. disp. (h)"
+                                class="mecColMetric"/>
+
+                            <Text
+                                text="Carga prog. (h)"
+                                class="mecColMetric"/>
+
+                            <Text
+                                text="Utilización"
+                                class="mecColUtil"/>
+                        </HBox>
+
+                        <VBox
+                            class="mecMiniTableRows"
+                            items="{dashboard>/capacidadEspecialidad}">
+
+                            <items>
+                                <HBox
+                                    class="mecMiniTableRow"
+                                    alignItems="Center">
+
+                                    <Text
+                                        text="{dashboard>label}"
+                                        class="mecColName mecRowName"/>
+
+                                    <HBox
+                                        class="mecColMetric"
+                                        alignItems="Center">
+
+                                        <ProgressIndicator
+                                            percentValue="{dashboard>capPct}"
+                                            displayValue=""
+                                            showValue="false"
+                                            class="mecInlineProgress"/>
+
+                                        <Text
+                                            text="{dashboard>capacidad}"
+                                            class="mecTableNumber"/>
+                                    </HBox>
+
+                                    <HBox
+                                        class="mecColMetric"
+                                        alignItems="Center">
+
+                                        <ProgressIndicator
+                                            percentValue="{dashboard>cargaPct}"
+                                            displayValue=""
+                                            showValue="false"
+                                            class="mecInlineProgress mecBlueProgress"/>
+
+                                        <Text
+                                            text="{dashboard>carga}"
+                                            class="mecTableNumber"/>
+                                    </HBox>
+
+                                    <ObjectStatus
+                                        text="{dashboard>utilizacion}"
+                                        state="{dashboard>state}"
+                                        class="mecColUtil mecUtilStatus"/>
+                                </HBox>
+                            </items>
+                        </VBox>
+
+                        <HBox class="mecMiniTableTotal">
+                            <Text
+                                text="Total"
+                                class="mecColName"/>
+
+                            <Text
+                                text="{dashboard>/balance/capacidad}"
+                                class="mecColMetric mecTotalGreen"/>
+
+                            <Text
+                                text="{dashboard>/balance/carga}"
+                                class="mecColMetric mecTotalBlue"/>
+
+                            <Text
+                                text="{dashboard>/capacidadTotal}"
+                                class="mecColUtil mecTotalGreen"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- PRESIÓN SERVICIO -->
+                    <VBox
+                        busy="{dashboard>/operationalLoading}"
+                        busyIndicatorDelay="0"
+                        class="mecCard mecPressureCard">
+
+                        <HBox
+                            alignItems="Center"
+                            class="mecCardTitleRow">
+
+                            <Title
+                                text="Presión operativa por tipo de servicio"
+                                level="H3"
+                                class="mecCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="mecSmallInfo"/>
+                        </HBox>
+
+                        <Text
+                            text="Demanda de mecánicos por tipo de servicio"
+                            class="mecCardSubtitle"/>
+
+                        <HBox class="mecPressureHeader">
+                            <Text
+                                text="Servicio"
+                                class="mecPressureName"/>
+
+                            <Text
+                                text="Req. (h)"
+                                class="mecPressureMetric"/>
+
+                            <Text
+                                text="Disp. (h)"
+                                class="mecPressureMetric"/>
+
+                            <Text
+                                text="Utilización"
+                                class="mecPressureUtil"/>
+                        </HBox>
+
+                        <VBox
+                            class="mecPressureRows"
+                            items="{dashboard>/presionServicios}">
+
+                            <items>
+                                <HBox
+                                    class="mecPressureRow"
+                                    alignItems="Center">
+
+                                    <Text
+                                        text="{dashboard>label}"
+                                        class="mecPressureName mecRowName"/>
+
+                                    <VBox class="mecPressureMetric">
+                                        <Text
+                                            text="{dashboard>req}"
+                                            class="mecPressureNumber mecBlueText"/>
+
+                                        <ProgressIndicator
+                                            percentValue="{dashboard>reqPct}"
+                                            displayValue=""
+                                            showValue="false"
+                                            class="mecPressureProgress mecBlueProgress"/>
+                                    </VBox>
+
+                                    <VBox class="mecPressureMetric">
+                                        <Text
+                                            text="{dashboard>disp}"
+                                            class="mecPressureNumber mecGreenText"/>
+
+                                        <ProgressIndicator
+                                            percentValue="{dashboard>dispPct}"
+                                            displayValue=""
+                                            showValue="false"
+                                            class="mecPressureProgress"/>
+                                    </VBox>
+
+                                    <VBox
+                                        class="mecPressureUtil"
+                                        alignItems="Center">
+
+                                        <ObjectStatus
+                                            text="{dashboard>utilizacion}"
+                                            state="{dashboard>state}"
+                                            class="mecPressureUtilValue"/>
+
+                                        <Text
+                                            text="{dashboard>stateText}"
+                                            class="mecPressureStateText"/>
+                                    </VBox>
+                                </HBox>
+                            </items>
+                        </VBox>
+
+                        <HBox class="mecPressureTotal">
+                            <Text
+                                text="Total"
+                                class="mecPressureName"/>
+
+                            <Text
+                                text="{dashboard>/presionTotal/req}"
+                                class="mecPressureMetric mecTotalBlue"/>
+
+                            <Text
+                                text="{dashboard>/presionTotal/disp}"
+                                class="mecPressureMetric mecTotalGreen"/>
+
+                            <Text
+                                text="{dashboard>/presionTotal/utilizacion}"
+                                class="mecPressureUtil mecTotalOrange"/>
+                        </HBox>
+                    </VBox>
                 </HBox>
-
-                <VBox class="distList">
-
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distBarBox distBarBoxWide">
-                      <Text text="{dashboard>/distribucionEspecialidad/0/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionEspecialidad/0/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barBlue"/>
-                    </VBox>
-
-                    <Text text="{dashboard>/distribucionEspecialidad/0/value}" class="distValue blackText"/>
-                    <Text text="{dashboard>/distribucionEspecialidad/0/pctText}" class="distPct grayText"/>
-                  </HBox>
-
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distBarBox distBarBoxWide">
-                      <Text text="{dashboard>/distribucionEspecialidad/1/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionEspecialidad/1/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barGreen"/>
-                    </VBox>
-
-                    <Text text="{dashboard>/distribucionEspecialidad/1/value}" class="distValue blackText"/>
-                    <Text text="{dashboard>/distribucionEspecialidad/1/pctText}" class="distPct grayText"/>
-                  </HBox>
-
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distBarBox distBarBoxWide">
-                      <Text text="{dashboard>/distribucionEspecialidad/2/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionEspecialidad/2/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barPurple"/>
-                    </VBox>
-
-                    <Text text="{dashboard>/distribucionEspecialidad/2/value}" class="distValue blackText"/>
-                    <Text text="{dashboard>/distribucionEspecialidad/2/pctText}" class="distPct grayText"/>
-                  </HBox>
-
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distBarBox distBarBoxWide">
-                      <Text text="{dashboard>/distribucionEspecialidad/3/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionEspecialidad/3/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barOrange"/>
-                    </VBox>
-
-                    <Text text="{dashboard>/distribucionEspecialidad/3/value}" class="distValue blackText"/>
-                    <Text text="{dashboard>/distribucionEspecialidad/3/pctText}" class="distPct grayText"/>
-                  </HBox>
-
-                  <HBox class="distRow" alignItems="Center">
-                    <VBox class="distBarBox distBarBoxWide">
-                      <Text text="{dashboard>/distribucionEspecialidad/4/label}" class="distLabel"/>
-                      <ProgressIndicator
-                        percentValue="{dashboard>/distribucionEspecialidad/4/pct}"
-                        displayValue=""
-                        showValue="false"
-                        class="distProgress barGray"/>
-                    </VBox>
-
-                    <Text text="{dashboard>/distribucionEspecialidad/4/value}" class="distValue blackText"/>
-                    <Text text="{dashboard>/distribucionEspecialidad/4/pctText}" class="distPct grayText"/>
-                  </HBox>
-
-                </VBox>
-
-                <HBox class="especialidadMessageBox" alignItems="Center">
-                  <core:Icon src="sap-icon://group" class="especialidadMessageIcon"/>
-                  <Text
-                    text="La especialidad más demandada es Mecánica (36.8% del total)."
-                    class="especialidadMessageText"/>
-                </HBox>
-              </VBox>
-
-            </HBox>
-          </VBox>
-        </HBox>
-
-        <!-- FILA INFERIOR -->
-        <HBox class="mainGrid" wrap="Wrap">
-
-          <VBox class="card heatCard">
-            <HBox alignItems="Center">
-              <Title text="Saturación por turno y zona" level="H3" class="cardTitle"/>
-              <core:Icon src="sap-icon://hint" class="smallInfoIcon"/>
-            </HBox>
-
-            <Text
-              text="Utilización de la plantilla; identifica zonas con sobrecarga."
-              class="cardSubtitle"/>
-
-            <core:HTML sanitizeContent="false" content="{dashboard>/heatmapHtml}"/>
-          </VBox>
-
-          <VBox class="card capacityCard">
-            <HBox alignItems="Center">
-              <Title text="Capacidad por especialidad" level="H3" class="cardTitle"/>
-              <core:Icon src="sap-icon://hint" class="smallInfoIcon"/>
-            </HBox>
-
-            <Text
-              text="Comparativo de capacidad disponible, carga programada y utilización"
-              class="cardSubtitle"/>
-
-            <HBox class="tableHeader">
-              <Text text="Especialidad" class="colEspecialidad"/>
-              <Text text="Cap. disponible (h)" class="colCap"/>
-              <Text text="Carga programada (h)" class="colCap"/>
-              <Text text="Utilización" class="colUtil"/>
-            </HBox>
-
-            <VBox items="{dashboard>/capacidadEspecialidad}">
-              <items>
-                <HBox class="capacityRow">
-                  <Text text="{dashboard>label}" class="colEspecialidad rowName"/>
-
-                  <VBox class="colCap">
-                    <HBox alignItems="Center">
-                      <ProgressIndicator
-                        percentValue="{dashboard>capPct}"
-                        displayValue=""
-                        showValue="false"
-                        class="greenProgress"/>
-                      <Text text="{dashboard>capacidad}" class="tableNumber"/>
-                    </HBox>
-                  </VBox>
-
-                  <VBox class="colCap">
-                    <HBox alignItems="Center">
-                      <ProgressIndicator
-                        percentValue="{dashboard>cargaPct}"
-                        displayValue=""
-                        showValue="false"
-                        class="blueProgress"/>
-                      <Text text="{dashboard>carga}" class="tableNumber"/>
-                    </HBox>
-                  </VBox>
-
-                  <Text text="{dashboard>utilizacion}" class="{dashboard>utilClass}"/>
-                </HBox>
-              </items>
             </VBox>
-
-            <HBox class="capacityTotal">
-              <Text text="Total" class="colEspecialidad totalStrong"/>
-              <Text text="{dashboard>/balance/capacidad}" class="colCap totalStrong greenText"/>
-              <Text text="{dashboard>/balance/carga}" class="colCap totalStrong blueText"/>
-              <Text text="{dashboard>/capacidadTotal}" class="colUtil totalStrong greenText"/>
-            </HBox>
-          </VBox>
-
-          <VBox class="card pressureCard">
-            <HBox alignItems="Center">
-              <Title text="Presión operativa por tipo de servicio" level="H3" class="cardTitle"/>
-              <core:Icon src="sap-icon://hint" class="smallInfoIcon"/>
-            </HBox>
-
-            <Text
-              text="Demanda de mecánicos por tipo de servicio"
-              class="cardSubtitle"/>
-
-            <HBox class="pressureHeader">
-              <Text text="Servicio" class="pColService"/>
-              <Text text="Req. (Eq.)" class="pCol"/>
-              <Text text="Disp. (Eq.)" class="pCol"/>
-              <Text text="Utilización" class="pColUtil"/>
-            </HBox>
-
-            <VBox items="{dashboard>/presionServicios}">
-              <items>
-                <HBox class="pressureRow">
-                  <Text text="{dashboard>label}" class="pColService rowName"/>
-
-                  <VBox class="pCol">
-                    <Text text="{dashboard>req}" class="blueText pNumber"/>
-                    <ProgressIndicator
-                      percentValue="{dashboard>reqPct}"
-                      displayValue=""
-                      showValue="false"
-                      class="blueProgress"/>
-                  </VBox>
-
-                  <VBox class="pCol">
-                    <Text text="{dashboard>disp}" class="greenText pNumber"/>
-                    <ProgressIndicator
-                      percentValue="{dashboard>dispPct}"
-                      displayValue=""
-                      showValue="false"
-                      class="greenProgress"/>
-                  </VBox>
-
-                  <HBox class="pColUtil" alignItems="Center">
-                    <Text text="{dashboard>utilizacion}" class="{dashboard>utilClass}"/>
-                    <Text text="{dashboard>estado}" class="stateText"/>
-                  </HBox>
-                </HBox>
-              </items>
-            </VBox>
-
-            <HBox class="pressureTotal">
-              <Text text="Total" class="pColService totalStrong"/>
-              <Text text="{dashboard>/presionTotal/req}" class="pCol totalStrong blueText"/>
-              <Text text="{dashboard>/presionTotal/disp}" class="pCol totalStrong greenText"/>
-              <Text text="{dashboard>/presionTotal/utilizacion}" class="pColUtil totalStrong orangeText"/>
-            </HBox>
-          </VBox>
-
-        </HBox>
-
-      </VBox>
-    </ScrollContainer>
-  </Page>
+        </content>
+    </Page>
 </mvc:View>

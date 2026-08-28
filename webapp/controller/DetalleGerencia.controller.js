@@ -1,506 +1,113 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "sap/ui/dom/includeStylesheet"
-], function (
-    Controller,
-    JSONModel,
-    MessageToast,
-    includeStylesheet
-) {
+    "mantenimiento/model/DetalleGerenciaService"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Service) {
     "use strict";
 
-    return Controller.extend(
-        "mantenimiento.controller.DetalleGerencia",
-        {
+    return Controller.extend("mantenimiento.controller.DetalleGerencia", {
+        onInit: function () {
+            this._requestId = 0;
+            this._filters = { period: "2026", dateFrom: "2026-01-01", dateTo: "2026-12-31", management: "ALL", headship: "ALL", zone: "ALL", serviceType: "ALL" };
+            this._loadStyles();
+            this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "view");
+            this.getView().getModel("view").setSizeLimit(2000);
+            this._bindDateEvents();
+            this._load(false);
+        },
 
-            /* ============================================================
-               INICIALIZACIÓN
-               ============================================================ */
-
-            onInit: function () {
-                includeStylesheet(
-                    sap.ui.require.toUrl(
-                        "mantenimiento/css/DetalleGerencia.css"
-                    )
-                );
-
-                var oViewModel = new JSONModel({
-
-                    /*
-                     * Apartado visible inicialmente.
-                     *
-                     * capacity  = Carga y capacidad por jefatura
-                     * materials = Consumo de materiales por jefatura
-                     */
-                    activeSection: "capacity",
-
-                    /* ====================================================
-                       FILTROS COMPARTIDOS
-                       ==================================================== */
-
-                    filters: {
-                        period: "2025-06",
-                        dateFrom: "2025-06-01",
-                        dateTo: "2025-06-30",
-                        management: "G01",
-                        headship: "ALL",
-                        zone: "ALL",
-                        serviceType: "ALL"
-                    },
-
-                    periodOptions: [
-                        {
-                            key: "2025-04",
-                            text: "Abril 2025"
-                        },
-                        {
-                            key: "2025-05",
-                            text: "Mayo 2025"
-                        },
-                        {
-                            key: "2025-06",
-                            text: "Junio 2025"
-                        }
-                    ],
-
-                    managementOptions: [
-                        {
-                            key: "G01",
-                            text: "G01 - Gerencia Norte"
-                        },
-                        {
-                            key: "G02",
-                            text: "G02 - Gerencia Centro"
-                        },
-                        {
-                            key: "G03",
-                            text: "G03 - Gerencia Sur"
-                        }
-                    ],
-
-                    headshipOptions: [
-                        {
-                            key: "ALL",
-                            text: "Todas"
-                        },
-                        {
-                            key: "J01",
-                            text: "J01 - Taller Norte"
-                        },
-                        {
-                            key: "J02",
-                            text: "J02 - Taller Centro"
-                        },
-                        {
-                            key: "J03",
-                            text: "J03 - Taller Sur"
-                        },
-                        {
-                            key: "J04",
-                            text: "J04 - Taller Oriente"
-                        },
-                        {
-                            key: "J05",
-                            text: "J05 - Taller Poniente"
-                        },
-                        {
-                            key: "J06",
-                            text: "J06 - Taller Noroeste"
-                        }
-                    ],
-
-                    zoneOptions: [
-                        {
-                            key: "ALL",
-                            text: "Todas"
-                        },
-                        {
-                            key: "NORTH",
-                            text: "Norte"
-                        },
-                        {
-                            key: "CENTER",
-                            text: "Centro"
-                        },
-                        {
-                            key: "SOUTH",
-                            text: "Sur"
-                        }
-                    ],
-
-                    serviceOptions: [
-                        {
-                            key: "ALL",
-                            text: "Todos"
-                        },
-                        {
-                            key: "PREVENTIVE",
-                            text: "Preventivo"
-                        },
-                        {
-                            key: "CORRECTIVE",
-                            text: "Correctivo"
-                        },
-                        {
-                            key: "EMERGENCY",
-                            text: "Emergencia"
-                        }
-                    ],
-
-                    /* ====================================================
-                       TABLA: CARGA Y CAPACIDAD
-                       ==================================================== */
-
-                    capacityRows: [
-                        {
-                            jefatura: "J01 - Taller Norte",
-                            supervisors: "8",
-                            capacity: "5,320",
-                            load: "4,850",
-                            utilization: 91,
-                            barPercent: 91,
-                            utilizationState: "Success",
-                            activeOrders: "42",
-                            overCapacity: "2",
-                            status: "Normal",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J02 - Taller Centro",
-                            supervisors: "5",
-                            capacity: "4,860",
-                            load: "5,450",
-                            utilization: 112,
-                            barPercent: 100,
-                            utilizationState: "Warning",
-                            activeOrders: "38",
-                            overCapacity: "3",
-                            status: "Alto",
-                            statusState: "Warning"
-                        },
-                        {
-                            jefatura: "J03 - Taller Sur",
-                            supervisors: "6",
-                            capacity: "3,720",
-                            load: "3,150",
-                            utilization: 85,
-                            barPercent: 85,
-                            utilizationState: "Success",
-                            activeOrders: "26",
-                            overCapacity: "1",
-                            status: "Normal",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J04 - Taller Oriente",
-                            supervisors: "4",
-                            capacity: "2,240",
-                            load: "2,610",
-                            utilization: 117,
-                            barPercent: 100,
-                            utilizationState: "Warning",
-                            activeOrders: "18",
-                            overCapacity: "2",
-                            status: "Alto",
-                            statusState: "Warning"
-                        },
-                        {
-                            jefatura: "J05 - Taller Poniente",
-                            supervisors: "3",
-                            capacity: "1,680",
-                            load: "1,280",
-                            utilization: 76,
-                            barPercent: 76,
-                            utilizationState: "Success",
-                            activeOrders: "12",
-                            overCapacity: "0",
-                            status: "Normal",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J06 - Taller Noroeste",
-                            supervisors: "2",
-                            capacity: "880",
-                            load: "650",
-                            utilization: 74,
-                            barPercent: 74,
-                            utilizationState: "Success",
-                            activeOrders: "6",
-                            overCapacity: "0",
-                            status: "Bajo",
-                            statusState: "Information"
-                        }
-                    ],
-
-                    /* ====================================================
-                       TABLA: CONSUMO DE MATERIALES
-                       ==================================================== */
-
-                    materialRows: [
-                        {
-                            jefatura: "J01 - Taller Norte",
-                            supervisors: "8",
-                            category: "Lubricantes",
-                            material: "Aceite hidráulico ISO 68",
-                            actual: "8,950",
-                            unit: "L",
-                            plan: "9,500",
-                            planUnit: "L",
-                            variation: "-5.8%",
-                            variationState: "Success",
-                            orders: "42",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J02 - Taller Centro",
-                            supervisors: "5",
-                            category: "Refacciones",
-                            material: "Filtro de aceite PF-47",
-                            actual: "3,240",
-                            unit: "pzas",
-                            plan: "3,400",
-                            planUnit: "pzas",
-                            variation: "-4.7%",
-                            variationState: "Success",
-                            orders: "38",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J03 - Taller Sur",
-                            supervisors: "6",
-                            category: "Consumibles",
-                            material: "Guantes nitrilo L",
-                            actual: "2,860",
-                            unit: "pzas",
-                            plan: "2,780",
-                            planUnit: "pzas",
-                            variation: "+2.9%",
-                            variationState: "Warning",
-                            orders: "26",
-                            status: "Atención",
-                            statusState: "Warning"
-                        },
-                        {
-                            jefatura: "J04 - Taller Oriente",
-                            supervisors: "4",
-                            category: "Herramientas",
-                            material: "Broca HSS 1/2\"",
-                            actual: "620",
-                            unit: "pzas",
-                            plan: "650",
-                            planUnit: "pzas",
-                            variation: "-4.6%",
-                            variationState: "Success",
-                            orders: "18",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J05 - Taller Poniente",
-                            supervisors: "3",
-                            category: "Refacciones",
-                            material: "Banda en V A-40",
-                            actual: "1,560",
-                            unit: "pzas",
-                            plan: "1,700",
-                            planUnit: "pzas",
-                            variation: "-8.2%",
-                            variationState: "Success",
-                            orders: "12",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            jefatura: "J06 - Taller Noroeste",
-                            supervisors: "2",
-                            category: "Grasas",
-                            material: "Grasa multipropósito EP2",
-                            actual: "840",
-                            unit: "kg",
-                            plan: "900",
-                            planUnit: "kg",
-                            variation: "-6.7%",
-                            variationState: "Success",
-                            orders: "6",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        }
-                    ],
-
-                    /* ====================================================
-                       PANEL LATERAL DE CATEGORÍAS
-                       ==================================================== */
-
-                    categoryRows: [
-                        {
-                            category: "Lubricantes",
-                            quantity: "13,900",
-                            unit: "L",
-                            percent: 100,
-                            icon: "sap-icon://drop"
-                        },
-                        {
-                            category: "Refacciones",
-                            quantity: "8,440",
-                            unit: "pzas",
-                            percent: 61,
-                            icon: "sap-icon://action-settings"
-                        },
-                        {
-                            category: "Consumibles",
-                            quantity: "5,610",
-                            unit: "pzas",
-                            percent: 40,
-                            icon: "sap-icon://suitcase"
-                        },
-                        {
-                            category: "Herramientas",
-                            quantity: "1,360",
-                            unit: "pzas",
-                            percent: 10,
-                            icon: "sap-icon://wrench"
-                        },
-                        {
-                            category: "Grasas",
-                            quantity: "840",
-                            unit: "kg",
-                            percent: 6,
-                            icon: "sap-icon://product"
-                        }
-                    ]
-                });
-
-                oViewModel.setSizeLimit(100);
-
-                this.getView().setModel(
-                    oViewModel,
-                    "view"
-                );
-            },
-
-            /* ============================================================
-               FILTROS
-               ============================================================ */
-
-            onApplyFilters: function () {
-                var oViewModel = this.getView().getModel("view");
-                var oFilters = oViewModel.getProperty("/filters");
-
-                /*
-                 * Aquí puedes consumir el servicio correspondiente usando
-                 * los valores de oFilters.
-                 *
-                 * Ejemplo:
-                 *
-                 * oFilters.period
-                 * oFilters.dateFrom
-                 * oFilters.dateTo
-                 * oFilters.management
-                 * oFilters.headship
-                 * oFilters.zone
-                 * oFilters.serviceType
-                 */
-
-                MessageToast.show("Filtros aplicados");
-            },
-
-            /* ============================================================
-               CAMBIO ENTRE APARTADOS
-               No utiliza Router ni cambia de pantalla.
-               ============================================================ */
-
-            onOpenMaterials: function () {
-                this._setActiveSection("materials");
-            },
-
-            onBackToCapacity: function () {
-                this._setActiveSection("capacity");
-            },
-
-            /**
-             * Cambia exclusivamente el contenido dinámico de la pantalla.
-             *
-             * La cabecera, los filtros y las pestañas permanecen renderizados.
-             *
-             * @param {string} sSection Apartado que se desea mostrar.
-             * @private
-             */
-            _setActiveSection: function (sSection) {
-                var oViewModel = this.getView().getModel("view");
-                var aAllowedSections = [
-                    "capacity",
-                    "materials"
-                ];
-
-                if (
-                    !oViewModel ||
-                    aAllowedSections.indexOf(sSection) === -1
-                ) {
-                    return;
-                }
-
-                if (
-                    oViewModel.getProperty("/activeSection") ===
-                    sSection
-                ) {
-                    return;
-                }
-
-                oViewModel.setProperty(
-                    "/activeSection",
-                    sSection
-                );
-            },
-
-            /* ============================================================
-               ACCIONES DE TABLA
-               ============================================================ */
-
-            onViewSupervisors: function (oEvent) {
-                var oSource = oEvent.getSource();
-                var oContext = oSource.getBindingContext("view");
-                var sHeadship =
-                    "la jefatura seleccionada";
-                var sHeadshipId = "";
-
-                if (oContext) {
-                    sHeadship =
-                        oContext.getProperty("jefatura") ||
-                        sHeadship;
-
-                    sHeadshipId =
-                        sHeadship.split(" - ")[0];
-                }
-
-                MessageToast.show(
-                    "Abrir detalle de supervisores: " +
-                    sHeadship
-                );
-
-                /*
-                 * Cuando ya tengas declarada la ruta real en manifest.json,
-                 * sustituye el MessageToast por:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo(
-                 *         "RouteDetalleSupervisores",
-                 *         {
-                 *             jefaturaId: sHeadshipId
-                 *         }
-                 *     );
-                 */
-            },
-
-            onViewTotals: function () {
-                MessageToast.show(
-                    "Abrir totales consolidados de la gerencia"
-                );
+        _loadStyles: function () {
+            var id = "detalleGerenciaStylesheet";
+            if (!document.getElementById(id)) {
+                includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleGerencia.css") + "?v=20260827-odata", id);
             }
-        }
-    );
+        },
+        _model: function () { return this.getView().getModel("view"); },
+        _odata: function () {
+            var component = this.getOwnerComponent();
+            return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
+        },
+        _readFilters: function () {
+            var values = this._model().getProperty("/filters") || {};
+            return { period: values.period || "2026", dateFrom: values.dateFrom || "2026-01-01", dateTo: values.dateTo || "2026-12-31", management: values.management || "ALL", headship: values.headship || "ALL", zone: values.zone || "ALL", serviceType: values.serviceType || "ALL" };
+        },
+        _bindDateEvents: function () {
+            var selects = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.Select"); }), dates = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.DatePicker"); });
+            if (selects[0]) { selects[0].attachChange(this.onPeriodChange, this); }
+            dates.forEach(function (control) { control.attachChange(this.onDateChange, this); }.bind(this));
+        },
+        onPeriodChange: function (event) {
+            var year = String(event.getSource().getSelectedKey() || "");
+            if (!/^\d{4}$/.test(year)) { return; }
+            this._model().setProperty("/filters/period", year);
+            this._model().setProperty("/filters/dateFrom", year + "-01-01");
+            this._model().setProperty("/filters/dateTo", year + "-12-31");
+        },
+        onDateChange: function () {
+            var filters = this._readFilters(), from = String(filters.dateFrom).match(/^(\d{4})-\d{2}-\d{2}$/), until = String(filters.dateTo).match(/^(\d{4})-\d{2}-\d{2}$/);
+            if (from && until && from[1] === until[1]) { this._model().setProperty("/filters/period", from[1]); }
+        },
+        onApplyFilters: function () {
+            var filters = this._readFilters();
+            if (!this._date(filters.dateFrom) || !this._date(filters.dateTo) || this._date(filters.dateFrom) > this._date(filters.dateTo)) { MessageToast.show("Revisa que la fecha desde sea menor o igual a la fecha hasta."); return; }
+            this._filters = filters;
+            this._load(true);
+        },
+        _load: function (notify) {
+            var requestId = ++this._requestId, view = this.getView(), section = this._model().getProperty("/activeSection") || "capacity";
+            view.setBusy(true);
+            Service.load(this._odata(), this._filters).then(function (response) {
+                if (requestId !== this._requestId) { return; }
+                response.data.activeSection = section;
+                this._model().setData(response.data);
+                this._updateStaticKpis();
+                if (notify) { MessageToast.show("Detalle de gerencia actualizado con datos de SAP"); }
+            }.bind(this), function (error) {
+                if (requestId !== this._requestId) { return; }
+                var empty = Service.createEmpty(this._filters);
+                empty.activeSection = section;
+                this._model().setData(empty);
+                this._updateStaticKpis();
+                MessageToast.show(error && error.message ? error.message : "No fue posible consultar el detalle de gerencia");
+            }.bind(this)).then(function () { if (requestId === this._requestId) { view.setBusy(false); } }.bind(this));
+        },
+
+        /* El diseño recibido tiene KPI estáticos. Se actualizan por clase, sin modificar el XML de diseño. */
+        _updateStaticKpis: function () {
+            var kpis = this._model().getProperty("/kpis") || {}, numbers = this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("dgKpiNumber"); }), values = [kpis.headships, kpis.supervisors, kpis.capacity, kpis.load, kpis.utilization, kpis.activeOrders, kpis.movements, kpis.ordersWithMaterials, kpis.materialsUsed, kpis.criticalMaterials, kpis.topQuantity, kpis.materialVariation];
+            numbers.forEach(function (control, index) { if (values[index] !== undefined) { control.setNumber(values[index]); } });
+            if (numbers[10]) { numbers[10].setUnit(kpis.topUnit || ""); }
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("dgKpiHighlightText"); }).forEach(function (control) { control.setText(kpis.topMaterial || "Sin datos"); });
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("dgKpiCaptionAlert"); }).forEach(function (control) { control.setText("Con variación mayor a 5%"); });
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("dgKpiCaptionSuccess"); }).forEach(function (control) { control.setText("Basado en material principal"); });
+        },
+
+        onOpenMaterials: function () { this._setActiveSection("materials"); },
+        onBackToCapacity: function () { this._setActiveSection("capacity"); },
+        _setActiveSection: function (section) { if (["capacity", "materials"].indexOf(section) >= 0) { this._model().setProperty("/activeSection", section); } },
+
+        onViewSupervisors: function (event) {
+            var context = event.getSource().getBindingContext("view"), row = context && context.getObject(), component = this.getOwnerComponent(), router, headshipId = row && row.id || this._readFilters().headship;
+            if (component && component.setModel) { component.setModel(new JSONModel({ filters: this._readFilters(), selectedHeadship: { id: headshipId, name: row && row.jefatura || "Todas" } }), "managementOperationalContext"); }
+            router = component && component.getRouter && component.getRouter();
+            if (router && router.getRoute && router.getRoute("RouteDetalleOperativoSupervisores")) { router.navTo("RouteDetalleOperativoSupervisores"); return; }
+            MessageToast.show("Jefatura seleccionada: " + (row && row.jefatura || "Todas"));
+        },
+        onViewTotals: function () { MessageToast.show("Los totales se calculan con las jefaturas del filtro aplicado."); },
+        _find: function (root, predicate) {
+            var result = [];
+            function visit(control) {
+                var content;
+                if (!control) { return; }
+                if (predicate(control)) { result.push(control); }
+                if (control.getItems) { (control.getItems() || []).forEach(visit); }
+                if (control.getContent && !(control.isA && control.isA("sap.ui.core.HTML"))) { content = control.getContent(); if (Array.isArray(content)) { content.forEach(visit); } }
+            }
+            visit(root);
+            return result;
+        },
+        _date: function (value) { var match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/); return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null; }
+    });
 });

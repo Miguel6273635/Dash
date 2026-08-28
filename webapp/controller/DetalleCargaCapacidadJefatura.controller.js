@@ -1,466 +1,267 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/core/Item",
+    "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "sap/ui/core/routing/History"
-], function (Controller, JSONModel, MessageToast, History) {
+    "sap/ui/core/routing/History",
+    "mantenimiento/model/DetalleCargaCapacidadJefaturaService"
+], function (Controller, JSONModel, Item, includeStylesheet, MessageToast, History, Service) {
     "use strict";
 
-    return Controller.extend(
-        "mantenimiento.controller.DetalleCargaCapacidadJefatura",
-        {
+    return Controller.extend("mantenimiento.controller.DetalleCargaCapacidadJefatura", {
+        onInit: function () {
+            this._requestId = 0;
+            this._page = 1;
+            this._allLoadRows = [];
+            this._allMaterialRows = [];
+            this._filters = {
+                period: "2026", from: "2026-01-01", to: "2026-12-31",
+                management: "ALL", supervisor: "ALL", shift: "ALL", service: "ALL"
+            };
 
-            onInit: function () {
-                var oViewModel = new JSONModel({
-                    activeTab: "carga",
-                    pageSize: "10",
+            this._loadStyles();
+            this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "view");
+            this._model().setSizeLimit(2000);
+            this._configureFilters();
+            this._bindDateEvents();
+            this._load(false);
+        },
 
-                    filters: {
-                        period: "2025-06",
-                        from: "2025-06-01",
-                        to: "2025-06-30",
-                        management: "J01",
-                        supervisor: "ALL",
-                        shift: "ALL",
-                        service: "ALL"
-                    },
+        onAfterRendering: function () {
+            this._syncTabStyles();
+            this._updatePaginationText();
+        },
 
-                    loadRows: [
-                        {
-                            supervisorId: "SUP-001",
-                            supervisor: "Sergio Ramírez",
-                            resources: "12",
-                            available: "820",
-                            scheduled: "1,082",
-                            utilization: 132,
-                            utilPercent: 100,
-                            utilState: "Error",
-                            activeOrders: "24",
-                            overCapacity: "3",
-                            status: "Crítico",
-                            statusState: "Error"
-                        },
-                        {
-                            supervisorId: "SUP-002",
-                            supervisor: "María Gómez",
-                            resources: "11",
-                            available: "760",
-                            scheduled: "882",
-                            utilization: 116,
-                            utilPercent: 100,
-                            utilState: "Error",
-                            activeOrders: "18",
-                            overCapacity: "2",
-                            status: "Alto",
-                            statusState: "Warning"
-                        },
-                        {
-                            supervisorId: "SUP-003",
-                            supervisor: "Carlos López",
-                            resources: "10",
-                            available: "720",
-                            scheduled: "785",
-                            utilization: 109,
-                            utilPercent: 100,
-                            utilState: "Warning",
-                            activeOrders: "16",
-                            overCapacity: "1",
-                            status: "Alto",
-                            statusState: "Warning"
-                        },
-                        {
-                            supervisorId: "SUP-004",
-                            supervisor: "Patricia Soto",
-                            resources: "10",
-                            available: "960",
-                            scheduled: "749",
-                            utilization: 78,
-                            utilPercent: 78,
-                            utilState: "Warning",
-                            activeOrders: "17",
-                            overCapacity: "0",
-                            status: "Normal",
-                            statusState: "Information"
-                        },
-                        {
-                            supervisorId: "SUP-005",
-                            supervisor: "Jorge Martínez",
-                            resources: "12",
-                            available: "900",
-                            scheduled: "639",
-                            utilization: 71,
-                            utilPercent: 71,
-                            utilState: "Warning",
-                            activeOrders: "21",
-                            overCapacity: "0",
-                            status: "Normal",
-                            statusState: "Information"
-                        },
-                        {
-                            supervisorId: "SUP-006",
-                            supervisor: "Luis Herrera",
-                            resources: "12",
-                            available: "1,100",
-                            scheduled: "715",
-                            utilization: 65,
-                            utilPercent: 65,
-                            utilState: "Success",
-                            activeOrders: "14",
-                            overCapacity: "0",
-                            status: "Bajo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-007",
-                            supervisor: "Ana Torres",
-                            resources: "8",
-                            available: "700",
-                            scheduled: "434",
-                            utilization: 62,
-                            utilPercent: 62,
-                            utilState: "Success",
-                            activeOrders: "13",
-                            overCapacity: "0",
-                            status: "Bajo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-008",
-                            supervisor: "Roberto Díaz",
-                            resources: "7",
-                            available: "600",
-                            scheduled: "360",
-                            utilization: 60,
-                            utilPercent: 60,
-                            utilState: "Success",
-                            activeOrders: "13",
-                            overCapacity: "0",
-                            status: "Bajo",
-                            statusState: "Success"
-                        }
-                    ],
+        _loadStyles: function () {
+            var id = "detalleCargaCapacidadJefaturaStylesheet";
+            if (!document.getElementById(id)) {
+                includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleCargaCapacidadJefatura.css") + "?v=20260827-odata", id);
+            }
+        },
 
-                    materialRows: [
-                        {
-                            supervisorId: "SUP-001",
-                            supervisor: "Sergio Ramírez",
-                            resources: "12",
-                            category: "Lubricantes",
-                            categoryIcon: "sap-icon://drop",
-                            material: "Aceite hidráulico ISO 68",
-                            actual: "4,320 L",
-                            plan: "4,500 L",
-                            variation: "-4.0%",
-                            variationState: "Success",
-                            orders: "46",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-002",
-                            supervisor: "María Gómez",
-                            resources: "11",
-                            category: "Refacciones",
-                            categoryIcon: "sap-icon://action-settings",
-                            material: "Filtro de aceite PF-47",
-                            actual: "1,280 pzas",
-                            plan: "1,350 pzas",
-                            variation: "-5.2%",
-                            variationState: "Success",
-                            orders: "38",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-003",
-                            supervisor: "Carlos López",
-                            resources: "10",
-                            category: "Consumibles",
-                            categoryIcon: "sap-icon://product",
-                            material: "Grasa multipropósito EP2",
-                            actual: "680 kg",
-                            plan: "700 kg",
-                            variation: "-2.9%",
-                            variationState: "Success",
-                            orders: "31",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-004",
-                            supervisor: "Patricia Soto",
-                            resources: "10",
-                            category: "Herramientas",
-                            categoryIcon: "sap-icon://wrench",
-                            material: "Broca HSS 1/2\"",
-                            actual: "420 pzas",
-                            plan: "450 pzas",
-                            variation: "-6.7%",
-                            variationState: "Success",
-                            orders: "25",
-                            status: "En objetivo",
-                            statusState: "Success"
-                        },
-                        {
-                            supervisorId: "SUP-005",
-                            supervisor: "Jorge Martínez",
-                            resources: "12",
-                            category: "Refacciones",
-                            categoryIcon: "sap-icon://action-settings",
-                            material: "Banda en V A-40",
-                            actual: "420 pzas",
-                            plan: "380 pzas",
-                            variation: "+10.5%",
-                            variationState: "Error",
-                            orders: "33",
-                            status: "Atención",
-                            statusState: "Warning"
-                        },
-                        {
-                            supervisorId: "SUP-006",
-                            supervisor: "Luis Herrera",
-                            resources: "9",
-                            category: "Lubricantes",
-                            categoryIcon: "sap-icon://drop",
-                            material: "Aceite de motor 15W-40",
-                            actual: "380 L",
-                            plan: "360 L",
-                            variation: "+5.6%",
-                            variationState: "Error",
-                            orders: "21",
-                            status: "Crítico",
-                            statusState: "Error"
-                        }
-                    ],
+        _model: function () { return this.getView().getModel("view"); },
 
-                    participation: [
-                        {
-                            category: "Lubricantes",
-                            icon: "sap-icon://drop",
-                            consumption: "5,180 L",
-                            share: "45.2%",
-                            percent: 45.2
-                        },
-                        {
-                            category: "Refacciones",
-                            icon: "sap-icon://action-settings",
-                            consumption: "2,120 pzas",
-                            share: "28.3%",
-                            percent: 28.3
-                        },
-                        {
-                            category: "Consumibles",
-                            icon: "sap-icon://product",
-                            consumption: "1,100 kg",
-                            share: "18.7%",
-                            percent: 18.7
-                        },
-                        {
-                            category: "Herramientas",
-                            icon: "sap-icon://wrench",
-                            consumption: "480 pzas",
-                            share: "7.8%",
-                            percent: 7.8
-                        }
-                    ]
+        _odata: function () {
+            var component = this.getOwnerComponent();
+            return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
+        },
+
+        /* El XML recibido tenía listas mock. Se sustituyen al iniciar por las opciones OData,
+         * conservando el mismo control Select y su mismo diseño. */
+        _configureFilters: function () {
+            var selects = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.Select"); }), paths = ["/periodOptions", "/headshipOptions", "/supervisorOptions", "/shiftOptions", "/serviceOptions"];
+            selects.slice(0, paths.length).forEach(function (select, index) {
+                select.unbindItems();
+                select.destroyItems();
+                select.bindItems({
+                    path: "view>" + paths[index],
+                    template: new Item({ key: "{view>key}", text: "{view>text}" })
                 });
+            });
+        },
 
-                oViewModel.setSizeLimit(100);
-                this.getView().setModel(oViewModel, "view");
-            },
+        _bindDateEvents: function () {
+            var selects = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.Select"); }), dates = this._find(this.getView(), function (control) { return control.isA && control.isA("sap.m.DatePicker"); });
+            if (selects[0]) { selects[0].attachChange(this.onPeriodChange, this); }
+            dates.forEach(function (control) { control.attachChange(this.onDateChange, this); }.bind(this));
+        },
 
-            onAfterRendering: function () {
-                this._syncTabStyles();
-            },
+        _readFilters: function () {
+            var values = this._model().getProperty("/filters") || {};
+            return {
+                period: values.period || "2026",
+                from: values.from || "2026-01-01",
+                to: values.to || "2026-12-31",
+                management: values.management || "ALL",
+                supervisor: values.supervisor || "ALL",
+                shift: values.shift || "ALL",
+                service: values.service || "ALL"
+            };
+        },
 
-            onShowCarga: function () {
-                this._setActiveTab("carga");
-            },
+        onPeriodChange: function (event) {
+            var year = String(event.getSource().getSelectedKey() || "");
+            if (!/^\d{4}$/.test(year)) { return; }
+            this._model().setProperty("/filters/period", year);
+            this._model().setProperty("/filters/from", year + "-01-01");
+            this._model().setProperty("/filters/to", year + "-12-31");
+        },
 
-            onShowMateriales: function () {
-                this._setActiveTab("materiales");
-            },
+        onDateChange: function () {
+            var filters = this._readFilters(), start = String(filters.from).match(/^(\d{4})-\d{2}-\d{2}$/), end = String(filters.to).match(/^(\d{4})-\d{2}-\d{2}$/);
+            if (start && end && start[1] === end[1]) { this._model().setProperty("/filters/period", start[1]); }
+        },
 
-            _setActiveTab: function (sTab) {
-                this.getView()
-                    .getModel("view")
-                    .setProperty("/activeTab", sTab);
+        onApplyFilters: function () {
+            var filters = this._readFilters();
+            if (!this._date(filters.from) || !this._date(filters.to) || this._date(filters.from) > this._date(filters.to)) {
+                MessageToast.show("Revisa que la fecha desde sea menor o igual a la fecha hasta.");
+                return;
+            }
+            this._filters = filters;
+            this._load(true);
+        },
 
-                this._syncTabStyles();
-            },
+        _load: function (notify) {
+            var requestId = ++this._requestId, view = this.getView(), activeTab = this._model().getProperty("/activeTab") || "carga";
+            view.setBusy(true);
+            Service.load(this._odata(), this._filters).then(function (response) {
+                if (requestId !== this._requestId) { return; }
+                response.data.activeTab = activeTab;
+                this._model().setData(response.data);
+                this._allLoadRows = (response.data.loadRows || []).slice();
+                this._allMaterialRows = (response.data.materialRows || []).slice();
+                this._page = 1;
+                this._renderPage();
+                this._updateStaticKpis();
+                if (notify) { MessageToast.show("Detalle de jefatura actualizado con datos de SAP"); }
+            }.bind(this), function (error) {
+                if (requestId !== this._requestId) { return; }
+                this._model().setData(Service.createEmpty(this._filters));
+                this._allLoadRows = [];
+                this._allMaterialRows = [];
+                this._page = 1;
+                this._renderPage();
+                this._updateStaticKpis();
+                MessageToast.show(error && error.message ? error.message : "No fue posible consultar el detalle de jefatura");
+            }.bind(this)).then(function () {
+                if (requestId === this._requestId) { view.setBusy(false); }
+            }.bind(this));
+        },
 
-            _syncTabStyles: function () {
-                var sActiveTab = this.getView()
-                    .getModel("view")
-                    .getProperty("/activeTab");
+        /* El diseño trae ObjectNumber estáticos; se actualizan por clase sin cambiar el XML. */
+        _updateStaticKpis: function () {
+            var kpis = this._model().getProperty("/kpis") || {}, values = [
+                kpis.supervisors, kpis.resources, kpis.capacity, kpis.load, kpis.utilization,
+                kpis.activeOrders, kpis.movements, kpis.ordersWithMaterials, kpis.materialsUsed,
+                kpis.criticalMaterials, kpis.topQuantity, kpis.materialVariation
+            ], numbers = this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("jefKpiValue"); });
+            numbers.forEach(function (control, index) {
+                if (values[index] !== undefined) { control.setNumber(values[index]); }
+            });
+            if (numbers[10]) { numbers[10].setUnit(kpis.topUnit || ""); }
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("jefKpiSubline"); }).forEach(function (control) {
+                control.setText(kpis.topMaterial || "Sin datos");
+            });
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("jefKpiNote"); }).forEach(function (control, index) {
+                var notes = ["Órdenes distintas con movimiento", "Materiales distintos", "Criticidad o variación mayor a 15%", "Total consumido", kpis.materialVariation && kpis.materialVariation.charAt(0) === "+" ? "Por encima del plan" : "Por debajo del plan"];
+                if (notes[index]) { control.setText(notes[index]); }
+            });
+        },
 
-                var aCargaButtons = [
-                    "tabCargaInCard",
-                    "tabCargaTop"
-                ];
+        onShowCarga: function () { this._setActiveTab("carga"); },
+        onShowMateriales: function () { this._setActiveTab("materiales"); },
+        _setActiveTab: function (tab) {
+            this._model().setProperty("/activeTab", tab);
+            this._page = 1;
+            this._renderPage();
+            this._syncTabStyles();
+        },
+        _syncTabStyles: function () {
+            var activeTab = this._model().getProperty("/activeTab") || "carga";
+            ["tabCargaInCard", "tabCargaTop"].forEach(function (id) {
+                var control = this.byId(id);
+                if (control) { control.toggleStyleClass("jefTabActive", activeTab === "carga"); }
+            }.bind(this));
+            ["tabMaterialesInCard", "tabMaterialesTop"].forEach(function (id) {
+                var control = this.byId(id);
+                if (control) { control.toggleStyleClass("jefTabActive", activeTab === "materiales"); }
+            }.bind(this));
+        },
 
-                var aMaterialButtons = [
-                    "tabMaterialesInCard",
-                    "tabMaterialesTop"
-                ];
+        onPageSizeChange: function () {
+            this._page = 1;
+            this._renderPage();
+        },
+        onFirstPage: function () { this._page = 1; this._renderPage(); },
+        onPreviousPage: function () { this._page -= 1; this._renderPage(); },
+        onNextPage: function () { this._page += 1; this._renderPage(); },
+        onLastPage: function () {
+            var rows = this._activeRows(), size = Number(this._model().getProperty("/pageSize")) || 10;
+            this._page = Math.max(1, Math.ceil(rows.length / size));
+            this._renderPage();
+        },
+        _activeRows: function () {
+            return (this._model().getProperty("/activeTab") || "carga") === "materiales" ? this._allMaterialRows : this._allLoadRows;
+        },
+        _renderPage: function () {
+            var rows = this._activeRows(), size = Number(this._model().getProperty("/pageSize")) || 10, pages = Math.max(1, Math.ceil(rows.length / size)), current = Math.max(1, Math.min(this._page, pages)), start = (current - 1) * size, slice = rows.slice(start, start + size);
+            this._page = current;
+            if ((this._model().getProperty("/activeTab") || "carga") === "materiales") {
+                this._model().setProperty("/materialRows", slice);
+            } else {
+                this._model().setProperty("/loadRows", slice);
+            }
+            this._model().setProperty("/paging", { current: current, total: pages, start: rows.length ? start + 1 : 0, end: Math.min(start + size, rows.length), count: rows.length });
+            this._updatePaginationText();
+        },
+        _updatePaginationText: function () {
+            var paging = this._model().getProperty("/paging") || { current: 1, total: 1, start: 0, end: 0, count: 0 };
+            this._find(this.getView(), function (control) { return control.hasStyleClass && control.hasStyleClass("jefRecordCount"); }).forEach(function (control) {
+                control.setText(paging.start + " - " + paging.end + " de " + paging.count + " registros");
+            });
+            this._find(this.getView(), function (control) {
+                return control.isA && control.isA("sap.m.Button") && control.getType && control.getType() === "Emphasized" && control.getText && /^\d+$/.test(control.getText()) && !control.hasStyleClass("jefApplyButton");
+            }).forEach(function (control) { control.setText(String(paging.current)); });
+        },
 
-                aCargaButtons.forEach(function (sId) {
-                    var oButton = this.byId(sId);
+        onSupervisorPress: function (event) {
+            var context = event.getSource().getBindingContext("view"), row = context && context.getObject();
+            MessageToast.show("Supervisor seleccionado: " + (row && row.supervisor || "Sin supervisor"));
+        },
+        onViewResources: function (event) {
+            var context = event.getSource().getBindingContext("view"), row = context && context.getObject(), component = this.getOwnerComponent(), router, filters = this._readFilters();
+            if (component && component.setModel && row) {
+                component.setModel(new JSONModel({
+                    filters: {
+                        period: filters.period, dateFrom: filters.from, dateTo: filters.to,
+                        headquarters: filters.management, supervisor: row.supervisorId,
+                        shift: filters.shift, serviceType: filters.service
+                    },
+                    selectedSupervisor: { id: row.supervisorId, name: row.supervisor }
+                }), "operationalContext");
+            }
+            router = component && component.getRouter && component.getRouter();
+            if (router && router.getRoute && router.getRoute("RouteDetalleOperativoRecursos")) {
+                router.navTo("RouteDetalleOperativoRecursos");
+                return;
+            }
+            MessageToast.show("Abrir detalle de recursos de " + (row && row.supervisor || "Supervisor"));
+        },
+        onViewMaterialDetail: function (event) {
+            var context = event.getSource().getBindingContext("view"), row = context && context.getObject();
+            MessageToast.show("Consumo de materiales de " + (row && row.supervisor || "Supervisor"));
+        },
+        onMaterialReport: function () { MessageToast.show("El reporte usa los materiales del período filtrado."); },
 
-                    if (oButton) {
-                        oButton.toggleStyleClass(
-                            "jefTabActive",
-                            sActiveTab === "carga"
-                        );
-                    }
-                }.bind(this));
+        onBackToJefatura: function () {
+            var previous = History.getInstance().getPreviousHash(), component, router;
+            if (previous !== undefined) { window.history.go(-1); return; }
+            component = this.getOwnerComponent();
+            router = component && component.getRouter && component.getRouter();
+            if (router && router.getRoute && router.getRoute("RouteVistaJefatura")) { router.navTo("RouteVistaJefatura", {}, true); return; }
+            MessageToast.show("No se encontró la ruta de Vista Jefatura");
+        },
 
-                aMaterialButtons.forEach(function (sId) {
-                    var oButton = this.byId(sId);
-
-                    if (oButton) {
-                        oButton.toggleStyleClass(
-                            "jefTabActive",
-                            sActiveTab === "materiales"
-                        );
-                    }
-                }.bind(this));
-            },
-
-            onApplyFilters: function () {
-                var oView = this.getView();
-
-                oView.setBusy(true);
-
-                window.setTimeout(function () {
-                    if (!oView.bIsDestroyed) {
-                        oView.setBusy(false);
-                        MessageToast.show(
-                            "Filtros aplicados correctamente"
-                        );
-                    }
-                }, 450);
-            },
-
-            onSupervisorPress: function (oEvent) {
-                var oContext = oEvent
-                    .getSource()
-                    .getBindingContext("view");
-
-                var sSupervisor = oContext
-                    ? oContext.getProperty("supervisor")
-                    : "Supervisor";
-
-                MessageToast.show(
-                    "Supervisor seleccionado: " + sSupervisor
-                );
-            },
-
-            onViewResources: function (oEvent) {
-                var oContext = oEvent
-                    .getSource()
-                    .getBindingContext("view");
-
-                var sSupervisor = oContext
-                    ? oContext.getProperty("supervisor")
-                    : "Supervisor";
-
-                MessageToast.show(
-                    "Abrir detalle de recursos de " + sSupervisor
-                );
-
-                /*
-                 * Cuando tengas la ruta definitiva, reemplaza
-                 * el MessageToast por:
-                 *
-                 * this.getOwnerComponent()
-                 *     .getRouter()
-                 *     .navTo("RouteDetalleOperativoRecursos", {
-                 *         supervisorId:
-                 *             oContext.getProperty("supervisorId")
-                 *     });
-                 */
-            },
-
-            onViewMaterialDetail: function (oEvent) {
-                var oContext = oEvent
-                    .getSource()
-                    .getBindingContext("view");
-
-                var sSupervisor = oContext
-                    ? oContext.getProperty("supervisor")
-                    : "Supervisor";
-
-                MessageToast.show(
-                    "Abrir consumo de materiales de " + sSupervisor
-                );
-            },
-
-            onMaterialReport: function () {
-                MessageToast.show(
-                    "Abrir reporte completo de materiales"
-                );
-            },
-
-            onPageSizeChange: function (oEvent) {
-                MessageToast.show(
-                    "Registros por página: " +
-                    oEvent.getSource().getSelectedKey()
-                );
-            },
-
-            onFirstPage: function () {
-                MessageToast.show(
-                    "Ya estás en la primera página"
-                );
-            },
-
-            onPreviousPage: function () {
-                MessageToast.show(
-                    "Ya estás en la primera página"
-                );
-            },
-
-            onNextPage: function () {
-                MessageToast.show(
-                    "No hay más páginas"
-                );
-            },
-
-            onLastPage: function () {
-                MessageToast.show(
-                    "Ya estás en la última página"
-                );
-            },
-
-            onBackToJefatura: function () {
-                var oHistory = History.getInstance();
-                var sPreviousHash = oHistory.getPreviousHash();
-
-                if (sPreviousHash !== undefined) {
-                    window.history.go(-1);
-                    return;
-                }
-
-                var oOwnerComponent = this.getOwnerComponent();
-                var oRouter = oOwnerComponent &&
-                    oOwnerComponent.getRouter();
-
-                if (
-                    oRouter &&
-                    oRouter.getRoute("RouteVistaJefatura")
-                ) {
-                    oRouter.navTo(
-                        "RouteVistaJefatura",
-                        {},
-                        true
-                    );
-                } else {
-                    MessageToast.show(
-                        "No se encontró la ruta de Vista Jefatura"
-                    );
+        _find: function (root, predicate) {
+            var result = [];
+            function visit(control) {
+                var content;
+                if (!control) { return; }
+                if (predicate(control)) { result.push(control); }
+                if (control.getItems) { (control.getItems() || []).forEach(visit); }
+                if (control.getContent && !(control.isA && control.isA("sap.ui.core.HTML"))) {
+                    content = control.getContent();
+                    if (Array.isArray(content)) { content.forEach(visit); }
                 }
             }
+            visit(root);
+            return result;
+        },
+        _date: function (value) {
+            var match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
         }
-    );
+    });
 });

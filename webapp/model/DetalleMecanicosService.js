@@ -1,13 +1,19 @@
 sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator"
-], function (Filter, FilterOperator) {
+], function (
+    Filter,
+    FilterOperator
+) {
     "use strict";
 
-    var PAGE_SIZE = 5000;
+    var PAGE_SIZE = 1000;
     var MAX_PAGES = 50;
+    var DETAIL_CONCURRENCY = 3;
 
-    function parseInputDate(sValue) {
+    function parseInputDate(
+        sValue
+    ) {
         var aMatch;
         var oDate;
 
@@ -15,39 +21,48 @@ sap.ui.define([
             return null;
         }
 
-        aMatch = String(sValue).match(
-            /^(\d{2})\/(\d{2})\/(\d{4})$/
-        );
+        aMatch =
+            String(sValue).match(
+                /^(\d{2})\/(\d{2})\/(\d{4})$/
+            );
 
         if (aMatch) {
-            oDate = new Date(
+            return new Date(
                 Number(aMatch[3]),
                 Number(aMatch[2]) - 1,
                 Number(aMatch[1])
             );
-        } else {
-            oDate = new Date(sValue);
         }
 
-        return Number.isNaN(oDate.getTime())
+        oDate =
+            new Date(sValue);
+
+        return Number.isNaN(
+            oDate.getTime()
+        )
             ? null
             : oDate;
     }
 
-    function buildOrdersFilters(mFilters) {
+    function buildOrdersFilters(
+        mFilters
+    ) {
         var aFilters = [];
         var oStartDate;
         var oEndDate;
 
-        mFilters = mFilters || {};
+        mFilters =
+            mFilters || {};
 
-        oStartDate = parseInputDate(
-            mFilters.fechaDesde
-        );
+        oStartDate =
+            parseInputDate(
+                mFilters.fechaDesde
+            );
 
-        oEndDate = parseInputDate(
-            mFilters.fechaHasta
-        );
+        oEndDate =
+            parseInputDate(
+                mFilters.fechaHasta
+            );
 
         if (oStartDate) {
             aFilters.push(
@@ -72,16 +87,28 @@ sap.ui.define([
         return aFilters;
     }
 
-    function getSignature(aResults) {
+    function getSignature(
+        aResults
+    ) {
         var oFirst;
         var oLast;
 
-        if (!aResults || !aResults.length) {
+        if (
+            !aResults ||
+            !aResults.length
+        ) {
             return "";
         }
 
-        oFirst = aResults[0] || {};
-        oLast = aResults[aResults.length - 1] || {};
+        oFirst =
+            aResults[0] ||
+            {};
+
+        oLast =
+            aResults[
+                aResults.length - 1
+            ] ||
+            {};
 
         return JSON.stringify([
             oFirst.ResourceDateId ||
@@ -118,128 +145,281 @@ sap.ui.define([
 
             function readPage() {
                 var iSkip =
-                    iPage * PAGE_SIZE;
+                    iPage *
+                    PAGE_SIZE;
 
-                console.log(
-                    "[DM SERVICE] Consultando:",
+                oModel.read(
                     sPath,
-                    "página:",
-                    iPage + 1
-                );
+                    {
+                        filters:
+                            aFilters || [],
 
-                oModel.read(sPath, {
-                    filters:
-                        aFilters || [],
+                        urlParameters: {
+                            "$format":
+                                "json",
+                            "$top":
+                                String(
+                                    PAGE_SIZE
+                                ),
+                            "$skip":
+                                String(
+                                    iSkip
+                                )
+                        },
 
-                    urlParameters: {
-                        "$format":
-                            "json",
+                        success:
+                            function (
+                                oData
+                            ) {
+                                var aResults =
+                                    Array.isArray(
+                                        oData &&
+                                        oData.results
+                                    )
+                                        ? oData.results
+                                        : [];
 
-                        "$top":
-                            String(PAGE_SIZE),
+                                var sSignature =
+                                    getSignature(
+                                        aResults
+                                    );
 
-                        "$skip":
-                            String(iSkip)
-                    },
+                                if (
+                                    iPage > 0 &&
+                                    sSignature &&
+                                    sSignature ===
+                                    sPreviousSignature
+                                ) {
+                                    resolve(
+                                        aAll
+                                    );
 
-                    success: function (oData) {
-                        var aResults =
-                            Array.isArray(
-                                oData &&
-                                oData.results
-                            )
-                                ? oData.results
-                                : [];
+                                    return;
+                                }
 
-                        var sSignature =
-                            getSignature(
-                                aResults
-                            );
+                                sPreviousSignature =
+                                    sSignature;
 
-                        /*
-                         * Evita bucle si backend ignora $skip.
-                         */
-                        if (
-                            iPage > 0 &&
-                            sSignature &&
-                            sSignature ===
-                            sPreviousSignature
-                        ) {
-                            console.warn(
-                                "[DM SERVICE] " +
-                                sPath +
-                                " parece ignorar $skip."
-                            );
+                                aAll =
+                                    aAll.concat(
+                                        aResults
+                                    );
 
-                            resolve(aAll);
-                            return;
-                        }
+                                if (
+                                    aResults.length <
+                                    PAGE_SIZE ||
+                                    iPage + 1 >=
+                                    MAX_PAGES
+                                ) {
+                                    resolve(
+                                        aAll
+                                    );
 
-                        sPreviousSignature =
-                            sSignature;
+                                    return;
+                                }
 
-                        aAll =
-                            aAll.concat(
-                                aResults
-                            );
+                                iPage += 1;
+                                readPage();
+                            },
 
-                        if (
-                            aResults.length <
-                                PAGE_SIZE ||
-                            iPage + 1 >=
-                                MAX_PAGES
-                        ) {
-                            console.log(
-                                "[DM SERVICE] " +
-                                sPath +
-                                " -> " +
-                                aAll.length +
-                                " registros"
-                            );
+                        error:
+                            function (
+                                oError
+                            ) {
+                                console.error(
+                                    "[DM SERVICE] Error en " +
+                                    sPath,
+                                    oError
+                                );
 
-                            resolve(aAll);
-                            return;
-                        }
+                                if (bOptional) {
+                                    resolve(
+                                        []
+                                    );
 
-                        iPage += 1;
+                                    return;
+                                }
 
-                        readPage();
-                    },
-
-                    error: function (oError) {
-                        console.error(
-                            "[DM SERVICE] Error en " +
-                            sPath,
-                            oError
-                        );
-
-                        /*
-                         * Mientras ABAP termina los EntitySets
-                         * auxiliares, la pantalla no se cae.
-                         */
-                        if (bOptional) {
-                            resolve([]);
-                            return;
-                        }
-
-                        reject(
-                            new Error(
-                                "No fue posible consultar " +
-                                sPath
-                            )
-                        );
+                                reject(
+                                    new Error(
+                                        "No fue posible consultar " +
+                                        sPath
+                                    )
+                                );
+                            }
                     }
-                });
+                );
             }
 
             readPage();
         });
     }
 
+    function uniqueStrings(
+        aValues
+    ) {
+        var mSeen =
+            Object.create(null);
+
+        return (
+            aValues || []
+        ).filter(
+            function (
+                vValue
+            ) {
+                var sValue =
+                    String(
+                        vValue ||
+                        ""
+                    );
+
+                if (
+                    !sValue ||
+                    mSeen[
+                        sValue
+                    ]
+                ) {
+                    return false;
+                }
+
+                mSeen[
+                    sValue
+                ] = true;
+
+                return true;
+            }
+        );
+    }
+
+    function runConcurrent(
+        aValues,
+        iLimit,
+        fnWorker
+    ) {
+        var aQueue =
+            (
+                aValues || []
+            ).slice();
+
+        var aResult = [];
+        var iActive = 0;
+
+        return new Promise(
+            function (
+                resolve
+            ) {
+                function next() {
+                    var vValue;
+
+                    if (
+                        !aQueue.length &&
+                        iActive === 0
+                    ) {
+                        resolve(
+                            aResult
+                        );
+
+                        return;
+                    }
+
+                    while (
+                        iActive <
+                        iLimit &&
+                        aQueue.length
+                    ) {
+                        vValue =
+                            aQueue.shift();
+
+                        iActive += 1;
+
+                        Promise.resolve(
+                            fnWorker(
+                                vValue
+                            )
+                        )
+                            .then(
+                                function (
+                                    aRows
+                                ) {
+                                    if (
+                                        Array.isArray(
+                                            aRows
+                                        ) &&
+                                        aRows.length
+                                    ) {
+                                        aResult =
+                                            aResult.concat(
+                                                aRows
+                                            );
+                                    }
+                                }
+                            )
+                            .catch(
+                                function (
+                                    oError
+                                ) {
+                                    console.error(
+                                        "[DM SERVICE] Error detalle:",
+                                        oError
+                                    );
+                                }
+                            )
+                            .then(
+                                function () {
+                                    iActive -= 1;
+                                    next();
+                                }
+                            );
+                    }
+                }
+
+                next();
+            }
+        );
+    }
+
+    function readByOrderIds(
+        oModel,
+        sPath,
+        aOrderIds
+    ) {
+        return runConcurrent(
+            uniqueStrings(
+                aOrderIds
+            ),
+
+            DETAIL_CONCURRENCY,
+
+            function (
+                sOrderId
+            ) {
+                return fetchAll(
+                    oModel,
+                    sPath,
+                    [
+                        new Filter(
+                            "OrderId",
+                            FilterOperator.EQ,
+                            sOrderId
+                        )
+                    ],
+                    true
+                );
+            }
+        );
+    }
+
     function getDashboardData(
         oModel,
-        mFilters
+        mFilters,
+        bInitialLoad
     ) {
+        var oEffectiveFilters =
+            Object.assign(
+                {},
+                mFilters || {}
+            );
+
         var aOrdersFilters;
 
         if (
@@ -254,20 +434,45 @@ sap.ui.define([
             );
         }
 
+        /*
+         * SOLO PRIMERA CONSULTA:
+         * 01/08/2026 - 25/08/2026
+         *
+         * Después se usan las fechas que mande el Controller.
+         */
+        if (bInitialLoad) {
+            oEffectiveFilters.periodo =
+                "2026";
+
+            oEffectiveFilters.fechaDesde =
+                "01/08/2026";
+
+            oEffectiveFilters.fechaHasta =
+                "25/08/2026";
+        }
+
         aOrdersFilters =
             buildOrdersFilters(
-                mFilters
+                oEffectiveFilters
             );
 
         console.log(
-            "[DM SERVICE] Cargando Detalle de mecánicos...",
-            mFilters
+            "[DM SERVICE] Consulta:",
+            {
+                initial:
+                    Boolean(
+                        bInitialLoad
+                    ),
+
+                filters:
+                    oEffectiveFilters
+            }
         );
 
+        /*
+         * FASE 1
+         */
         return Promise.all([
-            /*
-             * Principal de esta pantalla.
-             */
             fetchAll(
                 oModel,
                 "/DashboardResourceDailySet",
@@ -284,77 +489,133 @@ sap.ui.define([
 
             fetchAll(
                 oModel,
-                "/DashboardOrderResourcesSet",
-                [],
-                true
-            ),
-
-            fetchAll(
-                oModel,
-                "/DashboardOrderOperationsSet",
-                [],
-                true
-            ),
-
-            fetchAll(
-                oModel,
-                "/DashboardOrderConfirmationsSet",
-                [],
-                true
-            ),
-
-            fetchAll(
-                oModel,
                 "/DashboardFilterCatalogSet",
                 [],
                 true
             )
-        ]).then(function (aResponses) {
-            var oRaw = {
-                resources:
-                    aResponses[0] || [],
+        ]).then(
+            function (
+                aBase
+            ) {
+                var aResources =
+                    aBase[0] ||
+                    [];
 
-                orders:
-                    aResponses[1] || [],
+                var aOrders =
+                    aBase[1] ||
+                    [];
 
-                orderResources:
-                    aResponses[2] || [],
+                var aCatalogs =
+                    aBase[2] ||
+                    [];
 
-                operations:
-                    aResponses[3] || [],
+                var aOrderIds =
+                    uniqueStrings(
+                        aOrders.map(
+                            function (
+                                oOrder
+                            ) {
+                                return (
+                                    oOrder.OrderId
+                                );
+                            }
+                        )
+                    );
+/*
+ * Primera carga rápida:
+ * muestra órdenes, recursos y catálogos sin disparar
+ * consultas individuales por cada OrderId.
+ */
+if (bInitialLoad) {
+    return {
+        resources: aResources,
+        orders: aOrders,
+        orderResources: [],
+        operations: [],
+        confirmations: [],
+        catalogs: aCatalogs
+    };
+}
+                /*
+                 * Si no hay órdenes, NO dispara
+                 * consultas pesadas de detalle.
+                 */
+                if (
+                    !aOrderIds.length
+                ) {
+                    return {
+                        resources:
+                            aResources,
 
-                confirmations:
-                    aResponses[4] || [],
+                        orders:
+                            aOrders,
 
-                catalogs:
-                    aResponses[5] || []
-            };
+                        orderResources:
+                            [],
 
-            console.log(
-                "[DM SERVICE] Carga terminada:",
-                {
-                    resources:
-                        oRaw.resources.length,
+                        operations:
+                            [],
 
-                    orders:
-                        oRaw.orders.length,
+                        confirmations:
+                            [],
 
-                    orderResources:
-                        oRaw.orderResources.length,
-
-                    operations:
-                        oRaw.operations.length,
-
-                    confirmations:
-                        oRaw.confirmations.length,
-
-                    catalogs:
-                        oRaw.catalogs.length
+                        catalogs:
+                            aCatalogs
+                    };
                 }
-            );
 
-            return oRaw;
-        });
+                /*
+                 * FASE 2
+                 * Sólo detalles de las OT encontradas.
+                 */
+                return Promise.all([
+                    readByOrderIds(
+                        oModel,
+                        "/DashboardOrderResourcesSet",
+                        aOrderIds
+                    ),
+
+                    readByOrderIds(
+                        oModel,
+                        "/DashboardOrderOperationsSet",
+                        aOrderIds
+                    ),
+
+                    readByOrderIds(
+                        oModel,
+                        "/DashboardOrderConfirmationsSet",
+                        aOrderIds
+                    )
+                ]).then(
+                    function (
+                        aDetail
+                    ) {
+                        return {
+                            resources:
+                                aResources,
+
+                            orders:
+                                aOrders,
+
+                            orderResources:
+                                aDetail[0] ||
+                                [],
+
+                            operations:
+                                aDetail[1] ||
+                                [],
+
+                            confirmations:
+                                aDetail[2] ||
+                                [],
+
+                            catalogs:
+                                aCatalogs
+                        };
+                    }
+                );
+            }
+        );
     }
 
     return {

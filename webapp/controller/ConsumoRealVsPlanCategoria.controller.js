@@ -1,444 +1,193 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/core/Item",
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
-], function (Controller, JSONModel, MessageToast, Filter, FilterOperator) {
+    "sap/ui/model/FilterOperator",
+    "mantenimiento/model/ConsumoRealVsPlanCategoriaService"
+], function (Controller, JSONModel, Item, MessageToast, Filter, FilterOperator, Service) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.ConsumoRealVsPlanCategoria", {
-
         onInit: function () {
-            var oData = this._getMockData();
-            oData.tendenciaSvg = this._crearGraficaTendenciaSvg(oData.tendenciaSemanal);
-            this.getView().setModel(new JSONModel(oData), "crpc");
+            this._requestId = 0;
+            this._filters = { periodo: "2026", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "ALL", cliente: "ALL", responsable: "ALL", tipoOt: "ALL" };
+            this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "crpc");
+            this.getView().getModel("crpc").setSizeLimit(2000);
+            this._setOptions(this._model().getData());
+            this.byId("crpcPeriodo").attachChange(this.onPeriodoChange, this);
+            this._load(false);
         },
-
-        _getMockData: function () {
-            return {
-                filtros: {
-                    periodo: "mayo2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
-                    zona: "todas",
-                    cliente: "todos",
-                    responsable: "todos",
-                    tipoOt: "todas"
-                },
-
-                kpis: {
-                    planTotal: "2,200",
-                    realTotal: "2,368",
-                    desviacionTotal: "+168"
-                },
-
-                materialesDesviacion: [
-                    {
-                        id: "1",
-                        material: "Aceite hidráulico",
-                        icono: "sap-icon://water",
-                        categoria: "Lubricantes",
-                        plan: "250",
-                        real: "282",
-                        contribucion: 100,
-                        contribucionTexto: "19.0%",
-                        acumulado: "19.0%",
-                        ot: "7",
-                        elevadores: "5",
-                        clientes: "2",
-                        norte: "+19",
-                        centro: "+10",
-                        sur: "+3",
-                        occidente: "0",
-                        total: "+32",
-                        estado: "Red",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "2",
-                        material: "Sensor de puerta",
-                        icono: "sap-icon://shipping-status",
-                        categoria: "Refacciones",
-                        plan: "82",
-                        real: "100",
-                        contribucion: 56,
-                        contribucionTexto: "10.7%",
-                        acumulado: "29.8%",
-                        ot: "16",
-                        elevadores: "12",
-                        clientes: "4",
-                        norte: "+12",
-                        centro: "+1",
-                        sur: "+2",
-                        occidente: "0",
-                        total: "+18",
-                        estado: "Orange",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "3",
-                        material: "Zapata de freno",
-                        icono: "sap-icon://product",
-                        categoria: "Refacciones",
-                        plan: "129",
-                        real: "142",
-                        contribucion: 41,
-                        contribucionTexto: "7.7%",
-                        acumulado: "37.5%",
-                        ot: "11",
-                        elevadores: "8",
-                        clientes: "3",
-                        norte: "+6",
-                        centro: "+3",
-                        sur: "+2",
-                        occidente: "0",
-                        total: "+13",
-                        estado: "Orange",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "4",
-                        material: "Rodamiento guía",
-                        icono: "sap-icon://technical-object",
-                        categoria: "Refacciones",
-                        plan: "40",
-                        real: "48",
-                        contribucion: 25,
-                        contribucionTexto: "4.8%",
-                        acumulado: "42.3%",
-                        ot: "6",
-                        elevadores: "5",
-                        clientes: "2",
-                        norte: "+5",
-                        centro: "+2",
-                        sur: "+1",
-                        occidente: "0",
-                        total: "+8",
-                        estado: "Yellow",
-                        norteEstado: "Red",
-                        centroEstado: "Red",
-                        surEstado: "Red",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Red"
-                    },
-                    {
-                        id: "5",
-                        material: "Fusible de control",
-                        icono: "sap-icon://electrocardiogram",
-                        categoria: "Consumibles",
-                        plan: "67",
-                        real: "51",
-                        contribucion: 50,
-                        contribucionTexto: "-9.5%",
-                        acumulado: "32.7%",
-                        ot: "5",
-                        elevadores: "4",
-                        clientes: "2",
-                        norte: "-10",
-                        centro: "-5",
-                        sur: "-1",
-                        occidente: "0",
-                        total: "-16",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Green",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "6",
-                        material: "Cable eléctrico",
-                        icono: "sap-icon://chain-link",
-                        categoria: "Consumibles",
-                        plan: "60",
-                        real: "58",
-                        contribucion: 8,
-                        contribucionTexto: "-1.2%",
-                        acumulado: "31.5%",
-                        ot: "4",
-                        elevadores: "3",
-                        clientes: "2",
-                        norte: "-1",
-                        centro: "-1",
-                        sur: "0",
-                        occidente: "0",
-                        total: "-2",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Neutral",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "7",
-                        material: "Grasa multipropósito",
-                        icono: "sap-icon://lab",
-                        categoria: "Lubricantes",
-                        plan: "80",
-                        real: "74",
-                        contribucion: 19,
-                        contribucionTexto: "-3.6%",
-                        acumulado: "27.9%",
-                        ot: "3",
-                        elevadores: "3",
-                        clientes: "1",
-                        norte: "-3",
-                        centro: "-2",
-                        sur: "-1",
-                        occidente: "0",
-                        total: "-6",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Green",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    },
-                    {
-                        id: "8",
-                        material: "Contactores",
-                        icono: "sap-icon://connected",
-                        categoria: "Refacciones",
-                        plan: "70",
-                        real: "67",
-                        contribucion: 10,
-                        contribucionTexto: "-1.8%",
-                        acumulado: "26.1%",
-                        ot: "3",
-                        elevadores: "2",
-                        clientes: "1",
-                        norte: "-2",
-                        centro: "-1",
-                        sur: "0",
-                        occidente: "0",
-                        total: "-3",
-                        estado: "Green",
-                        norteEstado: "Green",
-                        centroEstado: "Green",
-                        surEstado: "Neutral",
-                        occidenteEstado: "Neutral",
-                        totalEstado: "Green"
-                    }
-                ],
-
-                detalleConsumo: [
-                    {
-                        fecha: "01/05/2024",
-                        plan: "50.0",
-                        real: "58.0",
-                        zona: "Norte",
-                        cliente: "Tecno Elevadores",
-                        responsable: "Juan Pérez",
-                        ot: "15",
-                        elevador: "E-101",
-                        varPzas: "+8.0",
-                        varPct: "+16%"
-                    },
-                    {
-                        fecha: "08/05/2024",
-                        plan: "50.0",
-                        real: "52.0",
-                        zona: "Centro",
-                        cliente: "Servi Ascensores",
-                        responsable: "Ana Torres",
-                        ot: "18",
-                        elevador: "E-203",
-                        varPzas: "+2.0",
-                        varPct: "+4%"
-                    },
-                    {
-                        fecha: "15/05/2024",
-                        plan: "50.0",
-                        real: "55.0",
-                        zona: "Sur",
-                        cliente: "Grupo Altura",
-                        responsable: "Luis Gómez",
-                        ot: "12",
-                        elevador: "E-305",
-                        varPzas: "+5.0",
-                        varPct: "+10%"
-                    },
-                    {
-                        fecha: "22/05/2024",
-                        plan: "50.0",
-                        real: "60.0",
-                        zona: "Norte",
-                        cliente: "Tecno Elevadores",
-                        responsable: "Juan Pérez",
-                        ot: "16",
-                        elevador: "E-101",
-                        varPzas: "+10.0",
-                        varPct: "+20%"
-                    },
-                    {
-                        fecha: "29/05/2024",
-                        plan: "50.0",
-                        real: "57.0",
-                        zona: "Occidente",
-                        cliente: "Plus Elevadores",
-                        responsable: "Carla Méndez",
-                        ot: "14",
-                        elevador: "E-402",
-                        varPzas: "+7.0",
-                        varPct: "+14%"
-                    }
-                ],
-
-                tendenciaSemanal: [
-                    {
-                        semana: "Semana 1\n29 abr - 5 may",
-                        plan: 0,
-                        real: 3,
-                        variacion: -3
-                    },
-                    {
-                        semana: "Semana 2\n6 - 12 may",
-                        plan: 2,
-                        real: 5,
-                        variacion: 3
-                    },
-                    {
-                        semana: "Semana 3\n13 - 19 may",
-                        plan: 3,
-                        real: 10,
-                        variacion: 7
-                    },
-                    {
-                        semana: "Semana 4\n20 - 26 may",
-                        plan: 4,
-                        real: 15,
-                        variacion: 11
-                    },
-                    {
-                        semana: "Semana 5\n27 may - 2 jun",
-                        plan: 3,
-                        real: 20,
-                        variacion: 17
-                    }
-                ]
-            };
+        onAfterRendering: function () { this._updateStaticTexts(); },
+        _model: function () { return this.getView().getModel("crpc"); },
+        _odata: function () {
+            var component = this.getOwnerComponent();
+            return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
         },
-
-        _crearGraficaTendenciaSvg: function (aDatos) {
-            var aSeries = aDatos || [];
-            var aX = [92, 193, 293, 393, 494];
-            var iTop = 8;
-            var iBottom = 104;
-            var iRange = iBottom - iTop;
-
-            function y(iValor) {
-                return iTop + ((30 - Number(iValor)) / 40) * iRange;
-            }
-
-            function puntos(sPropiedad) {
-                return aSeries.map(function (oDato, iIndice) {
-                    return aX[iIndice] + "," + y(oDato[sPropiedad]).toFixed(1);
-                }).join(" ");
-            }
-
-            function marcadores(sPropiedad, sColor) {
-                return aSeries.map(function (oDato, iIndice) {
-                    return "<circle cx=\"" + aX[iIndice] + "\" cy=\"" +
-                        y(oDato[sPropiedad]).toFixed(1) + "\" r=\"2.4\" fill=\"" +
-                        sColor + "\" stroke=\"#FFFFFF\" stroke-width=\"0.8\"/>";
-                }).join("");
-            }
-
-            function etiquetas(sPropiedad, sColor, iDesplazamientoY, iDesplazamientoX, bSigno) {
-                return aSeries.map(function (oDato, iIndice) {
-                    var iValor = Number(oDato[sPropiedad]);
-                    var sValor = bSigno && iValor > 0 ? "+" + iValor : String(iValor);
-
-                    return "<text x=\"" + (aX[iIndice] + iDesplazamientoX) + "\" y=\"" +
-                        (y(iValor) + iDesplazamientoY).toFixed(1) + "\" text-anchor=\"middle\" " +
-                        "fill=\"" + sColor + "\" font-size=\"8\" font-weight=\"800\">" +
-                        sValor + "</text>";
-                }).join("");
-            }
-
-            var aEscala = [30, 20, 10, 0, -10];
-            var sRejilla = aEscala.map(function (iValor) {
-                var iY = y(iValor).toFixed(1);
-                return "<line x1=\"42\" y1=\"" + iY + "\" x2=\"544\" y2=\"" + iY +
-                    "\" stroke=\"#D8E1EC\" stroke-width=\"1\"/>" +
-                    "<text x=\"31\" y=\"" + (Number(iY) + 3) +
-                    "\" text-anchor=\"end\" fill=\"#60738D\" font-size=\"8\">" + iValor + "</text>";
-            }).join("");
-
-            return "<div class=\"crpcTrendSvgInner\">" +
-                "<svg viewBox=\"0 0 560 112\" preserveAspectRatio=\"none\" role=\"img\" " +
-                "aria-label=\"Tendencia semanal: plan, real y variación\">" +
-                sRejilla +
-                "<polyline points=\"" + puntos("plan") +
-                "\" fill=\"none\" stroke=\"#93C5FD\" stroke-width=\"1.5\"/>" +
-                "<polyline points=\"" + puntos("real") +
-                "\" fill=\"none\" stroke=\"#2563EB\" stroke-width=\"1.9\"/>" +
-                "<polyline points=\"" + puntos("variacion") +
-                "\" fill=\"none\" stroke=\"#EF4444\" stroke-width=\"1.6\" " +
-                "stroke-dasharray=\"2 4\" stroke-linecap=\"round\"/>" +
-                marcadores("plan", "#93C5FD") +
-                marcadores("real", "#2563EB") +
-                marcadores("variacion", "#EF4444") +
-                etiquetas("plan", "#526781", 12, 0, false) +
-                etiquetas("real", "#1D4ED8", -7, -5, false) +
-                etiquetas("variacion", "#EF4444", -10, 7, true) +
-                "</svg></div>";
+        onPeriodoChange: function (event) {
+            var year = String(event.getSource().getSelectedKey() || "");
+            if (!/^\d{4}$/.test(year)) { return; }
+            this._filters.periodo = year;
+            this._filters.fechaDesde = "01/01/" + year;
+            this._filters.fechaHasta = "31/12/" + year;
+            this._model().setProperty("/filtros/periodo", year);
+            this._model().setProperty("/filtros/fechaDesde", this._filters.fechaDesde);
+            this._model().setProperty("/filtros/fechaHasta", this._filters.fechaHasta);
+            this.byId("crpcFechaDesde").setValue(this._filters.fechaDesde);
+            this.byId("crpcFechaHasta").setValue(this._filters.fechaHasta);
         },
-
-        _actualizarGraficaTendencia: function () {
-            var oModel = this.getView().getModel("crpc");
-            oModel.setProperty(
-                "/tendenciaSvg",
-                this._crearGraficaTendenciaSvg(oModel.getProperty("/tendenciaSemanal"))
-            );
-        },
-
         onAplicarFiltros: function () {
-            this._actualizarGraficaTendencia();
-            MessageToast.show("Filtros aplicados correctamente");
-        },
-
-        onBuscarMaterial: function (oEvent) {
-            var sValue = oEvent.getParameter("newValue") || "";
-            var oTable = this.byId("tblMaterialesDesv");
-            var oBinding = oTable && oTable.getBinding("items");
-
-            if (!oBinding) {
+            this._filters = {
+                periodo: this.byId("crpcPeriodo").getSelectedKey() || "2026",
+                fechaDesde: this.byId("crpcFechaDesde").getValue() || "01/01/2026",
+                fechaHasta: this.byId("crpcFechaHasta").getValue() || "31/12/2026",
+                zona: this.byId("crpcZona").getSelectedKey() || "ALL",
+                cliente: this.byId("crpcCliente").getSelectedKey() || "ALL",
+                responsable: this.byId("crpcResponsable").getSelectedKey() || "ALL",
+                tipoOt: this.byId("crpcTipoOt").getSelectedKey() || "ALL"
+            };
+            if (!this._validRange(this._filters.fechaDesde, this._filters.fechaHasta)) {
+                MessageToast.show("Revisa que la fecha desde sea menor o igual a la fecha hasta.");
                 return;
             }
-
-            if (!sValue) {
-                oBinding.filter([]);
-                return;
-            }
-
-            oBinding.filter([
-                new Filter("material", FilterOperator.Contains, sValue)
-            ]);
+            this._load(true);
+        },
+        _load: function (notify) {
+            var requestId = ++this._requestId, view = this.getView();
+            view.setBusy(true);
+            Service.load(this._odata(), this._filters).then(function (response) {
+                if (requestId !== this._requestId) { return; }
+                this._showData(response.data);
+                if (notify) { MessageToast.show("Consumo real vs plan actualizado con datos de SAP"); }
+            }.bind(this), function (error) {
+                if (requestId !== this._requestId) { return; }
+                this._showData(Service.createEmpty(this._filters));
+                MessageToast.show(error && error.message ? error.message : "No fue posible consultar el consumo real vs plan");
+            }.bind(this)).then(function () {
+                if (requestId === this._requestId) { view.setBusy(false); }
+            }.bind(this));
+        },
+        _showData: function (data) {
+            data.tendenciaSvg = this._crearGraficaTendenciaSvg(data.tendenciaSemanal || []);
+            this._model().setData(data);
+            this._setOptions(data);
+            this.byId("sfMaterial").setValue("");
+            this.byId("tblMaterialesDesv").getBinding("items").filter([]);
+            this._updateStaticTexts();
+        },
+        _setOptions: function (data) {
+            var options = data.opciones || {}, filters = data.filtros || this._filters;
+            this._replaceItems("crpcPeriodo", options.periodos || [], filters.periodo);
+            this._replaceItems("crpcZona", options.zonas || [], filters.zona);
+            this._replaceItems("crpcCliente", options.clientes || [], filters.cliente);
+            this._replaceItems("crpcResponsable", options.responsables || [], filters.responsable);
+            this._replaceItems("crpcTipoOt", options.tiposOt || [], filters.tipoOt);
+            this.byId("crpcFechaDesde").setValue(filters.fechaDesde);
+            this.byId("crpcFechaHasta").setValue(filters.fechaHasta);
+        },
+        _replaceItems: function (id, rows, key) {
+            var select = this.byId(id);
+            select.destroyItems();
+            rows.forEach(function (row) { select.addItem(new Item({ key: row.key, text: row.text })); });
+            select.setSelectedKey(key);
+            if (!select.getSelectedItem() && select.getItems().length) { select.setSelectedKey(select.getItems()[0].getKey()); }
+        },
+        _validRange: function (from, until) {
+            var start = this._parseDate(from), end = this._parseDate(until);
+            return !!start && !!end && start <= end;
+        },
+        _parseDate: function (value) {
+            var part = String(value || "").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+            return part ? new Date(Number(part[3]), Number(part[2]) - 1, Number(part[1])) : null;
         },
 
-        onMaterialPress: function (oEvent) {
-            MessageToast.show("Detalle de " + oEvent.getSource().getText());
+        onBuscarMaterial: function (event) {
+            var value = event.getParameter("newValue") || "", binding = this.byId("tblMaterialesDesv").getBinding("items");
+            binding.filter(value ? [new Filter("material", FilterOperator.Contains, value)] : []);
         },
-
+        onMaterialPress: function (event) {
+            var context = event.getSource().getBindingContext("crpc"), row = context && context.getObject();
+            if (row && row.key) { this._selectMaterial(row.key); }
+        },
+        _selectMaterial: function (key) {
+            var details = this._model().getProperty("/detailsByMaterial") || {}, selection = details[key];
+            if (!selection) { return; }
+            this._model().setProperty("/seleccion", selection);
+            this._model().setProperty("/detalleConsumo", selection.details || []);
+            this._model().setProperty("/tendenciaSemanal", selection.weeks || []);
+            this._model().setProperty("/tendenciaSvg", this._crearGraficaTendenciaSvg(selection.weeks || []));
+            this._updateStaticTexts();
+            MessageToast.show("Detalle de " + selection.material + " (" + selection.unit + ")");
+        },
         onVerSemanas: function () {
-            MessageToast.show("Ver histórico de 24 semanas");
-        }
+            var selection = this._model().getProperty("/seleccion") || {};
+            MessageToast.show("Se muestran las últimas " + ((selection.weeks || []).length || 0) + " semanas con datos del material seleccionado.");
+        },
 
+        _updateStaticTexts: function () {
+            var data = this._model().getData() || {}, kpis = data.kpis || {}, summary = data.resumenTabla || {}, selected = data.seleccion || {}, titles, mini, trends, totalCells, totalZones, weekNames, weekDates, success;
+            this._findByClass(this.getView(), "crpcKpiSub").forEach(function (control, index) {
+                control.setText([kpis.planBase || "Totales separados por unidad", kpis.realBase || "Consumo neto por unidad", kpis.desviacionPct || "Variación por unidad"][index]);
+            });
+            this._findByClass(this.getView(), "crpcKpiUnit").forEach(function (control) { control.setText(""); });
+            this._findByClass(this.getView(), "crpcTotalLabel").forEach(function (control) { control.setText(summary.label || "Totales por unidad"); });
+            totalCells = this._findByClass(this.getView(), "crpcTotalCell");
+            [summary.plan, summary.real, "Por unidad", "Por unidad", summary.ot, summary.equipos, summary.clientes, summary.deviation].forEach(function (value, index) {
+                if (totalCells[index]) { totalCells[index].setText(value || "—"); }
+            });
+            totalZones = this._findByClass(this.getView(), "crpcTotalZones")[0];
+            if (totalZones) {
+                this._descendants(totalZones, function (control) { return control.isA && control.isA("sap.m.Text"); }).forEach(function (control, index) { control.setText((summary.zones || [])[index] || "—"); });
+            }
+            titles = this._findByClass(this.getView(), "crpcCardTitle");
+            if (titles[1]) { titles[1].setText("Detalle de consumo - " + (selected.material || "Sin datos")); }
+            if (titles[2]) { titles[2].setText("Tendencia semanal - " + (selected.unit || "sin unidad comparable")); }
+            this._findByClass(this.getView(), "crpcPill").forEach(function (pill) {
+                var label = this._descendants(pill, function (control) { return control.isA && control.isA("sap.m.Text"); })[0];
+                if (label) { label.setText(selected.categoria || "Sin categoría"); }
+            }.bind(this));
+            mini = this._findByClass(this.getView(), "crpcMiniValue");
+            [this._quantity(selected.plan, selected.unit), this._quantity(selected.real, selected.unit), this._signed(selected.deviation, selected.unit), selected.variation === null || selected.variation === undefined ? "Sin plan" : this._signedPercent(selected.variation)].forEach(function (value, index) {
+                if (mini[index]) { mini[index].setText(value); }
+            });
+            trends = this._findByClass(this.getView(), "crpcTrendVal");
+            [selected.stats && selected.stats.weeks, selected.stats && selected.stats.equipment, selected.stats && selected.stats.clients, selected.stats && selected.stats.zones].forEach(function (value, index) { if (trends[index]) { trends[index].setText(String(value || 0)); } });
+            weekNames = this._findByClass(this.getView(), "crpcWeekName");
+            weekDates = this._findByClass(this.getView(), "crpcWeekDate");
+            (selected.weeks || []).slice(0, 5).forEach(function (week, index) { if (weekNames[index]) { weekNames[index].setText(week.semana); } if (weekDates[index]) { weekDates[index].setText(week.periodo); } });
+            for (var index = (selected.weeks || []).length; index < 5; index += 1) { if (weekNames[index]) { weekNames[index].setText("Sin datos"); } if (weekDates[index]) { weekDates[index].setText("—"); } }
+            success = this._findByClass(this.getView(), "crpcSuccess")[0];
+            if (success) {
+                var message = this._descendants(success, function (control) { return control.isA && control.isA("sap.m.Text"); })[0], weeks = selected.weeks || [], highest = weeks.slice().sort(function (a, b) { return b.variacion - a.variacion; })[0];
+                if (message) { message.setText(highest && highest.variacion > 0 ? "Mayor desviación: " + highest.semana + " (" + this._signed(highest.variacion, selected.unit) + ")." : "No hay sobreconsumo positivo en las semanas visibles."); }
+            }
+        },
+        _crearGraficaTendenciaSvg: function (rows) {
+            var data = (rows || []).slice(0, 5), x = [92, 193, 293, 393, 494], maximum = Math.max.apply(Math, [1].concat(data.map(function (row) { return Math.max(Math.abs(row.plan || 0), Math.abs(row.real || 0), Math.abs(row.variacion || 0)); }))), top = 12, base = 102;
+            function y(value) { return base - (Number(value) || 0) / maximum * 78; }
+            function points(field) { return data.map(function (row, index) { return x[index] + "," + y(row[field]).toFixed(1); }).join(" "); }
+            function marks(field, color) { return data.map(function (row, index) { return '<circle cx="' + x[index] + '" cy="' + y(row[field]).toFixed(1) + '" r="2.6" fill="' + color + '" stroke="#fff" stroke-width="0.8"/>'; }).join(""); }
+            return '<div class="crpcTrendSvgInner"><svg viewBox="0 0 560 112" preserveAspectRatio="none" role="img" aria-label="Tendencia semanal del material"><line x1="42" y1="' + top + '" x2="544" y2="' + top + '" stroke="#D8E1EC"/><line x1="42" y1="57" x2="544" y2="57" stroke="#D8E1EC"/><line x1="42" y1="' + base + '" x2="544" y2="' + base + '" stroke="#D8E1EC"/><text x="31" y="' + (top + 3) + '" text-anchor="end" fill="#60738D" font-size="8">' + this._escape(this._number(maximum)) + '</text><text x="31" y="60" text-anchor="end" fill="#60738D" font-size="8">0</text><polyline points="' + points("plan") + '" fill="none" stroke="#93C5FD" stroke-width="1.5"/><polyline points="' + points("real") + '" fill="none" stroke="#2563EB" stroke-width="1.9"/><polyline points="' + points("variacion") + '" fill="none" stroke="#EF4444" stroke-width="1.6" stroke-dasharray="2 4"/>' + marks("plan", "#93C5FD") + marks("real", "#2563EB") + marks("variacion", "#EF4444") + '</svg></div>';
+        },
+        _quantity: function (value, unit) { return this._number(value) + (unit ? " " + unit : ""); },
+        _number: function (value) { return new Intl.NumberFormat("es-MX", { maximumFractionDigits: 1 }).format(Number(value) || 0); },
+        _signed: function (value, unit) { return ((Number(value) || 0) > 0 ? "+" : "") + this._quantity(value, unit); },
+        _signedPercent: function (value) { return ((Number(value) || 0) > 0 ? "+" : "") + (Number(value) || 0).toFixed(1) + "%"; },
+        _findByClass: function (root, className) { return this._descendants(root, function (control) { return control.hasStyleClass && control.hasStyleClass(className); }); },
+        _descendants: function (root, predicate) {
+            var found = [];
+            function visit(control) {
+                var children = [];
+                if (!control) { return; }
+                if (predicate(control)) { found.push(control); }
+                if (control.getItems) { children = children.concat(control.getItems() || []); }
+                if (control.getContent && !(control.isA && control.isA("sap.ui.core.HTML"))) { children = children.concat(control.getContent() || []); }
+                children.forEach(visit);
+            }
+            visit(root);
+            return found;
+        },
+        _escape: function (value) { return String(value || "").replace(/[&<>"']/g, function (character) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[character]; }); }
     });
 });

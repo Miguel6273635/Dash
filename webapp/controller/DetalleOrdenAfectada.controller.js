@@ -1,11 +1,17 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/m/MessageBox",
+    "mantenimiento/model/DetalleOrdenAfectadaService",
+    "mantenimiento/model/DetalleOrdenAfectadaMapper"
 ], function (
     Controller,
     JSONModel,
-    MessageToast
+    MessageToast,
+    MessageBox,
+    Service,
+    Mapper
 ) {
     "use strict";
 
@@ -13,285 +19,502 @@ sap.ui.define([
         "mantenimiento.controller.DetalleOrdenAfectada",
         {
             onInit: function () {
-                var oData = {
-                    filters: {
-                        period: "currentMonth",
-                        dateFrom: "01/05/2024",
-                        dateTo: "31/05/2024",
-                        orderType: "all",
-                        supervisor: "all",
-                        zone: "all"
-                    },
+                var oModel =
+                    new JSONModel(
+                        this._getInitialData()
+                    );
 
-                    kpis: {
-                        orderStatus: "En riesgo",
-                        equipment: "ELV-0615",
-                        orderType: "Reparación correctiva",
-                        commitmentDate: "03/06/2024",
-                        plannedHours: "18 h",
-                        actualHours: "21 h",
-                        hourDeviation: "(+3 h / 16.7%)",
-                        responsible: "Ana Martínez"
-                    },
-
-                    summary: {
-                        order: "OT-245678",
-                        orderClass: "PM Preventiva",
-                        status: "En riesgo",
-                        priority: "Alta",
-                        creationDate: "24/05/2024 09:15",
-                        commitmentDate: "03/06/2024",
-                        commitmentEnd: "03/06/2024",
-                        client: "Hospital San José",
-                        zone: "Torre Reforma",
-                        site: "Sur",
-                        elevator: "Sala Rameau",
-                        responsible: "Ana Martínez",
-                        equipment: "ELV-0615",
-                        relatedAsset: "AN-1025134"
-                    },
-
-                    operations: [
-                        {
-                            operation: "0010",
-                            description: "Inicio de orden",
-                            workCenter: "CT-ELV-01",
-                            resource: "María Gómez",
-                            plannedHours: "1.0 h",
-                            actualHours: "1.2 h",
-                            status: "Completa",
-                            statusState: "Success",
-                            impact: "Afectado",
-                            impactState: "Error"
-                        },
-                        {
-                            operation: "0020",
-                            description: "Inspección general",
-                            workCenter: "CT-ELV-02",
-                            resource: "Carlos Reng",
-                            plannedHours: "4.5 h",
-                            actualHours: "4.5 h",
-                            status: "En proceso",
-                            statusState: "Warning",
-                            impact: "Alto",
-                            impactState: "Error"
-                        },
-                        {
-                            operation: "0030",
-                            description: "Reparación de freno",
-                            workCenter: "CT-ELV-03",
-                            resource: "Jorge Torres",
-                            plannedHours: "6.0 h",
-                            actualHours: "10.0 h",
-                            status: "En riesgo",
-                            statusState: "Warning",
-                            impact: "Alto",
-                            impactState: "Error"
-                        },
-                        {
-                            operation: "0040",
-                            description: "Prueba final",
-                            workCenter: "CT-ELV-04",
-                            resource: "Sofía López",
-                            plannedHours: "3.0 h",
-                            actualHours: "3.3 h",
-                            status: "En proceso",
-                            statusState: "Information",
-                            impact: "Medio",
-                            impactState: "Warning"
-                        },
-                        {
-                            operation: "0050",
-                            description: "Cierre de orden",
-                            workCenter: "CT-ELV-05",
-                            resource: "Ana Martínez",
-                            plannedHours: "2.0 h",
-                            actualHours: "2.0 h",
-                            status: "Pendiente",
-                            statusState: "None",
-                            impact: "Bajo",
-                            impactState: "Success"
-                        }
-                    ],
-
-                    history: [
-                        {
-                            date: "24/05/2024 11:30",
-                            user: "Ana Martínez",
-                            action: "Cambio de estatus",
-                            comment: "Se actualiza a en riesgo por retraso en refacción",
-                            status: "En riesgo",
-                            statusState: "Warning"
-                        },
-                        {
-                            date: "23/05/2024 10:15",
-                            user: "Luis Torres",
-                            action: "Asignación de recurso",
-                            comment: "Asignación de técnico y ayudante",
-                            status: "Completa",
-                            statusState: "Success"
-                        },
-                        {
-                            date: "21/05/2024 16:45",
-                            user: "Mario Gómez",
-                            action: "Inicio de orden",
-                            comment: "Se inicia inspección general del equipo",
-                            status: "Completa",
-                            statusState: "Success"
-                        },
-                        {
-                            date: "20/05/2024 14:20",
-                            user: "Carlos Reng",
-                            action: "Reprogramación",
-                            comment: "Reprogramación por retraso en refacción",
-                            status: "En riesgo",
-                            statusState: "Warning"
-                        },
-                        {
-                            date: "24/05/2024 09:15",
-                            user: "Sofía López",
-                            action: "Registro",
-                            comment: "Se crea la orden según detección de falla",
-                            status: "Completa",
-                            statusState: "Success"
-                        }
-                    ],
-
-                    materials: [
-                        {
-                            type: "Material pendiente",
-                            description: "Freno de seguridad",
-                            responsible: "Almacén Central",
-                            date: "02/06/2024",
-                            status: "En proceso",
-                            statusState: "Warning"
-                        },
-                        {
-                            type: "Autorización",
-                            description: "Aprobación de gasto",
-                            responsible: "María González",
-                            date: "03/06/2024",
-                            status: "Pendiente",
-                            statusState: "Information"
-                        },
-                        {
-                            type: "Visita cliente",
-                            description: "Verificación en sitio",
-                            responsible: "Luis Ramírez",
-                            date: "01/06/2024",
-                            status: "Programada",
-                            statusState: "Success"
-                        },
-                        {
-                            type: "Validación legal",
-                            description: "Revisión de contrato",
-                            responsible: "Legal",
-                            date: "02/06/2024",
-                            status: "En proceso",
-                            statusState: "Warning"
-                        }
-                    ],
-
-                    resources: [
-                        {
-                            type: "Mecánicos",
-                            assigned: "2",
-                            plannedHours: "14.0 h",
-                            actualHours: "16.5 h",
-                            deviation: "+2.5 h (17.9%)",
-                            utilizationBar: 88,
-                            utilization: "118%"
-                        },
-                        {
-                            type: "Ayudantes",
-                            assigned: "2",
-                            plannedHours: "4.0 h",
-                            actualHours: "4.5 h",
-                            deviation: "+0.5 h (12.5%)",
-                            utilizationBar: 84,
-                            utilization: "113%"
-                        }
-                    ],
-
-                    impact: {
-                        reason: "Ausencia de contrato",
-                        equipmentStatus: "Bloqueado activo",
-                        managementStatus: "En validación",
-                        blockedDays: "69"
-                    }
-                };
-
-                var oModel = new JSONModel(oData);
-
-                oModel.setSizeLimit(100);
-
-                this.getView().setModel(oModel);
-            },
-
-            onApplyFilters: function () {
-                var oFilters = this.getView()
-                    .getModel()
-                    .getProperty("/filters");
-
-                MessageToast.show(
-                    "Filtros aplicados: " +
-                    oFilters.dateFrom +
-                    " al " +
-                    oFilters.dateTo
+                oModel.setSizeLimit(
+                    5000
                 );
+
+                this.getView().setModel(
+                    oModel
+                );
+
+                this._attachRoute();
             },
 
-            onViewOrderStatus: function () {
-                this._showDetailMessage("estatus de la orden");
-            },
+            _getInitialData:
+                function () {
+                    return {
+                        busy:
+                            false,
 
-            onViewEquipment: function () {
-                this._showDetailMessage("equipo ELV-0615");
-            },
+                        pageTitle:
+                            "Detalle de orden afectada",
 
-            onViewOrderType: function () {
-                this._showDetailMessage("tipo de orden");
-            },
+                        selectedOrderId:
+                            "",
 
-            onViewCommitment: function () {
-                this._showDetailMessage("fecha compromiso");
-            },
+                        filters: {
+                            period:
+                                "currentMonth",
 
-            onViewPlannedHours: function () {
-                this._showDetailMessage("horas programadas");
-            },
+                            dateFrom:
+                                "01/01/2026",
 
-            onViewActualHours: function () {
-                this._showDetailMessage("horas reales");
-            },
+                            dateTo:
+                                "31/12/2026",
 
-            onViewResponsible: function () {
-                this._showDetailMessage("responsable Ana Martínez");
-            },
+                            orderType:
+                                "all",
 
-            onViewOperations: function () {
-                this._showDetailMessage("operaciones de la orden");
-            },
+                            supervisor:
+                                "all",
 
-            onViewHistory: function () {
-                this._showDetailMessage("historial completo");
-            },
+                            zone:
+                                "all"
+                        },
 
-            onViewPending: function () {
-                this._showDetailMessage("materiales y pendientes");
-            },
+                        kpis: {
+                            orderStatus:
+                                "Sin datos",
 
-            onViewResources: function () {
-                this._showDetailMessage("detalle de recursos");
-            },
+                            equipment:
+                                "Sin datos",
 
-            onViewAssociatedEquipment: function () {
-                this._showDetailMessage("equipo asociado ELV-0615");
-            },
+                            orderType:
+                                "Sin datos",
 
-            _showDetailMessage: function (sSection) {
-                MessageToast.show("Abriendo " + sSection);
-            }
+                            commitmentDate:
+                                "Sin datos",
+
+                            plannedHours:
+                                "0.0 h",
+
+                            actualHours:
+                                "0.0 h",
+
+                            hourDeviation:
+                                "(0.0 h / 0.0%)",
+
+                            responsible:
+                                "Sin datos"
+                        },
+
+                        summary: {
+                            order:
+                                "Sin datos",
+
+                            orderClass:
+                                "Sin datos",
+
+                            status:
+                                "Sin datos",
+
+                            priority:
+                                "Sin datos",
+
+                            creationDate:
+                                "Sin datos",
+
+                            commitmentDate:
+                                "Sin datos",
+
+                            commitmentEnd:
+                                "Sin datos",
+
+                            client:
+                                "Sin datos",
+
+                            zone:
+                                "Sin datos",
+
+                            site:
+                                "Sin datos",
+
+                            elevator:
+                                "Sin datos",
+
+                            responsible:
+                                "Sin datos",
+
+                            equipment:
+                                "Sin datos",
+
+                            relatedAsset:
+                                "Sin datos"
+                        },
+
+                        operations:
+                            [],
+
+                        history:
+                            [],
+
+                        materials:
+                            [],
+
+                        resources:
+                            [],
+
+                        impact: {
+                            reason:
+                                "Sin datos",
+
+                            equipmentStatus:
+                                "Sin datos",
+
+                            managementStatus:
+                                "Sin datos",
+
+                            blockedDays:
+                                "Sin datos"
+                        },
+
+                        meta:
+                            {}
+                    };
+                },
+
+            _attachRoute:
+                function () {
+                    var oRouter =
+                        this.getOwnerComponent()
+                            .getRouter();
+
+                    var oRoute =
+                        oRouter.getRoute(
+                            "RouteDetalleOrdenAfectada"
+                        );
+
+                    if (oRoute) {
+                        oRoute.attachPatternMatched(
+                            this._onRouteMatched,
+                            this
+                        );
+
+                        return;
+                    }
+
+                    /*
+                     * Si aún no existe parámetro en la ruta,
+                     * cargamos la extracción igualmente.
+                     * Cuando OrdersSet tenga registros,
+                     * Mapper podrá tomar la primera OT.
+                     */
+                    this._loadData("");
+                },
+
+            _onRouteMatched:
+                function (oEvent) {
+                    var oArgs =
+                        oEvent.getParameter(
+                            "arguments"
+                        ) || {};
+
+                    /*
+                     * Soporta distintos nombres posibles
+                     * mientras se termina de homologar la ruta.
+                     */
+                    var sOrderId =
+                        oArgs.orderId ||
+                        oArgs.OrderId ||
+                        oArgs.order ||
+                        oArgs.otId ||
+                        "";
+
+                    try {
+                        sOrderId =
+                            decodeURIComponent(
+                                sOrderId
+                            );
+                    } catch (e) {
+                        // Mantener valor original.
+                    }
+
+                    this.getView()
+                        .getModel()
+                        .setProperty(
+                            "/selectedOrderId",
+                            sOrderId
+                        );
+
+                    this._loadData(
+                        sOrderId
+                    );
+                },
+
+            _getODataModel:
+                function () {
+                    var oComponent =
+                        this.getOwnerComponent();
+
+                    return (
+                        oComponent &&
+                        oComponent.getModel(
+                            "dashboardOData"
+                        )
+                    ) ||
+                    (
+                        oComponent &&
+                        oComponent.getModel()
+                    );
+                },
+
+            _loadData:
+                function (
+                    sOrderId,
+                    bNotify
+                ) {
+                    var oModel =
+                        this.getView()
+                            .getModel();
+
+                    var sSelectedOrderId =
+                        sOrderId ||
+                        oModel.getProperty(
+                            "/selectedOrderId"
+                        ) ||
+                        "";
+
+                    oModel.setProperty(
+                        "/busy",
+                        true
+                    );
+
+                    console.log(
+                        "[DOA CONTROLLER] Orden:",
+                        sSelectedOrderId ||
+                        "(sin OrderId)"
+                    );
+
+                    Service
+                        .getDashboardData(
+                            this._getODataModel(),
+                            sSelectedOrderId
+                        )
+                        .then(
+                            function (
+                                oRawData
+                            ) {
+                                var oMapped =
+                                    Mapper.mapData(
+                                        oRawData,
+                                        sSelectedOrderId
+                                    );
+
+                                /*
+                                 * Conservamos filtros seleccionados
+                                 * aunque se sustituya la información.
+                                 */
+                                var oFilters =
+                                    oModel.getProperty(
+                                        "/filters"
+                                    );
+
+                                var bBusy =
+                                    oModel.getProperty(
+                                        "/busy"
+                                    );
+
+                                oModel.setData(
+                                    Object.assign(
+                                        {},
+                                        oMapped,
+                                        {
+                                            busy:
+                                                bBusy,
+
+                                            filters:
+                                                oFilters,
+
+                                            selectedOrderId:
+                                                oMapped.meta &&
+                                                oMapped.meta.selectedOrderId
+                                                    ? oMapped.meta.selectedOrderId
+                                                    : sSelectedOrderId
+                                        }
+                                    )
+                                );
+
+                                console.log(
+                                    "[DOA CONTROLLER] Resultado:",
+                                    oMapped.meta
+                                );
+
+                                if (bNotify) {
+                                    MessageToast.show(
+                                        "Datos actualizados."
+                                    );
+                                }
+                            }
+                        )
+                        .catch(
+                            function (
+                                oError
+                            ) {
+                                console.error(
+                                    "[DOA CONTROLLER] Error:",
+                                    oError
+                                );
+
+                                MessageBox.error(
+                                    oError &&
+                                    oError.message
+                                        ? oError.message
+                                        : "No fue posible consultar el detalle de la orden."
+                                );
+                            }
+                        )
+                        .finally(
+                            function () {
+                                oModel.setProperty(
+                                    "/busy",
+                                    false
+                                );
+                            }
+                        );
+                },
+
+            onApplyFilters:
+                function () {
+                    var oModel =
+                        this.getView()
+                            .getModel();
+
+                    var sOrderId =
+                        oModel.getProperty(
+                            "/selectedOrderId"
+                        ) ||
+                        "";
+
+                    /*
+                     * Aplicar filtros vuelve a consultar SAP.
+                     */
+                    this._loadData(
+                        sOrderId,
+                        true
+                    );
+                },
+
+            onViewOrderStatus:
+                function () {
+                    this._showDetailMessage(
+                        "estatus de la orden"
+                    );
+                },
+
+            onViewEquipment:
+                function () {
+                    var sEquipment =
+                        this.getView()
+                            .getModel()
+                            .getProperty(
+                                "/kpis/equipment"
+                            );
+
+                    this._showDetailMessage(
+                        "equipo " +
+                        (
+                            sEquipment ||
+                            ""
+                        )
+                    );
+                },
+
+            onViewOrderType:
+                function () {
+                    this._showDetailMessage(
+                        "tipo de orden"
+                    );
+                },
+
+            onViewCommitment:
+                function () {
+                    this._showDetailMessage(
+                        "fecha compromiso"
+                    );
+                },
+
+            onViewPlannedHours:
+                function () {
+                    this._showDetailMessage(
+                        "horas programadas"
+                    );
+                },
+
+            onViewActualHours:
+                function () {
+                    this._showDetailMessage(
+                        "horas reales"
+                    );
+                },
+
+            onViewResponsible:
+                function () {
+                    var sResponsible =
+                        this.getView()
+                            .getModel()
+                            .getProperty(
+                                "/kpis/responsible"
+                            );
+
+                    this._showDetailMessage(
+                        "responsable " +
+                        (
+                            sResponsible ||
+                            ""
+                        )
+                    );
+                },
+
+            onViewOperations:
+                function () {
+                    this._showDetailMessage(
+                        "operaciones de la orden"
+                    );
+                },
+
+            onViewHistory:
+                function () {
+                    this._showDetailMessage(
+                        "historial completo"
+                    );
+                },
+
+            onViewPending:
+                function () {
+                    this._showDetailMessage(
+                        "materiales y pendientes"
+                    );
+                },
+
+            onViewResources:
+                function () {
+                    this._showDetailMessage(
+                        "detalle de recursos"
+                    );
+                },
+
+            onViewAssociatedEquipment:
+                function () {
+                    var sEquipment =
+                        this.getView()
+                            .getModel()
+                            .getProperty(
+                                "/summary/equipment"
+                            );
+
+                    this._showDetailMessage(
+                        "equipo asociado " +
+                        (
+                            sEquipment ||
+                            ""
+                        )
+                    );
+                },
+
+            _showDetailMessage:
+                function (
+                    sSection
+                ) {
+                    MessageToast.show(
+                        "Abriendo " +
+                        sSection
+                    );
+                }
         }
     );
 });

@@ -1,143 +1,1019 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox",
+    "mantenimiento/model/DetalleOperativoZonaSurService",
+    "mantenimiento/model/DetalleOperativoZonaSurMapper"
+], function (
+    Controller,
+    JSONModel,
+    MessageToast,
+    MessageBox,
+    DetalleOperativoZonaSurService,
+    DetalleOperativoZonaSurMapper
+) {
     "use strict";
 
-    return Controller.extend("mantenimiento.controller.DetalleOperativoZonaSur", {
+    return Controller.extend(
+        "mantenimiento.controller.DetalleOperativoZonaSur",
+        {
+            onInit: function () {
+                this._iRequest = 0;
+                this._oRawData = null;
 
-        onInit: function () {
-            var oMockData = this._getMockData();
-            this.getView().setModel(new JSONModel(oMockData), "doz");
+                this._oModel = new JSONModel(
+                    this._getInitialData()
+                );
 
-            console.group("DETALLE OPERATIVO DE ZONA - JSON MOCK");
-            console.log(JSON.stringify(oMockData, null, 2));
-            console.groupEnd();
-        },
+                this._oModel.setDefaultBindingMode(
+                    "TwoWay"
+                );
 
-        onAplicarFiltros: function () {
-            var oFiltros = this.getView().getModel("doz").getProperty("/filtros");
-            var oRequest = {
-                dashboard: "DETALLE_OPERATIVO_ZONA",
-                tipoConsulta: "GENERAL",
-                filtros: oFiltros
-            };
+                this._oModel.setSizeLimit(
+                    5000
+                );
 
-            console.group("JSON QUE SE MANDARÍA AL BACKEND / SAP BTP");
-            console.log(JSON.stringify(oRequest, null, 2));
-            console.groupEnd();
+                this.getView().setModel(
+                    this._oModel,
+                    "doz"
+                );
 
-            MessageToast.show("Filtros aplicados al detalle operativo");
-        },
+                this._loadBase(
+                    false
+                );
+            },
 
-        onVerDetalleOrdenes: function () {
-            this._logDetalle("ORDENES", "Resumen de carga operativa por estado");
-        },
+            onAfterRendering: function () {
+                this._updateVisuals();
+            },
 
-        onVerDetalleHoras: function () {
-            this._logDetalle("HORAS", "Evolución de horas programadas vs reales");
-        },
+            _getODataModel: function () {
+                var oComponent =
+                    this.getOwnerComponent();
 
-        onVerDetalleRecursos: function () {
-            this._logDetalle("RECURSOS", "Recursos y utilización");
-        },
+                return (
+                    oComponent &&
+                    oComponent.getModel(
+                        "dashboardOData"
+                    )
+                ) || (
+                    oComponent &&
+                    oComponent.getModel()
+                );
+            },
 
-        onVerDetalleCausa: function () {
-            this._logDetalle("CAUSAS", "Principales causas de presión");
-        },
+            _getFilters: function () {
+                return Object.assign(
+                    {},
+                    this._oModel.getProperty(
+                        "/filtros"
+                    ) || {}
+                );
+            },
 
-        onVerDetalleCliente: function () {
-            this._logDetalle("CLIENTES_ELEVADORES", "Clientes / elevadores con mayor carga");
-        },
+            onPeriodoChange: function (
+                oEvent
+            ) {
+                var sYear =
+                    oEvent.getSource()
+                        .getSelectedKey();
 
-        onVerTodasProximas: function () {
-            this._logDetalle("ORDENES_PROXIMAS", "Órdenes próximas a vencer");
-        },
+                var iYear =
+                    Number(
+                        sYear
+                    );
 
-        _logDetalle: function (sSeccion, sDescripcion) {
-            var oFiltros = this.getView().getModel("doz").getProperty("/filtros");
-            var oRequest = {
-                dashboard: "DETALLE_OPERATIVO_ZONA",
-                tipoConsulta: "DETALLE",
-                seccion: sSeccion,
-                descripcion: sDescripcion,
-                filtros: oFiltros
-            };
+                if (
+                    !Number.isInteger(
+                        iYear
+                    )
+                ) {
+                    return;
+                }
 
-            console.group("JSON DETALLE - " + sSeccion);
-            console.log(JSON.stringify(oRequest, null, 2));
-            console.groupEnd();
+                this._oModel.setProperty(
+                    "/filtros/periodo",
+                    String(
+                        iYear
+                    )
+                );
 
-            MessageToast.show("Detalle: " + sDescripcion);
-        },
+                this._oModel.setProperty(
+                    "/filtros/fechaDesde",
+                    "01/01/" +
+                    iYear
+                );
 
-        _getMockData: function () {
-            return {
-                filtros: {
-                    periodo: "Mayo 2024",
-                    fechaDesde: "01/05/2024",
-                    fechaHasta: "31/05/2024",
-                    zona: "Todas",
-                    supervisor: "Todas",
-                    tipoOrden: "Todas"
-                },
+                this._oModel.setProperty(
+                    "/filtros/fechaHasta",
+                    "31/12/" +
+                    iYear
+                );
+            },
 
-                kpis: {
-                    indicePresion: { valor: 92, texto: "92%", estado: "Crítica", nivel: "Nivel muy alto" },
-                    ordenesAbiertas: { valor: 41, porcentaje: "30.2% del total" },
-                    ordenesVencidas: { valor: 9, porcentaje: "22.0% de las abiertas" },
-                    horasProgramadas: { valor: 1420, texto: "1,420 h" },
-                    horasReales: { valor: 1518, texto: "1,518 h", variacion: "+98 h (6.9%)" },
-                    recursosDisponibles: { mecanicos: 6, ayudantes: 3, texto: "6 / 3", utilizacion: "96%" }
-                },
+            onFechaChange: function () {
+                var sFrom =
+                    this._oModel.getProperty(
+                        "/filtros/fechaDesde"
+                    ) || "";
 
-                resumenEstados: [
-                    { estado: "Abiertas", cantidad: 18, porcentajeTexto: "43.9%", porcentajeNumero: 43.9, color: "blue", icon: "sap-icon://activity-individual" },
-                    { estado: "En proceso", cantidad: 12, porcentajeTexto: "29.3%", porcentajeNumero: 29.3, color: "orange", icon: "sap-icon://lateness" },
-                    { estado: "Reprogramadas", cantidad: 6, porcentajeTexto: "14.6%", porcentajeNumero: 14.6, color: "green", icon: "sap-icon://appointment-2" },
-                    { estado: "Pendientes por cliente/material", cantidad: 5, porcentajeTexto: "12.2%", porcentajeNumero: 12.2, color: "purple", icon: "sap-icon://customer" },
-                    { estado: "Vencidas", cantidad: 9, porcentajeTexto: "22.0%", porcentajeNumero: 22, color: "red", icon: "sap-icon://status-negative" }
-                ],
+                var sTo =
+                    this._oModel.getProperty(
+                        "/filtros/fechaHasta"
+                    ) || "";
 
-                evolucionHoras: [
-                    { semana: "Sem 18", programadas: 280, reales: 360 },
-                    { semana: "Sem 19", programadas: 520, reales: 680 },
-                    { semana: "Sem 20", programadas: 760, reales: 960 },
-                    { semana: "Sem 21", programadas: 1030, reales: 1200 },
-                    { semana: "Sem 22", programadas: 1420, reales: 1518 }
-                ],
+                var aFrom =
+                    sFrom.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
 
-                recursos: {
-                    utilizacion: 96,
-                    asignados: { mecanicos: 54, ayudantes: 24 },
-                    disponibles: { mecanicos: 6, ayudantes: 3 }
-                },
+                var aTo =
+                    sTo.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
 
-                causasPresion: [
-                    { causa: "Órdenes vencidas", impacto: 30, impactoTexto: "30%", color: "red", icon: "sap-icon://lateness" },
-                    { causa: "Horas excedidas", impacto: 25, impactoTexto: "25%", color: "orange", icon: "sap-icon://time-overtime" },
-                    { causa: "Falta de recursos", impacto: 20, impactoTexto: "20%", color: "yellow", icon: "sap-icon://group" },
-                    { causa: "Reprogramaciones", impacto: 15, impactoTexto: "15%", color: "blue", icon: "sap-icon://calendar" },
-                    { causa: "Pendientes por cliente/material", impacto: 10, impactoTexto: "10%", color: "purple", icon: "sap-icon://product" }
-                ],
+                if (
+                    aFrom &&
+                    aTo &&
+                    aFrom[3] ===
+                        aTo[3]
+                ) {
+                    this._oModel.setProperty(
+                        "/filtros/periodo",
+                        aFrom[3]
+                    );
+                }
+            },
 
-                clientesCarga: [
-                    { cliente: "Hospital San José", elevador: "EV-0615", abiertas: 5, vencidas: 3 },
-                    { cliente: "Torre Reforma", elevador: "EV-1024", abiertas: 4, vencidas: 2 },
-                    { cliente: "Plaza Central", elevador: "EV-0871", abiertas: 4, vencidas: 1 },
-                    { cliente: "Condominio Las Palmas", elevador: "EV-0430", abiertas: 3, vencidas: 1 },
-                    { cliente: "Corporativo Delta", elevador: "EV-0988", abiertas: 3, vencidas: 1 }
-                ],
+            onAplicarFiltros: function () {
+                var oFilters =
+                    this._getFilters();
 
-                ordenesVencer: [
-                    { ot: "OT-245876", tipo: "Inspección", tipoKey: "inspeccion", elevador: "EV-0615", compromiso: "03/06/2024", dias: 2, prioridad: "Alta", prioridadKey: "alta" },
-                    { ot: "OT-245791", tipo: "Mantenimiento", tipoKey: "mantenimiento", elevador: "EV-1024", compromiso: "04/06/2024", dias: 3, prioridad: "Media", prioridadKey: "media" },
-                    { ot: "OT-245730", tipo: "Call Center", tipoKey: "callcenter", elevador: "EV-0871", compromiso: "05/06/2024", dias: 4, prioridad: "Media", prioridadKey: "media" },
-                    { ot: "OT-245728", tipo: "Inspección", tipoKey: "inspeccion", elevador: "EV-0430", compromiso: "06/06/2024", dias: 5, prioridad: "Baja", prioridadKey: "baja" },
-                    { ot: "OT-245745", tipo: "Mantenimiento", tipoKey: "mantenimiento", elevador: "EV-0988", compromiso: "01/06/2024", dias: 6, prioridad: "Baja", prioridadKey: "baja" }
-                ]
-            };
+                if (
+                    !oFilters.fechaDesde ||
+                    !oFilters.fechaHasta
+                ) {
+                    MessageBox.warning(
+                        "Selecciona fecha desde y fecha hasta."
+                    );
+                    return;
+                }
+
+                this._loadBase(
+                    true
+                );
+            },
+
+            _loadBase: function (
+                bNotify
+            ) {
+                var iRequest =
+                    ++this._iRequest;
+
+                var oODataModel =
+                    this._getODataModel();
+
+                var oFilters =
+                    this._getFilters();
+
+                if (!oODataModel) {
+                    MessageBox.error(
+                        "No se encontró el modelo OData dashboardOData."
+                    );
+                    return;
+                }
+
+                this._oModel.setProperty(
+                    "/busy",
+                    true
+                );
+
+                this._oModel.setProperty(
+                    "/operationalBusy",
+                    false
+                );
+
+                this._oModel.setProperty(
+                    "/confirmationBusy",
+                    false
+                );
+
+                DetalleOperativoZonaSurService
+                    .getBaseData(
+                        oODataModel,
+                        oFilters
+                    )
+                    .then(
+                        function (
+                            oRaw
+                        ) {
+                            var oMapped;
+                            var aOrderIds;
+
+                            if (
+                                iRequest !==
+                                this._iRequest
+                            ) {
+                                return;
+                            }
+
+                            this._oRawData =
+                                oRaw;
+
+                            oMapped =
+                                DetalleOperativoZonaSurMapper
+                                    .mapData(
+                                        this._oRawData,
+                                        oFilters
+                                    );
+
+                            this._applyMappedData(
+                                oMapped
+                            );
+
+                            this._oModel.setProperty(
+                                "/busy",
+                                false
+                            );
+
+                            if (bNotify) {
+                                MessageToast.show(
+                                    "Filtros aplicados"
+                                );
+                            }
+
+                            aOrderIds =
+                                (
+                                    this._oRawData.orders ||
+                                    []
+                                )
+                                    .map(
+                                        function (
+                                            oOrder
+                                        ) {
+                                            return (
+                                                oOrder.OrderId
+                                            );
+                                        }
+                                    )
+                                    .filter(
+                                        Boolean
+                                    );
+
+                            if (
+                                !aOrderIds.length
+                            ) {
+                                return;
+                            }
+
+                            this._loadOperational(
+                                iRequest,
+                                oFilters,
+                                aOrderIds
+                            );
+                        }.bind(this)
+                    )
+                    .catch(
+                        function (
+                            oError
+                        ) {
+                            console.error(
+                                "[DOZ CONTROLLER] Base:",
+                                oError
+                            );
+
+                            if (
+                                iRequest ===
+                                this._iRequest
+                            ) {
+                                this._oModel.setProperty(
+                                    "/busy",
+                                    false
+                                );
+                            }
+
+                            MessageBox.error(
+                                "No fue posible cargar la información base de Detalle operativo de zona."
+                            );
+                        }.bind(this)
+                    );
+            },
+
+            _loadOperational: function (
+                iRequest,
+                oFilters,
+                aOrderIds
+            ) {
+                var oODataModel =
+                    this._getODataModel();
+
+                this._oModel.setProperty(
+                    "/operationalBusy",
+                    true
+                );
+
+                DetalleOperativoZonaSurService
+                    .getOperationalData(
+                        oODataModel,
+                        aOrderIds
+                    )
+                    .then(
+                        function (
+                            oOperational
+                        ) {
+                            var oMapped;
+
+                            if (
+                                iRequest !==
+                                    this._iRequest ||
+                                !this._oRawData
+                            ) {
+                                return;
+                            }
+
+                            this._oRawData.orderResources =
+                                oOperational.orderResources ||
+                                [];
+
+                            this._oRawData.operations =
+                                oOperational.operations ||
+                                [];
+
+                            this._oRawData.causes =
+                                oOperational.causes ||
+                                [];
+
+                            oMapped =
+                                DetalleOperativoZonaSurMapper
+                                    .mapData(
+                                        this._oRawData,
+                                        oFilters
+                                    );
+
+                            this._applyMappedData(
+                                oMapped
+                            );
+
+                            /*
+                             * Confirmaciones se consultan después para
+                             * no bloquear la carga principal.
+                             */
+                            this._loadConfirmations(
+                                iRequest,
+                                oFilters,
+                                aOrderIds
+                            );
+                        }.bind(this)
+                    )
+                    .catch(
+                        function (
+                            oError
+                        ) {
+                            console.error(
+                                "[DOZ CONTROLLER] Operacional:",
+                                oError
+                            );
+                        }
+                    )
+                    .then(
+                        function () {
+                            if (
+                                iRequest ===
+                                this._iRequest
+                            ) {
+                                this._oModel.setProperty(
+                                    "/operationalBusy",
+                                    false
+                                );
+                            }
+                        }.bind(this)
+                    );
+            },
+
+            _loadConfirmations: function (
+                iRequest,
+                oFilters,
+                aOrderIds
+            ) {
+                var oODataModel =
+                    this._getODataModel();
+
+                this._oModel.setProperty(
+                    "/confirmationBusy",
+                    true
+                );
+
+                DetalleOperativoZonaSurService
+                    .getConfirmationData(
+                        oODataModel,
+                        aOrderIds
+                    )
+                    .then(
+                        function (
+                            aConfirmations
+                        ) {
+                            var oMapped;
+
+                            if (
+                                iRequest !==
+                                    this._iRequest ||
+                                !this._oRawData
+                            ) {
+                                return;
+                            }
+
+                            this._oRawData.confirmations =
+                                aConfirmations ||
+                                [];
+
+                            oMapped =
+                                DetalleOperativoZonaSurMapper
+                                    .mapData(
+                                        this._oRawData,
+                                        oFilters
+                                    );
+
+                            this._applyMappedData(
+                                oMapped
+                            );
+                        }.bind(this)
+                    )
+                    .catch(
+                        function (
+                            oError
+                        ) {
+                            console.error(
+                                "[DOZ CONTROLLER] Confirmaciones:",
+                                oError
+                            );
+                        }
+                    )
+                    .then(
+                        function () {
+                            if (
+                                iRequest ===
+                                this._iRequest
+                            ) {
+                                this._oModel.setProperty(
+                                    "/confirmationBusy",
+                                    false
+                                );
+                            }
+                        }.bind(this)
+                    );
+            },
+
+            _applyMappedData: function (
+                oMapped
+            ) {
+                [
+                    "catalogos",
+                    "kpis",
+                    "totalOrdenesAbiertas",
+                    "resumenEstados",
+                    "evolucionHoras",
+                    "horasResumen",
+                    "recursos",
+                    "causasPresion",
+                    "clientesCarga",
+                    "ordenesVencer",
+                    "chart",
+                    "meta"
+                ].forEach(
+                    function (
+                        sPath
+                    ) {
+                        this._oModel.setProperty(
+                            "/" + sPath,
+                            oMapped[sPath]
+                        );
+                    }.bind(this)
+                );
+
+                window.setTimeout(
+                    this._updateVisuals.bind(
+                        this
+                    ),
+                    0
+                );
+            },
+
+            _updateVisuals: function () {
+                var oRoot =
+                    this.getView()
+                        .getDomRef();
+
+                var oChart =
+                    this._oModel &&
+                    this._oModel.getProperty(
+                        "/chart"
+                    );
+
+                var nUtilization =
+                    this._oModel &&
+                    this._oModel.getProperty(
+                        "/recursos/utilizacion"
+                    );
+
+                if (!oRoot) {
+                    return;
+                }
+
+                this._updateHoursChart(
+                    oRoot,
+                    oChart
+                );
+
+                this._updateGauge(
+                    oRoot,
+                    nUtilization
+                );
+            },
+
+            _updateHoursChart: function (
+                oRoot,
+                oChart
+            ) {
+                var aPurple;
+                var aGreen;
+                var oPurpleLine;
+                var oGreenLine;
+                var aPurpleDots;
+                var aGreenDots;
+                var aLabels;
+                var i;
+
+                if (!oChart) {
+                    return;
+                }
+
+                aPurple =
+                    oChart.programadas ||
+                    [];
+
+                aGreen =
+                    oChart.reales ||
+                    [];
+
+                oPurpleLine =
+                    oRoot.querySelector(
+                        ".dozHoursFixedLinePurple"
+                    );
+
+                oGreenLine =
+                    oRoot.querySelector(
+                        ".dozHoursFixedLineGreen"
+                    );
+
+                aPurpleDots =
+                    oRoot.querySelectorAll(
+                        ".dozHoursFixedDotPurple"
+                    );
+
+                aGreenDots =
+                    oRoot.querySelectorAll(
+                        ".dozHoursFixedDotGreen"
+                    );
+
+                aLabels =
+                    oRoot.querySelectorAll(
+                        ".dozHoursWeekLabel"
+                    );
+
+                if (oPurpleLine) {
+                    oPurpleLine.setAttribute(
+                        "points",
+                        this._toSvgPoints(
+                            aPurple
+                        )
+                    );
+                }
+
+                if (oGreenLine) {
+                    oGreenLine.setAttribute(
+                        "points",
+                        this._toSvgPoints(
+                            aGreen
+                        )
+                    );
+                }
+
+                for (
+                    i = 0;
+                    i < aPurpleDots.length;
+                    i += 1
+                ) {
+                    this._setDot(
+                        aPurpleDots[i],
+                        aPurple[i]
+                    );
+                }
+
+                for (
+                    i = 0;
+                    i < aGreenDots.length;
+                    i += 1
+                ) {
+                    this._setDot(
+                        aGreenDots[i],
+                        aGreen[i]
+                    );
+                }
+
+                for (
+                    i = 0;
+                    i < aLabels.length;
+                    i += 1
+                ) {
+                    aLabels[i].textContent =
+                        aPurple[i]
+                            ? aPurple[i].label
+                            : "";
+                }
+            },
+
+            _toSvgPoints: function (
+                aPoints
+            ) {
+                return (
+                    aPoints || []
+                ).map(
+                    function (
+                        oPoint
+                    ) {
+                        return (
+                            oPoint.x +
+                            "," +
+                            oPoint.y
+                        );
+                    }
+                ).join(" ");
+            },
+
+            _setDot: function (
+                oDom,
+                oPoint
+            ) {
+                if (!oDom) {
+                    return;
+                }
+
+                if (!oPoint) {
+                    oDom.setAttribute(
+                        "cx",
+                        "-20"
+                    );
+                    oDom.setAttribute(
+                        "cy",
+                        "-20"
+                    );
+                    return;
+                }
+
+                oDom.setAttribute(
+                    "cx",
+                    String(
+                        oPoint.x
+                    )
+                );
+
+                oDom.setAttribute(
+                    "cy",
+                    String(
+                        oPoint.y
+                    )
+                );
+            },
+
+            _updateGauge: function (
+                oRoot,
+                nUtilization
+            ) {
+                var oNeedle =
+                    oRoot.querySelector(
+                        ".dozGaugeNeedle"
+                    );
+
+                var oValue =
+                    oRoot.querySelector(
+                        ".dozGaugeValue"
+                    );
+
+                var nSafe;
+                var nAngle;
+
+                if (
+                    !Number.isFinite(
+                        Number(
+                            nUtilization
+                        )
+                    )
+                ) {
+                    if (oValue) {
+                        oValue.textContent =
+                            "Sin datos";
+                    }
+
+                    if (oNeedle) {
+                        oNeedle.style.transform =
+                            "rotate(-90deg)";
+                    }
+
+                    return;
+                }
+
+                nSafe =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            Number(
+                                nUtilization
+                            )
+                        )
+                    );
+
+                nAngle =
+                    -90 +
+                    (
+                        nSafe *
+                        1.8
+                    );
+
+                if (oValue) {
+                    oValue.textContent =
+                        nSafe.toFixed(
+                            0
+                        ) +
+                        "%";
+                }
+
+                if (oNeedle) {
+                    oNeedle.style.transform =
+                        "rotate(" +
+                        nAngle +
+                        "deg)";
+                }
+            },
+
+            onVerDetalleOrdenes: function () {
+                this._logDetalle(
+                    "ORDENES",
+                    "Resumen de carga operativa por estado"
+                );
+            },
+
+            onVerDetalleHoras: function () {
+                this._logDetalle(
+                    "HORAS",
+                    "Evolución de horas programadas vs reales"
+                );
+            },
+
+            onVerDetalleRecursos: function () {
+                this._logDetalle(
+                    "RECURSOS",
+                    "Recursos y utilización"
+                );
+            },
+
+            onVerDetalleCausa: function () {
+                this._logDetalle(
+                    "CAUSAS",
+                    "Principales causas de presión"
+                );
+            },
+
+            onVerDetalleCliente: function () {
+                this._logDetalle(
+                    "CLIENTES_ELEVADORES",
+                    "Clientes / elevadores con mayor carga"
+                );
+            },
+
+            onVerTodasProximas: function () {
+                this._logDetalle(
+                    "ORDENES_PROXIMAS",
+                    "Órdenes próximas a vencer"
+                );
+            },
+
+            _logDetalle: function (
+                sSeccion,
+                sDescripcion
+            ) {
+                console.log(
+                    "[DOZ DETALLE]",
+                    {
+                        seccion:
+                            sSeccion,
+                        descripcion:
+                            sDescripcion,
+                        filtros:
+                            this._getFilters()
+                    }
+                );
+
+                MessageToast.show(
+                    "Detalle: " +
+                    sDescripcion
+                );
+            },
+
+            _getInitialData: function () {
+                return {
+                    busy:
+                        false,
+
+                    operationalBusy:
+                        false,
+
+                    confirmationBusy:
+                        false,
+
+                    filtros: {
+                        periodo:
+                            "2026",
+                        fechaDesde:
+                            "01/01/2026",
+                        fechaHasta:
+                            "31/12/2026",
+                        zona:
+                            "ALL",
+                        supervisor:
+                            "ALL",
+                        tipoOrden:
+                            "ALL"
+                    },
+
+                    catalogos: {
+                        periodos: [
+                            {
+                                key:
+                                    "2028",
+                                text:
+                                    "2028"
+                            },
+                            {
+                                key:
+                                    "2027",
+                                text:
+                                    "2027"
+                            },
+                            {
+                                key:
+                                    "2026",
+                                text:
+                                    "2026"
+                            },
+                            {
+                                key:
+                                    "2025",
+                                text:
+                                    "2025"
+                            },
+                            {
+                                key:
+                                    "2024",
+                                text:
+                                    "2024"
+                            }
+                        ],
+
+                        zonas: [
+                            {
+                                key:
+                                    "ALL",
+                                text:
+                                    "Todas"
+                            }
+                        ],
+
+                        supervisores: [
+                            {
+                                key:
+                                    "ALL",
+                                text:
+                                    "Todos"
+                            }
+                        ],
+
+                        tiposOrden: [
+                            {
+                                key:
+                                    "ALL",
+                                text:
+                                    "Todos"
+                            }
+                        ]
+                    },
+
+                    kpis: {
+                        indicePresion: {
+                            texto:
+                                "Sin datos",
+                            estado:
+                                "Pendiente",
+                            nivel:
+                                "Fórmula pendiente"
+                        },
+
+                        ordenesAbiertas: {
+                            valor:
+                                "0",
+                            porcentaje:
+                                "Sin datos"
+                        },
+
+                        ordenesVencidas: {
+                            valor:
+                                "0",
+                            porcentaje:
+                                "Sin datos"
+                        },
+
+                        horasProgramadas: {
+                            texto:
+                                "Sin datos"
+                        },
+
+                        horasReales: {
+                            texto:
+                                "Sin datos",
+                            variacion:
+                                "Sin datos"
+                        },
+
+                        recursosDisponibles: {
+                            texto:
+                                "Sin datos",
+                            utilizacion:
+                                "Utilización: Sin datos"
+                        }
+                    },
+
+                    totalOrdenesAbiertas:
+                        "0",
+
+                    resumenEstados:
+                        [],
+
+                    evolucionHoras:
+                        [],
+
+                    horasResumen: {
+                        programadas:
+                            "Sin datos",
+                        reales:
+                            "Sin datos",
+                        variacion:
+                            "Sin datos"
+                    },
+
+                    recursos: {
+                        utilizacion:
+                            null,
+                        utilizacionTexto:
+                            "Sin datos",
+
+                        asignados: {
+                            mecanicos:
+                                "Sin datos",
+                            ayudantes:
+                                "Sin datos"
+                        },
+
+                        disponibles: {
+                            mecanicos:
+                                "Sin datos",
+                            ayudantes:
+                                "Sin datos"
+                        }
+                    },
+
+                    causasPresion:
+                        [],
+
+                    clientesCarga:
+                        [],
+
+                    ordenesVencer:
+                        [],
+
+                    chart: {
+                        programadas:
+                            [],
+                        reales:
+                            [],
+                        max:
+                            0
+                    },
+
+                    meta:
+                        {}
+                };
+            }
         }
-    });
+    );
 });

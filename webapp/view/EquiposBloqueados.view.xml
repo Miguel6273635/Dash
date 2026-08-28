@@ -10,7 +10,9 @@
         id="equiposBloqueadosPage"
         showHeader="false"
         enableScrolling="true"
-        class="ebPage">
+        class="ebPage"
+        busy="{dashboard>/busy}"
+        busyIndicatorDelay="0">
 
         <content>
             <VBox class="ebDashboardShell">
@@ -64,17 +66,9 @@
                             width="100%"
                             class="ebFilterControl">
 
-                            <core:Item
-                                key="ACTUAL"
-                                text="Mes actual" />
-
-                            <core:Item
-                                key="ANTERIOR"
-                                text="Mes anterior" />
-
-                            <core:Item
-                                key="TRIMESTRE"
-                                text="Trimestre actual" />
+                            <core:Item key="ACTUAL" text="Mes actual" />
+                            <core:Item key="ANTERIOR" text="Mes anterior" />
+                            <core:Item key="TRIMESTRE" text="Trimestre actual" />
                         </Select>
                     </VBox>
 
@@ -114,29 +108,12 @@
                             width="100%"
                             class="ebFilterControl">
 
-                            <core:Item
-                                key="TODAS"
-                                text="Todas" />
-
-                            <core:Item
-                                key="Norte"
-                                text="Norte" />
-
-                            <core:Item
-                                key="Centro"
-                                text="Centro" />
-
-                            <core:Item
-                                key="Sur"
-                                text="Sur" />
-
-                            <core:Item
-                                key="Este"
-                                text="Este" />
-
-                            <core:Item
-                                key="Oeste"
-                                text="Oeste" />
+                            <core:Item key="TODAS" text="Todas" />
+                            <core:Item key="Norte" text="Norte" />
+                            <core:Item key="Centro" text="Centro" />
+                            <core:Item key="Sur" text="Sur" />
+                            <core:Item key="Este" text="Este" />
+                            <core:Item key="Oeste" text="Oeste" />
                         </Select>
                     </VBox>
 
@@ -150,29 +127,12 @@
                             width="100%"
                             class="ebFilterControl">
 
-                            <core:Item
-                                key="TODOS"
-                                text="Todos" />
-
-                            <core:Item
-                                key="Cliente A"
-                                text="Cliente A" />
-
-                            <core:Item
-                                key="Cliente B"
-                                text="Cliente B" />
-
-                            <core:Item
-                                key="Cliente C"
-                                text="Cliente C" />
-
-                            <core:Item
-                                key="Cliente D"
-                                text="Cliente D" />
-
-                            <core:Item
-                                key="Cliente E"
-                                text="Cliente E" />
+                            <core:Item key="TODOS" text="Todos" />
+                            <core:Item key="Cliente A" text="Cliente A" />
+                            <core:Item key="Cliente B" text="Cliente B" />
+                            <core:Item key="Cliente C" text="Cliente C" />
+                            <core:Item key="Cliente D" text="Cliente D" />
+                            <core:Item key="Cliente E" text="Cliente E" />
                         </Select>
                     </VBox>
 
@@ -186,17 +146,9 @@
                             width="100%"
                             class="ebFilterControl">
 
-                            <core:Item
-                                key="TODOS"
-                                text="Todos" />
-
-                            <core:Item
-                                key="Bloqueado"
-                                text="Bloqueado" />
-
-                            <core:Item
-                                key="En gestión"
-                                text="En gestión" />
+                            <core:Item key="TODOS" text="Todos" />
+                            <core:Item key="Bloqueado" text="Bloqueado" />
+                            <core:Item key="En gestión" text="En gestión" />
                         </Select>
                     </VBox>
 
@@ -210,29 +162,12 @@
                             width="100%"
                             class="ebFilterControl">
 
-                            <core:Item
-                                key="TODOS"
-                                text="Todos" />
-
-                            <core:Item
-                                key="Ana Martínez"
-                                text="Ana Martínez" />
-
-                            <core:Item
-                                key="Luis Ramírez"
-                                text="Luis Ramírez" />
-
-                            <core:Item
-                                key="Mario Gómez"
-                                text="Mario Gómez" />
-
-                            <core:Item
-                                key="Carlos Pérez"
-                                text="Carlos Pérez" />
-
-                            <core:Item
-                                key="Sofía Torres"
-                                text="Sofía Torres" />
+                            <core:Item key="TODOS" text="Todos" />
+                            <core:Item key="Ana Martínez" text="Ana Martínez" />
+                            <core:Item key="Luis Ramírez" text="Luis Ramírez" />
+                            <core:Item key="Mario Gómez" text="Mario Gómez" />
+                            <core:Item key="Carlos Pérez" text="Carlos Pérez" />
+                            <core:Item key="Sofía Torres" text="Sofía Torres" />
                         </Select>
                     </VBox>
 
@@ -256,8 +191,6 @@
                 <FlexBox
                     class="ebKpiGrid"
                     wrap="Wrap">
-
-                    <!-- KPI: Equipos bloqueados totales -->
 
                     <VBox class="ebKpiCard ebKpiBlue">
                         <HBox
@@ -294,8 +227,6 @@
                             class="ebKpiLink" />
                     </VBox>
 
-                    <!-- KPI: Órdenes afectadas -->
-
                     <VBox class="ebKpiCard ebKpiOrange">
                         <HBox
                             class="ebKpiMain"
@@ -330,8 +261,6 @@
                             press=".onKpiDetail"
                             class="ebKpiLink" />
                     </VBox>
-
-                    <!-- KPI: Bloqueados mayores a 30 días -->
 
                     <VBox class="ebKpiCard ebKpiRed">
                         <HBox
@@ -368,8 +297,6 @@
                             class="ebKpiLink" />
                     </VBox>
 
-                    <!-- KPI: Equipos críticos -->
-
                     <VBox class="ebKpiCard ebKpiPurple">
                         <HBox
                             class="ebKpiMain"
@@ -404,8 +331,6 @@
                             press=".onKpiDetail"
                             class="ebKpiLink" />
                     </VBox>
-
-                    <!-- KPI: Pendientes de desbloqueo -->
 
                     <VBox class="ebKpiCard ebKpiGreen">
                         <HBox
@@ -445,15 +370,12 @@
 
                 <!-- =====================================================
                      PRIMERA FILA ANALÍTICA
-                     Motivos + Gestión + Clientes + Dona
                      ===================================================== -->
 
                 <FlexBox
                     class="ebAnalyticsRow ebAnalyticsRowTop"
                     wrap="NoWrap"
                     alignItems="Stretch">
-
-                    <!-- Principales motivos de bloqueo -->
 
                     <VBox class="ebPanel ebPanelQuarter">
                         <HBox
@@ -475,8 +397,6 @@
                             sanitizeContent="false"
                             class="ebHtmlChart" />
                     </VBox>
-
-                    <!-- Estado de gestión del desbloqueo -->
 
                     <VBox class="ebPanel ebPanelQuarter">
                         <HBox
@@ -553,7 +473,7 @@
 
                             <HBox class="ebManagementValues">
                                 <Text
-                                    text="248"
+                                    text="{dashboard>/kpis/totalBloqueados}"
                                     class="ebManagementValue" />
 
                                 <Text
@@ -562,8 +482,6 @@
                             </HBox>
                         </HBox>
                     </VBox>
-
-                    <!-- Clientes con mayor afectación -->
 
                     <VBox class="ebPanel ebPanelQuarter">
                         <HBox
@@ -599,11 +517,9 @@
                                 src="sap-icon://message-success" />
 
                             <Text
-                                text="Cliente A y E concentran el 45% del total de órdenes afectadas." />
+                                text="Concentración de órdenes afectadas por cliente." />
                         </HBox>
                     </VBox>
-
-                    <!-- Afectación en órdenes / Dona -->
 
                     <VBox class="ebPanel ebPanelQuarter ebPanelDonut">
                         <HBox
@@ -633,15 +549,12 @@
 
                 <!-- =====================================================
                      SEGUNDA FILA ANALÍTICA
-                     Antigüedad + Evolución + Matriz
                      ===================================================== -->
 
                 <FlexBox
                     class="ebAnalyticsRow ebAnalyticsRowBottom"
                     wrap="NoWrap"
                     alignItems="Stretch">
-
-                    <!-- Antigüedad de equipos bloqueados -->
 
                     <VBox class="ebPanel ebPanelAge">
                         <HBox
@@ -668,51 +581,42 @@
 
                             <VBox class="ebAgeSummaryCard ebAgeBlue">
                                 <HBox alignItems="Center">
-
                                     <VBox class="ebAgeIconBox">
-                                        <core:Icon
-                                            src="sap-icon://locked" />
+                                        <core:Icon src="sap-icon://locked" />
                                     </VBox>
 
                                     <VBox>
                                         <Text text="Total equipos" />
-
                                         <ObjectNumber
-                                            number="248" />
+                                            number="{dashboard>/ageSummary/total}" />
                                     </VBox>
                                 </HBox>
                             </VBox>
 
                             <VBox class="ebAgeSummaryCard ebAgePurple">
                                 <HBox alignItems="Center">
-
                                     <VBox class="ebAgeIconBox">
-                                        <core:Icon
-                                            src="sap-icon://calendar" />
+                                        <core:Icon src="sap-icon://calendar" />
                                     </VBox>
 
                                     <VBox>
                                         <Text text="&gt; 30 días" />
-
                                         <ObjectNumber
-                                            number="86" />
+                                            number="{dashboard>/ageSummary/over30}" />
                                     </VBox>
                                 </HBox>
                             </VBox>
 
                             <VBox class="ebAgeSummaryCard ebAgeRed">
                                 <HBox alignItems="Center">
-
                                     <VBox class="ebAgeIconBox">
-                                        <core:Icon
-                                            src="sap-icon://lateness" />
+                                        <core:Icon src="sap-icon://lateness" />
                                     </VBox>
 
                                     <VBox>
                                         <Text text="% &gt; 30 días" />
-
                                         <ObjectNumber
-                                            number="34.7"
+                                            number="{dashboard>/ageSummary/percentOver30}"
                                             unit="%" />
                                     </VBox>
                                 </HBox>
@@ -724,8 +628,6 @@
                             sanitizeContent="false"
                             class="ebHtmlChart" />
                     </VBox>
-
-                    <!-- Evolución de bloqueos y desbloqueos -->
 
                     <VBox class="ebPanel ebPanelEvolution">
                         <HBox
@@ -754,8 +656,6 @@
                             class="ebHtmlChart" />
                     </VBox>
 
-                    <!-- Matriz de criticidad -->
-
                     <VBox class="ebPanel ebPanelMatrix">
                         <HBox
                             class="ebPanelHeader"
@@ -780,8 +680,6 @@
 
                 <VBox class="ebTablePanel">
 
-                    <!-- Barra superior de la tabla -->
-
                     <HBox
                         class="ebTableToolbar"
                         alignItems="Center"
@@ -796,8 +694,7 @@
                                 alignItems="Center"
                                 justifyContent="Center">
 
-                                <core:Icon
-                                    src="sap-icon://table-view" />
+                                <core:Icon src="sap-icon://table-view" />
                             </VBox>
 
                             <VBox>
@@ -875,224 +772,223 @@
                         </HBox>
                     </HBox>
 
-                    <!-- Tabla -->
                     <Table
-    id="equiposTable"
-    width="100%"
-    fixedLayout="true"
-    inset="false"
-    showSeparators="Inner"
-    items="{dashboard>/equipos}"
-    class="ebEquipmentTable">
+                        id="equiposTable"
+                        width="100%"
+                        fixedLayout="true"
+                        inset="false"
+                        showSeparators="Inner"
+                        items="{dashboard>/equipos}"
+                        class="ebEquipmentTable">
 
-    <columns>
-        <Column width="8%">
-            <Text
-                text="Equipo / Elevador"
-                wrapping="true" />
-        </Column>
+                        <columns>
 
-        <Column
-            id="colCliente"
-            width="7%">
+                            <Column width="8%">
+                                <Text
+                                    text="Equipo / Elevador"
+                                    wrapping="true" />
+                            </Column>
 
-            <Text
-                text="Cliente"
-                wrapping="true" />
-        </Column>
+                            <Column
+                                id="colCliente"
+                                width="7%">
 
-        <Column
-            id="colZona"
-            width="5%">
+                                <Text
+                                    text="Cliente"
+                                    wrapping="true" />
+                            </Column>
 
-            <Text
-                text="Zona"
-                wrapping="true" />
-        </Column>
+                            <Column
+                                id="colZona"
+                                width="5%">
 
-        <Column
-            width="8%"
-            hAlign="Center">
+                                <Text
+                                    text="Zona"
+                                    wrapping="true" />
+                            </Column>
 
-            <Text
-                text="Estatus"
-                wrapping="true"
-                textAlign="Center" />
-        </Column>
+                            <Column
+                                width="8%"
+                                hAlign="Center">
 
-        <Column
-            id="colMotivo"
-            width="14%">
+                                <Text
+                                    text="Estatus"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
 
-            <Text
-                text="Motivo de bloqueo"
-                wrapping="true" />
-        </Column>
+                            <Column
+                                id="colMotivo"
+                                width="14%">
 
-        <Column
-            width="8%"
-            hAlign="Center">
+                                <Text
+                                    text="Motivo de bloqueo"
+                                    wrapping="true" />
+                            </Column>
 
-            <Text
-                text="Fecha de bloqueo"
-                wrapping="true"
-                textAlign="Center" />
-        </Column>
+                            <Column
+                                width="8%"
+                                hAlign="Center">
 
-        <Column
-            width="6%"
-            hAlign="Center">
+                                <Text
+                                    text="Fecha de bloqueo"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
 
-            <Text
-                text="Días bloqueado"
-                wrapping="true"
-                textAlign="Center" />
-        </Column>
+                            <Column
+                                width="6%"
+                                hAlign="Center">
 
-        <Column
-            width="7%"
-            hAlign="Center">
+                                <Text
+                                    text="Días bloqueado"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
 
-            <Text
-                text="Órdenes afectadas"
-                wrapping="true"
-                textAlign="Center" />
-        </Column>
+                            <Column
+                                width="7%"
+                                hAlign="Center">
 
-        <Column
-            id="colResponsable"
-            width="9%">
+                                <Text
+                                    text="Órdenes afectadas"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
 
-            <Text
-                text="Responsable"
-                wrapping="true" />
-        </Column>
+                            <Column
+                                id="colResponsable"
+                                width="9%">
 
-        <Column
-            id="colAccion"
-            width="12%">
+                                <Text
+                                    text="Responsable"
+                                    wrapping="true" />
+                            </Column>
 
-            <Text
-                text="Próxima acción"
-                wrapping="true" />
-        </Column>
-<Column
-    width="9%"
-    hAlign="Center">
+                            <Column
+                                id="colAccion"
+                                width="12%">
 
-    <Text
-        text="Fecha compromiso"
-        wrapping="true"
-        textAlign="Center" />
-</Column>
+                                <Text
+                                    text="Próxima acción"
+                                    wrapping="true" />
+                            </Column>
 
-<Column
-    width="7%"
-    hAlign="Center">
+                            <Column
+                                width="9%"
+                                hAlign="Center">
 
-    <Text
-        text="Prioridad"
-        wrapping="true"
-        textAlign="Center" />
-</Column>
-     
-    </columns>
+                                <Text
+                                    text="Fecha compromiso"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
 
-    <items>
-        <ColumnListItem
-            type="Active"
-            press=".onEquipoPress"
-            vAlign="Middle">
+                            <Column
+                                width="7%"
+                                hAlign="Center">
 
-            <cells>
-                <Link
-                    text="{dashboard>equipo}"
-                    press=".onEquipoPress"
-                    wrapping="false"
-                    class="ebEquipmentLink" />
+                                <Text
+                                    text="Prioridad"
+                                    wrapping="true"
+                                    textAlign="Center" />
+                            </Column>
+                        </columns>
 
-                <Text
-                    text="{dashboard>cliente}"
-                    wrapping="true" />
+                        <items>
 
-                <Text
-                    text="{dashboard>zona}"
-                    wrapping="true" />
+                            <ColumnListItem
+                                type="Active"
+                                press=".onEquipoPress"
+                                vAlign="Middle">
 
-                <Text
-                    text="{dashboard>estatus}"
-                    class="ebStatusPill">
+                                <cells>
 
-                    <customData>
-                        <core:CustomData
-                            key="status"
-                            value="{dashboard>estatusKey}"
-                            writeToDom="true" />
-                    </customData>
-                </Text>
+                                    <Link
+                                        text="{dashboard>equipo}"
+                                        press=".onEquipoPress"
+                                        wrapping="false"
+                                        class="ebEquipmentLink" />
 
-                <Text
-                    text="{dashboard>motivo}"
-                    wrapping="true"
-                    maxLines="2" />
+                                    <Text
+                                        text="{dashboard>cliente}"
+                                        wrapping="true" />
 
-                <Text
-                    text="{dashboard>fechaBloqueo}"
-                    wrapping="false"
-                    textAlign="Center" />
+                                    <Text
+                                        text="{dashboard>zona}"
+                                        wrapping="true" />
 
-                <ObjectNumber
-                    number="{dashboard>diasBloqueado}"
-                    state="{
-                        path: 'dashboard>diasBloqueado',
-                        formatter: '.formatDiasState'
-                    }"
-                    class="ebDaysNumber" />
+                                    <Text
+                                        text="{dashboard>estatus}"
+                                        class="ebStatusPill">
 
-                <ObjectNumber
-                    number="{dashboard>ordenesAfectadas}"
-                    class="ebOrdersNumber" />
+                                        <customData>
+                                            <core:CustomData
+                                                key="status"
+                                                value="{dashboard>estatusKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </Text>
 
-                <Text
-                    text="{dashboard>responsable}"
-                    wrapping="true"
-                    maxLines="2" />
+                                    <Text
+                                        text="{dashboard>motivo}"
+                                        wrapping="true"
+                                        maxLines="2" />
 
-                <Text
-                    text="{dashboard>proximaAccion}"
-                    wrapping="true"
-                    maxLines="2" />
+                                    <Text
+                                        text="{dashboard>fechaBloqueo}"
+                                        wrapping="false"
+                                        textAlign="Center" />
 
-                <HBox
-                    alignItems="Center"
-                    justifyContent="Center"
-                    class="ebCommitmentDate">
+                                    <ObjectNumber
+                                        number="{dashboard>diasBloqueado}"
+                                        state="{
+                                            path: 'dashboard>diasBloqueado',
+                                            formatter: '.formatDiasState'
+                                        }"
+                                        class="ebDaysNumber" />
 
-                    <core:Icon src="sap-icon://calendar" />
+                                    <ObjectNumber
+                                        number="{dashboard>ordenesAfectadas}"
+                                        class="ebOrdersNumber" />
 
-                    <Text
-                        text="{dashboard>fechaCompromiso}"
-                        wrapping="false" />
-                </HBox>
+                                    <Text
+                                        text="{dashboard>responsable}"
+                                        wrapping="true"
+                                        maxLines="2" />
 
-                <Text
-                    text="{dashboard>prioridad}"
-                    class="ebPriorityPill">
+                                    <Text
+                                        text="{dashboard>proximaAccion}"
+                                        wrapping="true"
+                                        maxLines="2" />
 
-                    <customData>
-                        <core:CustomData
-                            key="priority"
-                            value="{dashboard>prioridadKey}"
-                            writeToDom="true" />
-                    </customData>
-                </Text>
-            </cells>
-        </ColumnListItem>
-    </items>
-</Table>
-                   
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="ebCommitmentDate">
 
-                    <!-- Pie de tabla -->
+                                        <core:Icon src="sap-icon://calendar" />
+
+                                        <Text
+                                            text="{dashboard>fechaCompromiso}"
+                                            wrapping="false" />
+                                    </HBox>
+
+                                    <Text
+                                        text="{dashboard>prioridad}"
+                                        class="ebPriorityPill">
+
+                                        <customData>
+                                            <core:CustomData
+                                                key="priority"
+                                                value="{dashboard>prioridadKey}"
+                                                writeToDom="true" />
+                                        </customData>
+                                    </Text>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
 
                     <HBox
                         class="ebTableFooter"
@@ -1103,8 +999,7 @@
                             alignItems="Center"
                             class="ebLastUpdated">
 
-                            <core:Icon
-                                src="sap-icon://history" />
+                            <core:Icon src="sap-icon://history" />
 
                             <Text
                                 text="Última actualización: {dashboard>/lastUpdated}" />

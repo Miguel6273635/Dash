@@ -21,773 +21,628 @@ sap.ui.define([
         "mantenimiento.controller.DetalleMecanicos",
         {
             onInit: function () {
-                var iYear =
-                    new Date()
-                        .getFullYear();
+                var iYear = 2026;
 
                 this._loadScreenStyles();
 
-                this._oModel =
-                    new JSONModel(
-                        this._getInitialData(
-                            iYear
-                        )
-                    );
+                this._oModel = new JSONModel(
+                    this._getInitialData(
+                        iYear
+                    )
+                );
 
                 this._oModel.setSizeLimit(
                     5000
                 );
 
-                this.getView()
-                    .setModel(
-                        this._oModel,
-                        "detalle"
+                this.getView().setModel(
+                    this._oModel,
+                    "detalle"
+                );
+
+                this._iLoadRequest = 0;
+
+                /*
+                 * SOLO LA PRIMERA CONSULTA:
+                 * 01/08/2026 - 25/08/2026
+                 */
+                this._loadData(
+                    {
+                        periodo: "2026",
+                        fechaDesde: "01/08/2026",
+                        fechaHasta: "25/08/2026",
+                        zona: "TODAS",
+                        supervisor: "TODOS",
+                        turno: "TODOS",
+                        tipoServicio: "TODAS",
+                        especialidad: "TODAS",
+                        estado: "TODOS"
+                    },
+                    false,
+                    true
+                );
+            },
+
+            _loadScreenStyles: function () {
+                var sStyleId =
+                    "detalleMecanicosStyles";
+
+                var oOldStyle =
+                    document.getElementById(
+                        sStyleId
                     );
 
-                this._iLoadRequest =
-                    0;
+                var sCssUrl;
 
+                if (
+                    oOldStyle &&
+                    oOldStyle.parentNode
+                ) {
+                    oOldStyle.parentNode.removeChild(
+                        oOldStyle
+                    );
+                }
+
+                sCssUrl = sap.ui.require.toUrl(
+                    "mantenimiento/css/DetalleMecanicos.css"
+                );
+
+                sCssUrl +=
+                    "?version=20260821_01";
+
+                includeStylesheet(
+                    sCssUrl,
+                    sStyleId
+                );
+            },
+
+            _getODataModel: function () {
+                var oComponent =
+                    this.getOwnerComponent();
+
+                return (
+                    oComponent &&
+                    oComponent.getModel(
+                        "dashboardOData"
+                    )
+                ) || (
+                    oComponent &&
+                    oComponent.getModel()
+                );
+            },
+
+            _buildYearCatalog: function (
+                iSelectedYear
+            ) {
+                var iCurrentYear =
+                    new Date()
+                        .getFullYear();
+
+                var iStart =
+                    Math.min(
+                        iCurrentYear - 5,
+                        Number(
+                            iSelectedYear
+                        ) - 2
+                    );
+
+                var iEnd =
+                    Math.max(
+                        iCurrentYear + 1,
+                        Number(
+                            iSelectedYear
+                        ) + 2
+                    );
+
+                var aYears = [];
+                var iYear;
+
+                for (
+                    iYear = iEnd;
+                    iYear >= iStart;
+                    iYear--
+                ) {
+                    aYears.push({
+                        key: String(iYear),
+                        text: String(iYear)
+                    });
+                }
+
+                return aYears;
+            },
+
+            _getFilters: function () {
+                var mFilters =
+                    this._oModel.getProperty(
+                        "/filters"
+                    ) || {};
+
+                return {
+                    periodo:
+                        mFilters.periodo,
+
+                    fechaDesde:
+                        mFilters.fechaDesde,
+
+                    fechaHasta:
+                        mFilters.fechaHasta,
+
+                    zona:
+                        mFilters.zona,
+
+                    supervisor:
+                        mFilters.supervisor,
+
+                    turno:
+                        mFilters.turno,
+
+                    tipoServicio:
+                        mFilters.tipoServicio,
+
+                    especialidad:
+                        mFilters.especialidad,
+
+                    estado:
+                        mFilters.estado
+                };
+            },
+
+            onApplyFilters: function () {
+                var oFilters =
+                    this._getFilters();
+
+                if (
+                    !oFilters.fechaDesde ||
+                    !oFilters.fechaHasta
+                ) {
+                    MessageBox.warning(
+                        "Selecciona fecha desde y fecha hasta."
+                    );
+
+                    return;
+                }
+
+                /*
+                 * A PARTIR DE AQUÍ se usan exactamente
+                 * las fechas seleccionadas por el usuario.
+                 */
                 this._loadData(
-                    this._getFilters(),
+                    oFilters,
+                    true,
                     false
                 );
             },
 
-            _loadScreenStyles:
-                function () {
-                    var sStyleId =
-                        "detalleMecanicosStyles";
-
-                    var oOldStyle =
-                        document.getElementById(
-                            sStyleId
-                        );
-
-                    var sCssUrl;
-
-                    if (
-                        oOldStyle &&
-                        oOldStyle.parentNode
-                    ) {
-                        oOldStyle.parentNode
-                            .removeChild(
-                                oOldStyle
-                            );
-                    }
-
-                    sCssUrl =
-                        sap.ui.require.toUrl(
-                            "mantenimiento/css/DetalleMecanicos.css"
-                        );
-
-                    sCssUrl +=
-                        "?version=20260821_01";
-
-                    includeStylesheet(
-                        sCssUrl,
-                        sStyleId
-                    );
-                },
-
-            _getODataModel:
-                function () {
-                    var oComponent =
-                        this.getOwnerComponent();
-
-                    return (
-                        oComponent &&
-                        oComponent.getModel(
-                            "dashboardOData"
-                        )
-                    ) ||
-                    (
-                        oComponent &&
-                        oComponent.getModel()
-                    );
-                },
-
-            _buildYearCatalog:
-                function (
-                    iSelectedYear
-                ) {
-                    var iCurrentYear =
-                        new Date()
-                            .getFullYear();
-
-                    var iStart =
-                        Math.min(
-                            iCurrentYear - 5,
-                            Number(
-                                iSelectedYear
-                            ) - 2
-                        );
-
-                    var iEnd =
-                        Math.max(
-                            iCurrentYear + 1,
-                            Number(
-                                iSelectedYear
-                            ) + 2
-                        );
-
-                    var aYears =
-                        [];
-
-                    var iYear;
-
-                    for (
-                        iYear = iEnd;
-                        iYear >= iStart;
-                        iYear--
-                    ) {
-                        aYears.push({
-                            key:
-                                String(
-                                    iYear
-                                ),
-
-                            text:
-                                String(
-                                    iYear
-                                )
-                        });
-                    }
-
-                    return aYears;
-                },
-
-            _getFilters:
-                function () {
-                    var mFilters =
-                        this._oModel
-                            .getProperty(
-                                "/filters"
-                            ) || {};
-
-                    return {
-                        periodo:
-                            mFilters.periodo,
-
-                        fechaDesde:
-                            mFilters.fechaDesde,
-
-                        fechaHasta:
-                            mFilters.fechaHasta,
-
-                        zona:
-                            mFilters.zona,
-
-                        supervisor:
-                            mFilters.supervisor,
-
-                        turno:
-                            mFilters.turno,
-
-                        tipoServicio:
-                            mFilters.tipoServicio,
-
-                        especialidad:
-                            mFilters.especialidad,
-
-                        estado:
-                            mFilters.estado
-                    };
-                },
-
-            onApplyFilters:
-                function () {
-                    var oFilters =
-                        this._getFilters();
-
-                    if (
-                        !oFilters.fechaDesde ||
-                        !oFilters.fechaHasta
-                    ) {
-                        MessageBox.warning(
-                            "Selecciona fecha desde y fecha hasta."
-                        );
-
-                        return;
-                    }
-
-                    this._loadData(
-                        oFilters,
-                        true
-                    );
-                },
-
-            onPeriodoChange:
-                function (
+            onPeriodoChange: function (
+                oEvent
+            ) {
+                var sYear =
                     oEvent
+                        .getSource()
+                        .getSelectedKey();
+
+                var iYear =
+                    Number(sYear);
+
+                if (
+                    !Number.isInteger(
+                        iYear
+                    ) ||
+                    iYear < 1900 ||
+                    iYear > 9999
                 ) {
-                    var sYear =
-                        oEvent
-                            .getSource()
-                            .getSelectedKey();
+                    return;
+                }
 
-                    var iYear =
-                        Number(
-                            sYear
-                        );
+                this._oModel.setProperty(
+                    "/filters/periodo",
+                    String(iYear)
+                );
 
-                    if (
-                        !Number.isInteger(
-                            iYear
-                        ) ||
-                        iYear < 1900 ||
-                        iYear > 9999
-                    ) {
-                        return;
-                    }
+                this._oModel.setProperty(
+                    "/filters/fechaDesde",
+                    "01/01/" +
+                    iYear
+                );
 
-                    this._oModel
-                        .setProperty(
-                            "/filters/periodo",
-                            String(
-                                iYear
-                            )
-                        );
+                this._oModel.setProperty(
+                    "/filters/fechaHasta",
+                    "31/12/" +
+                    iYear
+                );
+            },
 
-                    this._oModel
-                        .setProperty(
-                            "/filters/fechaDesde",
-                            "01/01/" +
-                            iYear
-                        );
+            onFechaChange: function () {
+                var sDesde =
+                    this._oModel.getProperty(
+                        "/filters/fechaDesde"
+                    ) || "";
 
-                    this._oModel
-                        .setProperty(
-                            "/filters/fechaHasta",
-                            "31/12/" +
-                            iYear
-                        );
-                },
+                var sHasta =
+                    this._oModel.getProperty(
+                        "/filters/fechaHasta"
+                    ) || "";
 
-            onFechaChange:
-                function () {
-                    var sDesde =
-                        this._oModel
-                            .getProperty(
-                                "/filters/fechaDesde"
-                            ) ||
-                        "";
-
-                    var sHasta =
-                        this._oModel
-                            .getProperty(
-                                "/filters/fechaHasta"
-                            ) ||
-                        "";
-
-                    var aDesde =
-                        sDesde.match(
-                            /^(\d{2})\/(\d{2})\/(\d{4})$/
-                        );
-
-                    var aHasta =
-                        sHasta.match(
-                            /^(\d{2})\/(\d{2})\/(\d{4})$/
-                        );
-
-                    if (
-                        aDesde &&
-                        aHasta &&
-                        aDesde[3] ===
-                            aHasta[3]
-                    ) {
-                        this._oModel
-                            .setProperty(
-                                "/filters/periodo",
-                                aDesde[3]
-                            );
-                    }
-                },
-
-            _loadData:
-                function (
-                    oFilters,
-                    bNotify
-                ) {
-                    var iRequest =
-                        ++this
-                            ._iLoadRequest;
-
-                    var oODataModel =
-                        this._getODataModel();
-
-                    this._oModel
-                        .setProperty(
-                            "/loading",
-                            true
-                        );
-
-                    console.log(
-                        "[DM CONTROLLER] _loadData:",
-                        oFilters
+                var aDesde =
+                    sDesde.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
                     );
 
-                    Service
-                        .getDashboardData(
-                            oODataModel,
-                            oFilters
-                        )
-                        .then(
-                            function (
-                                oRawData
-                            ) {
-                                var oMapped;
+                var aHasta =
+                    sHasta.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
 
-                                if (
-                                    iRequest !==
-                                    this._iLoadRequest
-                                ) {
-                                    return;
-                                }
-
-                                oMapped =
-                                    Mapper.mapData(
-                                        oRawData,
-                                        oFilters
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/catalogos",
-                                        oMapped.catalogos
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/kpis",
-                                        oMapped.kpis
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/turnos",
-                                        oMapped.turnos
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/utilTurno",
-                                        oMapped.utilTurno
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/utilTotal",
-                                        oMapped.utilTotal
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/zonas",
-                                        oMapped.zonas
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/estadoPlantilla",
-                                        oMapped.estadoPlantilla
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/servicios",
-                                        oMapped.servicios
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/presion",
-                                        oMapped.presion
-                                    );
-
-                                this._oModel
-                                    .setProperty(
-                                        "/meta",
-                                        oMapped.meta
-                                    );
-
-                                if (bNotify) {
-                                    MessageToast.show(
-                                        "Detalle de mecánicos actualizado"
-                                    );
-                                }
-                            }.bind(this)
-                        )
-                        .catch(
-                            function (
-                                oError
-                            ) {
-                                if (
-                                    iRequest !==
-                                    this._iLoadRequest
-                                ) {
-                                    return;
-                                }
-
-                                console.error(
-                                    "[DM CONTROLLER] Error:",
-                                    oError
-                                );
-
-                                MessageBox.error(
-                                    oError &&
-                                    oError.message
-                                        ? oError.message
-                                        : "Error al consultar los datos de SAP."
-                                );
-                            }.bind(this)
-                        )
-                        .finally(
-                            function () {
-                                if (
-                                    iRequest ===
-                                    this._iLoadRequest
-                                ) {
-                                    this._oModel
-                                        .setProperty(
-                                            "/loading",
-                                            false
-                                        );
-                                }
-                            }.bind(this)
-                        );
-                },
-
-            _getInitialData:
-                function (
-                    iYear
+                if (
+                    aDesde &&
+                    aHasta &&
+                    aDesde[3] ===
+                        aHasta[3]
                 ) {
-                    return {
-                        loading:
-                            false,
+                    this._oModel.setProperty(
+                        "/filters/periodo",
+                        aDesde[3]
+                    );
+                }
+            },
 
-                        filters: {
-                            periodo:
-                                String(
-                                    iYear
-                                ),
+            _loadData: function (
+                oFilters,
+                bNotify,
+                bInitialLoad
+            ) {
+                var iRequest =
+                    ++this._iLoadRequest;
 
-                            fechaDesde:
-                                "01/01/" +
-                                iYear,
+                var oODataModel =
+                    this._getODataModel();
 
-                            fechaHasta:
-                                "31/12/" +
-                                iYear,
+                this._oModel.setProperty(
+                    "/loading",
+                    true
+                );
 
-                            zona:
-                                "TODAS",
+                console.log(
+                    "[DM CONTROLLER] _loadData:",
+                    {
+                        filters:
+                            oFilters,
+                        initialLoad:
+                            Boolean(
+                                bInitialLoad
+                            )
+                    }
+                );
 
-                            supervisor:
-                                "TODOS",
+                Service.getDashboardData(
+                    oODataModel,
+                    oFilters,
+                    Boolean(
+                        bInitialLoad
+                    )
+                )
+                    .then(
+                        function (
+                            oRawData
+                        ) {
+                            var oMapped;
 
-                            turno:
-                                "TODOS",
+                            if (
+                                iRequest !==
+                                this._iLoadRequest
+                            ) {
+                                return;
+                            }
 
-                            tipoServicio:
-                                "TODAS",
+                            /*
+                             * Mapper SIEMPRE recibe las fechas
+                             * que realmente se usaron.
+                             */
+                            oMapped =
+                                Mapper.mapData(
+                                    oRawData,
+                                    oFilters
+                                );
 
-                            especialidad:
-                                "TODAS",
+                            this._oModel.setProperty(
+                                "/catalogos",
+                                oMapped.catalogos
+                            );
 
-                            estado:
-                                "TODOS"
-                        },
+                            this._oModel.setProperty(
+                                "/kpis",
+                                oMapped.kpis
+                            );
 
-                        catalogos: {
-                            periodos:
-                                this._buildYearCatalog(
-                                    iYear
-                                ),
+                            this._oModel.setProperty(
+                                "/turnos",
+                                oMapped.turnos
+                            );
 
-                            zonas: [
-                                {
-                                    key:
-                                        "TODAS",
+                            this._oModel.setProperty(
+                                "/utilTurno",
+                                oMapped.utilTurno
+                            );
 
-                                    text:
-                                        "Todas"
-                                }
-                            ],
+                            this._oModel.setProperty(
+                                "/utilTotal",
+                                oMapped.utilTotal
+                            );
 
-                            supervisores: [
-                                {
-                                    key:
-                                        "TODOS",
+                            this._oModel.setProperty(
+                                "/zonas",
+                                oMapped.zonas
+                            );
 
-                                    text:
-                                        "Todos"
-                                }
-                            ],
+                            this._oModel.setProperty(
+                                "/estadoPlantilla",
+                                oMapped.estadoPlantilla
+                            );
 
-                            turnos: [
-                                {
-                                    key:
-                                        "TODOS",
+                            this._oModel.setProperty(
+                                "/servicios",
+                                oMapped.servicios
+                            );
 
-                                    text:
-                                        "Todos"
-                                }
-                            ],
+                            this._oModel.setProperty(
+                                "/presion",
+                                oMapped.presion
+                            );
 
-                            tiposServicio: [
-                                {
-                                    key:
-                                        "TODAS",
+                            this._oModel.setProperty(
+                                "/meta",
+                                oMapped.meta
+                            );
 
-                                    text:
-                                        "Todas"
-                                }
-                            ],
+                            if (bNotify) {
+                                MessageToast.show(
+                                    "Detalle de mecánicos actualizado"
+                                );
+                            }
+                        }.bind(this)
+                    )
+                    .catch(
+                        function (
+                            oError
+                        ) {
+                            if (
+                                iRequest !==
+                                this._iLoadRequest
+                            ) {
+                                return;
+                            }
 
-                            especialidades: [
-                                {
-                                    key:
-                                        "TODAS",
+                            console.error(
+                                "[DM CONTROLLER] Error:",
+                                oError
+                            );
 
-                                    text:
-                                        "Todas"
-                                }
-                            ],
+                            MessageBox.error(
+                                oError &&
+                                oError.message
+                                    ? oError.message
+                                    : "Error al consultar los datos de SAP."
+                            );
+                        }.bind(this)
+                    )
+                    .finally(
+                        function () {
+                            if (
+                                iRequest ===
+                                this._iLoadRequest
+                            ) {
+                                this._oModel.setProperty(
+                                    "/loading",
+                                    false
+                                );
+                            }
+                        }.bind(this)
+                    );
+            },
 
-                            estados: [
-                                {
-                                    key:
-                                        "TODOS",
+            _getInitialData: function (
+                iYear
+            ) {
+                return {
+                    loading: false,
 
-                                    text:
-                                        "Todos"
-                                }
-                            ]
-                        },
+                    filters: {
+                        /*
+                         * La pantalla arranca mostrando
+                         * el mismo rango de la primera consulta.
+                         */
+                        periodo: "2026",
+                        fechaDesde: "01/08/2026",
+                        fechaHasta: "25/08/2026",
 
-                        kpis: {
-                            activos:
-                                "Sin datos",
+                        zona: "TODAS",
+                        supervisor: "TODOS",
+                        turno: "TODOS",
+                        tipoServicio: "TODAS",
+                        especialidad: "TODAS",
+                        estado: "TODOS"
+                    },
 
-                            disponibles:
-                                "Sin datos",
+                    catalogos: {
+                        periodos:
+                            this._buildYearCatalog(
+                                iYear
+                            ),
 
-                            disponiblesPct:
-                                "Sin datos",
+                        zonas: [
+                            {
+                                key: "TODAS",
+                                text: "Todas"
+                            }
+                        ],
 
-                            sobrecapacidad:
-                                "Sin datos",
-
-                            sobrecapacidadPct:
-                                "Sin datos",
-
-                            cobertura:
-                                "Sin datos"
-                        },
+                        supervisores: [
+                            {
+                                key: "TODOS",
+                                text: "Todos"
+                            }
+                        ],
 
                         turnos: [
                             {
-                                label:
-                                    "Diurno",
-                                value:
-                                    "Sin datos",
-                                pct:
-                                    0,
-                                pctText:
-                                    "Sin datos",
-                                tone:
-                                    "blue"
-                            },
-                            {
-                                label:
-                                    "Nocturno",
-                                value:
-                                    "Sin datos",
-                                pct:
-                                    0,
-                                pctText:
-                                    "Sin datos",
-                                tone:
-                                    "green"
-                            },
-                            {
-                                label:
-                                    "Fin de semana",
-                                value:
-                                    "Sin datos",
-                                pct:
-                                    0,
-                                pctText:
-                                    "Sin datos",
-                                tone:
-                                    "purple"
+                                key: "TODOS",
+                                text: "Todos"
                             }
                         ],
 
-                        utilTurno: [
+                        tiposServicio: [
                             {
-                                turno:
-                                    "Diurno",
-                                capacidad:
-                                    "Sin datos",
-                                carga:
-                                    "Sin datos",
-                                utilizacion:
-                                    "Sin datos",
-                                percentValue:
-                                    0,
-                                tone:
-                                    "green"
-                            },
-                            {
-                                turno:
-                                    "Nocturno",
-                                capacidad:
-                                    "Sin datos",
-                                carga:
-                                    "Sin datos",
-                                utilizacion:
-                                    "Sin datos",
-                                percentValue:
-                                    0,
-                                tone:
-                                    "orange"
-                            },
-                            {
-                                turno:
-                                    "Fin de semana",
-                                capacidad:
-                                    "Sin datos",
-                                carga:
-                                    "Sin datos",
-                                utilizacion:
-                                    "Sin datos",
-                                percentValue:
-                                    0,
-                                tone:
-                                    "red"
+                                key: "TODAS",
+                                text: "Todas"
                             }
                         ],
 
-                        utilTotal: {
-                            capacidad:
-                                "Sin datos",
+                        especialidades: [
+                            {
+                                key: "TODAS",
+                                text: "Todas"
+                            }
+                        ],
 
-                            carga:
-                                "Sin datos",
+                        estados: [
+                            {
+                                key: "TODOS",
+                                text: "Todos"
+                            }
+                        ]
+                    },
 
-                            utilizacion:
-                                "Sin datos",
+                    kpis: {
+                        activos: "Sin datos",
+                        disponibles: "Sin datos",
+                        disponiblesPct: "Sin datos",
+                        sobrecapacidad: "Sin datos",
+                        sobrecapacidadPct: "Sin datos",
+                        cobertura: "Sin datos"
+                    },
 
-                            percentValue:
-                                0,
-
-                            tone:
-                                "gray"
+                    turnos: [
+                        {
+                            label: "Diurno",
+                            value: "Sin datos",
+                            pct: 0,
+                            pctText: "Sin datos",
+                            tone: "blue"
                         },
+                        {
+                            label: "Nocturno",
+                            value: "Sin datos",
+                            pct: 0,
+                            pctText: "Sin datos",
+                            tone: "green"
+                        },
+                        {
+                            label: "Fin de semana",
+                            value: "Sin datos",
+                            pct: 0,
+                            pctText: "Sin datos",
+                            tone: "purple"
+                        }
+                    ],
 
-                        zonas:
-                            [],
+                    utilTurno: [
+                        {
+                            turno: "Diurno",
+                            capacidad: "Sin datos",
+                            carga: "Sin datos",
+                            utilizacion: "Sin datos",
+                            percentValue: 0,
+                            tone: "green"
+                        },
+                        {
+                            turno: "Nocturno",
+                            capacidad: "Sin datos",
+                            carga: "Sin datos",
+                            utilizacion: "Sin datos",
+                            percentValue: 0,
+                            tone: "orange"
+                        },
+                        {
+                            turno: "Fin de semana",
+                            capacidad: "Sin datos",
+                            carga: "Sin datos",
+                            utilizacion: "Sin datos",
+                            percentValue: 0,
+                            tone: "red"
+                        }
+                    ],
 
-                        presion:
-                            [],
+                    utilTotal: {
+                        capacidad: "Sin datos",
+                        carga: "Sin datos",
+                        utilizacion: "Sin datos",
+                        percentValue: 0,
+                        tone: "gray"
+                    },
 
-                        estadoPlantilla: [
-                            {
-                                label:
-                                    "Disponibles",
-                                value:
-                                    "0",
-                                pct:
-                                    "0.0%",
-                                tone:
-                                    "green"
-                            },
-                            {
-                                label:
-                                    "Dentro de capacidad",
-                                value:
-                                    "0",
-                                pct:
-                                    "0.0%",
-                                tone:
-                                    "blue"
-                            },
-                            {
-                                label:
-                                    "Cerca de saturación",
-                                value:
-                                    "0",
-                                pct:
-                                    "0.0%",
-                                tone:
-                                    "orange"
-                            },
-                            {
-                                label:
-                                    "Sobre capacidad",
-                                value:
-                                    "0",
-                                pct:
-                                    "0.0%",
-                                tone:
-                                    "red"
-                            },
-                            {
-                                label:
-                                    "Inactivos",
-                                value:
-                                    "0",
-                                pct:
-                                    "0.0%",
-                                tone:
-                                    "gray"
-                            }
-                        ],
+                    zonas: [],
+                    presion: [],
 
-                        servicios: [
-                            {
-                                label:
-                                    "Sin datos",
-                                programadas:
-                                    "Sin datos",
-                                reales:
-                                    "Sin datos",
-                                programadasLevel:
-                                    "8",
-                                realesLevel:
-                                    "8"
-                            },
-                            {
-                                label:
-                                    "Sin datos",
-                                programadas:
-                                    "Sin datos",
-                                reales:
-                                    "Sin datos",
-                                programadasLevel:
-                                    "8",
-                                realesLevel:
-                                    "8"
-                            },
-                            {
-                                label:
-                                    "Sin datos",
-                                programadas:
-                                    "Sin datos",
-                                reales:
-                                    "Sin datos",
-                                programadasLevel:
-                                    "8",
-                                realesLevel:
-                                    "8"
-                            }
-                        ],
+                    estadoPlantilla: [
+                        {
+                            label: "Disponibles",
+                            value: "0",
+                            pct: "0.0%",
+                            tone: "green"
+                        },
+                        {
+                            label: "Dentro de capacidad",
+                            value: "0",
+                            pct: "0.0%",
+                            tone: "blue"
+                        },
+                        {
+                            label: "Cerca de saturación",
+                            value: "0",
+                            pct: "0.0%",
+                            tone: "orange"
+                        },
+                        {
+                            label: "Sobre capacidad",
+                            value: "0",
+                            pct: "0.0%",
+                            tone: "red"
+                        },
+                        {
+                            label: "Inactivos",
+                            value: "0",
+                            pct: "0.0%",
+                            tone: "gray"
+                        }
+                    ],
 
-                        meta:
-                            {}
-                    };
-                }
+                    servicios: [
+                        {
+                            label: "Sin datos",
+                            programadas: "Sin datos",
+                            reales: "Sin datos",
+                            programadasLevel: "8",
+                            realesLevel: "8"
+                        },
+                        {
+                            label: "Sin datos",
+                            programadas: "Sin datos",
+                            reales: "Sin datos",
+                            programadasLevel: "8",
+                            realesLevel: "8"
+                        },
+                        {
+                            label: "Sin datos",
+                            programadas: "Sin datos",
+                            reales: "Sin datos",
+                            programadasLevel: "8",
+                            realesLevel: "8"
+                        }
+                    ],
+
+                    meta: {}
+                };
+            }
         }
     );
 });
