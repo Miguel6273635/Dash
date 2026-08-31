@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/HorasTrabajadasMapper"
-], function (HorasTrabajadasMapper) {
+    "mantenimiento/model/HorasTrabajadasMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (HorasTrabajadasMapper, RelatedData) {
     "use strict";
 
     function read(model, entitySet, filter) {
@@ -36,27 +37,21 @@ sap.ui.define([
     }
     function createEmpty(filters) { return HorasTrabajadasMapper.build(emptyRaw(), filters); }
     function load(model, filters) {
-        var entitySets = {
-            DashboardResourceDailySet: "resources",
-            DashboardOrderResourcesSet: "assignments",
-            DashboardOrderOperationsSet: "operations",
-            DashboardOrderConfirmationsSet: "confirmations",
-            DashboardOrderCausesSet: "causes",
-            DashboardFilterCatalogSet: "catalogs"
-        };
-        if (!model || typeof model.read !== "function") {
-            return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
-        }
-        return Promise.all([
-            read(model, "DashboardOrdersSet", ordersFilter(filters)),
-            Promise.all(Object.keys(entitySets).map(function (entitySet) { return optional(model, entitySet); }))
-        ]).then(function (response) {
-            var raw = emptyRaw();
-            raw.orders = response[0];
-            response[1].forEach(function (item) {
-                raw[entitySets[item.entitySet]] = item.records;
-                if (item.error) { raw.meta.unavailableEntitySets.push({ entitySet: item.entitySet, message: item.error }); }
-            });
+        var selectedRange = HorasTrabajadasMapper.range(filters);
+
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(filters),
+            orderRelations: [
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" },
+                { entitySet: "DashboardOrderOperationsSet", target: "operations" },
+                { entitySet: "DashboardOrderConfirmationsSet", target: "confirmations" },
+                { entitySet: "DashboardOrderCausesSet", target: "causes" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", selectedRange) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (raw) {
             raw.meta.ordersFilter = ordersFilter(filters);
             return { data: HorasTrabajadasMapper.build(raw, filters), rawData: raw };
         });

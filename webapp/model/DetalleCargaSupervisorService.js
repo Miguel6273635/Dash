@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/DetalleCargaSupervisorMapper"
-], function (Mapper) {
+    "mantenimiento/model/DetalleCargaSupervisorMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (Mapper, RelatedData) {
     "use strict";
 
     function read(model, entitySet, filter) {
@@ -29,22 +30,22 @@ sap.ui.define([
     function empty() { return { resources: [], assignments: [], operations: [], orders: [], materials: [], movements: [], catalogs: [], meta: { unavailableEntitySets: [] } }; }
     function createEmpty(filters) { return Mapper.build(empty(), filters); }
     function load(model, filters) {
-        var requests = [
-            { entitySet: "DashboardResourceDailySet", target: "resources", filter: rangeFilter("WorkDate", filters) },
-            { entitySet: "DashboardOrderResourcesSet", target: "assignments" },
-            { entitySet: "DashboardOrderOperationsSet", target: "operations", filter: rangeFilter("PlannedStartDate", filters) },
-            { entitySet: "DashboardOrdersSet", target: "orders", filter: ordersFilter(filters) },
-            { entitySet: "DashboardOrderMaterialsSet", target: "materials", filter: rangeFilter("RequiredDate", filters) },
-            { entitySet: "DashboardMaterialMovementsSet", target: "movements", filter: rangeFilter("MovementDate", filters) },
-            { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
-        ], raw = empty();
-        if (!model || typeof model.read !== "function") { return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado")); }
-        return Promise.all(requests.map(function (request) { return optional(model, request.entitySet, request.filter); })).then(function (results) {
-            results.forEach(function (result, index) {
-                raw[requests[index].target] = result.records;
-                if (result.error) { raw.meta.unavailableEntitySets.push({ entitySet: result.entitySet, message: result.error }); }
-            });
-            raw.meta.filters = requests.map(function (request) { return { entitySet: request.entitySet, filter: request.filter || "" }; });
+        var current = Mapper.range(filters);
+
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(filters),
+            orderRelations: [
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" },
+                { entitySet: "DashboardOrderOperationsSet", target: "operations" },
+                { entitySet: "DashboardOrderMaterialsSet", target: "materials" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", current) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ],
+            materialMovements: { entitySet: "DashboardMaterialMovementsSet", target: "movements", from: "materials" }
+        }).then(function (raw) {
+            raw.meta.ordersFilter = ordersFilter(filters);
             return { data: Mapper.build(raw, filters), rawData: raw };
         });
     }

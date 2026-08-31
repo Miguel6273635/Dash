@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/AnalisisGeneralMapper"
-], function (AnalisisGeneralMapper) {
+    "mantenimiento/model/AnalisisGeneralMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (AnalisisGeneralMapper, RelatedData) {
     "use strict";
 
     function read(model, entitySet, filter) {
@@ -36,25 +37,19 @@ sap.ui.define([
     }
     function createEmpty(filters) { return AnalisisGeneralMapper.build(emptyRaw(), filters); }
     function load(model, filters) {
-        var entities = {
-            DashboardOrderCausesSet: "causes",
-            DashboardOrderResourcesSet: "assignments",
-            DashboardResourceDailySet: "resources",
-            DashboardFilterCatalogSet: "catalogs"
-        };
-        if (!model || typeof model.read !== "function") {
-            return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
-        }
-        return Promise.all([
-            read(model, "DashboardOrdersSet", ordersFilter(filters)),
-            Promise.all(Object.keys(entities).map(function (entitySet) { return optional(model, entitySet); }))
-        ]).then(function (response) {
-            var raw = emptyRaw();
-            raw.orders = response[0];
-            response[1].forEach(function (item) {
-                raw[entities[item.entitySet]] = item.records;
-                if (item.error) { raw.meta.unavailableEntitySets.push({ entitySet: item.entitySet, message: item.error }); }
-            });
+        var range = AnalisisGeneralMapper.period(filters && filters.week || "2026-W26");
+
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(filters),
+            orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", range) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (raw) {
             raw.meta.ordersFilter = ordersFilter(filters);
             return { data: AnalisisGeneralMapper.build(raw, filters), rawData: raw };
         });

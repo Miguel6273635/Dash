@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/DetalleCumplimientoOrdenesMapper"
-], function (DetalleCumplimientoOrdenesMapper) {
+    "mantenimiento/model/DetalleCumplimientoOrdenesMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (DetalleCumplimientoOrdenesMapper, RelatedData) {
     "use strict";
 
     var AUXILIARY_SETS = {
@@ -145,7 +146,6 @@ sap.ui.define([
     function load(oModel, mFilters) {
         var oContext;
         var sOrdersFilter;
-        var aAuxiliaryNames;
 
         if (!oModel || typeof oModel.read !== "function") {
             return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
@@ -159,26 +159,23 @@ sap.ui.define([
         }
 
         sOrdersFilter = buildOrdersFilter(oContext);
-        aAuxiliaryNames = Object.keys(AUXILIARY_SETS);
-
-        return Promise.all([
-            readEntitySet(oModel, "DashboardOrdersSet", sOrdersFilter),
-            Promise.all(aAuxiliaryNames.map(function (sEntitySet) {
-                return readOptional(oModel, sEntitySet);
-            }))
-        ]).then(function (aResponses) {
+        return RelatedData.load(oModel, {
+            ordersFilter: sOrdersFilter,
+            orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", oContext) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (oRelatedRaw) {
             var oRawData = createRawData(oContext);
 
-            oRawData.orders = aResponses[0];
-            aResponses[1].forEach(function (oResponse) {
-                oRawData[AUXILIARY_SETS[oResponse.entitySet]] = oResponse.records;
-                if (oResponse.error) {
-                    oRawData.meta.unavailableEntitySets.push({
-                        entitySet: oResponse.entitySet,
-                        message: oResponse.error
-                    });
-                }
+            ["orders", "causes", "assignments", "resources", "catalogs"].forEach(function (sKey) {
+                oRawData[sKey] = oRelatedRaw[sKey] || [];
             });
+            oRawData.meta.unavailableEntitySets = oRelatedRaw.meta.unavailableEntitySets;
             oRawData.meta.ordersFilter = sOrdersFilter;
             oRawData.meta.generatedAt = new Date().toISOString();
             oRawData.meta.records = {

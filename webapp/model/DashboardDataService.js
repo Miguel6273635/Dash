@@ -3,7 +3,9 @@ sap.ui.define([
 ], function (DashboardMapper) {
     "use strict";
 
-    var PAGE_SIZE = 5000;
+    // Las entidades dependientes se consultan por lotes de OT ya filtradas.
+    // No se usa $top: el servicio debe devolver todos los registros del rango.
+    var ORDER_FILTER_BATCH_SIZE = 40;
     var TYPE_MAP = {
         PREVENTIVO: "SM01",
         CORRECTIVO: "SM02",
@@ -36,6 +38,10 @@ sap.ui.define([
         DashboardOrderMaterialsSet: [
             "MaterialRequirementId", "OrderId", "MaterialCategoryCode", "MaterialCategoryName",
             "BaseUnitCode", "PlannedQuantity", "IsPublishable"
+        ],
+        DashboardOrderResourcesSet: [
+            "OrderResourceId", "OrderId", "RoutingNumber", "OperationCounter", "ResourceId",
+            "PersonnelNumber", "RoleCode", "AssignmentTypeCode", "ValidFrom", "ValidTo"
         ],
         DashboardMaterialMovementsSet: [
             "MaterialMovementId", "MaterialRequirementId", "MovementDirectionCode",
@@ -70,15 +76,16 @@ sap.ui.define([
             "ActualStartDate", "IncludedInCalculation"
         ]
     };
-    var AUXILIARY_SETS = {
-        DashboardOrderCausesSet: "causes",
-        DashboardOrderMaterialsSet: "materials",
-        DashboardMaterialMovementsSet: "movements",
+    var INDEPENDENT_SETS = {
         DashboardServiceRequestsSet: "serviceRequests",
         DashboardEquipmentBlocksSet: "blocks",
+        DashboardFilterCatalogSet: "catalogs"
+    };
+    var ORDER_DEPENDENT_SETS = {
+        DashboardOrderCausesSet: "causes",
+        DashboardOrderMaterialsSet: "materials",
+        DashboardOrderResourcesSet: "assignments",
         DashboardBlockOrdersSet: "blockOrders",
-        DashboardFilterCatalogSet: "catalogs",
-        DashboardResourceDailySet: "resources",
         DashboardOrderOperationsSet: "operations",
         DashboardOrderConfirmationsSet: "confirmations"
     };
@@ -208,10 +215,7 @@ sap.ui.define([
     }
 
     function readEntitySet(oModel, sEntitySet, sFilter) {
-        var mUrlParameters = {
-            "$format": "json",
-            "$top": String(PAGE_SIZE)
-        };
+        var mUrlParameters = { "$format": "json" };
 
         if (SELECTS[sEntitySet]) {
             mUrlParameters.$select = SELECTS[sEntitySet].join(",");
@@ -237,12 +241,82 @@ sap.ui.define([
         });
     }
 
-    function readOptional(oModel, sEntitySet) {
-        return readEntitySet(oModel, sEntitySet, "").then(function (aRecords) {
+    function readOptional(oModel, sEntitySet, sFilter) {
+        return readEntitySet(oModel, sEntitySet, sFilter || "").then(function (aRecords) {
             return { entitySet: sEntitySet, records: aRecords, error: null };
         }).catch(function (oError) {
             return { entitySet: sEntitySet, records: [], error: oError.message };
         });
+    }
+
+    function buildValuesFilter(sField, aValues) {
+        return aValues.map(function (vValue) {
+            return sField + " eq '" + escapeODataString(vValue) + "'";
+        }).join(" or ");
+    }
+
+    function createBatches(aValues) {
+        var aDistinct = Array.from(new Set((aValues || []).filter(function (vValue) {
+            return String(vValue || "").trim() !== "";
+        }).map(function (vValue) {
+            return String(vValue);
+        })));
+        var aBatches = [];
+        var iIndex;
+
+        for (iIndex = 0; iIndex < aDistinct.length; iIndex += ORDER_FILTER_BATCH_SIZE) {
+            aBatches.push(aDistinct.slice(iIndex, iIndex + ORDER_FILTER_BATCH_SIZE));
+        }
+        return aBatches;
+    }
+
+    function readByValues(oModel, sEntitySet, sField, aValues) {
+        var aBatches = createBatches(aValues);
+
+        if (!aBatches.length) {
+            return Promise.resolve({ entitySet: sEntitySet, records: [], error: null });
+        }
+
+        return Promise.all(aBatches.map(function (aBatch) {
+            return readEntitySet(oModel, sEntitySet, buildValuesFilter(sField, aBatch)).then(function (aRecords) {
+                return { records: aRecords, error: null };
+            }).catch(function (oError) {
+                return { records: [], error: oError.message };
+            });
+        })).then(function (aResults) {
+            var aRecords = [];
+            var aErrors = [];
+
+            aResults.forEach(function (oResult) {
+                aRecords = aRecords.concat(oResult.records);
+                if (oResult.error) {
+                    aErrors.push(oResult.error);
+                }
+            });
+            return {
+                entitySet: sEntitySet,
+                records: aRecords,
+                error: aErrors.length ? aErrors.join(" | ") : null
+            };
+        });
+    }
+
+    function buildDateRangeFilter(sField, mContext) {
+        var aClauses = [];
+        var sStart = formatODataDate(mContext.startDate);
+        var sEnd = formatODataDate(mContext.endDate);
+
+        if (sStart) {
+            aClauses.push(sField + " ge datetime'" + sStart + "'");
+        }
+        if (sEnd) {
+            aClauses.push(sField + " le datetime'" + sEnd + "'");
+        }
+        return aClauses.join(" and ");
+    }
+
+    function isExecutedOrder(oOrder) {
+        return ["E0015", "E0016", "E0019"].indexOf(canonicalStatus(oOrder)) >= 0;
     }
 
     function isWithinRange(vValue, oStartDate, oEndDate) {
@@ -357,6 +431,7 @@ sap.ui.define([
             blockOrders: [],
             catalogs: [],
             resources: [],
+            assignments: [],
             operations: [],
             confirmations: [],
             range: {
@@ -369,7 +444,6 @@ sap.ui.define([
     function load(oModel, mFilters) {
         var mContext;
         var sOrderFilter;
-        var aAuxiliaryNames;
 
         if (!oModel || typeof oModel.read !== "function") {
             return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
@@ -380,15 +454,11 @@ sap.ui.define([
             return Promise.reject(new Error("La fecha desde no puede ser posterior a la fecha hasta"));
         }
         sOrderFilter = buildOrdersFilter(mContext);
-        aAuxiliaryNames = Object.keys(AUXILIARY_SETS);
 
-        return Promise.all([
-            readEntitySet(oModel, "DashboardOrdersSet", sOrderFilter),
-            Promise.all(aAuxiliaryNames.map(function (sEntitySet) {
-                return readOptional(oModel, sEntitySet);
-            }))
-        ]).then(function (aResponses) {
-            var aRawOrders = aResponses[0];
+        // Primero se obtienen las OT del período. Los Entity Sets como causas,
+        // operaciones, confirmaciones y materiales requieren el OrderId en QAS;
+        // una lectura global de esas entidades devuelve vacío aunque existan datos.
+        return readEntitySet(oModel, "DashboardOrdersSet", sOrderFilter).then(function (aRawOrders) {
             var mRaw = { warnings: [] };
             var aOrders;
             var oOrderIds;
@@ -405,85 +475,131 @@ sap.ui.define([
             var aOperations;
             var aConfirmations;
             var oDashboard;
-
-            aResponses[1].forEach(function (oResponse) {
-                mRaw[AUXILIARY_SETS[oResponse.entitySet]] = oResponse.records;
-                if (oResponse.error) {
-                    mRaw.warnings.push({ entitySet: oResponse.entitySet, message: oResponse.error });
-                }
-            });
+            var aInitialReads;
 
             aOrders = filterOrders(aRawOrders, mContext);
             oOrderIds = new Set(aOrders.map(function (oOrder) { return String(oOrder.OrderId); }));
             oNonExecutedIds = new Set(aOrders.filter(function (oOrder) {
-                return ["E0013", "E0014"].indexOf(canonicalStatus(oOrder)) >= 0;
+                return !isExecutedOrder(oOrder);
             }).map(function (oOrder) { return String(oOrder.OrderId); }));
-            aCauses = (mRaw.causes || []).filter(function (oCause) {
-                return oNonExecutedIds.has(String(oCause.OrderId));
+
+            aInitialReads = Object.keys(INDEPENDENT_SETS).map(function (sEntitySet) {
+                return readOptional(oModel, sEntitySet);
             });
-            aMaterials = (mRaw.materials || []).filter(function (oMaterial) {
-                return oOrderIds.has(String(oMaterial.OrderId)) && oMaterial.IsPublishable !== false;
-            });
-            oMaterialIds = new Set(aMaterials.map(function (oMaterial) {
-                return String(oMaterial.MaterialRequirementId);
-            }));
-            aMovements = (mRaw.movements || []).filter(function (oMovement) {
-                return oMaterialIds.has(String(oMovement.MaterialRequirementId)) && oMovement.IsReversal !== true;
-            });
-            aRequests = filterServiceRequests(mRaw.serviceRequests || [], mContext);
-            aBlocks = filterBlocks(mRaw.blocks || [], mContext);
-            oBlockIds = new Set(aBlocks.map(function (oBlock) { return String(oBlock.BlockId); }));
-            aBlockOrders = (mRaw.blockOrders || []).filter(function (oBlockOrder) {
-                return oBlockIds.has(String(oBlockOrder.BlockId)) &&
-                    oOrderIds.has(String(oBlockOrder.OrderId)) && !oBlockOrder.ImpactEndAt;
-            });
-            aResources = filterResources(mRaw.resources || [], mContext);
-            aOperations = (mRaw.operations || []).filter(function (oOperation) {
-                return oOrderIds.has(String(oOperation.OrderId));
-            });
-            aConfirmations = (mRaw.confirmations || []).filter(function (oConfirmation) {
-                return oOrderIds.has(String(oConfirmation.OrderId)) &&
-                    isWithinRange(oConfirmation.ActualStartDate, mContext.startDate, mContext.endDate);
+            aInitialReads.push(readOptional(
+                oModel,
+                "DashboardResourceDailySet",
+                buildDateRangeFilter("WorkDate", mContext)
+            ));
+            Object.keys(ORDER_DEPENDENT_SETS).forEach(function (sEntitySet) {
+                aInitialReads.push(readByValues(oModel, sEntitySet, "OrderId", Array.from(oOrderIds)));
             });
 
-            oDashboard = DashboardMapper.buildDashboard({
-                orders: aOrders,
-                causes: aCauses,
-                materials: aMaterials,
-                movements: aMovements,
-                serviceRequests: aRequests,
-                blocks: aBlocks,
-                blockOrders: aBlockOrders,
-                catalogs: mRaw.catalogs || [],
-                resources: aResources,
-                operations: aOperations,
-                confirmations: aConfirmations,
-                allOrders: aRawOrders,
-                allResources: mRaw.resources || [],
-                range: { startDate: mContext.startDate, endDate: mContext.endDate }
-            });
-            oDashboard.meta = {
-                source: "BTP_DESTINATION_ODATA_V2",
-                destination: "QAS_MITSU_DASH",
-                servicePath: "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV/",
-                ordersFilter: sOrderFilter,
-                generatedAt: new Date().toISOString(),
-                dataQuality: analyzeOrderData(aOrders),
-                unavailableEntitySets: mRaw.warnings,
-                records: {
-                    orders: aOrders.length,
-                    causes: aCauses.length,
-                    materials: aMaterials.length,
-                    movements: aMovements.length,
-                    serviceRequests: aRequests.length,
-                    blocks: aBlocks.length,
-                    blockOrders: aBlockOrders.length,
-                    resources: aResources.length,
-                    operations: aOperations.length,
-                    confirmations: aConfirmations.length
+            return Promise.all(aInitialReads).then(function (aResponses) {
+                aResponses.forEach(function (oResponse) {
+                    var sModelProperty = INDEPENDENT_SETS[oResponse.entitySet] ||
+                        ORDER_DEPENDENT_SETS[oResponse.entitySet] ||
+                        (oResponse.entitySet === "DashboardResourceDailySet" ? "resources" : "");
+
+                    if (sModelProperty) {
+                        mRaw[sModelProperty] = oResponse.records;
+                    }
+                    if (oResponse.error) {
+                        mRaw.warnings.push({ entitySet: oResponse.entitySet, message: oResponse.error });
+                    }
+                });
+
+                aMaterials = (mRaw.materials || []).filter(function (oMaterial) {
+                    return oOrderIds.has(String(oMaterial.OrderId)) && oMaterial.IsPublishable !== false;
+                });
+                oMaterialIds = new Set(aMaterials.map(function (oMaterial) {
+                    return String(oMaterial.MaterialRequirementId);
+                }));
+
+                return readByValues(
+                    oModel,
+                    "DashboardMaterialMovementsSet",
+                    "MaterialRequirementId",
+                    Array.from(oMaterialIds)
+                );
+            }).then(function (oMovementResponse) {
+                mRaw.movements = oMovementResponse.records;
+                if (oMovementResponse.error) {
+                    mRaw.warnings.push({ entitySet: oMovementResponse.entitySet, message: oMovementResponse.error });
                 }
-            };
-            return oDashboard;
+
+                aCauses = (mRaw.causes || []).filter(function (oCause) {
+                    return oNonExecutedIds.has(String(oCause.OrderId));
+                });
+                aMaterials = (mRaw.materials || []).filter(function (oMaterial) {
+                    return oOrderIds.has(String(oMaterial.OrderId)) && oMaterial.IsPublishable !== false;
+                });
+                oMaterialIds = new Set(aMaterials.map(function (oMaterial) {
+                    return String(oMaterial.MaterialRequirementId);
+                }));
+                aMovements = (mRaw.movements || []).filter(function (oMovement) {
+                    return oMaterialIds.has(String(oMovement.MaterialRequirementId)) && oMovement.IsReversal !== true;
+                });
+                aRequests = filterServiceRequests(mRaw.serviceRequests || [], mContext);
+                aBlocks = filterBlocks(mRaw.blocks || [], mContext);
+                oBlockIds = new Set(aBlocks.map(function (oBlock) { return String(oBlock.BlockId); }));
+                aBlockOrders = (mRaw.blockOrders || []).filter(function (oBlockOrder) {
+                    return (oBlockIds.size === 0 || oBlockIds.has(String(oBlockOrder.BlockId))) &&
+                        oOrderIds.has(String(oBlockOrder.OrderId)) && !oBlockOrder.ImpactEndAt;
+                });
+                aResources = filterResources(mRaw.resources || [], mContext);
+                mRaw.assignments = (mRaw.assignments || []).filter(function (oAssignment) {
+                    return oOrderIds.has(String(oAssignment.OrderId));
+                });
+                aOperations = (mRaw.operations || []).filter(function (oOperation) {
+                    return oOrderIds.has(String(oOperation.OrderId));
+                });
+                aConfirmations = (mRaw.confirmations || []).filter(function (oConfirmation) {
+                    return oOrderIds.has(String(oConfirmation.OrderId)) &&
+                        isWithinRange(oConfirmation.ActualStartDate, mContext.startDate, mContext.endDate);
+                });
+
+                oDashboard = DashboardMapper.buildDashboard({
+                    orders: aOrders,
+                    causes: aCauses,
+                    materials: aMaterials,
+                    movements: aMovements,
+                    serviceRequests: aRequests,
+                    blocks: aBlocks,
+                    blockOrders: aBlockOrders,
+                    catalogs: mRaw.catalogs || [],
+                    resources: aResources,
+                    assignments: mRaw.assignments,
+                    operations: aOperations,
+                    confirmations: aConfirmations,
+                    allOrders: aRawOrders,
+                    allResources: mRaw.resources || [],
+                    range: { startDate: mContext.startDate, endDate: mContext.endDate }
+                });
+                oDashboard.meta = {
+                    source: "BTP_DESTINATION_ODATA_V2",
+                    destination: "QAS_MITSU_DASH",
+                    servicePath: "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV/",
+                    ordersFilter: sOrderFilter,
+                    generatedAt: new Date().toISOString(),
+                    dataQuality: analyzeOrderData(aOrders),
+                    unavailableEntitySets: mRaw.warnings,
+                    records: {
+                        orders: aOrders.length,
+                        causes: aCauses.length,
+                        materials: aMaterials.length,
+                        movements: aMovements.length,
+                        serviceRequests: aRequests.length,
+                        blocks: aBlocks.length,
+                        blockOrders: aBlockOrders.length,
+                        resources: aResources.length,
+                        assignments: mRaw.assignments.length,
+                        operations: aOperations.length,
+                        confirmations: aConfirmations.length
+                    }
+                };
+                return oDashboard;
+            });
         });
     }
 

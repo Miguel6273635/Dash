@@ -1,12 +1,13 @@
 sap.ui.define([
-    "mantenimiento/model/ReparacionesPlaneadasEjecutadasMapper",
+    "mantenimiento/model/ReparacionesPlaneadasMapper",
     "mantenimiento/model/ODataRelatedDataService"
-], function (ReparacionesPlaneadasEjecutadasMapper, RelatedData) {
+], function (ReparacionesPlaneadasMapper, RelatedData) {
     "use strict";
 
     var AUXILIARY_SETS = {
+        DashboardOrderCausesSet: "causes",
         DashboardOrderMaterialsSet: "materials",
-        DashboardOrderConfirmationsSet: "confirmations",
+        DashboardOrderResourcesSet: "assignments",
         DashboardResourceDailySet: "resources",
         DashboardFilterCatalogSet: "catalogs"
     };
@@ -24,7 +25,6 @@ sap.ui.define([
         aMatch = sText.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
         sIsoDate = aMatch ? aMatch[3] + "-" + aMatch[2] + "-" + aMatch[1] : sText.slice(0, 10);
         oDate = new Date(sIsoDate + "T" + (bEndOfDay ? "23:59:59" : "00:00:00"));
-
         return Number.isNaN(oDate.getTime()) ? null : oDate;
     }
 
@@ -61,9 +61,9 @@ sap.ui.define([
         var sStartDate = formatODataDate(oContext.startDate);
         var sEndDate = formatODataDate(oContext.endDate);
 
-        // Mismo filtro base que Reparaciones Planeadas No Ejecutadas. El
-        // backend usa EQ como extremos del rango de fechas de la OT.
-        // No se agrega $top: se requieren todas las órdenes del período.
+        // El GET_ENTITYSET ABAP compartido usa EQ como extremo de rango para
+        // las fechas planeadas; zona y responsable se resuelven al unir los
+        // recursos, por lo que se filtran en BTP/UI5 después de la lectura.
         if (sStartDate) {
             aClauses.unshift("PlannedStartDate eq datetime'" + sStartDate + "'");
         }
@@ -79,6 +79,7 @@ sap.ui.define([
         if (sFilter) {
             mUrlParameters.$filter = sFilter;
         }
+
         return new Promise(function (resolve, reject) {
             oModel.read("/" + sEntitySet, {
                 urlParameters: mUrlParameters,
@@ -86,19 +87,20 @@ sap.ui.define([
                     resolve(Array.isArray(oData && oData.results) ? oData.results : []);
                 },
                 error: function (oError) {
-                    reject(new Error("No fue posible consultar " + sEntitySet +
-                        (oError && oError.message ? ": " + oError.message : "")));
+                    var sMessage = "No fue posible consultar " + sEntitySet;
+                    if (oError && oError.message) {
+                        sMessage += ": " + oError.message;
+                    }
+                    reject(new Error(sMessage));
                 }
             });
         });
     }
 
     function readOptional(oModel, sEntitySet) {
-        return readEntitySet(oModel, sEntitySet).then(function (aRecords) {
+        return readEntitySet(oModel, sEntitySet, "").then(function (aRecords) {
             return { entitySet: sEntitySet, records: aRecords, error: null };
         }).catch(function (oError) {
-            // Los KPIs continúan visibles si un Entity Set auxiliar todavía
-            // no se publica. La tabla indica Sin datos donde corresponda.
             return { entitySet: sEntitySet, records: [], error: oError.message };
         });
     }
@@ -106,8 +108,9 @@ sap.ui.define([
     function createRawData(oContext) {
         return {
             orders: [],
+            causes: [],
             materials: [],
-            confirmations: [],
+            assignments: [],
             resources: [],
             catalogs: [],
             range: {
@@ -124,7 +127,7 @@ sap.ui.define([
     }
 
     function build(oRawData, mFilters, sAnalysis) {
-        var oData = ReparacionesPlaneadasEjecutadasMapper.buildData(oRawData, mFilters, sAnalysis);
+        var oData = ReparacionesPlaneadasMapper.buildData(oRawData, mFilters, sAnalysis);
 
         oData.meta = Object.assign({}, oData.meta, oRawData.meta || {});
         return oData;
@@ -155,8 +158,9 @@ sap.ui.define([
         return RelatedData.load(oModel, {
             ordersFilter: sOrdersFilter,
             orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
                 { entitySet: "DashboardOrderMaterialsSet", target: "materials" },
-                { entitySet: "DashboardOrderConfirmationsSet", target: "confirmations" }
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
             ],
             independent: [
                 { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", oContext) },
@@ -165,7 +169,7 @@ sap.ui.define([
         }).then(function (oRelatedRaw) {
             var oRawData = createRawData(oContext);
 
-            ["orders", "materials", "confirmations", "resources", "catalogs"].forEach(function (sKey) {
+            ["orders", "causes", "materials", "assignments", "resources", "catalogs"].forEach(function (sKey) {
                 oRawData[sKey] = oRelatedRaw[sKey] || [];
             });
             oRawData.meta.unavailableEntitySets = oRelatedRaw.meta.unavailableEntitySets;
@@ -173,8 +177,9 @@ sap.ui.define([
             oRawData.meta.generatedAt = new Date().toISOString();
             oRawData.meta.records = {
                 orders: oRawData.orders.length,
+                causes: oRawData.causes.length,
                 materials: oRawData.materials.length,
-                confirmations: oRawData.confirmations.length,
+                assignments: oRawData.assignments.length,
                 resources: oRawData.resources.length,
                 catalogs: oRawData.catalogs.length
             };

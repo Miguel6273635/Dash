@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/ComportamientoOperativoMapper"
-], function (ComportamientoOperativoMapper) {
+    "mantenimiento/model/ComportamientoOperativoMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (ComportamientoOperativoMapper, RelatedData) {
     "use strict";
 
     var AUXILIARY = {
@@ -35,16 +36,27 @@ sap.ui.define([
     function build(rawData, filters) { var data = ComportamientoOperativoMapper.buildData(rawData, filters); data.meta = Object.assign({}, data.meta, rawData.meta); return data; }
     function createEmpty(filters) { var c = context(filters); return build(raw(c), c.filters); }
     function load(model, filters) {
-        var c, names;
-        if (!model || typeof model.read !== "function") { return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado")); }
+        var c;
         c = context(filters);
         if (!c.startDate || !c.endDate) { return Promise.reject(new Error("Selecciona un periodo válido")); }
         if (c.startDate > c.endDate) { return Promise.reject(new Error("La fecha desde no puede ser posterior a la fecha hasta")); }
-        names = Object.keys(AUXILIARY);
-        return Promise.all([read(model, "DashboardOrdersSet", ordersFilter(c)), Promise.all(names.map(function (name) { return optional(model, name); }))]).then(function (response) {
+
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(c),
+            orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", c) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (response) {
             var data = raw(c);
-            data.orders = response[0];
-            response[1].forEach(function (item) { data[AUXILIARY[item.set]] = item.records; if (item.error) { data.meta.unavailableEntitySets.push({ entitySet: item.set, message: item.error }); } });
+            ["orders", "causes", "assignments", "resources", "catalogs"].forEach(function (sKey) {
+                data[sKey] = response[sKey] || [];
+            });
+            data.meta.unavailableEntitySets = response.meta.unavailableEntitySets;
             data.meta.ordersFilter = ordersFilter(c); data.meta.records = { orders: data.orders.length, causes: data.causes.length, assignments: data.assignments.length, resources: data.resources.length, catalogs: data.catalogs.length };
             return { data: build(data, c.filters), rawData: data };
         });

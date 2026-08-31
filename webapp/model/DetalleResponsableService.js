@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/DetalleResponsableMapper"
-], function (DetalleResponsableMapper) {
+    "mantenimiento/model/DetalleResponsableMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (DetalleResponsableMapper, RelatedData) {
     "use strict";
 
     function read(model, entitySet, filter) {
@@ -62,30 +63,25 @@ sap.ui.define([
     }
 
     function load(model, filters) {
-        var names = {
-            DashboardOrderCausesSet: "causes",
-            DashboardOrderResourcesSet: "assignments",
-            DashboardResourceDailySet: "resources",
-            DashboardFilterCatalogSet: "catalogs",
-            DashboardOrderEventsSet: "events"
-        };
         var range = DetalleResponsableMapper.period(filters.periodKey || "2026-ANUAL");
 
-        if (!model || typeof model.read !== "function") {
-            return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
-        }
-        return Promise.all([
-            read(model, "DashboardOrdersSet", ordersFilter(filters)),
-            Promise.all(Object.keys(names).map(function (entitySet) { return optional(model, entitySet); }))
-        ]).then(function (result) {
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(filters),
+            orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" },
+                { entitySet: "DashboardOrderEventsSet", target: "events" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", range) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (result) {
             var data = raw(range);
-            data.orders = result[0];
-            result[1].forEach(function (item) {
-                data[names[item.entitySet]] = item.records;
-                if (item.error) {
-                    data.meta.unavailableEntitySets.push({ entitySet: item.entitySet, message: item.error });
-                }
+            ["orders", "causes", "assignments", "resources", "catalogs", "events"].forEach(function (sKey) {
+                data[sKey] = result[sKey] || [];
             });
+            data.meta.unavailableEntitySets = result.meta.unavailableEntitySets;
             data.meta.ordersFilter = ordersFilter(filters);
             return { data: DetalleResponsableMapper.build(data, filters), rawData: data };
         });

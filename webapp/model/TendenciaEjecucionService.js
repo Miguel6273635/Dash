@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/TendenciaEjecucionMapper"
-], function (TendenciaEjecucionMapper) {
+    "mantenimiento/model/TendenciaEjecucionMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (TendenciaEjecucionMapper, RelatedData) {
     "use strict";
 
     function read(model, entitySet, filter) {
@@ -22,15 +23,12 @@ sap.ui.define([
     }
     function ordersFilter(filters) {
         /*
-         * SAP expone el periodo mediante igualdad de inicio/fin. Por esa
-         * razón una semana no puede enviarse como "lunes - domingo": solo
-         * devolvería OT que coincidan exactamente con ambas fechas. Siempre
-         * se consulta el año del periodo elegido y el Mapper separa después
-         * las OT por su PlannedStartDate en las semanas correspondientes.
+         * El servicio BTP interpreta estas dos fechas como el rango del
+         * periodo. Al seleccionar una semana se envía la ventana de cinco
+         * semanas que termina en ella; al seleccionar "Anual", se envía el
+         * año completo. El Mapper asigna cada OT por PlannedStartDate.
          */
-        var selectedPeriod = String(filters && filters.period || "2026-ANUAL");
-        var yearMatch = selectedPeriod.match(/^(\d{4})-/);
-        var range = TendenciaEjecucionMapper.period((yearMatch ? yearMatch[1] : "2026") + "-ANUAL");
+        var range = TendenciaEjecucionMapper.period(filters && filters.period || "2026-ANUAL");
         return [
             "PlannedStartDate eq datetime'" + odataDate(range.startDate) + "'",
             "PlannedFinishDate eq datetime'" + odataDate(range.endDate) + "'"
@@ -39,12 +37,19 @@ sap.ui.define([
     function emptyRaw() { return { orders: [], causes: [], assignments: [], resources: [], catalogs: [], meta: { unavailableEntitySets: [] } }; }
     function createEmpty(filters) { return TendenciaEjecucionMapper.build(emptyRaw(), filters); }
     function load(model, filters) {
-        var maps = { DashboardOrderCausesSet: "causes", DashboardOrderResourcesSet: "assignments", DashboardResourceDailySet: "resources", DashboardFilterCatalogSet: "catalogs" };
-        if (!model || typeof model.read !== "function") { return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado")); }
-        return Promise.all([read(model, "DashboardOrdersSet", ordersFilter(filters)), Promise.all(Object.keys(maps).map(function (entitySet) { return optional(model, entitySet); }))]).then(function (response) {
-            var raw = emptyRaw();
-            raw.orders = response[0];
-            response[1].forEach(function (item) { raw[maps[item.entitySet]] = item.records; if (item.error) { raw.meta.unavailableEntitySets.push({ entitySet: item.entitySet, message: item.error }); } });
+        var range = TendenciaEjecucionMapper.period(filters && filters.period || "2026-ANUAL");
+
+        return RelatedData.load(model, {
+            ordersFilter: ordersFilter(filters),
+            orderRelations: [
+                { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
+            ],
+            independent: [
+                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", range) },
+                { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+            ]
+        }).then(function (raw) {
             raw.meta.ordersFilter = ordersFilter(filters);
             return { data: TendenciaEjecucionMapper.build(raw, filters), rawData: raw };
         });

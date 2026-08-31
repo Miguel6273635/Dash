@@ -1,6 +1,7 @@
 sap.ui.define([
-    "mantenimiento/model/AnalisisFallasMapper"
-], function (AnalisisFallasMapper) {
+    "mantenimiento/model/AnalisisFallasMapper",
+    "mantenimiento/model/ODataRelatedDataService"
+], function (AnalisisFallasMapper, RelatedData) {
     "use strict";
 
     var AUXILIARY_SETS = {
@@ -165,7 +166,6 @@ sap.ui.define([
     function load(oModel, mFilters) {
         var oContext;
         var aPeriods;
-        var aAuxiliaryNames;
 
         if (!oModel || typeof oModel.read !== "function") {
             return Promise.reject(new Error(
@@ -182,39 +182,45 @@ sap.ui.define([
             ));
         }
         aPeriods = previousRanges(oContext);
-        aAuxiliaryNames = Object.keys(AUXILIARY_SETS);
 
-        return Promise.all([
-            Promise.all(aPeriods.map(function (oRange) {
-                return readEntitySet(
-                    oModel, "DashboardOrdersSet", buildOrdersFilter(oRange)
-                );
-            })),
-            Promise.all(aAuxiliaryNames.map(function (sEntitySet) {
-                return readOptional(oModel, sEntitySet);
-            }))
-        ]).then(function (aResponses) {
-            var oRawData = createRawData(oContext);
-            var aOrdersByPeriod = aResponses[0];
+        return Promise.all(aPeriods.map(function (oRange) {
+            return readEntitySet(oModel, "DashboardOrdersSet", buildOrdersFilter(oRange));
+        })).then(function (aOrdersByPeriod) {
             var mSeen = new Map();
+            var oTrendRange = {
+                startDate: aPeriods[0].startDate,
+                endDate: oContext.endDate
+            };
 
-            oRawData.orders = aOrdersByPeriod[aOrdersByPeriod.length - 1] || [];
             aOrdersByPeriod.forEach(function (aOrders) {
                 aOrders.forEach(function (oOrder) {
                     mSeen.set(String(oOrder.OrderId), oOrder);
                 });
             });
-            oRawData.trendOrders = Array.from(mSeen.values());
-            oRawData.trendPeriods = aPeriods;
-            aResponses[1].forEach(function (oResponse) {
-                oRawData[AUXILIARY_SETS[oResponse.entitySet]] = oResponse.records;
-                if (oResponse.error) {
-                    oRawData.meta.unavailableEntitySets.push({
-                        entitySet: oResponse.entitySet,
-                        message: oResponse.error
-                    });
-                }
+            return RelatedData.loadForOrders(oModel, Array.from(mSeen.values()), {
+                orderRelations: [
+                    { entitySet: "DashboardOrderCausesSet", target: "causes" },
+                    { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
+                ],
+                independent: [
+                    { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", oTrendRange) },
+                    { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
+                ]
+            }).then(function (oRelatedRaw) {
+                return { ordersByPeriod: aOrdersByPeriod, relatedRaw: oRelatedRaw };
             });
+        }).then(function (oResponse) {
+            var oRawData = createRawData(oContext);
+            var aOrdersByPeriod = oResponse.ordersByPeriod;
+            var oRelatedRaw = oResponse.relatedRaw;
+
+            oRawData.orders = aOrdersByPeriod[aOrdersByPeriod.length - 1] || [];
+            oRawData.trendOrders = oRelatedRaw.orders;
+            oRawData.trendPeriods = aPeriods;
+            ["causes", "assignments", "resources", "catalogs"].forEach(function (sKey) {
+                oRawData[sKey] = oRelatedRaw[sKey] || [];
+            });
+            oRawData.meta.unavailableEntitySets = oRelatedRaw.meta.unavailableEntitySets;
             oRawData.meta.ordersFilter = buildOrdersFilter(aPeriods[aPeriods.length - 1]);
             oRawData.meta.generatedAt = new Date().toISOString();
             oRawData.meta.records = {
