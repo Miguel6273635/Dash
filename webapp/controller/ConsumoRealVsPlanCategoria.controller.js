@@ -5,14 +5,16 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "mantenimiento/model/ConsumoRealVsPlanCategoriaService"
-], function (Controller, JSONModel, Item, MessageToast, Filter, FilterOperator, Service) {
+    "mantenimiento/model/ConsumoRealVsPlanCategoriaService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, Item, MessageToast, Filter, FilterOperator, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.ConsumoRealVsPlanCategoria", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
-            this._filters = { periodo: "2026", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "ALL", cliente: "ALL", responsable: "ALL", tipoOt: "ALL" };
+            this._filters = { periodo: initialPeriod.year, fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "ALL", cliente: "ALL", responsable: "ALL", tipoOt: "ALL" };
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "crpc");
             this.getView().getModel("crpc").setSizeLimit(2000);
             this._setOptions(this._model().getData());

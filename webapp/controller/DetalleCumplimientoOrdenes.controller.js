@@ -3,13 +3,15 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/dom/includeStylesheet",
-    "mantenimiento/model/DetalleCumplimientoOrdenesService"
+    "mantenimiento/model/DetalleCumplimientoOrdenesService",
+    "mantenimiento/model/InitialLoadPeriod"
 ], function (
     Controller,
     JSONModel,
     MessageToast,
     includeStylesheet,
-    DetalleCumplimientoOrdenesService
+    DetalleCumplimientoOrdenesService,
+    InitialLoadPeriod
 ) {
     "use strict";
 
@@ -117,10 +119,11 @@ sap.ui.define([
         },
 
         _getDefaultFilters: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             return {
-                periodo: "2026",
-                fechaDesde: "01/01/2026",
-                fechaHasta: "31/12/2026",
+                periodo: initialPeriod.year,
+                fechaDesde: initialPeriod.startDisplay,
+                fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS",
                 supervisor: "TODOS",
                 tipoServicio: "TODOS"

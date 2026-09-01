@@ -47,6 +47,7 @@ sap.ui.define([], function () {
         var match = String(key || "").match(/^(\d{4})-W(\d{2})$/);
         var annual = String(key || "").match(/^(\d{4})-ANUAL$/);
         var lastFive = String(key || "").match(/^(\d{4})-ULT5$/);
+        var monthly = String(key || "").match(/^(\d{4})-(\d{2})$/);
         var start;
         if (match) {
             start = isoWeekStart(Number(match[1]), Number(match[2]) - 4);
@@ -55,23 +56,39 @@ sap.ui.define([], function () {
         if (annual) {
             return { startDate: new Date(Number(annual[1]), 0, 1), endDate: new Date(Number(annual[1]), 11, 31, 23, 59, 59) };
         }
+        if (monthly && Number(monthly[2]) >= 1 && Number(monthly[2]) <= 12) {
+            return {
+                startDate: new Date(Number(monthly[1]), Number(monthly[2]) - 1, 1),
+                endDate: new Date(Number(monthly[1]), Number(monthly[2]), 0, 23, 59, 59)
+            };
+        }
         if (lastFive) { return lastWeekWindow(Number(lastFive[1])); }
         return lastWeekWindow(2026);
     }
     function periodOptions() {
+        var now = new Date();
+        var previous = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         var result = [
-            { key: "2026-ANUAL", text: "2026 (Anual)" },
-            { key: "2026-ULT5", text: "Últimas 5 semanas de 2026" },
-            { key: "2025-ANUAL", text: "2025 (Anual)" },
-            { key: "2024-ANUAL", text: "2024 (Anual)" }
+            {
+                key: previous.getFullYear() + "-" + String(previous.getMonth() + 1).padStart(2, "0"),
+                text: MONTHS[previous.getMonth()] + " " + previous.getFullYear() + " (Mensual)"
+            },
+            { key: "2026-ANUAL", text: "2026 (Anual)" }
         ];
         var year;
         var week;
         var max;
-        for (year = 2024; year <= 2026; year += 1) {
+        /* El año seleccionado por defecto aparece primero: semanas 1 a 53. */
+        for (year = 2026; year >= 2024; year -= 1) {
             max = Math.round((isoWeekStart(year + 1, 1) - isoWeekStart(year, 1)) / 604800000);
             for (week = 1; week <= max; week += 1) {
                 result.push({ key: year + "-W" + String(week).padStart(2, "0"), text: "Semana " + week + " de " + year });
+            }
+            if (year === 2026) {
+                result.push({ key: "2026-ULT5", text: "Últimas 5 semanas de 2026" });
+            }
+            if (year > 2024) {
+                result.push({ key: (year - 1) + "-ANUAL", text: (year - 1) + " (Anual)" });
             }
         }
         return result;

@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "mantenimiento/model/PreventivasEjecutadasService"
-], function (Controller, JSONModel, MessageToast, PreventivasEjecutadasService) {
+    "mantenimiento/model/PreventivasEjecutadasService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, MessageToast, PreventivasEjecutadasService, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.AnalisisOTPreventivasEjecutadas", {
@@ -183,10 +184,11 @@ sap.ui.define([
         },
 
         _getDefaultFilters: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             return {
-                periodo: "2026",
-                fechaDesde: "01/01/2026",
-                fechaHasta: "31/12/2026",
+                periodo: initialPeriod.year,
+                fechaDesde: initialPeriod.startDisplay,
+                fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS",
                 cliente: "TODOS",
                 responsable: "TODOS"

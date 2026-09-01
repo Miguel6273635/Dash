@@ -5,8 +5,9 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/Device",
     "mantenimiento/model/DetalleOperativoRecursosMapper",
-    "mantenimiento/model/DetalleOperativoRecursosService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Device, Mapper, Service) {
+    "mantenimiento/model/DetalleOperativoRecursosService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Device, Mapper, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleOperativoRecursos", {
@@ -35,12 +36,12 @@ sap.ui.define([
             }
         },
         _getParentContext: function () {
-            var component = this.getOwnerComponent(), model = component && component.getModel && component.getModel("operationalContext"), data = model && model.getData && model.getData() || {}, parentFilters = data.filters || {}, selected = data.selectedSupervisor || {};
+            var component = this.getOwnerComponent(), model = component && component.getModel && component.getModel("operationalContext"), data = model && model.getData && model.getData() || {}, parentFilters = data.filters || {}, selected = data.selectedSupervisor || {}, initialPeriod = InitialLoadPeriod.previousMonth();
             return {
                 supervisorId: selected.id || "ALL",
                 supervisorName: selected.name || "Todos",
-                dateFrom: parentFilters.dateFrom || "2026-01-01",
-                dateTo: parentFilters.dateTo || "2026-12-31",
+                dateFrom: parentFilters.dateFrom || initialPeriod.startIso,
+                dateTo: parentFilters.dateTo || initialPeriod.endIso,
                 zone: "ALL", resourceType: "ALL", shift: "ALL", status: "ALL", search: ""
             };
         },

@@ -7,14 +7,16 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/Text",
     "sap/m/VBox",
-    "mantenimiento/model/ConsumoMaterialesService"
-], function (Controller, JSONModel, Item, MessageToast, Popover, Button, Text, VBox, Service) {
+    "mantenimiento/model/ConsumoMaterialesService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, Item, MessageToast, Popover, Button, Text, VBox, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.ConsumoMateriales", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
-            this._filters = { periodo: "2026", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "TODAS", supervisor: "TODOS", tipoOrden: "TODAS" };
+            this._filters = { periodo: initialPeriod.year, fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "TODAS", supervisor: "TODOS", tipoOrden: "TODAS" };
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "materialesModel");
             this.getView().getModel("materialesModel").setSizeLimit(1000);
             this._setFilterItems(this._model().getData());

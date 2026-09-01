@@ -4,14 +4,16 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
     "sap/ui/dom/includeStylesheet",
-    "mantenimiento/model/CausasZonaService"
+    "mantenimiento/model/CausasZonaService",
+    "mantenimiento/model/InitialLoadPeriod"
 ], function (
     Controller,
     JSONModel,
     MessageToast,
     History,
     includeStylesheet,
-    CausasZonaService
+    CausasZonaService,
+    InitialLoadPeriod
 ) {
     "use strict";
 
@@ -43,6 +45,7 @@ sap.ui.define([
     return Controller.extend("mantenimiento.controller.CausasZona", {
         onInit: function () {
             var oViewModel;
+            var initialPeriod;
 
             includeStylesheet(
                 sap.ui.require.toUrl(
@@ -53,11 +56,12 @@ sap.ui.define([
             this._iLoadRequest = 0;
             this._iCurrentPage = 1;
             this._sTypeFilter = "TODAS";
+            initialPeriod = InitialLoadPeriod.previousMonth();
             this._mFilters = {
-                /* La primera carga usa el mismo periodo anual validado en QAS. */
-                semana: "2026-ANUAL",
-                fechaDesde: "01/01/2026",
-                fechaHasta: "31/12/2026",
+                /* El selector conserva el año; la primera lectura se limita al mes anterior. */
+                semana: initialPeriod.year + "-ANUAL",
+                fechaDesde: initialPeriod.startDisplay,
+                fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS",
                 cliente: "TODOS",
                 responsable: "TODOS"

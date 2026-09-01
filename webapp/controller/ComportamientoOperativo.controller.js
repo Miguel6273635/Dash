@@ -4,14 +4,16 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
     "sap/ui/dom/includeStylesheet",
-    "mantenimiento/model/ComportamientoOperativoService"
-], function (Controller, JSONModel, MessageToast, Fragment, includeStylesheet, Service) {
+    "mantenimiento/model/ComportamientoOperativoService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, MessageToast, Fragment, includeStylesheet, Service, InitialLoadPeriod) {
     "use strict";
     return Controller.extend("mantenimiento.controller.ComportamientoOperativo", {
         onInit: function () {
-            var model;
+            var model, initialPeriod;
             includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/ComportamientoOperativo.css") + "?v=20260821-live-data");
-            this._request = 0; this._origin = "TODAS"; this._filters = { periodo: "2026-ANUAL", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "TODAS", origen: "TODAS" };
+            initialPeriod = InitialLoadPeriod.previousMonth();
+            this._request = 0; this._origin = "TODAS"; this._filters = { periodo: initialPeriod.year + "-ANUAL", fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "TODAS", origen: "TODAS" };
             model = new JSONModel(Service.createEmpty(this._filters)); model.setSizeLimit(1000); this.getView().setModel(model, "data"); this._load(false);
         },
         onPeriodoChange: function (event) {

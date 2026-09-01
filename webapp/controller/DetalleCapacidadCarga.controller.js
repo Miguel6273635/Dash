@@ -5,17 +5,19 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "mantenimiento/model/DetalleCapacidadCargaService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Filter, FilterOperator, Service) {
+    "mantenimiento/model/DetalleCapacidadCargaService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Filter, FilterOperator, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleCapacidadCarga", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
             this._filters = {
-                periodo: "2026",
-                fechaDesde: "01/01/2026",
-                fechaHasta: "31/12/2026",
+                periodo: initialPeriod.year,
+                fechaDesde: initialPeriod.startDisplay,
+                fechaHasta: initialPeriod.endDisplay,
                 zona: "TODOS",
                 turno: "TODOS",
                 supervisor: "TODOS"

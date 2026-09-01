@@ -8,13 +8,15 @@ sap.ui.define([
     "sap/m/Text",
     "sap/ui/core/Icon",
     "sap/m/MessageToast",
-    "mantenimiento/model/HorasTrabajadasService"
-], function (Controller, JSONModel, includeStylesheet, Item, HBox, VBox, Text, Icon, MessageToast, HorasTrabajadasService) {
+    "mantenimiento/model/HorasTrabajadasService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, Item, HBox, VBox, Text, Icon, MessageToast, HorasTrabajadasService, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.HorasTrabajadas", {
         onInit: function () {
-            this._filters = { periodo: "2026", fechaDesde: "01/01/2026", fechaHasta: "31/12/2026", zona: "TODAS", supervisor: "TODOS", tipoOrden: "TODOS", turno: "TODOS", mecanico: "TODOS", estadoOrden: "TODOS" };
+            var initialPeriod = InitialLoadPeriod.previousMonth();
+            this._filters = { periodo: initialPeriod.year, fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "TODAS", supervisor: "TODOS", tipoOrden: "TODOS", turno: "TODOS", mecanico: "TODOS", estadoOrden: "TODOS" };
             this._loadStyles();
             this.getView().setModel(new JSONModel(HorasTrabajadasService.createEmpty(this._filters)), "horasModel");
             this.getView().getModel("horasModel").setSizeLimit(1000);

@@ -5,7 +5,8 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/MessageToast",
     "sap/ui/dom/includeStylesheet",
-    "mantenimiento/model/AnalisisElevadoresService"
+    "mantenimiento/model/AnalisisElevadoresService",
+    "mantenimiento/model/InitialLoadPeriod"
 ], function (
     Controller,
     JSONModel,
@@ -13,7 +14,8 @@ sap.ui.define([
     Button,
     MessageToast,
     includeStylesheet,
-    AnalisisElevadoresService
+    AnalisisElevadoresService,
+    InitialLoadPeriod
 ) {
     "use strict";
 
@@ -83,10 +85,11 @@ sap.ui.define([
         },
 
         _getDefaultFilters: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             return {
-                periodo: "2026",
-                fechaDesde: "01/01/2026",
-                fechaHasta: "31/12/2026",
+                periodo: initialPeriod.year,
+                fechaDesde: initialPeriod.startDisplay,
+                fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS",
                 supervisor: "TODOS",
                 tipoOrden: "TODOS"

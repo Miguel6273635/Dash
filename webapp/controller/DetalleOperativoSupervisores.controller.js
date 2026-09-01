@@ -4,16 +4,18 @@ sap.ui.define([
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
     "sap/ui/Device",
-    "mantenimiento/model/DetalleOperativoSupervisoresService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Device, Service) {
+    "mantenimiento/model/DetalleOperativoSupervisoresService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Device, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleOperativoSupervisores", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
             this._resizeTimer = null;
             this._filters = {
-                period: "2026", dateFrom: "2026-01-01", dateTo: "2026-12-31",
+                period: initialPeriod.year, dateFrom: initialPeriod.startIso, dateTo: initialPeriod.endIso,
                 management: "ALL", headquarters: "ALL", supervisor: "ALL", shift: "ALL",
                 serviceType: "ALL", resourceType: "ALL", zone: "ALL"
             };

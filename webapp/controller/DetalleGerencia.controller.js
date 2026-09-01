@@ -3,14 +3,16 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "mantenimiento/model/DetalleGerenciaService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Service) {
+    "mantenimiento/model/DetalleGerenciaService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleGerencia", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
-            this._filters = { period: "2026", dateFrom: "2026-01-01", dateTo: "2026-12-31", management: "ALL", headship: "ALL", zone: "ALL", serviceType: "ALL" };
+            this._filters = { period: initialPeriod.year, dateFrom: initialPeriod.startIso, dateTo: initialPeriod.endIso, management: "ALL", headship: "ALL", zone: "ALL", serviceType: "ALL" };
             this._loadStyles();
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "view");
             this.getView().getModel("view").setSizeLimit(2000);

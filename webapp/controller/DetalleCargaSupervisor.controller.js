@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "mantenimiento/model/DetalleCargaSupervisorService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Service) {
+    "mantenimiento/model/DetalleCargaSupervisorService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleCargaSupervisor", {
@@ -37,11 +38,11 @@ sap.ui.define([
             return component && (component.getModel("dashboardOData") || component.getModel()) || this.getView().getModel("dashboardOData");
         },
         _initialFilters: function () {
-            var component = this.getOwnerComponent(), context = component && (component.getModel("operationalContext") || component.getModel("supervisorContext")), data = context && context.getData && context.getData(), inherited = data && data.filters || {}, selected = data && data.selectedSupervisor || {};
+            var component = this.getOwnerComponent(), context = component && (component.getModel("operationalContext") || component.getModel("supervisorContext")), data = context && context.getData && context.getData(), inherited = data && data.filters || {}, selected = data && data.selectedSupervisor || {}, initialPeriod = InitialLoadPeriod.previousMonth();
             return {
-                periodo: inherited.period || "2026",
-                fechaDesde: inherited.dateFrom || inherited.fechaDesde || "2026-01-01",
-                fechaHasta: inherited.dateTo || inherited.fechaHasta || "2026-12-31",
+                periodo: inherited.period || initialPeriod.year,
+                fechaDesde: inherited.dateFrom || inherited.fechaDesde || initialPeriod.startIso,
+                fechaHasta: inherited.dateTo || inherited.fechaHasta || initialPeriod.endIso,
                 gerencia: inherited.management || inherited.gerencia || "ALL",
                 jefatura: inherited.headquarters || inherited.headship || inherited.jefatura || "ALL",
                 supervisor: selected.id || inherited.supervisor || "ALL",

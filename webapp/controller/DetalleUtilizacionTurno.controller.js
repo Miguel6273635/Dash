@@ -3,15 +3,17 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
-    "mantenimiento/model/DetalleUtilizacionTurnoService"
-], function (Controller, JSONModel, includeStylesheet, MessageToast, Service) {
+    "mantenimiento/model/DetalleUtilizacionTurnoService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, includeStylesheet, MessageToast, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleUtilizacionTurno", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
             this._search = "";
-            this._filters = { periodo: "2026", fechaDesde: "2026-01-01", fechaHasta: "2026-12-31", zona: "TODOS", supervisor: "TODOS", mecanico: "TODOS" };
+            this._filters = { periodo: initialPeriod.year, fechaDesde: initialPeriod.startIso, fechaHasta: initialPeriod.endIso, zona: "TODOS", supervisor: "TODOS", mecanico: "TODOS" };
             this._loadStyles();
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "detalleTurno");
             this.getView().getModel("detalleTurno").setSizeLimit(2000);

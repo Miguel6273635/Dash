@@ -5,18 +5,20 @@ sap.ui.define([
     "sap/ui/dom/includeStylesheet",
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
-    "mantenimiento/model/DetalleCargaCapacidadJefaturaService"
-], function (Controller, JSONModel, Item, includeStylesheet, MessageToast, History, Service) {
+    "mantenimiento/model/DetalleCargaCapacidadJefaturaService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, Item, includeStylesheet, MessageToast, History, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleCargaCapacidadJefatura", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             this._requestId = 0;
             this._page = 1;
             this._allLoadRows = [];
             this._allMaterialRows = [];
             this._filters = {
-                period: "2026", from: "2026-01-01", to: "2026-12-31",
+                period: initialPeriod.year, from: initialPeriod.startIso, to: initialPeriod.endIso,
                 management: "ALL", supervisor: "ALL", shift: "ALL", service: "ALL"
             };
 

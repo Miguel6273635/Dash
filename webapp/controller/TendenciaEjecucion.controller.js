@@ -7,15 +7,17 @@ sap.ui.define([
     "sap/viz/ui5/data/DimensionDefinition",
     "sap/viz/ui5/data/MeasureDefinition",
     "sap/viz/ui5/controls/common/feeds/FeedItem",
-    "mantenimiento/model/TendenciaEjecucionService"
-], function (Controller, JSONModel, MessageToast, includeStylesheet, FlattenedDataset, DimensionDefinition, MeasureDefinition, FeedItem, Service) {
+    "mantenimiento/model/TendenciaEjecucionService",
+    "mantenimiento/model/InitialLoadPeriod"
+], function (Controller, JSONModel, MessageToast, includeStylesheet, FlattenedDataset, DimensionDefinition, MeasureDefinition, FeedItem, Service, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.TendenciaEjecucion", {
         onInit: function () {
+            var initialPeriod = InitialLoadPeriod.previousMonth();
             includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/TendenciaEjecucion.css") + "?v=20260821-live-data");
             this._requestId = 0;
-            this._filters = { periodo: "2026-ANUAL", zona: "TODAS" };
+            this._filters = { periodo: initialPeriod.monthKey, zona: "TODAS" };
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "trend");
             this.getView().getModel("trend").setSizeLimit(1000);
             this._load(false);

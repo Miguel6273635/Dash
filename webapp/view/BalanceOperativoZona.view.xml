@@ -1,19 +1,14 @@
-<mvc:View
-    controllerName="mantenimiento.controller.BalanceOperativoZona"
-    displayBlock="true"
+<mvc:View controllerName="mantenimiento.controller.BalanceOperativoZona" displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:vizData="sap.viz.ui5.data"
     xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds">
-
     <Page showHeader="false" class="BalanceOperativoZona">
         <content>
             <ScrollContainer height="100%" width="100%" vertical="true" horizontal="false">
                 <VBox class="bozPage">
-
-                    <!-- HEADER -->
                     <VBox class="bozHeader">
                         <HBox alignItems="Center">
                             <Title text="Balance operativo por zona" level="H1" class="bozTitle"/>
@@ -21,70 +16,37 @@
                         </HBox>
                         <Text text="Visión consolidada de carga, horas y recursos para identificar las zonas con mayor presión operativa." class="bozSubtitle"/>
                     </VBox>
-
-                    <!-- FILTROS -->
                     <HBox class="bozFiltersBar" wrap="NoWrap">
                         <VBox class="bozFilterBox">
                             <Label text="Periodo" class="bozFilterLabel"/>
-                            <Select selectedKey="mayo2024">
-                                <core:Item key="mayo2024" text="Mayo 2024"/>
-                                <core:Item key="junio2024" text="Junio 2024"/>
-                            </Select>
+                            <Select id="bozPeriodo" selectedKey="{boz>/filtros/periodo}" change=".onPeriodoChange"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Fecha desde" class="bozFilterLabel"/>
-                            <DatePicker value="01/05/2024" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                            <DatePicker id="bozFechaDesde" value="{boz>/filtros/fechaDesde}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Fecha hasta" class="bozFilterLabel"/>
-                            <DatePicker value="31/05/2024" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
+                            <DatePicker id="bozFechaHasta" value="{boz>/filtros/fechaHasta}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Turno" class="bozFilterLabel"/>
-                            <Select selectedKey="todos">
-                                <core:Item key="todos" text="Todos"/>
-                                <core:Item key="matutino" text="Matutino"/>
-                                <core:Item key="vespertino" text="Vespertino"/>
-                            </Select>
+                            <Select id="bozTurno" selectedKey="{boz>/filtros/turno}"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Tipo de orden" class="bozFilterLabel"/>
-                            <Select selectedKey="todos">
-                                <core:Item key="todos" text="Todos"/>
-                                <core:Item key="preventiva" text="Preventiva"/>
-                                <core:Item key="correctiva" text="Correctiva"/>
-                            </Select>
+                            <Select id="bozTipoOrden" selectedKey="{boz>/filtros/tipoOrden}"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Supervisor" class="bozFilterLabel"/>
-                            <Select selectedKey="todas">
-                                <core:Item key="todas" text="Todas"/>
-                                <core:Item key="juan" text="Juan Pérez"/>
-                                <core:Item key="ana" text="Ana Torres"/>
-                            </Select>
+                            <Select id="bozSupervisor" selectedKey="{boz>/filtros/supervisor}"/>
                         </VBox>
-
                         <VBox class="bozFilterBox">
                             <Label text="Zona" class="bozFilterLabel"/>
-                            <Select selectedKey="todas">
-                                <core:Item key="todas" text="Todas"/>
-                                <core:Item key="sur" text="Sur"/>
-                                <core:Item key="norte" text="Norte"/>
-                                <core:Item key="centro" text="Centro"/>
-                                <core:Item key="este" text="Este"/>
-                                <core:Item key="oeste" text="Oeste"/>
-                            </Select>
+                            <Select id="bozZona" selectedKey="{boz>/filtros/zona}"/>
                         </VBox>
-
                         <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" class="bozApplyButton" press=".onAplicarFiltros"/>
                     </HBox>
-
-                    <!-- KPIS -->
                     <HBox class="bozKpiRow">
                         <HBox class="bozKpiCard bozKpiRed" alignItems="Center">
                             <HBox class="bozKpiIcon bozKpiIconRed" alignItems="Center" justifyContent="Center">
@@ -92,66 +54,58 @@
                             </HBox>
                             <VBox>
                                 <Text text="Zona crítica" class="bozKpiLabel"/>
-                                <Text text="Sur" class="bozKpiMain bozRedText"/>
+                                <Text text="{boz>/resumen/zonaCritica/nombre}" class="bozKpiMain bozRedText"/>
                                 <Text text="Índice de presión" class="bozKpiSmall"/>
-                                <Text text="92%" class="bozKpiNumber bozRedText"/>
+                                <Text text="{boz>/resumen/zonaCritica/presion}" class="bozKpiNumber bozRedText"/>
                             </VBox>
                         </HBox>
-
                         <HBox class="bozKpiCard bozKpiOrange" alignItems="Center">
                             <HBox class="bozKpiIcon bozKpiIconOrange" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://bar-chart"/>
                             </HBox>
                             <VBox>
                                 <Text text="Zonas con presión alta" class="bozKpiLabel"/>
-                                <Text text="2" class="bozKpiNumber bozOrangeText"/>
-                                <Text text="Norte, Sur" class="bozKpiSmall"/>
+                                <Text text="{boz>/resumen/zonasPresionAlta/total}" class="bozKpiNumber bozOrangeText"/>
+                                <Text text="{boz>/resumen/zonasPresionAlta/nombres}" class="bozKpiSmall"/>
                             </VBox>
                         </HBox>
-
                         <HBox class="bozKpiCard bozKpiGreen" alignItems="Center">
                             <HBox class="bozKpiIcon bozKpiIconGreen" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://person-placeholder"/>
                             </HBox>
                             <VBox>
                                 <Text text="Zonas con capacidad disponible" class="bozKpiLabel"/>
-                                <Text text="2" class="bozKpiNumber bozGreenText"/>
-                                <Text text="Este, Oeste" class="bozKpiSmall"/>
+                                <Text text="{boz>/resumen/zonasCapacidadDisponible/total}" class="bozKpiNumber bozGreenText"/>
+                                <Text text="{boz>/resumen/zonasCapacidadDisponible/nombres}" class="bozKpiSmall"/>
                             </VBox>
                         </HBox>
-
                         <HBox class="bozKpiCard bozKpiBlue" alignItems="Center">
                             <HBox class="bozKpiIcon bozKpiIconBlue" alignItems="Center" justifyContent="Center">
                                 <core:Icon src="sap-icon://performance"/>
                             </HBox>
                             <VBox>
                                 <Text text="Índice global de presión operativa" class="bozKpiLabel"/>
-                                <Text text="72%" class="bozKpiNumber bozBlueText"/>
-                                <Text text="Nivel alto" class="bozKpiSmall"/>
+                                <Text text="{boz>/resumen/indiceGlobal/valor}" class="bozKpiNumber bozBlueText"/>
+                                <Text text="{boz>/resumen/indiceGlobal/nivel}" class="bozKpiSmall"/>
                             </VBox>
                         </HBox>
                     </HBox>
-
-                    <!-- FILA CENTRAL -->
                     <HBox class="bozTopGrid">
-
-                        <!-- INDICE DE PRESION -->
                         <VBox class="bozCard bozPressureCard">
                             <HBox class="bozCardHeader" alignItems="Center">
                                 <Title text="Índice de presión operativa por zona" level="H3" class="bozCardTitle"/>
                                 <Button icon="sap-icon://hint" type="Transparent" class="bozSmallButton"/>
                             </HBox>
-
                             <VBox class="bozPressureList" items="{boz>/presionZona}">
                                 <items>
                                     <HBox class="bozPressureRow" alignItems="Center">
                                         <Text text="{boz>zona}" class="bozPressureZone"/>
                                         <HBox class="bozPressureTrack">
-                                           <HBox class="bozPressureFill" width="{boz>porcentaje}">
-    <customData>
-        <core:CustomData key="estado" value="{boz>estado}" writeToDom="true"/>
-    </customData>
-</HBox>
+                                            <HBox class="bozPressureFill" width="{boz>porcentaje}">
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estado}" writeToDom="true"/>
+                                                </customData>
+                                            </HBox>
                                         </HBox>
                                         <Text text="{boz>valor}" class="bozPressureValue"/>
                                         <ObjectStatus text="{boz>label}" class="bozStatusPill">
@@ -162,7 +116,6 @@
                                     </HBox>
                                 </items>
                             </VBox>
-
                             <HBox class="bozAxisRow">
                                 <Text text="0%"/>
                                 <Text text="25%"/>
@@ -172,8 +125,6 @@
                             </HBox>
                             <Text text="Índice de presión" class="bozAxisTitle"/>
                         </VBox>
-
-                        <!-- MATRIZ -->
                         <VBox class="bozCard bozMatrixCard">
                             <HBox class="bozCardHeader" justifyContent="SpaceBetween" alignItems="Center">
                                 <VBox>
@@ -189,21 +140,44 @@
                                     <Button icon="sap-icon://action-settings" type="Transparent" class="bozSquareButton"/>
                                 </HBox>
                             </HBox>
-
                             <Table id="tblBalanceZona" items="{boz>/matriz}" class="bozMatrixTable" fixedLayout="true">
                                 <columns>
-                                    <Column width="72px"><Text text="Zona"/></Column>
-                                    <Column hAlign="Center"><Text text="Carga total"/></Column>
-                                    <Column hAlign="Center"><Text text="Pendientes"/></Column>
-                                    <Column hAlign="Center"><Text text="Vencidas"/></Column>
-                                    <Column hAlign="Center"><Text text="Estado"/></Column>
-                                    <Column hAlign="Center"><Text text="Programadas"/></Column>
-                                    <Column hAlign="Center"><Text text="Reales"/></Column>
-                                    <Column hAlign="Center"><Text text="Utilización"/></Column>
-                                    <Column hAlign="Center"><Text text="Estado"/></Column>
-                                    <Column hAlign="Center"><Text text="Disponibles"/></Column>
-                                    <Column hAlign="Center"><Text text="Utilización"/></Column>
-                                    <Column hAlign="Center"><Text text="Estado"/></Column>
+                                    <Column width="72px">
+                                        <Text text="Zona"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Carga total"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Pendientes"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Vencidas"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Estado"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Programadas"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Reales"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Utilización"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Estado"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Disponibles"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Utilización"/>
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Text text="Estado"/>
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -213,30 +187,39 @@
                                             <Text text="{boz>pendientes}" class="bozTableText"/>
                                             <Text text="{boz>vencidas}" class="bozTableText"/>
                                             <ObjectStatus text="{boz>estadoOrdenes}" class="bozMiniStatus">
-                                                <customData><core:CustomData key="estado" value="{boz>estadoOrdenesKey}" writeToDom="true"/></customData>
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estadoOrdenesKey}" writeToDom="true"/>
+                                                </customData>
                                             </ObjectStatus>
                                             <Text text="{boz>programadas}" class="bozTableText"/>
                                             <Text text="{boz>reales}" class="bozTableRed"/>
                                             <Text text="{boz>utilHoras}" class="bozTablePercent">
-                                                <customData><core:CustomData key="estado" value="{boz>estadoHorasKey}" writeToDom="true"/></customData>
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estadoHorasKey}" writeToDom="true"/>
+                                                </customData>
                                             </Text>
                                             <ObjectStatus text="{boz>estadoHoras}" class="bozMiniStatus">
-                                                <customData><core:CustomData key="estado" value="{boz>estadoHorasKey}" writeToDom="true"/></customData>
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estadoHorasKey}" writeToDom="true"/>
+                                                </customData>
                                             </ObjectStatus>
                                             <Text text="{boz>disponibles}" class="bozTableText"/>
                                             <Text text="{boz>utilRecursos}" class="bozTablePercent">
-                                                <customData><core:CustomData key="estado" value="{boz>estadoRecursosKey}" writeToDom="true"/></customData>
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estadoRecursosKey}" writeToDom="true"/>
+                                                </customData>
                                             </Text>
                                             <ObjectStatus text="{boz>estadoRecursos}" class="bozMiniStatus">
-                                                <customData><core:CustomData key="estado" value="{boz>estadoRecursosKey}" writeToDom="true"/></customData>
+                                                <customData>
+                                                    <core:CustomData key="estado" value="{boz>estadoRecursosKey}" writeToDom="true"/>
+                                                </customData>
                                             </ObjectStatus>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
                             </Table>
-
                             <HBox class="bozTableFooter" justifyContent="SpaceBetween" alignItems="Center">
-                                <Text text="Mostrando 1 a 5 de 5 resultados"/>
+                                <Text text="{boz>/matrizFooter}"/>
                                 <HBox alignItems="Center">
                                     <Button icon="sap-icon://navigation-left-arrow" type="Transparent" class="bozPagerButton"/>
                                     <Button text="1" type="Emphasized" class="bozPagerActive"/>
@@ -249,65 +232,80 @@
                             </HBox>
                         </VBox>
                     </HBox>
-
-                    <!-- FILA INFERIOR -->
                     <HBox class="bozBottomGrid">
-
-                        <!-- COMPOSICION -->
                         <VBox class="bozCard bozBottomCard">
                             <HBox class="bozCardHeader" alignItems="Center">
                                 <Title text="Composición de la presión por zona" level="H3" class="bozCardTitle"/>
                                 <Button icon="sap-icon://hint" type="Transparent" class="bozSmallButton"/>
                             </HBox>
                             <Text text="Factores que más impactan el índice de presión." class="bozCardSubtitle"/>
-
                             <VBox class="bozStackList" items="{boz>/composicion}">
                                 <items>
                                     <HBox class="bozStackRow" alignItems="Center">
                                         <Text text="{boz>zona}" class="bozStackZone"/>
                                         <HBox class="bozStackBar">
-                                            <HBox width="{boz>vencidas}" class="bozStackRed"><Text text="{boz>vencidasTxt}"/></HBox>
-                                            <HBox width="{boz>excedidas}" class="bozStackOrange"><Text text="{boz>excedidasTxt}"/></HBox>
-                                            <HBox width="{boz>recursos}" class="bozStackYellow"><Text text="{boz>recursosTxt}"/></HBox>
-                                            <HBox width="{boz>reprogramaciones}" class="bozStackBlue"><Text text="{boz>reprogramacionesTxt}"/></HBox>
-                                            <HBox width="{boz>materiales}" class="bozStackPurple"><Text text="{boz>materialesTxt}"/></HBox>
+                                            <HBox width="{boz>vencidas}" class="bozStackRed">
+                                                <Text text="{boz>vencidasTxt}"/>
+                                            </HBox>
+                                            <HBox width="{boz>excedidas}" class="bozStackOrange">
+                                                <Text text="{boz>excedidasTxt}"/>
+                                            </HBox>
+                                            <HBox width="{boz>recursos}" class="bozStackYellow">
+                                                <Text text="{boz>recursosTxt}"/>
+                                            </HBox>
+                                            <HBox width="{boz>reprogramaciones}" class="bozStackBlue">
+                                                <Text text="{boz>reprogramacionesTxt}"/>
+                                            </HBox>
+                                            <HBox width="{boz>materiales}" class="bozStackPurple">
+                                                <Text text="{boz>materialesTxt}"/>
+                                            </HBox>
                                         </HBox>
                                     </HBox>
                                 </items>
                             </VBox>
-
                             <HBox class="bozLegendArea">
                                 <VBox class="bozLegendList">
-                                    <HBox alignItems="Center"><VBox class="bozDot bozDotRed"/><Text text="Órdenes vencidas"/></HBox>
-                                    <HBox alignItems="Center"><VBox class="bozDot bozDotOrange"/><Text text="Horas excedidas"/></HBox>
-                                    <HBox alignItems="Center"><VBox class="bozDot bozDotYellow"/><Text text="Falta de recursos"/></HBox>
-                                    <HBox alignItems="Center"><VBox class="bozDot bozDotBlue"/><Text text="Reprogramaciones"/></HBox>
-                                    <HBox alignItems="Center"><VBox class="bozDot bozDotPurple"/><Text text="Pendientes por material / cliente"/></HBox>
+                                    <HBox alignItems="Center">
+                                        <VBox class="bozDot bozDotRed"/>
+                                        <Text text="Órdenes vencidas"/>
+                                    </HBox>
+                                    <HBox alignItems="Center">
+                                        <VBox class="bozDot bozDotOrange"/>
+                                        <Text text="Horas excedidas"/>
+                                    </HBox>
+                                    <HBox alignItems="Center">
+                                        <VBox class="bozDot bozDotYellow"/>
+                                        <Text text="Falta de recursos"/>
+                                    </HBox>
+                                    <HBox alignItems="Center">
+                                        <VBox class="bozDot bozDotBlue"/>
+                                        <Text text="Reprogramaciones"/>
+                                    </HBox>
+                                    <HBox alignItems="Center">
+                                        <VBox class="bozDot bozDotPurple"/>
+                                        <Text text="Pendientes por material / cliente"/>
+                                    </HBox>
                                 </VBox>
                                 <VBox class="bozLegendTotals">
                                     <Text text="Total"/>
-                                    <Text text="30%"/>
-                                    <Text text="16%"/>
-                                    <Text text="17%"/>
-                                    <Text text="15%"/>
-                                    <Text text="22%"/>
+                                    <Text text="{boz>/contribucionesResumen/vencidas}"/>
+                                    <Text text="{boz>/contribucionesResumen/excedidas}"/>
+                                    <Text text="{boz>/contribucionesResumen/recursos}"/>
+                                    <Text text="{boz>/contribucionesResumen/reprogramaciones}"/>
+                                    <Text text="{boz>/contribucionesResumen/materiales}"/>
                                 </VBox>
                             </HBox>
-
                             <HBox class="bozInfoFooter" alignItems="Center">
                                 <core:Icon src="sap-icon://hint"/>
                                 <Text text="Los porcentajes representan la contribución (%) de cada factor al índice de presión por zona."/>
                             </HBox>
                         </VBox>
-
-                        <!-- ORDENES VS CAPACIDAD -->
                         <VBox class="bozCard bozBottomCard">
                             <HBox class="bozCardHeader" alignItems="Center">
                                 <Title text="Órdenes vencidas vs capacidad disponible" level="H3" class="bozCardTitle"/>
                                 <Button icon="sap-icon://hint" type="Transparent" class="bozSmallButton"/>
                             </HBox>
                             <Text text="Relación entre órdenes vencidas y recursos disponibles por zona." class="bozCardSubtitle"/>
-
                             <viz:VizFrame id="vfCapacidadDisponible" vizType="line" width="100%" height="222px" uiConfig="{applicationSet:'fiori'}">
                                 <viz:dataset>
                                     <vizData:FlattenedDataset data="{boz>/capacidad}">
@@ -324,50 +322,70 @@
                                     <vizFeeds:FeedItem uid="categoryAxis" type="Dimension" values="Zona"/>
                                 </viz:feeds>
                             </viz:VizFrame>
-
                             <HBox class="bozSuccessFooter" alignItems="Center">
                                 <core:Icon src="sap-icon://sys-enter-2"/>
-                                <Text text="La mayor presión operativa se concentra en Sur, que combina el mayor volumen de órdenes vencidas con el menor nivel de recursos disponibles."/>
+                                <Text text="{boz>/capacidadMensaje}"/>
                             </HBox>
                         </VBox>
-
-                        <!-- MAPA REDISTRIBUCION -->
                         <VBox class="bozCard bozBottomCard">
                             <HBox class="bozCardHeader" alignItems="Center">
                                 <Title text="Mapa de redistribución operativa" level="H3" class="bozCardTitle"/>
                                 <Button icon="sap-icon://hint" type="Transparent" class="bozSmallButton"/>
                             </HBox>
                             <Text text="Zonas con presión alta y posibles zonas de apoyo." class="bozCardSubtitle"/>
-
                             <HBox class="bozRedistributionTop" justifyContent="SpaceBetween">
                                 <VBox class="bozRedistributionPanel bozPanelRed">
                                     <Text text="Zonas con presión alta" class="bozPanelTitle"/>
-                                    <HBox justifyContent="SpaceBetween" alignItems="Center"><HBox alignItems="Center"><core:Icon src="sap-icon://trend-up"/><Text text="Sur"/></HBox><Text text="92%" class="bozRedText"/></HBox>
-                                    <HBox justifyContent="SpaceBetween" alignItems="Center"><HBox alignItems="Center"><core:Icon src="sap-icon://trend-up"/><Text text="Norte"/></HBox><Text text="87%" class="bozRedText"/></HBox>
+                                    <VBox items="{boz>/panelPresion}">
+                                        <items>
+                                            <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                                <HBox alignItems="Center">
+                                                    <core:Icon src="sap-icon://trend-up"/>
+                                                    <Text text="{boz>zona}"/>
+                                                </HBox>
+                                                <Text text="{boz>presion}" class="bozRedText"/>
+                                            </HBox>
+                                        </items>
+                                    </VBox>
                                 </VBox>
-
                                 <VBox class="bozArrowColumn" alignItems="Center" justifyContent="Center">
                                     <Text text="← · · · · →"/>
                                     <Text text="← · · · · →"/>
                                 </VBox>
-
                                 <VBox class="bozRedistributionPanel bozPanelGreen">
                                     <Text text="Zonas con capacidad disponible" class="bozPanelTitle"/>
-                                    <HBox justifyContent="SpaceBetween" alignItems="Center"><HBox alignItems="Center"><core:Icon src="sap-icon://sys-enter-2"/><Text text="Este"/></HBox><Text text="58%" class="bozGreenText"/></HBox>
-                                    <HBox justifyContent="SpaceBetween" alignItems="Center"><HBox alignItems="Center"><core:Icon src="sap-icon://sys-enter-2"/><Text text="Oeste"/></HBox><Text text="42%" class="bozGreenText"/></HBox>
+                                    <VBox items="{boz>/panelApoyo}">
+                                        <items>
+                                            <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                                <HBox alignItems="Center">
+                                                    <core:Icon src="sap-icon://sys-enter-2"/>
+                                                    <Text text="{boz>zona}"/>
+                                                </HBox>
+                                                <Text text="{boz>presion}" class="bozGreenText"/>
+                                            </HBox>
+                                        </items>
+                                    </VBox>
                                 </VBox>
                             </HBox>
-
                             <Table items="{boz>/redistribucion}" class="bozSupportTable" fixedLayout="true">
                                 <columns>
-                                    <Column><Text text="Sugerencias de apoyo"/></Column>
-                                    <Column><Text text="Zona que apoya"/></Column>
-                                    <Column><Text text="Motivo"/></Column>
+                                    <Column>
+                                        <Text text="Sugerencias de apoyo"/>
+                                    </Column>
+                                    <Column>
+                                        <Text text="Zona que apoya"/>
+                                    </Column>
+                                    <Column>
+                                        <Text text="Motivo"/>
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
                                         <cells>
-                                            <HBox alignItems="Center"><Text text="{boz>origen}"/><Text text=" · · · →" class="bozDottedArrow"/></HBox>
+                                            <HBox alignItems="Center">
+                                                <Text text="{boz>origen}"/>
+                                                <Text text=" · · · →" class="bozDottedArrow"/>
+                                            </HBox>
                                             <Text text="{boz>destino}"/>
                                             <Text text="{boz>motivo}"/>
                                         </cells>
