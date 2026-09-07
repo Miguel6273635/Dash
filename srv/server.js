@@ -50,12 +50,33 @@ function parseODataDate(value) {
     return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function parseFilterDate(value) {
+    const text = String(value || "").trim();
+    const match = text.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    const date = match
+        ? new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]))
+        : new Date(text.slice(0, 10) + "T00:00:00");
+
+    if (Number.isNaN(date.getTime())) {
+        throw new Error("Fecha de filtro inválida: " + value);
+    }
+    return date;
+}
+
 function isWithinRange(value, from, to) {
     const date = parseODataDate(value);
 
     return Boolean(date) && date >= from && date <= new Date(
         to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59, 999
     );
+}
+
+function overlapsRange(startValue, endValue, from, to) {
+    const start = parseODataDate(startValue);
+    const end = parseODataDate(endValue) || to;
+    const lastMoment = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59, 999);
+
+    return Boolean(start) && start <= lastMoment && end >= from;
 }
 
 function canonicalStatus(order) {
@@ -88,8 +109,8 @@ function matches(value, requested) {
 }
 
 function filterSnapshot(snapshot, filters) {
-    const from = new Date(String(filters.fechaInicio || filters.fechaDesde).slice(6, 10), Number(String(filters.fechaInicio || filters.fechaDesde).slice(3, 5)) - 1, Number(String(filters.fechaInicio || filters.fechaDesde).slice(0, 2)));
-    const to = new Date(String(filters.fechaFin || filters.fechaHasta).slice(6, 10), Number(String(filters.fechaFin || filters.fechaHasta).slice(3, 5)) - 1, Number(String(filters.fechaFin || filters.fechaHasta).slice(0, 2)));
+    const from = parseFilterDate(filters.fechaInicio || filters.fechaDesde || filters.dateFrom);
+    const to = parseFilterDate(filters.fechaFin || filters.fechaHasta || filters.dateTo);
     const orderType = mapOrderType(filters.tipoOrden);
     const status = mapStatus(filters.estadoOrden);
     const orders = (snapshot.orders || []).filter((order) =>
@@ -106,6 +127,12 @@ function filterSnapshot(snapshot, filters) {
     const materialIds = new Set((snapshot.materials || [])
         .filter((material) => orderIds.has(String(material.OrderId)))
         .map((material) => String(material.MaterialRequirementId)));
+    const blocks = (snapshot.blocks || []).filter((block) =>
+        overlapsRange(block.BlockedAt, block.ReleasedAt, from, to) &&
+        (matches(block.ZoneId, filters.zona) || matches(block.ZoneName, filters.zona)) &&
+        matches(block.SupervisorId, filters.supervisor)
+    );
+    const blockIds = new Set(blocks.map((block) => String(block.BlockId)));
 
     return {
         orders,
@@ -117,7 +144,9 @@ function filterSnapshot(snapshot, filters) {
         confirmations: (snapshot.confirmations || []).filter((item) =>
             orderIds.has(String(item.OrderId)) && isWithinRange(item.ActualStartDate, from, to)
         ),
-        blockOrders: (snapshot.blockOrders || []).filter((item) => orderIds.has(String(item.OrderId))),
+        blockOrders: (snapshot.blockOrders || []).filter((item) =>
+            orderIds.has(String(item.OrderId)) && blockIds.has(String(item.BlockId))
+        ),
         resources: (snapshot.resources || []).filter((resource) =>
             isWithinRange(resource.WorkDate, from, to) &&
             (!hasValue(filters.zona) || matches(resource.ZoneId, filters.zona) || matches(resource.ZoneName, filters.zona)) &&
@@ -126,8 +155,12 @@ function filterSnapshot(snapshot, filters) {
             matches(resource.ResourceId, filters.mecanico)
         ),
         catalogs: snapshot.catalogs || [],
-        serviceRequests: [],
-        blocks: [],
+        serviceRequests: (snapshot.serviceRequests || []).filter((request) =>
+            isWithinRange(request.RequestedAt, from, to) &&
+            matches(request.ZoneId, filters.zona) &&
+            matches(request.ResponsibleId, filters.mecanico)
+        ),
+        blocks,
         range: { startDate: from, endDate: to }
     };
 }
@@ -180,7 +213,7 @@ app.get("/api/dashboard/mantenimiento", async function (request, response) {
         const snapshot = await snapshots.getSnapshot({
             dateFrom: filters.fechaInicio || filters.fechaDesde || filters.dateFrom,
             dateTo: filters.fechaFin || filters.fechaHasta || filters.dateTo,
-            include: ["orders", "causes", "materials", "movements", "assignments", "operations", "confirmations", "blockOrders", "resources", "catalogs"],
+            include: ["orders", "causes", "materials", "movements", "assignments", "operations", "confirmations", "blockOrders", "resources", "catalogs", "serviceRequests", "blocks"],
             forceRefresh: String(filters.refresh || "").toLowerCase() === "true"
         });
         const dashboard = buildDashboard(filterSnapshot(snapshot, filters));
@@ -208,7 +241,8 @@ app.post("/api/cache/refresh", async function (request, response) {
             dateTo: body.fechaHasta || body.dateTo,
             include: Array.isArray(body.include) ? body.include : toArray(body.include, ["orders", "catalogs"]),
             scope: body.scope || "active",
-            catalogs: Boolean(body.catalogs)
+            catalogs: Boolean(body.catalogs),
+            independent: Boolean(body.independent)
         });
 
         response.json({
