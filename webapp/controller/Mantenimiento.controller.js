@@ -220,8 +220,8 @@ sap.ui.define([
                 this._hasLoadedDashboard = true;
                 if (bNotify) {
                     MessageToast.show(
-                        oData.meta && oData.meta.source === "MANTENIMIENTO_CACHE_API"
-                            ? "Dashboard actualizado desde la caché de mantenimiento"
+                        oData.meta && oData.meta.source === "API_DASH"
+                            ? "Dashboard actualizado desde API_DASH"
                             : "Dashboard actualizado con datos de SAP"
                     );
                 }
