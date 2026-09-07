@@ -3,7 +3,15 @@ sap.ui.define([], function () {
 
     // QAS requiere que las entidades de detalle se consulten desde las OT del
     // período. Esta utilidad evita las lecturas globales que responden vacías.
-    var ORDER_ID_BATCH_SIZE = 40;
+    // Los servicios QAS de detalle aceptan filtros por OrderId, pero consultas
+    // con demasiados "or" pueden quedar suspendidas por el proxy de BAS.
+    // Quince OT mantiene la URL corta y permite recuperar los materiales de
+    // manera estable para una precarga mensual.
+    var ORDER_ID_BATCH_SIZE = 15;
+    // BAS puede suspender el proxy cuando se envían demasiadas consultas al
+    // mismo tiempo. Se mantienen lotes cortos, pero se controla concurrencia.
+    var MAX_PARALLEL_ENTITY_REQUESTS = 3;
+    var MAX_PARALLEL_BATCH_REQUESTS = 1;
 
     function read(oModel, sEntitySet, sFilter) {
         var mParameters = { "$format": "json" };
@@ -61,6 +69,30 @@ sap.ui.define([], function () {
         return aBatches;
     }
 
+    function runLimited(aTasks, iLimit) {
+        var aResults = new Array(aTasks.length);
+        var iNext = 0;
+        var iWorkers = Math.min(Math.max(iLimit || 1, 1), aTasks.length);
+
+        function runWorker() {
+            var iCurrent = iNext;
+
+            if (iCurrent >= aTasks.length) {
+                return Promise.resolve();
+            }
+
+            iNext += 1;
+            return aTasks[iCurrent]().then(function (oResult) {
+                aResults[iCurrent] = oResult;
+                return runWorker();
+            });
+        }
+
+        return Promise.all(Array.from({ length: iWorkers }, runWorker)).then(function () {
+            return aResults;
+        });
+    }
+
     function valuesFilter(sProperty, aValues) {
         return aValues.map(function (sValue) {
             return sProperty + " eq '" + escapeODataString(sValue) + "'";
@@ -73,9 +105,11 @@ sap.ui.define([], function () {
         if (!aBatches.length) {
             return Promise.resolve({ entitySet: sEntitySet, records: [], error: null });
         }
-        return Promise.all(aBatches.map(function (aBatch) {
-            return optional(oModel, sEntitySet, valuesFilter(sProperty, aBatch));
-        })).then(function (aResults) {
+        return runLimited(aBatches.map(function (aBatch) {
+            return function () {
+                return optional(oModel, sEntitySet, valuesFilter(sProperty, aBatch));
+            };
+        }), MAX_PARALLEL_BATCH_REQUESTS).then(function (aResults) {
             var aRecords = [];
             var aErrors = [];
 
@@ -135,13 +169,17 @@ sap.ui.define([], function () {
         }
         aOrders = Array.isArray(aOrders) ? aOrders : [];
         var aOrderIds = aOrders.map(function (oOrder) { return oOrder.OrderId; });
-        var aReads = aRelations.map(function (oRelation) {
-            return byValues(oModel, oRelation.entitySet, oRelation.property || "OrderId", aOrderIds);
+        var aReadTasks = aRelations.map(function (oRelation) {
+            return function () {
+                return byValues(oModel, oRelation.entitySet, oRelation.property || "OrderId", aOrderIds);
+            };
         }).concat(aIndependent.map(function (oIndependent) {
-            return optional(oModel, oIndependent.entitySet, oIndependent.filter || "");
+            return function () {
+                return optional(oModel, oIndependent.entitySet, oIndependent.filter || "");
+            };
         }));
 
-        return Promise.all(aReads).then(function (aResults) {
+        return runLimited(aReadTasks, MAX_PARALLEL_ENTITY_REQUESTS).then(function (aResults) {
             var mRaw = { orders: aOrders, meta: { unavailableEntitySets: [] } };
             var iIndex = 0;
 

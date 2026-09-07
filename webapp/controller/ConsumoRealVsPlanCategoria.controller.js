@@ -61,6 +61,7 @@ sap.ui.define([
             Service.load(this._odata(), this._filters).then(function (response) {
                 if (requestId !== this._requestId) { return; }
                 this._showData(response.data);
+                this._reportLoadStatus(response);
                 if (notify) { MessageToast.show("Consumo real vs plan actualizado con datos de SAP"); }
             }.bind(this), function (error) {
                 if (requestId !== this._requestId) { return; }
@@ -77,6 +78,40 @@ sap.ui.define([
             this.byId("sfMaterial").setValue("");
             this.byId("tblMaterialesDesv").getBinding("items").filter([]);
             this._updateStaticTexts();
+        },
+        _reportLoadStatus: function (response) {
+            var raw = response && response.rawData || {};
+            var meta = raw.meta || {};
+            var unavailable = meta.unavailableEntitySets || [];
+            var materials = Array.isArray(raw.materials) ? raw.materials : [];
+            var orders = Array.isArray(raw.orders) ? raw.orders : [];
+            var movements = Array.isArray(raw.movements) ? raw.movements : [];
+            var shown = this._model().getProperty("/materialesDesviacion") || [];
+            var names;
+
+            // Deja el diagnóstico exacto en la consola sin alterar la maqueta.
+            // Es útil para confirmar qué Entity Set devuelve vacío o falla.
+            window.console.info("[Consumo real vs plan] Resultado OData", {
+                orders: orders.length,
+                materials: materials.length,
+                movements: movements.length,
+                shownMaterials: shown.length,
+                ordersFilter: meta.ordersFilter || "",
+                unavailableEntitySets: unavailable
+            });
+
+            if (unavailable.length) {
+                names = unavailable.map(function (item) { return item.entitySet; }).join(", ");
+                MessageToast.show("SAP no respondió para: " + names + ". Revisa la consola del navegador.");
+            } else if (orders.length === 0) {
+                MessageToast.show("SAP no devolvió OT para el rango de fechas seleccionado.");
+            } else if (materials.length === 0) {
+                MessageToast.show("SAP devolvió " + orders.length + " OT, pero 0 materiales en DashboardOrderMaterialsSet.");
+            } else if (shown.length === 0) {
+                MessageToast.show("SAP devolvió materiales, pero ninguno pasó la validación IsPublishable.");
+            } else if (movements.length === 0) {
+                MessageToast.show("Se muestra el plan; SAP no devolvió movimientos reales para esos materiales.");
+            }
         },
         _setOptions: function (data) {
             var options = data.opciones || {}, filters = data.filtros || this._filters;

@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "mantenimiento/model/models"
-], (UIComponent, models) => {
+    "mantenimiento/model/models",
+    "mantenimiento/util/DashboardNavigation"
+], (UIComponent, models,DashboardNavigation) => {
     "use strict";
 
     return UIComponent.extend("mantenimiento.Component", {
@@ -18,6 +19,10 @@ sap.ui.define([
 
             // set the device model
             this.setModel(models.createDeviceModel(), "device");
+
+        this._dashboardNavigation =
+        DashboardNavigation.create(this);
+
 
             // enable routing
             this.getRouter().initialize();
