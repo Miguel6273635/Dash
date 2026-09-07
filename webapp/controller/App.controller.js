@@ -1,7 +1,9 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
-  "sap/m/MessageToast"
-], function (BaseController, MessageToast) {
+  "sap/m/MessageToast",
+  "sap/m/MessageBox",
+  "mantenimiento/model/DashboardCacheApiService"
+], function (BaseController, MessageToast, MessageBox, DashboardCacheApiService) {
   "use strict";
 
   return BaseController.extend("mantenimiento.controller.App", {
@@ -138,6 +140,11 @@ sap.ui.define([
       }
 
       var sKey = oItem.getKey();
+
+      if (sKey === "cacheRefresh") {
+        this.onRefreshCache();
+        return;
+      }
 
       /*
        * Los elementos padre sin key únicamente despliegan
@@ -321,6 +328,43 @@ sap.ui.define([
     /**
      * Recarga la aplicación.
      */
+    onRefreshCache: function () {
+      if (this._cacheRefreshPromise) {
+        MessageToast.show("La información se está actualizando.");
+        return;
+      }
+
+      MessageBox.confirm(
+        "Se consultará SAP para actualizar los datos del mes vigente. Las demás consultas usarán la nueva caché.",
+        {
+          title: "Actualizar información",
+          actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+          emphasizedAction: MessageBox.Action.OK,
+          onClose: function (sAction) {
+            if (sAction !== MessageBox.Action.OK) {
+              return;
+            }
+
+            this._cacheRefreshPromise = DashboardCacheApiService.refresh({
+              scope: "active",
+              include: ["orders", "catalogs"]
+            }).then(function (result) {
+              sap.ui.getCore().getEventBus().publish(
+                "mantenimiento",
+                "cacheRefreshed",
+                result
+              );
+              MessageToast.show("Información actualizada. Las pantallas recargarán desde la nueva caché.");
+            }).catch(function (error) {
+              MessageToast.show("No fue posible actualizar la información: " + error.message);
+            }).finally(function () {
+              this._cacheRefreshPromise = null;
+            }.bind(this));
+          }.bind(this)
+        }
+      );
+    },
+
     onRefresh: function () {
       window.location.reload();
     }
