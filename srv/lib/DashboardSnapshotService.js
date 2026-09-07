@@ -26,6 +26,13 @@ const RELATIONS = {
     blockOrders: { entitySet: "DashboardBlockOrdersSet", property: "OrderId" }
 };
 
+// Estas entidades no dependen de una OT. Se leen una vez y se reutilizan
+// desde caché; no se ejecuta una consulta por cada orden del periodo.
+const INDEPENDENT = {
+    serviceRequests: { entitySet: "DashboardServiceRequestsSet" },
+    blocks: { entitySet: "DashboardEquipmentBlocksSet" }
+};
+
 const POLICIES = {
     orders: { softTtlMs: 5 * 60 * 1000, hardTtlMs: 24 * 60 * 60 * 1000 },
     relation: { softTtlMs: 10 * 60 * 1000, hardTtlMs: 24 * 60 * 60 * 1000 },
@@ -151,6 +158,15 @@ class DashboardSnapshotService {
         POLICIES.catalog, forceRefresh);
     }
 
+    async _independent(name, forceRefresh) {
+        const source = INDEPENDENT[name];
+        const key = this._key(source.entitySet, "global");
+
+        return this._cached(key, () => this._repository.readAll(source.entitySet, {
+            select: SELECTS[source.entitySet]
+        }), POLICIES.independent, forceRefresh);
+    }
+
     async _movements(bucket, materials, forceRefresh) {
         const key = this._key("DashboardMaterialMovementsSet", bucket.key);
         const requirementIds = materials.map((material) => material.MaterialRequirementId);
@@ -219,6 +235,15 @@ class DashboardSnapshotService {
             response.meta.cache[this._key("DashboardFilterCatalogSet", "global")] = result.cacheStatus;
         }
 
+        for (const name of Object.keys(INDEPENDENT)) {
+            if (!requested.has(name)) {
+                continue;
+            }
+            const result = await this._independent(name, forceRefresh);
+            allRecords[name] = result.value;
+            response.meta.cache[this._key(INDEPENDENT[name].entitySet, "global")] = result.cacheStatus;
+        }
+
         Object.keys(allRecords).forEach((name) => {
             const id = name === "orders" ? "OrderId" : null;
             response[name] = id ? uniqueBy(allRecords[name], id) : allRecords[name];
@@ -240,6 +265,11 @@ class DashboardSnapshotService {
         if (scope === "all" || config.catalogs) {
             this._cache.invalidate(this._key("DashboardFilterCatalogSet", "global"));
         }
+        if (scope === "all" || config.independent) {
+            Object.keys(INDEPENDENT).forEach((name) => {
+                this._cache.invalidate(this._key(INDEPENDENT[name].entitySet, "global"));
+            });
+        }
 
         // La actualización se limita al conjunto solicitado. No precarga los
         // doce meses en paralelo ni vuelve a saturar QAS.
@@ -258,6 +288,7 @@ module.exports = {
     DashboardSnapshotService,
     POLICIES,
     SELECTS,
+    INDEPENDENT,
     bucketsForRange
 };
 
