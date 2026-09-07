@@ -4,8 +4,9 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/core/UIComponent",
     "mantenimiento/model/DashboardDataService",
+    "mantenimiento/model/DashboardCacheApiService",
     "mantenimiento/model/InitialLoadPeriod"
-], function (Controller, JSONModel, MessageToast, UIComponent, DashboardDataService, InitialLoadPeriod) {
+], function (Controller, JSONModel, MessageToast, UIComponent, DashboardDataService, DashboardCacheApiService, InitialLoadPeriod) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.Mantenimiento", {
@@ -204,20 +205,29 @@ sap.ui.define([
 
             this.getView().setBusy(true);
 
-            DashboardDataService.load(oODataModel, oRequest.filtros).then(function (oData) {
+            DashboardCacheApiService.loadMantenimiento(oRequest.filtros).catch(function (oCacheError) {
+                /*
+                 * El fallback mantiene el modo local de BAS mientras la API
+                 * todavía no está desplegada. En BTP la primera opción es la
+                 * API, que reutiliza la caché mensual compartida.
+                 */
+                if (window.console && window.console.warn) {
+                    window.console.warn("API de caché no disponible; se usará OData directo.", oCacheError);
+                }
+                return DashboardDataService.load(oODataModel, oRequest.filtros);
+            }).then(function (oData) {
                 this._onDashboardLoaded(oData);
                 this._hasLoadedDashboard = true;
                 if (bNotify) {
-                    if (oData.meta && oData.meta.dataQuality &&
-                        oData.meta.dataQuality.level === "PARTIAL") {
-                        MessageToast.show("Datos SAP cargados; hay campos pendientes de informar en el OData");
-                    } else {
-                        MessageToast.show("Dashboard actualizado con datos de SAP");
-                    }
+                    MessageToast.show(
+                        oData.meta && oData.meta.source === "MANTENIMIENTO_CACHE_API"
+                            ? "Dashboard actualizado desde la caché de mantenimiento"
+                            : "Dashboard actualizado con datos de SAP"
+                    );
                 }
             }.bind(this)).catch(function (oError) {
                 if (window.console && window.console.error) {
-                    window.console.error("Error al consultar el OData del dashboard", oError);
+                    window.console.error("Error al consultar el dashboard", oError);
                 }
                 this._onDashboardError(bNotify);
             }.bind(this)).finally(function () {
