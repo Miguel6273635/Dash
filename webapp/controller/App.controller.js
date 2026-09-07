@@ -347,7 +347,8 @@ sap.ui.define([
 
             this._cacheRefreshPromise = DashboardCacheApiService.refresh({
               scope: "active",
-              include: ["orders", "catalogs"]
+              include: ["orders", "catalogs", "serviceRequests", "blocks"],
+              independent: true
             }).then(function (result) {
               sap.ui.getCore().getEventBus().publish(
                 "mantenimiento",
