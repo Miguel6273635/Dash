@@ -168,10 +168,10 @@ function filterSnapshot(snapshot, filters) {
 function errorResponse(response, error) {
     const status = error && error.response && error.response.status;
 
-    console.error("Error de API de caché:", error.message);
+    console.error("Error de API_DASH:", error.message);
     response.status(status && status < 600 ? status : 502).json({
         success: false,
-        message: "No fue posible actualizar o consultar la caché de mantenimiento.",
+        message: "No fue posible actualizar o consultar API_DASH.",
         detail: error.message
     });
 }
@@ -182,7 +182,7 @@ app.use(express.json({ limit: "100kb" }));
 app.get("/health", function (request, response) {
     response.json({
         success: true,
-        service: "mantenimiento-cache-api",
+        service: "API_DASH",
         destination: destinationName,
         servicePath
     });
@@ -219,7 +219,7 @@ app.get("/api/dashboard/mantenimiento", async function (request, response) {
         const dashboard = buildDashboard(filterSnapshot(snapshot, filters));
 
         dashboard.meta = {
-            source: "MANTENIMIENTO_CACHE_API",
+            source: "API_DASH",
             generatedAt: new Date().toISOString(),
             cache: snapshot.meta.cache,
             months: snapshot.meta.months,
@@ -258,7 +258,7 @@ app.post("/api/cache/refresh", async function (request, response) {
 
 if (require.main === module) {
     app.listen(port, function () {
-        console.log("mantenimiento-cache-api escuchando en puerto " + port);
+        console.log("API_DASH escuchando en puerto " + port);
     });
 }
 
