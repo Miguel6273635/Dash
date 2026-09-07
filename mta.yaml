@@ -1,7 +1,7 @@
 _schema-version: "3.3"
 ID: mantenimiento
 description: |
-  Dashboard de Mantenimiento SAPUI5 conectado directamente al servicio OData ZPM_BTP_DASHMANTTO_SRV mediante la Destination QAS_MITSU_DASH.
+  Plataforma SAPUI5 de dashboards empresariales. API_DASH centraliza la caché y agregación de Mantenimiento; Finanzas y Compras se incorporarán como módulos posteriores.
 version: 0.0.1
 modules:
 - name: mantenimiento
@@ -42,10 +42,10 @@ modules:
     parameters:
       service-key:
         name: mantenimiento-xsuaa-key
-  - name: mantenimiento-cache-api-url
+  - name: api-dash-url
     group: destinations
     properties:
-      name: mantenimiento-cache-api
+      name: api-dash
       url: ~{url}
       forwardAuthToken: true
   parameters:
@@ -64,7 +64,7 @@ modules:
         existing_destinations_policy: update
   build-parameters:
     no-source: true
-- name: mantenimiento-cache-api
+- name: api-dash
   type: nodejs
   path: srv
   parameters:
@@ -74,7 +74,7 @@ modules:
   build-parameters:
     builder: npm
   provides:
-  - name: mantenimiento-cache-api-url
+  - name: api-dash-url
     properties:
       url: ${default-url}
   requires:
