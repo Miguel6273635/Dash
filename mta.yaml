@@ -42,6 +42,12 @@ modules:
     parameters:
       service-key:
         name: mantenimiento-xsuaa-key
+  - name: mantenimiento-cache-api-url
+    group: destinations
+    properties:
+      name: mantenimiento-cache-api
+      url: ~{url}
+      forwardAuthToken: true
   parameters:
     content:
       instance:
@@ -58,6 +64,22 @@ modules:
         existing_destinations_policy: update
   build-parameters:
     no-source: true
+- name: mantenimiento-cache-api
+  type: nodejs
+  path: srv
+  parameters:
+    memory: 1G
+    disk-quota: 1G
+    instances: 1
+  build-parameters:
+    builder: npm
+  provides:
+  - name: mantenimiento-cache-api-url
+    properties:
+      url: ${default-url}
+  requires:
+  - name: mantenimiento-destination-service
+  - name: mantenimiento-xsuaa
 resources:
 - name: mantenimiento-html5-repo-host
   type: org.cloudfoundry.managed-service
