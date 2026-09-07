@@ -355,7 +355,7 @@ sap.ui.define([
                 "cacheRefreshed",
                 result
               );
-              MessageToast.show("Información actualizada. Las pantallas recargarán desde la nueva caché.");
+              MessageToast.show("Información actualizada. Aplique nuevamente los filtros para ver los datos renovados.");
             }).catch(function (error) {
               MessageToast.show("No fue posible actualizar la información: " + error.message);
             }).finally(function () {
