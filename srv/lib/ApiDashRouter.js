@@ -47,7 +47,13 @@ function createApiDashRouter(options) {
     });
 
     router.get("/cache/status", function (request, response) {
-        const status = generations.status();
+        const generationStatus = generations.status();
+        // Conserva entries/bytes en la raíz para clientes ya desplegados y
+        // expone el detalle de A/B para la nueva administración de caché.
+        const status = Object.assign({}, generationStatus.active.cache, {
+            activeGeneration: generationStatus.active.id,
+            generations: generationStatus
+        });
         if (prewarm) {
             status.prewarm = prewarm.status();
         }
