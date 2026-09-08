@@ -158,14 +158,20 @@ function uniqueBy(records, property) {
         return records;
     }
     const seen = new Map();
+    const withoutId = [];
 
     records.forEach((record) => {
         const value = record && record[property];
-        if (value !== undefined && value !== null && value !== "") {
-            seen.set(String(value), record);
+        if (value === undefined || value === null || value === "") {
+            // Nunca se descarta una fila porque ABAP use otro nombre de clave.
+            // Esto protege temporalmente OrderRequirements mientras se confirma
+            // su identificador final en el contrato OData.
+            withoutId.push(record);
+            return;
         }
+        seen.set(String(value), record);
     });
-    return Array.from(seen.values());
+    return Array.from(seen.values()).concat(withoutId);
 }
 
 function unique(values) {
