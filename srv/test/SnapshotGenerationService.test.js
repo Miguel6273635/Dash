@@ -1,0 +1,82 @@
+"use strict";
+
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const CacheService = require("../lib/CacheService");
+const { SnapshotGenerationService } = require("../lib/SnapshotGenerationService");
+
+function activeGeneration() {
+    return {
+        id: "active-v1",
+        cache: new CacheService({ maxBytes: 1024 * 1024 }),
+        snapshots: {
+            getSnapshot: async function () { return { source: "active" }; }
+        },
+        publishedAt: 1
+    };
+}
+
+test("mantiene A mientras llena B y publica B de forma atómica", async function () {
+    let release;
+    const wait = new Promise((resolve) => { release = resolve; });
+    let calls = 0;
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function (generation) {
+            return {
+                getSnapshot: async function () {
+                    calls += 1;
+                    await wait;
+                    generation.cache.set(
+                        generation.id + ":orders:2026-08",
+                        [{ OrderId: "OT-1" }],
+                        { softTtlMs: 1000, hardTtlMs: 2000 }
+                    );
+                    return { meta: {} };
+                },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"]
+    });
+
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal((await service.getSnapshot()).source, "active");
+    assert.equal(service.activeGeneration, "active-v1");
+
+    release();
+    const result = await service.wait(job.id);
+
+    assert.equal(calls, 1);
+    assert.equal(result.status, "COMPLETED");
+    assert.notEqual(service.activeGeneration, "active-v1");
+});
+
+test("conserva A cuando B falla", async function () {
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function () {
+            return {
+                getSnapshot: async function () { throw new Error("QAS no disponible"); },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["materials"]
+    });
+    const result = await service.wait(job.id);
+
+    assert.equal(result.status, "FAILED");
+    assert.equal(result.error, "QAS no disponible");
+    assert.equal((await service.getSnapshot()).source, "active");
+    assert.equal(service.activeGeneration, "active-v1");
+});
