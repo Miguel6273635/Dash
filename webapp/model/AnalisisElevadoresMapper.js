@@ -415,8 +415,8 @@ sap.ui.define([
         var oRange = oRaw.range || {};
         var mValues = Object.assign({
             periodo: "2026",
-            fechaDesde: "01/01/2026",
-            fechaHasta: "31/12/2026",
+            fechaDesde: "03/08/2026", //cambio para pruebas de navegacion Tania 08/09/2026
+            fechaHasta: "07/08/2026",
             zona: ALL_ZONES,
             supervisor: ALL_VALUES,
             tipoOrden: ALL_VALUES
