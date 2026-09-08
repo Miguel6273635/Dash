@@ -5,6 +5,7 @@ const { executeHttpRequest } = require("@sap-cloud-sdk/http-client");
 const CacheService = require("./lib/CacheService");
 const SapODataRepository = require("./lib/SapODataRepository");
 const { DashboardSnapshotService } = require("./lib/DashboardSnapshotService");
+const { CachePrewarmService } = require("./lib/CachePrewarmService");
 const { MantenimientoDashboardService } = require("./lib/MantenimientoDashboardService");
 const { createApiDashRouter } = require("./lib/ApiDashRouter");
 const { buildDashboard } = require("./lib/dashboardMapper");
@@ -29,8 +30,9 @@ const repository = new SapODataRepository({
     }
 });
 const snapshots = new DashboardSnapshotService({ cache, repository });
+const prewarm = new CachePrewarmService({ snapshots });
 const mantenimiento = new MantenimientoDashboardService({ snapshots, buildDashboard });
-const api = createApiDashRouter({ cache, snapshots, mantenimiento });
+const api = createApiDashRouter({ cache, snapshots, mantenimiento, prewarm });
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "100kb" }));
@@ -56,5 +58,5 @@ if (require.main === module) {
     });
 }
 
-module.exports = { app, cache, repository, snapshots, mantenimiento };
+module.exports = { app, cache, repository, snapshots, prewarm, mantenimiento };
 
