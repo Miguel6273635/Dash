@@ -80,6 +80,7 @@ modules:
   requires:
   - name: mantenimiento-destination-service
   - name: mantenimiento-xsuaa
+  - name: connectivity
 resources:
 - name: mantenimiento-html5-repo-host
   type: org.cloudfoundry.managed-service
@@ -109,6 +110,10 @@ resources:
     path: ./xs-security.json
     service: xsuaa
     service-plan: application
+- name: connectivity
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: connectivity
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
