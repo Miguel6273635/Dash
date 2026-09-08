@@ -39,15 +39,15 @@ sap.ui.define([], function () {
                 refresh: forceRefresh ? "true" : undefined
             }));
 
-            return request("/api/dashboard/mantenimiento?" + query, { method: "GET" });
+            return request("/api/v1/mantenimiento?" + query, { method: "GET" });
         },
 
         getStatus: function () {
-            return request("/api/cache/status", { method: "GET" });
+            return request("/api/v1/cache/status", { method: "GET" });
         },
 
         refresh: function (payload) {
-            return request("/api/cache/refresh", {
+            return request("/api/v1/cache/refresh", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload || {})
