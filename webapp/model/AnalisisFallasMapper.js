@@ -5,6 +5,8 @@ sap.ui.define([], function () {
     var EXECUTED_SAP_STATUSES = ["E0015", "E0016", "E0019"];
     var EXECUTED_APP_STATUSES = ["0300", "0400", "0301"];
     var DEFAULT_PERIOD = "2026-ANUAL";
+    var DEFAULT_START_DATE = "03/08/2026";
+    var DEFAULT_END_DATE = "07/08/2026";
     var DEFAULT_ZONE = "TODAS";
     var KNOWN_ZONES = ["CENTRO", "ESTE", "NORTE", "SUR"];
     var MONTHS = [
@@ -110,17 +112,28 @@ sap.ui.define([], function () {
         return { startDate: oStart, endDate: oEnd };
     }
 
-    function getRange(mFilters, oRawData) {
-        var oPeriodRange = parsePeriod(mFilters.periodo || DEFAULT_PERIOD);
-        var oStart = parseDisplayDate(mFilters.fechaDesde) ||
-            (oRawData.range && oRawData.range.startDate) ||
-            (oPeriodRange && oPeriodRange.startDate);
-        var oEnd = parseDisplayDate(mFilters.fechaHasta) ||
-            (oRawData.range && oRawData.range.endDate) ||
-            (oPeriodRange && oPeriodRange.endDate);
+  function getRange(mFilters, oRawData) {
+    var oPeriodRange = parsePeriod(mFilters.periodo || DEFAULT_PERIOD);
 
-        return { startDate: oStart, endDate: oEnd };
+    var oStart = parseDisplayDate(mFilters.fechaDesde) ||
+        parseDisplayDate(DEFAULT_START_DATE) ||
+        (oRawData.range && oRawData.range.startDate) ||
+        (oPeriodRange && oPeriodRange.startDate);
+
+    var oEnd = parseDisplayDate(mFilters.fechaHasta) ||
+        parseDisplayDate(DEFAULT_END_DATE) ||
+        (oRawData.range && oRawData.range.endDate) ||
+        (oPeriodRange && oPeriodRange.endDate);
+
+    if (oEnd) {
+        oEnd.setHours(23, 59, 59, 999);
     }
+
+    return {
+        startDate: oStart,
+        endDate: oEnd
+    };
+}
 
     function isWithinRange(vValue, oStart, oEnd) {
         var oDate = parseDate(vValue);
