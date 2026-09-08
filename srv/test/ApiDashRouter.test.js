@@ -5,11 +5,20 @@ const assert = require("node:assert/strict");
 const express = require("express");
 const { createApiDashRouter } = require("../lib/ApiDashRouter");
 
+function generationsStub() {
+    return {
+        activeGeneration: "active-v1",
+        catalog: function () { return { profiles: [], dashboards: [] }; },
+        status: function () { return { active: { id: "active-v1", cache: { entries: 0 } }, staging: null, jobs: [] }; },
+        getSnapshot: async function () { return { orders: [], meta: {} }; },
+        start: function () { return { id: "job-1", reused: false }; }
+    };
+}
+
 test("publica el catálogo versionado de módulos de API_DASH", async function () {
     const app = express();
     app.use("/api/v1", createApiDashRouter({
-        cache: { status: function () { return { entries: 0 }; } },
-        snapshots: {},
+        generations: generationsStub(),
         mantenimiento: {}
     }));
     const server = await new Promise(function (resolve) {
@@ -31,4 +40,3 @@ test("publica el catálogo versionado de módulos de API_DASH", async function (
         await new Promise((resolve) => server.close(resolve));
     }
 });
-
