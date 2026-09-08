@@ -100,13 +100,16 @@ function createApiDashRouter(options) {
                 fechaDesde: body.fechaDesde || body.dateFrom,
                 fechaHasta: body.fechaHasta || body.dateTo,
                 profiles: toArray(body.profiles),
-                dashboards: toArray(body.dashboards)
+                dashboards: toArray(body.dashboards),
+                publish: !Boolean(body.validateOnly)
             });
             response.status(job.reused ? 200 : 202).json({
                 success: true,
                 message: job.reused
                     ? "Ya existe una actualización para ese periodo y conjunto de pantallas."
-                    : "La generación temporal inició. Los usuarios continúan consultando la información vigente hasta la publicación atómica.",
+                    : body.validateOnly
+                        ? "La validación temporal inició; medirá la capacidad sin sustituir la información vigente."
+                        : "La generación temporal inició. Los usuarios continúan consultando la información vigente hasta la publicación atómica.",
                 data: job
             });
         } catch (error) { errorResponse(response, error); }
