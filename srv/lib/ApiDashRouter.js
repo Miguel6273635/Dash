@@ -23,6 +23,7 @@ function createApiDashRouter(options) {
     const snapshots = config.snapshots;
     const cache = config.cache;
     const mantenimiento = config.mantenimiento;
+    const prewarm = config.prewarm;
 
     router.get("/", function (request, response) {
         response.json({ success: true, data: {
@@ -37,7 +38,40 @@ function createApiDashRouter(options) {
     });
 
     router.get("/cache/status", function (request, response) {
-        response.json({ success: true, data: cache.status() });
+        const status = cache.status();
+        if (prewarm) {
+            status.prewarm = prewarm.status();
+        }
+        response.json({ success: true, data: status });
+    });
+
+    router.get("/cache/prewarm", function (request, response) {
+        if (!prewarm) {
+            response.status(501).json({ success: false, message: "La precarga no está configurada." });
+            return;
+        }
+        response.json({ success: true, data: prewarm.status() });
+    });
+
+    router.post("/cache/prewarm", function (request, response) {
+        try {
+            if (!prewarm) {
+                response.status(501).json({ success: false, message: "La precarga no está configurada." });
+                return;
+            }
+            const body = request.body || {};
+            const job = prewarm.start({
+                fechaDesde: body.fechaDesde || body.dateFrom,
+                fechaHasta: body.fechaHasta || body.dateTo
+            });
+            response.status(job.reused ? 200 : 202).json({
+                success: true,
+                message: job.reused
+                    ? "Ya existe una precarga activa para el periodo solicitado."
+                    : "La precarga base inició en segundo plano, un mes a la vez.",
+                data: job
+            });
+        } catch (error) { errorResponse(response, error); }
     });
 
     router.get("/dashboard/snapshot", async function (request, response) {
