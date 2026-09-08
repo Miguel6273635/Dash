@@ -45,3 +45,46 @@ test("carga y reutiliza las entidades independientes sin consultas por orden", a
     assert.equal(calls.filter((item) => item === "DashboardEquipmentBlocksSet").length, 1);
 });
 
+
+
+test("conserva requisitos sin identificador conocido y carga eventos de bloqueo por BlockId", async function () {
+    const calls = [];
+    const repository = {
+        readAll: async function (entitySet) {
+            calls.push(entitySet);
+            if (entitySet === "DashboardOrdersSet") {
+                return [{ OrderId: "OT-1" }];
+            }
+            if (entitySet === "DashboardEquipmentBlocksSet") {
+                return [{ BlockId: "BL-1" }];
+            }
+            return [];
+        },
+        readByValues: async function (entitySet, property, values) {
+            calls.push(entitySet + ":" + property + ":" + values.join(","));
+            if (entitySet === "DashboardOrderRequirementsSet") {
+                return [{ OrderId: "OT-1", RequirementCode: "REQ-1" }];
+            }
+            if (entitySet === "DashboardBlockEventsSet") {
+                return [{ BlockEventId: "EV-1", BlockId: "BL-1" }];
+            }
+            return [];
+        }
+    };
+    const service = new DashboardSnapshotService({
+        cache: new CacheService({ maxBytes: 1024 * 1024 }),
+        repository: repository
+    });
+
+    const snapshot = await service.getSnapshot({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["requirements", "blockEvents"]
+    });
+
+    assert.equal(snapshot.requirements.length, 1);
+    assert.equal(snapshot.requirements[0].RequirementCode, "REQ-1");
+    assert.equal(snapshot.blockEvents[0].BlockEventId, "EV-1");
+    assert.ok(calls.includes("DashboardOrderRequirementsSet:OrderId:OT-1"));
+    assert.ok(calls.includes("DashboardBlockEventsSet:BlockId:BL-1"));
+});
