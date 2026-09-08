@@ -80,3 +80,36 @@ test("conserva A cuando B falla", async function () {
     assert.equal((await service.getSnapshot()).source, "active");
     assert.equal(service.activeGeneration, "active-v1");
 });
+
+
+test("puede validar el tamaño de B sin reemplazar A", async function () {
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function (generation) {
+            return {
+                getSnapshot: async function () {
+                    generation.cache.set(
+                        generation.id + ":orders:2026-08",
+                        [{ OrderId: "OT-1", Description: "Carga temporal" }],
+                        { softTtlMs: 1000, hardTtlMs: 2000 }
+                    );
+                    return { meta: {} };
+                },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"],
+        publish: false
+    });
+    const result = await service.wait(job.id);
+
+    assert.equal(result.status, "VALIDATED");
+    assert.ok(result.cacheBytes > 0);
+    assert.equal(service.activeGeneration, "active-v1");
+    assert.equal((await service.getSnapshot()).source, "active");
+});
