@@ -42,7 +42,10 @@ function cloneJob(job) {
         missingCacheKeys: (job.missingCacheKeys || []).slice(0, 20),
         startedAt: job.startedAt || null,
         finishedAt: job.finishedAt || null,
-        reused: Boolean(job.reused)
+        reused: Boolean(job.reused),
+        publish: Boolean(job.publish),
+        cacheBytes: Number(job.cacheBytes || 0),
+        cacheEntries: Number(job.cacheEntries || 0)
     };
 }
 
@@ -190,16 +193,27 @@ class SnapshotGenerationService {
                 );
             }
 
-            const previous = this._active;
-            staging.publishedAt = this._now();
-            this._active = staging;
-            this._staging = null;
+            const cacheStatus = staging.cache.status();
+            job.cacheBytes = cacheStatus.bytes;
+            job.cacheEntries = cacheStatus.entries;
 
-            // Después del cambio atómico la generación anterior ya no es
-            // consultada. Liberarla evita duplicar el consumo de memoria.
-            previous.cache.clear();
+            if (job.publish) {
+                const previous = this._active;
+                staging.publishedAt = this._now();
+                this._active = staging;
+                this._staging = null;
 
-            job.status = "COMPLETED";
+                // Después del cambio atómico la generación anterior ya no es
+                // consultada. Liberarla evita duplicar el consumo de memoria.
+                previous.cache.clear();
+                job.status = "COMPLETED";
+            } else {
+                // Validación de capacidad: conserva la métrica del escenario,
+                // pero no modifica A ni mantiene una segunda copia en memoria.
+                staging.cache.clear();
+                this._staging = null;
+                job.status = "VALIDATED";
+            }
             job.currentMonth = null;
             job.currentProfile = null;
         } catch (error) {
@@ -259,6 +273,9 @@ class SnapshotGenerationService {
             include: plan.include,
             totalTasks: buckets.length * plan.profiles.length,
             completedTasks: 0,
+            publish: config.publish !== false,
+            cacheBytes: 0,
+            cacheEntries: 0,
             currentMonth: null,
             currentProfile: null,
             error: null,
