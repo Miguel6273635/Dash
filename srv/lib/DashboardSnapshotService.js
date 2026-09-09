@@ -8,22 +8,21 @@ const SapODataRepository = require("./SapODataRepository");
  * su contrato final; así no se pierden datos de las vistas de detalle.
  */
 const SELECTS = {
+    // Contrato comprobado contra QAS durante la carga mensual inicial.
+    // Los campos de detalle se solicitarán en endpoints específicos sólo
+    // cuando SAP confirme el $select correspondiente.
     DashboardOrdersSet: [
-        "OrderId", "OrderTypeCode", "OrderTypeText", "Description",
-        "PlannedStartDate", "PlannedFinishDate", "SapUserStatusCode",
-        "AppStatusCode", "StatusText", "CustomerId", "CustomerName",
-        "EquipmentId", "EquipmentName", "SupervisorId", "Mecanico",
-        "Turno", "Zona", "FechaInicioProg", "FechaInicioReal"
+        "OrderId", "OrderTypeCode", "OrderTypeText", "PlannedStartDate",
+        "PlannedFinishDate", "SapUserStatusCode", "AppStatusCode",
+        "StatusText", "SupervisorId", "Mecanico", "Turno", "Zona"
     ],
     DashboardOrderCausesSet: [
         "OrderCauseId", "OrderId", "CauseCode", "CauseText",
         "CauseContextCode", "IsPrimary", "ValidTo"
     ],
     DashboardOrderMaterialsSet: [
-        "MaterialRequirementId", "OrderId", "ReservationNumber",
-        "ReservationItem", "MaterialId", "MaterialName",
-        "MaterialCategoryCode", "MaterialCategoryName", "BaseUnitCode",
-        "PlannedQuantity", "RequiredDate", "DataValidationStatusCode",
+        "MaterialRequirementId", "OrderId", "MaterialCategoryCode",
+        "MaterialCategoryName", "BaseUnitCode", "PlannedQuantity",
         "IsPublishable"
     ],
     DashboardMaterialMovementsSet: [
@@ -54,9 +53,9 @@ const SELECTS = {
         "BlockOrderId", "BlockId", "OrderId", "ImpactStartAt", "ImpactEndAt"
     ],
     DashboardResourceDailySet: [
-        "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName",
-        "ResourceTypeCode", "WorkDate", "ZoneId", "ZoneName", "SupervisorId",
-        "SupervisorName", "ShiftId", "ShiftName", "AvailabilityStatusCode",
+        "ResourceDateId", "ResourceId", "ResourceName", "ResourceTypeCode",
+        "WorkDate", "ZoneId", "ZoneName", "SupervisorId", "SupervisorName",
+        "ShiftId", "ShiftName", "AvailabilityStatusCode",
         "CapacitySourceValidated", "CapacityHours"
     ],
     DashboardFilterCatalogSet: [
