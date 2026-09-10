@@ -7,6 +7,22 @@
  * mediante __next/@odata.nextLink. Los detalles se consultan en lotes cortos
  * de IDs para evitar URLs enormes y la suspensión del proxy de BAS.
  */
+function withoutODataMetadata(record) {
+    if (!record || typeof record !== "object" || Array.isArray(record)) {
+        return record;
+    }
+
+    const compact = {};
+    Object.keys(record).forEach((key) => {
+        // Los enlaces y URIs de OData no participan en ningún cálculo del
+        // dashboard. Eliminarlos antes de cachear reduce el consumo de heap.
+        if (key !== "__metadata" && key !== "__deferred") {
+            compact[key] = record[key];
+        }
+    });
+    return compact;
+}
+
 class SapODataRepository {
     constructor(options) {
         const config = options || {};
@@ -73,7 +89,9 @@ class SapODataRepository {
                 ? container.results
                 : (Array.isArray(container.value) ? container.value : []);
 
-            results.push(...records);
+            records.forEach((record) => {
+                results.push(withoutODataMetadata(record));
+            });
             url = this._nextUrl(container.__next || body["@odata.nextLink"]);
         }
 
