@@ -1,11 +1,14 @@
 sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator"
+,
+    "mantenimiento/model/DashboardCacheODataModel"
 ], function (
     Filter,
     FilterOperator
-) {
-    "use strict";
+,
+    DashboardCacheODataModel
+) {    "use strict";
 
     var PAGE_SIZE = 1000;
     var MAX_PAGES = 50;
@@ -166,6 +169,11 @@ sap.ui.define([
         oModel,
         sOrderId
     ) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["catalogs","orders","operations","confirmations","assignments","resources","blocks","blockOrders","materials","requirements","events"]
+        );
         if (
             !oModel ||
             typeof oModel.read !== "function"
