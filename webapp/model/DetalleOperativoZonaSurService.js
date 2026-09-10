@@ -1,9 +1,12 @@
 sap.ui.define([
+
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "mantenimiento/model/DashboardCacheODataModel"
 ], function (
     Filter,
-    FilterOperator
+    FilterOperator,
+    DashboardCacheODataModel
 ) {
     "use strict";
 
@@ -410,6 +413,12 @@ sap.ui.define([
         oModel,
         mFilters
     ) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            mFilters,
+            ["orders","resources","catalogs","assignments","operations","causes","confirmations"]
+        );
+
         if (
             !oModel ||
             typeof oModel.read !==
@@ -486,6 +495,12 @@ sap.ui.define([
         oModel,
         aOrderIds
     ) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["orders","resources","catalogs","assignments","operations","causes","confirmations"]
+        );
+
         var aIds =
             uniqueStrings(
                 aOrderIds
@@ -552,6 +567,12 @@ sap.ui.define([
         oModel,
         aOrderIds
     ) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["orders","resources","catalogs","assignments","operations","causes","confirmations"]
+        );
+
         var aIds =
             uniqueStrings(
                 aOrderIds
