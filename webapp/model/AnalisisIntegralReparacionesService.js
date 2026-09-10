@@ -1,8 +1,12 @@
 /* global Promise */
 
 sap.ui.define([
-    "mantenimiento/model/AnalisisIntegralReparacionesMapper"
-], function (AnalisisIntegralReparacionesMapper) {
+
+    "mantenimiento/model/AnalisisIntegralReparacionesMapper",
+    "mantenimiento/model/DashboardCacheODataModel"
+], function (AnalisisIntegralReparacionesMapper,
+    DashboardCacheODataModel
+) {
     "use strict";
 
     var DEFAULT_PERIOD = "ANUAL_2026";
@@ -387,6 +391,12 @@ sap.ui.define([
     }
 
     function loadCriticalDetails(oModel, oRawData) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["orders","events","materials","assignments","resources"]
+        );
+
         return Promise.all([
             readOptional(oModel, "DashboardOrderEventsSet", {}),
             readOptional(oModel, "DashboardOrderMaterialsSet", {})
