@@ -62,6 +62,10 @@ sap.ui.define([], function () {
             return request("/api/v1/cache/status", { method: "GET" });
         },
 
+        getRefreshStatus: function () {
+            return request("/api/v1/cache/refresh", { method: "GET" });
+        },
+
         refresh: function (payload) {
             return request("/api/v1/cache/refresh", {
                 method: "POST",
