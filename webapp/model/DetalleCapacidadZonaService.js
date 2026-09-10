@@ -1,9 +1,12 @@
 sap.ui.define([
+
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "mantenimiento/model/DashboardCacheODataModel"
 ], function (
     Filter,
-    FilterOperator
+    FilterOperator,
+    DashboardCacheODataModel
 ) {
     "use strict";
 
@@ -120,6 +123,12 @@ sap.ui.define([
     }
 
     function getDashboardData(oODataModel, mFilters) {
+        oODataModel = DashboardCacheODataModel.wrap(
+            oODataModel,
+            mFilters,
+            ["orders","operations","confirmations","resources","assignments","catalogs"]
+        );
+
         var aOrdersFilters;
 
         if (
