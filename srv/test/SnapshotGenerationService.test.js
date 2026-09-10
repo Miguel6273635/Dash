@@ -113,3 +113,35 @@ test("puede validar el tamaño de B sin reemplazar A", async function () {
     assert.equal(service.activeGeneration, "active-v1");
     assert.equal((await service.getSnapshot()).source, "active");
 });
+
+
+test("la generación usa warmOnly para no duplicar en memoria las colecciones cacheadas", async function () {
+    let received;
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function (generation) {
+            return {
+                getSnapshot: async function (options) {
+                    received = options;
+                    generation.cache.set(
+                        generation.id + ":orders:2026-08",
+                        [{ OrderId: "OT-1" }],
+                        { softTtlMs: 1000, hardTtlMs: 2000 }
+                    );
+                    return { meta: { warmOnly: options.warmOnly } };
+                },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"],
+        publish: false
+    });
+    await service.wait(job.id);
+
+    assert.equal(received.warmOnly, true);
+});
