@@ -154,6 +154,10 @@ class SnapshotGenerationService {
         return catalog();
     }
 
+    plan(options) {
+        return resolvePlan(options);
+    }
+
     status() {
         return {
             active: this._statusGeneration(this._active),
