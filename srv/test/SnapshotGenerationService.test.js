@@ -145,3 +145,32 @@ test("la generación usa warmOnly para no duplicar en memoria las colecciones ca
 
     assert.equal(received.warmOnly, true);
 });
+
+
+test("crea una caché independiente para cada generación temporal", async function () {
+    const generationIds = [];
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        cacheFactory: function (options) {
+            generationIds.push(options.generationId);
+            return new CacheService({ maxBytes: 1024 * 1024 });
+        },
+        snapshotFactory: function () {
+            return {
+                getSnapshot: async function () { return { meta: { warmOnly: true } }; },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"],
+        publish: false
+    });
+
+    await service.wait(job.id);
+    assert.equal(generationIds.length, 1);
+    assert.match(generationIds[0], /^stage-/);
+});
