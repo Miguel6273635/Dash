@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/DashboardCacheApiService"
+], function (DashboardCacheApiService) {
     "use strict";
 
     // QAS requiere que las entidades de detalle se consulten desde las OT del
@@ -12,6 +14,118 @@ sap.ui.define([], function () {
     // mismo tiempo. Se mantienen lotes cortos, pero se controla concurrencia.
     var MAX_PARALLEL_ENTITY_REQUESTS = 3;
     var MAX_PARALLEL_BATCH_REQUESTS = 1;
+
+    var API_ENTITY_TARGETS = {
+        DashboardOrderCausesSet: "causes",
+        DashboardOrderMaterialsSet: "materials",
+        DashboardOrderResourcesSet: "assignments",
+        DashboardOrderOperationsSet: "operations",
+        DashboardOrderConfirmationsSet: "confirmations",
+        DashboardOrderEventsSet: "events",
+        DashboardOrderRequirementsSet: "requirements",
+        DashboardBlockOrdersSet: "blockOrders",
+        DashboardMaterialMovementsSet: "movements",
+        DashboardResourceDailySet: "resources",
+        DashboardFilterCatalogSet: "catalogs",
+        DashboardServiceRequestsSet: "serviceRequests",
+        DashboardEquipmentBlocksSet: "blocks",
+        DashboardBlockEventsSet: "blockEvents"
+    };
+
+    function unique(values) {
+        return (values || []).reduce(function (result, value) {
+            if (value && result.indexOf(value) < 0) {
+                result.push(value);
+            }
+            return result;
+        }, []);
+    }
+
+    function targetForEntitySet(entitySet) {
+        return API_ENTITY_TARGETS[String(entitySet || "")] || null;
+    }
+
+    function datesFromFilter(filter) {
+        var match;
+        var expression = /datetime'(\d{4}-\d{2}-\d{2})T\d{2}:\d{2}:\d{2}'/g;
+        var dates = [];
+
+        while ((match = expression.exec(String(filter || "")))) {
+            dates.push(match[1]);
+        }
+        return dates;
+    }
+
+    function rangeFromConfig(config) {
+        var filters = [config.ordersFilter || ""];
+
+        (config.independent || []).forEach(function (item) {
+            filters.push(item && item.filter || "");
+        });
+
+        var dates = filters.reduce(function (result, filter) {
+            return result.concat(datesFromFilter(filter));
+        }, []);
+
+        return {
+            fechaDesde: dates[0] || null,
+            fechaHasta: dates[1] || dates[0] || null
+        };
+    }
+
+    function includeFromConfig(config) {
+        var include = ["orders"];
+
+        (config.orderRelations || []).forEach(function (relation) {
+            include.push(targetForEntitySet(relation && relation.entitySet));
+        });
+        (config.independent || []).forEach(function (independent) {
+            include.push(targetForEntitySet(independent && independent.entitySet));
+        });
+        if (config.materialMovements) {
+            include.push(targetForEntitySet(config.materialMovements.entitySet ||
+                "DashboardMaterialMovementsSet"));
+        }
+        return unique(include);
+    }
+
+    function rawFromSnapshot(snapshot, config) {
+        var raw = {
+            orders: snapshot.orders || [],
+            meta: Object.assign({}, snapshot.meta || {}, {
+                source: "API_DASH",
+                unavailableEntitySets: [],
+                ordersFilter: config.ordersFilter || ""
+            })
+        };
+
+        (config.orderRelations || []).forEach(function (relation) {
+            raw[relation.target] = snapshot[targetForEntitySet(relation.entitySet)] || [];
+        });
+        (config.independent || []).forEach(function (independent) {
+            raw[independent.target] = snapshot[targetForEntitySet(independent.entitySet)] || [];
+        });
+        if (config.materialMovements) {
+            raw[config.materialMovements.target || "movements"] =
+                snapshot[targetForEntitySet(config.materialMovements.entitySet ||
+                    "DashboardMaterialMovementsSet")] || [];
+        }
+        return raw;
+    }
+
+    function loadFromApi(config) {
+        var range = rangeFromConfig(config);
+
+        if (!range.fechaDesde || !range.fechaHasta) {
+            return Promise.reject(new Error(
+                "La pantalla requiere fechas para consultar la generación publicada de API_DASH"
+            ));
+        }
+        return DashboardCacheApiService.loadSnapshot(range, includeFromConfig(config))
+            .then(function (snapshot) {
+                return rawFromSnapshot(snapshot, config);
+            });
+    }
 
     function read(oModel, sEntitySet, sFilter) {
         var mParameters = { "$format": "json" };
@@ -216,12 +330,9 @@ sap.ui.define([], function () {
     function load(oModel, mOptions) {
         var mConfig = mOptions || {};
 
-        if (!oModel || typeof oModel.read !== "function") {
-            return Promise.reject(new Error("El modelo OData 'dashboardOData' no está configurado"));
-        }
-        return read(oModel, "DashboardOrdersSet", mConfig.ordersFilter || "").then(function (aOrders) {
-            return loadForOrders(oModel, aOrders, mConfig);
-        });
+        // Todas las pantallas que comparten esta secuencia reciben los datos
+        // desde API_DASH. No existe fallback a OData desde el navegador.
+        return loadFromApi(mConfig);
     }
 
     return {
@@ -229,6 +340,8 @@ sap.ui.define([], function () {
         loadForOrders: loadForOrders,
         rangeFilter: rangeFilter,
         read: read,
-        byValues: byValues
+        byValues: byValues,
+        loadFromApi: loadFromApi,
+        includeFromConfig: includeFromConfig
     };
 });
