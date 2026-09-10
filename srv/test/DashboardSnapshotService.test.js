@@ -128,3 +128,27 @@ test("calienta la caché sin materializar una segunda respuesta de datos", async
     assert.equal("requirements" in warmup, false);
     assert.equal(cache.status().entries, 4);
 });
+
+
+test("la consulta de una pantalla no hace OData cuando falta una entrada activa", async function () {
+    let reads = 0;
+    const cache = new CacheService({ maxBytes: 1024 * 1024 });
+    const service = new DashboardSnapshotService({
+        cache,
+        repository: {
+            readAll: async function () { reads += 1; return []; },
+            readByValues: async function () { reads += 1; return []; }
+        }
+    });
+
+    await assert.rejects(
+        service.getSnapshot({
+            dateFrom: "2026-08-01",
+            dateTo: "2026-08-31",
+            include: ["orders"],
+            cacheOnly: true
+        }),
+        (error) => error && error.code === "CACHE_MISS"
+    );
+    assert.equal(reads, 0);
+});
