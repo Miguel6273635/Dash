@@ -104,11 +104,16 @@ sap.ui.define([
         );
       }
 
+      if (this._iCacheRefreshPoll) {
+        window.clearTimeout(this._iCacheRefreshPoll);
+      }
+
       this._fnDocumentPointerDown = null;
       this._fnDocumentKeyDown = null;
       this._fnSideNavMouseEnter = null;
       this._fnSideNavMouseLeave = null;
       this._iSideNavCloseTimer = null;
+      this._iCacheRefreshPoll = null;
     },
 
     /**
@@ -326,16 +331,90 @@ sap.ui.define([
     },
 
     /**
-     * Recarga la aplicación.
+     * Devuelve el intervalo de calendario completo que se refresca desde el
+     * menú. La API divide internamente el año por meses y perfiles.
+     *
+     * @returns {object} Intervalo ISO del año vigente
+     * @private
+     */
+    _getCurrentYearRange: function () {
+      var oToday = new Date();
+      var iYear = oToday.getFullYear();
+
+      return {
+        fechaDesde: iYear + "-01-01",
+        fechaHasta: iYear + "-12-31",
+        label: String(iYear)
+      };
+    },
+
+    /**
+     * Consulta el estado de la generación temporal mientras esta vista siga
+     * abierta. El trabajo continúa en API_DASH si el usuario navega o cierra
+     * la aplicación.
+     *
+     * @param {string} sJobId Identificador devuelto por API_DASH
+     * @returns {Promise} Resolución cuando A se publica o rechazo si B falla
+     * @private
+     */
+    _waitForCacheRefresh: function (sJobId) {
+      return new Promise(function (resolve, reject) {
+        var fnPoll = function () {
+          DashboardCacheApiService.getRefreshStatus().then(function (oStatus) {
+            var aJobs = (oStatus && oStatus.jobs) || [];
+            var oJob = aJobs.filter(function (oItem) {
+              return oItem && oItem.id === sJobId;
+            }).pop();
+
+            if (!oJob) {
+              reject(new Error("No se encontró el estado de la generación en API_DASH."));
+              return;
+            }
+
+            if (oJob.status === "QUEUED" || oJob.status === "RUNNING") {
+              this._iCacheRefreshPoll = window.setTimeout(fnPoll, 15000);
+              return;
+            }
+
+            this._iCacheRefreshPoll = null;
+
+            if (oJob.status === "COMPLETED") {
+              sap.ui.getCore().getEventBus().publish(
+                "mantenimiento",
+                "cacheRefreshed",
+                oJob
+              );
+              resolve(oJob);
+              return;
+            }
+
+            reject(new Error(oJob.error ||
+              "La generación no pudo publicarse. La información anterior continúa activa."));
+          }.bind(this)).catch(reject);
+        }.bind(this);
+
+        fnPoll();
+      }.bind(this));
+    },
+
+    /**
+     * Crea una generación temporal del año vigente para todos los perfiles de
+     * Mantenimiento. La generación activa no se toca hasta que la temporal
+     * contenga cada entidad requerida y se publique de manera atómica.
      */
     onRefreshCache: function () {
+      var oRange;
+
       if (this._cacheRefreshPromise) {
-        MessageToast.show("La información se está actualizando.");
+        MessageToast.show("La información se está actualizando en segundo plano.");
         return;
       }
 
+      oRange = this._getCurrentYearRange();
+
       MessageBox.confirm(
-        "Se consultará SAP para actualizar los datos del mes vigente. Las demás consultas usarán la nueva caché.",
+        "Se preparará " + oRange.label +
+          " completo para todas las pantallas de Mantenimiento. El proceso puede tardar; los usuarios seguirán viendo la generación vigente hasta que la nueva quede completa.",
         {
           title: "Actualizar información",
           actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
@@ -346,20 +425,33 @@ sap.ui.define([
             }
 
             this._cacheRefreshPromise = DashboardCacheApiService.refresh({
-              scope: "active",
-              include: ["orders", "catalogs", "serviceRequests", "blocks"],
-              independent: true
-            }).then(function (result) {
-              sap.ui.getCore().getEventBus().publish(
-                "mantenimiento",
-                "cacheRefreshed",
-                result
+              fechaDesde: oRange.fechaDesde,
+              fechaHasta: oRange.fechaHasta,
+              profiles: [
+                "core",
+                "operational",
+                "materials",
+                "compliance",
+                "repair",
+                "equipment",
+                "requests"
+              ]
+            }).then(function (oJob) {
+              MessageToast.show(
+                "La generación temporal inició. API_DASH mantiene visibles los datos vigentes."
               );
-              MessageToast.show("Información actualizada. Aplique nuevamente los filtros para ver los datos renovados.");
-            }).catch(function (error) {
-              MessageToast.show("No fue posible actualizar la información: " + error.message);
+              return this._waitForCacheRefresh(oJob.id);
+            }.bind(this)).then(function () {
+              MessageToast.show(
+                "Información actualizada. Aplique nuevamente los filtros para ver la nueva generación."
+              );
+            }).catch(function (oError) {
+              MessageToast.show(
+                "No fue posible publicar la actualización: " + oError.message
+              );
             }).finally(function () {
               this._cacheRefreshPromise = null;
+              this._iCacheRefreshPoll = null;
             }.bind(this));
           }.bind(this)
         }
