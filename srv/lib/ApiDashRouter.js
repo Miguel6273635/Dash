@@ -128,8 +128,8 @@ function createApiDashRouter(options) {
                 ? generations.plan({ dashboards, profiles })
                 : { dashboards: [], profiles: [], include: toArray(request.query.include, ["orders", "catalogs"]) };
             const data = await generations.getSnapshot({
-                dateFrom: request.query.fechaDesde || request.query.dateFrom,
-                dateTo: request.query.fechaHasta || request.query.dateTo,
+                dateFrom: request.query.fechaDesde || request.query.fechaInicio || request.query.dateFrom,
+                dateTo: request.query.fechaHasta || request.query.fechaFin || request.query.dateTo,
                 include: plan.include,
                 // Una pantalla no llena faltantes desde SAP: consume únicamente
                 // la generación activa que ya fue publicada de forma atómica.
