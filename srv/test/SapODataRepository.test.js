@@ -46,3 +46,26 @@ test("divide los detalles en lotes de máximo quince OrderId", async function ()
     assert.equal((filters[1].match(/OrderId eq/g) || []).length, 1);
 });
 
+
+
+test("descarta metadatos OData antes de entregar registros para caché", async function () {
+    const repository = new SapODataRepository({
+        execute: async function () {
+            return {
+                data: {
+                    d: {
+                        results: [{
+                            OrderId: "1",
+                            Description: "OT de prueba",
+                            __metadata: { uri: "http://servidor/orden/1", type: "SAP.Order" }
+                        }]
+                    }
+                }
+            };
+        }
+    });
+
+    const result = await repository.readAll("DashboardOrdersSet");
+
+    assert.deepEqual(result, [{ OrderId: "1", Description: "OT de prueba" }]);
+});
