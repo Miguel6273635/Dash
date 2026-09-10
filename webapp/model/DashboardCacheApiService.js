@@ -50,6 +50,14 @@ sap.ui.define([], function () {
             return request("/api/v1/dashboard/snapshot?" + query, { method: "GET" });
         },
 
+        loadSnapshot: function (filters, include) {
+            var query = toQuery(Object.assign({}, filters || {}, {
+                include: include
+            }));
+
+            return request("/api/v1/dashboard/snapshot?" + query, { method: "GET" });
+        },
+
         getStatus: function () {
             return request("/api/v1/cache/status", { method: "GET" });
         },
