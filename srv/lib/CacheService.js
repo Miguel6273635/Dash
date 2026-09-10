@@ -23,13 +23,51 @@ class CacheService {
         this._bytes = 0;
     }
 
-    _estimateBytes(key, value) {
-        try {
-            return Buffer.byteLength(String(key) + JSON.stringify(value), "utf8");
-        } catch (error) {
-            // Nunca se deben almacenar valores no serializables en esta caché.
-            throw new Error("No fue posible calcular el tamaño de la caché: " + error.message);
+    _estimateValueBytes(value, depth) {
+        const level = Number(depth || 0);
+
+        if (value === null || value === undefined) {
+            return 4;
         }
+        if (typeof value === "string") {
+            return Buffer.byteLength(value, "utf8");
+        }
+        if (typeof value === "number" || typeof value === "bigint") {
+            return 8;
+        }
+        if (typeof value === "boolean") {
+            return 4;
+        }
+        if (typeof value !== "object") {
+            return 16;
+        }
+
+        // JSON.stringify de un arreglo masivo crea otra copia gigante del
+        // payload. Esta estimación acotada preserva el límite LRU sin crear
+        // esa copia transitoria en el heap.
+        if (level >= 4) {
+            return 32;
+        }
+        if (Array.isArray(value)) {
+            if (!value.length) {
+                return 24;
+            }
+            const samples = Math.min(64, value.length);
+            let sampledBytes = 0;
+            for (let index = 0; index < samples; index += 1) {
+                const position = Math.floor(index * value.length / samples);
+                sampledBytes += this._estimateValueBytes(value[position], level + 1);
+            }
+            return 24 + Math.ceil(sampledBytes / samples) * value.length;
+        }
+
+        return 32 + Object.keys(value).reduce((bytes, property) =>
+            bytes + Buffer.byteLength(property, "utf8") +
+            this._estimateValueBytes(value[property], level + 1), 0);
+    }
+
+    _estimateBytes(key, value) {
+        return Buffer.byteLength(String(key), "utf8") + this._estimateValueBytes(value, 0);
     }
 
     _touch(key, entry) {
