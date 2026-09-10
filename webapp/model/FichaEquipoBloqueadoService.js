@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/DashboardCacheODataModel"
+], function (DashboardCacheODataModel) {
     "use strict";
 
     var PAGE_SIZE = 1000;
@@ -130,6 +132,11 @@ sap.ui.define([], function () {
     }
 
     function getDashboardData(oModel) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["blocks","blockOrders","orders","blockEvents","resources"]
+        );
         if (
             !oModel ||
             typeof oModel.read !== "function"
