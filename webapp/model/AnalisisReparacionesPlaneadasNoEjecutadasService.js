@@ -1,8 +1,12 @@
 /* global Promise */
 
 sap.ui.define([
-    "mantenimiento/model/AnalisisReparacionesPlaneadasNoEjecutadasMapper"
-], function (AnalisisReparacionesPlaneadasNoEjecutadasMapper) {
+
+    "mantenimiento/model/AnalisisReparacionesPlaneadasNoEjecutadasMapper",
+    "mantenimiento/model/DashboardCacheODataModel"
+], function (AnalisisReparacionesPlaneadasNoEjecutadasMapper,
+    DashboardCacheODataModel
+) {
     "use strict";
 
     var ID_CHUNK_SIZE = 30;
@@ -443,6 +447,12 @@ sap.ui.define([
     }
 
     function load(oModel, mFilters, sAnalysis) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            mFilters,
+            ["orders","causes","materials","assignments","resources","catalogs"]
+        );
+
         var oContext;
         var oRawData;
         var oCatalogPromise;
