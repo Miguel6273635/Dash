@@ -190,39 +190,30 @@ sap.ui.define([
                 this._onDashboardLoaded(DashboardDataService.createEmpty(this._buildDashboardRequest().filtros));
             }
             oModel.setProperty("/connection", {
-                status: "FALLBACK",
-                source: "ODATA_ERROR"
+                status: "PENDING_CACHE",
+                source: "API_DASH"
             });
 
             if (bNotify) {
-                MessageToast.show("No fue posible consultar SAP; se conservan los últimos datos disponibles");
+                MessageToast.show("La información está en preparación en API_DASH; se conserva el último resultado publicado");
             }
         },
 
         _loadDashboard: function (bNotify) {
             var oRequest = this._buildDashboardRequest();
-            var oODataModel = this.getOwnerComponent().getModel("dashboardOData");
 
             this.getView().setBusy(true);
 
-            DashboardCacheApiService.loadMantenimiento(oRequest.filtros).catch(function (oCacheError) {
-                /*
-                 * El fallback mantiene el modo local de BAS mientras la API
-                 * todavía no está desplegada. En BTP la primera opción es la
-                 * API, que reutiliza la caché mensual compartida.
-                 */
-                if (window.console && window.console.warn) {
-                    window.console.warn("API de caché no disponible; se usará OData directo.", oCacheError);
-                }
-                return DashboardDataService.load(oODataModel, oRequest.filtros);
-            }).then(function (oData) {
+            // Las pantallas productivas consultan sólo la generación publicada
+            // de API_DASH. Ya no se hace fallback a OData desde el navegador.
+            DashboardCacheApiService.loadMantenimiento(oRequest.filtros).then(function (oData) {
                 this._onDashboardLoaded(oData);
                 this._hasLoadedDashboard = true;
                 if (bNotify) {
                     MessageToast.show(
                         oData.meta && oData.meta.source === "API_DASH"
                             ? "Dashboard actualizado desde API_DASH"
-                            : "Dashboard actualizado con datos de SAP"
+                            : "Dashboard actualizado desde la información publicada"
                     );
                 }
             }.bind(this)).catch(function (oError) {
