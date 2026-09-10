@@ -73,6 +73,7 @@ class SnapshotGenerationService {
             maxEntries: 400,
             maxBytes: 128 * 1024 * 1024
         }, config.cacheOptions || {});
+        this._cacheFactory = config.cacheFactory || ((cacheOptions) => new CacheService(cacheOptions));
         this._now = config.now || Date.now;
         this._sequence = 0;
         this._jobs = new Map();
@@ -90,7 +91,9 @@ class SnapshotGenerationService {
     _createGeneration(id) {
         const generation = {
             id,
-            cache: new CacheService(this._cacheOptions),
+            cache: this._cacheFactory(Object.assign({}, this._cacheOptions, {
+                generationId: id
+            })),
             snapshots: null,
             publishedAt: null
         };
