@@ -1,7 +1,7 @@
 sap.ui.define([
     "mantenimiento/model/AnalisisFallasMapper",
-    "mantenimiento/model/ODataRelatedDataService"
-], function (AnalisisFallasMapper, RelatedData) {
+    "mantenimiento/model/DashboardCacheApiService"
+], function (AnalisisFallasMapper, DashboardCacheApiService) {
     "use strict";
 
     var AUXILIARY_SETS = {
@@ -74,32 +74,24 @@ sap.ui.define([
         ].join(" and ");
     }
 
-    function readEntitySet(oModel, sEntitySet, sFilter) {
-        var mUrlParameters = { "$format": "json" };
+    function parseODataDate(vValue) {
+        var aMatch;
+        var oDate;
 
-        if (sFilter) {
-            mUrlParameters.$filter = sFilter;
+        if (!vValue) {
+            return null;
         }
-        return new Promise(function (resolve, reject) {
-            oModel.read("/" + sEntitySet, {
-                urlParameters: mUrlParameters,
-                success: function (oData) {
-                    resolve(Array.isArray(oData && oData.results) ? oData.results : []);
-                },
-                error: function (oError) {
-                    reject(new Error("No fue posible consultar " + sEntitySet +
-                        (oError && oError.message ? ": " + oError.message : "")));
-                }
-            });
-        });
+        aMatch = String(vValue).match(/\/Date\((-?\d+)/);
+        oDate = aMatch ? new Date(Number(aMatch[1])) : new Date(vValue);
+        return Number.isNaN(oDate.getTime()) ? null : oDate;
     }
 
-    function readOptional(oModel, sEntitySet) {
-        return readEntitySet(oModel, sEntitySet, "").then(function (aRecords) {
-            return { entitySet: sEntitySet, records: aRecords, error: null };
-        }).catch(function (oError) {
-            return { entitySet: sEntitySet, records: [], error: oError.message };
-        });
+    function orderIsInRange(oOrder, oRange) {
+        var oDate = parseODataDate(oOrder && oOrder.PlannedStartDate);
+
+        return Boolean(oDate) &&
+            oDate >= oRange.startDate &&
+            oDate <= oRange.endDate;
     }
 
     function previousRanges(oContext) {
@@ -164,15 +156,10 @@ sap.ui.define([
     }
 
     function load(oModel, mFilters) {
-        var oContext;
+        var oContext = getFilterContext(mFilters);
         var aPeriods;
+        var oTrendStart;
 
-        if (!oModel || typeof oModel.read !== "function") {
-            return Promise.reject(new Error(
-                "El modelo OData 'dashboardOData' no está configurado"
-            ));
-        }
-        oContext = getFilterContext(mFilters);
         if (!oContext.startDate || !oContext.endDate) {
             return Promise.reject(new Error("Selecciona un periodo válido"));
         }
@@ -181,48 +168,46 @@ sap.ui.define([
                 "La fecha desde no puede ser posterior a la fecha hasta"
             ));
         }
+
         aPeriods = previousRanges(oContext);
+        oTrendStart = aPeriods[0].startDate;
 
-        return Promise.all(aPeriods.map(function (oRange) {
-            return readEntitySet(oModel, "DashboardOrdersSet", buildOrdersFilter(oRange));
-        })).then(function (aOrdersByPeriod) {
-            var mSeen = new Map();
-            var oTrendRange = {
-                startDate: aPeriods[0].startDate,
-                endDate: oContext.endDate
-            };
-
-            aOrdersByPeriod.forEach(function (aOrders) {
-                aOrders.forEach(function (oOrder) {
-                    mSeen.set(String(oOrder.OrderId), oOrder);
+        /*
+         * La tendencia utiliza cinco periodos. Se obtiene completa desde la
+         * generación activa; si alguno no fue precargado API_DASH responde con
+         * CACHE_MISS y nunca intenta completar datos contra SAP desde el
+         * navegador.
+         */
+        return DashboardCacheApiService.loadSnapshot({
+            fechaDesde: formatODataDate(oTrendStart),
+            fechaHasta: formatODataDate(oContext.endDate)
+        }, [
+            "orders",
+            "causes",
+            "assignments",
+            "resources",
+            "catalogs"
+        ]).then(function (oSnapshot) {
+            var oRawData = createRawData(oContext);
+            var aOrders = oSnapshot.orders || [];
+            var aOrdersByPeriod = aPeriods.map(function (oRange) {
+                return aOrders.filter(function (oOrder) {
+                    return orderIsInRange(oOrder, oRange);
                 });
             });
-            return RelatedData.loadForOrders(oModel, Array.from(mSeen.values()), {
-                orderRelations: [
-                    { entitySet: "DashboardOrderCausesSet", target: "causes" },
-                    { entitySet: "DashboardOrderResourcesSet", target: "assignments" }
-                ],
-                independent: [
-                    { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", oTrendRange) },
-                    { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
-                ]
-            }).then(function (oRelatedRaw) {
-                return { ordersByPeriod: aOrdersByPeriod, relatedRaw: oRelatedRaw };
-            });
-        }).then(function (oResponse) {
-            var oRawData = createRawData(oContext);
-            var aOrdersByPeriod = oResponse.ordersByPeriod;
-            var oRelatedRaw = oResponse.relatedRaw;
 
             oRawData.orders = aOrdersByPeriod[aOrdersByPeriod.length - 1] || [];
-            oRawData.trendOrders = oRelatedRaw.orders;
+            oRawData.trendOrders = aOrders;
             oRawData.trendPeriods = aPeriods;
             ["causes", "assignments", "resources", "catalogs"].forEach(function (sKey) {
-                oRawData[sKey] = oRelatedRaw[sKey] || [];
+                oRawData[sKey] = oSnapshot[sKey] || [];
             });
-            oRawData.meta.unavailableEntitySets = oRelatedRaw.meta.unavailableEntitySets;
-            oRawData.meta.ordersFilter = buildOrdersFilter(aPeriods[aPeriods.length - 1]);
-            oRawData.meta.generatedAt = new Date().toISOString();
+            oRawData.meta = Object.assign({}, oRawData.meta, {
+                source: "API_DASH_ACTIVE_GENERATION",
+                generatedAt: new Date().toISOString(),
+                cache: oSnapshot.meta && oSnapshot.meta.cache,
+                ordersFilter: buildOrdersFilter(aPeriods[aPeriods.length - 1])
+            });
             oRawData.meta.records = {
                 orders: oRawData.orders.length,
                 trendOrders: oRawData.trendOrders.length,
