@@ -88,3 +88,43 @@ test("conserva requisitos sin identificador conocido y carga eventos de bloqueo 
     assert.ok(calls.includes("DashboardOrderRequirementsSet:OrderId:OT-1"));
     assert.ok(calls.includes("DashboardBlockEventsSet:BlockId:BL-1"));
 });
+
+
+test("calienta la caché sin materializar una segunda respuesta de datos", async function () {
+    const cache = new CacheService({ maxBytes: 1024 * 1024 });
+    const service = new DashboardSnapshotService({
+        cache,
+        repository: {
+            readAll: async function (entitySet) {
+                if (entitySet === "DashboardOrdersSet") {
+                    return [{ OrderId: "OT-1" }];
+                }
+                if (entitySet === "DashboardEquipmentBlocksSet") {
+                    return [{ BlockId: "BL-1" }];
+                }
+                return [];
+            },
+            readByValues: async function (entitySet) {
+                if (entitySet === "DashboardOrderRequirementsSet") {
+                    return [{ OrderId: "OT-1", RequirementCode: "REQ-1" }];
+                }
+                if (entitySet === "DashboardBlockEventsSet") {
+                    return [{ BlockId: "BL-1", BlockEventId: "EV-1" }];
+                }
+                return [];
+            }
+        }
+    });
+
+    const warmup = await service.getSnapshot({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["requirements", "blockEvents"],
+        warmOnly: true
+    });
+
+    assert.equal(warmup.meta.warmOnly, true);
+    assert.equal("orders" in warmup, false);
+    assert.equal("requirements" in warmup, false);
+    assert.equal(cache.status().entries, 4);
+});
