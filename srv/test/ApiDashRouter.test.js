@@ -64,12 +64,14 @@ test("la ruta de una pantalla usa sólo la generación activa y su perfil", asyn
 
     try {
         const response = await fetch("http://127.0.0.1:" + server.address().port +
-            "/api/v1/dashboard/snapshot?dashboard=ConsumoMateriales&fechaDesde=2026-08-01&fechaHasta=2026-08-31");
+            "/api/v1/dashboard/snapshot?dashboard=ConsumoMateriales&fechaInicio=2026-08-01&fechaFin=2026-08-31");
         const body = await response.json();
 
         assert.equal(response.status, 200);
         assert.deepEqual(calls[0].include, ["orders", "materials"]);
         assert.equal(calls[0].cacheOnly, true);
+        assert.equal(calls[0].dateFrom, "2026-08-01");
+        assert.equal(calls[0].dateTo, "2026-08-31");
         assert.deepEqual(body.meta.dashboards, ["ConsumoMateriales"]);
     } finally {
         await new Promise((resolve) => server.close(resolve));
