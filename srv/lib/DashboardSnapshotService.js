@@ -212,22 +212,36 @@ class DashboardSnapshotService {
             "' and PlannedFinishDate eq datetime'" + SapODataRepository.odataDate(bucket.to) + "'";
     }
 
-    async _cached(key, loader, policy, forceRefresh) {
+    async _cached(key, loader, policy, forceRefresh, cacheOnly) {
+        if (cacheOnly) {
+            const cached = this._cache.get(key);
+
+            if (!cached) {
+                const error = new Error("La generación activa no contiene todavía " + key);
+                error.code = "CACHE_MISS";
+                error.cacheKey = key;
+                throw error;
+            }
+            return Object.assign({}, cached, {
+                cacheStatus: cached.stale ? "STALE" : "HIT"
+            });
+        }
+
         return this._cache.getOrLoad(key, loader, policy, {
             forceRefresh: Boolean(forceRefresh),
             waitForRefresh: Boolean(forceRefresh)
         });
     }
 
-    async _orders(bucket, forceRefresh) {
+    async _orders(bucket, forceRefresh, cacheOnly) {
         const key = this._key("orders", bucket.key);
         return this._cached(key, () => this._repository.readAll("DashboardOrdersSet", {
             filter: this._ordersFilter(bucket),
             select: SELECTS.DashboardOrdersSet
-        }), POLICIES.orders, forceRefresh);
+        }), POLICIES.orders, forceRefresh, cacheOnly);
     }
 
-    async _relation(name, bucket, orders, forceRefresh) {
+    async _relation(name, bucket, orders, forceRefresh, cacheOnly) {
         const relation = RELATIONS[name];
         const key = this._key(relation.entitySet, bucket.key);
         const orderIds = orders.map((order) => order.OrderId);
@@ -240,7 +254,7 @@ class DashboardSnapshotService {
         ), POLICIES.relation, forceRefresh);
     }
 
-    async _resources(bucket, forceRefresh) {
+    async _resources(bucket, forceRefresh, cacheOnly) {
         const key = this._key("DashboardResourceDailySet", bucket.key);
         const filter = "WorkDate ge datetime'" + SapODataRepository.odataDate(bucket.from) +
             "' and WorkDate le datetime'" + SapODataRepository.odataDate(bucket.to) + "'";
@@ -248,25 +262,25 @@ class DashboardSnapshotService {
         return this._cached(key, () => this._repository.readAll("DashboardResourceDailySet", {
             filter,
             select: SELECTS.DashboardResourceDailySet
-        }), POLICIES.resources, forceRefresh);
+        }), POLICIES.resources, forceRefresh, cacheOnly);
     }
 
-    async _catalogs(forceRefresh) {
+    async _catalogs(forceRefresh, cacheOnly) {
         return this._cached(this._key("DashboardFilterCatalogSet", "global"), () =>
             this._repository.readAll("DashboardFilterCatalogSet", { select: SELECTS.DashboardFilterCatalogSet }),
-        POLICIES.catalog, forceRefresh);
+        POLICIES.catalog, forceRefresh, cacheOnly);
     }
 
-    async _independent(name, forceRefresh) {
+    async _independent(name, forceRefresh, cacheOnly) {
         const source = INDEPENDENT[name];
         const key = this._key(source.entitySet, "global");
 
         return this._cached(key, () => this._repository.readAll(source.entitySet, {
             select: SELECTS[source.entitySet]
-        }), POLICIES.independent, forceRefresh);
+        }), POLICIES.independent, forceRefresh, cacheOnly);
     }
 
-    async _blockRelation(name, blocks, forceRefresh) {
+    async _blockRelation(name, blocks, forceRefresh, cacheOnly) {
         const relation = BLOCK_RELATIONS[name];
         const key = this._key(relation.entitySet, "global");
         const blockIds = blocks.map((block) => block.BlockId);
@@ -279,7 +293,7 @@ class DashboardSnapshotService {
         ), POLICIES.relation, forceRefresh);
     }
 
-    async _movements(bucket, materials, forceRefresh) {
+    async _movements(bucket, materials, forceRefresh, cacheOnly) {
         const key = this._key("DashboardMaterialMovementsSet", bucket.key);
         const requirementIds = materials.map((material) => material.MaterialRequirementId);
 
@@ -339,6 +353,7 @@ class DashboardSnapshotService {
         const to = dateAtStart(config.dateTo);
         const requested = this._requested(config.include);
         const forceRefresh = Boolean(config.forceRefresh);
+        const cacheOnly = Boolean(config.cacheOnly);
         const warmOnly = Boolean(config.warmOnly);
 
         if (from > to) {
@@ -352,6 +367,7 @@ class DashboardSnapshotService {
             cache: {},
             months: [],
             namespace: this._namespace,
+            cacheOnly,
             warmOnly
         } };
         const allRecords = warmOnly ? null : {};
@@ -363,7 +379,7 @@ class DashboardSnapshotService {
         const buckets = bucketsForRange(from, to);
 
         for (const bucket of buckets) {
-            const ordersResult = await this._orders(bucket, forceRefresh);
+            const ordersResult = await this._orders(bucket, forceRefresh, cacheOnly);
             const orders = ordersResult.value;
             let materials = null;
 
@@ -375,7 +391,7 @@ class DashboardSnapshotService {
                 if (!requested.has(name)) {
                     continue;
                 }
-                const result = await this._relation(name, bucket, orders, forceRefresh);
+                const result = await this._relation(name, bucket, orders, forceRefresh, cacheOnly);
                 if (name === "materials") {
                     materials = result.value;
                 }
@@ -384,22 +400,22 @@ class DashboardSnapshotService {
             }
 
             if (requested.has("resources")) {
-                const result = await this._resources(bucket, forceRefresh);
+                const result = await this._resources(bucket, forceRefresh, cacheOnly);
                 addRecords("resources", result.value);
                 response.meta.cache[this._key("DashboardResourceDailySet", bucket.key)] = result.cacheStatus;
             }
 
             if (requested.has("movements")) {
                 materials = materials ||
-                    (await this._relation("materials", bucket, orders, forceRefresh)).value;
-                const result = await this._movements(bucket, materials, forceRefresh);
+                    (await this._relation("materials", bucket, orders, forceRefresh, cacheOnly)).value;
+                const result = await this._movements(bucket, materials, forceRefresh, cacheOnly);
                 addRecords("movements", result.value);
                 response.meta.cache[this._key("DashboardMaterialMovementsSet", bucket.key)] = result.cacheStatus;
             }
         }
 
         if (requested.has("catalogs")) {
-            const result = await this._catalogs(forceRefresh);
+            const result = await this._catalogs(forceRefresh, cacheOnly);
             addRecords("catalogs", result.value);
             response.meta.cache[this._key("DashboardFilterCatalogSet", "global")] = result.cacheStatus;
         }
@@ -409,7 +425,7 @@ class DashboardSnapshotService {
             if (!requested.has(name)) {
                 continue;
             }
-            const result = await this._independent(name, forceRefresh);
+            const result = await this._independent(name, forceRefresh, cacheOnly);
             if (name === "blocks") {
                 blocks = result.value;
             }
@@ -421,11 +437,11 @@ class DashboardSnapshotService {
             if (!requested.has(name)) {
                 continue;
             }
-            blocks = blocks || (await this._independent("blocks", forceRefresh)).value;
+            blocks = blocks || (await this._independent("blocks", forceRefresh, cacheOnly)).value;
             if (!warmOnly && !allRecords.blocks) {
                 allRecords.blocks = blocks;
             }
-            const result = await this._blockRelation(name, blocks, forceRefresh);
+            const result = await this._blockRelation(name, blocks, forceRefresh, cacheOnly);
             addRecords(name, result.value);
             response.meta.cache[this._key(BLOCK_RELATIONS[name].entitySet, "global")] = result.cacheStatus;
         }
