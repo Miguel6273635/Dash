@@ -42,6 +42,14 @@ sap.ui.define([], function () {
             return request("/api/v1/mantenimiento?" + query, { method: "GET" });
         },
 
+        loadDashboard: function (dashboard, filters) {
+            var query = toQuery(Object.assign({}, filters || {}, {
+                dashboard: dashboard
+            }));
+
+            return request("/api/v1/dashboard/snapshot?" + query, { method: "GET" });
+        },
+
         getStatus: function () {
             return request("/api/v1/cache/status", { method: "GET" });
         },
