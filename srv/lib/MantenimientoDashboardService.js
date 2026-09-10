@@ -109,7 +109,11 @@ class MantenimientoDashboardService {
             dateFrom: filters.fechaInicio || filters.fechaDesde || filters.dateFrom,
             dateTo: filters.fechaFin || filters.fechaHasta || filters.dateTo,
             include: MANTENIMIENTO_INCLUDE,
-            forceRefresh: Boolean(forceRefresh)
+            forceRefresh: Boolean(forceRefresh),
+            // Una pantalla nunca dispara OData contra SAP. Si su periodo aún
+            // no fue publicado, la API responde que la información sigue en
+            // preparación y conserva la generación anterior.
+            cacheOnly: true
         });
         const dashboard = this._buildDashboard(filterSnapshot(snapshot, filters));
         dashboard.meta = Object.assign({}, dashboard.meta, {
