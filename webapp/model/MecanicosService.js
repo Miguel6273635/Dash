@@ -1,7 +1,11 @@
 sap.ui.define([
+
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
-], function (Filter, FilterOperator) {
+    "sap/ui/model/FilterOperator",
+    "mantenimiento/model/DashboardCacheODataModel"
+], function (Filter, FilterOperator,
+    DashboardCacheODataModel
+) {
     "use strict";
 
     var PAGE_SIZE = 1000;
@@ -276,6 +280,12 @@ sap.ui.define([
     }
 
     function getBaseData(oModel, mFilters) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            mFilters,
+            ["resources","catalogs","orders","assignments","operations"]
+        );
+
         if (!oModel || typeof oModel.read !== "function") {
             return Promise.reject(
                 new Error(
@@ -317,6 +327,12 @@ sap.ui.define([
     }
 
     function getOperationalData(oModel, aOrderIds) {
+        oModel = DashboardCacheODataModel.wrap(
+            oModel,
+            {},
+            ["resources","catalogs","orders","assignments","operations"]
+        );
+
         var aIds = uniqueStrings(aOrderIds);
 
         if (!aIds.length) {
