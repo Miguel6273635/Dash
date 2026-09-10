@@ -11,11 +11,16 @@ function toArray(value, fallback) {
 
 function errorResponse(response, error) {
     const status = error && error.response && error.response.status;
+    const cacheMiss = error && error.code === "CACHE_MISS";
+
     console.error("Error de API_DASH:", error.message);
-    response.status(status && status < 600 ? status : 502).json({
+    response.status(cacheMiss ? 503 : (status && status < 600 ? status : 502)).json({
         success: false,
-        message: "No fue posible actualizar o consultar API_DASH.",
-        detail: error.message
+        message: cacheMiss
+            ? "La información solicitada está en preparación o requiere una actualización."
+            : "No fue posible actualizar o consultar API_DASH.",
+        detail: error.message,
+        code: cacheMiss ? "CACHE_MISS" : undefined
     });
 }
 
@@ -117,15 +122,27 @@ function createApiDashRouter(options) {
 
     router.get("/dashboard/snapshot", async function (request, response) {
         try {
+            const dashboards = toArray(request.query.dashboard || request.query.dashboards);
+            const profiles = toArray(request.query.profile || request.query.profiles);
+            const plan = (dashboards.length || profiles.length)
+                ? generations.plan({ dashboards, profiles })
+                : { dashboards: [], profiles: [], include: toArray(request.query.include, ["orders", "catalogs"]) };
             const data = await generations.getSnapshot({
                 dateFrom: request.query.fechaDesde || request.query.dateFrom,
                 dateTo: request.query.fechaHasta || request.query.dateTo,
-                include: toArray(request.query.include, ["orders", "catalogs"])
+                include: plan.include,
+                // Una pantalla no llena faltantes desde SAP: consume únicamente
+                // la generación activa que ya fue publicada de forma atómica.
+                cacheOnly: true
             });
             response.json({
                 success: true,
                 data,
-                meta: { activeGeneration: generations.activeGeneration }
+                meta: {
+                    activeGeneration: generations.activeGeneration,
+                    dashboards: plan.dashboards,
+                    profiles: plan.profiles
+                }
             });
         } catch (error) { errorResponse(response, error); }
     });
