@@ -171,11 +171,25 @@ class SnapshotGenerationService {
                 for (const profileName of job.profiles) {
                     job.currentMonth = bucket.key;
                     job.currentProfile = profileName;
+                    console.info("API_DASH precarga iniciada: " + JSON.stringify({
+                        job: job.id,
+                        month: bucket.key,
+                        profile: profileName
+                    }));
                     await staging.snapshots.getSnapshot({
                         dateFrom: isoDate(bucket.from),
                         dateTo: isoDate(bucket.to),
-                        include: PROFILES[profileName].include
+                        include: PROFILES[profileName].include,
+                        warmOnly: true
                     });
+                    const cacheStatus = staging.cache.status();
+                    console.info("API_DASH precarga completada: " + JSON.stringify({
+                        job: job.id,
+                        month: bucket.key,
+                        profile: profileName,
+                        entries: cacheStatus.entries,
+                        bytes: cacheStatus.bytes
+                    }));
                     job.completedTasks += 1;
                 }
             }
