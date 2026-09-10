@@ -1,8 +1,10 @@
 "use strict";
 
 const express = require("express");
+const path = require("node:path");
 const { executeHttpRequest } = require("@sap-cloud-sdk/http-client");
 const CacheService = require("./lib/CacheService");
+const FileCacheService = require("./lib/FileCacheService");
 const SapODataRepository = require("./lib/SapODataRepository");
 const { DashboardSnapshotService } = require("./lib/DashboardSnapshotService");
 const { CachePrewarmService } = require("./lib/CachePrewarmService");
@@ -15,11 +17,25 @@ const app = express();
 const port = Number(process.env.PORT || 4004);
 const destinationName = process.env.SAP_DESTINATION_NAME || "QAS_MITSU_DASH";
 const servicePath = process.env.SAP_ODATA_SERVICE_PATH || "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV";
+const cacheStorageMode = String(process.env.CACHE_STORAGE_MODE || "memory").toLowerCase();
+const usesDiskCache = cacheStorageMode === "disk";
+const cacheStorageDirectory = process.env.CACHE_STORAGE_DIR || "/tmp/api-dash-cache";
 const cacheOptions = {
-    maxEntries: Number(process.env.CACHE_MAX_ENTRIES || 400),
-    maxBytes: Number(process.env.CACHE_MAX_BYTES || 128 * 1024 * 1024)
+    maxEntries: Number(process.env.CACHE_MAX_ENTRIES || (usesDiskCache ? 800 : 400)),
+    maxBytes: Number(process.env.CACHE_MAX_BYTES || (usesDiskCache ? 512 * 1024 * 1024 : 128 * 1024 * 1024))
 };
-const cache = new CacheService(cacheOptions);
+
+function createGenerationCache(generationId) {
+    const options = Object.assign({}, cacheOptions);
+
+    if (usesDiskCache) {
+        options.directory = path.join(cacheStorageDirectory, generationId);
+        return new FileCacheService(options);
+    }
+    return new CacheService(options);
+}
+
+const cache = createGenerationCache("v1");
 const repository = new SapODataRepository({
     servicePath,
     batchSize: 15,
@@ -35,6 +51,9 @@ const snapshots = new DashboardSnapshotService({ cache, repository, namespace: "
 const generations = new SnapshotGenerationService({
     repository,
     cacheOptions,
+    cacheFactory: function (options) {
+        return createGenerationCache(options.generationId);
+    },
     active: { id: "v1", cache, snapshots, publishedAt: Date.now() }
 });
 
