@@ -339,20 +339,35 @@ class DashboardSnapshotService {
         const to = dateAtStart(config.dateTo);
         const requested = this._requested(config.include);
         const forceRefresh = Boolean(config.forceRefresh);
+        const warmOnly = Boolean(config.warmOnly);
 
         if (from > to) {
             throw new Error("La fecha desde no puede ser posterior a la fecha hasta");
         }
 
-        const response = { meta: { cache: {}, months: [], namespace: this._namespace } };
-        const allRecords = {};
+        // warmOnly se usa exclusivamente durante la generación B. Carga cada
+        // colección en su entrada de caché, pero no crea una segunda respuesta
+        // con referencias a todos los registros del mismo periodo.
+        const response = { meta: {
+            cache: {},
+            months: [],
+            namespace: this._namespace,
+            warmOnly
+        } };
+        const allRecords = warmOnly ? null : {};
+        const addRecords = function (name, records) {
+            if (!warmOnly) {
+                allRecords[name] = (allRecords[name] || []).concat(records);
+            }
+        };
         const buckets = bucketsForRange(from, to);
 
         for (const bucket of buckets) {
             const ordersResult = await this._orders(bucket, forceRefresh);
             const orders = ordersResult.value;
-            const monthly = { orders };
+            let materials = null;
 
+            addRecords("orders", orders);
             response.meta.cache[this._key("orders", bucket.key)] = ordersResult.cacheStatus;
             response.meta.months.push(bucket.key);
 
@@ -361,41 +376,44 @@ class DashboardSnapshotService {
                     continue;
                 }
                 const result = await this._relation(name, bucket, orders, forceRefresh);
-                monthly[name] = result.value;
+                if (name === "materials") {
+                    materials = result.value;
+                }
+                addRecords(name, result.value);
                 response.meta.cache[this._key(RELATIONS[name].entitySet, bucket.key)] = result.cacheStatus;
             }
 
             if (requested.has("resources")) {
                 const result = await this._resources(bucket, forceRefresh);
-                monthly.resources = result.value;
+                addRecords("resources", result.value);
                 response.meta.cache[this._key("DashboardResourceDailySet", bucket.key)] = result.cacheStatus;
             }
 
             if (requested.has("movements")) {
-                const materials = monthly.materials ||
+                materials = materials ||
                     (await this._relation("materials", bucket, orders, forceRefresh)).value;
                 const result = await this._movements(bucket, materials, forceRefresh);
-                monthly.movements = result.value;
+                addRecords("movements", result.value);
                 response.meta.cache[this._key("DashboardMaterialMovementsSet", bucket.key)] = result.cacheStatus;
             }
-
-            Object.keys(monthly).forEach((name) => {
-                allRecords[name] = (allRecords[name] || []).concat(monthly[name]);
-            });
         }
 
         if (requested.has("catalogs")) {
             const result = await this._catalogs(forceRefresh);
-            allRecords.catalogs = result.value;
+            addRecords("catalogs", result.value);
             response.meta.cache[this._key("DashboardFilterCatalogSet", "global")] = result.cacheStatus;
         }
 
+        let blocks = null;
         for (const name of Object.keys(INDEPENDENT)) {
             if (!requested.has(name)) {
                 continue;
             }
             const result = await this._independent(name, forceRefresh);
-            allRecords[name] = result.value;
+            if (name === "blocks") {
+                blocks = result.value;
+            }
+            addRecords(name, result.value);
             response.meta.cache[this._key(INDEPENDENT[name].entitySet, "global")] = result.cacheStatus;
         }
 
@@ -403,17 +421,20 @@ class DashboardSnapshotService {
             if (!requested.has(name)) {
                 continue;
             }
-            const blocks = allRecords.blocks ||
-                (await this._independent("blocks", forceRefresh)).value;
-            allRecords.blocks = blocks;
+            blocks = blocks || (await this._independent("blocks", forceRefresh)).value;
+            if (!warmOnly && !allRecords.blocks) {
+                allRecords.blocks = blocks;
+            }
             const result = await this._blockRelation(name, blocks, forceRefresh);
-            allRecords[name] = result.value;
+            addRecords(name, result.value);
             response.meta.cache[this._key(BLOCK_RELATIONS[name].entitySet, "global")] = result.cacheStatus;
         }
 
-        Object.keys(allRecords).forEach((name) => {
-            response[name] = uniqueBy(allRecords[name], RECORD_IDS[name]);
-        });
+        if (!warmOnly) {
+            Object.keys(allRecords).forEach((name) => {
+                response[name] = uniqueBy(allRecords[name], RECORD_IDS[name]);
+            });
+        }
         response.meta.generatedAt = new Date().toISOString();
         return response;
     }
