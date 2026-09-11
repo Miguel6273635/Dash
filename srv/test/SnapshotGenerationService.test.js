@@ -174,3 +174,43 @@ test("crea una caché independiente para cada generación temporal", async funct
     assert.equal(generationIds.length, 1);
     assert.match(generationIds[0], /^stage-/);
 });
+
+
+test("conserva A hasta que termine una lectura iniciada antes de publicar B", async function () {
+    let releaseRead;
+    const cache = new CacheService({ maxBytes: 1024 * 1024 });
+    cache.set("active:orders", [{ OrderId: "A" }], { softTtlMs: 1000, hardTtlMs: 2000 });
+    const active = {
+        id: "active-v1",
+        cache: cache,
+        snapshots: {
+            getSnapshot: function () {
+                return new Promise((resolve) => { releaseRead = resolve; });
+            }
+        },
+        publishedAt: 1
+    };
+    const service = new SnapshotGenerationService({
+        active: active,
+        snapshotFactory: function () {
+            return {
+                getSnapshot: async function () { return { meta: { warmOnly: true } }; },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const inFlight = service.getSnapshot();
+    const job = service.start({
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"]
+    });
+
+    await service.wait(job.id);
+    assert.ok(cache.get("active:orders"));
+
+    releaseRead({ source: "old-generation" });
+    assert.equal((await inFlight).source, "old-generation");
+    assert.equal(cache.get("active:orders"), null);
+});
