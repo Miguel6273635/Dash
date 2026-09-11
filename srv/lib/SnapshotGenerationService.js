@@ -86,6 +86,8 @@ class SnapshotGenerationService {
             }));
 
         this._active = config.active || this._createGeneration("active-v1");
+        this._active.readers = Number(this._active.readers || 0);
+        this._active.retired = Boolean(this._active.retired);
     }
 
     _createGeneration(id) {
@@ -95,7 +97,9 @@ class SnapshotGenerationService {
                 generationId: id
             })),
             snapshots: null,
-            publishedAt: null
+            publishedAt: null,
+            readers: 0,
+            retired: false
         };
         generation.snapshots = this._snapshotFactory(generation);
         return generation;
@@ -130,15 +134,38 @@ class SnapshotGenerationService {
         return {
             id: generation.id,
             publishedAt: generation.publishedAt,
+            readers: Number(generation.readers || 0),
+            retiring: Boolean(generation.retired),
             cache: generation.cache.status()
         };
+    }
+
+    _finishRead(generation) {
+        generation.readers = Math.max(0, Number(generation.readers || 0) - 1);
+
+        if (generation.retired && generation.readers === 0) {
+            generation.cache.clear();
+        }
+    }
+
+    _retire(generation) {
+        generation.retired = true;
+
+        if (Number(generation.readers || 0) === 0) {
+            generation.cache.clear();
+        }
     }
 
     getSnapshot(options) {
         // Se captura la generación actual antes de iniciar IO para que una
         // publicación posterior no mezcle conjuntos en una misma respuesta.
+        // La liberación se difiere hasta que termine esa lectura; así A y B no
+        // se mezclan aunque B se publique a mitad de una solicitud.
         const active = this._active;
-        return active.snapshots.getSnapshot(options);
+        active.readers = Number(active.readers || 0) + 1;
+
+        return Promise.resolve(active.snapshots.getSnapshot(options))
+            .finally(() => this._finishRead(active));
     }
 
     getActiveSnapshots() {
@@ -224,9 +251,10 @@ class SnapshotGenerationService {
                 this._active = staging;
                 this._staging = null;
 
-                // Después del cambio atómico la generación anterior ya no es
-                // consultada. Liberarla evita duplicar el consumo de memoria.
-                previous.cache.clear();
+                // La generación anterior deja de recibir lecturas nuevas, pero
+                // no se borra hasta que termine la última solicitud que ya la
+                // había capturado. Esto preserva la atomicidad A -> B.
+                this._retire(previous);
                 job.status = "COMPLETED";
             } else {
                 // Validación de capacidad: conserva la métrica del escenario,
