@@ -45,7 +45,8 @@ function cloneJob(job) {
         reused: Boolean(job.reused),
         publish: Boolean(job.publish),
         cacheBytes: Number(job.cacheBytes || 0),
-        cacheEntries: Number(job.cacheEntries || 0)
+        cacheEntries: Number(job.cacheEntries || 0),
+        promoted: Boolean(job.promoted)
     };
 }
 
@@ -196,6 +197,40 @@ class SnapshotGenerationService {
         };
     }
 
+    _publish(job, staging) {
+        const previous = this._active;
+
+        if (this._staging !== staging) {
+            throw new Error("La generación temporal ya no está disponible para publicación");
+        }
+
+        staging.publishedAt = this._now();
+        this._active = staging;
+        this._staging = null;
+        this._retire(previous);
+        job.status = "COMPLETED";
+        job.currentMonth = null;
+        job.currentProfile = null;
+        job.finishedAt = this._now();
+        return cloneJob(job);
+    }
+
+    _discardValidatedStaging() {
+        const staging = this._staging;
+        const validated = Array.from(this._jobs.values()).find((job) =>
+            job.stagingGeneration === (staging && staging.id) &&
+            job.status === "VALIDATED"
+        );
+
+        if (!staging || !validated) {
+            return false;
+        }
+
+        staging.cache.clear();
+        this._staging = null;
+        return true;
+    }
+
     async _run(job, staging, buckets) {
         job.status = "RUNNING";
         job.startedAt = this._now();
@@ -246,25 +281,16 @@ class SnapshotGenerationService {
             job.cacheEntries = cacheStatus.entries;
 
             if (job.publish) {
-                const previous = this._active;
-                staging.publishedAt = this._now();
-                this._active = staging;
-                this._staging = null;
-
-                // La generación anterior deja de recibir lecturas nuevas, pero
-                // no se borra hasta que termine la última solicitud que ya la
-                // había capturado. Esto preserva la atomicidad A -> B.
-                this._retire(previous);
-                job.status = "COMPLETED";
+                this._publish(job, staging);
             } else {
-                // Validación de capacidad: conserva la métrica del escenario,
-                // pero no modifica A ni mantiene una segunda copia en memoria.
-                staging.cache.clear();
-                this._staging = null;
+                // La validación conserva B en disco. Si el mismo periodo se
+                // publica después, se promueve esta generación sin otra ronda
+                // de consultas SAP. Una solicitud distinta descarta B antes de
+                // comenzar para no mezclar periodos.
                 job.status = "VALIDATED";
+                job.currentMonth = null;
+                job.currentProfile = null;
             }
-            job.currentMonth = null;
-            job.currentProfile = null;
         } catch (error) {
             job.status = "FAILED";
             job.error = error && error.message ? error.message : String(error);
@@ -296,12 +322,32 @@ class SnapshotGenerationService {
         });
         const key = this._jobKey(from, to, plan);
         const existing = this._jobs.get(key);
+        const publish = config.publish !== false;
 
         if (existing && (existing.status === "QUEUED" || existing.status === "RUNNING")) {
             const duplicate = cloneJob(existing);
             duplicate.reused = true;
             return duplicate;
         }
+
+        if (existing && existing.status === "VALIDATED" &&
+            this._staging && this._staging.id === existing.stagingGeneration) {
+            if (publish) {
+                existing.publish = true;
+                existing.promoted = true;
+                return this._publish(existing, this._staging);
+            }
+
+            const duplicate = cloneJob(existing);
+            duplicate.reused = true;
+            return duplicate;
+        }
+
+        // Una validación de otro periodo no debe bloquear una actualización
+        // real. B sólo vive hasta que se publica o una nueva generación la
+        // sustituye de manera explícita.
+        this._discardValidatedStaging();
+
         if (this._staging) {
             throw new Error(
                 "Ya existe una actualización en segundo plano. Espere a que finalice antes de iniciar otra."
@@ -322,7 +368,8 @@ class SnapshotGenerationService {
             include: plan.include,
             totalTasks: buckets.length * plan.profiles.length,
             completedTasks: 0,
-            publish: config.publish !== false,
+            publish: publish,
+            promoted: false,
             cacheBytes: 0,
             cacheEntries: 0,
             currentMonth: null,
