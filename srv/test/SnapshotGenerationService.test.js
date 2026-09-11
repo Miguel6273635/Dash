@@ -214,3 +214,33 @@ test("conserva A hasta que termine una lectura iniciada antes de publicar B", as
     assert.equal((await inFlight).source, "old-generation");
     assert.equal(cache.get("active:orders"), null);
 });
+
+
+test("publica una validación terminada sin volver a ejecutar sus consultas", async function () {
+    let calls = 0;
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function () {
+            return {
+                getSnapshot: async function () {
+                    calls += 1;
+                    return { meta: { warmOnly: true } };
+                },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+    const options = {
+        fechaDesde: "2026-08-01",
+        fechaHasta: "2026-08-31",
+        profiles: ["core"]
+    };
+
+    const validation = service.start(Object.assign({}, options, { publish: false }));
+    assert.equal((await service.wait(validation.id)).status, "VALIDATED");
+
+    const published = service.start(options);
+    assert.equal(published.status, "COMPLETED");
+    assert.equal(published.promoted, true);
+    assert.equal(calls, 1);
+});
