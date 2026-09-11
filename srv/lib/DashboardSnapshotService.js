@@ -214,7 +214,7 @@ class DashboardSnapshotService {
 
     async _cached(key, loader, policy, forceRefresh, cacheOnly) {
         if (cacheOnly) {
-            const cached = this._cache.get(key);
+            const cached = this._cache.get(key, { allowExpired: true });
 
             if (!cached) {
                 const error = new Error("La generación activa no contiene todavía " + key);
