@@ -1,6 +1,8 @@
 sap.ui.define([], function () {
     "use strict";
 
+    var API_BASE = "/destination/api-dash/api/v1";
+
     function request(path, options) {
         var config = options || {};
         var headers = Object.assign({ Accept: "application/json" }, config.headers || {});
@@ -13,8 +15,13 @@ sap.ui.define([], function () {
                 return {};
             }).then(function (payload) {
                 if (!response.ok || payload.success === false) {
-                    throw new Error(payload.detail || payload.message || "No fue posible consultar la API de caché");
+                    throw new Error(
+                        payload.detail ||
+                        payload.message ||
+                        "No fue posible consultar la API de caché"
+                    );
                 }
+
                 return payload.data;
             });
         });
@@ -27,9 +34,13 @@ sap.ui.define([], function () {
             var value = filters[key];
 
             if (value !== undefined && value !== null && value !== "") {
-                query.set(key, Array.isArray(value) ? value.join(",") : String(value));
+                query.set(
+                    key,
+                    Array.isArray(value) ? value.join(",") : String(value)
+                );
             }
         });
+
         return query.toString();
     }
 
@@ -39,7 +50,9 @@ sap.ui.define([], function () {
                 refresh: forceRefresh ? "true" : undefined
             }));
 
-            return request("/api/v1/mantenimiento?" + query, { method: "GET" });
+            return request(API_BASE + "/mantenimiento?" + query, {
+                method: "GET"
+            });
         },
 
         loadDashboard: function (dashboard, filters) {
@@ -47,7 +60,9 @@ sap.ui.define([], function () {
                 dashboard: dashboard
             }));
 
-            return request("/api/v1/dashboard/snapshot?" + query, { method: "GET" });
+            return request(API_BASE + "/dashboard/snapshot?" + query, {
+                method: "GET"
+            });
         },
 
         loadSnapshot: function (filters, include) {
@@ -55,19 +70,25 @@ sap.ui.define([], function () {
                 include: include
             }));
 
-            return request("/api/v1/dashboard/snapshot?" + query, { method: "GET" });
+            return request(API_BASE + "/dashboard/snapshot?" + query, {
+                method: "GET"
+            });
         },
 
         getStatus: function () {
-            return request("/api/v1/cache/status", { method: "GET" });
+            return request(API_BASE + "/cache/status", {
+                method: "GET"
+            });
         },
 
         getRefreshStatus: function () {
-            return request("/api/v1/cache/refresh", { method: "GET" });
+            return request(API_BASE + "/cache/refresh", {
+                method: "GET"
+            });
         },
 
         refresh: function (payload) {
-            return request("/api/v1/cache/refresh", {
+            return request(API_BASE + "/cache/refresh", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload || {})
@@ -75,4 +96,3 @@ sap.ui.define([], function () {
         }
     };
 });
-
