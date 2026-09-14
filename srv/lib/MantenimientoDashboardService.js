@@ -98,6 +98,59 @@ function filterSnapshot(snapshot, filters) {
     };
 }
 
+
+function materializedDashboardKey(filters) {
+    const config = filters || {};
+    const from = parseFilterDate(config.fechaInicio || config.fechaDesde || config.dateFrom);
+    const to = parseFilterDate(config.fechaFin || config.fechaHasta || config.dateTo);
+    const toKey = function (date) {
+        return date
+            ? date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0")
+            : "";
+    };
+
+    return "mantenimiento:" + toKey(from) + ":" + toKey(to) + ":all";
+}
+
+function hasInteractiveFilters(filters) {
+    const config = filters || {};
+
+    return ["zona", "supervisor", "tipoOrden", "turno", "mecanico", "estadoOrden"]
+        .some(function (name) {
+            return hasValue(config[name]);
+        });
+}
+
+function canMaterializeMantenimiento(include) {
+    const available = new Set(include || []);
+
+    return MANTENIMIENTO_INCLUDE.every(function (name) {
+        return available.has(name);
+    });
+}
+
+async function buildMantenimientoDashboard(snapshots, filters, buildDashboard) {
+    const config = filters || {};
+    const snapshot = await snapshots.getSnapshot({
+        dateFrom: config.fechaInicio || config.fechaDesde || config.dateFrom,
+        dateTo: config.fechaFin || config.fechaHasta || config.dateTo,
+        include: MANTENIMIENTO_INCLUDE,
+        cacheOnly: true
+    });
+    const dashboard = buildDashboard(filterSnapshot(snapshot, config));
+
+    dashboard.meta = Object.assign({}, dashboard.meta, {
+        source: "API_DASH",
+        module: "mantenimiento",
+        generatedAt: new Date().toISOString(),
+        cache: snapshot.meta && snapshot.meta.cache,
+        months: snapshot.meta && snapshot.meta.months,
+        records: { orders: dashboard.summary && dashboard.summary.plannedOrders || 0 }
+    });
+
+    return dashboard;
+}
+
 class MantenimientoDashboardService {
     constructor(options) {
         this._snapshots = options.snapshots;
@@ -105,28 +158,32 @@ class MantenimientoDashboardService {
     }
 
     async getDashboard(filters, forceRefresh) {
-        const snapshot = await this._snapshots.getSnapshot({
-            dateFrom: filters.fechaInicio || filters.fechaDesde || filters.dateFrom,
-            dateTo: filters.fechaFin || filters.fechaHasta || filters.dateTo,
-            include: MANTENIMIENTO_INCLUDE,
-            forceRefresh: Boolean(forceRefresh),
-            // Una pantalla nunca dispara OData contra SAP. Si su periodo aún
-            // no fue publicado, la API responde que la información sigue en
-            // preparación y conserva la generación anterior.
-            cacheOnly: true
-        });
-        const dashboard = this._buildDashboard(filterSnapshot(snapshot, filters));
-        dashboard.meta = Object.assign({}, dashboard.meta, {
-            source: "API_DASH",
-            module: "mantenimiento",
-            generatedAt: new Date().toISOString(),
-            cache: snapshot.meta.cache,
-            months: snapshot.meta.months,
-            records: { orders: dashboard.summary && dashboard.summary.plannedOrders || 0 }
-        });
-        return dashboard;
+        const config = filters || {};
+        const key = materializedDashboardKey(config);
+
+        if (!forceRefresh && !hasInteractiveFilters(config) &&
+            typeof this._snapshots.getActiveView === "function") {
+            const materialized = this._snapshots.getActiveView(key);
+
+            if (materialized) {
+                return Object.assign({}, materialized, {
+                    meta: Object.assign({}, materialized.meta, {
+                        generatedAt: new Date().toISOString(),
+                        materialized: true
+                    })
+                });
+            }
+        }
+
+        return buildMantenimientoDashboard(this._snapshots, config, this._buildDashboard);
     }
 }
 
-module.exports = { MantenimientoDashboardService, MANTENIMIENTO_INCLUDE, filterSnapshot };
-
+module.exports = {
+    MantenimientoDashboardService,
+    MANTENIMIENTO_INCLUDE,
+    filterSnapshot,
+    materializedDashboardKey,
+    canMaterializeMantenimiento,
+    buildMantenimientoDashboard
+};

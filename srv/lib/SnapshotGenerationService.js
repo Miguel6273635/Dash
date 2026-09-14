@@ -79,6 +79,7 @@ class SnapshotGenerationService {
         this._sequence = 0;
         this._jobs = new Map();
         this._staging = null;
+        this._materializers = [];
         this._snapshotFactory = config.snapshotFactory || ((generation) =>
             new DashboardSnapshotService({
                 cache: generation.cache,
@@ -87,6 +88,7 @@ class SnapshotGenerationService {
             }));
 
         this._active = config.active || this._createGeneration("active-v1");
+        this._active.views = this._active.views || new Map();
         this._active.readers = Number(this._active.readers || 0);
         this._active.retired = Boolean(this._active.retired);
     }
@@ -98,6 +100,7 @@ class SnapshotGenerationService {
                 generationId: id
             })),
             snapshots: null,
+            views: new Map(),
             publishedAt: null,
             readers: 0,
             retired: false
@@ -146,6 +149,7 @@ class SnapshotGenerationService {
 
         if (generation.retired && generation.readers === 0) {
             generation.cache.clear();
+            generation.views.clear();
         }
     }
 
@@ -154,7 +158,20 @@ class SnapshotGenerationService {
 
         if (Number(generation.readers || 0) === 0) {
             generation.cache.clear();
+            generation.views.clear();
         }
+    }
+
+    addMaterializer(materializer) {
+        if (typeof materializer !== "function") {
+            throw new Error("El materializador debe ser una función");
+        }
+        this._materializers.push(materializer);
+        return this;
+    }
+
+    getActiveView(key) {
+        return this._active.views.get(key) || null;
     }
 
     getSnapshot(options) {
@@ -274,6 +291,12 @@ class SnapshotGenerationService {
                     "La generación temporal excedió la capacidad disponible; faltan " +
                     missing.length + " entradas de caché."
                 );
+            }
+
+            for (const materialize of this._materializers) {
+                job.currentMonth = null;
+                job.currentProfile = "MATERIALIZING";
+                await materialize({ job, generation: staging });
             }
 
             const cacheStatus = staging.cache.status();

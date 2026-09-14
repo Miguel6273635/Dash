@@ -9,7 +9,12 @@ const SapODataRepository = require("./lib/SapODataRepository");
 const { DashboardSnapshotService } = require("./lib/DashboardSnapshotService");
 const { CachePrewarmService } = require("./lib/CachePrewarmService");
 const { SnapshotGenerationService } = require("./lib/SnapshotGenerationService");
-const { MantenimientoDashboardService } = require("./lib/MantenimientoDashboardService");
+const {
+    MantenimientoDashboardService,
+    materializedDashboardKey,
+    canMaterializeMantenimiento,
+    buildMantenimientoDashboard
+} = require("./lib/MantenimientoDashboardService");
 const { createApiDashRouter } = require("./lib/ApiDashRouter");
 const { buildDashboard } = require("./lib/dashboardMapper");
 
@@ -65,6 +70,24 @@ const mantenimiento = new MantenimientoDashboardService({
     snapshots: generations,
     buildDashboard
 });
+generations.addMaterializer(async function ({ job, generation }) {
+    if (!canMaterializeMantenimiento(job.include)) {
+        return;
+    }
+
+    const filters = {
+        fechaDesde: job.dateFrom,
+        fechaHasta: job.dateTo
+    };
+    const dashboard = await buildMantenimientoDashboard(
+        generation.snapshots,
+        filters,
+        buildDashboard
+    );
+
+    generation.views.set(materializedDashboardKey(filters), dashboard);
+});
+
 const api = createApiDashRouter({ generations, mantenimiento, prewarm });
 
 app.disable("x-powered-by");
