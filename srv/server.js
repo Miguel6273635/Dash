@@ -59,6 +59,8 @@ const generations = new SnapshotGenerationService({
     cacheFactory: function (options) {
         return createGenerationCache(options.generationId);
     },
+    preloadAttempts: Number(process.env.CACHE_PRELOAD_ATTEMPTS || 4),
+    retryDelayMs: Number(process.env.CACHE_PRELOAD_RETRY_DELAY_MS || 5000),
     active: { id: "v1", cache, snapshots, publishedAt: Date.now() }
 });
 

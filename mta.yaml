@@ -68,16 +68,18 @@ modules:
   type: nodejs
   path: srv
   parameters:
-    memory: 1G
-    # Dos generaciones se conservan durante la publicación atómica:
-    # activa para usuarios y temporal para la siguiente actualización.
-    disk-quota: 2G
+    # La vista anual se calcula desde caché en disco.
+    memory: 6G
+    # Debe caber la generación activa y la temporal al mismo tiempo.
+    disk-quota: 10G
     instances: 1
   properties:
     CACHE_STORAGE_MODE: disk
     CACHE_STORAGE_DIR: /tmp/api-dash-cache
-    CACHE_MAX_BYTES: 734003200
-    CACHE_MAX_ENTRIES: 1200
+    CACHE_MAX_BYTES: 4294967296
+    CACHE_MAX_ENTRIES: 2500
+    CACHE_PRELOAD_ATTEMPTS: 4
+    CACHE_PRELOAD_RETRY_DELAY_MS: 5000
   build-parameters:
     builder: npm
   provides:

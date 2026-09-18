@@ -251,7 +251,7 @@ class DashboardSnapshotService {
             relation.property,
             orderIds,
             { select: SELECTS[relation.entitySet] }
-        ), POLICIES.relation, forceRefresh);
+        ), POLICIES.relation, forceRefresh, cacheOnly);
     }
 
     async _resources(bucket, forceRefresh, cacheOnly) {
@@ -290,7 +290,7 @@ class DashboardSnapshotService {
             relation.property,
             blockIds,
             { select: SELECTS[relation.entitySet] }
-        ), POLICIES.relation, forceRefresh);
+        ), POLICIES.relation, forceRefresh, cacheOnly);
     }
 
     async _movements(bucket, materials, forceRefresh, cacheOnly) {
@@ -302,7 +302,7 @@ class DashboardSnapshotService {
             "MaterialRequirementId",
             requirementIds,
             { select: SELECTS.DashboardMaterialMovementsSet }
-        ), POLICIES.relation, forceRefresh);
+        ), POLICIES.relation, forceRefresh, cacheOnly);
     }
 
     cacheKeysFor(options) {
@@ -344,7 +344,7 @@ class DashboardSnapshotService {
     }
 
     missingCacheKeys(options) {
-        return this.cacheKeysFor(options).filter((key) => !this._cache.get(key));
+        return this.cacheKeysFor(options).filter((key) => !this._cache.get(key, { allowExpired: true }));
     }
 
     async getSnapshot(options) {

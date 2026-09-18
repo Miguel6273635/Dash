@@ -1,7 +1,9 @@
 sap.ui.define([], function () {
     "use strict";
 
-  var API_BASE = "/dynamic_dest/api-dash/api/v1";
+    var API_BASE = window.location.hostname.indexOf(".applicationstudio.cloud.sap") !== -1
+        ? "/api/v1"
+        : "/dynamic_dest/api-dash/api/v1";
 
     function request(path, options) {
         var config = options || {};

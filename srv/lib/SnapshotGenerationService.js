@@ -46,7 +46,9 @@ function cloneJob(job) {
         publish: Boolean(job.publish),
         cacheBytes: Number(job.cacheBytes || 0),
         cacheEntries: Number(job.cacheEntries || 0),
-        promoted: Boolean(job.promoted)
+        promoted: Boolean(job.promoted),
+        retryCount: Number(job.retryCount || 0),
+        lastRetry: job.lastRetry ? Object.assign({}, job.lastRetry) : null
     };
 }
 
@@ -78,6 +80,11 @@ class SnapshotGenerationService {
         this._now = config.now || Date.now;
         this._sequence = 0;
         this._jobs = new Map();
+        this._preloadAttempts = Math.max(1, Number(config.preloadAttempts) || 4);
+        this._retryDelayMs = Math.max(0, Number(config.retryDelayMs) || 5000);
+        this._sleep = config.sleep || function (delayMs) {
+            return new Promise((resolve) => setTimeout(resolve, delayMs));
+        };
         this._staging = null;
         this._materializers = [];
         this._snapshotFactory = config.snapshotFactory || ((generation) =>
@@ -248,6 +255,49 @@ class SnapshotGenerationService {
         return true;
     }
 
+    async _warmWithRetry(job, staging, bucket, profileName) {
+        for (let attempt = 1; attempt <= this._preloadAttempts; attempt += 1) {
+            job.currentMonth = bucket.key;
+            job.currentProfile = profileName;
+
+            try {
+                await staging.snapshots.getSnapshot({
+                    dateFrom: isoDate(bucket.from),
+                    dateTo: isoDate(bucket.to),
+                    include: PROFILES[profileName].include,
+                    warmOnly: true
+                });
+                return;
+            } catch (error) {
+                const message = error && error.message ? error.message : String(error);
+
+                if (attempt >= this._preloadAttempts) {
+                    throw error;
+                }
+
+                job.retryCount += 1;
+                job.lastRetry = {
+                    month: bucket.key,
+                    profile: profileName,
+                    attempt,
+                    error: message,
+                    at: this._now()
+                };
+
+                console.warn("API_DASH reintentará la precarga: " + JSON.stringify({
+                    job: job.id,
+                    month: bucket.key,
+                    profile: profileName,
+                    attempt,
+                    retryInMs: this._retryDelayMs * attempt,
+                    error: message
+                }));
+
+                await this._sleep(this._retryDelayMs * attempt);
+            }
+        }
+    }
+
     async _run(job, staging, buckets) {
         job.status = "RUNNING";
         job.startedAt = this._now();
@@ -262,12 +312,7 @@ class SnapshotGenerationService {
                         month: bucket.key,
                         profile: profileName
                     }));
-                    await staging.snapshots.getSnapshot({
-                        dateFrom: isoDate(bucket.from),
-                        dateTo: isoDate(bucket.to),
-                        include: PROFILES[profileName].include,
-                        warmOnly: true
-                    });
+                    await this._warmWithRetry(job, staging, bucket, profileName);
                     const cacheStatus = staging.cache.status();
                     console.info("API_DASH precarga completada: " + JSON.stringify({
                         job: job.id,
@@ -400,6 +445,8 @@ class SnapshotGenerationService {
             error: null,
             missingCacheKeys: [],
             startedAt: null,
+            retryCount: 0,
+            lastRetry: null,
             finishedAt: null,
             promise: null
         };
