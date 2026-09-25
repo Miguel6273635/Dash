@@ -293,4 +293,3 @@ test("publica una validación terminada sin volver a ejecutar sus consultas", as
     assert.equal(published.promoted, true);
     assert.equal(calls, 1);
 });
-

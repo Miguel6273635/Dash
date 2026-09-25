@@ -482,4 +482,3 @@ class SnapshotGenerationService {
 }
 
 module.exports = { SnapshotGenerationService };
-

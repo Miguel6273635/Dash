@@ -188,4 +188,3 @@ module.exports = {
     canMaterializeMantenimiento,
     buildMantenimientoDashboard
 };
-
