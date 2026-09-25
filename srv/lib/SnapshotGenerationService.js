@@ -77,6 +77,7 @@ class SnapshotGenerationService {
             maxBytes: 128 * 1024 * 1024
         }, config.cacheOptions || {});
         this._cacheFactory = config.cacheFactory || ((cacheOptions) => new CacheService(cacheOptions));
+        this._allowLiveFallback = Boolean(config.allowLiveFallback);
         this._now = config.now || Date.now;
         this._sequence = 0;
         this._jobs = new Map();
@@ -189,7 +190,20 @@ class SnapshotGenerationService {
         const active = this._active;
         active.readers = Number(active.readers || 0) + 1;
 
-        return Promise.resolve(active.snapshots.getSnapshot(options))
+        return Promise.resolve()
+            .then(() => active.snapshots.getSnapshot(options))
+            .catch((error) => {
+                if (!this._allowLiveFallback || !options || !options.cacheOnly ||
+                    !error || error.code !== "CACHE_MISS") {
+                    throw error;
+                }
+
+                // La precarga B sigue aislada. Sólo esta solicitud completa
+                // las entradas faltantes en A con los filtros recibidos.
+                return active.snapshots.getSnapshot(Object.assign({}, options, {
+                    cacheOnly: false
+                }));
+            })
             .finally(() => this._finishRead(active));
     }
 
@@ -468,3 +482,4 @@ class SnapshotGenerationService {
 }
 
 module.exports = { SnapshotGenerationService };
+

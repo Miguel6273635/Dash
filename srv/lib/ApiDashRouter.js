@@ -133,8 +133,9 @@ function createApiDashRouter(options) {
                 dateFrom: request.query.fechaDesde || request.query.fechaInicio || request.query.dateFrom,
                 dateTo: request.query.fechaHasta || request.query.fechaFin || request.query.dateTo,
                 include: plan.include,
-                // Una pantalla no llena faltantes desde SAP: consume únicamente
-                // la generación activa que ya fue publicada de forma atómica.
+                // Se consulta primero la generación activa. Si falta una clave,
+                // SnapshotGenerationService puede recuperar sólo esa lectura
+                // desde SAP mientras la nueva precarga sigue en segundo plano.
                 cacheOnly: true
             });
             response.json({
@@ -143,7 +144,9 @@ function createApiDashRouter(options) {
                 meta: {
                     activeGeneration: generations.activeGeneration,
                     dashboards: plan.dashboards,
-                    profiles: plan.profiles
+                    profiles: plan.profiles,
+                    source: data.meta && data.meta.cacheOnly === false
+                        ? "API_DASH_SAP_FALLBACK" : "API_DASH"
                 }
             });
         } catch (error) { errorResponse(response, error); }
@@ -166,3 +169,4 @@ function createApiDashRouter(options) {
 }
 
 module.exports = { createApiDashRouter };
+

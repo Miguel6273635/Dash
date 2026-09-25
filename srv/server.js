@@ -61,6 +61,7 @@ const generations = new SnapshotGenerationService({
     },
     preloadAttempts: Number(process.env.CACHE_PRELOAD_ATTEMPTS || 4),
     retryDelayMs: Number(process.env.CACHE_PRELOAD_RETRY_DELAY_MS || 5000),
+    allowLiveFallback: process.env.CACHE_LIVE_FALLBACK !== "false",
     active: { id: "v1", cache, snapshots, publishedAt: Date.now() }
 });
 
@@ -114,6 +115,14 @@ app.use("/api", api);
 if (require.main === module) {
     app.listen(port, function () {
         console.log("API_DASH escuchando en puerto " + port);
+        if (process.env.CACHE_AUTO_PRELOAD !== "false") {
+            try {
+                const job = generations.start({});
+                console.info("API_DASH precarga anual iniciada tras el arranque: " + job.id);
+            } catch (error) {
+                console.error("No fue posible iniciar la precarga anual: " + error.message);
+            }
+        }
     });
 }
 
@@ -126,3 +135,4 @@ module.exports = {
     prewarm,
     mantenimiento
 };
+

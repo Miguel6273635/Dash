@@ -16,6 +16,55 @@ function activeGeneration() {
     };
 }
 
+test("tras reiniciar, recupera desde SAP sólo cuando falta caché y conserva los filtros", async function () {
+    const calls = [];
+    const active = activeGeneration();
+    active.snapshots.getSnapshot = async function (options) {
+        calls.push(Object.assign({}, options));
+        if (options.cacheOnly) {
+            const error = new Error("Falta una clave de la generación activa");
+            error.code = "CACHE_MISS";
+            throw error;
+        }
+        return { orders: [{ OrderId: "OT-1" }], meta: { cacheOnly: false } };
+    };
+    const service = new SnapshotGenerationService({
+        active,
+        allowLiveFallback: true
+    });
+    const filters = {
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["orders", "materials"],
+        cacheOnly: true
+    };
+
+    const result = await service.getSnapshot(filters);
+
+    assert.equal(result.orders[0].OrderId, "OT-1");
+    assert.deepEqual(calls, [filters, Object.assign({}, filters, { cacheOnly: false })]);
+    assert.equal(active.readers, 0);
+});
+
+test("no oculta errores de SAP ni consulta en vivo si la alternativa está deshabilitada", async function () {
+    const active = activeGeneration();
+    let calls = 0;
+    active.snapshots.getSnapshot = async function () {
+        calls += 1;
+        const error = new Error("SAP no disponible");
+        error.code = "SAP_DOWN";
+        throw error;
+    };
+    const service = new SnapshotGenerationService({
+        active,
+        allowLiveFallback: true
+    });
+
+    await assert.rejects(service.getSnapshot({ cacheOnly: true }), /SAP no disponible/);
+    assert.equal(calls, 1);
+    assert.equal(active.readers, 0);
+});
+
 test("mantiene A mientras llena B y publica B de forma atómica", async function () {
     let release;
     const wait = new Promise((resolve) => { release = resolve; });
@@ -244,3 +293,4 @@ test("publica una validación terminada sin volver a ejecutar sus consultas", as
     assert.equal(published.promoted, true);
     assert.equal(calls, 1);
 });
+

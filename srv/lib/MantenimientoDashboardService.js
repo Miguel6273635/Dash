@@ -140,7 +140,8 @@ async function buildMantenimientoDashboard(snapshots, filters, buildDashboard) {
     const dashboard = buildDashboard(filterSnapshot(snapshot, config));
 
     dashboard.meta = Object.assign({}, dashboard.meta, {
-        source: "API_DASH",
+        source: snapshot.meta && snapshot.meta.cacheOnly === false
+            ? "API_DASH_SAP_FALLBACK" : "API_DASH",
         module: "mantenimiento",
         generatedAt: new Date().toISOString(),
         cache: snapshot.meta && snapshot.meta.cache,
@@ -187,3 +188,4 @@ module.exports = {
     canMaterializeMantenimiento,
     buildMantenimientoDashboard
 };
+
