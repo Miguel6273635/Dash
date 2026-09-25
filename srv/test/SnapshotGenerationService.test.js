@@ -46,7 +46,7 @@ test("tras reiniciar, recupera desde SAP sólo cuando falta caché y conserva lo
     assert.equal(active.readers, 0);
 });
 
-test("no oculta errores de SAP ni consulta en vivo si la alternativa está deshabilitada", async function () {
+test("no oculta errores de SAP ajenos al faltante de caché", async function () {
     const active = activeGeneration();
     let calls = 0;
     active.snapshots.getSnapshot = async function () {
@@ -61,6 +61,25 @@ test("no oculta errores de SAP ni consulta en vivo si la alternativa está desha
     });
 
     await assert.rejects(service.getSnapshot({ cacheOnly: true }), /SAP no disponible/);
+    assert.equal(calls, 1);
+    assert.equal(active.readers, 0);
+});
+
+test("puede deshabilitar la consulta en vivo y responder con CACHE_MISS", async function () {
+    const active = activeGeneration();
+    let calls = 0;
+    active.snapshots.getSnapshot = async function () {
+        calls += 1;
+        const error = new Error("No hay datos publicados");
+        error.code = "CACHE_MISS";
+        throw error;
+    };
+    const service = new SnapshotGenerationService({
+        active,
+        allowLiveFallback: false
+    });
+
+    await assert.rejects(service.getSnapshot({ cacheOnly: true }), /No hay datos publicados/);
     assert.equal(calls, 1);
     assert.equal(active.readers, 0);
 });
