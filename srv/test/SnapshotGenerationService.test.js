@@ -16,6 +16,26 @@ function activeGeneration() {
     };
 }
 
+test("inicia la precarga anual sin fechas explícitas", async function () {
+    const year = new Date().getFullYear();
+    const service = new SnapshotGenerationService({
+        active: activeGeneration(),
+        snapshotFactory: function () {
+            return {
+                getSnapshot: async function () { return { meta: {} }; },
+                missingCacheKeys: function () { return []; }
+            };
+        }
+    });
+
+    const job = service.start({ profiles: ["core"] });
+
+    assert.equal(job.dateFrom, year + "-01-01");
+    assert.equal(job.dateTo, year + "-12-31");
+    assert.equal(job.totalTasks, 12);
+    assert.equal((await service.wait(job.id)).status, "COMPLETED");
+});
+
 test("tras reiniciar, recupera desde SAP sólo cuando falta caché y conserva los filtros", async function () {
     const calls = [];
     const active = activeGeneration();
