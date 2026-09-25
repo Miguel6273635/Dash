@@ -5,6 +5,13 @@ const { DashboardSnapshotService, bucketsForRange } = require("./DashboardSnapsh
 const { PROFILES, resolvePlan, catalog } = require("./DashboardProfileRegistry");
 
 function dateAtStart(value, label) {
+    if (value instanceof Date) {
+        if (Number.isNaN(value.getTime())) {
+            throw new Error("Fecha inválida" + (label ? " (" + label + ")" : "") + ": " + value);
+        }
+        return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+    }
+
     const text = String(value || "").trim();
     const match = text.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
     const date = match
