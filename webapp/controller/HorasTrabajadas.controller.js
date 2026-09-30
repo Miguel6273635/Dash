@@ -47,10 +47,6 @@ sap.ui.define([
                 mecanico: this._selected("fbMecanico", "TODOS"),
                 estadoOrden: this._selected("fbEstado", "TODOS")
             };
-            if (/^\d{4}$/.test(periodKey)) {
-                this._filters.fechaDesde = "01/01/" + periodKey;
-                this._filters.fechaHasta = "31/12/" + periodKey;
-            }
             this._load(true);
         },
 
@@ -157,10 +153,18 @@ sap.ui.define([
             this.byId("htmlProyeccionChart").setContent(this._projectionSvg(data.proyeccion));
             var projection = this.byId("cardProyeccion");
             this._findByClass(projection, "htwProjectionBigValue").forEach(function (control) { control.setText(data.proyeccion.utilizacion); });
-            this._findByClass(projection, "htwAlertMainRed").forEach(function (control) { control.setText(data.proyeccion.horasProyectadas); });
+            this._findByClass(projection, "htwAlertMainRed").forEach(function (control) { control.setText(data.proyeccion.horasReales); });
             this._findByClass(projection, "htwAlertMainOrange").forEach(function (control) { control.setText(data.proyeccion.brecha); });
             this._findByClass(projection, "htwAlertMainGreen").forEach(function (control) { control.setText(data.proyeccion.riesgo); });
-            this._findByClass(projection, "htwProjectionFooter").forEach(function (control) { control.setText("Proyección basada en datos hasta el " + data.proyeccion.fechaCorte); });
+            var subtitles = this._findByClass(projection, "htwAlertSub");
+            if (subtitles[0]) { subtitles[0].setText(data.proyeccion.utilizacion === "Sin datos" ? "Sin capacidad validada" : "Utilización proyectada: " + data.proyeccion.utilizacion); }
+            if (subtitles[1]) { subtitles[1].setText("Capacidad menos horas proyectadas"); }
+            if (subtitles[2]) { subtitles[2].setText(data.proyeccion.riesgo === "Sin datos" ? "Sin capacidad validada" : "Según capacidad validada"); }
+            this._findByClass(projection, "htwProjectionFooter").forEach(function (control) {
+                control.setText(data.proyeccion.utilizacion === "Sin datos"
+                    ? "No hay capacidad validada para proyectar el cierre"
+                    : "Proyección basada en datos hasta el " + data.proyeccion.fechaCorte);
+            });
             this._findByClass(this.byId("cardCapacidadCarga"), "htwDonutCleanLegendSub").forEach(function (control, index) {
                 control.setText([data.kpis.capacidadDisponible, data.kpis.horasProgramadas, data.kpis.horasReales][index] || "Sin datos");
             });
@@ -217,9 +221,16 @@ sap.ui.define([
         },
 
         _projectionSvg: function (projection) {
-            var value = parseFloat(projection.utilizacion) || 0;
-            var y = 155 - Math.min(value, 150) / 150 * 130;
-            return '<svg class="htwProjectionSvg" viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="25" x2="600" y2="25" class="htwProjGrid"/><line x1="40" y1="90" x2="600" y2="90" class="htwProjGrid"/><line x1="40" y1="155" x2="600" y2="155" class="htwProjGrid"/><polyline points="55,145 170,130 285,112 400,95 510,' + y + '" class="htwProjLineSolid"/><polyline points="510,' + y + ' 600,' + Math.max(25, y - 8) + '" class="htwProjLineDashed"/><text x="600" y="195" text-anchor="end" class="htwProjDateText">Cierre</text></svg>';
+            var value = parseFloat(projection.utilizacion);
+            var width;
+            var color;
+
+            if (!Number.isFinite(value)) {
+                return '<svg class="htwProjectionSvg" viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg"><text x="310" y="108" text-anchor="middle" class="htwProjDateText">Sin capacidad validada para calcular la proyección</text></svg>';
+            }
+            width = Math.max(0, Math.min(value, 150)) / 150 * 500;
+            color = value > 100 ? "#ef4444" : value >= 90 ? "#f59e0b" : "#16a34a";
+            return '<svg class="htwProjectionSvg" viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg"><text x="55" y="65" class="htwProjDateText">Utilización proyectada al cierre</text><rect x="55" y="85" width="500" height="22" rx="11" fill="#e8edf3"/><rect x="55" y="85" width="' + width + '" height="22" rx="11" fill="' + color + '"/><text x="55" y="145" class="htwProjDateText">' + this._escape(projection.utilizacion) + '</text></svg>';
         },
 
         _escape: function (value) { return String(value || "").replace(/[&<>"']/g, function (character) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]; }); },

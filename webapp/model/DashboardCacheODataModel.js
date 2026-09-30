@@ -198,11 +198,24 @@ sap.ui.define([
     }
 
     function wrap(model, filters, include) {
-        var requested = (include || Object.keys(ENTITY_TARGETS)).slice();
-        var snapshot = DashboardCacheApiService.loadSnapshot(
-            rangeFor(filters),
-            requested
-        );
+        var range = rangeFor(filters);
+        var pending = {};
+
+        function recordsFor(target) {
+            if (!pending[target]) {
+                // Las pantallas declaran varios includes, pero cada read()
+                // necesita sólo su EntitySet. Se carga bajo demanda y se
+                // comparte la promesa entre lecturas de la misma entidad.
+                pending[target] = DashboardCacheApiService.loadSnapshot(range, [target])
+                    .then(function (snapshot) {
+                        return snapshot[target] || [];
+                    }).catch(function (error) {
+                        delete pending[target];
+                        throw error;
+                    });
+            }
+            return pending[target];
+        }
 
         return {
             __apiDashCache: true,
@@ -218,8 +231,8 @@ sap.ui.define([
                     return;
                 }
 
-                snapshot.then(function (data) {
-                    var rows = filtered(data[target] || [], config);
+                recordsFor(target).then(function (records) {
+                    var rows = filtered(records, config);
 
                     config.success && config.success({
                         results: rows

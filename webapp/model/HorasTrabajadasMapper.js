@@ -276,7 +276,7 @@ sap.ui.define([], function () {
                 capacidadDisponible: capacityValidated ? formatHours(capacity) : "Sin datos", horasProgramadas: formatHours(planned), horasReales: formatHours(actual)
             },
             graficas: { utilizacionResumen: utilizationRows, causasDesviacion: causeRows, horasPorTipoOrden: typeRows, capacidadPorZona: zoneData },
-            proyeccion: { utilizacion: percentageText(projectedUse), horasReales: formatHours(actual), horasRestantes: formatHours(remaining), horasProyectadas: formatHours(projected), brecha: signedHours(capacityValidated ? capacity - projected : 0), riesgo: risk, fechaCorte: dateText(selectedRange.endDate) },
+            proyeccion: { utilizacion: percentageText(projectedUse), horasReales: formatHours(actual), horasRestantes: formatHours(remaining), horasProyectadas: formatHours(projected), brecha: capacityValidated ? signedHours(capacity - projected) : "Sin datos", riesgo: risk, fechaCorte: dateText(selectedRange.endDate) },
             avisos: { turno: turnValidation ? "" : "La fuente de turno no está validada; no se muestran resultados oficiales por turno.", capacidad: capacityValidated ? "" : "No hay capacidad validada para los filtros seleccionados." },
             meta: { source: "BTP_DESTINATION_ODATA_V2", startDate: selectedRange.startDate, endDate: selectedRange.endDate, orders: orders.length }
         };

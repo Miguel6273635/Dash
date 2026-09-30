@@ -435,45 +435,17 @@
                                     <Title text="Proyección de cierre de horas" level="H3" class="htwCardTitle htwProyeccionTitle"/>
                                     <core:Icon id="icInfoProyeccionHoras" src="sap-icon://hint" class="htwProyeccionInfoIcon"/>
                                 </HBox>
-                                <!-- Parte superior: 98% + gráfica -->
+                                <!-- Parte superior: indicador calculado, sin cifras de ejemplo -->
                                 <HBox class="htwProjectionTop" alignItems="Start" justifyContent="Start">
                                     <!-- Lado izquierdo -->
                                     <VBox class="htwProjectionMetricBox">
                                         <Text text="Utilización proyectada al cierre" class="htwProjectionMiniLabel"/>
-                                        <Text text="98%" class="htwProjectionBigValue"/>
+                                        <Text text="Sin datos" class="htwProjectionBigValue"/>
                                         <Text text="de utilización proyectada" class="htwProjectionMiniDesc"/>
                                     </VBox>
-                                    <!-- Lado derecho: SVG CORRECTO DENTRO DE core:HTML -->
+                                    <!-- La gráfica se reemplaza con datos calculados por el controlador. -->
                                     <VBox class="htwProjectionChartBox">
-                                        <core:HTML id="htmlProyeccionChart" sanitizeContent="false" content='&lt;svg class="htwProjectionSvg" viewBox="0 0 620 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"&gt;
-                    &lt;!-- Líneas horizontales --&gt;
-                    &lt;line x1="40" y1="25" x2="600" y2="25" class="htwProjGrid"/&gt;
-                    &lt;line x1="40" y1="90" x2="600" y2="90" class="htwProjGrid"/&gt;
-                    &lt;line x1="40" y1="155" x2="600" y2="155" class="htwProjGrid"/&gt;
-                    &lt;!-- Etiquetas eje Y --&gt;
-                    &lt;text x="0" y="160" class="htwProjAxisText"&gt;0%&lt;/text&gt;
-                    &lt;text x="0" y="95" class="htwProjAxisText"&gt;50%&lt;/text&gt;
-                    &lt;text x="0" y="30" class="htwProjAxisText"&gt;150%&lt;/text&gt;
-                    &lt;!-- Línea real --&gt;
-                    &lt;polyline points="55,125 120,110 185,118 250,90 315,95 380,78 445,78 510,70" class="htwProjLineSolid"/&gt;
-                    &lt;!-- Línea proyectada --&gt;
-                    &lt;polyline points="510,70 555,62 600,58" class="htwProjLineDashed"/&gt;
-                    &lt;!-- Puntos --&gt;
-                    &lt;circle cx="55" cy="125" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="120" cy="110" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="185" cy="118" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="250" cy="90" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="315" cy="95" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="380" cy="78" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="445" cy="78" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;circle cx="510" cy="70" r="3.8" class="htwProjPoint"/&gt;
-                    &lt;!-- Fechas --&gt;
-                    &lt;text x="55" y="195" text-anchor="middle" class="htwProjDateText"&gt;01 May&lt;/text&gt;
-                    &lt;text x="185" y="195" text-anchor="middle" class="htwProjDateText"&gt;08 May&lt;/text&gt;
-                    &lt;text x="315" y="195" text-anchor="middle" class="htwProjDateText"&gt;15 May&lt;/text&gt;
-                    &lt;text x="445" y="195" text-anchor="middle" class="htwProjDateText"&gt;22 May&lt;/text&gt;
-                    &lt;text x="600" y="195" text-anchor="end" class="htwProjDateText"&gt;31 May&lt;/text&gt;
-                &lt;/svg&gt;'/>
+                                        <core:HTML id="htmlProyeccionChart" sanitizeContent="false" content='&lt;svg class="htwProjectionSvg" viewBox="0 0 620 210" xmlns="http://www.w3.org/2000/svg"&gt;&lt;text x="310" y="108" text-anchor="middle" class="htwProjDateText"&gt;Sin capacidad validada para calcular la proyección&lt;/text&gt;&lt;/svg&gt;'/>
                                     </VBox>
                                 </HBox>
                                 <!-- Alertas inferiores -->
@@ -484,8 +456,8 @@
                                             <core:Icon src="sap-icon://alert" class="htwAlertIcon htwAlertIconRed"/>
                                             <VBox class="htwAlertTextWrap">
                                                 <Text text="Estado actual" class="htwAlertLabel"/>
-                                                <Text text="Fin de semana" class="htwAlertMain htwAlertMainRed"/>
-                                                <Text text="122% de utilización promedio" class="htwAlertSub"/>
+                                                <Text text="Sin datos" class="htwAlertMain htwAlertMainRed"/>
+                                                <Text text="Sin capacidad validada" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
@@ -495,8 +467,8 @@
                                             <core:Icon src="sap-icon://alert" class="htwAlertIcon htwAlertIconOrange"/>
                                             <VBox class="htwAlertTextWrap">
                                                 <Text text="Brecha proyectada" class="htwAlertLabel"/>
-                                                <Text text="250 h" class="htwAlertMain htwAlertMainOrange"/>
-                                                <Text text="de falta de horas para el cierre" class="htwAlertSub"/>
+                                                <Text text="Sin datos" class="htwAlertMain htwAlertMainOrange"/>
+                                                <Text text="Capacidad menos horas proyectadas" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
@@ -506,14 +478,14 @@
                                             <core:Icon src="sap-icon://bar-chart" class="htwAlertIcon htwAlertIconGreen"/>
                                             <VBox class="htwAlertTextWrap">
                                                 <Text text="Riesgo" class="htwAlertLabel"/>
-                                                <Text text="Alto" class="htwAlertMain htwAlertMainGreen"/>
-                                                <Text text="Si no se corrigen cargas en semanas clave" class="htwAlertSub"/>
+                                                <Text text="Sin datos" class="htwAlertMain htwAlertMainGreen"/>
+                                                <Text text="Sin capacidad validada" class="htwAlertSub"/>
                                             </VBox>
                                         </HBox>
                                     </VBox>
                                 </HBox>
                                 <!-- Pie -->
-                                <Text text="Proyección basada en datos hasta el 31/05/2024" class="htwProjectionFooter"/>
+                                <Text text="Proyección pendiente de datos validados" class="htwProjectionFooter"/>
                             </VBox>
                         </HBox>
                     </VBox>
