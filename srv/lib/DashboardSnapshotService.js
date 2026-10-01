@@ -8,21 +8,23 @@ const SapODataRepository = require("./SapODataRepository");
  * su contrato final; así no se pierden datos de las vistas de detalle.
  */
 const SELECTS = {
-    // Contrato comprobado contra QAS durante la carga mensual inicial.
-    // Los campos de detalle se solicitarán en endpoints específicos sólo
-    // cuando SAP confirme el $select correspondiente.
+    // Contrato comprobado contra las respuestas OData de QAS. Las vistas de
+    // detalle necesitan conservar cliente, sitio y equipo en la caché mensual.
     DashboardOrdersSet: [
         "OrderId", "OrderTypeCode", "OrderTypeText", "PlannedStartDate",
         "PlannedFinishDate", "SapUserStatusCode", "AppStatusCode",
-        "StatusText", "SupervisorId", "Mecanico", "Turno", "Zona"
+        "StatusText", "SupervisorId", "Mecanico", "Turno", "Zona",
+        "CustomerId", "CustomerName", "SiteId", "SiteName",
+        "EquipmentId", "EquipmentName"
     ],
     DashboardOrderCausesSet: [
         "OrderCauseId", "OrderId", "CauseCode", "CauseText",
         "CauseContextCode", "IsPrimary", "ValidTo"
     ],
     DashboardOrderMaterialsSet: [
-        "MaterialRequirementId", "OrderId", "MaterialCategoryCode",
-        "MaterialCategoryName", "BaseUnitCode", "PlannedQuantity",
+        "MaterialRequirementId", "OrderId", "ReservationNumber", "ReservationItem",
+        "MaterialId", "MaterialName", "MaterialCategoryCode", "MaterialCategoryName",
+        "BaseUnitCode", "PlannedQuantity", "RequiredDate", "DataValidationStatusCode",
         "IsPublishable"
     ],
     DashboardMaterialMovementsSet: [
@@ -36,13 +38,16 @@ const SELECTS = {
         "ValidFrom", "ValidTo"
     ],
     DashboardOrderOperationsSet: [
-        "OperationKey", "OrderId", "OperationCounter", "PlannedSourceCode",
+        "OperationKey", "OrderId", "RoutingNumber", "OperationCounter",
+        "AssignedPersonnelNumber", "PlannedSourceCode",
         "PlannedValueOriginal", "PlannedUnitOriginal", "CapacityLineNumber",
         "PlannedStartDate"
     ],
     DashboardOrderConfirmationsSet: [
-        "ConfirmationId", "OrderId", "ActualValueOriginal",
-        "ActualUnitOriginal", "ActualStartDate", "IncludedInCalculation"
+        "ConfirmationId", "OrderId", "RoutingNumber", "OperationCounter",
+        "ExecutorPersonnelNumber", "ActualValueOriginal", "ActualUnitOriginal",
+        "ActualStartDate", "CancellationIndicator", "ReversalReference",
+        "IncludedInCalculation"
     ],
     DashboardOrderEventsSet: [
         "OrderEventId", "OrderId", "EventTypeCode", "EventAt", "UserId",
@@ -53,9 +58,9 @@ const SELECTS = {
         "BlockOrderId", "BlockId", "OrderId", "ImpactStartAt", "ImpactEndAt"
     ],
     DashboardResourceDailySet: [
-        "ResourceDateId", "ResourceId", "ResourceName", "ResourceTypeCode",
+        "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName", "ResourceTypeCode",
         "WorkDate", "ZoneId", "ZoneName", "SupervisorId", "SupervisorName",
-        "ShiftId", "ShiftName", "AvailabilityStatusCode",
+        "ShiftId", "ShiftName", "ShiftSourceValidated", "AvailabilityStatusCode",
         "CapacitySourceValidated", "CapacityHours"
     ],
     DashboardFilterCatalogSet: [
@@ -63,6 +68,7 @@ const SELECTS = {
         "NumericValue", "UnitCode", "ScopeTypeCode", "ScopeId", "SortOrder",
         "Active"
     ],
+    DashboardZonasSet: ["ZonaId", "Zona", "Base"],
     DashboardServiceRequestsSet: [
         "RequestId", "ZoneId", "ResponsibleId", "RequestedAt", "AttendedAt",
         "ClosedAt", "CurrentStatusCode"
@@ -111,6 +117,7 @@ const POLICIES = {
     catalog: { softTtlMs: 60 * 60 * 1000, hardTtlMs: 7 * 24 * 60 * 60 * 1000 },
     independent: { softTtlMs: 10 * 60 * 1000, hardTtlMs: 12 * 60 * 60 * 1000 }
 };
+const OFFICIAL_ZONES = ["NORTE", "CENTRO", "SUR", "ESTE", "OESTE"];
 
 function dateAtStart(value) {
     const text = String(value || "").trim();
@@ -177,12 +184,51 @@ function unique(values) {
     return Array.from(new Set((values || []).map(String).filter(Boolean)));
 }
 
+function normalizeZone(value) {
+    return String(value || "").trim().toUpperCase();
+}
+
+function mergeZoneCatalog(catalogs, zoneRows) {
+    const baseCatalogs = (catalogs || []).filter((catalog) => {
+        if (normalizeZone(catalog && catalog.FilterDomain) !== "ZONE") {
+            return true;
+        }
+        return OFFICIAL_ZONES.includes(normalizeZone(
+            catalog && (catalog.ValueId || catalog.ValueText)
+        ));
+    });
+    const seen = new Set();
+    const zones = (zoneRows || []).map((row) => normalizeZone(row && row.Zona))
+        .filter((zone) => {
+            if (!OFFICIAL_ZONES.includes(zone) || seen.has(zone)) {
+                return false;
+            }
+            seen.add(zone);
+            return true;
+        });
+
+    if (!zones.length) {
+        return baseCatalogs;
+    }
+
+    return baseCatalogs.filter((catalog) => normalizeZone(catalog.FilterDomain) !== "ZONE")
+        .concat(zones.map((zone) => ({
+            FilterCatalogId: "ZONE:" + zone,
+            FilterDomain: "ZONE",
+            ValueId: zone,
+            ValueText: zone,
+            SortOrder: OFFICIAL_ZONES.indexOf(zone) + 1,
+            Active: true
+        })));
+}
+
 class DashboardSnapshotService {
     constructor(options) {
         const config = options || {};
 
         this._cache = config.cache;
         this._repository = config.repository;
+        this._catalogRepository = config.catalogRepository || null;
         this._namespace = String(config.namespace || "v1");
         if (!this._cache || !this._repository) {
             throw new Error("DashboardSnapshotService requiere cache y repository");
@@ -205,6 +251,16 @@ class DashboardSnapshotService {
             requested.add("blocks");
         }
         return requested;
+    }
+
+    _requiresOrders(requested) {
+        return requested.has("orders") || Object.keys(RELATIONS).some((name) =>
+            requested.has(name)
+        );
+    }
+
+    _requiresMonthlyBuckets(requested) {
+        return this._requiresOrders(requested) || requested.has("resources");
     }
 
     _ordersFilter(bucket) {
@@ -266,9 +322,23 @@ class DashboardSnapshotService {
     }
 
     async _catalogs(forceRefresh, cacheOnly) {
-        return this._cached(this._key("DashboardFilterCatalogSet", "global"), () =>
-            this._repository.readAll("DashboardFilterCatalogSet", { select: SELECTS.DashboardFilterCatalogSet }),
-        POLICIES.catalog, forceRefresh, cacheOnly);
+        return this._cached(this._key("DashboardFilterCatalogSet", "global"), async () => {
+            const catalogs = await this._repository.readAll("DashboardFilterCatalogSet", {
+                select: SELECTS.DashboardFilterCatalogSet
+            });
+            let zoneRows = [];
+
+            if (this._catalogRepository) {
+                try {
+                    zoneRows = await this._catalogRepository.readAll("DashboardZonasSet", {
+                        select: SELECTS.DashboardZonasSet
+                    });
+                } catch (error) {
+                    console.warn("No fue posible consultar DashboardZonasSet; se usará el respaldo de zonas operativas: " + error.message);
+                }
+            }
+            return mergeZoneCatalog(catalogs, zoneRows);
+        }, POLICIES.catalog, forceRefresh, cacheOnly);
     }
 
     async _independent(name, forceRefresh, cacheOnly) {
@@ -311,21 +381,26 @@ class DashboardSnapshotService {
         const to = dateAtStart(config.dateTo);
         const requested = this._requested(config.include);
         const keys = [];
+        const requiresOrders = this._requiresOrders(requested);
 
-        bucketsForRange(from, to).forEach((bucket) => {
-            keys.push(this._key("orders", bucket.key));
-            Object.keys(RELATIONS).forEach((name) => {
-                if (requested.has(name)) {
-                    keys.push(this._key(RELATIONS[name].entitySet, bucket.key));
+        if (this._requiresMonthlyBuckets(requested)) {
+            bucketsForRange(from, to).forEach((bucket) => {
+                if (requiresOrders) {
+                    keys.push(this._key("orders", bucket.key));
+                }
+                Object.keys(RELATIONS).forEach((name) => {
+                    if (requested.has(name)) {
+                        keys.push(this._key(RELATIONS[name].entitySet, bucket.key));
+                    }
+                });
+                if (requested.has("resources")) {
+                    keys.push(this._key("DashboardResourceDailySet", bucket.key));
+                }
+                if (requested.has("movements")) {
+                    keys.push(this._key("DashboardMaterialMovementsSet", bucket.key));
                 }
             });
-            if (requested.has("resources")) {
-                keys.push(this._key("DashboardResourceDailySet", bucket.key));
-            }
-            if (requested.has("movements")) {
-                keys.push(this._key("DashboardMaterialMovementsSet", bucket.key));
-            }
-        });
+        }
 
         if (requested.has("catalogs")) {
             keys.push(this._key("DashboardFilterCatalogSet", "global"));
@@ -377,15 +452,26 @@ class DashboardSnapshotService {
             }
         };
         const buckets = bucketsForRange(from, to);
+        const requiresOrders = this._requiresOrders(requested);
+        const requiresMonthlyBuckets = this._requiresMonthlyBuckets(requested);
 
-        for (const bucket of buckets) {
-            const ordersResult = await this._orders(bucket, forceRefresh, cacheOnly);
-            const orders = ordersResult.value;
+        response.meta.months = buckets.map((bucket) => bucket.key);
+
+        for (const bucket of requiresMonthlyBuckets ? buckets : []) {
+            const ordersResult = requiresOrders
+                ? await this._orders(bucket, forceRefresh, cacheOnly)
+                : null;
+            const orders = ordersResult ? ordersResult.value : [];
             let materials = null;
 
-            addRecords("orders", orders);
-            response.meta.cache[this._key("orders", bucket.key)] = ordersResult.cacheStatus;
-            response.meta.months.push(bucket.key);
+            // Las relaciones necesitan las OT para resolver sus OrderId, pero
+            // no deben volver a serializarlas si el cliente no pidió orders.
+            if (ordersResult) {
+                response.meta.cache[this._key("orders", bucket.key)] = ordersResult.cacheStatus;
+                if (requested.has("orders")) {
+                    addRecords("orders", orders);
+                }
+            }
 
             for (const name of Object.keys(RELATIONS)) {
                 if (!requested.has(name)) {
@@ -495,5 +581,7 @@ module.exports = {
     RELATIONS,
     BLOCK_RELATIONS,
     INDEPENDENT,
+    OFFICIAL_ZONES,
+    mergeZoneCatalog,
     bucketsForRange
 };

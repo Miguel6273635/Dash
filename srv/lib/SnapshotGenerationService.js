@@ -79,6 +79,7 @@ class SnapshotGenerationService {
         }
 
         this._repository = config.repository;
+        this._catalogRepository = config.catalogRepository || null;
         this._cacheOptions = Object.assign({
             maxEntries: 400,
             maxBytes: 128 * 1024 * 1024
@@ -99,6 +100,7 @@ class SnapshotGenerationService {
             new DashboardSnapshotService({
                 cache: generation.cache,
                 repository: this._repository,
+                catalogRepository: this._catalogRepository,
                 namespace: generation.id
             }));
 

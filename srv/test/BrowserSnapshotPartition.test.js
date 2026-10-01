@@ -84,6 +84,76 @@ test("preserva las fechas parciales y rechaza mezcla de generaciones", async fun
     assert.match(urls[1], /fechaHasta=2026-02-10/);
 });
 
+test("limita la concurrencia global sin volver a serializar todas las lecturas", async function () {
+    let active = 0;
+    let maximum = 0;
+    let calls = 0;
+    const api = loadUi5Module(apiFile, {
+        fetch: async function (url) {
+            const target = new URL(url, "https://preview.test").searchParams.get("include");
+            const data = { meta: { namespace: "generation-1", cacheOnly: true, cache: {} } };
+
+            calls += 1;
+            active += 1;
+            maximum = Math.max(maximum, active);
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            active -= 1;
+            data[target] = [];
+            return { ok: true, json: async function () { return { success: true, data: data }; } };
+        }
+    });
+
+    await api.loadSnapshot({
+        fechaDesde: "2026-01-01",
+        fechaHasta: "2026-06-30"
+    }, ["orders"]);
+
+    assert.equal(calls, 6);
+    assert.equal(maximum, 4);
+});
+
+test("comparte una lectura idéntica solicitada al mismo tiempo por dos vistas", async function () {
+    let calls = 0;
+    const api = loadUi5Module(apiFile, {
+        fetch: async function () {
+            calls += 1;
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            return {
+                ok: true,
+                json: async function () {
+                    return {
+                        success: true,
+                        data: {
+                            orders: [{ OrderId: "OT-1" }],
+                            meta: { namespace: "generation-1", cacheOnly: true, cache: {} }
+                        }
+                    };
+                }
+            };
+        }
+    });
+    const filters = { fechaDesde: "2026-08-01", fechaHasta: "2026-08-31" };
+
+    const results = await Promise.all([
+        api.loadSnapshot(filters, ["orders"]),
+        api.loadSnapshot(filters, ["orders"])
+    ]);
+
+    assert.equal(calls, 1);
+    assert.equal(results[0].orders[0].OrderId, "OT-1");
+    assert.equal(results[1].orders[0].OrderId, "OT-1");
+});
+
+test("la ruta vacía abre Mantenimiento y no dispara AnalisisFallas en segundo plano", function () {
+    const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../webapp/manifest.json"), "utf8"));
+    const initialRoute = manifest["sap.ui5"].routing.routes.find(function (route) {
+        return route.pattern === ":?query:";
+    });
+
+    assert.equal(initialRoute.name, "RouteInicio");
+    assert.deepEqual(initialRoute.target, ["TargetMantenimiento"]);
+});
+
 test("el adaptador carga cada EntitySet sólo al leerlo y comparte la lectura", async function () {
     const calls = [];
     const adapter = loadUi5Module(adapterFile, {

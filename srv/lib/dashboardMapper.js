@@ -1,12 +1,25 @@
 "use strict";
 
 const OFFICIAL_ORDER_TYPES = new Set(["SM01", "SM02", "SM03"]);
-const EXECUTED_STATUS = "E0015";
-const NON_EXECUTED_STATUSES = new Set(["E0013", "E0014"]);
+// QAS publica tanto STAT de SAP como el estado homologado de la aplicación.
+// E0015 (completada), E0016 (cerrada) y E0019 (cerrada parcialmente) cuentan
+// como ejecución para los indicadores. Cualquier otro estado, incluido vacío,
+// permanece dentro del plan como no ejecutado.
+const EXECUTED_STATUSES = new Set(["E0015", "E0016", "E0019"]);
+const APP_STATUS_TO_SAP_STATUS = Object.freeze({
+    "0100": "E0013",
+    "0200": "E0014",
+    "0300": "E0015",
+    "0400": "E0016",
+    "0500": "E0017",
+    "0600": "E0018",
+    "0301": "E0019"
+});
 const CAUSE_TONES = ["blue", "sky", "green", "yellow", "orange", "purple", "gray"];
 const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const MONTH_NAMES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const MONTH_KEYS = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+const OFFICIAL_ZONES = ["NORTE", "CENTRO", "SUR", "ESTE", "OESTE"];
 const DEFAULT_SHIFTS = [
     { key: "DIURNO", text: "Diurno" },
     { key: "NOCTURNO", text: "Nocturno" },
@@ -24,6 +37,25 @@ function asNumber(value) {
 
 function normalize(value) {
     return String(value || "").trim().toUpperCase();
+}
+
+function officialZoneOptions(catalogs) {
+    const labels = new Map();
+
+    asArray(catalogs).filter((catalog) =>
+        catalog.Active !== false && normalize(catalog.FilterDomain) === "ZONE"
+    ).forEach((catalog) => {
+        const zone = normalize(catalog.ValueId || catalog.ValueText);
+
+        if (OFFICIAL_ZONES.includes(zone)) {
+            labels.set(zone, String(catalog.ValueText || zone));
+        }
+    });
+
+    return [{ key: "TODAS", text: "Todas" }].concat(OFFICIAL_ZONES.map((zone) => ({
+        key: zone,
+        text: labels.get(zone) || zone
+    })));
 }
 
 function uniqueBy(items, property) {
@@ -101,12 +133,30 @@ function weekNumber(date) {
 }
 
 function getStatusCode(order) {
-    return normalize(order.SapUserStatusCode || order.AppStatusCode);
+    const sapStatus = normalize(order && order.SapUserStatusCode);
+    const appStatus = normalize(order && order.AppStatusCode);
+
+    if (/^E00\d{2}$/.test(sapStatus)) {
+        return sapStatus;
+    }
+    if (/^E00\d{2}$/.test(appStatus)) {
+        return appStatus;
+    }
+    return APP_STATUS_TO_SAP_STATUS[sapStatus] || APP_STATUS_TO_SAP_STATUS[appStatus] || "";
+}
+
+function isExecutedOrder(order) {
+    return EXECUTED_STATUSES.has(getStatusCode(order));
+}
+
+function isNonExecutedOrder(order) {
+    return !isExecutedOrder(order);
 }
 
 function hasRecognizedStatus(order) {
-    const status = getStatusCode(order);
-    return status === EXECUTED_STATUS || NON_EXECUTED_STATUSES.has(status);
+    // Toda OT oficial pertenece al plan, aunque SAP todavía no haya informado
+    // un estado. Así la desviación no ignora silenciosamente órdenes abiertas.
+    return Boolean(order && order.OrderId);
 }
 
 function getOfficialOrders(orders) {
@@ -133,8 +183,8 @@ function buildGaugeSvg(value) {
 function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
     const officialOrders = getOfficialOrders(orders);
     const planned = officialOrders.length;
-    const executed = officialOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
-    const nonExecuted = officialOrders.filter((order) => NON_EXECUTED_STATUSES.has(getStatusCode(order))).length;
+    const executed = officialOrders.filter(isExecutedOrder).length;
+    const nonExecuted = officialOrders.filter(isNonExecutedOrder).length;
     const classified = officialOrders.filter(hasRecognizedStatus).length;
     const hasStatusData = classified > 0;
     const complianceValue = hasStatusData ? percentage(executed, planned) : null;
@@ -179,7 +229,7 @@ function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
         executedOrders: executed,
         classifiedOrders: classified,
         nonExecuted: hasStatusData ? String(nonExecuted) : "--",
-        nonExecutedPercent: hasStatusData ? (planned > 0 ? "100%" : "0%") : "--",
+        nonExecutedPercent: hasStatusData ? formatPercentage(deviationValue, 1, "0.0%") : "--",
         nonExecutedInfo: hasStatusData
             ? `${nonExecuted} órdenes no ejecutadas representan ${formatPercentage(deviationValue, 1, "0.0%")} del plan.`
             : `SAP devolvió ${planned} órdenes sin estado de usuario para calcular la desviación.`,
@@ -194,7 +244,7 @@ function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
 function buildCauses(orders, causes) {
     const nonExecutedOrderIds = new Set(
         getOfficialOrders(orders)
-            .filter((order) => NON_EXECUTED_STATUSES.has(getStatusCode(order)))
+            .filter(isNonExecutedOrder)
             .map((order) => String(order.OrderId))
     );
     const totals = new Map();
@@ -364,7 +414,7 @@ function svgDots(points, cssClass) {
 function buildExecution(orders, periods) {
     const values = periods.map((period) => {
         const periodOrders = ordersInPeriod(orders, period);
-        const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const executed = periodOrders.filter(isExecutedOrder).length;
         const classified = periodOrders.filter(hasRecognizedStatus).length;
         return {
             planned: periodOrders.length,
@@ -424,28 +474,20 @@ function heatValue(executed, planned, classified) {
     };
 }
 
-function buildZonePeriods(orders, periods) {
-    const zonePriority = ["NORTE", "CENTRO", "SUR", "ESTE", "OESTE"];
+function buildZonePeriods(orders, periods, catalogs) {
     const officialOrders = getOfficialOrders(orders);
-    const zones = Array.from(new Set(officialOrders.map((order) => String(order.Zona || order.ZoneId || "Sin zona"))))
-        .sort((left, right) => {
-            const leftIndex = zonePriority.indexOf(normalize(left));
-            const rightIndex = zonePriority.indexOf(normalize(right));
-            if (leftIndex >= 0 || rightIndex >= 0) {
-                return (leftIndex < 0 ? 99 : leftIndex) - (rightIndex < 0 ? 99 : rightIndex);
-            }
-            return left.localeCompare(right, "es");
-        })
-        .slice(0, 5);
+    const zones = officialZoneOptions(catalogs).slice(1).map((item) => item.key);
     const rows = zones.map((zone) => {
-        const zoneOrders = officialOrders.filter((order) => String(order.Zona || order.ZoneId || "Sin zona") === zone);
+        const zoneOrders = officialOrders.filter((order) =>
+            normalize(order.Zona || order.ZoneId) === zone
+        );
         const cells = periods.map((period) => {
             const periodOrders = ordersInPeriod(zoneOrders, period);
-            const executed = periodOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+            const executed = periodOrders.filter(isExecutedOrder).length;
             const classified = periodOrders.filter(hasRecognizedStatus).length;
             return heatValue(executed, periodOrders.length, classified);
         });
-        const executedTotal = zoneOrders.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const executedTotal = zoneOrders.filter(isExecutedOrder).length;
         const classifiedTotal = zoneOrders.filter(hasRecognizedStatus).length;
         return {
             zone,
@@ -519,11 +561,53 @@ function shiftTone(utilization) {
     return "normal";
 }
 
-function buildCapacity(orders, resources, operations, confirmations) {
+function toShiftKey(value) {
+    const shift = normalize(value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[_-]+/g, " ");
+
+    if (shift.includes("NOCTURN")) {
+        return "NOCTURNO";
+    }
+    if (shift.includes("SABAD") || shift.includes("DOMIN") ||
+        (shift.includes("FIN") && shift.includes("SEM"))) {
+        return "FIN_SEMANA";
+    }
+    if (shift.includes("DIURN") || shift.includes("LUNES A VIERNES") ||
+        shift.includes("MATUTIN") || shift.includes("VESPERTIN")) {
+        return "DIURNO";
+    }
+    return shift || "SIN_TURNO";
+}
+
+function shiftTextFor(key, fallback) {
+    const defaultShift = DEFAULT_SHIFTS.find((shift) => shift.key === key);
+    return defaultShift ? defaultShift.text : (fallback || "Sin turno");
+}
+
+function validPersonnelId(value) {
+    const identifier = String(value || "").trim();
+    return identifier && !/^0+$/.test(identifier) ? identifier : "";
+}
+
+function isMechanicResource(resource) {
+    const type = normalize(resource && resource.ResourceTypeCode);
+    return type === "MECHANIC" || type.includes("MECAN") ||
+        type === "TECHNICIAN" || type.includes("TECNIC");
+}
+
+function buildCapacity(orders, resources, assignments, operations, confirmations) {
     const officialOrders = getOfficialOrders(orders);
     const orderById = new Map(officialOrders.map((order) => [String(order.OrderId), order]));
-    const validResources = asArray(resources).filter((resource) =>
+    const periodResources = asArray(resources).filter((resource) =>
+        normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
+    );
+    const validResources = periodResources.filter((resource) =>
         resource.CapacitySourceValidated !== false && normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
+    );
+    const selectedAssignments = asArray(assignments).filter((assignment) =>
+        orderById.has(String(assignment.OrderId))
     );
     const selectedOperations = deduplicateOperations(operations);
     const validConfirmations = asArray(confirmations).filter((confirmation) => confirmation.IncludedInCalculation !== false);
@@ -534,26 +618,70 @@ function buildCapacity(orders, resources, operations, confirmations) {
     const actualHours = validConfirmations.reduce((sum, confirmation) =>
         sum + toHours(confirmation.ActualValueOriginal, confirmation.ActualUnitOriginal), 0
     );
-    const technicians = new Set(validResources.map((resource) => String(resource.ResourceId))).size;
-    const activeTurns = new Set(validResources.map((resource) => String(resource.ResourceDateId || `${resource.ResourceId}-${resource.WorkDate}-${resource.ShiftId}`))).size;
-    const shiftNames = Array.from(new Set(validResources.map((resource) => resource.ShiftName || resource.ShiftId).filter(Boolean)));
     const maximum = Math.max(capacityHours, plannedHours, actualHours, 0);
     const committed = percentage(plannedHours, capacityHours);
-    const margin = capacityHours - plannedHours;
+    const hasCapacity = capacityHours > 0;
+    const margin = hasCapacity ? capacityHours - plannedHours : null;
 
     const resourceShiftMap = new Map();
-    validResources.forEach((resource) => {
-        const key = normalize(resource.ShiftId || resource.ShiftName || "SIN_TURNO");
-        const current = resourceShiftMap.get(key) || { capacity: 0, technicians: new Set(), text: resource.ShiftName || resource.ShiftId || "Sin turno" };
+    validResources.filter((resource) => resource.ShiftSourceValidated !== false).forEach((resource) => {
+        const key = toShiftKey(resource.ShiftId || resource.ShiftName);
+        const current = resourceShiftMap.get(key) || {
+            capacity: 0,
+            technicians: new Set(),
+            text: shiftTextFor(key, resource.ShiftName || resource.ShiftId)
+        };
+        const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
         current.capacity += asNumber(resource.CapacityHours);
-        current.technicians.add(String(resource.ResourceId));
+        if (technicianId) {
+            current.technicians.add(technicianId);
+        }
         resourceShiftMap.set(key, current);
     });
+
+    function addOrderTechnician(order, value) {
+        const technicianId = validPersonnelId(value);
+        if (!technicianId) {
+            return;
+        }
+        const key = toShiftKey(order && order.Turno);
+        const current = resourceShiftMap.get(key) || {
+            capacity: 0,
+            technicians: new Set(),
+            text: shiftTextFor(key, order && order.Turno)
+        };
+        current.technicians.add(technicianId);
+        resourceShiftMap.set(key, current);
+    }
+
+    selectedAssignments.forEach((assignment) => {
+        addOrderTechnician(
+            orderById.get(String(assignment.OrderId)),
+            assignment.PersonnelNumber || assignment.ResourceId
+        );
+    });
+    officialOrders.forEach((order) => addOrderTechnician(order, order.Mecanico));
+
+    const technicians = new Set();
+    periodResources.filter(isMechanicResource).forEach((resource) => {
+        const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
+        if (technicianId) {
+            technicians.add(technicianId);
+        }
+    });
+    resourceShiftMap.forEach((shift) => {
+        shift.technicians.forEach((technician) => technicians.add(technician));
+    });
+    const shiftKeysWithPeople = Array.from(resourceShiftMap.keys()).filter((key) =>
+        key !== "SIN_TURNO" && resourceShiftMap.get(key).technicians.size > 0
+    );
+    const activeTurns = shiftKeysWithPeople.length;
+    const shiftNames = shiftKeysWithPeople.map((key) => shiftTextFor(key, resourceShiftMap.get(key).text));
 
     const plannedByShift = new Map();
     selectedOperations.forEach((operation) => {
         const order = orderById.get(String(operation.OrderId)) || {};
-        const key = normalize(order.Turno || "SIN_TURNO");
+        const key = toShiftKey(order.Turno);
         plannedByShift.set(key, (plannedByShift.get(key) || 0) + toHours(operation.PlannedValueOriginal, operation.PlannedUnitOriginal));
     });
 
@@ -571,7 +699,7 @@ function buildCapacity(orders, resources, operations, confirmations) {
             title: resourceShift ? resourceShift.text : fallback.text,
             percent: formatPercentage(utilization),
             technicians: String(resourceShift ? resourceShift.technicians.size : 0),
-            capacity: formatHours(capacity),
+            capacity: capacity > 0 ? formatHours(capacity) : "Sin datos",
             programmed: formatHours(programmed),
             state: shiftState(utilization),
             tone: shiftTone(utilization)
@@ -580,8 +708,8 @@ function buildCapacity(orders, resources, operations, confirmations) {
     shiftCards.push({
         title: "Total",
         percent: formatPercentage(committed),
-        technicians: String(technicians),
-        capacity: formatHours(capacityHours),
+        technicians: String(technicians.size),
+        capacity: hasCapacity ? formatHours(capacityHours) : "Sin datos",
         programmed: formatHours(plannedHours),
         state: shiftState(committed),
         tone: shiftTone(committed)
@@ -592,10 +720,10 @@ function buildCapacity(orders, resources, operations, confirmations) {
 
     return {
         activeTurns: String(activeTurns),
-        technicians: String(technicians),
+        technicians: String(technicians.size),
         currentShiftLine1: firstShiftLine,
         currentShiftLine2: secondShiftLine,
-        capacity: formatHours(capacityHours),
+        capacity: hasCapacity ? formatHours(capacityHours) : "Sin datos",
         planned: formatHours(plannedHours),
         actual: formatHours(actualHours),
         capacityWidth: `${maximum > 0 ? capacityHours / maximum * 100 : 0}%`,
@@ -606,9 +734,13 @@ function buildCapacity(orders, resources, operations, confirmations) {
         scale2: formatQuantity(maximum * 2 / 3),
         scale3: formatQuantity(maximum),
         committed: formatPercentage(committed),
-        committedDetail: `(${formatQuantity(plannedHours)} / ${formatQuantity(capacityHours)} h)`,
-        margin: formatHours(margin),
-        marginDetail: `(${formatPercentage(capacityHours > 0 ? margin / capacityHours * 100 : null)} disponible - Programado)`,
+        committedDetail: hasCapacity
+            ? `(${formatQuantity(plannedHours)} / ${formatQuantity(capacityHours)} h)`
+            : "(Capacidad no validada por SAP)",
+        margin: hasCapacity ? formatHours(margin) : "Sin datos",
+        marginDetail: hasCapacity
+            ? `(${formatPercentage(margin / capacityHours * 100)} disponible - Programado)`
+            : "(Capacidad no validada por SAP)",
         shifts: shiftCards
     };
 }
@@ -625,7 +757,7 @@ function buildComposition(orders) {
         : officialOrders.filter((order) => normalize(order.OrderTypeCode) === "SM02");
 
     const card = (items) => {
-        const executed = items.filter((order) => getStatusCode(order) === EXECUTED_STATUS).length;
+        const executed = items.filter(isExecutedOrder).length;
         const classified = items.filter(hasRecognizedStatus).length;
         return {
             orders: `${classified > 0 ? executed : "--"} / ${items.length}`,
@@ -687,10 +819,7 @@ function buildFilterOptions(catalogs, orders, resources) {
     const allRecords = [...asArray(orders), ...asArray(resources)];
     return {
         periodos: buildPeriodOptions(orders),
-        zonas: preferCatalog(
-            catalogOptions(catalogs, ["ZONE"], "TODAS", "Todas"),
-            derivedOptions(allRecords.map((record) => ({ key: record.Zona || record.ZoneId, text: record.ZoneName || record.Zona || record.ZoneId })), "key", "text", "TODAS", "Todas")
-        ),
+        zonas: officialZoneOptions(catalogs),
         supervisores: preferCatalog(
             catalogOptions(catalogs, ["SUPERVISOR"], "TODOS", "Todos"),
             derivedOptions(allRecords.map((record) => ({ key: record.SupervisorId, text: record.SupervisorName || record.SupervisorId })), "key", "text", "TODOS", "Todos")
@@ -709,7 +838,10 @@ function buildFilterOptions(catalogs, orders, resources) {
         ),
         estadosOrden: preferCatalog(
             catalogOptions(catalogs, ["STATUS"], "TODOS", "Todos"),
-            derivedOptions(orders, "SapUserStatusCode", "StatusText", "TODOS", "Todos")
+            derivedOptions(asArray(orders).map((order) => ({
+                key: getStatusCode(order),
+                text: order.StatusText || getStatusCode(order)
+            })), "key", "text", "TODOS", "Todos")
         )
     };
 }
@@ -722,8 +854,8 @@ function buildDashboard(rawData) {
         summary: buildSummary(data.orders, data.serviceRequests, data.blocks, data.catalogs, data.blockOrders),
         causes: buildCauses(data.orders, data.causes),
         execution: buildExecution(data.orders, periods),
-        zonePeriods: buildZonePeriods(data.orders, periods),
-        staff: buildCapacity(data.orders, data.resources, data.operations, data.confirmations),
+        zonePeriods: buildZonePeriods(data.orders, periods, data.catalogs),
+        staff: buildCapacity(data.orders, data.resources, data.assignments, data.operations, data.confirmations),
         materials: buildMaterials(data.materials, data.movements),
         composition: buildComposition(data.orders),
         filterOptions: buildFilterOptions(data.catalogs, data.allOrders || data.orders, data.allResources || data.resources)
@@ -741,5 +873,6 @@ module.exports = {
     buildComposition,
     buildFilterOptions,
     getOfficialOrders,
+    getStatusCode,
     toHours
 };

@@ -21,6 +21,7 @@ const CAUSE_TONES = ["blue", "sky", "green", "yellow", "orange", "purple", "gray
 const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const MONTH_NAMES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const MONTH_KEYS = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+const OFFICIAL_ZONES = ["NORTE", "CENTRO", "SUR", "ESTE", "OESTE"];
 const DEFAULT_SHIFTS = [
     { key: "DIURNO", text: "Diurno" },
     { key: "NOCTURNO", text: "Nocturno" },
@@ -38,6 +39,25 @@ function asNumber(value) {
 
 function normalize(value) {
     return String(value || "").trim().toUpperCase();
+}
+
+function officialZoneOptions(catalogs) {
+    const labels = new Map();
+
+    asArray(catalogs).filter((catalog) =>
+        catalog.Active !== false && normalize(catalog.FilterDomain) === "ZONE"
+    ).forEach((catalog) => {
+        const zone = normalize(catalog.ValueId || catalog.ValueText);
+
+        if (OFFICIAL_ZONES.includes(zone)) {
+            labels.set(zone, String(catalog.ValueText || zone));
+        }
+    });
+
+    return [{ key: "TODAS", text: "Todas" }].concat(OFFICIAL_ZONES.map((zone) => ({
+        key: zone,
+        text: labels.get(zone) || zone
+    })));
 }
 
 function uniqueBy(items, property) {
@@ -173,8 +193,8 @@ function buildGaugeSvg(value) {
 function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
     const officialOrders = getOfficialOrders(orders);
     const planned = officialOrders.length;
-        const executed = officialOrders.filter(isExecutedOrder).length;
-        const nonExecuted = officialOrders.filter(isNonExecutedOrder).length;
+    const executed = officialOrders.filter(isExecutedOrder).length;
+    const nonExecuted = officialOrders.filter(isNonExecutedOrder).length;
     const classified = officialOrders.filter(hasRecognizedStatus).length;
     const hasStatusData = classified > 0;
     const complianceValue = hasStatusData ? percentage(executed, planned) : null;
@@ -219,7 +239,7 @@ function buildSummary(orders, serviceRequests, blocks, catalogs, blockOrders) {
         executedOrders: executed,
         classifiedOrders: classified,
         nonExecuted: hasStatusData ? String(nonExecuted) : "--",
-        nonExecutedPercent: hasStatusData ? (planned > 0 ? "100%" : "0%") : "--",
+        nonExecutedPercent: hasStatusData ? formatPercentage(deviationValue, 1, "0.0%") : "--",
         nonExecutedInfo: hasStatusData
             ? `${nonExecuted} órdenes no ejecutadas representan ${formatPercentage(deviationValue, 1, "0.0%")} del plan.`
             : `SAP devolvió ${planned} órdenes sin estado de usuario para calcular la desviación.`,
@@ -475,21 +495,13 @@ function heatValue(executed, planned, classified) {
     };
 }
 
-function buildZonePeriods(orders, periods) {
-    const zonePriority = ["NORTE", "CENTRO", "SUR", "ESTE", "OESTE"];
+function buildZonePeriods(orders, periods, catalogs) {
     const officialOrders = getOfficialOrders(orders);
-    const zones = Array.from(new Set(officialOrders.map((order) => String(order.Zona || order.ZoneId || "Sin zona"))))
-        .sort((left, right) => {
-            const leftIndex = zonePriority.indexOf(normalize(left));
-            const rightIndex = zonePriority.indexOf(normalize(right));
-            if (leftIndex >= 0 || rightIndex >= 0) {
-                return (leftIndex < 0 ? 99 : leftIndex) - (rightIndex < 0 ? 99 : rightIndex);
-            }
-            return left.localeCompare(right, "es");
-        })
-        .slice(0, 5);
+    const zones = officialZoneOptions(catalogs).slice(1).map((item) => item.key);
     const rows = zones.map((zone) => {
-        const zoneOrders = officialOrders.filter((order) => String(order.Zona || order.ZoneId || "Sin zona") === zone);
+        const zoneOrders = officialOrders.filter((order) =>
+            normalize(order.Zona || order.ZoneId) === zone
+        );
         const cells = periods.map((period) => {
             const periodOrders = ordersInPeriod(zoneOrders, period);
             const executed = periodOrders.filter(isExecutedOrder).length;
@@ -571,16 +583,21 @@ function shiftTone(utilization) {
 }
 
 function toShiftKey(value) {
-    const shift = normalize(value).replace(/[_-]+/g, " ");
+    const shift = normalize(value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[_-]+/g, " ");
 
-    if (shift.includes("DIURN")) {
-        return "DIURNO";
-    }
     if (shift.includes("NOCTURN")) {
         return "NOCTURNO";
     }
-    if (shift.includes("FIN") && shift.includes("SEM")) {
+    if (shift.includes("SABAD") || shift.includes("DOMIN") ||
+        (shift.includes("FIN") && shift.includes("SEM"))) {
         return "FIN_SEMANA";
+    }
+    if (shift.includes("DIURN") || shift.includes("LUNES A VIERNES") ||
+        shift.includes("MATUTIN") || shift.includes("VESPERTIN")) {
+        return "DIURNO";
     }
     return shift || "SIN_TURNO";
 }
@@ -590,10 +607,24 @@ function shiftTextFor(key, fallback) {
     return defaultShift ? defaultShift.text : (fallback || "Sin turno");
 }
 
+function validPersonnelId(value) {
+    const identifier = String(value || "").trim();
+    return identifier && !/^0+$/.test(identifier) ? identifier : "";
+}
+
+function isMechanicResource(resource) {
+    const type = normalize(resource && resource.ResourceTypeCode);
+    return type === "MECHANIC" || type.includes("MECAN") ||
+        type === "TECHNICIAN" || type.includes("TECNIC");
+}
+
 function buildCapacity(orders, resources, assignments, operations, confirmations) {
     const officialOrders = getOfficialOrders(orders);
     const orderById = new Map(officialOrders.map((order) => [String(order.OrderId), order]));
-    const validResources = asArray(resources).filter((resource) =>
+    const periodResources = asArray(resources).filter((resource) =>
+        normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
+    );
+    const validResources = periodResources.filter((resource) =>
         resource.CapacitySourceValidated !== false && normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
     );
     const selectedAssignments = asArray(assignments).filter((assignment) =>
@@ -610,18 +641,22 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
     );
     const maximum = Math.max(capacityHours, plannedHours, actualHours, 0);
     const committed = percentage(plannedHours, capacityHours);
-    const margin = capacityHours - plannedHours;
+    const hasCapacity = capacityHours > 0;
+    const margin = hasCapacity ? capacityHours - plannedHours : null;
 
     const resourceShiftMap = new Map();
-    validResources.forEach((resource) => {
+    validResources.filter((resource) => resource.ShiftSourceValidated !== false).forEach((resource) => {
         const key = toShiftKey(resource.ShiftId || resource.ShiftName);
         const current = resourceShiftMap.get(key) || {
             capacity: 0,
             technicians: new Set(),
             text: shiftTextFor(key, resource.ShiftName || resource.ShiftId)
         };
+        const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
         current.capacity += asNumber(resource.CapacityHours);
-        current.technicians.add(String(resource.ResourceId));
+        if (technicianId) {
+            current.technicians.add(technicianId);
+        }
         resourceShiftMap.set(key, current);
     });
 
@@ -631,7 +666,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
     selectedAssignments.forEach((assignment) => {
         const order = orderById.get(String(assignment.OrderId)) || {};
         const key = toShiftKey(order.Turno);
-        const technicianId = String(assignment.PersonnelNumber || assignment.ResourceId || "").trim();
+        const technicianId = validPersonnelId(assignment.PersonnelNumber || assignment.ResourceId);
         const current = resourceShiftMap.get(key) || {
             capacity: 0,
             technicians: new Set(),
@@ -644,11 +679,34 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
         resourceShiftMap.set(key, current);
     });
 
+    officialOrders.forEach((order) => {
+        const technicianId = validPersonnelId(order.Mecanico);
+        const key = toShiftKey(order.Turno);
+        const current = resourceShiftMap.get(key) || {
+            capacity: 0,
+            technicians: new Set(),
+            text: shiftTextFor(key, order.Turno)
+        };
+
+        if (technicianId) {
+            current.technicians.add(technicianId);
+            resourceShiftMap.set(key, current);
+        }
+    });
+
     const technicians = new Set();
+    periodResources.filter(isMechanicResource).forEach((resource) => {
+        const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
+        if (technicianId) {
+            technicians.add(technicianId);
+        }
+    });
     resourceShiftMap.forEach((shift) => {
         shift.technicians.forEach((technician) => technicians.add(technician));
     });
-    const shiftKeysWithPeople = Array.from(resourceShiftMap.keys()).filter((key) => key !== "SIN_TURNO");
+    const shiftKeysWithPeople = Array.from(resourceShiftMap.keys()).filter((key) =>
+        key !== "SIN_TURNO" && resourceShiftMap.get(key).technicians.size > 0
+    );
     const activeTurns = shiftKeysWithPeople.length;
     const shiftNames = shiftKeysWithPeople.map((key) => {
         const shift = resourceShiftMap.get(key);
@@ -676,7 +734,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
             title: resourceShift ? resourceShift.text : fallback.text,
             percent: formatPercentage(utilization),
             technicians: String(resourceShift ? resourceShift.technicians.size : 0),
-            capacity: formatHours(capacity),
+            capacity: capacity > 0 ? formatHours(capacity) : "Sin datos",
             programmed: formatHours(programmed),
             state: shiftState(utilization),
             tone: shiftTone(utilization)
@@ -686,7 +744,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
         title: "Total",
         percent: formatPercentage(committed),
         technicians: String(technicians.size),
-        capacity: formatHours(capacityHours),
+        capacity: hasCapacity ? formatHours(capacityHours) : "Sin datos",
         programmed: formatHours(plannedHours),
         state: shiftState(committed),
         tone: shiftTone(committed)
@@ -700,7 +758,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
         technicians: String(technicians.size),
         currentShiftLine1: firstShiftLine,
         currentShiftLine2: secondShiftLine,
-        capacity: formatHours(capacityHours),
+        capacity: hasCapacity ? formatHours(capacityHours) : "Sin datos",
         planned: formatHours(plannedHours),
         actual: formatHours(actualHours),
         capacityWidth: `${maximum > 0 ? capacityHours / maximum * 100 : 0}%`,
@@ -711,9 +769,13 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
         scale2: formatQuantity(maximum * 2 / 3),
         scale3: formatQuantity(maximum),
         committed: formatPercentage(committed),
-        committedDetail: `(${formatQuantity(plannedHours)} / ${formatQuantity(capacityHours)} h)`,
-        margin: formatHours(margin),
-        marginDetail: `(${formatPercentage(capacityHours > 0 ? margin / capacityHours * 100 : null)} disponible - Programado)`,
+        committedDetail: hasCapacity
+            ? `(${formatQuantity(plannedHours)} / ${formatQuantity(capacityHours)} h)`
+            : "(Capacidad no validada por SAP)",
+        margin: hasCapacity ? formatHours(margin) : "Sin datos",
+        marginDetail: hasCapacity
+            ? `(${formatPercentage(margin / capacityHours * 100)} disponible - Programado)`
+            : "(Capacidad no validada por SAP)",
         shifts: shiftCards
     };
 }
@@ -803,10 +865,7 @@ function buildFilterOptions(catalogs, orders, resources) {
     const allRecords = [...asArray(orders), ...asArray(resources)];
     return {
         periodos: buildPeriodOptions(orders),
-        zonas: preferCatalog(
-            catalogOptions(catalogs, ["ZONE"], "TODAS", "Todas"),
-            derivedOptions(allRecords.map((record) => ({ key: record.Zona || record.ZoneId, text: record.ZoneName || record.Zona || record.ZoneId })), "key", "text", "TODAS", "Todas")
-        ),
+        zonas: officialZoneOptions(catalogs),
         supervisores: preferCatalog(
             catalogOptions(catalogs, ["SUPERVISOR"], "TODOS", "Todos"),
             derivedOptions(allRecords.map((record) => ({ key: record.SupervisorId, text: record.SupervisorName || record.SupervisorId })), "key", "text", "TODOS", "Todos")
@@ -838,7 +897,7 @@ function buildDashboard(rawData) {
         summary: buildSummary(data.orders, data.serviceRequests, data.blocks, data.catalogs, data.blockOrders),
         causes: buildCauses(data.orders, data.causes),
         execution: buildExecution(data.orders, periods),
-        zonePeriods: buildZonePeriods(data.orders, periods),
+        zonePeriods: buildZonePeriods(data.orders, periods, data.catalogs),
         staff: buildCapacity(data.orders, data.resources, data.assignments, data.operations, data.confirmations),
         materials: buildMaterials(data.materials, data.movements),
         composition: buildComposition(data.orders),

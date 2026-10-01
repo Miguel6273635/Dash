@@ -1,9 +1,14 @@
+/* global Promise */
 sap.ui.define([], function () {
     "use strict";
 
     var API_BASE = window.location.hostname.indexOf(".applicationstudio.cloud.sap") !== -1
         ? "/api/v1"
         : "/dynamic_dest/api-dash/api/v1";
+    var MAX_ACTIVE_GET_REQUESTS = 4;
+    var ACTIVE_GET_REQUESTS = 0;
+    var GET_QUEUE = [];
+    var PENDING_GETS = new Map();
     var GLOBAL_COLLECTIONS = {
         catalogs: true,
         blocks: true,
@@ -50,6 +55,43 @@ sap.ui.define([], function () {
                 return payload.data;
             });
         });
+    }
+
+    function drainGetQueue() {
+        var available = MAX_ACTIVE_GET_REQUESTS - ACTIVE_GET_REQUESTS;
+
+        GET_QUEUE.splice(0, available).forEach(function (job) {
+            ACTIVE_GET_REQUESTS += 1;
+            request(job.path, { method: "GET" })
+                .then(job.resolve, job.reject)
+                .finally(function () {
+                    ACTIVE_GET_REQUESTS -= 1;
+                    drainGetQueue();
+                });
+        });
+    }
+
+    function get(path) {
+        var pending = PENDING_GETS.get(path);
+        var task;
+        var clear;
+
+        if (pending) {
+            return pending;
+        }
+
+        task = new Promise(function (resolve, reject) {
+            GET_QUEUE.push({ path: path, resolve: resolve, reject: reject });
+            drainGetQueue();
+        });
+        PENDING_GETS.set(path, task);
+        clear = function () {
+            if (PENDING_GETS.get(path) === task) {
+                PENDING_GETS.delete(path);
+            }
+        };
+        task.then(clear, clear);
+        return task;
     }
 
     function toQuery(filters) {
@@ -148,42 +190,45 @@ sap.ui.define([], function () {
             });
         });
 
-        // Serie deliberada: una entidad mensual puede rondar 100 MB. No
-        // mantenemos varias respuestas grandes simultáneamente en memoria.
-        return tasks.reduce(function (chain, task) {
-            return chain.then(function () {
-                var query = toQuery({
-                    fechaDesde: task.range.fechaDesde,
-                    fechaHasta: task.range.fechaHasta,
-                    include: task.target
-                });
+        // La cola es global para todas las pantallas: permite hasta cuatro
+        // lecturas cacheadas en paralelo y comparte una petición idéntica si
+        // dos vistas la solicitan al mismo tiempo. El resultado se combina en
+        // el orden original para conservar la deduplicación por mes.
+        return Promise.all(tasks.map(function (task) {
+            var query = toQuery({
+                fechaDesde: task.range.fechaDesde,
+                fechaHasta: task.range.fechaHasta,
+                include: task.target
+            });
 
-                return request(API_BASE + "/dashboard/snapshot?" + query, {
-                    method: "GET"
-                }).then(function (part) {
-                    var meta = part && part.meta || {};
-                    var id = RECORD_IDS[task.target];
-                    var rows = part && part[task.target] || [];
+            return get(API_BASE + "/dashboard/snapshot?" + query).then(function (part) {
+                return { task: task, part: part };
+            });
+        })).then(function (parts) {
+            parts.forEach(function (item) {
+                var task = item.task;
+                var part = item.part;
+                var meta = part && part.meta || {};
+                var id = RECORD_IDS[task.target];
+                var rows = part && part[task.target] || [];
 
-                    if (generation && meta.namespace && generation !== meta.namespace) {
-                        throw new Error("La generación de caché cambió durante la consulta; vuelve a cargar la vista.");
+                if (generation && meta.namespace && generation !== meta.namespace) {
+                    throw new Error("La generación de caché cambió durante la consulta; vuelve a cargar la vista.");
+                }
+                generation = generation || meta.namespace || null;
+                output.meta.namespace = generation;
+                output.meta.cacheOnly = output.meta.cacheOnly && meta.cacheOnly !== false;
+                Object.assign(output.meta.cache, meta.cache || {});
+                rows.forEach(function (row) {
+                    var key = id && row && row[id];
+
+                    if (key === undefined || key === null || key === "") {
+                        unkeyed[task.target].push(row);
+                    } else {
+                        indexed[task.target].set(String(key), row);
                     }
-                    generation = generation || meta.namespace || null;
-                    output.meta.namespace = generation;
-                    output.meta.cacheOnly = output.meta.cacheOnly && meta.cacheOnly !== false;
-                    Object.assign(output.meta.cache, meta.cache || {});
-                    rows.forEach(function (row) {
-                        var key = id && row && row[id];
-
-                        if (key === undefined || key === null || key === "") {
-                            unkeyed[task.target].push(row);
-                        } else {
-                            indexed[task.target].set(String(key), row);
-                        }
-                    });
                 });
             });
-        }, Promise.resolve()).then(function () {
             targets.forEach(function (target) {
                 output[target] = Array.from(indexed[target].values()).concat(unkeyed[target]);
             });
@@ -198,9 +243,7 @@ sap.ui.define([], function () {
                 refresh: forceRefresh ? "true" : undefined
             }));
 
-            return request(API_BASE + "/mantenimiento?" + query, {
-                method: "GET"
-            });
+            return get(API_BASE + "/mantenimiento?" + query);
         },
 
         loadDashboard: function (dashboard, filters) {
@@ -208,9 +251,7 @@ sap.ui.define([], function () {
                 dashboard: dashboard
             }));
 
-            return request(API_BASE + "/dashboard/snapshot?" + query, {
-                method: "GET"
-            });
+            return get(API_BASE + "/dashboard/snapshot?" + query);
         },
 
         loadSnapshot: function (filters, include) {
@@ -218,15 +259,11 @@ sap.ui.define([], function () {
         },
 
         getStatus: function () {
-            return request(API_BASE + "/cache/status", {
-                method: "GET"
-            });
+            return get(API_BASE + "/cache/status");
         },
 
         getRefreshStatus: function () {
-            return request(API_BASE + "/cache/refresh", {
-                method: "GET"
-            });
+            return get(API_BASE + "/cache/refresh");
         },
 
         refresh: function (payload) {

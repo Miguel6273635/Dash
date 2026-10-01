@@ -22,6 +22,7 @@ const app = express();
 const port = Number(process.env.PORT || 4004);
 const destinationName = process.env.SAP_DESTINATION_NAME || "QAS_MITSU_DASH";
 const servicePath = process.env.SAP_ODATA_SERVICE_PATH || "/sap/opu/odata/sap/ZPM_BTP_DASHMANTTO_SRV";
+const catalogServicePath = process.env.SAP_CATALOG_SERVICE_PATH || "/sap/opu/odata/sap/ZSD_CATALOGOS_SRV";
 const cacheStorageMode = String(process.env.CACHE_STORAGE_MODE || "memory").toLowerCase();
 const usesDiskCache = cacheStorageMode === "disk";
 const cacheStorageDirectory = process.env.CACHE_STORAGE_DIR || "/tmp/api-dash-cache";
@@ -41,20 +42,32 @@ function createGenerationCache(generationId) {
 }
 
 const cache = createGenerationCache("v1");
+function executeSapRequest(url) {
+    return executeHttpRequest(
+        { destinationName },
+        { method: "GET", url, headers: { Accept: "application/json" } },
+        { fetchCsrfToken: false }
+    );
+}
+
 const repository = new SapODataRepository({
     servicePath,
     batchSize: 15,
-    execute: function (url) {
-        return executeHttpRequest(
-            { destinationName },
-            { method: "GET", url, headers: { Accept: "application/json" } },
-            { fetchCsrfToken: false }
-        );
-    }
+    execute: executeSapRequest
 });
-const snapshots = new DashboardSnapshotService({ cache, repository, namespace: "v1" });
+const catalogRepository = new SapODataRepository({
+    servicePath: catalogServicePath,
+    execute: executeSapRequest
+});
+const snapshots = new DashboardSnapshotService({
+    cache,
+    repository,
+    catalogRepository,
+    namespace: "v1"
+});
 const generations = new SnapshotGenerationService({
     repository,
+    catalogRepository,
     cacheOptions,
     cacheFactory: function (options) {
         return createGenerationCache(options.generationId);
@@ -103,6 +116,7 @@ app.get("/health", function (request, response) {
         version: "v1",
         destination: destinationName,
         servicePath,
+        catalogServicePath,
         activeGeneration: generations.activeGeneration
     });
 });
@@ -130,6 +144,7 @@ module.exports = {
     app,
     cache,
     repository,
+    catalogRepository,
     snapshots,
     generations,
     prewarm,

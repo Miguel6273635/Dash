@@ -45,6 +45,115 @@ test("carga y reutiliza las entidades independientes sin consultas por orden", a
     assert.equal(calls.filter((item) => item === "DashboardEquipmentBlocksSet").length, 1);
 });
 
+test("una colección global no consulta ni devuelve órdenes del mes", async function () {
+    const calls = [];
+    const service = new DashboardSnapshotService({
+        cache: new CacheService({ maxBytes: 1024 * 1024 }),
+        repository: {
+            readAll: async function (entitySet) {
+                calls.push(entitySet);
+                if (entitySet === "DashboardOrdersSet") {
+                    throw new Error("No se deben consultar órdenes para un catálogo global");
+                }
+                return [{ FilterCatalogId: "CAT-1" }];
+            },
+            readByValues: async function () {
+                throw new Error("No se esperaban relaciones por OT");
+            }
+        }
+    });
+
+    const snapshot = await service.getSnapshot({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["catalogs"]
+    });
+
+    assert.deepEqual(calls, ["DashboardFilterCatalogSet"]);
+    assert.equal(snapshot.catalogs[0].FilterCatalogId, "CAT-1");
+    assert.equal("orders" in snapshot, false);
+    assert.deepEqual(service.cacheKeysFor({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["catalogs"]
+    }), ["v1:DashboardFilterCatalogSet:global"]);
+});
+
+test("reemplaza el falso dominio de zonas con DashboardZonasSet", async function () {
+    const catalogCalls = [];
+    const service = new DashboardSnapshotService({
+        cache: new CacheService({ maxBytes: 1024 * 1024 }),
+        repository: {
+            readAll: async function () {
+                return [
+                    {
+                        FilterCatalogId: "OLD-ZONE",
+                        FilterDomain: "ZONE",
+                        ValueId: "MANTENIMIENTO D.F.",
+                        ValueText: "MANTENIMIENTO D.F.",
+                        Active: true
+                    },
+                    {
+                        FilterCatalogId: "STATUS-1",
+                        FilterDomain: "STATUS",
+                        ValueId: "E0015",
+                        ValueText: "Completada",
+                        Active: true
+                    }
+                ];
+            },
+            readByValues: async function () { return []; }
+        },
+        catalogRepository: {
+            readAll: async function (entitySet, options) {
+                catalogCalls.push({ entitySet, select: options.select });
+                return ["CENTRO", "ESTE", "NORTE", "OESTE", "SUR"].map((zone) => ({
+                    ZonaId: "", Zona: zone, Base: ""
+                }));
+            }
+        }
+    });
+
+    const snapshot = await service.getSnapshot({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["catalogs"]
+    });
+    const zones = snapshot.catalogs.filter((item) => item.FilterDomain === "ZONE");
+
+    assert.equal(catalogCalls[0].entitySet, "DashboardZonasSet");
+    assert.deepEqual(catalogCalls[0].select, ["ZonaId", "Zona", "Base"]);
+    assert.deepEqual(zones.map((item) => item.ValueId).sort(), ["CENTRO", "ESTE", "NORTE", "OESTE", "SUR"]);
+    assert.equal(snapshot.catalogs.some((item) => item.ValueId === "MANTENIMIENTO D.F."), false);
+    assert.equal(snapshot.catalogs.some((item) => item.FilterDomain === "STATUS"), true);
+});
+
+test("una relación usa órdenes internamente pero no las repite en la respuesta", async function () {
+    const service = new DashboardSnapshotService({
+        cache: new CacheService({ maxBytes: 1024 * 1024 }),
+        repository: {
+            readAll: async function (entitySet) {
+                return entitySet === "DashboardOrdersSet" ? [{ OrderId: "OT-1" }] : [];
+            },
+            readByValues: async function (entitySet, property, values) {
+                assert.equal(entitySet, "DashboardOrderCausesSet");
+                assert.equal(property, "OrderId");
+                assert.deepEqual(values, ["OT-1"]);
+                return [{ OrderCauseId: "CAUSE-1", OrderId: "OT-1" }];
+            }
+        }
+    });
+
+    const snapshot = await service.getSnapshot({
+        dateFrom: "2026-08-01",
+        dateTo: "2026-08-31",
+        include: ["causes"]
+    });
+
+    assert.equal(snapshot.causes[0].OrderCauseId, "CAUSE-1");
+    assert.equal("orders" in snapshot, false);
+});
+
 
 
 test("conserva requisitos sin identificador conocido y carga eventos de bloqueo por BlockId", async function () {
