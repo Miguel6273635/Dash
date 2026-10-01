@@ -10,7 +10,7 @@
     <Page
         id="analisisOTPreventivasEjecutadasPage"
         showHeader="false"
-        enableScrolling="false"
+        enableScrolling="true"
         class="otpEjPage sapUiSizeCompact">
 
         <content>
@@ -21,9 +21,9 @@
                 fitContainer="true"
                 class="otpEjPageContainer">
 
-                <!-- ===================================================== -->
-                <!-- ENCABEZADO                                            -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     HEADER
+                     ===================================================== -->
 
                 <VBox
                     width="100%"
@@ -77,14 +77,12 @@
 
                 </VBox>
 
-
-                <!-- ===================================================== -->
-                <!-- FILTROS                                               -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
 
                 <HBox
                     width="100%"
-                    wrap="NoWrap"
                     alignItems="Stretch"
                     class="otpEjFilters">
 
@@ -99,8 +97,9 @@
                         <Select
                             width="100%"
                             selectedKey="{otpe>/filters/periodo}"
+                            change=".onPeriodoChange"
                             items="{otpe>/catalogos/periodos}"
-                            class="otpEjFilterControl otpEjSelect">
+                            class="otpEjFilterControl">
 
                             <core:Item
                                 key="{otpe>key}"
@@ -109,7 +108,6 @@
                         </Select>
 
                     </VBox>
-
 
                     <!-- FECHA DESDE -->
 
@@ -124,10 +122,9 @@
                             value="{otpe>/filters/fechaDesde}"
                             displayFormat="dd/MM/yyyy"
                             valueFormat="dd/MM/yyyy"
-                            class="otpEjFilterControl otpEjDatePicker"/>
+                            class="otpEjFilterControl"/>
 
                     </VBox>
-
 
                     <!-- FECHA HASTA -->
 
@@ -142,10 +139,9 @@
                             value="{otpe>/filters/fechaHasta}"
                             displayFormat="dd/MM/yyyy"
                             valueFormat="dd/MM/yyyy"
-                            class="otpEjFilterControl otpEjDatePicker"/>
+                            class="otpEjFilterControl"/>
 
                     </VBox>
-
 
                     <!-- ZONA -->
 
@@ -159,7 +155,7 @@
                             width="100%"
                             selectedKey="{otpe>/filters/zona}"
                             items="{otpe>/catalogos/zonas}"
-                            class="otpEjFilterControl otpEjSelect">
+                            class="otpEjFilterControl">
 
                             <core:Item
                                 key="{otpe>key}"
@@ -168,7 +164,6 @@
                         </Select>
 
                     </VBox>
-
 
                     <!-- CLIENTE -->
 
@@ -182,7 +177,7 @@
                             width="100%"
                             selectedKey="{otpe>/filters/cliente}"
                             items="{otpe>/catalogos/clientes}"
-                            class="otpEjFilterControl otpEjSelect">
+                            class="otpEjFilterControl">
 
                             <core:Item
                                 key="{otpe>key}"
@@ -191,7 +186,6 @@
                         </Select>
 
                     </VBox>
-
 
                     <!-- RESPONSABLE -->
 
@@ -205,7 +199,7 @@
                             width="100%"
                             selectedKey="{otpe>/filters/responsable}"
                             items="{otpe>/catalogos/responsables}"
-                            class="otpEjFilterControl otpEjSelect">
+                            class="otpEjFilterControl">
 
                             <core:Item
                                 key="{otpe>key}"
@@ -215,8 +209,7 @@
 
                     </VBox>
 
-
-                    <!-- BOTÓN -->
+                    <!-- APLICAR -->
 
                     <Button
                         text="Aplicar filtros"
@@ -227,14 +220,12 @@
 
                 </HBox>
 
-
-                <!-- ===================================================== -->
-                <!-- KPI                                                   -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     KPIS
+                     ===================================================== -->
 
                 <HBox
                     width="100%"
-                    wrap="NoWrap"
                     alignItems="Stretch"
                     class="otpEjKpiGrid">
 
@@ -261,23 +252,19 @@
 
                             <Text
                                 text="{otpe>/kpis/planeadas}"
-                                wrapping="false"
                                 class="otpEjKpiNumber"/>
 
                             <Text
                                 text="Planeadas"
-                                wrapping="false"
                                 class="otpEjKpiLabel"/>
 
                             <Text
                                 text="Órdenes del periodo"
-                                wrapping="false"
                                 class="otpEjKpiSubLabel"/>
 
                         </VBox>
 
                     </HBox>
-
 
                     <!-- EJECUTADAS -->
 
@@ -302,23 +289,19 @@
 
                             <Text
                                 text="{otpe>/kpis/ejecutadas}"
-                                wrapping="false"
                                 class="otpEjKpiNumber"/>
 
                             <Text
                                 text="Ejecutadas"
-                                wrapping="false"
                                 class="otpEjKpiLabel"/>
 
                             <Text
-                                text="95.4% del total"
-                                wrapping="false"
+                                text="Órdenes completadas"
                                 class="otpEjKpiSubLabel"/>
 
                         </VBox>
 
                     </HBox>
-
 
                     <!-- NO EJECUTADAS -->
 
@@ -343,23 +326,19 @@
 
                             <Text
                                 text="{otpe>/kpis/noEjecutadas}"
-                                wrapping="false"
                                 class="otpEjKpiNumber"/>
 
                             <Text
                                 text="No ejecutadas"
-                                wrapping="false"
                                 class="otpEjKpiLabel"/>
 
                             <Text
-                                text="4.6% del total planeado"
-                                wrapping="false"
+                                text="Órdenes pendientes"
                                 class="otpEjKpiSubLabel otpEjKpiSubRed"/>
 
                         </VBox>
 
                     </HBox>
-
 
                     <!-- CUMPLIMIENTO -->
 
@@ -384,17 +363,14 @@
 
                             <Text
                                 text="{otpe>/kpis/cumplimiento}"
-                                wrapping="false"
                                 class="otpEjKpiNumber"/>
 
                             <Text
                                 text="Cumplimiento"
-                                wrapping="false"
                                 class="otpEjKpiLabel"/>
 
                             <Text
-                                text="248 de 260 OT"
-                                wrapping="false"
+                                text="Del total planeado"
                                 class="otpEjKpiSubLabel"/>
 
                         </VBox>
@@ -403,43 +379,39 @@
 
                 </HBox>
 
-
-                <!-- ===================================================== -->
-                <!-- SELECTOR DE ANÁLISIS                                  -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     SELECTOR
+                     ===================================================== -->
 
                 <HBox
                     width="100%"
                     alignItems="Center"
                     justifyContent="SpaceBetween"
-                    wrap="NoWrap"
                     class="otpEjToolbar">
 
                     <HBox
                         alignItems="Center"
-                        wrap="NoWrap"
                         class="otpEjTabs">
 
                         <Text
                             text="Ver análisis por:"
-                            wrapping="false"
                             class="otpEjTabsLabel"/>
 
                         <Button
-                            text="No ejecutadas (12)"
-                            type="Default"
+                            text="{= 'No ejecutadas (' + ${otpe>/kpis/noEjecutadas} + ')' }"
+                            type="{= ${otpe>/ui/selectedAnalysis} === 'NO_EJECUTADAS' ? 'Emphasized' : 'Default'}"
                             press=".onSelectNoEjecutadas"
                             class="otpEjTabBtn"/>
 
                         <Button
-                            text="Ejecutadas (248)"
-                            type="Emphasized"
+                            text="{= 'Ejecutadas (' + ${otpe>/kpis/ejecutadas} + ')' }"
+                            type="{= ${otpe>/ui/selectedAnalysis} === 'EJECUTADAS' ? 'Emphasized' : 'Default'}"
                             press=".onSelectEjecutadas"
-                            class="otpEjTabBtn otpEjTabActive"/>
+                            class="otpEjTabBtn"/>
 
                         <Button
-                            text="Todas (260)"
-                            type="Default"
+                            text="{= 'Todas (' + ${otpe>/kpis/planeadas} + ')' }"
+                            type="{= ${otpe>/ui/selectedAnalysis} === 'TODAS' ? 'Emphasized' : 'Default'}"
                             press=".onSelectTodas"
                             class="otpEjTabBtn"/>
 
@@ -462,10 +434,9 @@
 
                 </HBox>
 
-
-                <!-- ===================================================== -->
-                <!-- CARD TABLA                                            -->
-                <!-- ===================================================== -->
+                <!-- =====================================================
+                     CARD TABLA
+                     ===================================================== -->
 
                 <VBox
                     width="100%"
@@ -473,15 +444,7 @@
                     fitContainer="true"
                     class="otpEjTableCard">
 
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="1"
-                            shrinkFactor="1"
-                            baseSize="0%"/>
-                    </layoutData>
-
-
-                    <!-- CABECERA CARD -->
+                    <!-- CABECERA -->
 
                     <HBox
                         width="100%"
@@ -498,12 +461,12 @@
                             width="100%"
                             placeholder="Buscar responsable..."
                             liveChange=".onSearchResponsable"
+                            search=".onSearchResponsable"
                             class="otpEjSearch"/>
 
                     </HBox>
 
-
-                    <!-- CONTENIDO TABLA -->
+                    <!-- TABLA -->
 
                     <VBox
                         width="100%"
@@ -511,15 +474,7 @@
                         fitContainer="true"
                         class="otpEjTableViewport">
 
-                        <layoutData>
-                            <FlexItemData
-                                growFactor="1"
-                                shrinkFactor="1"
-                                baseSize="0%"/>
-                        </layoutData>
-
-
-                        <!-- CABECERA -->
+                        <!-- HEADER -->
 
                         <HBox
                             width="100%"
@@ -527,51 +482,54 @@
 
                             <Text text=""/>
 
-                            <Text
-                                text="Responsable"
-                                class="otpEjHeaderText"/>
+                            <Text text="Responsable"/>
 
-                            <Text
-                                text="OT ejecutadas"
-                                class="otpEjHeaderText"/>
+                            <Text text="OT ejecutadas"/>
 
-                            <Text
-                                text="% del total ejecutado"
-                                class="otpEjHeaderText"/>
+                            <Text text="% del total ejecutado"/>
 
-                            <Text
-                                text="Clientes atendidos"
-                                class="otpEjHeaderText"/>
+                            <Text text="Clientes atendidos"/>
 
-                            <Text
-                                text="Elevadores atendidos"
-                                class="otpEjHeaderText"/>
+                            <Text text="Elevadores atendidos"/>
 
-                            <Text
-                                text="Tiempo promedio ejecución"
-                                class="otpEjHeaderText"/>
+                            <Text text="Tiempo promedio ejecución"/>
 
                             <Text text=""/>
 
                         </HBox>
 
+                        <!-- RESPONSABLES PAGINADOS -->
 
-                        <!-- RESPONSABLES -->
-
-                        <VBox
-                            width="100%"
-                            items="{otpe>/responsables}"
+                        <List
+                            id="otpeRespList"
+                            items="{otpe>/pagedResponsables}"
+                            showSeparators="None"
+                            noDataText="No se encontraron responsables"
                             class="otpEjRespList">
 
-                            <items>
+                            <CustomListItem
+                                class="otpEjRespListItem">
+
+                                <customData>
+
+                                    <core:CustomData
+                                        key="units"
+                                        value="{otpe>_pageUnits}"
+                                        writeToDom="true"/>
+
+                                    <core:CustomData
+                                        key="expanded"
+                                        value="{= ${otpe>expanded} ? 'true' : 'false' }"
+                                        writeToDom="true"/>
+
+                                </customData>
 
                                 <VBox
                                     width="100%"
-                                    visible="{otpe>visible}"
+                                    height="100%"
                                     class="otpEjRespBlock">
 
-
-                                    <!-- FILA RESPONSABLE -->
+                                    <!-- RESPONSABLE -->
 
                                     <HBox
                                         width="100%"
@@ -596,32 +554,27 @@
 
                                         <Text
                                             text="{otpe>nombre}"
-                                            wrapping="false"
+                                            tooltip="{otpe>nombre}"
                                             class="otpEjRespName"/>
 
                                         <Text
                                             text="{otpe>ot}"
-                                            wrapping="false"
                                             class="otpEjGreenStrong"/>
 
                                         <Text
                                             text="{otpe>pct}"
-                                            wrapping="false"
                                             class="otpEjBlueStrong"/>
 
                                         <Text
                                             text="{otpe>clientes}"
-                                            wrapping="false"
                                             class="otpEjStrong"/>
 
                                         <Text
                                             text="{otpe>elevadores}"
-                                            wrapping="false"
                                             class="otpEjStrong"/>
 
                                         <Text
                                             text="{otpe>tiempo}"
-                                            wrapping="false"
                                             class="otpEjGreenStrong"/>
 
                                         <Button
@@ -632,8 +585,7 @@
 
                                     </HBox>
 
-
-                                    <!-- DETALLE EXPANDIDO -->
+                                    <!-- DETALLE -->
 
                                     <VBox
                                         width="100%"
@@ -645,20 +597,19 @@
                                             class="otpEjSubHeader">
 
                                             <Text text="OT"/>
-
                                             <Text text="Cliente"/>
-
                                             <Text text="Elevador"/>
-
                                             <Text text="Fecha ejecución"/>
-
                                             <Text text="Tiempo ejecución"/>
 
                                         </HBox>
 
                                         <VBox
                                             width="100%"
-                                            items="{otpe>ordenes}"
+                                            items="{
+                                                path: 'otpe>ordenes',
+                                                templateShareable: false
+                                            }"
                                             class="otpEjSubRows">
 
                                             <items>
@@ -669,24 +620,21 @@
 
                                                     <Text
                                                         text="{otpe>ot}"
-                                                        wrapping="false"
                                                         class="otpEjOrderText"/>
 
                                                     <Text
                                                         text="{otpe>cliente}"
-                                                        wrapping="false"/>
+                                                        tooltip="{otpe>cliente}"/>
 
                                                     <Text
                                                         text="{otpe>elevador}"
-                                                        wrapping="false"/>
+                                                        tooltip="{otpe>elevador}"/>
 
                                                     <Text
-                                                        text="{otpe>fecha}"
-                                                        wrapping="false"/>
+                                                        text="{otpe>fecha}"/>
 
                                                     <Text
-                                                        text="{otpe>tiempo}"
-                                                        wrapping="false"/>
+                                                        text="{otpe>tiempo}"/>
 
                                                 </HBox>
 
@@ -698,10 +646,9 @@
 
                                 </VBox>
 
-                            </items>
+                            </CustomListItem>
 
-                        </VBox>
-
+                        </List>
 
                         <!-- TOTAL -->
 
@@ -713,32 +660,26 @@
 
                             <Text
                                 text="Total"
-                                wrapping="false"
                                 class="otpEjRespName"/>
 
                             <Text
                                 text="{otpe>/totales/ot}"
-                                wrapping="false"
                                 class="otpEjGreenStrong"/>
 
                             <Text
                                 text="{otpe>/totales/pct}"
-                                wrapping="false"
                                 class="otpEjBlueStrong"/>
 
                             <Text
                                 text="{otpe>/totales/clientes}"
-                                wrapping="false"
                                 class="otpEjStrong"/>
 
                             <Text
                                 text="{otpe>/totales/elevadores}"
-                                wrapping="false"
                                 class="otpEjStrong"/>
 
                             <Text
                                 text="{otpe>/totales/tiempo}"
-                                wrapping="false"
                                 class="otpEjGreenStrong"/>
 
                             <Text text=""/>
@@ -747,22 +688,55 @@
 
                     </VBox>
 
-
-                    <!-- PIE -->
+                    <!-- FOOTER -->
 
                     <HBox
                         width="100%"
                         alignItems="Center"
+                        justifyContent="SpaceBetween"
                         class="otpEjTableFooter">
 
-                        <core:Icon
-                            src="sap-icon://hint"
-                            class="otpEjFooterIcon"/>
+                        <HBox
+                            alignItems="Center"
+                            class="otpEjFooterNote">
 
-                        <Text
-                            text="El tiempo promedio de ejecución corresponde al tiempo desde la fecha de inicio hasta la fecha de cierre de la OT."
-                            wrapping="false"
-                            class="otpEjFooterText"/>
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="otpEjFooterIcon"/>
+
+                            <Text
+                                text="El tiempo promedio de ejecución corresponde al tiempo desde la fecha de inicio hasta la fecha de cierre de la OT."
+                                wrapping="false"
+                                class="otpEjFooterText"/>
+
+                        </HBox>
+
+                        <!-- PAGINACIÓN -->
+
+                        <HBox
+                            alignItems="Center"
+                            visible="{= ${otpe>/pagination/totalPages} > 1 }"
+                            class="otpEjPagination">
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="{= ${otpe>/pagination/page} > 1 }"
+                                press=".onPreviousPage"
+                                class="otpEjPageButton"/>
+
+                            <Text
+                                text="{= 'Página ' + ${otpe>/pagination/page} + ' de ' + ${otpe>/pagination/totalPages} }"
+                                class="otpEjPageText"/>
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="{= ${otpe>/pagination/page} &lt; ${otpe>/pagination/totalPages} }"
+                                press=".onNextPage"
+                                class="otpEjPageButton"/>
+
+                        </HBox>
 
                     </HBox>
 

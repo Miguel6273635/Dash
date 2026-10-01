@@ -1,1070 +1,2521 @@
-/* =========================================================
+/* ==========================================================================
    ANÁLISIS INTEGRAL DE REPARACIONES
-   ========================================================= */
+   ESTÁNDAR VISUAL - VISTA JEFATURA
+   ========================================================================== */
 
+.repaIntegralPage {
+    --ri-bg: #f7f9fc;
+    --ri-card: #ffffff;
+
+    --ri-navy: #13214a;
+    --ri-title: #1c2940;
+    --ri-text: #39465a;
+    --ri-muted: #8792a3;
+    --ri-label: #78869a;
+
+    --ri-blue: #2e8cff;
+    --ri-blue-strong: #0a6ff5;
+
+    --ri-green: #63bf42;
+    --ri-green-text: #58b33a;
+
+    --ri-red: #ff4d53;
+    --ri-red-text: #ef3f47;
+
+    --ri-purple: #8645e9;
+
+    --ri-border: #e2e8f0;
+}
+
+
+/* ==========================================================================
+   PÁGINA
+   ========================================================================== */
+
+.repaIntegralView,
 .repaIntegralPage,
-.repaIntegralPage .sapMPageBgStandard,
-.repaIntegralPage .sapMPageEnableScrolling,
+.repaIntegralPage.sapMPage,
+.repaIntegralPage .sapMPage,
+.repaIntegralPage .sapMPageCont,
 .repaIntegralPage .sapMPageScroll,
-.repaIntegralPage .repaIntegralScroll,
-.repaIntegralPage .sapMScrollContScroll {
-  background: #f6f8fc;
+.repaIntegralPage .sapMPageEnableScrolling {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    max-height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    background: var(--ri-bg) !important;
 }
 
 .repaIntegralPage,
-.repaIntegralPage * {
-  box-sizing: border-box;
+.repaIntegralPage *,
+.repaIntegralPage *::before,
+.repaIntegralPage *::after {
+    box-sizing: border-box !important;
 }
 
-.repaIntegralPage .repaIntegralScroll,
-.repaIntegralPage .sapMScrollContScroll {
-  width: 100%;
-  overflow-x: hidden;
-}
+
+/* ==========================================================================
+   CONTENEDOR
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralContainer {
-  width: 100%;
-  min-width: 0;
-  padding: 7px 12px 10px;
-  gap: 8px;
-  background: #f6f8fc;
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding:
+        10px
+        12px
+        9px
+        18px !important;
+
+    gap: 8px !important;
+
+    overflow: hidden !important;
+
+    background: var(--ri-bg) !important;
 }
 
-/* =========================================================
+.repaIntegralPage
+.repaIntegralContainer > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+}
+
+/* La tabla utiliza todo el espacio sobrante */
+.repaIntegralPage
+.repaIntegralContainer > .sapMFlexItem:last-child {
+    flex: 1 1 0 !important;
+
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* ==========================================================================
    ENCABEZADO
-   ========================================================= */
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralHeader {
-  width: 100%;
-  min-width: 0;
-  min-height: 43px;
-  margin: 0;
-  padding: 0;
-  gap: 12px;
+    flex: 0 0 auto !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    padding:
+        1px
+        7px !important;
+
+    overflow: hidden !important;
 }
 
 .repaIntegralPage .repaIntegralHeaderText {
-  min-width: 0;
+    min-width: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralTitle.sapMTitle {
-  margin: 0;
-  padding: 0;
-  color: #172554;
-  font-size: 1.16rem;
-  line-height: 1.2rem;
-  font-weight: 900;
-  letter-spacing: -0.025em;
+.repaIntegralPage
+.repaIntegralTitle.sapMTitle {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--ri-navy) !important;
+
+    font-size: 1.72rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+
+    letter-spacing: -0.03em !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralSubtitle {
-  margin-top: 2px;
-  color: #64748b;
-  font-size: 0.51rem;
-  line-height: 0.62rem;
-  font-weight: 700;
+.repaIntegralPage
+.repaIntegralSubtitle.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 2px !important;
+
+    color: #718096 !important;
+
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
 }
+
+
+/* ==========================================================================
+   BREADCRUMB
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralBreadcrumb {
-  min-height: 11px;
-  margin-top: 2px;
-  gap: 6px;
+    margin-top: 4px !important;
+
+    gap: 5px !important;
 }
 
-.repaIntegralPage .repaIntegralBreadcrumb .sapMText {
-  color: #0a6ff5;
-  font-size: 0.48rem;
-  line-height: 0.6rem;
-  font-weight: 800;
+.repaIntegralPage
+.repaIntegralBreadLink.sapMLnk,
+
+.repaIntegralPage
+.repaIntegralBreadText.sapMText {
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+
+    text-decoration: none !important;
 }
 
-.repaIntegralPage .repaIntegralBreadcrumb .sapUiIcon {
-  color: #94a3b8;
-  font-size: 0.45rem;
+.repaIntegralPage .repaIntegralBreadIcon {
+    color: #94a3b8 !important;
+
+    font-size: 0.48rem !important;
 }
 
-.repaIntegralPage .repaIntegralDate {
-  flex: 0 0 auto;
-  margin-top: 3px;
-  color: #64748b;
-  font-size: 0.49rem;
-  line-height: 0.62rem;
-  font-weight: 800;
-  white-space: nowrap;
+
+/* ==========================================================================
+   FECHA CORTE
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralDate.sapMText {
+    flex: 0 0 auto !important;
+
+    padding-top: 5px !important;
+
+    color: #65748b !important;
+
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+
+    white-space: nowrap !important;
 }
 
-/* =========================================================
+
+/* ==========================================================================
    FILTROS
-   ========================================================= */
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralFilterCard {
-  display: flex !important;
-  width: 100%;
-  min-width: 0;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  align-items: stretch;
-  background: transparent;
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1.18fr)
+        minmax(0, 1.18fr)
+        minmax(0, 0.90fr)
+        minmax(0, 0.96fr)
+        minmax(0, 1fr)
+        118px !important;
+
+    flex: 0 0 54px !important;
+
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 1px !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.repaIntegralPage
+.repaIntegralFilterCard > .sapMFlexItem {
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
 }
 
 .repaIntegralPage .repaIntegralFilterItem {
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
-  min-width: 0;
-  padding: 7px 9px;
-  justify-content: flex-start;
-  border: 1px solid #dbe3ef;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+    display: flex !important;
+    flex-direction: column !important;
+
+    justify-content: center !important;
+
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    padding:
+        6px
+        10px
+        5px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(25, 45, 79, 0.05) !important;
 }
 
-.repaIntegralPage .repaIntegralFilterPeriod {
-  flex: 1.08 1 108px;
+.repaIntegralPage
+.repaIntegralFilterLabel.sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+    height: 14px !important;
+
+    margin:
+        0 0 1px !important;
+
+    color: var(--ri-label) !important;
+
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+    line-height: 14px !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralFilterDate {
-  flex: 1.22 1 126px;
+
+/* SELECT / DATEPICKER */
+
+.repaIntegralPage
+.repaIntegralFilterControl.sapMSlt,
+
+.repaIntegralPage
+.repaIntegralFilterControl.sapMInputBase,
+
+.repaIntegralPage
+.repaIntegralFilterControl
+.sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.repaIntegralPage .repaIntegralFilterNormal {
-  flex: 0.9 1 88px;
+.repaIntegralPage
+.repaIntegralFilterControl.sapMSlt
+.sapMSltLabel,
+
+.repaIntegralPage
+.repaIntegralFilterControl
+.sapMInputBaseInner {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+
+    color: #1e2e4c !important;
+
+    background: transparent !important;
+
+    font-size: 0.70rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralFilterResponsible {
-  flex: 1.04 1 104px;
+.repaIntegralPage
+.repaIntegralFilterControl.sapMSlt
+.sapMSltLabel {
+    padding:
+        0
+        1.6rem
+        0
+        0 !important;
 }
 
-.repaIntegralPage .repaIntegralFilterItem .sapMLabel {
-  display: block;
-  height: 11px;
-  min-height: 11px;
-  margin: 0 0 3px;
-  padding: 0;
-  color: #64748b;
-  font-size: 0.49rem;
-  line-height: 11px;
-  font-weight: 800;
+.repaIntegralPage
+.repaIntegralFilterControl
+.sapMInputBaseInner {
+    padding:
+        0
+        1.8rem
+        0
+        0 !important;
 }
 
-.repaIntegralPage .repaIntegralFilterItem .sapMSlt,
-.repaIntegralPage .repaIntegralFilterItem .sapMInputBase,
-.repaIntegralPage .repaIntegralFilterItem .sapMInputBaseContentWrapper {
-  width: 100% !important;
-  height: 22px !important;
-  min-height: 22px !important;
-  max-height: 22px !important;
-  margin: -1px 0 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+.repaIntegralPage
+.repaIntegralFilterControl.sapMSlt
+.sapMSltArrow {
+    width: 1.35rem !important;
+    height: 1.62rem !important;
+
+    color: var(--ri-blue-strong) !important;
+
+    background: transparent !important;
+
+    font-size: 0.72rem !important;
+
+    line-height: 1.62rem !important;
 }
 
-.repaIntegralPage .repaIntegralFilterItem .sapMSltLabel,
-.repaIntegralPage .repaIntegralFilterItem .sapMInputBaseInner {
-  width: 100% !important;
-  height: 22px !important;
-  min-height: 22px !important;
-  max-height: 22px !important;
-  margin: 0 !important;
-  padding: 0 1.25rem 0 0 !important;
-  color: #172554 !important;
-  background: transparent !important;
-  font-size: 0.57rem !important;
-  line-height: 22px !important;
-  font-weight: 900 !important;
-  text-overflow: ellipsis;
+.repaIntegralPage
+.repaIntegralFilterControl
+.sapMInputBaseIconContainer,
+
+.repaIntegralPage
+.repaIntegralFilterControl
+.sapMInputBaseIcon {
+    width: 1.45rem !important;
+    min-width: 1.45rem !important;
+
+    height: 1.62rem !important;
+
+    color: var(--ri-blue-strong) !important;
+
+    background: transparent !important;
+
+    line-height: 1.62rem !important;
 }
 
-.repaIntegralPage .repaIntegralFilterItem .sapMSltArrow,
-.repaIntegralPage .repaIntegralFilterItem .sapMInputBaseIconContainer,
-.repaIntegralPage .repaIntegralFilterItem .sapMInputBaseIcon {
-  width: 22px !important;
-  min-width: 22px !important;
-  height: 22px !important;
-  min-height: 22px !important;
-  max-height: 22px !important;
-  padding: 0 !important;
-  color: #0a6ff5 !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
+
+/* ==========================================================================
+   BOTÓN FILTROS
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralFilterButton {
+    display: flex !important;
+
+    align-items: center !important;
+
+    width: 118px !important;
+    height: 54px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralFilterAction {
-  flex: 0 0 108px;
-  width: 108px;
-  min-width: 108px;
-  max-width: 108px;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
-  padding: 0;
+.repaIntegralPage
+.repaIntegralFilterButton
+.sapMBtnInner {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    width: 100% !important;
+
+    height: 3rem !important;
+    min-height: 3rem !important;
+
+    padding:
+        0
+        0.8rem !important;
+
+    background: var(--ri-blue-strong) !important;
+
+    border: 0 !important;
+
+    border-radius: 0.7rem !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(10, 111, 245, 0.24) !important;
 }
 
-.repaIntegralPage .repaIntegralFilterButton {
-  width: 108px;
-  min-width: 108px;
-  height: 34px;
-  min-height: 34px;
-  padding: 0;
+.repaIntegralPage
+.repaIntegralFilterButton
+.sapMBtnContent,
+
+.repaIntegralPage
+.repaIntegralFilterButton
+.sapMBtnIcon {
+    color: #ffffff !important;
+
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
 }
 
-.repaIntegralPage .repaIntegralFilterButton .sapMBtnInner {
-  width: 108px !important;
-  min-width: 108px !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  max-height: 34px !important;
-  padding: 0 0.45rem !important;
-  border: 0 !important;
-  border-radius: 7px !important;
-  background: #0a6ff5 !important;
-  box-shadow: 0 4px 10px rgba(10, 111, 245, 0.26) !important;
+
+/* ==========================================================================
+   MESSAGE STRIP
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralMessageStrip.sapMMsgStrip {
+    flex: 0 0 auto !important;
+
+    min-height: 28px !important;
+
+    margin: 0 !important;
+    padding:
+        4px
+        9px !important;
+
+    border-radius: 7px !important;
 }
 
-.repaIntegralPage .repaIntegralFilterButton .sapMBtnContent,
-.repaIntegralPage .repaIntegralFilterButton .sapMBtnIcon {
-  color: #ffffff !important;
-  font-size: 0.55rem !important;
-  line-height: 34px !important;
-  font-weight: 900 !important;
+.repaIntegralPage
+.repaIntegralMessageStrip
+.sapMMsgStripMessage {
+    font-size: 0.54rem !important;
+    font-weight: 600 !important;
 }
 
-.repaIntegralPage .repaIntegralFilterButton .sapMBtnIcon {
-  font-size: 0.66rem !important;
-}
 
-/* =========================================================
+/* ==========================================================================
    KPIS
-   ========================================================= */
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralKpiRow {
-  width: 100%;
-  min-width: 0;
-  gap: 8px;
-  margin: 0;
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        ) !important;
+
+    flex: 0 0 76px !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    gap: 8px !important;
+
+    overflow: hidden !important;
+}
+
+.repaIntegralPage
+.repaIntegralKpiRow > .sapMFlexItem {
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
 }
 
 .repaIntegralPage .repaIntegralKpiCard {
-  flex: 1 1 0;
-  width: 0;
-  min-width: 0;
-  height: 76px;
-  min-height: 76px;
-  max-height: 76px;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-  border-left-width: 3px;
-  border-radius: 9px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    --ri-accent: #2e8cff;
+    --ri-rgb: 46, 140, 255;
+
+    position: relative !important;
+
+    display: flex !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
+
+    gap: 8px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(var(--ri-rgb), 0.20) 0%,
+            rgba(var(--ri-rgb), 0.11) 22%,
+            rgba(var(--ri-rgb), 0.04) 48%,
+            rgba(255, 255, 255, 0.98) 76%,
+            #ffffff 100%
+        ) !important;
+
+    border:
+        1px solid
+        rgba(var(--ri-rgb), 0.18) !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20, 39, 70, 0.06) !important;
 }
 
-.repaIntegralPage .repaIntegralKpiInner {
-  width: 100%;
-  height: 100%;
-  padding: 8px 12px;
-  gap: 10px;
+.repaIntegralPage
+.repaIntegralKpiCard::before {
+    position: absolute !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 3px !important;
+
+    background: var(--ri-accent) !important;
+
+    content: "" !important;
 }
 
 .repaIntegralPage .repaIntegralKpiBlue {
-  border-left-color: #2563eb;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), #ffffff 48%);
+    --ri-accent: #2e8cff;
+    --ri-rgb: 46, 140, 255;
 }
 
 .repaIntegralPage .repaIntegralKpiGreen {
-  border-left-color: #16a34a;
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.12), #ffffff 48%);
+    --ri-accent: #63bf42;
+    --ri-rgb: 99, 191, 66;
 }
 
 .repaIntegralPage .repaIntegralKpiRed {
-  border-left-color: #ef4444;
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12), #ffffff 48%);
+    --ri-accent: #ff4d53;
+    --ri-rgb: 255, 77, 83;
 }
 
 .repaIntegralPage .repaIntegralKpiPurple {
-  border-left-color: #7c3aed;
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.12), #ffffff 48%);
+    --ri-accent: #8645e9;
+    --ri-rgb: 134, 69, 233;
 }
 
-.repaIntegralPage .repaIntegralKpiIconBox {
-  width: 42px;
-  min-width: 42px;
-  height: 42px;
-  min-height: 42px;
-  flex: 0 0 42px;
-  border-radius: 50%;
+.repaIntegralPage
+.repaIntegralKpiIconBox {
+    flex:
+        0 0
+        43px !important;
+
+    width: 43px !important;
+    height: 43px !important;
+
+    min-width: 43px !important;
+    min-height: 43px !important;
+
+    background:
+        rgba(var(--ri-rgb), 0.13) !important;
+
+    border-radius: 50% !important;
 }
 
-.repaIntegralPage .repaIntegralKpiIconBox .sapUiIcon {
-  font-size: 1.12rem;
+.repaIntegralPage
+.repaIntegralKpiIcon {
+    color: var(--ri-accent) !important;
+
+    font-size: 1.28rem !important;
 }
 
-.repaIntegralPage .repaIntegralBlueSoft {
-  background: #eff6ff;
+.repaIntegralPage
+.repaIntegralKpiContent {
+    min-width: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralGreenSoft {
-  background: #f0fdf4;
+.repaIntegralPage
+.repaIntegralKpiNumber.sapMText {
+    color: var(--ri-accent) !important;
+
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    line-height: 1.05 !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralRedSoft {
-  background: #fef2f2;
+.repaIntegralPage
+.repaIntegralKpiLabel.sapMText {
+    margin-top: 2px !important;
+
+    color: #43516a !important;
+
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralPurpleSoft {
-  background: #faf5ff;
+.repaIntegralPage
+.repaIntegralKpiSub.sapMText {
+    margin-top: 3px !important;
+
+    overflow: hidden !important;
+
+    color: #6f7c8f !important;
+
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralBlueSoft .sapUiIcon,
-.repaIntegralPage .repaIntegralBlueText {
-  color: #2563eb !important;
+.repaIntegralPage
+.repaIntegralRedSub.sapMText {
+    color: var(--ri-red-text) !important;
 }
 
-.repaIntegralPage .repaIntegralGreenSoft .sapUiIcon,
-.repaIntegralPage .repaIntegralGreenText {
-  color: #16a34a !important;
-}
 
-.repaIntegralPage .repaIntegralRedSoft .sapUiIcon,
-.repaIntegralPage .repaIntegralRedText {
-  color: #ef4444 !important;
-}
-
-.repaIntegralPage .repaIntegralPurpleSoft .sapUiIcon,
-.repaIntegralPage .repaIntegralPurpleText {
-  color: #7c3aed !important;
-}
-
-.repaIntegralPage .repaIntegralKpiContent {
-  min-width: 0;
-  height: 100%;
-}
-
-.repaIntegralPage .repaIntegralKpiNumber {
-  font-size: 1.32rem;
-  line-height: 1.36rem;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralKpiLabel {
-  color: #172554;
-  font-size: 0.57rem;
-  line-height: 0.67rem;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralKpiSub {
-  margin-top: 2px;
-  color: #64748b;
-  font-size: 0.47rem;
-  line-height: 0.57rem;
-  font-weight: 700;
-}
-
-.repaIntegralPage .repaIntegralRedSub {
-  color: #dc2626;
-  font-weight: 800;
-}
-
-/* =========================================================
+/* ==========================================================================
    SELECTOR DE ESTADO
-   ========================================================= */
+   ========================================================================== */
 
 .repaIntegralPage .repaIntegralAnalysisBar {
-  width: 100%;
-  min-width: 0;
-  min-height: 32px;
-  margin: 0;
-  gap: 10px;
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto !important;
+
+    flex: 0 0 36px !important;
+
+    width: 100% !important;
+    height: 36px !important;
+
+    min-width: 0 !important;
+    min-height: 36px !important;
+
+    gap: 8px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
 }
 
 .repaIntegralPage .repaIntegralTabs {
-  min-width: 0;
-  gap: 6px;
+    min-width: 0 !important;
+
+    gap: 5px !important;
 }
 
-.repaIntegralPage .repaIntegralTabsLabel {
-  margin-right: 2px;
-  color: #172554;
-  font-size: 0.53rem;
-  line-height: 0.65rem;
-  font-weight: 900;
+.repaIntegralPage
+.repaIntegralTabsLabel.sapMText {
+    margin-right: 3px !important;
+
+    color: var(--ri-title) !important;
+
+    font-size: 0.54rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralTabButton {
-  height: 28px;
-  min-height: 28px;
-  padding: 0;
+.repaIntegralPage .repaIntegralTabButton,
+.repaIntegralPage
+.repaIntegralTabButton
+.sapMBtnInner {
+    height: 31px !important;
+    min-height: 31px !important;
 }
 
-.repaIntegralPage .repaIntegralTabButton .sapMBtnInner {
-  height: 28px !important;
-  min-height: 28px !important;
-  max-height: 28px !important;
-  padding: 0 0.68rem !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 7px !important;
-  background: #ffffff !important;
+.repaIntegralPage
+.repaIntegralTabButton
+.sapMBtnInner {
+    padding:
+        0
+        10px !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #d7e0eb !important;
+
+    border-radius: 7px !important;
 }
 
-.repaIntegralPage .repaIntegralTabButton .sapMBtnContent {
-  color: #0a6ff5 !important;
-  font-size: 0.5rem !important;
-  line-height: 26px !important;
-  font-weight: 900 !important;
+.repaIntegralPage
+.repaIntegralTabButton
+.sapMBtnContent {
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.53rem !important;
+    font-weight: 700 !important;
+
+    line-height: 29px !important;
 }
 
-.repaIntegralPage .repaIntegralTabButtonActive .sapMBtnInner {
-  border-color: #0a6ff5 !important;
-  background: #0a6ff5 !important;
-  box-shadow: 0 2px 6px rgba(10, 111, 245, 0.2) !important;
+.repaIntegralPage
+.repaIntegralTabButton
+.sapMBtnEmphasized {
+    background: var(--ri-blue-strong) !important;
+
+    border-color: var(--ri-blue-strong) !important;
 }
 
-.repaIntegralPage .repaIntegralTabButtonActive .sapMBtnContent {
-  color: #ffffff !important;
+.repaIntegralPage
+.repaIntegralTabButton
+.sapMBtnEmphasized
+.sapMBtnContent {
+    color: #ffffff !important;
 }
 
-.repaIntegralPage .repaIntegralInfoMessage {
-  min-width: 300px;
-  height: 28px;
-  padding: 0 10px;
-  gap: 7px;
-  border: 1px solid #e2e8f0;
-  border-radius: 7px;
-  background: linear-gradient(90deg, #f4fbf8, #f5f8ff);
+
+/* ==========================================================================
+   INFO
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralInfoMessage {
+    min-height: 31px !important;
+
+    padding:
+        0
+        10px !important;
+
+    gap: 6px !important;
+
+    background: #f8fafc !important;
+
+    border:
+        1px solid
+        var(--ri-border) !important;
+
+    border-radius: 8px !important;
 }
 
-.repaIntegralPage .repaIntegralInfoMessage .sapUiIcon {
-  color: #64748b;
-  font-size: 0.64rem;
+.repaIntegralPage
+.repaIntegralInfoIcon {
+    color: #64748b !important;
+
+    font-size: 0.60rem !important;
 }
 
-.repaIntegralPage .repaIntegralInfoMessage .sapMText {
-  color: #64748b;
-  font-size: 0.47rem;
-  line-height: 0.58rem;
-  font-weight: 700;
+.repaIntegralPage
+.repaIntegralInfoText.sapMText {
+    color: #64748b !important;
+
+    font-size: 0.48rem !important;
+    font-weight: 600 !important;
+
+    white-space: nowrap !important;
 }
 
-/* =========================================================
-   CARD Y TABLA PRINCIPAL
-   ========================================================= */
 
-.repaIntegralPage .repaIntegralTableCard {
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-  border-radius: 9px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+/* ==========================================================================
+   CARD PRINCIPAL
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTableCard {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        10px
+        11px
+        8px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        var(--ri-border) !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20, 39, 70, 0.05) !important;
 }
 
-.repaIntegralPage .repaIntegralTableTop {
-  width: 100%;
-  min-height: 34px;
-  padding: 3px 12px;
-  gap: 12px;
-  border-bottom: 1px solid #e8edf4;
+.repaIntegralPage
+.repaIntegralTableCard > .sapMFlexItem:nth-child(1) {
+    flex:
+        0 0
+        40px !important;
+
+    min-height: 40px !important;
 }
 
-.repaIntegralPage .repaIntegralSectionTitle.sapMTitle {
-  min-width: 0;
-  margin: 0;
-  color: #172554;
-  font-size: 0.9rem;
-  line-height: 1.1rem;
-  font-weight: 900;
+.repaIntegralPage
+.repaIntegralTableCard > .sapMFlexItem:nth-child(2) {
+    flex:
+        1 1
+        0 !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
 }
 
-.repaIntegralPage .repaIntegralSearch {
-  width: 220px !important;
-  min-width: 180px;
-  height: 26px;
-  flex: 0 0 220px;
+.repaIntegralPage
+.repaIntegralTableCard > .sapMFlexItem:nth-child(3) {
+    flex:
+        0 0
+        24px !important;
+
+    min-height: 24px !important;
 }
 
-.repaIntegralPage .repaIntegralSearch .sapMSFF {
-  height: 26px !important;
-  min-height: 26px !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 7px !important;
-  background: #ffffff !important;
+
+/* ==========================================================================
+   CABECERA DE TABLA
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTableTop {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(220px, 280px) !important;
+
+    width: 100% !important;
+    height: 40px !important;
+
+    min-width: 0 !important;
+    min-height: 40px !important;
+
+    gap: 12px !important;
+
+    padding-bottom: 7px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
 }
 
-.repaIntegralPage .repaIntegralSearch .sapMSFI {
-  height: 24px !important;
-  font-size: 0.54rem !important;
-  line-height: 24px !important;
+.repaIntegralPage
+.repaIntegralSectionTitle.sapMTitle {
+    margin: 0 !important;
+
+    color: var(--ri-title) !important;
+
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralSearch .sapMSFB {
-  width: 26px !important;
-  height: 24px !important;
-  line-height: 24px !important;
+
+/* ==========================================================================
+   BUSCADOR
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralSearch {
+    justify-self: end !important;
+
+    width: 100% !important;
+    max-width: 280px !important;
+
+    min-width: 220px !important;
+
+    height: 30px !important;
 }
 
-.repaIntegralPage .repaIntegralTableViewport {
-  width: 100%;
-  min-width: 0;
-  overflow-x: hidden;
+.repaIntegralPage
+.repaIntegralSearch
+.sapMSFF {
+    width: 100% !important;
+
+    height: 30px !important;
+    min-height: 30px !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #d7e0eb !important;
+
+    border-radius: 7px !important;
+
+    box-shadow: none !important;
 }
 
-.repaIntegralPage .repaIntegralTableGrid {
-  display: grid !important;
-  grid-template-columns:
-    36px
-    minmax(130px, 1.5fr)
-    minmax(68px, 0.68fr)
-    minmax(68px, 0.68fr)
-    minmax(76px, 0.75fr)
-    minmax(165px, 1.35fr)
-    minmax(80px, 0.82fr)
-    24px;
-  column-gap: 0;
-  align-items: center;
-  width: 100%;
-  min-width: 0;
+.repaIntegralPage
+.repaIntegralSearch
+.sapMSFI {
+    height: 28px !important;
+
+    padding:
+        0
+        31px
+        0
+        11px !important;
+
+    color: #526176 !important;
+
+    font-size: 0.56rem !important;
+
+    line-height: 28px !important;
 }
 
-.repaIntegralPage .repaIntegralTableGrid > * {
-  min-width: 0;
+.repaIntegralPage
+.repaIntegralSearch
+.sapMSFI::placeholder {
+    color: #8b9ab0 !important;
+
+    font-style: italic !important;
+
+    opacity: 1 !important;
 }
 
-.repaIntegralPage .repaIntegralTableHeaderRow {
-  min-height: 38px;
-  border-bottom: 1px solid #e8edf4;
-  background: #f8fafc;
+.repaIntegralPage
+.repaIntegralSearch
+.sapMSFB {
+    width: 28px !important;
+    height: 28px !important;
+
+    color: #244c74 !important;
+
+    font-size: 0.70rem !important;
+
+    line-height: 28px !important;
 }
 
-.repaIntegralPage .repaIntegralHeaderText,
-.repaIntegralPage .repaIntegralTableHeaderRow .sapMText {
-  padding: 0 7px;
-  color: #172554;
-  font-size: 0.7rem;
-  line-height: 0.9rem;
-  font-weight: 900;
-  text-align: center;
-  white-space: normal;
-  overflow-wrap: anywhere;
+
+/* ==========================================================================
+   VIEWPORT DE TABLA
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTableViewport {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    border:
+        1px solid
+        #e5eaf1 !important;
+
+    border-radius: 7px !important;
 }
 
-.repaIntegralPage .repaIntegralHeaderCumplimiento {
-  gap: 4px;
+.repaIntegralPage
+.repaIntegralTableViewport > .sapMFlexItem:nth-child(1) {
+    flex:
+        0 0
+        34px !important;
+
+    min-height: 34px !important;
 }
 
-.repaIntegralPage .repaIntegralSmallInfo {
-  color: #94a3b8;
-  font-size: 0.55rem;
+.repaIntegralPage
+.repaIntegralTableViewport > .sapMFlexItem:nth-child(2) {
+    flex:
+        1 1
+        0 !important;
+
+    min-height: 0 !important;
+
+    overflow: hidden !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialBlock {
-  width: 100%;
-  min-width: 0;
+.repaIntegralPage
+.repaIntegralTableViewport > .sapMFlexItem:nth-child(3) {
+    flex:
+        0 0
+        34px !important;
+
+    min-height: 34px !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialRow {
-  min-height: 38px;
-  padding: 0;
-  border-bottom: 1px solid #e8edf4;
-  background: #ffffff;
+
+/* ==========================================================================
+   GRID
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTableGrid {
+    display: grid !important;
+
+    grid-template-columns:
+        32px
+        minmax(150px, 1.55fr)
+        minmax(72px, 0.70fr)
+        minmax(72px, 0.70fr)
+        minmax(82px, 0.78fr)
+        minmax(175px, 1.45fr)
+        minmax(88px, 0.82fr)
+        24px !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    column-gap: 0 !important;
+
+    align-items: center !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialRow:hover {
-  background: #fbfdff;
+.repaIntegralPage
+.repaIntegralTableGrid > .sapMFlexItem {
+    min-width: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralCellExpand,
-.repaIntegralPage .repaIntegralCellArrow {
-  width: 100%;
-  min-width: 0;
-  padding: 0;
-  text-align: center;
+
+/* ==========================================================================
+   HEADER TABLA
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTableHeaderRow {
+    height: 34px !important;
+    min-height: 34px !important;
+
+    background: #f7f9fc !important;
+
+    border-bottom:
+        1px solid
+        #e5eaf1 !important;
 }
 
-.repaIntegralPage .repaIntegralCellMaterial,
-.repaIntegralPage .repaIntegralCellNumber,
-.repaIntegralPage .repaIntegralCellTotal,
-.repaIntegralPage .repaIntegralCellCumplimiento {
-  min-width: 0;
-  padding: 0 5px;
+.repaIntegralPage
+.repaIntegralHeaderText.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    padding:
+        0
+        6px !important;
+
+    color: #65748b !important;
+
+    font-size: 0.55rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+
+    text-align: center !important;
+
+    white-space: normal !important;
 }
 
-.repaIntegralPage .repaIntegralCellNumber,
-.repaIntegralPage .repaIntegralCellTotal {
-  color: #172554;
-  font-size: 0.72rem;
-  line-height: 0.92rem;
-  font-weight: 900;
-  text-align: center;
+.repaIntegralPage
+.repaIntegralHeaderCumplimiento {
+    min-width: 0 !important;
+
+    gap: 4px !important;
 }
 
-.repaIntegralPage .repaIntegralExpandButton,
-.repaIntegralPage .repaIntegralArrowButton {
-  width: 18px;
-  min-width: 18px;
-  height: 20px;
-  min-height: 20px;
-  padding: 0;
-  justify-self: center;
+.repaIntegralPage
+.repaIntegralSmallInfo {
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.55rem !important;
 }
 
-.repaIntegralPage .repaIntegralExpandButton .sapMBtnInner,
-.repaIntegralPage .repaIntegralArrowButton .sapMBtnInner {
-  width: 18px !important;
-  min-width: 18px !important;
-  height: 20px !important;
-  min-height: 20px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
+
+/* ==========================================================================
+   LISTA DE MATERIALES
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralMaterialList {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
 }
 
-.repaIntegralPage .repaIntegralExpandButton .sapMBtnIcon,
-.repaIntegralPage .repaIntegralArrowButton .sapMBtnIcon {
-  width: 18px !important;
-  margin: 0 !important;
-  color: #0a6ff5 !important;
-  font-size: 0.54rem !important;
-  line-height: 20px !important;
+.repaIntegralPage
+.repaIntegralMaterialList > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialContent {
-  gap: 6px;
+.repaIntegralPage
+.repaIntegralMaterialBlock {
+    width: 100% !important;
+
+    min-width: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialIcon {
-  width: 22px;
-  min-width: 22px;
-  height: 22px;
-  min-height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 22px;
-  border: 1px solid #dbe3ef;
-  border-radius: 6px;
-  background: #f8fafc;
-  color: #435386;
-  font-size: 0.68rem;
+
+/* ==========================================================================
+   FILA MATERIAL
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralMaterialRow {
+    min-height: 34px !important;
+
+    background: #ffffff !important;
+
+    border-bottom:
+        1px solid
+        #eef2f6 !important;
 }
 
-.repaIntegralPage .repaIntegralMaterialName {
-  min-width: 0;
-  color: #172554;
-  font-size: 0.72rem;
-  line-height: 0.92rem;
-  font-weight: 900;
+.repaIntegralPage
+.repaIntegralMaterialRow:hover {
+    background: #fbfdff !important;
 }
 
-.repaIntegralPage .repaIntegralBlueNumber {
-  color: #0a6ff5;
+.repaIntegralPage
+.repaIntegralCellMaterial,
+
+.repaIntegralPage
+.repaIntegralCellNumber,
+
+.repaIntegralPage
+.repaIntegralCellTotal,
+
+.repaIntegralPage
+.repaIntegralCellCumplimiento {
+    min-width: 0 !important;
+
+    padding:
+        0
+        6px !important;
 }
 
-.repaIntegralPage .repaIntegralGreenNumber {
-  color: #16a34a;
+.repaIntegralPage
+.repaIntegralCellNumber.sapMText,
+
+.repaIntegralPage
+.repaIntegralCellTotal.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: var(--ri-text) !important;
+
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+
+    text-align: center !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralRedNumber {
-  color: #ef4444;
+
+/* ==========================================================================
+   MATERIAL
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralMaterialContent {
+    gap: 6px !important;
 }
 
-.repaIntegralPage .repaIntegralTotalText {
-  color: #172554;
-  font-weight: 900;
+.repaIntegralPage
+.repaIntegralMaterialIcon {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    flex:
+        0 0
+        24px !important;
+
+    width: 24px !important;
+    height: 24px !important;
+
+    min-width: 24px !important;
+    min-height: 24px !important;
+
+    color: #435386 !important;
+
+    background: #f8fafc !important;
+
+    border:
+        1px solid
+        #dbe3ef !important;
+
+    border-radius: 7px !important;
+
+    font-size: 0.70rem !important;
 }
 
-.repaIntegralPage .repaIntegralCumplimientoBox {
-  gap: 7px;
+.repaIntegralPage
+.repaIntegralMaterialName.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: var(--ri-text) !important;
+
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-.repaIntegralPage .repaIntegralCumplimientoText,
-.repaIntegralPage .repaIntegralTotalCumplimiento {
-  min-width: 42px;
-  color: #172554;
-  font-size: 0.7rem;
-  line-height: 0.9rem;
-  font-weight: 900;
-  text-align: right;
+
+/* ==========================================================================
+   COLORES DE NÚMEROS
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralBlueNumber.sapMText {
+    color: var(--ri-blue-strong) !important;
 }
 
-.repaIntegralPage .repaIntegralCumplimientoText .sapMObjStatusText {
-  font-size: 0.7rem;
-  line-height: 0.9rem;
-  font-weight: 900;
+.repaIntegralPage
+.repaIntegralGreenNumber.sapMText {
+    color: var(--ri-green-text) !important;
 }
 
-.repaIntegralPage .repaIntegralProgressTrack {
-  flex: 1 1 auto;
-  min-width: 70px;
-  height: 5px;
-  min-height: 5px;
-  max-height: 5px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #e5e7eb;
+.repaIntegralPage
+.repaIntegralRedNumber.sapMText {
+    color: var(--ri-red-text) !important;
 }
 
-.repaIntegralPage .repaIntegralProgressFill {
-  height: 5px;
-  min-height: 5px;
-  max-height: 5px;
-  flex: 0 0 auto;
-  border-radius: 999px;
+.repaIntegralPage
+.repaIntegralTotalText.sapMText {
+    color: var(--ri-title) !important;
+
+    font-weight: 800 !important;
 }
 
-.repaIntegralPage .repaIntegralProgressSuccess {
-  background: #16a34a;
+
+/* ==========================================================================
+   BOTONES EXPANDIR
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralExpandButton,
+
+.repaIntegralPage
+.repaIntegralArrowButton {
+    width: 20px !important;
+    min-width: 20px !important;
+
+    height: 26px !important;
+    min-height: 26px !important;
+
+    padding: 0 !important;
+
+    justify-self: center !important;
 }
 
-.repaIntegralPage .repaIntegralProgressWarning {
-  background: #f97316;
+.repaIntegralPage
+.repaIntegralExpandButton
+.sapMBtnInner,
+
+.repaIntegralPage
+.repaIntegralArrowButton
+.sapMBtnInner {
+    width: 20px !important;
+    min-width: 20px !important;
+
+    height: 26px !important;
+    min-height: 26px !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
 }
 
-.repaIntegralPage .repaIntegralProgressError {
-  background: #ef4444;
+.repaIntegralPage
+.repaIntegralExpandButton
+.sapMBtnIcon,
+
+.repaIntegralPage
+.repaIntegralArrowButton
+.sapMBtnIcon {
+    width: 20px !important;
+
+    margin: 0 !important;
+
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.56rem !important;
+
+    line-height: 26px !important;
 }
 
-.repaIntegralPage .repaIntegralProgressInformation {
-  background: #0a6ff5;
+
+/* ==========================================================================
+   CUMPLIMIENTO
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralCumplimientoBox {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 7px !important;
 }
 
-/* =========================================================
+.repaIntegralPage
+.repaIntegralCumplimientoText {
+    flex: 0 0 44px !important;
+
+    min-width: 44px !important;
+}
+
+.repaIntegralPage
+.repaIntegralCumplimientoText
+.sapMObjStatusText {
+    font-size: 0.55rem !important;
+    font-weight: 800 !important;
+}
+
+.repaIntegralPage
+.repaIntegralTotalCumplimiento.sapMText {
+    flex: 0 0 44px !important;
+
+    min-width: 44px !important;
+
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+
+    text-align: right !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressTrack {
+    flex:
+        1 1
+        0 !important;
+
+    width: 100% !important;
+
+    min-width: 55px !important;
+
+    height: 5px !important;
+    min-height: 5px !important;
+
+    overflow: hidden !important;
+
+    background: #e5e7eb !important;
+
+    border-radius: 999px !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressFill {
+    height: 5px !important;
+    min-height: 5px !important;
+
+    border-radius: 999px !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressSuccess {
+    background: #16a34a !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressWarning {
+    background: #f59e0b !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressError {
+    background: #ef4444 !important;
+}
+
+.repaIntegralPage
+.repaIntegralProgressInformation {
+    background: var(--ri-blue-strong) !important;
+}
+
+
+/* ==========================================================================
    DETALLE EXPANDIDO
-   ========================================================= */
+   ========================================================================== */
 
-.repaIntegralPage .repaIntegralDetailBox {
-  width: auto;
-  min-width: 0;
-  margin: 0 24px 0 36px;
-  padding: 5px 8px 4px;
-  overflow: hidden;
-  border-right: 1px solid #e8edf4;
-  border-bottom: 1px solid #e8edf4;
-  border-left: 1px solid #e8edf4;
-  border-radius: 0 0 7px 7px;
-  background: #ffffff;
+.repaIntegralPage
+.repaIntegralDetailBox {
+    width: calc(100% - 56px) !important;
+
+    min-width: 0 !important;
+
+    margin:
+        0
+        24px
+        0
+        32px !important;
+
+    padding:
+        6px
+        8px
+        5px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border-right:
+        1px solid
+        #e5eaf1 !important;
+
+    border-bottom:
+        1px solid
+        #e5eaf1 !important;
+
+    border-left:
+        1px solid
+        #e5eaf1 !important;
 }
 
-.repaIntegralPage .repaIntegralDetailHeader {
-  min-height: 28px;
-  margin: 0 0 5px;
-  gap: 8px;
-}
-
-.repaIntegralPage .repaIntegralDetailTitle {
-  min-width: 0;
-  color: #172554;
-  font-size: 0.75rem;
-  line-height: 0.95rem;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralMiniBadges {
-  flex: 0 0 auto;
-  gap: 5px;
-}
-
-.repaIntegralPage .repaIntegralMiniBadge {
-  min-height: 22px;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-.repaIntegralPage .repaIntegralMiniBadge.sapMObjStatusSuccess {
-  background: #f0fdf4;
-}
-
-.repaIntegralPage .repaIntegralMiniBadge.sapMObjStatusError {
-  background: #fef2f2;
-}
-
-.repaIntegralPage .repaIntegralMiniBadge .sapMObjStatusText {
-  font-size: 0.65rem;
-  line-height: 0.82rem;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralInnerTable {
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid #e8edf4;
-  border-radius: 6px;
-  background: #ffffff;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTbl {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblHeader {
-  height: 32px;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblHeaderCell {
-  height: 32px;
-  padding: 0 8px !important;
-  border-bottom: 1px solid #e8edf4;
-  background: #f8fafc;
-  vertical-align: middle;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMColumnHeader .sapMText,
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblHeaderCell .sapMText {
-  color: #64748b;
-  font-size: 0.68rem;
-  line-height: 0.88rem;
-  font-weight: 900;
-  text-align: center;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblRow,
-.repaIntegralPage .repaIntegralInnerTable .sapMLIB {
-  height: 32px;
-  min-height: 32px;
-  background: #ffffff;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblCell {
-  height: 32px;
-  padding: 0 8px !important;
-  border-bottom: 1px solid #f1f5f9;
-  vertical-align: middle;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblCell .sapMText,
-.repaIntegralPage .repaIntegralInnerTable .sapMListTblCell .sapMObjStatusText {
-  color: #172554;
-  font-size: 0.7rem;
-  line-height: 0.9rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-.repaIntegralPage .repaIntegralInnerTable .repaIntegralOtText {
-  color: #3157b7;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralStatus .sapUiIcon {
-  font-size: 0.7rem;
-}
-
-.repaIntegralPage .repaIntegralDetailLink {
-  align-self: flex-start;
-  height: 20px;
-  min-height: 20px;
-  margin-top: 1px;
-  padding: 0;
-}
-
-.repaIntegralPage .repaIntegralDetailLink .sapMBtnInner {
-  height: 20px !important;
-  min-height: 20px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-}
-
-.repaIntegralPage .repaIntegralDetailLink .sapMBtnContent,
-.repaIntegralPage .repaIntegralDetailLink .sapMBtnIcon {
-  color: #0a6ff5 !important;
-  font-size: 0.43rem !important;
-  line-height: 20px !important;
-  font-weight: 900 !important;
-}
-
-/* =========================================================
-   TOTAL GENERAL Y ESTADOS
-   ========================================================= */
-
-.repaIntegralPage .repaIntegralTotalRow {
-  min-height: 32px;
-  padding: 0;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
-}
-
-.repaIntegralPage .repaIntegralTotalLabel {
-  color: #172554;
-  font-size: 0.52rem;
-  line-height: 0.64rem;
-  font-weight: 900;
-}
-
-.repaIntegralPage .repaIntegralTotalCumplimiento {
-  color: #0a6ff5;
-  font-weight: 900;
-}
-
-.repaIntegralPage .sapMObjStatusSuccess .sapMObjStatusText,
-.repaIntegralPage .sapMObjStatusSuccess .sapUiIcon {
-  color: #16a34a !important;
-}
-
-.repaIntegralPage .sapMObjStatusError .sapMObjStatusText,
-.repaIntegralPage .sapMObjStatusError .sapUiIcon {
-  color: #ef4444 !important;
-}
-
-.repaIntegralPage .sapMObjStatusWarning .sapMObjStatusText,
-.repaIntegralPage .sapMObjStatusWarning .sapUiIcon {
-  color: #f97316 !important;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media screen and (max-width: 1100px) {
-  .repaIntegralPage .repaIntegralContainer {
-    padding: 8px 10px 14px;
-  }
-
-  .repaIntegralPage .repaIntegralFilterCard {
-    flex-wrap: wrap !important;
-  }
-
-  .repaIntegralPage .repaIntegralFilterItem,
-  .repaIntegralPage .repaIntegralFilterPeriod,
-  .repaIntegralPage .repaIntegralFilterDate,
-  .repaIntegralPage .repaIntegralFilterNormal,
-  .repaIntegralPage .repaIntegralFilterResponsible,
-  .repaIntegralPage .repaIntegralFilterAction {
-    flex: 1 1 calc(25% - 8px);
-    width: calc(25% - 8px);
-    min-width: 150px;
-    max-width: none;
-  }
-
-  .repaIntegralPage .repaIntegralFilterButton,
-  .repaIntegralPage .repaIntegralFilterButton .sapMBtnInner {
+.repaIntegralPage
+.repaIntegralDetailHeader {
     width: 100% !important;
-  }
 
-  .repaIntegralPage .repaIntegralKpiRow {
-    flex-wrap: wrap !important;
-  }
+    min-height: 28px !important;
 
-  .repaIntegralPage .repaIntegralKpiCard {
-    flex: 1 1 calc(50% - 8px);
-    width: calc(50% - 8px);
-    min-width: calc(50% - 8px);
-    max-width: calc(50% - 8px);
-  }
+    margin-bottom: 5px !important;
 
-  .repaIntegralPage .repaIntegralAnalysisBar {
-    flex-wrap: wrap !important;
-  }
-
-  .repaIntegralPage .repaIntegralInfoMessage {
-    flex: 1 1 300px;
-  }
-
-  .repaIntegralPage .repaIntegralTableViewport {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .repaIntegralPage .repaIntegralTableHeaderRow,
-  .repaIntegralPage .repaIntegralMaterialList,
-  .repaIntegralPage .repaIntegralTotalRow {
-    width: 900px;
-    min-width: 900px;
-  }
-
-  .repaIntegralPage .repaIntegralDetailBox {
-    width: 840px;
-    min-width: 840px;
-  }
+    gap: 8px !important;
 }
 
-@media screen and (max-width: 700px) {
-  .repaIntegralPage .repaIntegralHeader {
-    flex-wrap: wrap !important;
-  }
+.repaIntegralPage
+.repaIntegralDetailTitle.sapMText {
+    display: block !important;
 
-  .repaIntegralPage .repaIntegralDate {
-    width: 100%;
-    margin-top: 0;
-  }
+    min-width: 0 !important;
 
-  .repaIntegralPage .repaIntegralTitle.sapMTitle {
-    font-size: 1rem;
-    line-height: 1.08rem;
-  }
+    overflow: hidden !important;
 
-  .repaIntegralPage .repaIntegralFilterItem,
-  .repaIntegralPage .repaIntegralFilterPeriod,
-  .repaIntegralPage .repaIntegralFilterDate,
-  .repaIntegralPage .repaIntegralFilterNormal,
-  .repaIntegralPage .repaIntegralFilterResponsible,
-  .repaIntegralPage .repaIntegralFilterAction {
-    flex: 1 1 calc(50% - 8px);
-    width: calc(50% - 8px);
-    min-width: calc(50% - 8px);
-    max-width: calc(50% - 8px);
-  }
+    color: var(--ri-title) !important;
 
-  .repaIntegralPage .repaIntegralTabs {
-    width: 100%;
-    flex-wrap: wrap !important;
-  }
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
 
-  .repaIntegralPage .repaIntegralInfoMessage {
-    width: 100%;
-    min-width: 100%;
-  }
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
 
-  .repaIntegralPage .repaIntegralTableTop {
-    align-items: flex-start !important;
-    flex-direction: column;
-  }
+.repaIntegralPage
+.repaIntegralMiniBadges {
+    flex: 0 0 auto !important;
 
-  .repaIntegralPage .repaIntegralSearch {
+    gap: 5px !important;
+}
+
+.repaIntegralPage
+.repaIntegralMiniBadge {
+    min-height: 22px !important;
+
+    padding:
+        2px
+        7px !important;
+
+    border-radius: 6px !important;
+}
+
+.repaIntegralPage
+.repaIntegralMiniBadge.sapMObjStatusSuccess {
+    background: #f0fdf4 !important;
+}
+
+.repaIntegralPage
+.repaIntegralMiniBadge.sapMObjStatusError {
+    background: #fef2f2 !important;
+}
+
+.repaIntegralPage
+.repaIntegralMiniBadge
+.sapMObjStatusText {
+    font-size: 0.51rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* ==========================================================================
+   TABLA INTERNA
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralInnerTable {
     width: 100% !important;
-    min-width: 100%;
-    flex-basis: 100%;
-  }
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e5eaf1 !important;
+
+    border-radius: 6px !important;
 }
 
-@media screen and (max-width: 430px) {
-  .repaIntegralPage .repaIntegralContainer {
-    padding: 8px 8px 60px;
-  }
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTbl {
+    width: 100% !important;
 
-  .repaIntegralPage .repaIntegralFilterItem,
-  .repaIntegralPage .repaIntegralFilterPeriod,
-  .repaIntegralPage .repaIntegralFilterDate,
-  .repaIntegralPage .repaIntegralFilterNormal,
-  .repaIntegralPage .repaIntegralFilterResponsible,
-  .repaIntegralPage .repaIntegralFilterAction,
-  .repaIntegralPage .repaIntegralKpiCard {
-    flex: 1 1 100%;
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-  }
+    table-layout: fixed !important;
+}
 
-  .repaIntegralPage .repaIntegralKpiCard {
-    height: 74px;
-    min-height: 74px;
-    max-height: 74px;
-  }
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTblHeaderCell {
+    height: 28px !important;
 
-  .repaIntegralPage .repaIntegralDetailHeader {
-    align-items: flex-start !important;
-    flex-wrap: wrap !important;
-  }
+    padding:
+        0
+        6px !important;
 
-  .repaIntegralPage .repaIntegralTabButton .sapMBtnInner {
-    padding: 0 0.5rem !important;
-  }
+    background: #f7f9fc !important;
+
+    border-bottom:
+        1px solid
+        #e8edf4 !important;
+}
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMColumnHeader
+.sapMText {
+    width: 100% !important;
+
+    color: #65748b !important;
+
+    font-size: 0.49rem !important;
+    font-weight: 700 !important;
+
+    text-align: center !important;
+}
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTblRow,
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMLIB {
+    min-height: 30px !important;
+
+    background: #ffffff !important;
+}
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTblCell {
+    height: 30px !important;
+
+    padding:
+        0
+        6px !important;
+
+    border-bottom:
+        1px solid
+        #eef2f6 !important;
+}
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTblCell
+.sapMText,
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.sapMListTblCell
+.sapMObjStatusText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: var(--ri-text) !important;
+
+    font-size: 0.53rem !important;
+    font-weight: 600 !important;
+
+    text-align: center !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.repaIntegralPage
+.repaIntegralInnerTable
+.repaIntegralOtText.sapMText {
+    color: var(--ri-blue-strong) !important;
+
+    font-weight: 800 !important;
+}
+
+.repaIntegralPage
+.repaIntegralStatus
+.sapUiIcon {
+    font-size: 0.58rem !important;
+}
+
+
+/* ==========================================================================
+   LINK DETALLE
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralDetailLink {
+    align-self: flex-start !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+
+    margin-top: 2px !important;
+
+    padding: 0 !important;
+}
+
+.repaIntegralPage
+.repaIntegralDetailLink
+.sapMBtnInner {
+    height: 22px !important;
+    min-height: 22px !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+}
+
+.repaIntegralPage
+.repaIntegralDetailLink
+.sapMBtnContent,
+
+.repaIntegralPage
+.repaIntegralDetailLink
+.sapMBtnIcon {
+    color: var(--ri-blue-strong) !important;
+
+    font-size: 0.48rem !important;
+    font-weight: 700 !important;
+
+    line-height: 22px !important;
+}
+
+
+/* ==========================================================================
+   TOTAL GENERAL
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralTotalRow {
+    height: 34px !important;
+    min-height: 34px !important;
+
+    background: #f7f9fc !important;
+
+    border-top:
+        1px solid
+        #dfe6ef !important;
+}
+
+.repaIntegralPage
+.repaIntegralTotalLabel.sapMText {
+    color: var(--ri-title) !important;
+
+    font-size: 0.56rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* ==========================================================================
+   OBJECT STATUS
+   ========================================================================== */
+
+.repaIntegralPage
+.sapMObjStatusSuccess
+.sapMObjStatusText,
+
+.repaIntegralPage
+.sapMObjStatusSuccess
+.sapUiIcon {
+    color: #16a34a !important;
+}
+
+.repaIntegralPage
+.sapMObjStatusError
+.sapMObjStatusText,
+
+.repaIntegralPage
+.sapMObjStatusError
+.sapUiIcon {
+    color: #ef4444 !important;
+}
+
+.repaIntegralPage
+.sapMObjStatusWarning
+.sapMObjStatusText,
+
+.repaIntegralPage
+.sapMObjStatusWarning
+.sapUiIcon {
+    color: #f59e0b !important;
+}
+
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.repaIntegralPage
+.repaIntegralFooter {
+    display: flex !important;
+
+    width: 100% !important;
+
+    height: 24px !important;
+    min-height: 24px !important;
+
+    padding:
+        4px
+        1px
+        0 !important;
+
+    gap: 6px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+}
+
+.repaIntegralPage
+.repaIntegralFooterIcon {
+    flex: 0 0 auto !important;
+
+    color: #64748b !important;
+
+    font-size: 0.58rem !important;
+}
+
+.repaIntegralPage
+.repaIntegralFooterText.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #64748b !important;
+
+    font-size: 0.47rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+
+/* ==========================================================================
+   LAPTOP - ALTURA REDUCIDA
+   ========================================================================== */
+
+@media screen and (min-width: 761px) and (max-height: 720px) {
+
+    .repaIntegralPage
+    .repaIntegralContainer {
+        padding:
+            6px
+            8px
+            6px
+            18px !important;
+
+        gap: 6px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTitle.sapMTitle {
+        font-size: 1.38rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralSubtitle.sapMText {
+        font-size: 0.48rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralBreadcrumb {
+        margin-top: 2px !important;
+    }
+
+
+    /* FILTROS */
+
+    .repaIntegralPage
+    .repaIntegralFilterCard,
+
+    .repaIntegralPage
+    .repaIntegralFilterCard > .sapMFlexItem,
+
+    .repaIntegralPage
+    .repaIntegralFilterItem,
+
+    .repaIntegralPage
+    .repaIntegralFilterButton {
+        height: 48px !important;
+        min-height: 48px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterCard {
+        flex-basis: 48px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterItem {
+        padding:
+            4px
+            8px
+            3px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterLabel.sapMLabel {
+        height: 12px !important;
+
+        font-size: 0.55rem !important;
+        line-height: 12px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterControl.sapMSlt,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl.sapMInputBase,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl
+    .sapMInputBaseContentWrapper,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl.sapMSlt
+    .sapMSltLabel,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl
+    .sapMInputBaseInner,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl.sapMSlt
+    .sapMSltArrow,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl
+    .sapMInputBaseIconContainer,
+
+    .repaIntegralPage
+    .repaIntegralFilterControl
+    .sapMInputBaseIcon {
+        height: 1.5rem !important;
+        min-height: 1.5rem !important;
+
+        line-height: 1.5rem !important;
+    }
+
+
+    /* KPI */
+
+    .repaIntegralPage
+    .repaIntegralKpiRow,
+
+    .repaIntegralPage
+    .repaIntegralKpiRow > .sapMFlexItem,
+
+    .repaIntegralPage
+    .repaIntegralKpiCard {
+        height: 62px !important;
+        min-height: 62px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiRow {
+        flex-basis: 62px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiCard {
+        padding:
+            5px
+            7px
+            5px
+            10px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiIconBox {
+        flex-basis: 35px !important;
+
+        width: 35px !important;
+        height: 35px !important;
+
+        min-width: 35px !important;
+        min-height: 35px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiIcon {
+        font-size: 1.04rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiNumber.sapMText {
+        font-size: 0.98rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiLabel.sapMText {
+        font-size: 0.55rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiSub.sapMText {
+        font-size: 0.47rem !important;
+    }
+
+
+    /* SELECTOR */
+
+    .repaIntegralPage
+    .repaIntegralAnalysisBar {
+        flex-basis: 32px !important;
+
+        height: 32px !important;
+        min-height: 32px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTabButton,
+
+    .repaIntegralPage
+    .repaIntegralTabButton
+    .sapMBtnInner {
+        height: 28px !important;
+        min-height: 28px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTabButton
+    .sapMBtnContent {
+        font-size: 0.48rem !important;
+
+        line-height: 26px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInfoMessage {
+        min-height: 28px !important;
+    }
+
+
+    /* TABLA */
+
+    .repaIntegralPage
+    .repaIntegralTableCard {
+        padding:
+            7px
+            8px
+            6px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableCard > .sapMFlexItem:nth-child(1) {
+        flex-basis: 35px !important;
+
+        min-height: 35px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableTop {
+        height: 35px !important;
+        min-height: 35px !important;
+
+        padding-bottom: 5px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralSectionTitle.sapMTitle {
+        font-size: 0.70rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableViewport > .sapMFlexItem:nth-child(1),
+
+    .repaIntegralPage
+    .repaIntegralTableHeaderRow {
+        flex-basis: 30px !important;
+
+        height: 30px !important;
+        min-height: 30px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralMaterialRow {
+        min-height: 31px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralCellNumber.sapMText,
+
+    .repaIntegralPage
+    .repaIntegralCellTotal.sapMText,
+
+    .repaIntegralPage
+    .repaIntegralMaterialName.sapMText {
+        font-size: 0.52rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralDetailBox {
+        padding:
+            4px
+            6px
+            3px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInnerTable
+    .sapMListTblHeaderCell {
+        height: 25px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInnerTable
+    .sapMListTblRow,
+
+    .repaIntegralPage
+    .repaIntegralInnerTable
+    .sapMLIB,
+
+    .repaIntegralPage
+    .repaIntegralInnerTable
+    .sapMListTblCell {
+        height: 27px !important;
+        min-height: 27px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInnerTable
+    .sapMListTblCell
+    .sapMText {
+        font-size: 0.49rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableViewport > .sapMFlexItem:nth-child(3),
+
+    .repaIntegralPage
+    .repaIntegralTotalRow {
+        flex-basis: 31px !important;
+
+        height: 31px !important;
+        min-height: 31px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableCard > .sapMFlexItem:nth-child(3),
+
+    .repaIntegralPage
+    .repaIntegralFooter {
+        flex-basis: 21px !important;
+
+        height: 21px !important;
+        min-height: 21px !important;
+    }
+}
+
+
+/* ==========================================================================
+   LAPTOP ANGOSTA
+   ========================================================================== */
+
+@media screen and (min-width: 761px) and (max-width: 1180px) {
+
+    .repaIntegralPage
+    .repaIntegralContainer {
+        padding-left: 10px !important;
+        padding-right: 8px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterCard {
+        grid-template-columns:
+            minmax(100px, 1fr)
+            minmax(115px, 1.1fr)
+            minmax(115px, 1.1fr)
+            minmax(90px, 0.85fr)
+            minmax(90px, 0.9fr)
+            minmax(95px, 0.95fr)
+            105px !important;
+
+        gap: 6px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterButton {
+        width: 105px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableTop {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(200px, 245px) !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralSearch {
+        min-width: 200px !important;
+        max-width: 245px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableHeaderRow,
+
+    .repaIntegralPage
+    .repaIntegralMaterialList,
+
+    .repaIntegralPage
+    .repaIntegralTotalRow {
+        width: 980px !important;
+        min-width: 980px !important;
+    }
+}
+
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media screen and (max-width: 760px) {
+
+    .repaIntegralView,
+    .repaIntegralPage,
+    .repaIntegralPage.sapMPage,
+    .repaIntegralPage .sapMPage,
+    .repaIntegralPage .sapMPageCont,
+    .repaIntegralPage .sapMPageScroll,
+    .repaIntegralPage .sapMPageEnableScrolling {
+        height: auto !important;
+
+        min-height: 100% !important;
+        max-height: none !important;
+
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralContainer {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        padding:
+            10px
+            10px
+            16px !important;
+
+        gap: 8px !important;
+
+        overflow: visible !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralHeader {
+        flex-wrap: wrap !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralDate {
+        display: none !important;
+    }
+
+
+    /* FILTROS */
+
+    .repaIntegralPage
+    .repaIntegralFilterCard {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        height: auto !important;
+
+        flex-basis: auto !important;
+
+        gap: 7px !important;
+
+        overflow: visible !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterCard > .sapMFlexItem,
+
+    .repaIntegralPage
+    .repaIntegralFilterItem,
+
+    .repaIntegralPage
+    .repaIntegralFilterButton {
+        width: 100% !important;
+
+        height: 54px !important;
+        min-height: 54px !important;
+    }
+
+
+    /* KPIS */
+
+    .repaIntegralPage
+    .repaIntegralKpiRow {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        height: auto !important;
+
+        flex-basis: auto !important;
+
+        gap: 7px !important;
+
+        overflow: visible !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralKpiRow > .sapMFlexItem,
+
+    .repaIntegralPage
+    .repaIntegralKpiCard {
+        height: 76px !important;
+        min-height: 76px !important;
+    }
+
+
+    /* TABS */
+
+    .repaIntegralPage
+    .repaIntegralAnalysisBar {
+        grid-template-columns:
+            1fr !important;
+
+        height: auto !important;
+
+        flex-basis: auto !important;
+
+        gap: 6px !important;
+
+        overflow: visible !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTabs {
+        flex-wrap: wrap !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInfoMessage {
+        width: 100% !important;
+    }
+
+
+    /* CARD */
+
+    .repaIntegralPage
+    .repaIntegralContainer > .sapMFlexItem:last-child {
+        flex: 0 0 auto !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableCard {
+        height: auto !important;
+
+        min-height: 430px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableTop {
+        grid-template-columns:
+            1fr !important;
+
+        height: auto !important;
+
+        min-height: 72px !important;
+
+        gap: 6px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralSearch {
+        justify-self: stretch !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableViewport {
+        height: auto !important;
+
+        min-height: 330px !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTableHeaderRow,
+
+    .repaIntegralPage
+    .repaIntegralMaterialList,
+
+    .repaIntegralPage
+    .repaIntegralTotalRow {
+        width: 980px !important;
+        min-width: 980px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralMaterialList {
+        height: auto !important;
+
+        max-height: none !important;
+
+        overflow: visible !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralDetailBox {
+        width: 924px !important;
+        min-width: 924px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInnerTable {
+        min-width: 900px !important;
+    }
+}
+
+
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media screen and (max-width: 520px) {
+
+    .repaIntegralPage
+    .repaIntegralContainer {
+        padding:
+            8px
+            8px
+            18px !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralTitle.sapMTitle {
+        font-size: 1.22rem !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralSubtitle.sapMText {
+        white-space: normal !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralFilterCard,
+
+    .repaIntegralPage
+    .repaIntegralKpiRow {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralInfoText.sapMText,
+
+    .repaIntegralPage
+    .repaIntegralFooterText.sapMText {
+        white-space: normal !important;
+    }
+
+    .repaIntegralPage
+    .repaIntegralDetailHeader {
+        flex-wrap: wrap !important;
+    }
 }
