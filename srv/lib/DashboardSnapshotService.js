@@ -3,9 +3,9 @@
 const SapODataRepository = require("./SapODataRepository");
 
 /*
- * Campos comprobados en los mappers actuales. Las entidades nuevas de
- * requisitos y eventos de bloqueo se leen sin $select mientras ABAP define
- * su contrato final; así no se pierden datos de las vistas de detalle.
+ * Campos comprobados contra las respuestas OData disponibles. Los requisitos
+ * continúan sin $select mientras ABAP define su contrato final; los tres
+ * EntitySets de EF-06 ya usan el contrato validado de bloqueos.
  */
 const SELECTS = {
     // Contrato comprobado contra las respuestas OData de QAS. Las vistas de
@@ -55,7 +55,8 @@ const SELECTS = {
         "ChangeNumber"
     ],
     DashboardBlockOrdersSet: [
-        "BlockOrderId", "BlockId", "OrderId", "ImpactStartAt", "ImpactEndAt"
+        "BlockOrderId", "BlockId", "OrderId", "ImpactLevelCode",
+        "ImpactStartAt", "ImpactEndAt"
     ],
     DashboardResourceDailySet: [
         "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName", "ResourceTypeCode",
@@ -74,8 +75,19 @@ const SELECTS = {
         "ClosedAt", "CurrentStatusCode"
     ],
     DashboardEquipmentBlocksSet: [
-        "BlockId", "EquipmentId", "ZoneId", "SupervisorId", "BlockedAt",
-        "ReleasedAt", "CurrentStatusCode", "IsPublishable"
+        "BlockId", "EquipmentId", "EquipmentName", "CustomerId", "CustomerName",
+        "SiteId", "SiteName", "ZoneId", "ZoneName", "BlockReasonCode",
+        "BlockReasonText", "BlockCategoryCode", "BlockedAt", "ReleasedAt",
+        "CurrentStatusCode", "CurrentStatusText", "ManagementStatusCode",
+        "ResponsibleId", "SupervisorId", "PriorityCode", "CriticalityCode",
+        "DifficultyCode", "CommitmentDate", "NextAction", "GeneralObservation",
+        "DataValidationStatusCode", "IsPublishable", "ChangedAt"
+    ],
+    DashboardBlockEventsSet: [
+        "BlockEventId", "BlockId", "RecordTypeCode", "PendingTypeCode",
+        "ActionCode", "EventAt", "CommitmentDate", "ClosedAt", "StatusCode",
+        "StatusText", "ResponsibleId", "SupervisorId", "PriorityCode", "Comment",
+        "IsCurrent", "ChangedAt"
     ]
 };
 
@@ -86,11 +98,11 @@ const RELATIONS = {
     operations: { entitySet: "DashboardOrderOperationsSet", property: "OrderId", id: "OperationKey" },
     confirmations: { entitySet: "DashboardOrderConfirmationsSet", property: "OrderId", id: "ConfirmationId" },
     events: { entitySet: "DashboardOrderEventsSet", property: "OrderId", id: "OrderEventId" },
-    requirements: { entitySet: "DashboardOrderRequirementsSet", property: "OrderId", id: "RequirementId" },
-    blockOrders: { entitySet: "DashboardBlockOrdersSet", property: "OrderId", id: "BlockOrderId" }
+    requirements: { entitySet: "DashboardOrderRequirementsSet", property: "OrderId", id: "RequirementId" }
 };
 
 const BLOCK_RELATIONS = {
+    blockOrders: { entitySet: "DashboardBlockOrdersSet", property: "BlockId", id: "BlockOrderId" },
     blockEvents: { entitySet: "DashboardBlockEventsSet", property: "BlockId", id: "BlockEventId" }
 };
 
@@ -247,7 +259,7 @@ class DashboardSnapshotService {
         if (requested.has("movements")) {
             requested.add("materials");
         }
-        if (requested.has("blockEvents")) {
+        if (requested.has("blockEvents") || requested.has("blockOrders")) {
             requested.add("blocks");
         }
         return requested;

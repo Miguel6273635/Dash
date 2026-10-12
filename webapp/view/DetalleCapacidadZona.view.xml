@@ -6,615 +6,1128 @@
     xmlns:core="sap.ui.core">
 
     <Page
+        id="detalleCapacidadZonaPage"
         showHeader="false"
+        enableScrolling="false"
         busy="{dcz>/isBusy}"
         busyIndicatorDelay="0"
         class="DetalleCapacidadZona">
 
         <content>
-            <ScrollContainer
-                height="100%"
+
+            <VBox
                 width="100%"
-                vertical="true"
-                horizontal="false">
+                height="100%"
+                class="dczRoot sapUiSizeCompact">
 
-                <VBox class="dczPage">
+                <!-- =================================================
+                     VOLVER
+                     ================================================= -->
 
-                    <!-- VOLVER -->
+                <HBox
+                    class="dczBackRow"
+                    alignItems="Center">
+
+                    <Button
+                        icon="sap-icon://navigation-left-arrow"
+                        text="Volver a Horas trabajadas"
+                        type="Transparent"
+                        class="dczBackButton"
+                        press=".onVolverHoras"/>
+
+                </HBox>
+
+
+                <!-- =================================================
+                     HEADER
+                     ================================================= -->
+
+                <VBox
+                    class="dczHeader">
+
                     <HBox
-                        class="dczBackRow"
                         alignItems="Center">
 
-                        <Button
-                            icon="sap-icon://navigation-left-arrow"
-                            text="Volver a Horas trabajadas"
-                            type="Transparent"
-                            class="dczBackButton"
-                            press=".onVolverHoras" />
+                        <Title
+                            text="Detalle de capacidad por zona"
+                            level="H1"
+                            class="dczTitle"/>
+
+                        <core:Icon
+                            src="sap-icon://hint"
+                            class="dczHeaderInfoIcon"/>
+
                     </HBox>
 
-                    <!-- HEADER -->
-                    <VBox class="dczHeader">
-                        <HBox alignItems="Center">
-                            <Title
-                                text="Detalle de capacidad por zona"
-                                level="H1"
-                                class="dczTitle" />
+                    <Text
+                        text="Consulta del detalle de capacidad disponible y la utilización de horas en la zona seleccionada."
+                        wrapping="false"
+                        class="dczSubtitle"/>
 
-                            <Button
-                                icon="sap-icon://hint"
-                                type="Transparent"
-                                class="dczInfoButton" />
-                        </HBox>
+                </VBox>
 
-                        <Text
-                            text="Consulta del detalle de capacidad disponible y la utilización de horas en la zona seleccionada."
-                            class="dczSubtitle" />
+
+                <!-- =================================================
+                     FILTROS
+                     ================================================= -->
+
+                <HBox
+                    width="100%"
+                    wrap="NoWrap"
+                    alignItems="Stretch"
+                    class="dczFiltersBar">
+
+                    <!-- AÑO -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterYear">
+
+                        <Label
+                            text="Año"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/periodo}"
+                            change=".onPeriodoChange"
+                            items="{dcz>/catalogos/periodos}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
                     </VBox>
 
-                    <!-- FILTROS -->
+
+                    <!-- FECHA DESDE -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterDate">
+
+                        <Label
+                            text="Fecha desde"
+                            class="dczFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{dcz>/filters/fechaDesde}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            change=".onFechaChange"
+                            class="dczFilterControl"/>
+
+                    </VBox>
+
+
+                    <!-- FECHA HASTA -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterDate">
+
+                        <Label
+                            text="Fecha hasta"
+                            class="dczFilterLabel"/>
+
+                        <DatePicker
+                            width="100%"
+                            value="{dcz>/filters/fechaHasta}"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="dd/MM/yyyy"
+                            change=".onFechaChange"
+                            class="dczFilterControl"/>
+
+                    </VBox>
+
+
+                    <!-- ZONA -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterNormal">
+
+                        <Label
+                            text="Zona"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/zona}"
+                            items="{dcz>/catalogos/zonas}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+
+                    <!-- SUPERVISOR -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterNormal">
+
+                        <Label
+                            text="Supervisor"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/supervisor}"
+                            items="{dcz>/catalogos/supervisores}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+
+                    <!-- TURNO -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterNormal">
+
+                        <Label
+                            text="Turno"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/turno}"
+                            items="{dcz>/catalogos/turnos}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+
+                    <!-- TIPO ORDEN -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterOrder">
+
+                        <Label
+                            text="Tipo de orden"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/tipoOrden}"
+                            items="{dcz>/catalogos/tiposOrden}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+
+                    <!-- ESTADO -->
+
+                    <VBox
+                        class="dczFilterBox dczFilterState">
+
+                        <Label
+                            text="Estado de orden"
+                            class="dczFilterLabel"/>
+
+                        <Select
+                            width="100%"
+                            selectedKey="{dcz>/filters/estado}"
+                            items="{dcz>/catalogos/estados}"
+                            class="dczFilterControl">
+
+                            <core:Item
+                                key="{dcz>key}"
+                                text="{dcz>text}"/>
+
+                        </Select>
+
+                    </VBox>
+
+
+                    <!-- APLICAR -->
+
+                    <VBox
+                        class="dczApplyButtonBox"
+                        justifyContent="Center">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            iconFirst="true"
+                            type="Emphasized"
+                            width="100%"
+                            class="dczApplyButton"
+                            press=".onAplicarFiltros"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- =================================================
+                     KPIS
+                     ================================================= -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    wrap="NoWrap"
+                    class="dczKpiRow">
+
+                    <!-- ZONA -->
+
                     <HBox
-                        class="dczFiltersBar"
-                        wrap="NoWrap"
-                        alignItems="Stretch">
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiBlue">
 
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Año"
-                                class="dczFilterLabel" />
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconBlue">
 
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/periodo}"
-                                change=".onPeriodoChange"
-                                items="{dcz>/catalogos/periodos}">
+                            <core:Icon
+                                src="sap-icon://map"/>
 
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Fecha desde"
-                                class="dczFilterLabel"/>
-
-                            <DatePicker
-                                width="100%"
-                                value="{dcz>/filters/fechaDesde}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy"
-                                change=".onFechaChange" />
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Fecha hasta"
-                                class="dczFilterLabel"/>
-
-                            <DatePicker
-                                width="100%"
-                                value="{dcz>/filters/fechaHasta}"
-                                displayFormat="dd/MM/yyyy"
-                                valueFormat="dd/MM/yyyy"
-                                change=".onFechaChange" />
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Zona"
-                                class="dczFilterLabel"/>
-
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/zona}"
-                                items="{dcz>/catalogos/zonas}">
-
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Supervisor"
-                                class="dczFilterLabel"/>
-
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/supervisor}"
-                                items="{dcz>/catalogos/supervisores}">
-
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Turno"
-                                class="dczFilterLabel"/>
-
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/turno}"
-                                items="{dcz>/catalogos/turnos}">
-
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Tipo de orden"
-                                class="dczFilterLabel"/>
-
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/tipoOrden}"
-                                items="{dcz>/catalogos/tiposOrden}">
-
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
-
-                        <VBox class="dczFilterBox">
-                            <Label
-                                text="Estado de orden"
-                                class="dczFilterLabel"/>
-
-                            <Select
-                                width="100%"
-                                selectedKey="{dcz>/filters/estado}"
-                                items="{dcz>/catalogos/estados}">
-
-                                <core:Item
-                                    key="{dcz>key}"
-                                    text="{dcz>text}" />
-                            </Select>
-                        </VBox>
+                        </HBox>
 
                         <VBox
-                            class="dczApplyButtonBox"
                             justifyContent="Center"
-                            alignItems="Center">
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Zona seleccionada"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/zona}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- CAPACIDAD -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiPurple">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconPurple">
+
+                            <core:Icon
+                                src="sap-icon://database"/>
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Capacidad disponible"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/capacidadDisponible}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- PROGRAMADAS -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiTeal">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconTeal">
+
+                            <core:Icon
+                                src="sap-icon://calendar"/>
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Horas programadas"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/horasProgramadas}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- REALES -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiGreen">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconGreen">
+
+                            <core:Icon
+                                src="sap-icon://history"/>
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Horas reales"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/horasReales}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- UTILIZACIÓN -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiOrange">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconOrange">
+
+                            <core:Icon
+                                src="sap-icon://trend-up"/>
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Utilización"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/utilizacion}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                            <HBox
+                                class="dczUtilTrack">
+
+                                <HBox
+                                    width="{dcz>/kpis/utilizacionWidth}"
+                                    class="dczUtilFill"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- ESTADO -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="dczKpiCard dczKpiRed">
+
+                        <HBox
+                            alignItems="Center"
+                            justifyContent="Center"
+                            class="dczKpiIcon dczKpiIconRed">
+
+                            <core:Icon
+                                src="sap-icon://record"/>
+
+                        </HBox>
+
+                        <VBox
+                            justifyContent="Center"
+                            class="dczKpiContent">
+
+                            <Text
+                                text="Estado"
+                                wrapping="false"
+                                class="dczKpiLabel"/>
+
+                            <Text
+                                text="{dcz>/kpis/estado}"
+                                wrapping="false"
+                                class="dczKpiNumber"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                </HBox>
+
+
+                <!-- =================================================
+                     TABLA PRINCIPAL
+                     ================================================= -->
+
+                <VBox
+                    width="100%"
+                    height="100%"
+                    class="dczCard dczMainTableCard">
+
+                    <layoutData>
+
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%"/>
+
+                    </layoutData>
+
+
+                    <!-- HEADER -->
+
+                    <HBox
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dczCardHeader">
+
+                        <HBox
+                            alignItems="Center"
+                            class="dczCardTitleGroup">
+
+                            <Title
+                                text="Órdenes asociadas a la zona seleccionada"
+                                level="H3"
+                                class="dczCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="dczInfoIcon"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="dczTableActions">
+
+                            <SearchField
+                                id="dczSearchField"
+                                placeholder="Buscar OT, cliente, elevador, responsable..."
+                                width="19rem"
+                                liveChange=".onBuscarOrden"
+                                search=".onBuscarOrden"
+                                class="dczSearchField"/>
 
                             <Button
-                                text="Aplicar filtros"
-                                icon="sap-icon://filter"
-                                iconFirst="true"
-                                type="Emphasized"
-                                class="dczApplyButton"
-                                press=".onAplicarFiltros"/>
-                        </VBox>
+                                text="Columnas"
+                                icon="sap-icon://table-view"
+                                type="Transparent"
+                                class="dczColumnsButton"/>
+
+                        </HBox>
+
                     </HBox>
 
-                    <!-- KPIS -->
-                    <HBox class="dczKpiRow">
 
-                        <HBox
-                            class="dczKpiCard dczKpiBlue"
-                            alignItems="Center">
+                    <!-- MARCO DE TABLA -->
 
-                            <HBox
-                                class="dczKpiIcon dczKpiIconBlue"
-                                alignItems="Center"
-                                justifyContent="Center">
+                    <VBox
+                        width="100%"
+                        class="dczOrdersTableFrame">
 
-                                <core:Icon src="sap-icon://map" />
-                            </HBox>
+                        <layoutData>
 
-                            <VBox>
-                                <Text
-                                    text="Zona seleccionada"
-                                    class="dczKpiLabel" />
+                            <FlexItemData
+                                growFactor="1"
+                                shrinkFactor="1"
+                                baseSize="0%"/>
 
-                                <Text
-                                    text="{dcz>/kpis/zona}"
-                                    class="dczKpiNumber dczBlueText" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox
-                            class="dczKpiCard dczKpiBlue"
-                            alignItems="Center">
-
-                            <HBox
-                                class="dczKpiIcon dczKpiIconBlue"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon src="sap-icon://database" />
-                            </HBox>
-
-                            <VBox>
-                                <Text
-                                    text="Capacidad disponible"
-                                    class="dczKpiLabel" />
-
-                                <Text
-                                    text="{dcz>/kpis/capacidadDisponible}"
-                                    class="dczKpiNumber dczDarkText" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox
-                            class="dczKpiCard dczKpiTeal"
-                            alignItems="Center">
-
-                            <HBox
-                                class="dczKpiIcon dczKpiIconTeal"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon src="sap-icon://calendar" />
-                            </HBox>
-
-                            <VBox>
-                                <Text
-                                    text="Horas programadas"
-                                    class="dczKpiLabel" />
-
-                                <Text
-                                    text="{dcz>/kpis/horasProgramadas}"
-                                    class="dczKpiNumber dczDarkText" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox
-                            class="dczKpiCard dczKpiGreen"
-                            alignItems="Center">
-
-                            <HBox
-                                class="dczKpiIcon dczKpiIconGreen"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon src="sap-icon://history" />
-                            </HBox>
-
-                            <VBox>
-                                <Text
-                                    text="Horas reales"
-                                    class="dczKpiLabel" />
-
-                                <Text
-                                    text="{dcz>/kpis/horasReales}"
-                                    class="dczKpiNumber dczDarkText" />
-                            </VBox>
-                        </HBox>
-
-                        <HBox
-                            class="dczKpiCard dczKpiOrange"
-                            alignItems="Center">
-
-                            <HBox
-                                class="dczKpiIcon dczKpiIconOrange"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon src="sap-icon://trend-up" />
-                            </HBox>
-
-                            <VBox>
-                                <Text
-                                    text="Utilización"
-                                    class="dczKpiLabel" />
-
-                                <Text
-                                    text="{dcz>/kpis/utilizacion}"
-                                    class="dczKpiNumber dczOrangeText" />
-
-                                <VBox class="dczUtilTrack">
-                                    <VBox
-                                        class="dczUtilFill"
-                                        width="{dcz>/kpis/utilizacionWidth}" />
-                                </VBox>
-                            </VBox>
-                        </HBox>
-
-                        <HBox
-                            class="dczKpiCard dczKpiRed"
-                            alignItems="Center">
-
-                            <HBox
-                                class="dczKpiIcon dczKpiIconRed"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon src="sap-icon://record" />
-                            </HBox>
-
-                            <VBox>
-                                <Text
-                                    text="Estado"
-                                    class="dczKpiLabel" />
-
-                                <Text
-                                    text="{dcz>/kpis/estado}"
-                                    class="dczKpiNumber dczDarkText" />
-                            </VBox>
-                        </HBox>
-                    </HBox>
-
-                    <!-- TABLA PRINCIPAL -->
-                    <VBox class="dczCard dczMainTableCard">
-
-                        <HBox
-                            class="dczCardHeader"
-                            justifyContent="SpaceBetween"
-                            alignItems="Center">
-
-                            <HBox alignItems="Center">
-                                <Title
-                                    text="Órdenes asociadas a la zona seleccionada"
-                                    level="H3"
-                                    class="dczCardTitle" />
-
-                                <Button
-                                    icon="sap-icon://hint"
-                                    type="Transparent"
-                                    class="dczSmallButton" />
-                            </HBox>
-
-                            <HBox
-                                alignItems="Center"
-                                class="dczTableActions">
-
-                                <SearchField
-                                    placeholder="Buscar OT, cliente, elevador, responsable..."
-                                    width="310px"
-                                    liveChange=".onBuscarOrden" />
-
-                                <Button
-                                    text="Columnas"
-                                    icon="sap-icon://table-view"
-                                    type="Transparent"
-                                    class="dczColumnsButton" />
-                            </HBox>
-                        </HBox>
+                        </layoutData>
 
                         <Table
                             id="tblOrdenesZona"
-                            items="{dcz>/ordenes}"
+                            width="100%"
+                            fixedLayout="true"
+                            inset="false"
+                            showSeparators="Inner"
+                            items="{dcz>/ordenesPaginadas}"
                             noDataText="No se encontraron órdenes para los filtros seleccionados"
-                            class="dczOrdersTable"
-                            fixedLayout="true">
+                            class="dczOrdersTable">
 
                             <columns>
-                                <Column width="88px"><Text text="OT"/></Column>
-                                <Column width="145px"><Text text="Cliente"/></Column>
-                                <Column width="125px"><Text text="Elevador / Equipo"/></Column>
-                                <Column width="165px"><Text text="Tipo de orden"/></Column>
-                                <Column width="130px"><Text text="Responsable"/></Column>
-                                <Column width="100px"><Text text="Turno"/></Column>
-                                <Column width="92px" hAlign="Center"><Text text="Horas plan (h)"/></Column>
-                                <Column width="98px" hAlign="Center"><Text text="Horas reales (h)"/></Column>
-                                <Column width="86px" hAlign="Center"><Text text="Variación (h)"/></Column>
-                                <Column width="92px" hAlign="Center"><Text text="Variación (%)"/></Column>
-                                <Column width="130px" hAlign="Center"><Text text="Estado"/></Column>
+
+                                <Column width="7%">
+                                    <Text text="OT"/>
+                                </Column>
+
+                                <Column width="11%">
+                                    <Text text="Cliente"/>
+                                </Column>
+
+                                <Column width="10%">
+                                    <Text text="Elevador / Equipo"/>
+                                </Column>
+
+                                <Column width="13%">
+                                    <Text text="Tipo de orden"/>
+                                </Column>
+
+                                <Column width="11%">
+                                    <Text text="Responsable"/>
+                                </Column>
+
+                                <Column width="8%">
+                                    <Text text="Turno"/>
+                                </Column>
+
+                                <Column
+                                    width="8%"
+                                    hAlign="End">
+                                    <Text text="Horas plan (h)"/>
+                                </Column>
+
+                                <Column
+                                    width="8%"
+                                    hAlign="End">
+                                    <Text text="Horas reales (h)"/>
+                                </Column>
+
+                                <Column
+                                    width="8%"
+                                    hAlign="End">
+                                    <Text text="Variación (h)"/>
+                                </Column>
+
+                                <Column
+                                    width="8%"
+                                    hAlign="End">
+                                    <Text text="Variación (%)"/>
+                                </Column>
+
+                                <Column width="8%">
+                                    <Text text="Estado"/>
+                                </Column>
+
                             </columns>
 
+
                             <items>
-                                <ColumnListItem>
+
+                                <ColumnListItem
+                                    vAlign="Middle"
+                                    class="dczOrderRow">
+
                                     <cells>
-                                        <Text text="{dcz>ot}" class="dczBlueStrong" />
-                                        <Text text="{dcz>cliente}" class="dczTableText" />
-                                        <Text text="{dcz>elevador}" class="dczTableText" />
-                                        <Text text="{dcz>tipoOrden}" class="dczTableText" />
-                                        <Text text="{dcz>responsable}" class="dczTableText" />
-                                        <Text text="{dcz>turno}" class="dczTableText" />
-                                        <Text text="{dcz>horasPlan}" class="dczTableTextCenter" />
-                                        <Text text="{dcz>horasReales}" class="dczTableTextCenter" />
-                                        <Text text="{dcz>variacionH}" class="{dcz>colorClass}" />
-                                        <Text text="{dcz>variacionPct}" class="{dcz>colorClass}" />
+
+                                        <Text
+                                            text="{dcz>ot}"
+                                            wrapping="false"
+                                            class="dczBlueStrong"/>
+
+                                        <Text
+                                            text="{dcz>cliente}"
+                                            tooltip="{dcz>cliente}"
+                                            wrapping="false"
+                                            class="dczTableText"/>
+
+                                        <Text
+                                            text="{dcz>elevador}"
+                                            tooltip="{dcz>elevador}"
+                                            wrapping="false"
+                                            class="dczTableText"/>
+
+                                        <Text
+                                            text="{dcz>tipoOrden}"
+                                            tooltip="{dcz>tipoOrden}"
+                                            wrapping="false"
+                                            class="dczTableText"/>
+
+                                        <Text
+                                            text="{dcz>responsable}"
+                                            tooltip="{dcz>responsable}"
+                                            wrapping="false"
+                                            class="dczTableText"/>
+
+                                        <Text
+                                            text="{dcz>turno}"
+                                            wrapping="false"
+                                            class="dczTableText"/>
+
+                                        <Text
+                                            text="{dcz>horasPlan}"
+                                            textAlign="End"
+                                            width="100%"
+                                            wrapping="false"
+                                            class="dczTableTextCenter"/>
+
+                                        <Text
+                                            text="{dcz>horasReales}"
+                                            textAlign="End"
+                                            width="100%"
+                                            wrapping="false"
+                                            class="dczTableTextCenter"/>
+
+                                        <Text
+                                            text="{dcz>variacionH}"
+                                            textAlign="End"
+                                            width="100%"
+                                            wrapping="false"
+                                            class="{dcz>colorClass}"/>
+
+                                        <Text
+                                            text="{dcz>variacionPct}"
+                                            textAlign="End"
+                                            width="100%"
+                                            wrapping="false"
+                                            class="{dcz>colorClass}"/>
 
                                         <HBox
                                             alignItems="Center"
-                                            justifyContent="Center"
                                             class="dczStatusCell">
 
-                                            <VBox class="{dcz>statusDotClass}" />
-                                            <Text text="{dcz>estado}" class="dczStatusText" />
+                                            <VBox
+                                                class="{dcz>statusDotClass}"/>
+
+                                            <Text
+                                                text="{dcz>estado}"
+                                                wrapping="false"
+                                                tooltip="{dcz>estado}"
+                                                class="dczStatusText"/>
+
                                         </HBox>
+
                                     </cells>
+
                                 </ColumnListItem>
+
                             </items>
+
                         </Table>
 
-                        <HBox
-                            class="dczTableFooter"
-                            justifyContent="SpaceBetween"
-                            alignItems="Center">
+                    </VBox>
 
-                            <Text text="{dcz>/footerText}" />
+
+                    <!-- PAGINACIÓN -->
+
+                    <HBox
+                        width="100%"
+                        justifyContent="SpaceBetween"
+                        alignItems="Center"
+                        class="dczTableFooter">
+
+                        <Text
+                            text="{dcz>/pagination/resultText}"
+                            class="dczFooterText"/>
+
+                        <HBox
+                            alignItems="Center"
+                            class="dczPager">
+
+                            <Button
+                                icon="sap-icon://navigation-left-arrow"
+                                type="Transparent"
+                                enabled="{dcz>/pagination/hasPrevious}"
+                                press=".onPaginaAnterior"
+                                class="dczPagerButton"/>
+
+                            <Text
+                                text="{= 'Página ' + ${dcz>/pagination/currentPage} + ' de ' + ${dcz>/pagination/totalPages} }"
+                                class="dczPaginationText"/>
+
+                            <Button
+                                icon="sap-icon://navigation-right-arrow"
+                                type="Transparent"
+                                enabled="{dcz>/pagination/hasNext}"
+                                press=".onPaginaSiguiente"
+                                class="dczPagerButton"/>
+
+                        </HBox>
+
+                    </HBox>
+
+                </VBox>
+
+
+                <!-- =================================================
+                     RESÚMENES
+                     ================================================= -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    wrap="NoWrap"
+                    class="dczBottomGrid">
+
+                    <!-- RESUMEN TURNO -->
+
+                    <VBox
+                        width="100%"
+                        height="100%"
+                        class="dczCard dczSummaryCard dczSummaryBlue">
+
+                        <HBox
+                            alignItems="Center"
+                            class="dczSummaryTitleRow">
 
                             <HBox
                                 alignItems="Center"
-                                class="dczPager">
+                                justifyContent="Center"
+                                class="dczSummaryIcon dczSummaryIconBlue">
 
-                                <Select
-                                    selectedKey="10"
-                                    width="116px">
+                                <core:Icon
+                                    src="sap-icon://calendar"/>
 
-                                    <core:Item key="10" text="10 por página" />
-                                    <core:Item key="20" text="20 por página" />
-                                </Select>
-
-                                <Button
-                                    icon="sap-icon://navigation-left-arrow"
-                                    type="Transparent"
-                                    class="dczPagerButton" />
-
-                                <Button
-                                    text="1"
-                                    type="Emphasized"
-                                    class="dczPagerActive" />
-
-                                <Button
-                                    icon="sap-icon://navigation-right-arrow"
-                                    type="Transparent"
-                                    class="dczPagerButton" />
                             </HBox>
+
+                            <Title
+                                text="Resumen por turno de la zona seleccionada"
+                                level="H3"
+                                class="dczCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="dczInfoIcon"/>
+
                         </HBox>
+
+
+                        <VBox
+                            width="100%"
+                            class="dczSummaryTableFrame">
+
+                            <Table
+                                width="100%"
+                                fixedLayout="true"
+                                inset="false"
+                                showSeparators="Inner"
+                                items="{dcz>/resumenTurno}"
+                                noDataText="No data"
+                                class="dczSummaryTable dczSummaryTurnoTable">
+
+                                <columns>
+
+                                    <Column width="20%">
+                                        <Text text="Turno"/>
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="Center">
+                                        <Text text="OT"/>
+                                    </Column>
+
+                                    <Column
+                                        width="14%"
+                                        hAlign="Center">
+                                        <Text text="Horas plan (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="14%"
+                                        hAlign="Center">
+                                        <Text text="Horas reales (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="13%"
+                                        hAlign="Center">
+                                        <Text text="Variación (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="13%"
+                                        hAlign="Center">
+                                        <Text text="Variación (%)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="18%">
+                                        <Text text="Estado"/>
+                                    </Column>
+
+                                </columns>
+
+
+                                <items>
+
+                                    <ColumnListItem>
+
+                                        <cells>
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="dczSummaryNameCell">
+
+                                                <VBox
+                                                    class="{dcz>dotClass}"/>
+
+                                                <Text
+                                                    text="{dcz>turno}"
+                                                    wrapping="false"
+                                                    tooltip="{dcz>turno}"
+                                                    class="dczTableText"/>
+
+                                            </HBox>
+
+                                            <Text
+                                                text="{dcz>ot}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>horasPlan}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>horasReales}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>variacionH}"
+                                                class="{dcz>colorClass}"/>
+
+                                            <Text
+                                                text="{dcz>variacionPct}"
+                                                class="{dcz>colorClass}"/>
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="dczStatusCell">
+
+                                                <VBox
+                                                    class="{dcz>statusDotClass}"/>
+
+                                                <Text
+                                                    text="{dcz>estado}"
+                                                    wrapping="false"
+                                                    class="dczStatusText"/>
+
+                                            </HBox>
+
+                                        </cells>
+
+                                    </ColumnListItem>
+
+                                </items>
+
+                            </Table>
+
+                        </VBox>
+
                     </VBox>
 
-                    <!-- RESÚMENES -->
-                    <HBox class="dczBottomGrid">
 
-                        <VBox
-                            class="dczCard dczSummaryCard dczSummaryBlue">
+                    <!-- RESUMEN TIPO ORDEN -->
 
-                            <HBox
-                                class="dczSummaryTitleRow"
-                                alignItems="Center">
+                    <VBox
+                        width="100%"
+                        height="100%"
+                        class="dczCard dczSummaryCard dczSummaryGreen">
 
-                                <HBox
-                                    class="dczSummaryIcon dczSummaryIconBlue"
-                                    alignItems="Center"
-                                    justifyContent="Center">
-
-                                    <core:Icon src="sap-icon://calendar" />
-                                </HBox>
-
-                                <Title
-                                    text="Resumen por turno de la zona seleccionada"
-                                    level="H3"
-                                    class="dczCardTitle" />
-
-                                <Button
-                                    icon="sap-icon://hint"
-                                    type="Transparent"
-                                    class="dczSmallButton" />
-                            </HBox>
-
-                            <Table
-                                items="{dcz>/resumenTurno}"
-                                class="dczSummaryTable dczSummaryTurnoTable"
-                                fixedLayout="true">
-
-                                <columns>
-                                    <Column width="20%"><Text text="Turno"/></Column>
-                                    <Column width="8%" hAlign="Center"><Text text="OT"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="Horas plan (h)"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="Horas reales (h)"/></Column>
-                                    <Column width="13%" hAlign="Center"><Text text="Variación (h)"/></Column>
-                                    <Column width="13%" hAlign="Center"><Text text="Variación (%)"/></Column>
-                                    <Column width="18%" hAlign="Center"><Text text="Estado"/></Column>
-                                </columns>
-
-                                <items>
-                                    <ColumnListItem>
-                                        <cells>
-                                            <HBox
-                                                alignItems="Center"
-                                                class="dczSummaryNameCell">
-
-                                                <VBox class="{dcz>dotClass}"/>
-                                                <Text text="{dcz>turno}" class="dczTableText"/>
-                                            </HBox>
-
-                                            <Text text="{dcz>ot}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>horasPlan}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>horasReales}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>variacionH}" class="{dcz>colorClass}"/>
-                                            <Text text="{dcz>variacionPct}" class="{dcz>colorClass}"/>
-
-                                            <HBox
-                                                alignItems="Center"
-                                                justifyContent="Center"
-                                                class="dczStatusCell">
-
-                                                <VBox class="{dcz>statusDotClass}"/>
-                                                <Text text="{dcz>estado}" class="dczStatusText"/>
-                                            </HBox>
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
-                            </Table>
-                        </VBox>
-
-                        <VBox
-                            class="dczCard dczSummaryCard dczSummaryGreen">
+                        <HBox
+                            alignItems="Center"
+                            class="dczSummaryTitleRow">
 
                             <HBox
-                                class="dczSummaryTitleRow"
-                                alignItems="Center">
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="dczSummaryIcon dczSummaryIconGreen">
 
-                                <HBox
-                                    class="dczSummaryIcon dczSummaryIconGreen"
-                                    alignItems="Center"
-                                    justifyContent="Center">
+                                <core:Icon
+                                    src="sap-icon://task"/>
 
-                                    <core:Icon src="sap-icon://task" />
-                                </HBox>
-
-                                <Title
-                                    text="Resumen por tipo de orden de la zona seleccionada"
-                                    level="H3"
-                                    class="dczCardTitle" />
-
-                                <Button
-                                    icon="sap-icon://hint"
-                                    type="Transparent"
-                                    class="dczSmallButton" />
                             </HBox>
 
+                            <Title
+                                text="Resumen por tipo de orden de la zona seleccionada"
+                                level="H3"
+                                class="dczCardTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="dczInfoIcon"/>
+
+                        </HBox>
+
+
+                        <VBox
+                            width="100%"
+                            class="dczSummaryTableFrame">
+
                             <Table
+                                width="100%"
+                                fixedLayout="true"
+                                inset="false"
+                                showSeparators="Inner"
                                 items="{dcz>/resumenTipoOrden}"
-                                class="dczSummaryTable dczSummaryTipoTable"
-                                fixedLayout="true">
+                                noDataText="No data"
+                                class="dczSummaryTable dczSummaryTipoTable">
 
                                 <columns>
-                                    <Column width="28%"><Text text="Tipo de orden"/></Column>
-                                    <Column width="8%" hAlign="Center"><Text text="OT"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="Horas plan (h)"/></Column>
-                                    <Column width="14%" hAlign="Center"><Text text="Horas reales (h)"/></Column>
-                                    <Column width="12%" hAlign="Center"><Text text="Variación (h)"/></Column>
-                                    <Column width="12%" hAlign="Center"><Text text="Variación (%)"/></Column>
-                                    <Column width="12%" hAlign="Center"><Text text="Estado"/></Column>
+
+                                    <Column width="28%">
+                                        <Text text="Tipo de orden"/>
+                                    </Column>
+
+                                    <Column
+                                        width="8%"
+                                        hAlign="Center">
+                                        <Text text="OT"/>
+                                    </Column>
+
+                                    <Column
+                                        width="14%"
+                                        hAlign="Center">
+                                        <Text text="Horas plan (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="14%"
+                                        hAlign="Center">
+                                        <Text text="Horas reales (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="12%"
+                                        hAlign="Center">
+                                        <Text text="Variación (h)"/>
+                                    </Column>
+
+                                    <Column
+                                        width="12%"
+                                        hAlign="Center">
+                                        <Text text="Variación (%)"/>
+                                    </Column>
+
+                                    <Column width="12%">
+                                        <Text text="Estado"/>
+                                    </Column>
+
                                 </columns>
 
+
                                 <items>
+
                                     <ColumnListItem>
+
                                         <cells>
+
                                             <HBox
                                                 alignItems="Center"
                                                 class="dczSummaryNameCell">
 
-                                                <VBox class="{dcz>dotClass}"/>
-                                                <Text text="{dcz>tipoOrden}" class="dczTableText"/>
+                                                <VBox
+                                                    class="{dcz>dotClass}"/>
+
+                                                <Text
+                                                    text="{dcz>tipoOrden}"
+                                                    tooltip="{dcz>tipoOrden}"
+                                                    wrapping="false"
+                                                    class="dczTableText"/>
+
                                             </HBox>
 
-                                            <Text text="{dcz>ot}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>horasPlan}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>horasReales}" class="dczTableTextCenter"/>
-                                            <Text text="{dcz>variacionH}" class="{dcz>colorClass}"/>
-                                            <Text text="{dcz>variacionPct}" class="{dcz>colorClass}"/>
+                                            <Text
+                                                text="{dcz>ot}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>horasPlan}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>horasReales}"
+                                                class="dczTableTextCenter"/>
+
+                                            <Text
+                                                text="{dcz>variacionH}"
+                                                class="{dcz>colorClass}"/>
+
+                                            <Text
+                                                text="{dcz>variacionPct}"
+                                                class="{dcz>colorClass}"/>
 
                                             <HBox
                                                 alignItems="Center"
-                                                justifyContent="Center"
                                                 class="dczStatusCell">
 
-                                                <VBox class="{dcz>statusDotClass}"/>
-                                                <Text text="{dcz>estado}" class="dczStatusText"/>
+                                                <VBox
+                                                    class="{dcz>statusDotClass}"/>
+
+                                                <Text
+                                                    text="{dcz>estado}"
+                                                    wrapping="false"
+                                                    class="dczStatusText"/>
+
                                             </HBox>
+
                                         </cells>
+
                                     </ColumnListItem>
+
                                 </items>
+
                             </Table>
+
                         </VBox>
-                    </HBox>
-                </VBox>
-            </ScrollContainer>
+
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+
         </content>
+
     </Page>
+
 </mvc:View>

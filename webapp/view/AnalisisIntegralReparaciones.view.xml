@@ -22,7 +22,7 @@
                 class="repaIntegralContainer">
 
                 <!-- =====================================================
-                     ENCABEZADO
+                     HEADER
                      ===================================================== -->
 
                 <HBox
@@ -88,8 +88,6 @@
                     alignItems="Stretch"
                     class="repaIntegralFilterCard">
 
-                    <!-- PERIODO -->
-
                     <VBox class="repaIntegralFilterItem">
 
                         <Label
@@ -112,8 +110,6 @@
 
                     </VBox>
 
-                    <!-- FECHA DESDE -->
-
                     <VBox class="repaIntegralFilterItem">
 
                         <Label
@@ -130,8 +126,6 @@
 
                     </VBox>
 
-                    <!-- FECHA HASTA -->
-
                     <VBox class="repaIntegralFilterItem">
 
                         <Label
@@ -147,8 +141,6 @@
                             class="repaIntegralFilterControl"/>
 
                     </VBox>
-
-                    <!-- ZONA -->
 
                     <VBox class="repaIntegralFilterItem">
 
@@ -171,8 +163,6 @@
 
                     </VBox>
 
-                    <!-- CLIENTE -->
-
                     <VBox class="repaIntegralFilterItem">
 
                         <Label
@@ -193,8 +183,6 @@
                         </Select>
 
                     </VBox>
-
-                    <!-- RESPONSABLE -->
 
                     <VBox class="repaIntegralFilterItem">
 
@@ -217,8 +205,6 @@
 
                     </VBox>
 
-                    <!-- BOTÓN -->
-
                     <Button
                         text="Aplicar filtros"
                         icon="sap-icon://filter"
@@ -229,7 +215,7 @@
                 </HBox>
 
                 <!-- =====================================================
-                     MENSAJE DE ERROR / ADVERTENCIA
+                     ADVERTENCIA
                      ===================================================== -->
 
                 <MessageStrip
@@ -248,8 +234,6 @@
                     width="100%"
                     alignItems="Stretch"
                     class="repaIntegralKpiRow">
-
-                    <!-- PLANEADAS -->
 
                     <HBox
                         alignItems="Center"
@@ -286,8 +270,6 @@
 
                     </HBox>
 
-                    <!-- EJECUTADAS -->
-
                     <HBox
                         alignItems="Center"
                         class="repaIntegralKpiCard repaIntegralKpiGreen">
@@ -323,8 +305,6 @@
 
                     </HBox>
 
-                    <!-- NO EJECUTADAS -->
-
                     <HBox
                         alignItems="Center"
                         class="repaIntegralKpiCard repaIntegralKpiRed">
@@ -359,8 +339,6 @@
                         </VBox>
 
                     </HBox>
-
-                    <!-- CUMPLIMIENTO -->
 
                     <HBox
                         alignItems="Center"
@@ -400,7 +378,7 @@
                 </HBox>
 
                 <!-- =====================================================
-                     SELECTOR DE ESTADO
+                     SELECTOR
                      ===================================================== -->
 
                 <HBox
@@ -456,7 +434,7 @@
                 </HBox>
 
                 <!-- =====================================================
-                     TABLA PRINCIPAL
+                     CARD TABLA
                      ===================================================== -->
 
                 <VBox
@@ -464,8 +442,6 @@
                     height="100%"
                     fitContainer="true"
                     class="repaIntegralTableCard">
-
-                    <!-- CABECERA -->
 
                     <HBox
                         width="100%"
@@ -487,8 +463,6 @@
                             class="repaIntegralSearch"/>
 
                     </HBox>
-
-                    <!-- VIEWPORT DE TABLA -->
 
                     <VBox
                         width="100%"
@@ -548,7 +522,9 @@
 
                         </HBox>
 
-                        <!-- LISTA -->
+                        <!-- =================================================
+                             MATERIALES
+                             ================================================= -->
 
                         <VBox
                             width="100%"
@@ -603,8 +579,6 @@
                                         <Text
                                             text="{intRep>noEjecutadas}"
                                             class="repaIntegralCellNumber repaIntegralRedNumber"/>
-
-                                        <!-- CUMPLIMIENTO -->
 
                                         <HBox
                                             alignItems="Center"
@@ -692,11 +666,17 @@
 
                                         </HBox>
 
+                                        <!-- TABLA DE 5 REGISTROS -->
+
                                         <Table
                                             width="100%"
-                                            items="{intRep>ordenes}"
+                                            items="{
+                                                path: 'intRep>ordenesPagina',
+                                                templateShareable: false
+                                            }"
                                             fixedLayout="Strict"
                                             showSeparators="Inner"
+                                            noDataText="No se encontraron órdenes"
                                             class="repaIntegralInnerTable">
 
                                             <columns>
@@ -773,13 +753,46 @@
 
                                         </Table>
 
-                                        <Button
-                                            text="{= 'Ver las ' + ${intRep>planeadas} + ' órdenes de ' + ${intRep>material} }"
-                                            icon="sap-icon://navigation-right-arrow"
-                                            iconFirst="false"
-                                            type="Transparent"
-                                            press=".onVerDetalleMaterial"
-                                            class="repaIntegralDetailLink"/>
+                                        <!-- PIE DE PAGINACIÓN -->
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            justifyContent="SpaceBetween"
+                                            visible="{= ${intRep>totalPaginas} > 1 }"
+                                            class="repaIntegralPagination">
+
+                                            <Text
+                                                text="{intRep>rangoTexto}"
+                                                class="repaIntegralPaginationInfo"/>
+
+                                            <HBox
+                                                alignItems="Center"
+                                                class="repaIntegralPaginationControls">
+
+                                                <Button
+                                                    icon="sap-icon://navigation-left-arrow"
+                                                    type="Transparent"
+                                                    enabled="{intRep>tieneAnterior}"
+                                                    tooltip="Página anterior"
+                                                    press=".onPaginaAnteriorMaterial"
+                                                    class="repaIntegralPageButton"/>
+
+                                                <Text
+                                                    text="{intRep>paginaTexto}"
+                                                    class="repaIntegralPageText"/>
+
+                                                <Button
+                                                    icon="sap-icon://navigation-right-arrow"
+                                                    type="Transparent"
+                                                    enabled="{intRep>tieneSiguiente}"
+                                                    tooltip="Página siguiente"
+                                                    press=".onPaginaSiguienteMaterial"
+                                                    class="repaIntegralPageButton"/>
+
+                                            </HBox>
+
+                                        </HBox>
 
                                     </VBox>
 
@@ -850,7 +863,7 @@
 
                     </VBox>
 
-                    <!-- FOOTER -->
+                    <!-- FOOTER GENERAL -->
 
                     <HBox
                         width="100%"

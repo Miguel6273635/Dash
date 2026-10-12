@@ -25,31 +25,61 @@ sap.ui.define([
             this._iRequest = 0;
             this._oRawData = null;
 
-            this._oModel = new JSONModel(this._getInitialData());
-            this._oModel.setDefaultBindingMode("TwoWay");
-            this._oModel.setSizeLimit(5000);
+            this._oModel = new JSONModel(
+                this._getInitialData()
+            );
 
-            this.getView().setModel(this._oModel, "dashboard");
+            this._oModel.setDefaultBindingMode(
+                "TwoWay"
+            );
+
+            this._oModel.setSizeLimit(
+                5000
+            );
+
+            this.getView().setModel(
+                this._oModel,
+                "dashboard"
+            );
 
             this._loadBase(false);
         },
+
 
         onAfterRendering: function () {
             this._applyDynamicVisuals();
         },
 
+
+        /* =====================================================
+           CSS
+           ===================================================== */
+
         _loadScreenStyles: function () {
-            var sStyleId = "mantenimiento-mecanicos-css-runtime";
-            var oOldStyle = document.getElementById(sStyleId);
+            var sStyleId =
+                "mantenimiento-mecanicos-css-runtime";
+
+            var oOldStyle =
+                document.getElementById(
+                    sStyleId
+                );
+
             var sCssUrl;
 
-            if (oOldStyle && oOldStyle.parentNode) {
-                oOldStyle.parentNode.removeChild(oOldStyle);
+            if (
+                oOldStyle &&
+                oOldStyle.parentNode
+            ) {
+                oOldStyle.parentNode.removeChild(
+                    oOldStyle
+                );
             }
 
-            sCssUrl = sap.ui.require.toUrl(
-                "mantenimiento/css/Mecanicos.css"
-            ) + "?version=20260825_03";
+            sCssUrl =
+                sap.ui.require.toUrl(
+                    "mantenimiento/css/Mecanicos.css"
+                ) +
+                "?version=20261005-unified-final";
 
             includeStylesheet(
                 sCssUrl,
@@ -57,30 +87,55 @@ sap.ui.define([
             );
         },
 
+
+        /* =====================================================
+           MODELO ODATA
+           ===================================================== */
+
         _getODataModel: function () {
-            var oComponent = this.getOwnerComponent();
+            var oComponent =
+                this.getOwnerComponent();
 
             return (
                 oComponent &&
-                oComponent.getModel("dashboardOData")
+                oComponent.getModel(
+                    "dashboardOData"
+                )
             ) || (
                 oComponent &&
                 oComponent.getModel()
             );
         },
 
+
+        /* =====================================================
+           FILTROS
+           ===================================================== */
+
         _getFilters: function () {
             return Object.assign(
                 {},
-                this._oModel.getProperty("/filters") || {}
+                this._oModel.getProperty(
+                    "/filters"
+                ) || {}
             );
         },
 
-        onPeriodChange: function (oEvent) {
-            var sYear = oEvent.getSource().getSelectedKey();
-            var iYear = Number(sYear);
 
-            if (!Number.isInteger(iYear)) {
+        onPeriodChange: function (oEvent) {
+            var sYear =
+                oEvent
+                    .getSource()
+                    .getSelectedKey();
+
+            var iYear =
+                Number(sYear);
+
+            if (
+                !Number.isInteger(
+                    iYear
+                )
+            ) {
                 return;
             }
 
@@ -107,18 +162,27 @@ sap.ui.define([
             this._markDirty();
         },
 
+
         onDateChange: function () {
             var sFrom =
-                this._oModel.getProperty("/filters/fechaDesde") || "";
+                this._oModel.getProperty(
+                    "/filters/fechaDesde"
+                ) || "";
 
             var sTo =
-                this._oModel.getProperty("/filters/fechaHasta") || "";
+                this._oModel.getProperty(
+                    "/filters/fechaHasta"
+                ) || "";
 
             var aFrom =
-                sFrom.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                sFrom.match(
+                    /^(\d{2})\/(\d{2})\/(\d{4})$/
+                );
 
             var aTo =
-                sTo.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                sTo.match(
+                    /^(\d{2})\/(\d{2})\/(\d{4})$/
+                );
 
             if (
                 aFrom &&
@@ -139,9 +203,11 @@ sap.ui.define([
             this._markDirty();
         },
 
+
         onFilterChange: function () {
             this._markDirty();
         },
+
 
         _markDirty: function () {
             this._oModel.setProperty(
@@ -150,8 +216,10 @@ sap.ui.define([
             );
         },
 
+
         onApplyFilters: function () {
-            var oFilters = this._getFilters();
+            var oFilters =
+                this._getFilters();
 
             if (
                 !oFilters.fechaDesde ||
@@ -160,21 +228,33 @@ sap.ui.define([
                 MessageBox.warning(
                     "Selecciona fecha desde y fecha hasta."
                 );
+
                 return;
             }
 
             this._loadBase(true);
         },
 
+
+        /* =====================================================
+           CARGA BASE
+           ===================================================== */
+
         _loadBase: function (bNotify) {
-            var iRequest = ++this._iRequest;
-            var oODataModel = this._getODataModel();
-            var oFilters = this._getFilters();
+            var iRequest =
+                ++this._iRequest;
+
+            var oODataModel =
+                this._getODataModel();
+
+            var oFilters =
+                this._getFilters();
 
             if (!oODataModel) {
                 MessageBox.error(
                     "No se encontró el modelo OData dashboardOData."
                 );
+
                 return;
             }
 
@@ -197,18 +277,25 @@ sap.ui.define([
                     var oMapped;
                     var aOrderIds;
 
-                    if (iRequest !== this._iRequest) {
+                    if (
+                        iRequest !==
+                        this._iRequest
+                    ) {
                         return;
                     }
 
-                    this._oRawData = oRaw;
+                    this._oRawData =
+                        oRaw;
 
-                    oMapped = MecanicosMapper.mapData(
-                        this._oRawData,
-                        oFilters
+                    oMapped =
+                        MecanicosMapper.mapData(
+                            this._oRawData,
+                            oFilters
+                        );
+
+                    this._applyMappedData(
+                        oMapped
                     );
-
-                    this._applyMappedData(oMapped);
 
                     this._oModel.setProperty(
                         "/filters/dirty",
@@ -226,13 +313,25 @@ sap.ui.define([
                         );
                     }
 
-                    aOrderIds = (
-                        this._oRawData.orders || []
-                    ).map(function (oOrder) {
-                        return oOrder.OrderId;
-                    }).filter(Boolean);
+                    aOrderIds =
+                        (
+                            this._oRawData.orders ||
+                            []
+                        )
+                            .map(
+                                function (
+                                    oOrder
+                                ) {
+                                    return (
+                                        oOrder.OrderId
+                                    );
+                                }
+                            )
+                            .filter(Boolean);
 
-                    if (!aOrderIds.length) {
+                    if (
+                        !aOrderIds.length
+                    ) {
                         return;
                     }
 
@@ -241,32 +340,46 @@ sap.ui.define([
                         oFilters,
                         aOrderIds
                     );
+
                 }.bind(this))
+
                 .catch(function (oError) {
+
                     console.error(
                         "[MEC CONTROLLER] Base:",
                         oError
                     );
 
-                    if (iRequest === this._iRequest) {
-                        this._oModel.setProperty(
-                            "/loading",
-                            false
-                        );
+                    if (
+                        iRequest ===
+                        this._iRequest
+                    ) {
+                        this._oModel
+                            .setProperty(
+                                "/loading",
+                                false
+                            );
                     }
 
                     MessageBox.error(
                         "No fue posible cargar la información base de Mecánicos."
                     );
+
                 }.bind(this));
         },
+
+
+        /* =====================================================
+           CARGA OPERACIONAL
+           ===================================================== */
 
         _loadOperational: function (
             iRequest,
             oFilters,
             aOrderIds
         ) {
-            var oODataModel = this._getODataModel();
+            var oODataModel =
+                this._getODataModel();
 
             this._oModel.setProperty(
                 "/operationalLoading",
@@ -278,46 +391,77 @@ sap.ui.define([
                     oODataModel,
                     aOrderIds
                 )
-                .then(function (oOperational) {
+
+                .then(function (
+                    oOperational
+                ) {
                     var oMapped;
 
                     if (
-                        iRequest !== this._iRequest ||
+                        iRequest !==
+                            this._iRequest ||
                         !this._oRawData
                     ) {
                         return;
                     }
 
-                    this._oRawData.orderResources =
-                        oOperational.orderResources || [];
+                    this._oRawData
+                        .orderResources =
+                        oOperational
+                            .orderResources ||
+                        [];
 
-                    this._oRawData.operations =
-                        oOperational.operations || [];
+                    this._oRawData
+                        .operations =
+                        oOperational
+                            .operations ||
+                        [];
 
-                    oMapped = MecanicosMapper.mapData(
-                        this._oRawData,
-                        oFilters
+                    oMapped =
+                        MecanicosMapper.mapData(
+                            this._oRawData,
+                            oFilters
+                        );
+
+                    this._applyMappedData(
+                        oMapped
                     );
 
-                    this._applyMappedData(oMapped);
                 }.bind(this))
-                .catch(function (oError) {
+
+                .catch(function (
+                    oError
+                ) {
                     console.error(
                         "[MEC CONTROLLER] Operacional:",
                         oError
                     );
                 })
+
                 .then(function () {
-                    if (iRequest === this._iRequest) {
-                        this._oModel.setProperty(
-                            "/operationalLoading",
-                            false
-                        );
+
+                    if (
+                        iRequest ===
+                        this._iRequest
+                    ) {
+                        this._oModel
+                            .setProperty(
+                                "/operationalLoading",
+                                false
+                            );
                     }
+
                 }.bind(this));
         },
 
-        _applyMappedData: function (oMapped) {
+
+        /* =====================================================
+           APLICAR DATOS DEL MAPPER
+           ===================================================== */
+
+        _applyMappedData: function (
+            oMapped
+        ) {
             [
                 "catalogos",
                 "header",
@@ -338,22 +482,42 @@ sap.ui.define([
                 "presionServicios",
                 "presionTotal",
                 "meta"
-            ].forEach(function (sPath) {
-                this._oModel.setProperty(
-                    "/" + sPath,
-                    oMapped[sPath]
-                );
-            }.bind(this));
+            ].forEach(
+                function (
+                    sPath
+                ) {
+                    this._oModel
+                        .setProperty(
+                            "/" + sPath,
+                            oMapped[sPath]
+                        );
+
+                }.bind(this)
+            );
 
             window.setTimeout(
-                this._applyDynamicVisuals.bind(this),
+                this
+                    ._applyDynamicVisuals
+                    .bind(this),
                 0
             );
         },
 
+
+        /* =====================================================
+           DONAS DINÁMICAS
+           ===================================================== */
+
         _applyDynamicVisuals: function () {
-            var oZoneDonut = this.byId("zoneDonut");
-            var oStateDonut = this.byId("stateDonut");
+            var oZoneDonut =
+                this.byId(
+                    "zoneDonut"
+                );
+
+            var oStateDonut =
+                this.byId(
+                    "stateDonut"
+                );
 
             var oZoneDom =
                 oZoneDonut &&
@@ -375,104 +539,233 @@ sap.ui.define([
                     "/estadoDonutGradient"
                 );
 
-            if (oZoneDom && sZoneGradient) {
+            if (
+                oZoneDom &&
+                sZoneGradient
+            ) {
                 oZoneDom.style.background =
                     sZoneGradient;
             }
 
-            if (oStateDom && sStateGradient) {
+            if (
+                oStateDom &&
+                sStateGradient
+            ) {
                 oStateDom.style.background =
                     sStateGradient;
             }
         },
 
+
+        /* =====================================================
+           DATOS INICIALES
+           ===================================================== */
+
         _getInitialData: function () {
             return {
+
                 loading: false,
+
                 operationalLoading: false,
 
                 header: {
-                    periodoActual: "2026"
+                    periodoActual:
+                        "2026"
                 },
 
                 filters: {
-                    periodo: "2026",
-                    fechaDesde: "01/01/2026",
-                    fechaHasta: "31/12/2026",
-                    zona: "ALL",
-                    supervisor: "ALL",
-                    turno: "ALL",
-                    tipoServicio: "ALL",
-                    especialidad: "ALL",
-                    estado: "ALL",
-                    dirty: false
+                    periodo:
+                        "2026",
+
+                    fechaDesde:
+                        "01/01/2026",
+
+                    fechaHasta:
+                        "31/12/2026",
+
+                    zona:
+                        "ALL",
+
+                    supervisor:
+                        "ALL",
+
+                    turno:
+                        "ALL",
+
+                    tipoServicio:
+                        "ALL",
+
+                    especialidad:
+                        "ALL",
+
+                    estado:
+                        "ALL",
+
+                    dirty:
+                        false
                 },
 
                 catalogos: {
+
                     periodos: [
-                        { key: "2028", text: "2028" },
-                        { key: "2027", text: "2027" },
-                        { key: "2026", text: "2026" },
-                        { key: "2025", text: "2025" },
-                        { key: "2024", text: "2024" }
+                        {
+                            key: "2028",
+                            text: "2028"
+                        },
+                        {
+                            key: "2027",
+                            text: "2027"
+                        },
+                        {
+                            key: "2026",
+                            text: "2026"
+                        },
+                        {
+                            key: "2025",
+                            text: "2025"
+                        },
+                        {
+                            key: "2024",
+                            text: "2024"
+                        }
                     ],
+
                     zonas: [
-                        { key: "ALL", text: "Todas" }
+                        {
+                            key: "ALL",
+                            text: "Todas"
+                        }
                     ],
+
                     supervisores: [
-                        { key: "ALL", text: "Todos" }
+                        {
+                            key: "ALL",
+                            text: "Todos"
+                        }
                     ],
+
                     turnos: [
-                        { key: "ALL", text: "Todos" }
+                        {
+                            key: "ALL",
+                            text: "Todos"
+                        }
                     ],
+
                     tiposServicio: [
-                        { key: "ALL", text: "Todos" }
+                        {
+                            key: "ALL",
+                            text: "Todos"
+                        }
                     ],
+
                     especialidades: [
-                        { key: "ALL", text: "Todas" }
+                        {
+                            key: "ALL",
+                            text: "Todas"
+                        }
                     ],
+
                     estados: [
-                        { key: "ALL", text: "Todos" },
-                        { key: "AVAILABLE", text: "Disponibles" },
-                        { key: "BALANCED", text: "Dentro de capacidad" },
-                        { key: "NEAR", text: "Cerca de saturación" },
-                        { key: "OVER", text: "Sobre capacidad" },
-                        { key: "CRITICAL", text: "Crítico" },
-                        { key: "INACTIVE", text: "Inactivos" }
+                        {
+                            key: "ALL",
+                            text: "Todos"
+                        },
+                        {
+                            key: "AVAILABLE",
+                            text: "Disponibles"
+                        },
+                        {
+                            key: "BALANCED",
+                            text:
+                                "Dentro de capacidad"
+                        },
+                        {
+                            key: "NEAR",
+                            text:
+                                "Cerca de saturación"
+                        },
+                        {
+                            key: "OVER",
+                            text:
+                                "Sobre capacidad"
+                        },
+                        {
+                            key: "CRITICAL",
+                            text: "Crítico"
+                        },
+                        {
+                            key: "INACTIVE",
+                            text: "Inactivos"
+                        }
                     ]
                 },
 
                 kpis: {
-                    activos: "Sin datos",
-                    disponibles: "Sin datos",
-                    disponiblesPct: "Sin datos",
-                    sobrecapacidad: "Sin datos",
-                    sobrecapacidadPct: "Sin datos",
-                    cobertura: "Sin datos",
-                    coberturaSub: "Regla funcional pendiente"
+                    activos:
+                        "Sin datos",
+
+                    disponibles:
+                        "Sin datos",
+
+                    disponiblesPct:
+                        "Sin datos",
+
+                    sobrecapacidad:
+                        "Sin datos",
+
+                    sobrecapacidadPct:
+                        "Sin datos",
+
+                    cobertura:
+                        "Sin datos",
+
+                    coberturaSub:
+                        "Regla funcional pendiente"
                 },
 
                 balance: {
-                    capacidad: "Sin datos",
-                    capacidadPct: "",
-                    carga: "Sin datos",
-                    cargaPct: "",
-                    brecha: "Sin datos",
-                    brechaPct: "",
-                    utilizacion: "Sin datos",
-                    utilizacionRaw: 0,
+                    capacidad:
+                        "Sin datos",
+
+                    capacidadPct:
+                        "",
+
+                    carga:
+                        "Sin datos",
+
+                    cargaPct:
+                        "",
+
+                    brecha:
+                        "Sin datos",
+
+                    brechaPct:
+                        "",
+
+                    utilizacion:
+                        "Sin datos",
+
+                    utilizacionRaw:
+                        0,
+
                     mensaje:
                         "Esperando datos validados de capacidad y carga."
                 },
 
                 distribucionTurnos:
-                    this._emptyDistribution(3),
+                    this._emptyDistribution(
+                        3
+                    ),
 
                 distribucionEspecialidad:
-                    this._emptyDistribution(5),
+                    this._emptyDistribution(
+                        5
+                    ),
 
                 distribucionZona:
-                    this._emptyDistribution(5),
+                    this._emptyDistribution(
+                        5
+                    ),
 
                 estadoData:
                     this._emptyState(),
@@ -483,31 +776,44 @@ sap.ui.define([
                 estadoDonutGradient:
                     "conic-gradient(#e8eef6 0% 100%)",
 
-                zonaTotal: "—",
+                zonaTotal:
+                    "—",
 
                 especialidadMensaje:
                     "Especialidad pendiente de información.",
 
                 heatmapZones: [
-                    { label: "Sin datos" }
+                    {
+                        label:
+                            "Sin datos"
+                    }
                 ],
 
                 heatmapRows: [
                     {
-                        shift: "Sin turno validado",
+                        shift:
+                            "Sin turno validado",
+
                         cells: [
                             {
-                                zone: "Sin datos",
-                                value: "—",
-                                stateCode: "NO_DATA"
+                                zone:
+                                    "Sin datos",
+
+                                value:
+                                    "—",
+
+                                stateCode:
+                                    "NO_DATA"
                             }
                         ]
                     }
                 ],
 
-                capacidadEspecialidad: [],
+                capacidadEspecialidad:
+                    [],
 
-                capacidadTotal: "Sin datos",
+                capacidadTotal:
+                    "Sin datos",
 
                 presionServicios: [
                     this._emptyPressure(),
@@ -516,77 +822,154 @@ sap.ui.define([
                 ],
 
                 presionTotal: {
-                    req: "Sin datos",
-                    disp: "Sin datos",
-                    utilizacion: "Sin datos"
+                    req:
+                        "Sin datos",
+
+                    disp:
+                        "Sin datos",
+
+                    utilizacion:
+                        "Sin datos"
                 },
 
                 meta: {}
             };
         },
 
-        _emptyDistribution: function (iCount) {
+
+        _emptyDistribution: function (
+            iCount
+        ) {
             var aResult = [];
+
             var i;
 
-            for (i = 0; i < iCount; i += 1) {
+            for (
+                i = 0;
+                i < iCount;
+                i += 1
+            ) {
                 aResult.push({
-                    label: "Sin datos",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Sin datos",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 });
             }
 
             return aResult;
         },
 
+
         _emptyState: function () {
             return [
                 {
-                    label: "Disponibles",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Disponibles",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 },
+
                 {
-                    label: "Dentro de capacidad",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Dentro de capacidad",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 },
+
                 {
-                    label: "Cerca de saturación",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Cerca de saturación",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 },
+
                 {
-                    label: "Sobre capacidad",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Sobre capacidad",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 },
+
                 {
-                    label: "Inactivos",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
+                    label:
+                        "Inactivos",
+
+                    value:
+                        "—",
+
+                    pct:
+                        0,
+
+                    pctText:
+                        "—"
                 }
             ];
         },
 
+
         _emptyPressure: function () {
             return {
-                label: "Sin datos",
-                req: "—",
-                disp: "—",
-                utilizacion: "—",
-                state: "None",
-                stateText: "",
-                reqPct: 0,
-                dispPct: 0
+                label:
+                    "Sin datos",
+
+                req:
+                    "—",
+
+                disp:
+                    "—",
+
+                utilizacion:
+                    "—",
+
+                state:
+                    "None",
+
+                stateText:
+                    "",
+
+                reqPct:
+                    0,
+
+                dispPct:
+                    0
             };
         }
+
     });
 });

@@ -953,8 +953,32 @@ sap.ui.define([], function () {
                 }
             );
 
+        var aRelatedBlockIds = Object.create(null);
+        (oRaw.blockOrders || []).forEach(function (oRelation) {
+            if (String(oRelation.OrderId || "") === sSelectedOrderId && oRelation.BlockId) {
+                aRelatedBlockIds[String(oRelation.BlockId)] = true;
+            }
+        });
+
+        var aBlockHistory = (oRaw.blockEvents || [])
+            .filter(function (oEvent) {
+                return !!aRelatedBlockIds[String(oEvent.BlockId || "")];
+            })
+            .map(function (oEvent) {
+                return {
+                    OrderId: sSelectedOrderId,
+                    EventAt: oEvent.EventAt,
+                    UserId: oEvent.ResponsibleId || oEvent.SupervisorId,
+                    ActionCode: oEvent.ActionCode,
+                    EventTypeCode: oEvent.RecordTypeCode,
+                    Comment: oEvent.Comment,
+                    AppStatusCode: oEvent.StatusText || oEvent.StatusCode,
+                    SapStatusCode: oEvent.StatusCode
+                };
+            });
+
         var aHistory =
-            (oRaw.events || [])
+            (oRaw.events || []).concat(aBlockHistory)
                 .filter(
                     function (oEvent) {
                         return (

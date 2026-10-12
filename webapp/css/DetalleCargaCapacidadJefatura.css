@@ -1,1405 +1,2442 @@
-/* ========================================================================
+/* ================================================================
    DETALLE DE CARGA, CAPACIDAD, ÓRDENES Y MATERIALES DE JEFATURA
-   Estilos exclusivos de la pantalla
-   ======================================================================== */
+   ESTÁNDAR VISUAL UNIFICADO
+   ================================================================ */
+
+
+/* ================================================================
+   1. PÁGINA
+   ================================================================ */
 
 .jefPage,
-.jefPage .sapMPage,
+.jefPage.sapMPage,
 .jefPage .sapMPageBgStandard,
-.jefPage .sapMPageBgSolid {
-    background: #f6f8fb !important;
+.jefPage .sapMPageBgSolid,
+.jefPage .sapMPageScroll,
+.jefPage .sapMPageEnableScrolling {
+    width: 100% !important;
+    min-width: 0 !important;
+    background: #f7f9fc !important;
+}
+
+.jefPage,
+.jefPage *,
+.jefPage *::before,
+.jefPage *::after {
+    box-sizing: border-box !important;
 }
 
 .jefPage .sapMPageScroll {
     padding: 0 !important;
 }
 
-.jefDashboard {
-    width: 100%;
-    max-width: 100rem;
-    box-sizing: border-box;
-    margin: 0 auto;
-    padding: 0.85rem 1rem 1.25rem;
-    color: #13244a;
-}
 
-/* ========================================================================
-   ENCABEZADO
-   ======================================================================== */
+/* ================================================================
+   2. CONTENEDOR GENERAL
+   ================================================================ */
 
-.jefBreadcrumb {
-    gap: 0.55rem;
-    margin-bottom: 0.45rem;
-}
+.jefPage .jefDashboard.sapMFlexBox {
+    display: flex !important;
+    flex-direction: column !important;
 
-.jefBreadcrumb .sapMLnk,
-.jefBreadcrumb .sapMText,
-.jefBreadcrumb .sapUiIcon {
-    font-size: 0.72rem !important;
-}
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
 
-.jefBreadcrumb .sapMLnk {
-    color: #0a6ed1 !important;
-    font-weight: 600;
-}
+    min-height: calc(100vh - 34px) !important;
 
-.jefBreadcrumb .sapMText,
-.jefBreadcrumb .sapUiIcon {
-    color: #687793 !important;
-}
-
-.jefBreadcrumb .sapUiIcon {
-    font-size: 0.55rem !important;
-}
-
-.jefPageTitle {
     margin: 0 !important;
-    color: #101f43 !important;
-    font-size: 1.65rem !important;
-    line-height: 1.2 !important;
-    font-weight: 700 !important;
+
+    padding:
+        10px
+        14px
+        8px
+        18px !important;
+
+    gap: 8px !important;
+
+    color: #15243d !important;
+    background: #f7f9fc !important;
+
+    font-family:
+        "72",
+        "72full",
+        Arial,
+        sans-serif !important;
 }
 
-.jefPageSubtitle {
-    display: block;
-    margin-top: 0.25rem;
-    color: #66758f !important;
-    font-size: 0.8rem !important;
+.jefPage .jefDashboard > .sapMFlexItem {
+    min-width: 0 !important;
 }
 
-/* ========================================================================
-   FILTROS EN CARDS INDIVIDUALES
-   ======================================================================== */
 
-.jefFilterCardsRow {
-    width: 100%;
-    box-sizing: border-box;
-    gap: 0.65rem;
-    margin-top: 0.85rem;
-    margin-bottom: 0.85rem;
-    align-items: stretch !important;
-}
+/* ================================================================
+   3. BREADCRUMB
+   Para mantener la misma estructura visual de las demás pantallas.
+   ================================================================ */
 
-.jefFilterCard {
-    flex: 0 0 auto;
-    min-width: 0;
-    min-height: 4.15rem;
-    box-sizing: border-box;
-    padding: 0.48rem 0.68rem 0.42rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.62rem;
-    box-shadow: 0 0.12rem 0.42rem rgba(31, 51, 86, 0.055);
-    justify-content: flex-start;
-}
-
-.jefFilterPeriod {
-    width: 8.1rem;
-}
-
-.jefFilterDate {
-    width: 8.6rem;
-}
-
-.jefFilterManagement {
-    width: 10.8rem;
-}
-
-.jefFilterCompact {
-    width: 7.35rem;
-}
-
-.jefFilterService {
-    width: 8.55rem;
-}
-
-.jefFilterCard .sapMLabel {
-    margin-bottom: 0.06rem;
-    color: #42536e !important;
-    font-size: 0.65rem !important;
-    line-height: 1rem !important;
-    font-weight: 700 !important;
-}
-
-/* Selects y DatePicker sin bordes internos */
-
-.jefFilterCard .sapMSlt,
-.jefFilterCard .sapMInputBase,
-.jefFilterCard .sapMInputBaseContentWrapper {
-    width: 100% !important;
-    height: 2rem !important;
-    min-height: 2rem !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    outline: 0 !important;
-}
-
-.jefFilterCard .sapMSlt:hover,
-.jefFilterCard .sapMSlt:focus,
-.jefFilterCard .sapMInputBaseContentWrapper:hover,
-.jefFilterCard .sapMInputBaseContentWrapper:focus,
-.jefFilterCard .sapMInputBaseContentWrapper.sapMInputBaseContentWrapperFocus,
-.jefFilterCard .sapMInputBaseFocused .sapMInputBaseContentWrapper {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    outline: 0 !important;
-}
-
-.jefFilterCard .sapMSlt::before,
-.jefFilterCard .sapMSlt::after,
-.jefFilterCard .sapMInputBaseContentWrapper::before,
-.jefFilterCard .sapMInputBaseContentWrapper::after {
+.jefPage .jefBreadcrumb {
     display: none !important;
-    content: none !important;
 }
 
-.jefFilterCard .sapMSltLabel,
-.jefFilterCard .sapMInputBaseInner {
-    height: 2rem !important;
-    line-height: 2rem !important;
-    padding-left: 0 !important;
-    padding-right: 1.65rem !important;
-    color: #17284b !important;
-    font-size: 0.71rem !important;
-    background: transparent !important;
-    border: 0 !important;
-}
 
-.jefFilterCard .sapMSltArrow,
-.jefFilterCard .sapMInputBaseIcon {
-    color: #334765 !important;
-}
+/* ================================================================
+   4. TÍTULO
+   ================================================================ */
 
-.jefFilterCard .sapMInputBaseIconContainer {
-    border-left: 0 !important;
-    background: transparent !important;
-}
+.jefPage .jefPageTitle.sapMTitle {
+    display: block !important;
 
-.jefFilterCard .sapMInputBaseIcon {
-    width: 1.8rem !important;
-    min-width: 1.8rem !important;
-    background: transparent !important;
-}
-
-/* Botón sin card y alineado con la parte inferior de los filtros */
-
-.jefFilterActionWrap {
-    flex: 0 0 8.15rem;
-    width: 8.15rem;
-    min-height: 4.15rem;
-    box-sizing: border-box;
-    justify-content: flex-end !important;
-    align-items: stretch !important;
-    padding: 0 0 0.42rem;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-}
-
-.jefFilterActionWrap .sapMBtn,
-.jefApplyButton {
     width: 100% !important;
-    height: 2.1rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #13214a !important;
+
+    font-size: 1.72rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+    letter-spacing: -.03em !important;
+
+    white-space: nowrap !important;
 }
 
-.jefApplyButton .sapMBtnInner {
+.jefPage .jefPageSubtitle.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 3px !important;
+    margin-bottom: 0 !important;
+
+    color: #65748b !important;
+
+    font-size: .73rem !important;
+    font-weight: 400 !important;
+
+    line-height: 1.15 !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+
+/* ================================================================
+   5. FILTROS
+   ================================================================ */
+
+.jefPage .jefFilterCardsRow.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        .86fr
+        1.02fr
+        1.02fr
+        1.28fr
+        .88fr
+        .88fr
+        1.04fr
+        118px !important;
+
     width: 100% !important;
     min-width: 0 !important;
-    height: 2.1rem !important;
-    min-height: 2.1rem !important;
-    padding: 0 0.75rem !important;
-    background: #0a6ed1 !important;
-    border: 1px solid #0a6ed1 !important;
-    border-radius: 0.45rem !important;
-    box-shadow: 0 0.18rem 0.38rem rgba(10, 110, 209, 0.2) !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+
+    gap: 8px !important;
+
+    margin:
+        0
+        0
+        0
+        0 !important;
+
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: visible !important;
 }
 
-.jefApplyButton .sapMBtnContent,
-.jefApplyButton .sapMBtnIcon {
-    color: #ffffff !important;
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
-    line-height: 2rem !important;
+.jefPage .jefFilterCardsRow > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.jefApplyButton .sapMBtnInner::after,
-.jefApplyButton.sapMBtn:focus > .sapMFocusable::before,
-.jefApplyButton .sapMFocusable:focus::before {
-    display: none !important;
+
+/* ================================================================
+   6. CARD DE FILTRO
+   ================================================================ */
+
+.jefPage .jefFilterCard,
+.jefPage .jefFilterPeriod,
+.jefPage .jefFilterDate,
+.jefPage .jefFilterManagement,
+.jefPage .jefFilterCompact,
+.jefPage .jefFilterService {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: center !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+
+    margin: 0 !important;
+
+    padding:
+        6px
+        10px
+        5px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(25,45,79,.05) !important;
+}
+
+
+/* ================================================================
+   7. LABEL
+   ================================================================ */
+
+.jefPage .jefFilterCard .sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+
+    height: 14px !important;
+    min-height: 14px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        2px !important;
+
+    color: #78869a !important;
+
+    font-size: .61rem !important;
+    font-weight: 600 !important;
+
+    line-height: 14px !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* ================================================================
+   8. SELECT / DATEPICKER
+   ================================================================ */
+
+.jefPage .jefFilterCard .sapMSlt,
+.jefPage .jefFilterCard .sapMInputBase,
+.jefPage .jefFilterCard .sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
     border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
     outline: 0 !important;
 }
 
-/* ========================================================================
-   COLORES DE KPI
-   ======================================================================== */
+.jefPage .jefFilterCard .sapMSlt:hover,
+.jefPage .jefFilterCard .sapMSlt.sapMSltPressed,
+.jefPage .jefFilterCard .sapMInputBaseContentWrapper:hover,
+.jefPage .jefFilterCard
+.sapMInputBaseFocused
+.sapMInputBaseContentWrapper {
+    background: transparent !important;
 
-.toneBlue {
-    --jef-tone: #2f80ff;
-    --jef-tone-soft: #eaf3ff;
-    --jef-tone-glow: rgba(47, 128, 255, 0.16);
+    border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.toneCyan {
-    --jef-tone: #19b5c6;
-    --jef-tone-soft: #e8f8fb;
-    --jef-tone-glow: rgba(25, 181, 198, 0.16);
+.jefPage .jefFilterCard .sapMSlt::before,
+.jefPage .jefFilterCard .sapMSlt::after,
+.jefPage .jefFilterCard
+.sapMInputBaseContentWrapper::before,
+.jefPage .jefFilterCard
+.sapMInputBaseContentWrapper::after {
+    display: none !important;
 }
 
-.toneGreen {
-    --jef-tone: #33b956;
-    --jef-tone-soft: #ebf8ee;
-    --jef-tone-glow: rgba(51, 185, 86, 0.16);
+.jefPage .jefFilterCard .sapMSltLabel,
+.jefPage .jefFilterCard .sapMInputBaseInner {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    padding:
+        0
+        1.38rem
+        0
+        2px !important;
+
+    overflow: hidden !important;
+
+    color: #1e2e4c !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
-.toneOrange {
-    --jef-tone: #ff922b;
-    --jef-tone-soft: #fff2e7;
-    --jef-tone-glow: rgba(255, 146, 43, 0.17);
+.jefPage .jefFilterCard .sapMSltArrow,
+.jefPage .jefFilterCard .sapMInputBaseIconContainer,
+.jefPage .jefFilterCard .sapMInputBaseIcon {
+    width: 1.25rem !important;
+
+    min-width: 1.25rem !important;
+
+    height: 1.62rem !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    font-size: .70rem !important;
+
+    line-height: 1.62rem !important;
 }
 
-.tonePurple {
-    --jef-tone: #9850eb;
-    --jef-tone-soft: #f4ebfd;
-    --jef-tone-glow: rgba(152, 80, 235, 0.17);
+
+/* ================================================================
+   9. BOTÓN APLICAR FILTROS
+   ================================================================ */
+
+.jefPage .jefFilterActionWrap.sapMFlexBox {
+    display: flex !important;
+
+    width: 118px !important;
+
+    min-width: 118px !important;
+    max-width: 118px !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: visible !important;
 }
 
-.toneRed {
-    --jef-tone: #ff5364;
-    --jef-tone-soft: #fdecef;
-    --jef-tone-glow: rgba(255, 83, 100, 0.16);
+.jefPage .jefFilterActionWrap > .sapMFlexItem {
+    width: 100% !important;
 }
 
-.toneTeal {
-    --jef-tone: #18a9ad;
-    --jef-tone-soft: #e7f8f7;
-    --jef-tone-glow: rgba(24, 169, 173, 0.16);
+.jefPage .jefApplyButton.sapMBtn {
+    width: 100% !important;
+
+    height: 54px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
 }
 
-/* ========================================================================
-   KPIs CON DEGRADADO HORIZONTAL
-   ======================================================================== */
+.jefPage .jefApplyButton .sapMBtnInner {
+    display: flex !important;
 
-.jefKpiRow {
-    width: 100%;
-    gap: 0.65rem;
-    margin-bottom: 0.85rem;
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+
+    margin:
+        5px
+        0 !important;
+
+    padding:
+        0
+        .72rem !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    background: #0a6ff5 !important;
+
+    border:
+        1px solid
+        #0a6ff5 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(10,111,245,.24) !important;
 }
 
-.jefKpiRowSeven .jefKpiCard {
-    flex: 1 1 calc(14.285% - 0.65rem);
-    min-width: 9rem;
+.jefPage .jefApplyButton .sapMBtnContent,
+.jefPage .jefApplyButton .sapMBtnIcon {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
 }
 
-.jefKpiRowFive .jefKpiCard {
-    flex: 1 1 calc(20% - 0.65rem);
-    min-width: 12rem;
+.jefPage .jefApplyButton .sapMBtnContent {
+    font-size: .63rem !important;
+    font-weight: 700 !important;
 }
 
-.jefKpiCard {
-    position: relative;
-    min-height: 5.65rem;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding: 0.75rem 0.8rem;
+.jefPage .jefApplyButton .sapMBtnIcon {
+    font-size: .72rem !important;
+}
+
+.jefPage .jefApplyButton:hover .sapMBtnInner {
+    background: #075fcf !important;
+
+    border-color: #075fcf !important;
+}
+
+.jefPage .jefApplyButton .sapMBtnInner::after,
+.jefPage .jefApplyButton
+.sapMFocusable:focus::before {
+    display: none !important;
+}
+
+
+/* ================================================================
+   10. COLORES KPI
+   ================================================================ */
+
+.jefPage .toneBlue {
+    --jef-tone: #2e8cff;
+    --jef-rgb: 46,140,255;
+}
+
+.jefPage .toneCyan {
+    --jef-tone: #1bc6c8;
+    --jef-rgb: 27,198,200;
+}
+
+.jefPage .toneGreen {
+    --jef-tone: #63bf42;
+    --jef-rgb: 99,191,66;
+}
+
+.jefPage .toneOrange {
+    --jef-tone: #ff9e31;
+    --jef-rgb: 255,158,49;
+}
+
+.jefPage .tonePurple {
+    --jef-tone: #8645e9;
+    --jef-rgb: 134,69,233;
+}
+
+.jefPage .toneRed {
+    --jef-tone: #ff4d53;
+    --jef-rgb: 255,77,83;
+}
+
+.jefPage .toneTeal {
+    --jef-tone: #16b5b8;
+    --jef-rgb: 22,181,184;
+}
+
+
+/* ================================================================
+   11. FILA KPI
+   ================================================================ */
+
+.jefPage .jefKpiRow.sapMFlexBox {
+    display: grid !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 9px !important;
+
+    margin:
+        0
+        0
+        0
+        0 !important;
+
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.jefPage .jefKpiRowSeven.sapMFlexBox {
+    grid-template-columns:
+        repeat(
+            7,
+            minmax(0,1fr)
+        ) !important;
+
+    height: 76px !important;
+
+    min-height: 76px !important;
+}
+
+.jefPage .jefKpiRowFive.sapMFlexBox {
+    grid-template-columns:
+        repeat(
+            5,
+            minmax(0,1fr)
+        ) !important;
+
+    height: 76px !important;
+
+    min-height: 76px !important;
+}
+
+.jefPage .jefKpiRow > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 76px !important;
+
+    min-height: 76px !important;
+
+    margin: 0 !important;
+}
+
+
+/* ================================================================
+   12. KPI CARD
+   ================================================================ */
+
+.jefPage .jefKpiCard {
+    position: relative !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 76px !important;
+    min-height: 76px !important;
+    max-height: 76px !important;
+
+    margin: 0 !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
+
+    overflow: hidden !important;
+
     background:
         linear-gradient(
             90deg,
-            var(--jef-tone-glow) 0%,
-            rgba(255, 255, 255, 0.96) 70%,
+            rgba(var(--jef-rgb),.20) 0%,
+            rgba(var(--jef-rgb),.11) 22%,
+            rgba(var(--jef-rgb),.04) 48%,
+            rgba(255,255,255,.98) 76%,
             #ffffff 100%
-        );
-    border: 1px solid #e1e7ef;
-    border-left: 0.22rem solid var(--jef-tone);
-    border-radius: 0.7rem;
-    box-shadow: 0 0.14rem 0.44rem rgba(31, 51, 86, 0.065);
+        ) !important;
+
+    border:
+        1px solid
+        rgba(var(--jef-rgb),.18) !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20,39,70,.06) !important;
 }
 
-.jefKpiCard::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+.jefPage .jefKpiCard::before {
+    position: absolute !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 3px !important;
+
+    background:
+        var(--jef-tone) !important;
+
+    border-radius:
+        7px
+        0
+        0
+        7px !important;
+
+    content: "" !important;
 }
 
-.jefKpiCardGradient,
-.jefKpiCardHorizontal {
+.jefPage .jefKpiCard::after {
+    display: none !important;
+}
+
+
+/* ================================================================
+   13. KPI LAYOUT
+   ================================================================ */
+
+.jefPage .jefKpiCardGradient,
+.jefPage .jefKpiCardHorizontal {
+    display: flex !important;
+
     flex-direction: row !important;
+
     align-items: center !important;
+
     justify-content: flex-start !important;
 }
 
-.jefKpiIconCircle {
-    position: relative;
-    z-index: 1;
-    flex: 0 0 auto;
-    width: 2.55rem;
-    height: 2.55rem;
-    margin: 0 0.72rem 0 0;
-    background: var(--jef-tone-soft);
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-}
+.jefPage .jefKpiIconCircle.sapMFlexBox {
+    position: relative !important;
 
-.jefKpiIconCircle .sapUiIcon {
-    color: var(--jef-tone) !important;
-    font-size: 1.25rem !important;
-}
+    z-index: 1 !important;
 
-.jefKpiTextBlock {
-    position: relative;
-    z-index: 1;
-    min-width: 0;
-    flex: 1 1 auto;
-    align-items: flex-start !important;
+    flex: 0 0 43px !important;
+
+    width: 43px !important;
+    min-width: 43px !important;
+    max-width: 43px !important;
+
+    height: 43px !important;
+    min-height: 43px !important;
+    max-height: 43px !important;
+
+    margin:
+        0
+        8px
+        0
+        0 !important;
+
+    background:
+        rgba(var(--jef-rgb),.13) !important;
+
+    border-radius: 50% !important;
+
+    align-items: center !important;
     justify-content: center !important;
 }
 
-.jefKpiTitle {
-    width: 100%;
-    min-height: auto;
-    color: #495872 !important;
-    font-size: 0.65rem !important;
-    line-height: 1.15 !important;
-    font-weight: 700 !important;
-    text-align: left !important;
+.jefPage .jefKpiIconCircle .sapUiIcon {
+    color:
+        var(--jef-tone) !important;
+
+    font-size: 1.28rem !important;
 }
 
-.jefKpiValue,
-.jefKpiValue .sapMObjectNumberText,
-.jefKpiValue .sapMObjectNumberUnit {
-    color: #14274d !important;
+.jefPage .jefKpiTextBlock.sapMFlexBox {
+    position: relative !important;
+
+    z-index: 1 !important;
+
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    align-items: flex-start !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+
+/* ================================================================
+   14. TEXTO KPI
+   ================================================================ */
+
+.jefPage .jefKpiTitle.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #43516a !important;
+
+    font-size: .62rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1.15 !important;
+
+    text-align: left !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage
+.jefKpiValue.sapMObjectNumber {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 2px !important;
+}
+
+.jefPage
+.jefKpiValue
+.sapMObjectNumberText {
+    color:
+        var(--jef-tone) !important;
+
+    font-size: 1.18rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+}
+
+.jefPage
+.jefKpiValue
+.sapMObjectNumberUnit {
+    color:
+        var(--jef-tone) !important;
+
+    font-size: .55rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+}
+
+.jefPage .jefKpiSubline.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 2px !important;
+
+    overflow: hidden !important;
+
+    color: #43516a !important;
+
+    font-size: .52rem !important;
+    font-weight: 700 !important;
+
+    line-height: .64rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage .jefKpiNote.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 2px !important;
+
+    overflow: hidden !important;
+
+    color: #6f7c8f !important;
+
+    font-size: .49rem !important;
+    font-weight: 600 !important;
+
+    line-height: 1.05 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage .jefPositiveNote.sapMText {
+    color: #58b33a !important;
+
+    font-weight: 700 !important;
+}
+
+
+/* ================================================================
+   15. MAIN CARD
+   ================================================================ */
+
+.jefPage .jefMainCard,
+.jefPage .jefMaterialTableCard,
+.jefPage .jefParticipationCard {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20,39,70,.05) !important;
+}
+
+.jefPage .jefMainCard.sapMFlexBox {
+    display: flex !important;
+
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+
+    min-height:
+        calc(100vh - 260px) !important;
+
+    margin-top: 8px !important;
+
+    padding:
+        0
+        10px
+        6px !important;
+}
+
+
+/* ================================================================
+   16. TABS
+   ================================================================ */
+
+.jefPage .jefTabs.sapMFlexBox {
+    flex: 0 0 auto !important;
+
+    width: 100% !important;
+
+    min-height: 40px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    align-items: flex-end !important;
+
+    gap: 6px !important;
+
+    background: transparent !important;
+
+    border-bottom:
+        1px solid
+        #e5eaf1 !important;
+}
+
+.jefPage .jefTabsInsideCard {
+    padding:
+        0
+        4px !important;
+}
+
+.jefPage .jefTabsMaterialTop {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+
+    padding-left: 0 !important;
+}
+
+.jefPage .jefTabButton.sapMBtn {
+    margin: 0 !important;
+
+    border-bottom:
+        3px solid
+        transparent !important;
+}
+
+.jefPage .jefTabButton .sapMBtnInner {
+    min-width: 195px !important;
+
+    height: 38px !important;
+    min-height: 38px !important;
+
+    padding:
+        0
+        12px !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.jefPage .jefTabButton .sapMBtnContent {
+    color: #65748b !important;
+
+    font-size: .61rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 36px !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage .jefTabButton.jefTabActive {
+    border-bottom-color:
+        #0a6ff5 !important;
+}
+
+.jefPage
+.jefTabButton.jefTabActive
+.sapMBtnContent {
+    color: #0a6ff5 !important;
+
     font-weight: 800 !important;
 }
 
-.jefKpiValue {
-    margin-top: 0.08rem;
-}
-
-.jefKpiValue .sapMObjectNumberText {
-    font-size: 1.3rem !important;
-    line-height: 1.15 !important;
-}
-
-.jefKpiValue .sapMObjectNumberUnit {
-    font-size: 0.82rem !important;
-}
-
-.jefKpiCardHorizontal {
-    min-height: 6.05rem;
-}
-
-.jefKpiCardHorizontal .jefKpiValue .sapMObjectNumberText {
-    font-size: 1.24rem !important;
-}
-
-.jefKpiSubline {
-    max-width: 100%;
-    margin-top: 0.05rem;
-    color: #44536d !important;
-    font-size: 0.59rem !important;
-    line-height: 1.1 !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.jefKpiNote {
-    margin-top: 0.12rem;
-    color: #79859a !important;
-    font-size: 0.59rem !important;
-}
-
-.jefPositiveNote {
-    color: #249844 !important;
-    font-weight: 700 !important;
-}
-
-/* ========================================================================
-   TABS
-   ======================================================================== */
-
-.jefTabs {
-    width: 100%;
-    min-height: 2.45rem;
-    align-items: flex-end;
-    border-bottom: 1px solid #e4e9f1;
-}
-
-.jefTabsInsideCard {
-    padding: 0 0.55rem;
-}
-
-.jefTabsMaterialTop {
-    margin-top: 0.1rem;
-    margin-bottom: 0.72rem;
-    padding-left: 0.15rem;
-}
-
-.jefTabButton {
-    margin-right: 0.45rem;
-    border-bottom: 0.18rem solid transparent;
-}
-
-.jefTabButton .sapMBtnInner {
-    min-width: auto !important;
-    height: 2.35rem !important;
-    padding: 0 0.75rem !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-}
-
-.jefTabButton .sapMBtnContent {
-    color: #495873 !important;
-    font-size: 0.72rem !important;
-    font-weight: 500 !important;
-}
-
-.jefTabButton.jefTabActive {
-    border-bottom-color: #0a6ed1;
-}
-
-.jefTabButton.jefTabActive .sapMBtnContent {
-    color: #0a6ed1 !important;
-    font-weight: 700 !important;
-}
-
-.jefTabButton .sapMBtnInner::after,
-.jefTabButton.sapMBtn:focus > .sapMFocusable::before,
-.jefTabButton .sapMFocusable:focus::before {
+.jefPage
+.jefTabButton
+.sapMBtnInner::after {
     display: none !important;
-    border: 0 !important;
-    outline: 0 !important;
 }
 
-/* ========================================================================
-   CARDS Y TABLAS
-   ======================================================================== */
 
-.jefMainCard,
-.jefMaterialTableCard,
-.jefParticipationCard {
-    box-sizing: border-box;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.65rem;
-    box-shadow: 0 0.14rem 0.48rem rgba(36, 55, 88, 0.055);
-}
+/* ================================================================
+   17. MARCO TABLA
+   ================================================================ */
 
-.jefMainCard {
-    padding: 0.45rem 0.55rem 0.55rem;
-}
+.jefPage .jefTableFrame {
+    display: flex !important;
 
-.jefTableFrame {
-    width: 100%;
-    margin-top: 0.45rem;
-    overflow: hidden;
-    border: 1px solid #e4e9f1;
-    border-radius: 0.5rem;
-}
+    flex: 1 1 auto !important;
 
-.jefDataTable {
+    flex-direction: column !important;
+
     width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin-top: 6px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e5e9ef !important;
+
+    border-radius: 7px !important;
+}
+
+
+/* ================================================================
+   18. TABLA
+   ================================================================ */
+
+.jefPage .jefDataTable {
+    width: 100% !important;
+
     background: #ffffff !important;
 }
 
-.jefDataTable .sapMListTbl {
+.jefPage .jefDataTable .sapMListTbl {
+    width: 100% !important;
+
     table-layout: fixed !important;
+
     border-collapse: separate !important;
+
     border-spacing: 0 !important;
 }
 
-.jefDataTable .sapMListTblHeaderCell {
-    height: 2.45rem !important;
-    padding: 0.35rem 0.45rem !important;
+
+/* ================================================================
+   19. CABECERA TABLA
+   ================================================================ */
+
+.jefPage .jefDataTable .sapMListTblHeader,
+.jefPage .jefDataTable .sapMListTblHeaderRow,
+.jefPage .jefDataTable thead,
+.jefPage .jefDataTable thead tr {
+    background: #f5f7fa !important;
+}
+
+.jefPage .jefDataTable .sapMListTblHeaderCell {
+    height: 44px !important;
+
+    min-height: 44px !important;
+
+    padding:
+        5px
+        6px !important;
+
     vertical-align: middle !important;
-    background: #f3f6fa !important;
-    border-top: 0 !important;
-    border-bottom: 1px solid #dfe6ef !important;
+
+    background: #f5f7fa !important;
+
+    border-bottom:
+        1px solid
+        #e2e8f0 !important;
 }
 
-.jefDataTable .sapMListTblHeaderCell:first-child {
-    border-top-left-radius: 0.45rem;
+.jefPage
+.jefDataTable
+.sapMListTblHeaderCell:not(:last-child) {
+    border-right:
+        1px solid
+        #e8edf3 !important;
 }
 
-.jefDataTable .sapMListTblHeaderCell:last-child {
-    border-top-right-radius: 0.45rem;
-}
+.jefPage .jefHeaderCell {
+    width: 100% !important;
 
-.jefDataTable .sapMListTblCell {
-    height: 2.35rem !important;
-    padding: 0.28rem 0.45rem !important;
-    vertical-align: middle !important;
-    border-bottom: 1px solid #edf1f6 !important;
-}
-
-.jefDataTable .sapMListTblRow:last-child .sapMListTblCell {
-    border-bottom: 0 !important;
-}
-
-.jefDataTable .sapMText,
-.jefDataTable .sapMLnk,
-.jefDataTable .sapMObjectNumberText,
-.jefDataTable .sapMObjStatusText {
-    font-size: 0.64rem !important;
-}
-
-.jefDataTable .sapMText {
-    color: #263754 !important;
-}
-
-.jefHeaderCell {
-    width: 100%;
-    gap: 0.25rem;
-    align-items: center;
-}
-
-.jefHeaderCenter {
-    justify-content: center;
-    text-align: center;
-}
-
-.jefHeaderCell .sapMText,
-.jefActionHeader {
-    color: #283a59 !important;
-    font-size: 0.6rem !important;
-    line-height: 1.05 !important;
-    font-weight: 700 !important;
-}
-
-.jefHeaderCell .sapUiIcon {
-    margin-left: auto;
-    color: #7f8ca0 !important;
-    font-size: 0.52rem !important;
-}
-
-.jefHeaderCenter .sapUiIcon {
-    margin-left: 0.15rem;
-}
-
-.jefActionHeader {
-    display: block;
-    width: 100%;
-    text-align: center !important;
-}
-
-.jefSupervisorLink {
-    color: #0a6ed1 !important;
-    font-weight: 700 !important;
-}
-.jefSupervisorCell,
-.jefCategoryCell {
-    gap: 0.38rem;
-}
-
-.jefCategoryCell {
-    min-width: 0;
-    align-items: center !important;
-}
-
-.jefCategoryCell .sapUiIcon {
-    flex: 0 0 auto;
-    width: 0.95rem;
-    min-width: 0.95rem;
-    font-size: 0.82rem !important;
-    line-height: 1 !important;
-    color: #6e7f98 !important;
-}
-
-.jefCategoryCell .sapMText {
-    color: #44536d !important;
-    font-size: 0.59rem !important;
-    white-space: nowrap;
-}
-
-/* ========================================================================
-   GRÁFICA DE UTILIZACIÓN
-   Porcentaje y barra en la misma línea, sin iconos al final
-   ======================================================================== */
-/* ========================================================================
-   GRÁFICA DE UTILIZACIÓN PERSONALIZADA
-   Porcentaje y barra en una sola línea
-   ======================================================================== */
-
-.jefUtilCell {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    gap: 0.55rem;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.jefUtilText {
-    flex: 0 0 2.5rem;
-    width: 2.5rem;
-    margin: 0 !important;
-    color: #263754 !important;
-    font-size: 0.62rem !important;
-    line-height: 1rem !important;
-    font-weight: 700 !important;
-    text-align: right !important;
-    white-space: nowrap;
-}
-
-/* Fondo completo de la barra */
-
-.jefUtilTrack {
-    position: relative;
-    flex: 0 0 6.2rem;
-    width: 6.2rem !important;
-    min-width: 6.2rem;
-    height: 0.34rem !important;
-    min-height: 0.34rem;
-    overflow: hidden;
-    background: #dfe5ec !important;
-    border: 0 !important;
-    border-radius: 999px;
-    box-shadow: none !important;
-    align-items: stretch !important;
-}
-
-/* Segmento coloreado */
-
-.jefUtilFill {
-    height: 100% !important;
-    min-height: 100%;
-    max-width: 100%;
-    background: #0a6ed1;
-    border: 0 !important;
-    border-radius: 999px;
-    box-shadow: none !important;
-}
-
-/* Crítico */
-
-.jefUtilFill[data-state="Error"] {
-    background: #ff4054 !important;
-}
-
-/* Alto y normal */
-
-.jefUtilFill[data-state="Warning"] {
-    background: #f59e0b !important;
-}
-
-/* Bajo */
-
-.jefUtilFill[data-state="Success"] {
-    background: #20a464 !important;
-}
-
-/* Estado neutro */
-
-.jefUtilFill[data-state="Information"],
-.jefUtilFill[data-state="None"] {
-    background: #0a6ed1 !important;
-}
-
-/* ========================================================================
-   PÍLDORAS OVALADAS
-   ======================================================================== */
-
-/* ========================================================================
-   PÍLDORAS DE ESTATUS
-   Una sola capa, forma completamente ovalada
-   ======================================================================== */
-
-.jefStatusPill {
-    display: inline-flex !important;
-    width: auto !important;
-    min-width: 5.25rem;
-    max-width: 100%;
-    min-height: 1.55rem;
-    box-sizing: border-box;
-    padding: 0.25rem 0.75rem !important;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    box-shadow: none !important;
-    align-items: center !important;
-    justify-content: center !important;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-/* Texto interior sin una segunda caja */
-
-.jefStatusPill .sapMObjStatusText {
-    display: inline-flex !important;
     min-width: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    color: inherit !important;
-    font-size: 0.61rem !important;
-    line-height: 1rem !important;
-    font-weight: 700 !important;
-    text-align: center !important;
+
+    gap: 3px !important;
+
     align-items: center !important;
+}
+
+.jefPage .jefHeaderCenter {
+    justify-content: center !important;
+
+    text-align: center !important;
+}
+
+.jefPage .jefHeaderCell .sapMText,
+.jefPage .jefActionHeader.sapMText {
+    color: #43516a !important;
+
+    font-size: .55rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+}
+
+.jefPage .jefHeaderCell .sapUiIcon {
+    flex: 0 0 auto !important;
+
+    margin-left: 3px !important;
+
+    color: #8794a8 !important;
+
+    font-size: .48rem !important;
+}
+
+.jefPage .jefActionHeader.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    text-align: center !important;
+}
+
+
+/* ================================================================
+   20. FILAS
+   ================================================================ */
+
+.jefPage .jefDataTable .sapMListTblRow,
+.jefPage .jefDataTable .sapMListTblCell {
+    height: 38px !important;
+
+    min-height: 38px !important;
+}
+
+.jefPage .jefDataTable .sapMListTblCell {
+    padding:
+        5px
+        6px !important;
+
+    vertical-align: middle !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
+}
+
+.jefPage
+.jefDataTable
+.sapMListTblCell:not(:last-child) {
+    border-right:
+        1px solid
+        #edf1f5 !important;
+}
+
+.jefPage
+.jefDataTable
+.sapMListTblRow:hover
+.sapMListTblCell {
+    background: #f8fbff !important;
+}
+
+.jefPage .jefDataTable .sapMText,
+.jefPage .jefDataTable .sapMLnk,
+.jefPage .jefDataTable .sapMObjectNumberText,
+.jefPage .jefDataTable .sapMObjStatusText {
+    color: #334158 !important;
+
+    font-size: .58rem !important;
+
+    line-height: .82rem !important;
+}
+
+
+/* ================================================================
+   21. SUPERVISOR / LINKS
+   ================================================================ */
+
+.jefPage .jefSupervisorLink,
+.jefPage .jefSupervisorLink .sapMLnkText {
+    color: #1877e8 !important;
+
+    font-size: .58rem !important;
+
+    font-weight: 700 !important;
+
+    text-decoration: none !important;
+}
+
+.jefPage .jefSupervisorCell,
+.jefPage .jefCategoryCell {
+    min-width: 0 !important;
+
+    gap: 5px !important;
+
+    align-items: center !important;
+}
+
+
+/* ================================================================
+   22. UTILIZACIÓN
+   ================================================================ */
+
+.jefPage .jefUtilCell.sapMFlexBox {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 7px !important;
+
+    align-items: center !important;
+
     justify-content: center !important;
 }
 
-/* Punto del estatus */
+.jefPage .jefUtilText.sapMText {
+    flex: 0 0 30px !important;
 
-.jefStatusPill::before {
-    content: "";
-    display: inline-block;
-    flex: 0 0 auto;
-    width: 0.32rem;
-    height: 0.32rem;
-    margin-right: 0.38rem;
-    background: currentColor;
-    border-radius: 50%;
+    width: 30px !important;
+
+    margin: 0 !important;
+
+    color: #334158 !important;
+
+    font-size: .58rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .72rem !important;
+
+    text-align: right !important;
+
+    white-space: nowrap !important;
 }
 
-/* Crítico */
+.jefPage .jefUtilTrack.sapMFlexBox {
+    flex: 1 1 auto !important;
 
-.jefStatusPill.sapMObjStatusError {
-    color: #d93645 !important;
-    background: #fff0f2 !important;
-    border-color: #ff4054 !important;
+    width: auto !important;
+
+    max-width: 100px !important;
+
+    min-width: 35px !important;
+
+    height: 4px !important;
+
+    min-height: 4px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #dfe5ec !important;
+
+    border: 0 !important;
+
+    border-radius: 999px !important;
 }
 
-/* Alto */
+.jefPage .jefUtilFill.sapMFlexBox {
+    height: 100% !important;
 
-.jefStatusPill.sapMObjStatusWarning {
-    color: #bd6b00 !important;
-    background: #fff6e8 !important;
-    border-color: #ef8500 !important;
+    min-height: 100% !important;
+
+    max-width: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    border-radius: 999px !important;
 }
 
-/* Normal */
+.jefPage
+.jefUtilFill[data-state="Error"] {
+    background: #ff4d53 !important;
+}
 
+.jefPage
+.jefUtilFill[data-state="Warning"] {
+    background: #ff9e31 !important;
+}
+
+.jefPage
+.jefUtilFill[data-state="Success"] {
+    background: #63bf42 !important;
+}
+
+.jefPage
+.jefUtilFill[data-state="Information"],
+.jefPage
+.jefUtilFill[data-state="None"] {
+    background: #2e8cff !important;
+}
+
+
+/* ================================================================
+   23. ESTATUS
+   ================================================================ */
+
+.jefPage .jefStatusPill.sapMObjStatus {
+    display: inline-flex !important;
+
+    width: auto !important;
+
+    min-width: 60px !important;
+
+    height: 22px !important;
+
+    min-height: 22px !important;
+
+    margin: 0 auto !important;
+
+    padding:
+        0
+        8px !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    border:
+        1px solid
+        transparent !important;
+
+    border-radius: 999px !important;
+
+    box-shadow: none !important;
+}
+
+.jefPage .jefStatusPill::before {
+    display: inline-block !important;
+
+    flex: 0 0 auto !important;
+
+    width: 5px !important;
+
+    height: 5px !important;
+
+    margin-right: 5px !important;
+
+    background: currentColor !important;
+
+    border-radius: 50% !important;
+
+    content: "" !important;
+}
+
+.jefPage
+.jefStatusPill
+.sapMObjStatusText {
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    color: inherit !important;
+
+    font-size: .53rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: 20px !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* BAJO */
+.jefPage
+.jefStatusPill.sapMObjStatusSuccess {
+    color: #278149 !important;
+
+    background: #effaf2 !important;
+
+    border-color: #63bf82 !important;
+}
+
+
+/* NORMAL */
+.jefPage
 .jefStatusPill.sapMObjStatusInformation {
     color: #a77c00 !important;
+
     background: #fff9df !important;
+
     border-color: #ecd88d !important;
 }
 
-/* Bajo */
 
-.jefStatusPill.sapMObjStatusSuccess {
-    color: #278149 !important;
-    background: #effaf2 !important;
-    border-color: #36a05d !important;
+/* ALTO */
+.jefPage
+.jefStatusPill.sapMObjStatusWarning {
+    color: #bd6b00 !important;
+
+    background: #fff6e8 !important;
+
+    border-color: #ffae55 !important;
 }
 
-.jefVariationNumber,
-.jefVariationNumber .sapMObjectNumberText {
-    font-weight: 700 !important;
+
+/* CRÍTICO */
+.jefPage
+.jefStatusPill.sapMObjStatusError {
+    color: #d93645 !important;
+
+    background: #fff0f2 !important;
+
+    border-color: #ff7582 !important;
 }
 
-.jefActionButton .sapMBtnInner,
-.jefChevronButton .sapMBtnInner,
-.jefReportButton .sapMBtnInner {
+
+/* ================================================================
+   24. VER RECURSOS
+   ================================================================ */
+
+.jefPage .jefActionButton.sapMBtn {
+    height: 28px !important;
+
+    margin: 0 !important;
+}
+
+.jefPage .jefActionButton .sapMBtnInner {
+    min-width: 0 !important;
+
+    height: 28px !important;
+
+    min-height: 28px !important;
+
+    padding:
+        0
+        4px !important;
+
     background: transparent !important;
+
     border: 0 !important;
+
+    box-shadow: none !important;
 }
 
-.jefActionButton .sapMBtnInner {
-    min-width: 5.25rem !important;
-    height: 1.8rem !important;
-    padding: 0 0.15rem !important;
-}
+.jefPage .jefActionButton .sapMBtnContent {
+    color: #1877e8 !important;
 
-.jefActionButton .sapMBtnContent,
-.jefActionButton .sapMBtnIcon,
-.jefChevronButton .sapMBtnIcon,
-.jefReportButton .sapMBtnContent,
-.jefReportButton .sapMBtnIcon {
-    color: #0a6ed1 !important;
-}
+    font-size: .53rem !important;
 
-.jefActionButton .sapMBtnContent {
-    font-size: 0.61rem !important;
     font-weight: 700 !important;
+
+    line-height: 26px !important;
 }
 
-.jefActionButton .sapMBtnIcon {
-    font-size: 0.55rem !important;
+.jefPage .jefActionButton .sapMBtnIcon {
+    color: #1877e8 !important;
+
+    font-size: .48rem !important;
+
+    line-height: 26px !important;
 }
 
-.jefChevronButton .sapMBtnInner {
-    min-width: 1.45rem !important;
-    height: 1.65rem !important;
-    padding: 0 !important;
-}
 
-.jefChevronButton .sapMBtnIcon {
-    font-size: 0.58rem !important;
-}
+/* ================================================================
+   25. FOOTER TABLA
+   ================================================================ */
 
-/* ========================================================================
-   FOOTER DE TABLA Y PAGINACIÓN
-   ======================================================================== */
+.jefPage .jefTableFooter.sapMFlexBox {
+    flex: 0 0 auto !important;
 
-.jefTableFooter {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.48rem 0.25rem 0.05rem;
-}
-
-.jefRowsPerPage {
-    gap: 0.45rem;
-}
-
-.jefRowsPerPage .sapMText,
-.jefRecordCount {
-    color: #55657e !important;
-    font-size: 0.64rem !important;
-}
-
-.jefRowsPerPage .sapMSlt {
-    width: 3.15rem !important;
-    height: 1.75rem !important;
-    border: 1px solid #dfe5ed !important;
-    border-radius: 0.32rem !important;
-}
-
-.jefRowsPerPage .sapMSltLabel {
-    height: 1.7rem !important;
-    line-height: 1.7rem !important;
-    font-size: 0.64rem !important;
-}
-
-.jefPagination {
-    gap: 0.24rem;
-}
-
-.jefPagination .sapMBtnInner {
-    min-width: 1.85rem !important;
-    height: 1.75rem !important;
-    padding: 0 !important;
-    border: 1px solid #dfe5ee !important;
-    border-radius: 0.35rem !important;
-}
-
-.jefPagination .sapMBtnTransparent .sapMBtnInner {
-    background: #ffffff !important;
-}
-
-.jefPagination .sapMBtnEmphasized .sapMBtnInner {
-    background: #0a6ed1 !important;
-    border-color: #0a6ed1 !important;
-}
-
-.jefPagination .sapMBtnContent,
-.jefPagination .sapMBtnIcon {
-    font-size: 0.62rem !important;
-}
-
-/* ========================================================================
-   CONTENIDO DE MATERIALES
-   ======================================================================== */
-
-.jefMaterialContent {
-    width: 100%;
-    gap: 0.7rem;
-    align-items: stretch !important;
-}
-
-.jefMaterialTableCard {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 0;
-    padding: 0.52rem 0.55rem 0.5rem;
-}
-
-.jefMaterialTableFrame {
-    width: 100%;
-    margin-top: 0;
-    overflow: hidden;
-}
-
-/* ========================================================================
-   TABLA DE MATERIALES
-   ======================================================================== */
-
-.jefMaterialTable {
     width: 100% !important;
-}
 
-.jefMaterialTable .sapMListTbl {
-    width: 100% !important;
-    table-layout: fixed !important;
-}
+    min-height: 38px !important;
 
-.jefMaterialTable .sapMListTblHeaderCell,
-.jefMaterialTable .sapMListTblCell {
-    box-sizing: border-box;
-    padding-left: 0.28rem !important;
-    padding-right: 0.28rem !important;
-    overflow: hidden;
-}
+    margin-top: auto !important;
 
-.jefMaterialTable .sapMText,
-.jefMaterialTable .sapMLnk,
-.jefMaterialTable .sapMObjectNumberText,
-.jefMaterialTable .sapMObjStatusText {
-    font-size: 0.59rem !important;
-}
+    padding:
+        5px
+        4px
+        0 !important;
 
-.jefMaterialTable .jefHeaderCell .sapMText {
-    font-size: 0.54rem !important;
-}
-
-/* Reduce el padding de las columnas Estatus y Acción. */
-
-.jefMaterialTable .sapMListTblHeaderCell:nth-child(9),
-.jefMaterialTable .sapMListTblCell:nth-child(9),
-.jefMaterialTable .sapMListTblHeaderCell:nth-child(10),
-.jefMaterialTable .sapMListTblCell:nth-child(10) {
-    padding-left: 0.12rem !important;
-    padding-right: 0.12rem !important;
-}
-
-/* Supervisor y categoría */
-
-.jefSupervisorCell,
-.jefCategoryCell {
-    min-width: 0;
-    gap: 0.34rem;
     align-items: center !important;
 }
 
-.jefSupervisorCell .sapUiIcon {
-    flex: 0 0 auto;
-    width: 0.86rem;
-    min-width: 0.86rem;
-    color: #667892 !important;
-    font-size: 0.76rem !important;
+
+/* Se elimina Mostrar / 10 / por página */
+.jefPage .jefRowsPerPage {
+    display: none !important;
 }
 
-.jefCategoryCell {
-    position: relative;
-}
+.jefPage .jefRecordCount.sapMText {
+    color: #617087 !important;
 
-.jefCategoryCell .sapMText {
-    min-width: 0;
-    color: #44536d !important;
-    font-size: 0.58rem !important;
+    font-size: .56rem !important;
+
+    font-weight: 700 !important;
+
     white-space: nowrap !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* Íconos SVG estables para todas las categorías.
-   Se usan porque algunos nombres sap-icon no existen en todas las
-   versiones de SAPUI5. */
 
+/* ================================================================
+   26. PAGINACIÓN
+   ================================================================ */
+
+.jefPage .jefPagination.sapMFlexBox {
+    gap: 3px !important;
+
+    align-items: center !important;
+}
+
+.jefPage .jefPagination .sapMBtn {
+    width: 28px !important;
+
+    height: 28px !important;
+}
+
+.jefPage .jefPagination .sapMBtnInner {
+    width: 28px !important;
+
+    min-width: 28px !important;
+
+    height: 28px !important;
+
+    min-height: 28px !important;
+
+    padding: 0 !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e5eaf1 !important;
+
+    border-radius: 6px !important;
+}
+
+.jefPage .jefPagination .sapMBtnIcon,
+.jefPage .jefPagination .sapMBtnContent {
+    color: #65748b !important;
+
+    font-size: .60rem !important;
+
+    line-height: 26px !important;
+}
+
+.jefPage
+.jefPagination
+.sapMBtnEmphasized
+.sapMBtnInner {
+    background: #0a6ff5 !important;
+
+    border-color: #0a6ff5 !important;
+
+    box-shadow:
+        0 3px 7px
+        rgba(10,111,245,.20) !important;
+}
+
+.jefPage
+.jefPagination
+.sapMBtnEmphasized
+.sapMBtnContent {
+    color: #ffffff !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* ================================================================
+   27. MATERIALES - LAYOUT PRINCIPAL
+   ================================================================ */
+
+.jefPage .jefMaterialContent.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0,1fr)
+        280px !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 10px !important;
+
+    align-items: stretch !important;
+}
+
+.jefPage .jefMaterialTableCard {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    padding:
+        7px
+        8px
+        6px !important;
+}
+
+
+/* ================================================================
+   28. MATERIAL TABLE
+   ================================================================ */
+
+.jefPage .jefMaterialTableFrame {
+    margin-top: 0 !important;
+}
+
+.jefPage .jefMaterialTable {
+    width: 100% !important;
+}
+
+.jefPage
+.jefMaterialTable
+.sapMListTblHeaderCell {
+    height: 42px !important;
+
+    min-height: 42px !important;
+
+    padding:
+        4px
+        4px !important;
+}
+
+.jefPage
+.jefMaterialTable
+.sapMListTblCell {
+    height: 35px !important;
+
+    min-height: 35px !important;
+
+    padding:
+        4px
+        4px !important;
+}
+
+.jefPage .jefMaterialTable .sapMText,
+.jefPage .jefMaterialTable .sapMLnk,
+.jefPage .jefMaterialTable .sapMObjectNumberText,
+.jefPage .jefMaterialTable .sapMObjStatusText {
+    font-size: .53rem !important;
+
+    line-height: .66rem !important;
+}
+
+.jefPage
+.jefMaterialTable
+.jefHeaderCell
+.sapMText {
+    font-size: .50rem !important;
+}
+
+
+/* ================================================================
+   29. CATEGORÍA
+   ================================================================ */
+
+.jefPage .jefCategoryCell {
+    position: relative !important;
+
+    min-width: 0 !important;
+}
+
+.jefPage .jefCategoryCell .sapMText {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #43516a !important;
+
+    font-size: .52rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage
 .jefCategoryCell[data-category] > .sapUiIcon,
+.jefPage
 .jefParticipationName[data-category] > .sapUiIcon {
     display: none !important;
 }
 
+.jefPage
 .jefCategoryCell[data-category]::before,
+.jefPage
 .jefParticipationName[data-category]::before {
-    content: "";
-    display: inline-block;
-    flex: 0 0 auto;
-    width: 0.88rem;
-    min-width: 0.88rem;
-    height: 0.96rem;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    display: inline-block !important;
+
+    flex: 0 0 auto !important;
+
+    width: 14px !important;
+
+    min-width: 14px !important;
+
+    height: 15px !important;
+
+    content: "" !important;
+
+    background-repeat: no-repeat !important;
+
+    background-position: center !important;
+
+    background-size: contain !important;
 }
 
+.jefPage
 .jefCategoryCell[data-category="Lubricantes"]::before,
+.jefPage
 .jefParticipationName[data-category="Lubricantes"]::before {
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2S5 10.2 5 15a7 7 0 0 0 14 0C19 10.2 12 2 12 2Z' fill='none' stroke='%23647892' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2S5 10.2 5 15a7 7 0 0 0 14 0C19 10.2 12 2 12 2Z' fill='none' stroke='%23647892' stroke-width='1.8'/%3E%3C/svg%3E") !important;
 }
 
+.jefPage
 .jefCategoryCell[data-category="Refacciones"]::before,
+.jefPage
 .jefParticipationName[data-category="Refacciones"]::before {
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9.8 3.2h4.4l.5 2a7.8 7.8 0 0 1 1.7 1l2-.6 2.2 3.8-1.5 1.4c.1.4.1.8.1 1.2s0 .8-.1 1.2l1.5 1.4-2.2 3.8-2-.6a7.8 7.8 0 0 1-1.7 1l-.5 2H9.8l-.5-2a7.8 7.8 0 0 1-1.7-1l-2 .6-2.2-3.8 1.5-1.4A6.5 6.5 0 0 1 4.8 12c0-.4 0-.8.1-1.2L3.4 9.4l2.2-3.8 2 .6a7.8 7.8 0 0 1 1.7-1l.5-2Z' fill='none' stroke='%23647892' stroke-width='1.45' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='2.7' fill='none' stroke='%23647892' stroke-width='1.45'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%23647892' stroke-width='1.7'/%3E%3Ccircle cx='12' cy='12' r='2.4' fill='none' stroke='%23647892' stroke-width='1.7'/%3E%3C/svg%3E") !important;
 }
 
+.jefPage
 .jefCategoryCell[data-category="Consumibles"]::before,
+.jefPage
 .jefParticipationName[data-category="Consumibles"]::before {
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z' fill='none' stroke='%23647892' stroke-width='1.65' stroke-linejoin='round'/%3E%3Cpath d='m4.4 7.7 7.6 4.2 7.6-4.2M12 12v8.6' fill='none' stroke='%23647892' stroke-width='1.65' stroke-linejoin='round'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z' fill='none' stroke='%23647892' stroke-width='1.65'/%3E%3C/svg%3E") !important;
 }
 
+.jefPage
 .jefCategoryCell[data-category="Herramientas"]::before,
+.jefPage
 .jefParticipationName[data-category="Herramientas"]::before {
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.5 6.3a4.6 4.6 0 0 0-5.8 5.8l-5.2 5.2a2 2 0 0 0 2.8 2.8l5.2-5.2a4.6 4.6 0 0 0 5.8-5.8l-2.8 2.8-2.4-.6-.6-2.4 3-2.6Z' fill='none' stroke='%23647892' stroke-width='1.65' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.5 6.3a4.6 4.6 0 0 0-5.8 5.8l-5.2 5.2a2 2 0 0 0 2.8 2.8l5.2-5.2a4.6 4.6 0 0 0 5.8-5.8l-2.8 2.8-2.4-.6-.6-2.4 3-2.6Z' fill='none' stroke='%23647892' stroke-width='1.65'/%3E%3C/svg%3E") !important;
 }
 
-/* ========================================================================
-   PÍLDORAS DE ESTATUS DE LA TABLA DE MATERIALES
-   ======================================================================== */
 
-.jefMaterialTable .jefStatusPill {
-    width: calc(100% - 0.15rem) !important;
-    min-width: 0 !important;
-    max-width: 5.25rem;
-    min-height: 1.42rem;
-    box-sizing: border-box;
-    padding: 0.19rem 0.34rem !important;
-    overflow: hidden;
-    white-space: nowrap;
+/* ================================================================
+   30. VARIACIÓN MATERIAL
+   ================================================================ */
+
+.jefPage .jefVariationNumber,
+.jefPage
+.jefVariationNumber
+.sapMObjectNumberText {
+    font-size: .54rem !important;
+
+    font-weight: 800 !important;
 }
 
-.jefMaterialTable .jefStatusPill::before {
-    width: 0.28rem;
-    height: 0.28rem;
-    margin-right: 0.3rem;
+
+/* ================================================================
+   31. CHEVRON MATERIAL
+   ================================================================ */
+
+.jefPage .jefChevronButton.sapMBtn {
+    width: 24px !important;
+
+    height: 24px !important;
 }
 
-.jefMaterialTable .jefStatusPill .sapMObjStatusText {
-    min-width: 0 !important;
-    max-width: 100%;
+.jefPage .jefChevronButton .sapMBtnInner {
+    width: 24px !important;
+
+    min-width: 24px !important;
+
+    height: 24px !important;
+
+    min-height: 24px !important;
+
     padding: 0 !important;
-    overflow: hidden;
-    text-overflow: clip;
-    white-space: nowrap !important;
-    font-size: 0.55rem !important;
-}
 
-/* ========================================================================
-   CARD PARTICIPACIÓN POR CATEGORÍA
-   ======================================================================== */
-
-.jefParticipationCard {
-    flex: 0 0 20.5rem;
-    width: 20.5rem;
-    min-width: 20.5rem;
-    min-height: 100%;
-    box-sizing: border-box;
-    padding: 0.75rem 0.78rem 0.6rem;
-    overflow: hidden;
-}
-
-.jefParticipationHeader {
-    width: 100%;
-    margin-bottom: 0.55rem;
-}
-
-.jefParticipationHeader .sapMTitle {
-    color: #263754 !important;
-    font-size: 0.82rem !important;
-    line-height: 1.15 !important;
-    font-weight: 700 !important;
-    white-space: nowrap;
-}
-
-.jefParticipationHeader .sapUiIcon {
-    flex: 0 0 auto;
-    color: #77859a !important;
-    font-size: 0.75rem !important;
-}
-
-/* Cabecera */
-
-.jefParticipationColumns {
-    width: 100%;
-    box-sizing: border-box;
-    padding-bottom: 0.38rem;
-    border-bottom: 1px solid #e7ecf2;
-    align-items: center !important;
-}
-
-.jefParticipationColumns .sapMText {
-    min-width: 0;
-    color: #7a8799 !important;
-    font-size: 0.52rem !important;
-    line-height: 1rem !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-}
-
-/* Filas */
-
-.jefParticipationRow {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.52rem 0 0.47rem;
-    border-bottom: 1px solid #edf1f5;
-}
-
-.jefParticipationTopRow {
-    width: 100%;
-    min-width: 0;
-    align-items: center !important;
-}
-
-.jefParticipationName {
-    position: relative;
-    min-width: 0;
-    gap: 0.35rem;
-    align-items: center !important;
-}
-
-.jefParticipationName .sapMText {
-    min-width: 0;
-    color: #263754 !important;
-    font-size: 0.59rem !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.jefParticipationConsumption,
-.jefParticipationShare {
-    min-width: 0;
-    color: #263754 !important;
-    font-size: 0.58rem !important;
-    line-height: 1rem !important;
-    white-space: nowrap !important;
-}
-
-.jefParticipationShare {
-    font-weight: 700 !important;
-}
-
-/* Barra continua sin ProgressIndicator */
-
-.jefParticipationTrack {
-    width: calc(46% - 1.23rem) !important;
-    height: 0.24rem !important;
-    min-height: 0.24rem;
-    margin-top: 0.27rem;
-    margin-left: 1.23rem;
-    overflow: hidden;
-    background: #dce7f3 !important;
-    border: 0 !important;
-    border-radius: 999px;
-    box-shadow: none !important;
-}
-
-.jefParticipationFill {
-    height: 100% !important;
-    min-height: 100%;
-    max-width: 100%;
-    background: #0a6ed1 !important;
-    border: 0 !important;
-    border-radius: 999px;
-    box-shadow: none !important;
-}
-
-/* Total y enlace */
-
-.jefParticipationTotal {
-    width: 100%;
-    box-sizing: border-box;
-    padding-top: 0.62rem;
-}
-
-.jefParticipationTotal .sapMText {
-    color: #263754 !important;
-    font-size: 0.65rem !important;
-    font-weight: 700 !important;
-}
-
-.jefParticipationSpacer {
-    flex: 1 1 auto;
-    min-height: 0.5rem;
-}
-
-.jefReportButton {
-    width: 100%;
-    margin-top: 0.35rem;
-    padding-top: 0.45rem;
-    border-top: 1px solid #e8edf3;
-}
-
-.jefReportButton .sapMBtnInner {
-    width: 100% !important;
-    justify-content: flex-end;
     background: transparent !important;
+
     border: 0 !important;
 }
 
-.jefReportButton .sapMBtnContent,
-.jefReportButton .sapMBtnIcon {
-    color: #0a6ed1 !important;
+.jefPage .jefChevronButton .sapMBtnIcon {
+    color: #1877e8 !important;
+
+    font-size: .50rem !important;
+
+    line-height: 22px !important;
 }
 
-.jefReportButton .sapMBtnContent {
-    font-size: 0.61rem !important;
+
+/* ================================================================
+   32. PARTICIPACIÓN POR CATEGORÍA
+   ================================================================ */
+
+.jefPage .jefParticipationCard.sapMFlexBox {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    width: 280px !important;
+
+    min-width: 280px !important;
+    max-width: 280px !important;
+
+    min-height: 100% !important;
+
+    padding:
+        10px
+        10px
+        8px !important;
+}
+
+.jefPage .jefParticipationHeader.sapMFlexBox {
+    width: 100% !important;
+
+    min-height: 28px !important;
+
+    margin-bottom: 6px !important;
+}
+
+.jefPage .jefParticipationHeader .sapMTitle {
+    color: #243858 !important;
+
+    font-size: .66rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .78rem !important;
+}
+
+.jefPage .jefParticipationHeader .sapUiIcon {
+    color: #718095 !important;
+
+    font-size: .66rem !important;
+}
+
+.jefPage .jefParticipationColumns.sapMFlexBox {
+    width: 100% !important;
+
+    padding-bottom: 5px !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
+}
+
+.jefPage
+.jefParticipationColumns
+.sapMText {
+    color: #8792a3 !important;
+
+    font-size: .47rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: .60rem !important;
+}
+
+.jefPage .jefParticipationRow {
+    width: 100% !important;
+
+    padding:
+        7px
+        0
+        6px !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
+}
+
+.jefPage .jefParticipationName {
+    min-width: 0 !important;
+
+    gap: 5px !important;
+}
+
+.jefPage
+.jefParticipationName
+.sapMText {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #334158 !important;
+
+    font-size: .52rem !important;
+
+    font-weight: 700 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage .jefParticipationConsumption,
+.jefPage .jefParticipationShare {
+    color: #334158 !important;
+
+    font-size: .51rem !important;
+
+    line-height: .64rem !important;
+
+    white-space: nowrap !important;
+}
+
+.jefPage .jefParticipationShare {
+    font-weight: 800 !important;
+}
+
+.jefPage .jefParticipationTrack.sapMFlexBox {
+    width:
+        calc(46% - 18px) !important;
+
+    height: 3px !important;
+
+    min-height: 3px !important;
+
+    margin-top: 4px !important;
+
+    margin-left: 18px !important;
+
+    overflow: hidden !important;
+
+    background: #dfe6ef !important;
+
+    border: 0 !important;
+
+    border-radius: 999px !important;
+}
+
+.jefPage .jefParticipationFill.sapMFlexBox {
+    height: 100% !important;
+
+    min-height: 100% !important;
+
+    background: #0a6ff5 !important;
+
+    border-radius: 999px !important;
+}
+
+.jefPage .jefParticipationTotal {
+    width: 100% !important;
+
+    padding-top: 8px !important;
+}
+
+.jefPage
+.jefParticipationTotal
+.sapMText {
+    color: #334158 !important;
+
+    font-size: .54rem !important;
+
+    font-weight: 800 !important;
+}
+
+.jefPage .jefParticipationSpacer {
+    flex: 1 1 auto !important;
+
+    min-height: 8px !important;
+}
+
+
+/* ================================================================
+   33. VER REPORTE
+   ================================================================ */
+
+.jefPage .jefReportButton {
+    width: 100% !important;
+
+    margin-top: 4px !important;
+
+    padding-top: 5px !important;
+
+    border-top:
+        1px solid
+        #edf1f5 !important;
+}
+
+.jefPage
+.jefReportButton
+.sapMBtnInner {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+}
+
+.jefPage
+.jefReportButton
+.sapMBtnContent,
+.jefPage
+.jefReportButton
+.sapMBtnIcon {
+    color: #1877e8 !important;
+
+    font-size: .52rem !important;
+
     font-weight: 700 !important;
 }
 
-.jefReportButton .sapMBtnIcon {
-    font-size: 0.58rem !important;
-}
 
+/* ================================================================
+   34. OCULTAR COLUMNAS TÉCNICAS SAPUI5
+   ================================================================ */
 
-/* ========================================================================
-   ESTADOS DE FOCO
-   ======================================================================== */
-
-.jefPage .sapMBtn:focus > .sapMFocusable::before,
-.jefPage .sapMBtn .sapMFocusable:focus::before {
+.jefPage .jefDataTable .sapMListTblHighlightCol,
+.jefPage .jefDataTable .sapMListTblHighlightCell,
+.jefPage .jefDataTable .sapMListTblNavigatedCol,
+.jefPage .jefDataTable .sapMListTblNavigatedCell,
+.jefPage .jefDataTable .sapMListTblSelCol,
+.jefPage .jefDataTable .sapMListTblSelColCell,
+.jefPage .jefDataTable .sapMListTblDummyCell,
+.jefPage .jefDataTable .sapMListTblNavCol {
     display: none !important;
-    outline: 0 !important;
+
+    width: 0 !important;
+
+    min-width: 0 !important;
+
+    max-width: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    border: 0 !important;
 }
 
-/* ========================================================================
-   RESPONSIVE
-   ======================================================================== */
 
-@media (max-width: 82rem) {
-    .jefFilterCardsRow {
-        gap: 0.55rem;
+/* ================================================================
+   35. LAPTOP - 1366x768 / ALTURA REDUCIDA
+   ================================================================ */
+
+@media screen
+and (min-width: 1051px)
+and (max-height: 720px) {
+
+    .jefPage .jefDashboard.sapMFlexBox {
+        min-height:
+            calc(100vh - 28px) !important;
+
+        padding:
+            6px
+            8px
+            5px
+            18px !important;
+
+        gap: 5px !important;
     }
 
-    .jefFilterPeriod {
-        width: 7.55rem;
+
+    .jefPage .jefPageTitle.sapMTitle {
+        font-size: 1.38rem !important;
     }
 
-    .jefFilterDate {
-        width: 8rem;
+
+    .jefPage .jefPageSubtitle.sapMText {
+        font-size: .62rem !important;
     }
 
-    .jefFilterManagement {
-        width: 9.65rem;
+
+    .jefPage .jefFilterCardsRow.sapMFlexBox,
+
+    .jefPage .jefFilterCard,
+
+    .jefPage .jefFilterPeriod,
+
+    .jefPage .jefFilterDate,
+
+    .jefPage .jefFilterManagement,
+
+    .jefPage .jefFilterCompact,
+
+    .jefPage .jefFilterService,
+
+    .jefPage .jefFilterActionWrap.sapMFlexBox {
+        height: 48px !important;
+
+        min-height: 48px !important;
     }
 
-    .jefFilterCompact {
-        width: 6.85rem;
+
+    .jefPage .jefFilterCardsRow.sapMFlexBox {
+        gap: 5px !important;
     }
 
-    .jefFilterService {
-        width: 7.85rem;
+
+    .jefPage .jefFilterCard {
+        padding:
+            3px
+            7px
+            2px !important;
     }
 
-    .jefFilterActionWrap {
-        flex-basis: 7.75rem;
-        width: 7.75rem;
+
+    .jefPage
+    .jefFilterCard
+    .sapMLabel {
+        height: 12px !important;
+
+        min-height: 12px !important;
+
+        font-size: .54rem !important;
+
+        line-height: 12px !important;
     }
 
-    .jefKpiRowSeven .jefKpiCard {
-        min-width: 8.35rem;
+
+    .jefPage
+    .jefFilterCard
+    .sapMSltLabel,
+
+    .jefPage
+    .jefFilterCard
+    .sapMInputBaseInner {
+        font-size: .59rem !important;
     }
 
-    .jefDataTable .sapMText,
-    .jefDataTable .sapMLnk,
-    .jefDataTable .sapMObjectNumberText,
-    .jefDataTable .sapMObjStatusText {
-        font-size: 0.59rem !important;
+
+    .jefPage .jefApplyButton.sapMBtn {
+        height: 48px !important;
     }
 
-    .jefUtilTrack {
-        flex-basis: 5.2rem;
-        width: 5.2rem !important;
-        min-width: 5.2rem !important;
+
+    .jefPage
+    .jefApplyButton
+    .sapMBtnInner {
+        height: 38px !important;
+
+        min-height: 38px !important;
+
+        margin:
+            5px
+            0 !important;
+    }
+
+
+    .jefPage .jefKpiRowSeven.sapMFlexBox,
+
+    .jefPage .jefKpiRowFive.sapMFlexBox,
+
+    .jefPage .jefKpiRow > .sapMFlexItem,
+
+    .jefPage .jefKpiCard {
+        height: 62px !important;
+
+        min-height: 62px !important;
+
+        max-height: 62px !important;
+    }
+
+
+    .jefPage .jefKpiRow.sapMFlexBox {
+        gap: 6px !important;
+    }
+
+
+    .jefPage .jefKpiCard {
+        padding:
+            6px
+            7px
+            6px
+            10px !important;
+    }
+
+
+    .jefPage .jefKpiIconCircle.sapMFlexBox {
+        flex-basis: 35px !important;
+
+        width: 35px !important;
+
+        min-width: 35px !important;
+
+        max-width: 35px !important;
+
+        height: 35px !important;
+
+        min-height: 35px !important;
+
+        max-height: 35px !important;
+
+        margin-right: 6px !important;
+    }
+
+
+    .jefPage
+    .jefKpiIconCircle
+    .sapUiIcon {
+        font-size: 1rem !important;
+    }
+
+
+    .jefPage .jefKpiTitle.sapMText {
+        font-size: .55rem !important;
+    }
+
+
+    .jefPage
+    .jefKpiValue
+    .sapMObjectNumberText {
+        font-size: .98rem !important;
+    }
+
+
+    .jefPage
+    .jefKpiValue
+    .sapMObjectNumberUnit {
+        font-size: .47rem !important;
+    }
+
+
+    .jefPage .jefKpiNote.sapMText {
+        font-size: .44rem !important;
+    }
+
+
+    .jefPage .jefMainCard.sapMFlexBox {
+        min-height:
+            calc(100vh - 220px) !important;
+
+        margin-top: 6px !important;
+    }
+
+
+    .jefPage .jefTabs.sapMFlexBox {
+        min-height: 34px !important;
+    }
+
+
+    .jefPage
+    .jefTabButton
+    .sapMBtnInner {
+        height: 34px !important;
+
+        min-height: 34px !important;
+    }
+
+
+    .jefPage
+    .jefTabButton
+    .sapMBtnContent {
+        line-height: 32px !important;
+    }
+
+
+    .jefPage
+    .jefDataTable
+    .sapMListTblHeaderCell {
+        height: 38px !important;
+
+        min-height: 38px !important;
+    }
+
+
+    .jefPage
+    .jefDataTable
+    .sapMListTblRow,
+
+    .jefPage
+    .jefDataTable
+    .sapMListTblCell {
+        height: 32px !important;
+
+        min-height: 32px !important;
+    }
+
+
+    .jefPage .jefTableFooter.sapMFlexBox {
+        min-height: 32px !important;
+
+        padding-top: 3px !important;
     }
 }
 
-@media (max-width: 70rem) {
-    .jefKpiRowSeven .jefKpiCard {
-        flex-basis: calc(25% - 0.65rem);
+
+/* ================================================================
+   36. RESPONSIVE MEDIO
+   ================================================================ */
+
+@media screen
+and (max-width: 1050px) {
+
+    .jefPage .jefFilterCardsRow.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0,1fr)
+            ) !important;
+
+        height: auto !important;
     }
 
-    .jefKpiRowFive .jefKpiCard {
-        flex-basis: calc(33.333% - 0.65rem);
-    }
 
-    .jefMaterialContent {
-        flex-direction: column;
-    }
-
-    .jefMaterialTableCard,
-    .jefParticipationCard {
-        flex: 1 1 auto;
-        width: 100%;
-        min-width: 0;
-    }
-}
-
-@media (max-width: 48rem) {
-    .jefDashboard {
-        padding: 0.7rem;
-    }
-
-    .jefPageTitle {
-        font-size: 1.25rem !important;
-    }
-
-    .jefFilterCardsRow {
-        gap: 0.55rem;
-    }
-
-    .jefFilterCard,
-    .jefFilterPeriod,
-    .jefFilterDate,
-    .jefFilterManagement,
-    .jefFilterCompact,
-    .jefFilterService,
-    .jefFilterActionWrap {
-        flex: 1 1 calc(50% - 0.3rem);
-        width: calc(50% - 0.3rem);
-        min-width: 0;
-    }
-
-    .jefFilterActionWrap {
-        padding-top: 0;
-    }
-
-    .jefApplyButton,
-    .jefApplyButton .sapMBtnInner {
+    .jefPage .jefFilterActionWrap.sapMFlexBox {
         width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
     }
 
-    .jefKpiRowSeven .jefKpiCard,
-    .jefKpiRowFive .jefKpiCard {
-        flex-basis: calc(50% - 0.65rem);
-        min-width: 0;
+
+    .jefPage .jefKpiRowSeven.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0,1fr)
+            ) !important;
+
+        height: auto !important;
+
+        overflow: visible !important;
     }
 
-    .jefTabs {
-        overflow-x: auto;
+
+    .jefPage .jefKpiRowFive.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0,1fr)
+            ) !important;
+
+        height: auto !important;
+
+        overflow: visible !important;
     }
 
-    .jefTabButton {
-        flex: 0 0 auto;
+
+    .jefPage .jefKpiRow > .sapMFlexItem,
+
+    .jefPage .jefKpiCard {
+        height: 76px !important;
+
+        min-height: 76px !important;
+
+        max-height: 76px !important;
     }
 
-    .jefMainCard,
-    .jefMaterialTableCard {
-        overflow-x: auto;
+
+    .jefPage .jefMaterialContent.sapMFlexBox {
+        grid-template-columns:
+            minmax(0,1fr) !important;
     }
 
-    .jefDataTable {
-        min-width: 55rem;
-    }
 
-    .jefTableFooter {
-        gap: 0.6rem;
-        flex-wrap: wrap;
+    .jefPage .jefParticipationCard.sapMFlexBox {
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
     }
 }
 
-@media (max-width: 30rem) {
-    .jefFilterCard,
-    .jefFilterPeriod,
-    .jefFilterDate,
-    .jefFilterManagement,
-    .jefFilterCompact,
-    .jefFilterService,
-    .jefFilterActionWrap {
-        flex-basis: 100%;
-        width: 100%;
+
+/* ================================================================
+   37. TABLET
+   ================================================================ */
+
+@media screen
+and (max-width: 760px) {
+
+    .jefPage .jefDashboard.sapMFlexBox {
+        padding:
+            9px
+            8px
+            12px !important;
     }
 
-    .jefKpiRowSeven .jefKpiCard,
-    .jefKpiRowFive .jefKpiCard {
-        flex-basis: 100%;
+
+    .jefPage .jefPageTitle.sapMTitle {
+        font-size: 1.20rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .jefPage .jefPageSubtitle.sapMText {
+        white-space: normal !important;
+    }
+
+
+    .jefPage .jefFilterCardsRow.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            ) !important;
+    }
+
+
+    .jefPage .jefKpiRowSeven.sapMFlexBox,
+
+    .jefPage .jefKpiRowFive.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            ) !important;
+    }
+
+
+    .jefPage .jefTabs.sapMFlexBox {
+        flex-wrap: wrap !important;
+    }
+
+
+    .jefPage .jefTabButton.sapMBtn,
+
+    .jefPage .jefTabButton .sapMBtnInner {
+        width: 100% !important;
+
+        min-width: 0 !important;
+    }
+
+
+    .jefPage .jefMainCard,
+    .jefPage .jefMaterialTableCard {
+        overflow-x: auto !important;
+    }
+
+
+    .jefPage .jefDataTable {
+        min-width: 900px !important;
+    }
+}
+
+
+/* ================================================================
+   38. MÓVIL
+   ================================================================ */
+
+@media screen
+and (max-width: 480px) {
+
+    .jefPage .jefFilterCardsRow.sapMFlexBox,
+
+    .jefPage .jefKpiRowSeven.sapMFlexBox,
+
+    .jefPage .jefKpiRowFive.sapMFlexBox {
+        grid-template-columns:
+            1fr !important;
+    }
+
+
+    .jefPage .jefFilterActionWrap.sapMFlexBox,
+
+    .jefPage .jefApplyButton.sapMBtn,
+
+    .jefPage .jefApplyButton .sapMBtnInner {
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
     }
 }

@@ -442,63 +442,149 @@
                         <core:Icon src="sap-icon://bar-chart" class="cmBlueIcon"/>
                         <Title text="Consumo de materiales por zona (pzas / L)" level="H3" class="cmCardTitle cmHeatmapTitle"/>
                     </HBox>
-                    <Table items="{materialesModel>/consumoZona}" class="cmHeatmapTable" fixedLayout="true" showSeparators="None">
-                        <columns>
-                            <Column width="14%">
-                                <Text text="Zona"/>
-                            </Column>
-                            <Column hAlign="Center">
-                                <Text text="Refacciones&#10;(pzas)"/>
-                            </Column>
-                            <Column hAlign="Center">
-                                <Text text="Consumibles&#10;(pzas)"/>
-                            </Column>
-                            <Column hAlign="Center">
-                                <Text text="Lubricantes&#10;(L)"/>
-                            </Column>
-                            <Column hAlign="Center">
-                                <Text text="Herramientas&#10;(pzas)"/>
-                            </Column>
-                            <Column hAlign="Center">
-                                <Text text="Total&#10;(pzas / L)"/>
-                            </Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <HBox alignItems="Center" class="cmZonaNameCell">
-                                        <VBox class="cmZoneDot">
-                                            <customData>
-                                                <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
-                                            </customData>
-                                        </VBox>
-                                        <Text text="{materialesModel>zona}" class="cmHeatmapZone"/>
-                                    </HBox>
-                                    <Text text="{materialesModel>refacciones}" class="cmHeatCell cmHeatRefacciones">
-                                        <customData>
-                                            <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
-                                        </customData>
-                                    </Text>
-                                    <Text text="{materialesModel>consumibles}" class="cmHeatCell cmHeatConsumibles">
-                                        <customData>
-                                            <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
-                                        </customData>
-                                    </Text>
-                                    <Text text="{materialesModel>lubricantes}" class="cmHeatCell cmHeatLubricantes">
-                                        <customData>
-                                            <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
-                                        </customData>
-                                    </Text>
-                                    <Text text="{materialesModel>herramientas}" class="cmHeatCell cmHeatHerramientas">
-                                        <customData>
-                                            <core:CustomData key="zona" value="{materialesModel>zonaKey}" writeToDom="true"/>
-                                        </customData>
-                                    </Text>
-                                    <Text text="{materialesModel>total}" class="cmHeatTotal"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                 <Table
+    items="{materialesModel>/consumoZona}"
+    class="cmHeatmapTable"
+    fixedLayout="true"
+    showSeparators="None"
+    width="100%">
+
+    <columns>
+
+        <Column width="14%">
+            <Text text="Zona"/>
+        </Column>
+
+        <Column width="17%" hAlign="Center">
+            <Text
+                text="Refacciones&#10;(pzas)"
+                width="100%"
+                textAlign="Center"/>
+        </Column>
+
+        <Column width="17%" hAlign="Center">
+            <Text
+                text="Consumibles&#10;(pzas)"
+                width="100%"
+                textAlign="Center"/>
+        </Column>
+
+        <Column width="17%" hAlign="Center">
+            <Text
+                text="Lubricantes&#10;(L)"
+                width="100%"
+                textAlign="Center"/>
+        </Column>
+
+        <Column width="17%" hAlign="Center">
+            <Text
+                text="Herramientas&#10;(pzas)"
+                width="100%"
+                textAlign="Center"/>
+        </Column>
+
+        <Column width="18%" hAlign="Center">
+            <Text
+                text="Total&#10;(pzas / L)"
+                width="100%"
+                textAlign="Center"/>
+        </Column>
+
+    </columns>
+
+    <items>
+
+        <ColumnListItem>
+
+            <cells>
+
+                <HBox
+                    alignItems="Center"
+                    class="cmZonaNameCell">
+
+                    <VBox class="cmZoneDot">
+                        <customData>
+                            <core:CustomData
+                                key="zona"
+                                value="{materialesModel>zonaKey}"
+                                writeToDom="true"/>
+                        </customData>
+                    </VBox>
+
+                    <Text
+                        text="{materialesModel>zona}"
+                        class="cmHeatmapZone"/>
+
+                </HBox>
+
+
+                <Text
+                    text="{materialesModel>refacciones}"
+                    class="cmHeatCell cmHeatRefacciones">
+
+                    <customData>
+                        <core:CustomData
+                            key="zona"
+                            value="{materialesModel>zonaKey}"
+                            writeToDom="true"/>
+                    </customData>
+
+                </Text>
+
+
+                <Text
+                    text="{materialesModel>consumibles}"
+                    class="cmHeatCell cmHeatConsumibles">
+
+                    <customData>
+                        <core:CustomData
+                            key="zona"
+                            value="{materialesModel>zonaKey}"
+                            writeToDom="true"/>
+                    </customData>
+
+                </Text>
+
+
+                <Text
+                    text="{materialesModel>lubricantes}"
+                    class="cmHeatCell cmHeatLubricantes">
+
+                    <customData>
+                        <core:CustomData
+                            key="zona"
+                            value="{materialesModel>zonaKey}"
+                            writeToDom="true"/>
+                    </customData>
+
+                </Text>
+
+
+                <Text
+                    text="{materialesModel>herramientas}"
+                    class="cmHeatCell cmHeatHerramientas">
+
+                    <customData>
+                        <core:CustomData
+                            key="zona"
+                            value="{materialesModel>zonaKey}"
+                            writeToDom="true"/>
+                    </customData>
+
+                </Text>
+
+
+                <Text
+                    text="{materialesModel>total}"
+                    class="cmHeatTotal"/>
+
+            </cells>
+
+        </ColumnListItem>
+
+    </items>
+
+</Table>
                     <HBox class="cmHeatLegend" justifyContent="Center" wrap="Wrap">
                         <HBox alignItems="Center">
                             <VBox class="cmLegendDot cmRedBg"/>

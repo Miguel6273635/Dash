@@ -1,30 +1,42 @@
-/* =========================================================
-   MECÁNICOS - PANTALLA PRINCIPAL
-   Reemplaza por completo el CSS anterior de esta pantalla.
-   Diseño escritorio sin scroll para dashboard SAPUI5/BTP.
-   ========================================================= */
+/* ================================================================
+   MECÁNICOS
+   ESTÁNDAR VISUAL UNIFICADO
+   ================================================================ */
 
 .mecPage {
-    --mec-bg: #f5f8fc;
+    --mec-bg: #f7f9fc;
     --mec-card: #ffffff;
-    --mec-navy: #183153;
-    --mec-text: #33445f;
-    --mec-muted: #7b8ca6;
-    --mec-border: #dfe7f1;
-    --mec-blue: #2488f5;
-    --mec-green: #25b15f;
-    --mec-orange: #ff8b22;
-    --mec-purple: #7c3aed;
-    --mec-red: #ef3c50;
+
+    --mec-navy: #13214a;
+    --mec-text: #34455f;
+    --mec-muted: #6f7c8f;
+
+    --mec-border: #e2e8f0;
+
+    --mec-blue: #2e8cff;
+    --mec-blue-dark: #1877e8;
+
+    --mec-green: #63bf42;
+    --mec-green-dark: #58b33a;
+
+    --mec-orange: #ff9e31;
+    --mec-orange-dark: #f28c1c;
+
+    --mec-purple: #8645e9;
+
+    --mec-red: #ff4d53;
+
     --mec-yellow: #f4ba22;
-    --mec-gray: #94a3b8;
 
     width: 100% !important;
     height: 100% !important;
+
     min-width: 0 !important;
     min-height: 0 !important;
+
     background: var(--mec-bg) !important;
 }
+
 
 .mecPage,
 .mecPage *,
@@ -33,459 +45,909 @@
     box-sizing: border-box !important;
 }
 
+
 .mecPage.sapMPage,
-.mecPage .sapMPage,
 .mecPage .sapMPageCont,
 .mecPage .sapMPageScroll,
 .mecPage .sapMPageEnableScrolling {
     width: 100% !important;
     height: 100% !important;
+
     min-width: 0 !important;
     min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     overflow: hidden !important;
+
     background: var(--mec-bg) !important;
 }
 
-.mecPage .sapMText,
-.mecPage .sapMLabel,
-.mecPage .sapMTitle,
-.mecPage .sapMSltLabel,
-.mecPage .sapMInputBaseInner,
-.mecPage .sapMBtnContent,
-.mecPage .sapMObjStatusText {
-    font-family: "72", "72full", Arial, sans-serif !important;
+
+/* ================================================================
+   LAYOUT PRINCIPAL
+   ================================================================ */
+
+.mecPage
+.mecDashboard.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr) !important;
+
+    grid-template-rows:
+        48px
+        54px
+        76px
+        minmax(220px, 1.08fr)
+        minmax(205px, .92fr) !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: 8px !important;
+
+    padding:
+        9px
+        14px
+        8px
+        18px !important;
+
+    overflow: hidden !important;
+
+    background: var(--mec-bg) !important;
 }
 
-/* =========================================================
-   LAYOUT PRINCIPAL
-   ========================================================= */
 
-.mecPage .mecDashboard {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows:
-        44px
-        58px
-        78px
-        minmax(210px, 1.16fr)
-        minmax(204px, 1fr) !important;
+.mecPage
+.mecDashboard
+> .sapMFlexItem,
+
+.mecPage
+.mecMiddleGrid
+> .sapMFlexItem,
+
+.mecPage
+.mecLowerGrid
+> .sapMFlexItem,
+
+.mecPage
+.mecDistributionColumns
+> .sapMFlexItem,
+
+.mecPage
+.mecKpiGrid
+> .sapMFlexItem,
+
+.mecPage
+.mecFilters
+> .sapMFlexItem {
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+
+/* ================================================================
+   HEADER
+   ================================================================ */
+
+.mecPage
+.mecHeader.sapMFlexBox {
+    width: 100% !important;
+    height: 48px !important;
+
+    min-width: 0 !important;
+    min-height: 48px !important;
+
+    padding:
+        0
+        2px !important;
+
+    overflow: hidden !important;
+}
+
+
+.mecPage
+.mecHeaderCopy.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    justify-content: center !important;
+}
+
+
+.mecPage
+.mecTitleRow.sapMFlexBox {
+    gap: 6px !important;
+}
+
+
+.mecPage
+.mecTitle.sapMTitle {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--mec-navy) !important;
+
+    font-size: 1.72rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+
+    letter-spacing: -0.03em !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecInfoIcon {
+    color: #0a6ff5 !important;
+
+    font-size: .74rem !important;
+}
+
+
+.mecPage
+.mecSubtitle.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 3px !important;
+
+    overflow: hidden !important;
+
+    color: #65748b !important;
+
+    font-size: .73rem !important;
+    font-weight: 400 !important;
+
+    line-height: 1.15 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* PERIODO */
+
+.mecPage
+.mecPeriodBadge.sapMFlexBox {
+    flex: 0 0 auto !important;
 
     gap: 7px !important;
 
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
+    min-width: 94px !important;
 
-    padding: 8px 12px 9px 18px !important;
-
-    overflow: hidden !important;
-    background: var(--mec-bg) !important;
+    padding:
+        5px
+        9px !important;
 }
 
-.mecPage .mecDashboard > .sapMFlexItem,
-.mecPage .mecMiddleGrid > .sapMFlexItem,
-.mecPage .mecLowerGrid > .sapMFlexItem,
-.mecPage .mecDistributionColumns > .sapMFlexItem,
-.mecPage .mecKpiGrid > .sapMFlexItem,
-.mecPage .mecFilters > .sapMFlexItem {
-    min-width: 0 !important;
-    min-height: 0 !important;
-}
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.mecPage .mecHeader {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    padding: 0 4px !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecHeaderCopy {
-    min-width: 0 !important;
-    justify-content: center !important;
-}
-
-.mecPage .mecTitleRow {
-    gap: 6px !important;
-}
-
-.mecPage .mecTitle.sapMTitle {
-    margin: 0 !important;
+.mecPage
+.mecPeriodIcon {
     color: var(--mec-navy) !important;
-    font-size: 1.48rem !important;
+
+    font-size: .90rem !important;
+}
+
+
+.mecPage
+.mecPeriodLabel.sapMText {
+    color: #78869a !important;
+
+    font-size: .50rem !important;
+    font-weight: 700 !important;
+
     line-height: 1 !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.025em !important;
 }
 
-.mecPage .mecInfoIcon {
-    color: #60748e !important;
-    font-size: 0.78rem !important;
-}
 
-.mecPage .mecSubtitle.sapMText {
+.mecPage
+.mecPeriodValue.sapMText {
     margin-top: 3px !important;
-    color: #687a93 !important;
-    font-size: 0.62rem !important;
-    line-height: 1.08 !important;
-    font-weight: 600 !important;
-}
 
-.mecPage .mecPeriodBadge {
-    flex: 0 0 auto !important;
-    gap: 6px !important;
-    padding: 4px 8px !important;
-    border-radius: 8px !important;
-}
-
-.mecPage .mecPeriodIcon {
     color: var(--mec-navy) !important;
-    font-size: 0.9rem !important;
-}
 
-.mecPage .mecPeriodLabel.sapMText {
-    color: var(--mec-muted) !important;
-    font-size: 0.47rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecPeriodValue.sapMText {
-    margin-top: 2px !important;
-    color: var(--mec-navy) !important;
-    font-size: 0.69rem !important;
-    line-height: 1 !important;
+    font-size: .70rem !important;
     font-weight: 800 !important;
+
+    line-height: 1 !important;
 }
 
-/* =========================================================
+
+/* ================================================================
    FILTROS
-   ========================================================= */
+   ================================================================ */
 
-.mecPage .mecFilters {
+.mecPage
+.mecFilters.sapMFlexBox {
     display: grid !important;
+
     grid-template-columns:
-        .78fr
-        1.08fr
-        1.08fr
-        .72fr
-        .84fr
-        .70fr
-        1fr
-        .91fr
-        .76fr
-        1.03fr !important;
+        minmax(80px, .75fr)
+        minmax(120px, 1.12fr)
+        minmax(120px, 1.12fr)
+        minmax(80px, .80fr)
+        minmax(92px, .90fr)
+        minmax(80px, .78fr)
+        minmax(110px, 1.04fr)
+        minmax(100px, .96fr)
+        minmax(85px, .82fr)
+        minmax(118px, .94fr) !important;
 
-    gap: 6px !important;
-
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-
-    align-items: stretch !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecFilterBox {
-    display: grid !important;
-    grid-template-rows: 12px minmax(0, 1fr) !important;
-    gap: 1px !important;
-
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    padding: 5px 7px 4px !important;
-
-    overflow: hidden !important;
-
-    background: #fff !important;
-    border: 1px solid var(--mec-border) !important;
-    border-radius: 9px !important;
-    box-shadow: 0 2px 7px rgba(24, 49, 83, .045) !important;
-}
-
-.mecPage .mecFilterBox > .sapMFlexItem {
-    width: 100% !important;
-    min-width: 0 !important;
-}
-
-.mecPage .mecFilterLabel.sapMLabel {
-    height: 12px !important;
-    margin: 0 !important;
-    color: var(--mec-muted) !important;
-    font-size: .49rem !important;
-    line-height: 12px !important;
-    font-weight: 700 !important;
-}
-
-/* Quitar borde interno de Select / DatePicker */
-.mecPage .mecFilterBox .sapMSlt,
-.mecPage .mecFilterBox .sapMInputBase,
-.mecPage .mecFilterBox .sapMInputBaseContentWrapper {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 22px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-}
-
-.mecPage .mecFilterBox .sapMSltLabel,
-.mecPage .mecFilterBox .sapMInputBaseInner {
-    height: 100% !important;
-    min-height: 22px !important;
-
-    padding: 0 1.25rem 0 0 !important;
-
-    color: var(--mec-navy) !important;
-    background: transparent !important;
-
-    font-size: .58rem !important;
-    line-height: 30px !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecFilterBox .sapMSltArrow,
-.mecPage .mecFilterBox .sapMInputBaseIcon,
-.mecPage .mecFilterBox .sapMInputBaseIconContainer {
-    width: 1.2rem !important;
-    min-width: 1.2rem !important;
-    height: 100% !important;
-
-    color: var(--mec-blue) !important;
-
-    font-size: .63rem !important;
-    line-height: 30px !important;
-}
-
-.mecPage .mecFilterBox .sapMInputBaseContentWrapper::before,
-.mecPage .mecFilterBox .sapMInputBaseContentWrapper::after,
-.mecPage .mecFilterBox .sapMSlt::before,
-.mecPage .mecFilterBox .sapMSlt::after {
-    display: none !important;
-}
-
-.mecPage .mecApplyWrap {
-    display: flex !important;
-    width: 100% !important;
-    height: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 2px !important;
-}
-
-.mecPage .mecApplyButton.sapMBtn {
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 !important;
-}
-
-.mecPage .mecApplyButton .sapMBtnInner {
-    width: 100% !important;
-    height: 38px !important;
-    min-height: 38px !important;
-
-    padding: 0 .45rem !important;
-
-    background: var(--mec-blue) !important;
-    border: 0 !important;
-    border-radius: 8px !important;
-
-    box-shadow: 0 4px 11px rgba(36, 136, 245, .24) !important;
-}
-
-.mecPage .mecApplyButton .sapMBtnContent,
-.mecPage .mecApplyButton .sapMBtnIcon {
-    color: #fff !important;
-    font-size: .57rem !important;
-    line-height: 38px !important;
-    font-weight: 800 !important;
-}
-
-/* =========================================================
-   KPI
-   ========================================================= */
-
-.mecPage .mecKpiGrid {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 8px !important;
 
     width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    align-items: stretch !important;
+
+    overflow: visible !important;
+}
+
+
+.mecPage
+.mecFilterBox.sapMFlexBox {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    padding:
+        6px
+        10px
+        5px !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(25, 45, 79, .05) !important;
+}
+
+
+.mecPage
+.mecFilterBox
+> .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecFilterLabel.sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+    height: 14px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        2px !important;
+
+    color: #78869a !important;
+
+    font-size: .61rem !important;
+    font-weight: 600 !important;
+
+    line-height: 14px !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* CONTROLES */
+
+.mecPage
+.mecFilterControl.sapMSlt,
+
+.mecPage
+.mecFilterControl.sapMInputBase,
+
+.mecPage
+.mecFilterControl
+.sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+
+.mecPage
+.mecFilterControl
+.sapMSltLabel,
+
+.mecPage
+.mecFilterControl
+.sapMInputBaseInner {
+    height: 1.62rem !important;
+
+    min-height: 1.62rem !important;
+
+    padding:
+        0
+        1.35rem
+        0
+        2px !important;
+
+    overflow: hidden !important;
+
+    color: #1e2e4c !important;
+
+    background: transparent !important;
+
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecFilterControl
+.sapMSltArrow,
+
+.mecPage
+.mecFilterControl
+.sapMInputBaseIconContainer,
+
+.mecPage
+.mecFilterControl
+.sapMInputBaseIcon {
+    width: 1.25rem !important;
+    height: 1.62rem !important;
+
+    min-width: 1.25rem !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    font-size: .70rem !important;
+
+    line-height: 1.62rem !important;
+}
+
+
+/* ================================================================
+   APLICAR
+   ================================================================ */
+
+.mecPage
+.mecApplyWrap.sapMFlexBox {
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    padding: 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: visible !important;
+}
+
+
+.mecPage
+.mecApplyButton.sapMBtn {
+    width: 100% !important;
     height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.mecPage
+.mecApplyButton
+.sapMBtnInner {
+    display: flex !important;
+
+    width: 100% !important;
+
+    height: 3rem !important;
+    min-height: 3rem !important;
+
+    padding:
+        0
+        .70rem !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    background: #0a6ff5 !important;
+
+    border: 0 !important;
+
+    border-radius: .7rem !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(10, 111, 245, .24) !important;
+}
+
+
+.mecPage
+.mecApplyButton
+.sapMBtnContent {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    font-size: .63rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecApplyButton
+.sapMBtnIcon {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    font-size: .72rem !important;
+
+    line-height: 1 !important;
+}
+
+
+/* ================================================================
+   KPIS
+   ================================================================ */
+
+.mecPage
+.mecKpiGrid.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        ) !important;
+
+    gap: 9px !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
     overflow: hidden !important;
 }
 
-.mecPage .mecKpiCard {
+
+.mecPage
+.mecKpiCard.sapMFlexBox {
     position: relative !important;
 
     width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
+    height: 76px !important;
 
-    gap: 9px !important;
-    padding: 8px 11px !important;
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
 
     overflow: hidden !important;
 
-    background: #fff !important;
-    border: 1px solid var(--mec-border) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 3px 10px rgba(24, 49, 83, .05) !important;
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e4eaf2 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20, 39, 70, .06) !important;
 }
 
-.mecPage .mecKpiCard::before {
+
+.mecPage
+.mecKpiCard.sapMFlexBox::before {
     position: absolute !important;
+
     top: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
-    width: 4px !important;
+
+    width: 3px !important;
+
+    border-radius:
+        8px
+        0
+        0
+        8px !important;
+
     content: "" !important;
 }
 
-.mecPage .mecKpiBlue {
-    background: linear-gradient(
-        90deg,
-        rgba(36, 136, 245, .10),
-        #fff 38%
-    ) !important;
+
+/* BLUE */
+
+.mecPage
+.mecKpiCard.mecKpiBlue.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46,140,255,.20) 0%,
+            rgba(46,140,255,.11) 22%,
+            rgba(46,140,255,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            46,
+            140,
+            255,
+            .18
+        ) !important;
 }
 
-.mecPage .mecKpiBlue::before {
-    background: var(--mec-blue) !important;
+
+.mecPage
+.mecKpiBlue::before {
+    background:
+        var(--mec-blue) !important;
 }
 
-.mecPage .mecKpiGreen {
-    background: linear-gradient(
-        90deg,
-        rgba(37, 177, 95, .10),
-        #fff 38%
-    ) !important;
+
+/* GREEN */
+
+.mecPage
+.mecKpiCard.mecKpiGreen.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,191,66,.20) 0%,
+            rgba(99,191,66,.11) 22%,
+            rgba(99,191,66,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            99,
+            191,
+            66,
+            .18
+        ) !important;
 }
 
-.mecPage .mecKpiGreen::before {
-    background: var(--mec-green) !important;
+
+.mecPage
+.mecKpiGreen::before {
+    background:
+        var(--mec-green) !important;
 }
 
-.mecPage .mecKpiOrange {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 139, 34, .11),
-        #fff 38%
-    ) !important;
+
+/* ORANGE */
+
+.mecPage
+.mecKpiCard.mecKpiOrange.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,158,49,.22) 0%,
+            rgba(255,158,49,.12) 22%,
+            rgba(255,158,49,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            255,
+            158,
+            49,
+            .20
+        ) !important;
 }
 
-.mecPage .mecKpiOrange::before {
-    background: var(--mec-orange) !important;
+
+.mecPage
+.mecKpiOrange::before {
+    background:
+        var(--mec-orange) !important;
 }
 
-.mecPage .mecKpiPurple {
-    background: linear-gradient(
-        90deg,
-        rgba(124, 58, 237, .10),
-        #fff 38%
-    ) !important;
+
+/* PURPLE */
+
+.mecPage
+.mecKpiCard.mecKpiPurple.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(134,69,233,.20) 0%,
+            rgba(134,69,233,.11) 22%,
+            rgba(134,69,233,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            134,
+            69,
+            233,
+            .18
+        ) !important;
 }
 
-.mecPage .mecKpiPurple::before {
-    background: var(--mec-purple) !important;
+
+.mecPage
+.mecKpiPurple::before {
+    background:
+        var(--mec-purple) !important;
 }
 
-.mecPage .mecKpiIconCircle {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
+
+/* ICON */
+
+.mecPage
+.mecKpiIconCircle.sapMFlexBox {
+    flex: 0 0 43px !important;
+
+    width: 43px !important;
+    height: 43px !important;
+
+    min-width: 43px !important;
+    min-height: 43px !important;
+
+    max-width: 43px !important;
+    max-height: 43px !important;
+
+    margin-right: 8px !important;
+
     border-radius: 50% !important;
 }
 
-.mecPage .mecKpiBlue .mecKpiIconCircle {
-    background: rgba(36, 136, 245, .13) !important;
+
+.mecPage
+.mecKpiBlue
+.mecKpiIconCircle {
+    background:
+        rgba(
+            46,
+            140,
+            255,
+            .13
+        ) !important;
 }
 
-.mecPage .mecKpiGreen .mecKpiIconCircle {
-    background: rgba(37, 177, 95, .13) !important;
+
+.mecPage
+.mecKpiGreen
+.mecKpiIconCircle {
+    background:
+        rgba(
+            99,
+            191,
+            66,
+            .13
+        ) !important;
 }
 
-.mecPage .mecKpiOrange .mecKpiIconCircle {
-    background: rgba(255, 139, 34, .14) !important;
+
+.mecPage
+.mecKpiOrange
+.mecKpiIconCircle {
+    background:
+        rgba(
+            255,
+            158,
+            49,
+            .13
+        ) !important;
 }
 
-.mecPage .mecKpiPurple .mecKpiIconCircle {
-    background: rgba(124, 58, 237, .13) !important;
+
+.mecPage
+.mecKpiPurple
+.mecKpiIconCircle {
+    background:
+        rgba(
+            134,
+            69,
+            233,
+            .13
+        ) !important;
 }
 
-.mecPage .mecKpiIcon {
-    font-size: 1.08rem !important;
+
+.mecPage
+.mecKpiIcon {
+    font-size: 1.28rem !important;
 }
 
-.mecPage .mecKpiBlue .mecKpiIcon,
-.mecPage .mecKpiBlue .mecKpiValue {
-    color: var(--mec-blue) !important;
+
+.mecPage
+.mecKpiBlue
+.mecKpiIcon,
+
+.mecPage
+.mecKpiBlue
+.mecKpiValue {
+    color:
+        var(--mec-blue-dark) !important;
 }
 
-.mecPage .mecKpiGreen .mecKpiIcon,
-.mecPage .mecKpiGreen .mecKpiValue {
-    color: var(--mec-green) !important;
+
+.mecPage
+.mecKpiGreen
+.mecKpiIcon,
+
+.mecPage
+.mecKpiGreen
+.mecKpiValue {
+    color:
+        var(--mec-green-dark) !important;
 }
 
-.mecPage .mecKpiOrange .mecKpiIcon,
-.mecPage .mecKpiOrange .mecKpiValue {
-    color: var(--mec-orange) !important;
+
+.mecPage
+.mecKpiOrange
+.mecKpiIcon,
+
+.mecPage
+.mecKpiOrange
+.mecKpiValue {
+    color:
+        var(--mec-orange-dark) !important;
 }
 
-.mecPage .mecKpiPurple .mecKpiIcon,
-.mecPage .mecKpiPurple .mecKpiValue {
-    color: var(--mec-purple) !important;
+
+.mecPage
+.mecKpiPurple
+.mecKpiIcon,
+
+.mecPage
+.mecKpiPurple
+.mecKpiValue {
+    color:
+        var(--mec-purple) !important;
 }
 
-.mecPage .mecKpiText {
+
+/* TEXTO KPI */
+
+.mecPage
+.mecKpiText.sapMFlexBox {
+    flex: 1 1 auto !important;
+
     min-width: 0 !important;
-    justify-content: center !important;
+
+    overflow: hidden !important;
 }
 
-.mecPage .mecKpiValue.sapMText {
-    font-size: 1.15rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
+
+.mecPage
+.mecKpiLabel.sapMText,
+
+.mecPage
+.mecKpiValue.sapMText,
+
+.mecPage
+.mecKpiSub.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
-.mecPage .mecKpiLabel.sapMText {
+
+.mecPage
+.mecKpiLabel.sapMText {
+    color: #43516a !important;
+
+    font-size: .62rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.15 !important;
+}
+
+
+.mecPage
+.mecKpiValue.sapMText {
     margin-top: 2px !important;
-    color: #42536d !important;
-    font-size: .58rem !important;
-    line-height: 1 !important;
+
+    font-size: 1.18rem !important;
     font-weight: 800 !important;
+
+    line-height: 1.05 !important;
 }
 
-.mecPage .mecKpiSub.sapMText {
-    margin-top: 4px !important;
-    color: var(--mec-muted) !important;
-    font-size: .46rem !important;
-    line-height: 1 !important;
+
+.mecPage
+.mecKpiSub.sapMText {
+    margin-top: 3px !important;
+
+    color: #6f7c8f !important;
+
+    font-size: .52rem !important;
     font-weight: 600 !important;
+
+    line-height: 1.1 !important;
 }
 
-/* =========================================================
-   FILAS PRINCIPALES
-   ========================================================= */
 
-.mecPage .mecMiddleGrid {
+/* ================================================================
+   FILAS PRINCIPALES
+   ================================================================ */
+
+.mecPage
+.mecMiddleGrid.sapMFlexBox {
     display: grid !important;
+
     grid-template-columns:
         minmax(0, .98fr)
         minmax(0, 2.02fr) !important;
@@ -494,14 +956,20 @@
 
     width: 100% !important;
     height: 100% !important;
+
+    min-width: 0 !important;
     min-height: 0 !important;
+
     overflow: hidden !important;
 }
 
-.mecPage .mecLowerGrid {
+
+.mecPage
+.mecLowerGrid.sapMFlexBox {
     display: grid !important;
+
     grid-template-columns:
-        minmax(0, 1.04fr)
+        minmax(0, 1.05fr)
         minmax(0, 1fr)
         minmax(0, .92fr) !important;
 
@@ -509,1597 +977,2079 @@
 
     width: 100% !important;
     height: 100% !important;
+
+    min-width: 0 !important;
     min-height: 0 !important;
+
     overflow: hidden !important;
 }
 
-/* =========================================================
-   CARDS
-   ========================================================= */
 
-.mecPage .mecCard {
+/* ================================================================
+   CARD BASE
+   ================================================================ */
+
+.mecPage
+.mecCard.sapMFlexBox {
     display: flex !important;
     flex-direction: column !important;
 
     width: 100% !important;
     height: 100% !important;
+
     min-width: 0 !important;
     min-height: 0 !important;
 
-    padding: 8px 10px !important;
+    padding:
+        8px
+        10px !important;
+
     overflow: hidden !important;
 
-    background: var(--mec-card) !important;
-    border: 1px solid var(--mec-border) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 3px 10px rgba(24, 49, 83, .045) !important;
-}
+    background:
+        var(--mec-card) !important;
 
-.mecPage .mecCardTitleRow {
-    flex: 0 0 auto !important;
-    gap: 5px !important;
-    min-height: 17px !important;
-}
+    border:
+        1px solid
+        var(--mec-border) !important;
 
-.mecPage .mecCardTitle.sapMTitle {
-    color: var(--mec-navy) !important;
-    font-size: .74rem !important;
-    line-height: 1.1 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecSmallInfo {
-    color: #5f7390 !important;
-    font-size: .6rem !important;
-}
-
-.mecPage .mecCardSubtitle.sapMText {
-    flex: 0 0 auto !important;
-    margin-top: 2px !important;
-    color: var(--mec-muted) !important;
-    font-size: .47rem !important;
-    line-height: 1.05 !important;
-    font-weight: 600 !important;
-}
-
-/* =========================================================
-   BALANCE
-   ========================================================= */
-
-.mecPage .mecBalanceStats {
-    flex: 0 0 auto !important;
-    margin-top: 9px !important;
-}
-
-.mecPage .mecBalanceMetric {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-}
-
-.mecPage .mecBalanceMetricIcon {
-    margin-bottom: 3px !important;
-    font-size: .72rem !important;
-}
-
-.mecPage .mecGreenMetric .mecBalanceMetricIcon,
-.mecPage .mecGreenMetric .mecBalanceValue {
-    color: var(--mec-green) !important;
-}
-
-.mecPage .mecBlueMetric .mecBalanceMetricIcon,
-.mecPage .mecBlueMetric .mecBalanceValue {
-    color: var(--mec-blue) !important;
-}
-
-.mecPage .mecPurpleMetric .mecBalanceMetricIcon,
-.mecPage .mecPurpleMetric .mecBalanceValue {
-    color: var(--mec-purple) !important;
-}
-
-.mecPage .mecMiniLabel.sapMText {
-    color: #596b84 !important;
-    font-size: .43rem !important;
-    line-height: 1.05 !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-}
-
-.mecPage .mecBalanceValue.sapMText {
-    margin-top: 2px !important;
-    font-size: .89rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-}
-
-.mecPage .mecMiniPct.sapMText {
-    margin-top: 2px !important;
-    color: var(--mec-muted) !important;
-    font-size: .4rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecBalanceProgressArea {
-    flex: 0 0 auto !important;
-    margin: 10px 10px 0 !important;
-}
-
-.mecPage .mecBalanceProgress.sapMPI,
-.mecPage .mecInlineProgress.sapMPI,
-.mecPage .mecPressureProgress.sapMPI,
-.mecPage .mecDistProgress.sapMPI {
-    overflow: hidden !important;
-    background: #e9eef5 !important;
-    border: 0 !important;
-    border-radius: 999px !important;
-    box-shadow: none !important;
-}
-
-.mecPage .mecBalanceProgress.sapMPI {
-    height: 6px !important;
-}
-
-.mecPage .mecBalanceProgress .sapMPIBar,
-.mecPage .mecBalanceProgress .sapMPIBarPositive {
-    background: var(--mec-green) !important;
-}
-
-.mecPage .mecBalanceScale {
-    margin-top: 3px !important;
-}
-
-.mecPage .mecBalanceScale .sapMText {
-    color: var(--mec-muted) !important;
-    font-size: .36rem !important;
-    line-height: 1 !important;
-    font-weight: 600 !important;
-}
-
-.mecPage .mecBalanceMessage {
-    flex: 0 0 auto !important;
-    gap: 5px !important;
-
-    margin-top: 9px !important;
-    padding: 7px 8px !important;
-
-    background: #effaf4 !important;
     border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20, 39, 70, .05) !important;
 }
 
-.mecPage .mecBalanceMessageIcon {
-    flex: 0 0 auto !important;
-    color: var(--mec-green) !important;
-    font-size: .62rem !important;
-}
 
-.mecPage .mecBalanceMessageText.sapMText {
-    color: #3e6b52 !important;
-    font-size: .43rem !important;
-    line-height: 1.12 !important;
-    font-weight: 700 !important;
-}
-
-/* =========================================================
-   DISTRIBUCIÓN
-   ========================================================= */
-
-.mecPage .mecDistributionColumns {
-    display: grid !important;
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr)) !important;
-
-    gap: 7px !important;
-
-    flex: 1 1 0 !important;
-    width: 100% !important;
-    min-height: 0 !important;
-
-    margin-top: 6px !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecDistributionColumn {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-
-    padding: 6px 7px !important;
-    overflow: hidden !important;
-
-    background: #fbfcfe !important;
-    border: 1px solid #edf1f6 !important;
-    border-radius: 8px !important;
-}
-
-.mecPage .mecMiniSectionHeader {
-    flex: 0 0 auto !important;
-    gap: 5px !important;
-}
-
-.mecPage .mecMiniSectionIcon {
+.mecPage
+.mecCardTitleRow.sapMFlexBox {
     flex: 0 0 22px !important;
-    width: 22px !important;
-    height: 22px !important;
-    min-width: 22px !important;
+
     min-height: 22px !important;
-    border-radius: 6px !important;
-}
 
-.mecPage .mecMiniSectionIcon .sapUiIcon {
-    font-size: .58rem !important;
-}
-
-.mecPage .mecBlueSectionIcon {
-    color: var(--mec-blue) !important;
-    background: #e7f2ff !important;
-}
-
-.mecPage .mecPurpleSectionIcon {
-    color: var(--mec-purple) !important;
-    background: #f0e9ff !important;
-}
-
-.mecPage .mecGreenSectionIcon {
-    color: var(--mec-green) !important;
-    background: #e9f9ef !important;
-}
-
-.mecPage .mecSectionTitle.sapMText {
-    color: var(--mec-navy) !important;
-    font-size: .51rem !important;
-    line-height: 1 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecDistList,
-.mecPage .mecSpecialtyList {
-    flex: 1 1 0 !important;
-    margin-top: 5px !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecDistRow,
-.mecPage .mecSpecialtyRow {
     gap: 5px !important;
-    min-height: 27px !important;
-    border-bottom: 1px solid #f1f4f8 !important;
+
+    align-items: center !important;
 }
 
-.mecPage .mecDistMain,
-.mecPage .mecSpecialtyMain {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-}
 
-.mecPage .mecDistLabel.sapMText {
-    color: var(--mec-text) !important;
-    font-size: .43rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
+.mecPage
+.mecCardTitle.sapMTitle {
+    margin: 0 !important;
 
-.mecPage .mecDistProgress.sapMPI {
-    height: 4px !important;
-    margin-top: 3px !important;
-}
+    color: #1c2940 !important;
 
-.mecPage .mecDistProgress .sapMPIBar {
-    background: var(--mec-blue) !important;
-}
-
-.mecPage .mecSpecialtyProgress .sapMPIBar {
-    background: var(--mec-green) !important;
-}
-
-.mecPage .mecDistValue.sapMText {
-    flex: 0 0 28px !important;
-    width: 28px !important;
-
-    color: var(--mec-text) !important;
-
-    font-size: .45rem !important;
-    line-height: 1 !important;
-    font-weight: 800 !important;
-    text-align: right !important;
-}
-
-.mecPage .mecDistPct.sapMText {
-    flex: 0 0 37px !important;
-    width: 37px !important;
-
-    color: var(--mec-muted) !important;
-
-    font-size: .41rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-    text-align: right !important;
-}
-
-.mecPage .mecDistTotal {
-    flex: 0 0 auto !important;
-    margin-top: 4px !important;
-    padding-top: 4px !important;
-    border-top: 1px solid #e8edf4 !important;
-}
-
-.mecPage .mecDistTotal .sapMText {
-    color: var(--mec-text) !important;
-    font-size: .44rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecStrong.sapMText {
-    font-weight: 900 !important;
-}
-
-/* Donuts */
-.mecPage .mecStateBody {
-    flex: 1 1 0 !important;
-    gap: 8px !important;
-    min-height: 0 !important;
-    margin-top: 5px !important;
-}
-
-.mecPage .mecStateDonut,
-.mecPage .mecZoneDonut {
-    position: relative !important;
-
-    flex: 0 0 70px !important;
-
-    width: 70px !important;
-    height: 70px !important;
-    min-width: 70px !important;
-    min-height: 70px !important;
-
-    border-radius: 50% !important;
-    background: conic-gradient(#e8eef6 0% 100%);
-}
-
-.mecPage .mecStateDonut::after,
-.mecPage .mecZoneDonut::after {
-    position: absolute !important;
-    top: 12px !important;
-    right: 12px !important;
-    bottom: 12px !important;
-    left: 12px !important;
-
-    z-index: 0 !important;
-
-    background: #fff !important;
-    border-radius: 50% !important;
-    content: "" !important;
-}
-
-.mecPage .mecDonutCenter {
-    position: relative !important;
-    z-index: 1 !important;
-}
-
-.mecPage .mecDonutValue.sapMText {
-    color: var(--mec-navy) !important;
     font-size: .72rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-}
-
-.mecPage .mecDonutLabel.sapMText {
-    margin-top: 2px !important;
-    color: var(--mec-muted) !important;
-    font-size: .35rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecStateLegend {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecStateLegendRow {
-    gap: 4px !important;
-    min-height: 20px !important;
-}
-
-.mecPage .mecStateLegendDot,
-.mecPage .mecZoneLegendDot {
-    flex: 0 0 6px !important;
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 50% !important;
-    background: var(--mec-blue) !important;
-}
-
-.mecPage .mecStateLegendRow:nth-child(1) .mecStateLegendDot {
-    background: var(--mec-green) !important;
-}
-
-.mecPage .mecStateLegendRow:nth-child(2) .mecStateLegendDot {
-    background: var(--mec-blue) !important;
-}
-
-.mecPage .mecStateLegendRow:nth-child(3) .mecStateLegendDot {
-    background: var(--mec-yellow) !important;
-}
-
-.mecPage .mecStateLegendRow:nth-child(4) .mecStateLegendDot {
-    background: var(--mec-red) !important;
-}
-
-.mecPage .mecStateLegendRow:nth-child(5) .mecStateLegendDot {
-    background: var(--mec-gray) !important;
-}
-
-.mecPage .mecStateLegendName.sapMText {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-
-    color: var(--mec-text) !important;
-
-    font-size: .39rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecStateLegendValue.sapMText {
-    flex: 0 0 20px !important;
-    width: 20px !important;
-
-    color: var(--mec-navy) !important;
-
-    font-size: .41rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-}
-
-.mecPage .mecStateLegendPct.sapMText {
-    flex: 0 0 32px !important;
-    width: 32px !important;
-
-    color: var(--mec-muted) !important;
-
-    font-size: .35rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-    text-align: right !important;
-}
-
-.mecPage .mecZoneMini {
-    flex: 0 0 auto !important;
-    gap: 7px !important;
-
-    margin-top: 4px !important;
-    padding-top: 4px !important;
-
-    border-top: 1px solid #edf1f6 !important;
-}
-
-.mecPage .mecZoneDonut {
-    flex-basis: 48px !important;
-
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
-}
-
-.mecPage .mecZoneDonut::after {
-    top: 9px !important;
-    right: 9px !important;
-    bottom: 9px !important;
-    left: 9px !important;
-}
-
-.mecPage .mecZoneLegend {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecZoneLegendRow {
-    gap: 4px !important;
-    min-height: 14px !important;
-}
-
-.mecPage .mecZoneLegendRow:nth-child(1) .mecZoneLegendDot {
-    background: var(--mec-blue) !important;
-}
-
-.mecPage .mecZoneLegendRow:nth-child(2) .mecZoneLegendDot {
-    background: var(--mec-green) !important;
-}
-
-.mecPage .mecZoneLegendRow:nth-child(3) .mecZoneLegendDot {
-    background: var(--mec-purple) !important;
-}
-
-.mecPage .mecZoneLegendRow:nth-child(4) .mecZoneLegendDot {
-    background: var(--mec-orange) !important;
-}
-
-.mecPage .mecZoneLegendRow:nth-child(5) .mecZoneLegendDot {
-    background: var(--mec-red) !important;
-}
-
-.mecPage .mecZoneLegendName.sapMText {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-
-    color: var(--mec-text) !important;
-
-    font-size: .35rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecZoneLegendValue.sapMText {
-    flex: 0 0 20px !important;
-    width: 20px !important;
-
-    color: var(--mec-navy) !important;
-
-    font-size: .36rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-    text-align: right !important;
-}
-
-/* =========================================================
-   HEATMAP
-   ========================================================= */
-
-.mecPage .mecHeatTable {
-    flex: 1 1 0 !important;
-    min-height: 0 !important;
-    margin-top: 6px !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecHeatHeader,
-.mecPage .mecHeatRow {
-    display: flex !important;
-    width: 100% !important;
-    gap: 4px !important;
-}
-
-.mecPage .mecHeatHeader {
-    flex: 0 0 22px !important;
-    height: 22px !important;
-}
-
-.mecPage .mecHeatRows {
-    flex: 1 1 0 !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-}
-
-.mecPage .mecHeatRow {
-    min-height: 33px !important;
-    margin-top: 4px !important;
-}
-
-.mecPage .mecHeatRowLabel.sapMText {
-    flex: 0 0 64px !important;
-    width: 64px !important;
-
-    color: var(--mec-text) !important;
-
-    font-size: .42rem !important;
-    line-height: 22px !important;
     font-weight: 800 !important;
+
+    line-height: 1.15 !important;
+
+    white-space: nowrap !important;
 }
 
-.mecPage .mecHeatCells {
-    display: flex !important;
+
+.mecPage
+.mecSmallInfo {
+    color: #0a6ff5 !important;
+
+    font-size: .66rem !important;
+}
+
+
+.mecPage
+.mecCardSubtitle.sapMText {
+    flex: 0 0 auto !important;
+
+    margin-top: 1px !important;
+
+    color: #8792a3 !important;
+
+    font-size: .49rem !important;
+    font-weight: 600 !important;
+
+    line-height: 1.15 !important;
+}
+
+
+/* ================================================================
+   BALANCE GENERAL
+   ================================================================ */
+
+.mecPage
+.mecBalanceCard.sapMFlexBox {
+    justify-content: flex-start !important;
+}
+
+
+.mecPage
+.mecBalanceStats.sapMFlexBox {
+    flex: 0 0 78px !important;
+
+    width: 100% !important;
+
+    margin-top: 7px !important;
+
+    align-items: center !important;
+}
+
+
+.mecPage
+.mecBalanceMetric.sapMFlexBox {
     flex: 1 1 0 !important;
-    gap: 4px !important;
+
     min-width: 0 !important;
+
+    justify-content: center !important;
 }
 
-.mecPage .mecHeatCells > .sapMFlexItem {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
+
+.mecPage
+.mecBalanceMetricIcon {
+    margin-bottom: 4px !important;
+
+    font-size: .76rem !important;
 }
 
-.mecPage .mecHeatHeaderCell.sapMText {
+
+.mecPage
+.mecGreenMetric
+.mecBalanceMetricIcon,
+
+.mecPage
+.mecGreenMetric
+.mecBalanceValue {
+    color:
+        var(--mec-green-dark) !important;
+}
+
+
+.mecPage
+.mecBlueMetric
+.mecBalanceMetricIcon,
+
+.mecPage
+.mecBlueMetric
+.mecBalanceValue {
+    color:
+        var(--mec-blue-dark) !important;
+}
+
+
+.mecPage
+.mecPurpleMetric
+.mecBalanceMetricIcon,
+
+.mecPage
+.mecPurpleMetric
+.mecBalanceValue {
+    color:
+        var(--mec-purple) !important;
+}
+
+
+.mecPage
+.mecMiniLabel.sapMText {
     display: block !important;
 
     width: 100% !important;
-    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #596b84 !important;
+
+    font-size: .46rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.05 !important;
+
+    text-align: center !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecBalanceValue.sapMText {
+    margin-top: 3px !important;
+
+    font-size: .95rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+}
+
+
+.mecPage
+.mecMiniPct.sapMText {
+    margin-top: 3px !important;
 
     color: var(--mec-muted) !important;
 
-    font-size: .39rem !important;
-    line-height: 22px !important;
+    font-size: .42rem !important;
     font-weight: 700 !important;
-    text-align: center !important;
 }
 
-.mecPage .mecHeatCell {
+
+/* PROGRESO */
+
+.mecPage
+.mecBalanceProgressArea.sapMFlexBox {
+    flex: 0 0 38px !important;
+
+    margin:
+        6px
+        8px
+        0 !important;
+
+    justify-content: center !important;
+}
+
+
+.mecPage
+.mecBalanceProgress.sapMPI,
+
+.mecPage
+.mecInlineProgress.sapMPI,
+
+.mecPage
+.mecPressureProgress.sapMPI,
+
+.mecPage
+.mecDistProgress.sapMPI {
+    overflow: hidden !important;
+
+    background: #e9eef5 !important;
+
+    border: 0 !important;
+
+    border-radius: 999px !important;
+
+    box-shadow: none !important;
+}
+
+
+.mecPage
+.mecBalanceProgress.sapMPI {
+    height: 7px !important;
+}
+
+
+.mecPage
+.mecBalanceProgress
+.sapMPIBar,
+
+.mecPage
+.mecBalanceProgress
+.sapMPIBarPositive {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecBalanceScale.sapMFlexBox {
+    margin-top: 4px !important;
+}
+
+
+.mecPage
+.mecBalanceScale
+.sapMText {
+    color: var(--mec-muted) !important;
+
+    font-size: .38rem !important;
+    font-weight: 600 !important;
+}
+
+
+/* MENSAJE */
+
+.mecPage
+.mecBalanceMessage.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    min-height: 38px !important;
+
+    gap: 6px !important;
+
+    margin-top: 7px !important;
+
+    padding:
+        8px
+        9px !important;
+
+    align-items: center !important;
+
+    background: #effaf4 !important;
+
+    border-radius: 7px !important;
+}
+
+
+.mecPage
+.mecBalanceMessageIcon {
+    flex: 0 0 auto !important;
+
+    color:
+        var(--mec-green-dark) !important;
+
+    font-size: .66rem !important;
+}
+
+
+.mecPage
+.mecBalanceMessageText.sapMText {
+    color: #3e6b52 !important;
+
+    font-size: .46rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.18 !important;
+}
+
+
+/* ================================================================
+   DISTRIBUCIÓN
+   ================================================================ */
+
+.mecPage
+.mecDistributionCard.sapMFlexBox {
+    min-height: 0 !important;
+}
+
+
+.mecPage
+.mecDistributionColumns.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, 1.14fr) !important;
+
+    flex: 1 1 0 !important;
+
     width: 100% !important;
+
+    min-height: 0 !important;
+
+    gap: 8px !important;
+
+    margin-top: 7px !important;
+
+    overflow: hidden !important;
+}
+
+
+.mecPage
+.mecDistributionColumn.sapMFlexBox {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
     min-width: 0 !important;
-    min-height: 30px !important;
+    min-height: 0 !important;
+
+    padding:
+        7px
+        9px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e7edf5 !important;
+
+    border-radius: 7px !important;
+}
+
+
+/* SECCIÓN */
+
+.mecPage
+.mecMiniSectionHeader.sapMFlexBox {
+    flex: 0 0 24px !important;
+
+    height: 24px !important;
+
+    min-height: 24px !important;
+
+    gap: 5px !important;
+
+    align-items: center !important;
+}
+
+
+.mecPage
+.mecMiniSectionIcon.sapMFlexBox {
+    flex: 0 0 23px !important;
+
+    width: 23px !important;
+    height: 23px !important;
+
+    min-width: 23px !important;
+    min-height: 23px !important;
 
     border-radius: 6px !important;
-    background: #f4f7fb !important;
 }
 
-.mecPage .mecHeatCell[data-state="BALANCED"] {
-    background: #e7f8ed !important;
+
+.mecPage
+.mecMiniSectionIcon
+.sapUiIcon {
+    font-size: .62rem !important;
 }
 
-.mecPage .mecHeatCell[data-state="NEAR"] {
-    background: #fff7da !important;
+
+.mecPage
+.mecBlueSectionIcon {
+    color:
+        var(--mec-blue-dark) !important;
+
+    background:
+        rgba(
+            46,
+            140,
+            255,
+            .12
+        ) !important;
 }
 
-.mecPage .mecHeatCell[data-state="OVER"] {
-    background: #fff0df !important;
+
+.mecPage
+.mecSectionAccent {
+    flex: 0 0 24px !important;
+
+    width: 24px !important;
+    height: 3px !important;
+
+    margin-right: 4px !important;
+
+    border-radius: 4px !important;
 }
 
-.mecPage .mecHeatCell[data-state="CRITICAL"] {
-    background: #ffe6e9 !important;
+
+.mecPage
+.mecSectionAccentGreen {
+    background:
+        var(--mec-green-dark) !important;
 }
 
-.mecPage .mecHeatValue.sapMText {
-    color: var(--mec-text) !important;
-    font-size: .45rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
+
+.mecPage
+.mecSectionTitle.sapMText {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #263954 !important;
+
+    font-size: .55rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
-.mecPage .mecHeatLegend {
-    flex: 0 0 auto !important;
+
+.mecPage
+.mecSectionHint {
+    margin-left: 3px !important;
+
+    color: #7190b4 !important;
+
+    font-size: .50rem !important;
+}
+
+
+/* DISTRIBUCIÓN LISTA */
+
+.mecPage
+.mecDistList.sapMFlexBox,
+
+.mecPage
+.mecSpecialtyList.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin-top: 5px !important;
+
+    overflow: hidden !important;
+}
+
+
+.mecPage
+.mecDistRow.sapMFlexBox,
+
+.mecPage
+.mecSpecialtyRow.sapMFlexBox {
     gap: 5px !important;
+
+    min-height: 31px !important;
+
+    border-bottom:
+        1px solid
+        #f1f4f8 !important;
+}
+
+
+.mecPage
+.mecDistMain.sapMFlexBox,
+
+.mecPage
+.mecSpecialtyMain.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecDistLabel.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #3d4a5e !important;
+
+    font-size: .47rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.05 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecDistProgress.sapMPI {
+    height: 5px !important;
+
+    margin-top: 4px !important;
+}
+
+
+.mecPage
+.mecDistProgress
+.sapMPIBar {
+    background:
+        var(--mec-blue) !important;
+}
+
+
+.mecPage
+.mecSpecialtyProgress
+.sapMPIBar {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecDistValue.sapMText {
+    flex: 0 0 32px !important;
+
+    width: 32px !important;
+
+    color: #1e2e4c !important;
+
+    font-size: .47rem !important;
+    font-weight: 800 !important;
+
+    text-align: right !important;
+}
+
+
+.mecPage
+.mecDistPct.sapMText {
+    flex: 0 0 42px !important;
+
+    width: 42px !important;
+
+    color: #6f7c8f !important;
+
+    font-size: .43rem !important;
+    font-weight: 700 !important;
+
+    text-align: right !important;
+}
+
+
+.mecPage
+.mecSpecialtyBullet {
+    flex: 0 0 7px !important;
+
+    width: 7px !important;
+    height: 7px !important;
+
+    margin-right: 4px !important;
+
+    border-radius: 50% !important;
+
+    background:
+        var(--mec-blue) !important;
+}
+
+
+.mecPage
+.mecSpecialtyTargetRow:nth-child(2)
+.mecSpecialtyBullet {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecSpecialtyTargetRow:nth-child(3)
+.mecSpecialtyBullet {
+    background:
+        var(--mec-purple) !important;
+}
+
+
+.mecPage
+.mecSpecialtyTargetRow:nth-child(4)
+.mecSpecialtyBullet {
+    background:
+        var(--mec-orange) !important;
+}
+
+
+.mecPage
+.mecSpecialtyTargetRow:nth-child(5)
+.mecSpecialtyBullet {
+    background: #7c8798 !important;
+}
+
+
+/* TOTAL */
+
+.mecPage
+.mecDistTotal.sapMFlexBox {
+    flex: 0 0 28px !important;
+
+    min-height: 28px !important;
+
+    margin-top: 4px !important;
+
+    padding-top: 5px !important;
+
+    align-items: center !important;
+
+    border-top:
+        1px solid
+        #e8edf4 !important;
+}
+
+
+.mecPage
+.mecDistTotal
+.sapMText {
+    color: var(--mec-text) !important;
+
+    font-size: .46rem !important;
+    font-weight: 700 !important;
+}
+
+
+.mecPage
+.mecStrong.sapMText {
+    font-weight: 800 !important;
+}
+
+
+/* ================================================================
+   DONA POR ZONA
+   ================================================================ */
+
+.mecPage
+.mecZoneColumn.sapMFlexBox {
+    justify-content: flex-start !important;
+}
+
+
+.mecPage
+.mecZoneTargetBody.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: 18px !important;
+
+    padding:
+        7px
+        6px
+        4px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+.mecPage
+.mecZoneDonut {
+    position: relative !important;
+
+    flex: 0 0 126px !important;
+
+    width: 126px !important;
+    height: 126px !important;
+
+    min-width: 126px !important;
+    min-height: 126px !important;
+
+    max-width: 126px !important;
+    max-height: 126px !important;
+
+    border-radius: 50% !important;
+
+    background:
+        conic-gradient(
+            #e8eef6
+            0%
+            100%
+        );
+}
+
+
+.mecPage
+.mecZoneDonut::after {
+    position: absolute !important;
+
+    top: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    left: 20px !important;
+
+    z-index: 0 !important;
+
+    background: #ffffff !important;
+
+    border-radius: 50% !important;
+
+    content: "" !important;
+}
+
+
+.mecPage
+.mecDonutCenter.sapMFlexBox {
+    position: relative !important;
+
+    z-index: 1 !important;
+}
+
+
+.mecPage
+.mecDonutValue.sapMText {
+    color: var(--mec-navy) !important;
+
+    font-size: 1.03rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+}
+
+
+.mecPage
+.mecDonutLabel.sapMText {
+    margin-top: 3px !important;
+
+    color: var(--mec-muted) !important;
+
+    font-size: .40rem !important;
+    font-weight: 700 !important;
+}
+
+
+/* LEYENDA */
+
+.mecPage
+.mecZoneLegend.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+.mecPage
+.mecZoneLegendRow.sapMFlexBox {
+    gap: 5px !important;
+
+    min-height: 24px !important;
+
+    align-items: center !important;
+}
+
+
+.mecPage
+.mecZoneLegendDot {
+    flex: 0 0 7px !important;
+
+    width: 7px !important;
+    height: 7px !important;
+
+    min-width: 7px !important;
+
+    border-radius: 50% !important;
+
+    background:
+        var(--mec-blue) !important;
+}
+
+
+.mecPage
+.mecZoneLegendRow:nth-child(2)
+.mecZoneLegendDot {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecZoneLegendRow:nth-child(3)
+.mecZoneLegendDot {
+    background:
+        var(--mec-purple) !important;
+}
+
+
+.mecPage
+.mecZoneLegendRow:nth-child(4)
+.mecZoneLegendDot {
+    background:
+        var(--mec-orange) !important;
+}
+
+
+.mecPage
+.mecZoneLegendRow:nth-child(5)
+.mecZoneLegendDot {
+    background:
+        var(--mec-red) !important;
+}
+
+
+.mecPage
+.mecZoneLegendName.sapMText {
+    flex: 1 1 0 !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #3d4a5e !important;
+
+    font-size: .43rem !important;
+    font-weight: 700 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecZoneLegendValue.sapMText {
+    flex: 0 0 28px !important;
+
+    width: 28px !important;
+
+    color: #1e2e4c !important;
+
+    font-size: .44rem !important;
+    font-weight: 800 !important;
+
+    text-align: right !important;
+}
+
+
+.mecPage
+.mecZoneLegendPct.sapMText {
+    flex: 0 0 42px !important;
+
+    width: 42px !important;
+
+    color: #6f7c8f !important;
+
+    font-size: .41rem !important;
+    font-weight: 700 !important;
+
+    text-align: right !important;
+}
+
+
+/* ================================================================
+   HEATMAP
+   ================================================================ */
+
+.mecPage
+.mecHeatCard.sapMFlexBox {
+    min-height: 0 !important;
+}
+
+
+.mecPage
+.mecHeatTable.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin-top: 7px !important;
+
+    overflow: hidden !important;
+}
+
+
+.mecPage
+.mecHeatHeader.sapMFlexBox,
+
+.mecPage
+.mecHeatRow.sapMFlexBox {
+    display: flex !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 5px !important;
+}
+
+
+.mecPage
+.mecHeatHeader.sapMFlexBox {
+    flex: 0 0 26px !important;
+
+    height: 26px !important;
+
+    min-height: 26px !important;
+}
+
+
+.mecPage
+.mecHeatRows.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+
+    min-height: 0 !important;
+
+    overflow: auto !important;
+}
+
+
+.mecPage
+.mecHeatRow.sapMFlexBox {
+    min-height: 36px !important;
+
     margin-top: 5px !important;
 }
 
-.mecPage .mecHeatLegend .sapMText {
+
+.mecPage
+.mecHeatRowLabel.sapMText {
+    flex: 0 0 72px !important;
+
+    width: 72px !important;
+
+    overflow: hidden !important;
+
+    color: var(--mec-text) !important;
+
+    font-size: .45rem !important;
+    font-weight: 800 !important;
+
+    line-height: 26px !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecHeatCells.sapMFlexBox {
+    display: flex !important;
+
+    flex: 1 1 0 !important;
+
+    gap: 5px !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecHeatCells
+> .sapMFlexItem {
+    flex: 1 1 0 !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecHeatHeaderCell.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
     color: var(--mec-muted) !important;
-    font-size: .33rem !important;
-    line-height: 1 !important;
+
+    font-size: .42rem !important;
+    font-weight: 700 !important;
+
+    line-height: 26px !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecHeatCell.sapMFlexBox {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 32px !important;
+
+    background: #f4f7fb !important;
+
+    border-radius: 6px !important;
+}
+
+
+.mecPage
+.mecHeatCell[data-state="BALANCED"] {
+    background: #e7f8ed !important;
+}
+
+
+.mecPage
+.mecHeatCell[data-state="NEAR"] {
+    background: #fff7da !important;
+}
+
+
+.mecPage
+.mecHeatCell[data-state="OVER"] {
+    background: #fff0df !important;
+}
+
+
+.mecPage
+.mecHeatCell[data-state="CRITICAL"] {
+    background: #ffe6e9 !important;
+}
+
+
+.mecPage
+.mecHeatValue.sapMText {
+    color: var(--mec-text) !important;
+
+    font-size: .48rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* LEYENDA */
+
+.mecPage
+.mecHeatLegend.sapMFlexBox {
+    flex: 0 0 23px !important;
+
+    min-height: 23px !important;
+
+    gap: 5px !important;
+
+    margin-top: 6px !important;
+
+    align-items: center !important;
+}
+
+
+.mecPage
+.mecHeatLegend
+.sapMText {
+    color: var(--mec-muted) !important;
+
+    font-size: .36rem !important;
     font-weight: 700 !important;
 }
 
-.mecPage .mecLegendDot {
-    flex: 0 0 5px !important;
-    width: 5px !important;
-    height: 5px !important;
+
+.mecPage
+.mecLegendDot {
+    flex: 0 0 6px !important;
+
+    width: 6px !important;
+    height: 6px !important;
 
     margin-right: 3px !important;
 
     border-radius: 50% !important;
 }
 
-.mecPage .mecLegendGreen {
-    background: var(--mec-green) !important;
+
+.mecPage
+.mecLegendGreen {
+    background:
+        var(--mec-green) !important;
 }
 
-.mecPage .mecLegendYellow {
-    background: var(--mec-yellow) !important;
+
+.mecPage
+.mecLegendYellow {
+    background:
+        var(--mec-yellow) !important;
 }
 
-.mecPage .mecLegendOrange {
-    background: var(--mec-orange) !important;
+
+.mecPage
+.mecLegendOrange {
+    background:
+        var(--mec-orange) !important;
 }
 
-.mecPage .mecLegendRed {
-    background: var(--mec-red) !important;
+
+.mecPage
+.mecLegendRed {
+    background:
+        var(--mec-red) !important;
 }
 
-/* =========================================================
-   TABLA CAPACIDAD POR ESPECIALIDAD
-   ========================================================= */
 
-.mecPage .mecMiniTableHeader,
-.mecPage .mecMiniTableRow,
-.mecPage .mecMiniTableTotal {
-    display: flex !important;
-    width: 100% !important;
-    gap: 5px !important;
-}
+/* ================================================================
+   CAPACIDAD POR ESPECIALIDAD
+   ================================================================ */
 
-.mecPage .mecMiniTableHeader {
-    flex: 0 0 28px !important;
-    min-height: 28px !important;
-
-    margin-top: 5px !important;
-    align-items: center !important;
-
-    border-bottom: 1px solid #edf1f6 !important;
-}
-
-.mecPage .mecMiniTableHeader .sapMText {
-    color: var(--mec-muted) !important;
-    font-size: .37rem !important;
-    line-height: 1.05 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecMiniTableRows {
-    flex: 1 1 0 !important;
+.mecPage
+.mecCapacityCard.sapMFlexBox {
     min-height: 0 !important;
-    overflow: hidden !important;
 }
 
-.mecPage .mecMiniTableRow {
-    min-height: 29px !important;
-    align-items: center !important;
-    border-bottom: 1px solid #f1f4f8 !important;
-}
 
-.mecPage .mecColName {
-    flex: 1.15 1 0 !important;
-    min-width: 0 !important;
-}
+.mecPage
+.mecMiniTableHeader.sapMFlexBox,
 
-.mecPage .mecColMetric {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-}
+.mecPage
+.mecMiniTableRow.sapMFlexBox,
 
-.mecPage .mecColUtil {
-    flex: .72 1 0 !important;
-    min-width: 0 !important;
-    text-align: center !important;
-}
-
-.mecPage .mecRowName.sapMText {
-    color: var(--mec-text) !important;
-    font-size: .4rem !important;
-    line-height: 1 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecInlineProgress.sapMPI {
-    flex: 1 1 0 !important;
-    height: 4px !important;
-    margin-right: 4px !important;
-}
-
-.mecPage .mecInlineProgress .sapMPIBar,
-.mecPage .mecInlineProgress .sapMPIBarPositive {
-    background: var(--mec-green) !important;
-}
-
-.mecPage .mecBlueProgress .sapMPIBar {
-    background: var(--mec-blue) !important;
-}
-
-.mecPage .mecTableNumber.sapMText {
-    flex: 0 0 34px !important;
-    width: 34px !important;
-
-    color: var(--mec-text) !important;
-
-    font-size: .38rem !important;
-    line-height: 1 !important;
-    font-weight: 800 !important;
-    text-align: right !important;
-}
-
-.mecPage .mecUtilStatus .sapMObjStatusText {
-    font-size: .4rem !important;
-    font-weight: 900 !important;
-}
-
-.mecPage .mecMiniTableTotal {
-    flex: 0 0 28px !important;
-    min-height: 28px !important;
-    align-items: center !important;
-    border-top: 1px solid #e3e9f1 !important;
-}
-
-.mecPage .mecMiniTableTotal .sapMText {
-    font-size: .4rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-}
-
-.mecPage .mecTotalGreen {
-    color: var(--mec-green) !important;
-}
-
-.mecPage .mecTotalBlue {
-    color: var(--mec-blue) !important;
-}
-
-.mecPage .mecTotalOrange {
-    color: var(--mec-orange) !important;
-}
-
-.mecPage .mecBlueText {
-    color: var(--mec-blue) !important;
-}
-
-.mecPage .mecGreenText {
-    color: var(--mec-green) !important;
-}
-
-/* =========================================================
-   PRESIÓN POR SERVICIO
-   ========================================================= */
-
-.mecPage .mecPressureHeader,
-.mecPage .mecPressureRow,
-.mecPage .mecPressureTotal {
+.mecPage
+.mecMiniTableTotal.sapMFlexBox {
     display: flex !important;
+
     width: 100% !important;
-    gap: 5px !important;
+
+    min-width: 0 !important;
+
+    gap: 6px !important;
 }
 
-.mecPage .mecPressureHeader {
-    flex: 0 0 28px !important;
-    min-height: 28px !important;
 
-    margin-top: 5px !important;
+.mecPage
+.mecMiniTableHeader.sapMFlexBox {
+    flex: 0 0 30px !important;
+
+    min-height: 30px !important;
+
+    margin-top: 6px !important;
+
     align-items: center !important;
 
-    border-bottom: 1px solid #edf1f6 !important;
+    border-bottom:
+        1px solid
+        #e7edf5 !important;
 }
 
-.mecPage .mecPressureHeader .sapMText {
-    color: var(--mec-muted) !important;
-    font-size: .37rem !important;
-    line-height: 1.05 !important;
+
+.mecPage
+.mecMiniTableHeader
+.sapMText {
+    color: #526683 !important;
+
+    font-size: .40rem !important;
     font-weight: 800 !important;
+
+    line-height: 1.05 !important;
 }
 
-.mecPage .mecPressureRows {
+
+.mecPage
+.mecMiniTableRows.sapMFlexBox {
     flex: 1 1 0 !important;
+
     min-height: 0 !important;
-    overflow: hidden !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
 }
 
-.mecPage .mecPressureRow {
+
+.mecPage
+.mecMiniTableRow.sapMFlexBox {
     min-height: 31px !important;
-    border-bottom: 1px solid #f1f4f8 !important;
+
+    align-items: center !important;
+
+    border-bottom:
+        1px solid
+        #f1f4f8 !important;
 }
 
-.mecPage .mecPressureName {
-    flex: 1.30 1 0 !important;
+
+.mecPage
+.mecColName {
+    flex: 1.15 1 0 !important;
+
     min-width: 0 !important;
 }
 
-.mecPage .mecPressureMetric {
-    flex: .82 1 0 !important;
+
+.mecPage
+.mecColMetric {
+    flex: 1 1 0 !important;
+
     min-width: 0 !important;
 }
 
-.mecPage .mecPressureUtil {
-    flex: .82 1 0 !important;
+
+.mecPage
+.mecColUtil {
+    flex: .72 1 0 !important;
+
     min-width: 0 !important;
+
     text-align: center !important;
 }
 
-.mecPage .mecPressureNumber.sapMText {
-    margin-bottom: 2px !important;
-    font-size: .42rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
-}
 
-.mecPage .mecPressureProgress.sapMPI {
-    height: 4px !important;
-}
+.mecPage
+.mecRowName.sapMText {
+    overflow: hidden !important;
 
-.mecPage .mecPressureProgress .sapMPIBar,
-.mecPage .mecPressureProgress .sapMPIBarPositive {
-    background: var(--mec-green) !important;
-}
+    color: var(--mec-text) !important;
 
-.mecPage .mecPressureUtilValue .sapMObjStatusText {
-    font-size: .41rem !important;
-    font-weight: 900 !important;
-}
+    font-size: .44rem !important;
+    font-weight: 800 !important;
 
-.mecPage .mecPressureStateText.sapMText {
-    margin-top: 2px !important;
+    text-overflow: ellipsis !important;
 
-    color: var(--mec-muted) !important;
-
-    font-size: .31rem !important;
-    line-height: 1 !important;
-    font-weight: 700 !important;
     white-space: nowrap !important;
 }
 
-.mecPage .mecPressureTotal {
-    flex: 0 0 28px !important;
-    min-height: 28px !important;
+
+.mecPage
+.mecInlineProgress.sapMPI {
+    flex: 1 1 0 !important;
+
+    height: 5px !important;
+
+    margin-right: 5px !important;
+}
+
+
+.mecPage
+.mecInlineProgress
+.sapMPIBar,
+
+.mecPage
+.mecInlineProgress
+.sapMPIBarPositive {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecBlueProgress
+.sapMPIBar {
+    background:
+        var(--mec-blue) !important;
+}
+
+
+.mecPage
+.mecTableNumber.sapMText {
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+
+    color: var(--mec-text) !important;
+
+    font-size: .41rem !important;
+    font-weight: 800 !important;
+
+    text-align: right !important;
+}
+
+
+.mecPage
+.mecUtilStatus
+.sapMObjStatusText {
+    font-size: .42rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* TOTAL */
+
+.mecPage
+.mecMiniTableTotal.sapMFlexBox {
+    flex: 0 0 30px !important;
+
+    min-height: 30px !important;
+
     align-items: center !important;
-    border-top: 1px solid #e3e9f1 !important;
+
+    border-top:
+        1px solid
+        #e3e9f1 !important;
 }
 
-.mecPage .mecPressureTotal .sapMText {
-    font-size: .4rem !important;
-    line-height: 1 !important;
-    font-weight: 900 !important;
+
+.mecPage
+.mecMiniTableTotal
+.sapMText {
+    font-size: .42rem !important;
+    font-weight: 800 !important;
 }
 
-/* =========================================================
+
+/* ================================================================
+   PRESIÓN OPERATIVA
+   ================================================================ */
+
+.mecPage
+.mecPressureCard.sapMFlexBox {
+    min-height: 0 !important;
+}
+
+
+.mecPage
+.mecPressureHeader.sapMFlexBox,
+
+.mecPage
+.mecPressureRow.sapMFlexBox,
+
+.mecPage
+.mecPressureTotal.sapMFlexBox {
+    display: flex !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 6px !important;
+}
+
+
+.mecPage
+.mecPressureHeader.sapMFlexBox {
+    flex: 0 0 30px !important;
+
+    min-height: 30px !important;
+
+    margin-top: 6px !important;
+
+    align-items: center !important;
+
+    border-bottom:
+        1px solid
+        #e7edf5 !important;
+}
+
+
+.mecPage
+.mecPressureHeader
+.sapMText {
+    color: #526683 !important;
+
+    font-size: .40rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+}
+
+
+.mecPage
+.mecPressureRows.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    min-height: 0 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+
+.mecPage
+.mecPressureRow.sapMFlexBox {
+    min-height: 34px !important;
+
+    align-items: center !important;
+
+    border-bottom:
+        1px solid
+        #f1f4f8 !important;
+}
+
+
+.mecPage
+.mecPressureName {
+    flex: 1.30 1 0 !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecPressureMetric {
+    flex: .82 1 0 !important;
+
+    min-width: 0 !important;
+}
+
+
+.mecPage
+.mecPressureUtil {
+    flex: .82 1 0 !important;
+
+    min-width: 0 !important;
+
+    text-align: center !important;
+}
+
+
+.mecPage
+.mecPressureNumber.sapMText {
+    margin-bottom: 3px !important;
+
+    font-size: .44rem !important;
+    font-weight: 800 !important;
+}
+
+
+.mecPage
+.mecPressureProgress.sapMPI {
+    height: 5px !important;
+}
+
+
+.mecPage
+.mecPressureProgress
+.sapMPIBar,
+
+.mecPage
+.mecPressureProgress
+.sapMPIBarPositive {
+    background:
+        var(--mec-green) !important;
+}
+
+
+.mecPage
+.mecPressureUtilValue
+.sapMObjStatusText {
+    font-size: .43rem !important;
+    font-weight: 800 !important;
+}
+
+
+.mecPage
+.mecPressureStateText.sapMText {
+    margin-top: 3px !important;
+
+    color: var(--mec-muted) !important;
+
+    font-size: .34rem !important;
+    font-weight: 700 !important;
+
+    white-space: nowrap !important;
+}
+
+
+.mecPage
+.mecPressureTotal.sapMFlexBox {
+    flex: 0 0 30px !important;
+
+    min-height: 30px !important;
+
+    align-items: center !important;
+
+    border-top:
+        1px solid
+        #e3e9f1 !important;
+}
+
+
+.mecPage
+.mecPressureTotal
+.sapMText {
+    font-size: .42rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* COLORES TOTAL */
+
+.mecPage
+.mecTotalGreen {
+    color:
+        var(--mec-green-dark) !important;
+}
+
+
+.mecPage
+.mecTotalBlue {
+    color:
+        var(--mec-blue-dark) !important;
+}
+
+
+.mecPage
+.mecTotalOrange {
+    color:
+        var(--mec-orange-dark) !important;
+}
+
+
+.mecPage
+.mecBlueText {
+    color:
+        var(--mec-blue-dark) !important;
+}
+
+
+.mecPage
+.mecGreenText {
+    color:
+        var(--mec-green-dark) !important;
+}
+
+
+/* ================================================================
+   PROGRESS INDICATORS
+   ================================================================ */
+
+.mecPage
+.sapMPIText,
+
+.mecPage
+.sapMPITextLeft,
+
+.mecPage
+.sapMPITextRight {
+    display: none !important;
+}
+
+
+/* ================================================================
    BUSY
-   ========================================================= */
+   ================================================================ */
 
-.mecPage .sapUiLocalBusyIndicator {
-    background: rgba(255, 255, 255, .60) !important;
+.mecPage
+.sapUiLocalBusyIndicator {
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .60
+        ) !important;
 }
 
-/* =========================================================
-   LAPTOP / 1366x768
-   ========================================================= */
 
-@media screen and (min-width: 1181px) and (max-height: 730px) {
-    .mecPage .mecDashboard {
+/* ================================================================
+   LAPTOP 1366 x 768 / POCO ALTO
+   ================================================================ */
+
+@media screen
+and (min-width: 901px)
+and (max-height: 720px) {
+
+    .mecPage
+    .mecDashboard.sapMFlexBox {
         grid-template-rows:
-            39px
-            52px
-            68px
-            minmax(188px, 1.12fr)
-            minmax(185px, 1fr) !important;
+            42px
+            48px
+            64px
+            minmax(188px, 1.08fr)
+            minmax(178px, .92fr) !important;
 
         gap: 5px !important;
 
         padding:
-            6px
-            9px
-            6px
-            16px !important;
+            5px
+            8px
+            5px
+            18px !important;
     }
 
-    .mecPage .mecTitle.sapMTitle {
-        font-size: 1.28rem !important;
+
+    .mecPage
+    .mecHeader.sapMFlexBox {
+        height: 42px !important;
+
+        min-height: 42px !important;
     }
 
-    .mecPage .mecSubtitle.sapMText {
+
+    .mecPage
+    .mecTitle.sapMTitle {
+        font-size: 1.38rem !important;
+    }
+
+
+    .mecPage
+    .mecSubtitle.sapMText {
+        font-size: .62rem !important;
+    }
+
+
+    .mecPage
+    .mecFilters.sapMFlexBox {
+        height: 48px !important;
+
+        min-height: 48px !important;
+
+        gap: 5px !important;
+    }
+
+
+    .mecPage
+    .mecFilterBox.sapMFlexBox,
+
+    .mecPage
+    .mecApplyWrap.sapMFlexBox {
+        height: 48px !important;
+
+        min-height: 48px !important;
+    }
+
+
+    .mecPage
+    .mecFilterBox.sapMFlexBox {
+        padding:
+            3px
+            7px
+            2px !important;
+    }
+
+
+    .mecPage
+    .mecFilterLabel.sapMLabel {
         font-size: .54rem !important;
     }
 
-    .mecPage .mecFilterBox {
-        padding: 4px 6px 3px !important;
+
+    .mecPage
+    .mecFilterControl
+    .sapMSltLabel,
+
+    .mecPage
+    .mecFilterControl
+    .sapMInputBaseInner {
+        font-size: .59rem !important;
     }
 
-    .mecPage .mecFilterLabel.sapMLabel {
-        font-size: .45rem !important;
+
+    .mecPage
+    .mecApplyButton
+    .sapMBtnInner {
+        height: 42px !important;
+
+        min-height: 42px !important;
     }
 
-    .mecPage .mecFilterBox .sapMSltLabel,
-    .mecPage .mecFilterBox .sapMInputBaseInner {
-        font-size: .52rem !important;
-        line-height: 27px !important;
+
+    .mecPage
+    .mecKpiGrid.sapMFlexBox,
+
+    .mecPage
+    .mecKpiCard.sapMFlexBox {
+        height: 64px !important;
+
+        min-height: 64px !important;
     }
 
-    .mecPage .mecFilterBox .sapMSltArrow,
-    .mecPage .mecFilterBox .sapMInputBaseIcon,
-    .mecPage .mecFilterBox .sapMInputBaseIconContainer {
-        line-height: 27px !important;
+
+    .mecPage
+    .mecKpiCard.sapMFlexBox {
+        padding:
+            6px
+            7px
+            6px
+            10px !important;
     }
 
-    .mecPage .mecApplyButton .sapMBtnInner {
-        height: 34px !important;
-        min-height: 34px !important;
+
+    .mecPage
+    .mecKpiIconCircle.sapMFlexBox {
+        flex-basis: 35px !important;
+
+        width: 35px !important;
+        height: 35px !important;
+
+        min-width: 35px !important;
+        min-height: 35px !important;
+
+        max-width: 35px !important;
+        max-height: 35px !important;
+
+        margin-right: 6px !important;
     }
 
-    .mecPage .mecApplyButton .sapMBtnContent,
-    .mecPage .mecApplyButton .sapMBtnIcon {
-        line-height: 34px !important;
-    }
 
-    .mecPage .mecKpiIconCircle {
-        flex-basis: 36px !important;
-
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        min-height: 36px !important;
-    }
-
-    .mecPage .mecKpiValue.sapMText {
+    .mecPage
+    .mecKpiIcon {
         font-size: 1rem !important;
     }
 
-    .mecPage .mecKpiLabel.sapMText {
-        font-size: .52rem !important;
+
+    .mecPage
+    .mecKpiLabel.sapMText {
+        font-size: .54rem !important;
     }
 
-    .mecPage .mecKpiSub.sapMText {
-        font-size: .41rem !important;
+
+    .mecPage
+    .mecKpiValue.sapMText {
+        font-size: .96rem !important;
     }
 
-    .mecPage .mecCard {
-        padding: 6px 8px !important;
+
+    .mecPage
+    .mecKpiSub.sapMText {
+        font-size: .47rem !important;
     }
 
-    .mecPage .mecCardTitle.sapMTitle {
-        font-size: .66rem !important;
+
+    .mecPage
+    .mecCard.sapMFlexBox {
+        padding:
+            6px
+            8px !important;
     }
 
-    .mecPage .mecCardSubtitle.sapMText {
-        font-size: .41rem !important;
+
+    .mecPage
+    .mecCardTitle.sapMTitle {
+        font-size: .65rem !important;
     }
 
-    .mecPage .mecDistributionColumn {
-        padding: 5px 6px !important;
-    }
 
-    .mecPage .mecStateDonut {
-        flex-basis: 60px !important;
-        width: 60px !important;
-        height: 60px !important;
-        min-width: 60px !important;
-        min-height: 60px !important;
-    }
-
-    .mecPage .mecHeatRow {
-        min-height: 28px !important;
-    }
-
-    .mecPage .mecHeatCell {
-        min-height: 26px !important;
-    }
-
-    .mecPage .mecMiniTableRow,
-    .mecPage .mecPressureRow {
-        min-height: 26px !important;
-    }
-}
-
-/* =========================================================
-   <= 1180px
-   ========================================================= */
-
-@media screen and (max-width: 1180px) {
-    .mecPage .mecDashboard {
-        gap: 5px !important;
-        padding: 6px 8px !important;
-    }
-
-    .mecPage .mecFilters {
-        gap: 4px !important;
-    }
-
-    .mecPage .mecFilterBox {
-        padding-right: 5px !important;
-        padding-left: 5px !important;
-    }
-
-    .mecPage .mecFilterLabel.sapMLabel {
+    .mecPage
+    .mecCardSubtitle.sapMText {
         font-size: .43rem !important;
     }
 
-    .mecPage .mecFilterBox .sapMSltLabel,
-    .mecPage .mecFilterBox .sapMInputBaseInner {
-        font-size: .49rem !important;
+
+    .mecPage
+    .mecBalanceStats.sapMFlexBox {
+        flex-basis: 65px !important;
+
+        margin-top: 4px !important;
     }
 
-    .mecPage .mecCard {
-        padding: 6px 7px !important;
-    }
-}
 
-/* =========================================================
-   TABLET / MÓVIL - seguridad
-   Escritorio permanece sin scroll.
-   ========================================================= */
-
-@media screen and (max-width: 900px),
-       screen and (orientation: portrait) {
-    .mecPage .sapMPageCont,
-    .mecPage .sapMPageScroll,
-    .mecPage .sapMPageEnableScrolling {
-        overflow: auto !important;
+    .mecPage
+    .mecBalanceValue.sapMText {
+        font-size: .82rem !important;
     }
 
-    .mecPage .mecDashboard {
-        display: flex !important;
-        flex-direction: column !important;
 
-        height: auto !important;
-        min-height: 100% !important;
+    .mecPage
+    .mecBalanceMessage.sapMFlexBox {
+        min-height: 31px !important;
 
-        overflow: visible !important;
+        padding:
+            5px
+            7px !important;
+
+        margin-top: 4px !important;
     }
 
-    .mecPage .mecFilters {
-        display: grid !important;
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr)) !important;
+    .mecPage
+    .mecDistributionColumns.sapMFlexBox {
+        margin-top: 4px !important;
 
-        height: auto !important;
-        overflow: visible !important;
+        gap: 5px !important;
     }
 
-    .mecPage .mecKpiGrid,
-    .mecPage .mecMiddleGrid,
-    .mecPage .mecLowerGrid,
-    .mecPage .mecDistributionColumns {
-        grid-template-columns: 1fr !important;
 
-        height: auto !important;
-        overflow: visible !important;
+    .mecPage
+    .mecDistributionColumn.sapMFlexBox {
+        padding:
+            5px
+            6px !important;
     }
 
-    .mecPage .mecCard {
-        min-height: 260px !important;
-    }
-}
 
-/* ======================================================================
-   V2 - AJUSTE VISUAL 26-AGO-2026
-   Referencia: misma jerarquía visual de filtros/KPIs de Vista Jefatura
-   y distribución de plantilla conforme a la maqueta autorizada.
-   ====================================================================== */
+    .mecPage
+    .mecDistRow.sapMFlexBox,
 
-/* --- Encabezado más limpio --- */
-.mecPage .mecHeader {
-    padding: 0 7px !important;
-    border-top: 1px solid #dce4ef !important;
-}
-
-.mecPage .mecTitle.sapMTitle {
-    color: #13214a !important;
-    font-size: 1.52rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.03em !important;
-}
-
-.mecPage .mecSubtitle.sapMText {
-    color: #65748b !important;
-    font-size: .65rem !important;
-    font-weight: 600 !important;
-}
-
-/* --- Filtros: patrón Vista Jefatura --- */
-.mecPage .mecFilters {
-    grid-template-columns:
-        minmax(88px, .72fr)
-        minmax(132px, 1.15fr)
-        minmax(132px, 1.15fr)
-        minmax(82px, .78fr)
-        minmax(94px, .90fr)
-        minmax(78px, .72fr)
-        minmax(112px, 1.02fr)
-        minmax(102px, .95fr)
-        minmax(84px, .78fr)
-        minmax(112px, .90fr) !important;
-    gap: 8px !important;
-    align-items: end !important;
-}
-
-.mecPage .mecFilterBox {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-
-    height: 54px !important;
-    min-height: 54px !important;
-
-    padding: 7px 10px 5px !important;
-
-    background: #ffffff !important;
-    border: 1px solid #e3e9f2 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 7px rgba(25, 45, 79, .05) !important;
-}
-
-.mecPage .mecFilterLabel.sapMLabel {
-    display: block !important;
-    height: 14px !important;
-    margin-bottom: 1px !important;
-    color: #78869a !important;
-    font-size: .61rem !important;
-    line-height: 14px !important;
-    font-weight: 600 !important;
-}
-
-.mecPage .mecFilterBox .sapMSlt,
-.mecPage .mecFilterBox .sapMInputBase,
-.mecPage .mecFilterBox .sapMInputBaseContentWrapper {
-    height: 1.62rem !important;
-    min-height: 1.62rem !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-}
-
-.mecPage .mecFilterBox .sapMSltLabel,
-.mecPage .mecFilterBox .sapMInputBaseInner {
-    height: 1.62rem !important;
-    min-height: 1.62rem !important;
-    padding: 0 1.55rem 0 0 !important;
-    color: #1e2e4c !important;
-    background: transparent !important;
-    font-size: .68rem !important;
-    line-height: 1.62rem !important;
-    font-weight: 700 !important;
-    text-overflow: ellipsis !important;
-}
-
-.mecPage .mecFilterBox .sapMSltArrow,
-.mecPage .mecFilterBox .sapMInputBaseIcon,
-.mecPage .mecFilterBox .sapMInputBaseIconContainer {
-    width: 1.35rem !important;
-    min-width: 1.35rem !important;
-    height: 1.62rem !important;
-    color: #24365a !important;
-    line-height: 1.62rem !important;
-}
-
-.mecPage .mecApplyWrap {
-    height: 54px !important;
-    padding: 0 1px 1px 2px !important;
-    justify-content: center !important;
-}
-
-.mecPage .mecApplyButton .sapMBtnInner {
-    min-width: 110px !important;
-    height: 1.95rem !important;
-    min-height: 1.95rem !important;
-    padding: 0 .8rem !important;
-    background: #0a6ff5 !important;
-    border: 0 !important;
-    border-radius: 5px !important;
-    box-shadow: 0 3px 8px rgba(10, 111, 245, .24) !important;
-}
-
-.mecPage .mecApplyButton .sapMBtnContent,
-.mecPage .mecApplyButton .sapMBtnIcon {
-    color: #ffffff !important;
-    font-size: .63rem !important;
-    line-height: 1.95rem !important;
-    font-weight: 700 !important;
-}
-
-/* --- KPIs: patrón Vista Jefatura --- */
-.mecPage .mecKpiGrid {
-    gap: 9px !important;
-}
-
-.mecPage .mecKpiCard {
-    min-height: 76px !important;
-    padding: 10px 9px 10px 12px !important;
-    border-radius: 7px !important;
-    box-shadow: 0 2px 8px rgba(20, 39, 70, .06) !important;
-}
-
-.mecPage .mecKpiCard::before {
-    width: 3px !important;
-    border-radius: 8px 0 0 8px !important;
-}
-
-.mecPage .mecKpiBlue {
-    background: linear-gradient(
-        90deg,
-        rgba(46, 140, 255, .20) 0%,
-        rgba(46, 140, 255, .11) 22%,
-        rgba(46, 140, 255, .04) 48%,
-        rgba(255, 255, 255, .98) 76%,
-        #ffffff 100%
-    ) !important;
-    border-color: rgba(46, 140, 255, .18) !important;
-}
-
-.mecPage .mecKpiGreen {
-    background: linear-gradient(
-        90deg,
-        rgba(50, 183, 99, .20) 0%,
-        rgba(50, 183, 99, .11) 22%,
-        rgba(50, 183, 99, .04) 48%,
-        rgba(255, 255, 255, .98) 76%,
-        #ffffff 100%
-    ) !important;
-    border-color: rgba(50, 183, 99, .18) !important;
-}
-
-.mecPage .mecKpiOrange {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 158, 49, .22) 0%,
-        rgba(255, 158, 49, .12) 22%,
-        rgba(255, 158, 49, .04) 48%,
-        rgba(255, 255, 255, .98) 76%,
-        #ffffff 100%
-    ) !important;
-    border-color: rgba(255, 158, 49, .20) !important;
-}
-
-.mecPage .mecKpiPurple {
-    background: linear-gradient(
-        90deg,
-        rgba(141, 71, 235, .20) 0%,
-        rgba(141, 71, 235, .11) 22%,
-        rgba(141, 71, 235, .04) 48%,
-        rgba(255, 255, 255, .98) 76%,
-        #ffffff 100%
-    ) !important;
-    border-color: rgba(141, 71, 235, .18) !important;
-}
-
-.mecPage .mecKpiIconCircle {
-    flex: 0 0 43px !important;
-    width: 43px !important;
-    height: 43px !important;
-    min-width: 43px !important;
-    min-height: 43px !important;
-    margin-right: 8px !important;
-}
-
-.mecPage .mecKpiIcon {
-    font-size: 1.28rem !important;
-}
-
-.mecPage .mecKpiValue.sapMText {
-    margin-top: 2px !important;
-    font-size: 1.18rem !important;
-    line-height: 1.05 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecKpiLabel.sapMText {
-    color: #43516a !important;
-    font-size: .62rem !important;
-    line-height: 1.15 !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecKpiSub.sapMText {
-    margin-top: 3px !important;
-    color: #6f7c8f !important;
-    font-size: .52rem !important;
-    line-height: 1.1 !important;
-    font-weight: 600 !important;
-}
-
-/* --- Títulos y textos de analítica --- */
-.mecPage .mecCardTitle.sapMTitle {
-    color: #1c2940 !important;
-    font-size: .78rem !important;
-    line-height: 1.15 !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecCardSubtitle.sapMText {
-    margin-top: 2px !important;
-    color: #8792a3 !important;
-    font-size: .50rem !important;
-    line-height: 1.2 !important;
-    font-weight: 600 !important;
-}
-
-.mecPage .mecSectionTitle.sapMText {
-    color: #263954 !important;
-    font-size: .55rem !important;
-    font-weight: 800 !important;
-    line-height: 1.05 !important;
-}
-
-.mecPage .mecSectionHint {
-    margin-left: 3px !important;
-    color: #7190b4 !important;
-    font-size: .49rem !important;
-}
-
-.mecPage .mecSectionAccent {
-    flex: 0 0 24px !important;
-    width: 24px !important;
-    height: 3px !important;
-    margin-right: 4px !important;
-    border-radius: 4px !important;
-}
-
-.mecPage .mecSectionAccentGreen {
-    background: #2ea85b !important;
-}
-
-/* --- Distribución: 3 bloques como maqueta --- */
-.mecPage .mecDistributionColumns {
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(0, 1fr)
-        minmax(0, 1.08fr) !important;
-    gap: 8px !important;
-}
-
-.mecPage .mecDistributionColumn {
-    padding: 7px 9px !important;
-    background: #ffffff !important;
-    border: 1px solid #edf1f6 !important;
-    border-radius: 7px !important;
-}
-
-.mecPage .mecDistRow,
-.mecPage .mecSpecialtyTargetRow {
-    min-height: 31px !important;
-}
-
-.mecPage .mecDistLabel.sapMText {
-    max-width: 100% !important;
-    overflow: hidden !important;
-    color: #3d4a5e !important;
-    font-size: .46rem !important;
-    line-height: 1.05 !important;
-    font-weight: 700 !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-}
-
-.mecPage .mecDistValue.sapMText {
-    flex-basis: 30px !important;
-    width: 30px !important;
-    color: #1e2e4c !important;
-    font-size: .46rem !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecDistPct.sapMText {
-    flex-basis: 40px !important;
-    width: 40px !important;
-    color: #6f7c8f !important;
-    font-size: .42rem !important;
-    font-weight: 700 !important;
-}
-
-.mecPage .mecSpecialtyBullet {
-    flex: 0 0 7px !important;
-    width: 7px !important;
-    height: 7px !important;
-    margin-right: 4px !important;
-    border-radius: 50% !important;
-    background: #2e8cff !important;
-}
-
-.mecPage .mecSpecialtyTargetRow:nth-child(2) .mecSpecialtyBullet {
-    background: #2eaa58 !important;
-}
-
-.mecPage .mecSpecialtyTargetRow:nth-child(3) .mecSpecialtyBullet {
-    background: #8b44dc !important;
-}
-
-.mecPage .mecSpecialtyTargetRow:nth-child(4) .mecSpecialtyBullet {
-    background: #ff8b22 !important;
-}
-
-.mecPage .mecSpecialtyTargetRow:nth-child(5) .mecSpecialtyBullet {
-    background: #7c8798 !important;
-}
-
-/* --- Dona por zona: mayor tamaño y leyenda alineada --- */
-.mecPage .mecZoneColumn {
-    justify-content: flex-start !important;
-}
-
-.mecPage .mecZoneTargetBody {
-    flex: 1 1 0 !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    gap: 12px !important;
-    padding: 6px 3px 2px !important;
-}
-
-.mecPage .mecZoneDonutLarge {
-    flex: 0 0 112px !important;
-    width: 112px !important;
-    height: 112px !important;
-    min-width: 112px !important;
-    min-height: 112px !important;
-}
-
-.mecPage .mecZoneDonutLarge::after {
-    top: 18px !important;
-    right: 18px !important;
-    bottom: 18px !important;
-    left: 18px !important;
-}
-
-.mecPage .mecDonutValueLarge.sapMText {
-    font-size: 1rem !important;
-    font-weight: 900 !important;
-}
-
-.mecPage .mecZoneLegendTarget {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-}
-
-.mecPage .mecZoneLegendTargetRow {
-    min-height: 22px !important;
-    gap: 5px !important;
-}
-
-.mecPage .mecZoneLegendName.sapMText {
-    max-width: 105px !important;
-    overflow: hidden !important;
-    color: #3d4a5e !important;
-    font-size: .41rem !important;
-    font-weight: 700 !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-}
-
-.mecPage .mecZoneLegendValue.sapMText {
-    flex: 0 0 25px !important;
-    width: 25px !important;
-    font-size: .42rem !important;
-    font-weight: 800 !important;
-}
-
-.mecPage .mecZoneLegendPct.sapMText {
-    flex: 0 0 38px !important;
-    width: 38px !important;
-    color: #6f7c8f !important;
-    font-size: .39rem !important;
-    font-weight: 700 !important;
-    text-align: right !important;
-}
-
-/* --- Lower cards: jerarquía textual más legible --- */
-.mecPage .mecHeatRowLabel.sapMText,
-.mecPage .mecRowName.sapMText,
-.mecPage .mecPressureNumber.sapMText,
-.mecPage .mecTableNumber.sapMText {
-    font-size: .43rem !important;
-}
-
-.mecPage .mecHeatHeaderCell.sapMText,
-.mecPage .mecMiniTableHeader .sapMText,
-.mecPage .mecPressureHeader .sapMText {
-    font-size: .39rem !important;
-}
-
-/* No mostrar símbolo/check de estado en ProgressIndicator; el color lo da CSS */
-.mecPage .sapMPIText,
-.mecPage .sapMPITextLeft,
-.mecPage .sapMPITextRight {
-    display: none !important;
-}
-
-/* --- Laptop --- */
-@media screen and (min-width: 1181px) and (max-height: 730px) {
-    .mecPage .mecFilterBox,
-    .mecPage .mecApplyWrap {
-        height: 50px !important;
-        min-height: 50px !important;
+    .mecPage
+    .mecSpecialtyRow.sapMFlexBox {
+        min-height: 27px !important;
     }
 
-    .mecPage .mecFilterBox {
-        padding: 5px 8px 4px !important;
-    }
 
-    .mecPage .mecKpiCard {
-        min-height: 68px !important;
-        padding: 7px 8px 7px 11px !important;
-    }
-
-    .mecPage .mecKpiIconCircle {
-        flex-basis: 38px !important;
-        width: 38px !important;
-        height: 38px !important;
-        min-width: 38px !important;
-        min-height: 38px !important;
-    }
-
-    .mecPage .mecKpiValue.sapMText {
-        font-size: 1.04rem !important;
-    }
-
-    .mecPage .mecZoneDonutLarge {
+    .mecPage
+    .mecZoneDonut {
         flex-basis: 96px !important;
+
         width: 96px !important;
         height: 96px !important;
+
         min-width: 96px !important;
         min-height: 96px !important;
+
+        max-width: 96px !important;
+        max-height: 96px !important;
     }
 
-    .mecPage .mecZoneDonutLarge::after {
+
+    .mecPage
+    .mecZoneDonut::after {
         top: 15px !important;
         right: 15px !important;
         bottom: 15px !important;
         left: 15px !important;
+    }
+
+
+    .mecPage
+    .mecHeatRow.sapMFlexBox {
+        min-height: 29px !important;
+    }
+
+
+    .mecPage
+    .mecHeatCell.sapMFlexBox {
+        min-height: 27px !important;
+    }
+
+
+    .mecPage
+    .mecMiniTableRow.sapMFlexBox,
+
+    .mecPage
+    .mecPressureRow.sapMFlexBox {
+        min-height: 27px !important;
+    }
+}
+
+
+/* ================================================================
+   TABLET
+   ================================================================ */
+
+@media screen
+and (max-width: 900px) {
+
+    .mecPage.sapMPage,
+    .mecPage
+    .sapMPageCont,
+    .mecPage
+    .sapMPageScroll {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        overflow-y: auto !important;
+    }
+
+
+    .mecPage
+    .mecDashboard.sapMFlexBox {
+        display: flex !important;
+        flex-direction: column !important;
+
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        padding: 10px !important;
+
+        overflow: visible !important;
+    }
+
+
+    .mecPage
+    .mecHeader.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 48px !important;
+    }
+
+
+    .mecPage
+    .mecFilters.sapMFlexBox {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        overflow: visible !important;
+    }
+
+
+    .mecPage
+    .mecFilterBox.sapMFlexBox,
+
+    .mecPage
+    .mecApplyWrap.sapMFlexBox {
+        height: 54px !important;
+    }
+
+
+    .mecPage
+    .mecKpiGrid.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        overflow: visible !important;
+    }
+
+
+    .mecPage
+    .mecKpiCard.sapMFlexBox {
+        height: 76px !important;
+    }
+
+
+    .mecPage
+    .mecMiddleGrid.sapMFlexBox,
+
+    .mecPage
+    .mecLowerGrid.sapMFlexBox,
+
+    .mecPage
+    .mecDistributionColumns.sapMFlexBox {
+        grid-template-columns:
+            minmax(0, 1fr) !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        overflow: visible !important;
+    }
+
+
+    .mecPage
+    .mecCard.sapMFlexBox {
+        min-height: 260px !important;
+    }
+
+
+    .mecPage
+    .mecDistributionColumn.sapMFlexBox {
+        min-height: 190px !important;
+    }
+}
+
+
+/* ================================================================
+   MÓVIL
+   ================================================================ */
+
+@media screen
+and (max-width: 600px) {
+
+    .mecPage
+    .mecHeader.sapMFlexBox {
+        flex-wrap: wrap !important;
+
+        gap: 4px !important;
+    }
+
+
+    .mecPage
+    .mecTitle.sapMTitle {
+        font-size: 1.20rem !important;
+    }
+
+
+    .mecPage
+    .mecSubtitle.sapMText {
+        font-size: .64rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .mecPage
+    .mecPeriodBadge.sapMFlexBox {
+        display: none !important;
+    }
+
+
+    .mecPage
+    .mecFilters.sapMFlexBox {
+        grid-template-columns:
+            minmax(0, 1fr) !important;
+    }
+
+
+    .mecPage
+    .mecKpiGrid.sapMFlexBox {
+        grid-template-columns:
+            minmax(0, 1fr) !important;
+    }
+
+
+    .mecPage
+    .mecHeatLegend.sapMFlexBox {
+        flex-wrap: wrap !important;
+    }
+
+
+    .mecPage
+    .mecZoneTargetBody.sapMFlexBox {
+        flex-direction: column !important;
     }
 }

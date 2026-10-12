@@ -3,142 +3,595 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/dom/includeStylesheet",
+    "sap/ui/core/ResizeHandler",
     "mantenimiento/model/DetalleResponsableService"
-], function (Controller, JSONModel, MessageToast, includeStylesheet, DetalleResponsableService) {
+], function (
+    Controller,
+    JSONModel,
+    MessageToast,
+    includeStylesheet,
+    ResizeHandler,
+    DetalleResponsableService
+) {
     "use strict";
 
     return Controller.extend("mantenimiento.controller.DetalleResponsable", {
-        onInit: function () {
-            var context = this._navigationContext();
 
-            includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleResponsable.css") + "?v=20260821-live-data");
+        onInit: function () {
+            var oContext = this._navigationContext();
+            var oModel;
+
+            includeStylesheet(
+                sap.ui.require.toUrl(
+                    "mantenimiento/css/DetalleResponsable.css"
+                ) + "?v=20261002-unified"
+            );
+
             this._requestId = 0;
             this._rawData = null;
+
+            this._resizeHandlerId = null;
+            this._resizeTimer = null;
+
+            /*
+             * Valor provisional.
+             * Después del render se calcula automáticamente
+             * cuántas filas caben realmente.
+             */
             this._filters = {
-                responsableId: context.responsableId || "",
-                periodKey: context.periodKey || "2026-ANUAL",
-                zona: context.zona || "TODAS",
-                origen: context.origen || "TODAS",
+                responsableId: oContext.responsableId || "",
+                periodKey: oContext.periodKey || "2026-ANUAL",
+                zona: oContext.zona || "TODAS",
+                origen: oContext.origen || "TODAS",
                 page: 1,
-                pageSize: 5
+                pageSize: 6
             };
 
-            this.getView().setModel(new JSONModel(
-                DetalleResponsableService.createEmpty(this._filters)
-            ), "detail");
-            this.getView().getModel("detail").setSizeLimit(1000);
+            oModel = new JSONModel(
+                DetalleResponsableService.createEmpty(
+                    this._filters
+                )
+            );
+
+            oModel.setSizeLimit(1000);
+
+            this.getView().setModel(
+                oModel,
+                "detail"
+            );
+
             this._load(false);
         },
 
+
+        /* ============================================================
+           AFTER RENDERING
+           ============================================================ */
+
         onAfterRendering: function () {
             this._paintComplianceDonut();
+
+            this._registerResize();
+
+            this._scheduleTableResize();
         },
 
+
+        /* ============================================================
+           FILTROS
+           ============================================================ */
+
         onApplyFilters: function () {
-            this._filters.periodKey = this.byId("detallePeriodo").getSelectedKey() || "2026-W01";
-            this._filters.zona = this.byId("selectZona").getSelectedKey() || "TODAS";
+            this._filters.periodKey =
+                this.byId("detallePeriodo")
+                    .getSelectedKey() ||
+                "2026-ANUAL";
+
+            this._filters.zona =
+                this.byId("selectZona")
+                    .getSelectedKey() ||
+                "TODAS";
+
             this._filters.page = 1;
+
             this._load(true);
         },
 
-        onPageSizeChange: function (event) {
-            this._filters.pageSize = Number(event.getSource().getSelectedKey()) || 5;
-            this._filters.page = 1;
-            this._rebuildFromRaw();
-        },
+
+        /* ============================================================
+           PAGINACIÓN
+           ============================================================ */
 
         onPreviousPage: function () {
-            this._filters.page = Math.max(1, this._filters.page - 1);
+            this._filters.page = Math.max(
+                1,
+                this._filters.page - 1
+            );
+
             this._rebuildFromRaw();
         },
 
         onNextPage: function () {
-            var pagination = this.getView().getModel("detail").getProperty("/paginacion") || {};
-            this._filters.page = Math.min(Number(pagination.totalPages) || 1, this._filters.page + 1);
+            var oPagination =
+                this.getView()
+                    .getModel("detail")
+                    .getProperty("/paginacion") || {};
+
+            var iTotalPages =
+                Number(
+                    oPagination.totalPages
+                ) || 1;
+
+            this._filters.page = Math.min(
+                iTotalPages,
+                this._filters.page + 1
+            );
+
             this._rebuildFromRaw();
         },
+
+
+        /* ============================================================
+           NAVEGACIÓN
+           ============================================================ */
 
         onNavBack: function () {
             window.history.go(-1);
         },
 
-        onNavToOrder: function (event) {
-            MessageToast.show("Detalle de la orden: " + event.getSource().getText());
+        onNavToOrder: function (oEvent) {
+            MessageToast.show(
+                "Detalle de la orden: " +
+                oEvent.getSource().getText()
+            );
         },
 
-        _load: function (notify) {
-            var requestId = ++this._requestId;
-            var model = this.getView().getModel("detail");
 
-            this.getView().setBusy(true);
-            DetalleResponsableService.load(this._odata(), this._filters).then(function (result) {
-                if (requestId !== this._requestId) {
-                    return;
-                }
-                this._rawData = result.rawData;
-                model.setData(result.data);
-                this._syncControls(result.data);
-                this._paintComplianceDonutAsync();
-                if (notify) {
-                    MessageToast.show("Detalle actualizado con datos de SAP");
-                }
-            }.bind(this)).catch(function (error) {
-                if (requestId !== this._requestId) {
-                    return;
-                }
-                model.setData(DetalleResponsableService.createEmpty(this._filters));
-                this._syncControls(model.getData());
-                this._paintComplianceDonutAsync();
-                if (notify) {
-                    MessageToast.show(error.message || "No fue posible cargar el detalle del responsable");
-                }
-            }.bind(this)).finally(function () {
-                if (requestId === this._requestId) {
-                    this.getView().setBusy(false);
-                }
-            }.bind(this));
+        /* ============================================================
+           CARGA SAP
+           ============================================================ */
+
+        _load: function (bNotify) {
+            var iRequestId =
+                ++this._requestId;
+
+            var oModel =
+                this.getView()
+                    .getModel("detail");
+
+            this.getView()
+                .setBusy(true);
+
+            DetalleResponsableService
+                .load(
+                    this._odata(),
+                    this._filters
+                )
+                .then(function (oResult) {
+
+                    if (
+                        iRequestId !==
+                        this._requestId
+                    ) {
+                        return;
+                    }
+
+                    this._rawData =
+                        oResult.rawData;
+
+                    oModel.setData(
+                        oResult.data
+                    );
+
+                    this._syncControls(
+                        oResult.data
+                    );
+
+                    this._paintComplianceDonutAsync();
+
+                    this._scheduleTableResize();
+
+                    if (bNotify) {
+                        MessageToast.show(
+                            "Detalle actualizado con datos de SAP"
+                        );
+                    }
+
+                }.bind(this))
+                .catch(function (oError) {
+
+                    if (
+                        iRequestId !==
+                        this._requestId
+                    ) {
+                        return;
+                    }
+
+                    oModel.setData(
+                        DetalleResponsableService
+                            .createEmpty(
+                                this._filters
+                            )
+                    );
+
+                    this._syncControls(
+                        oModel.getData()
+                    );
+
+                    this._paintComplianceDonutAsync();
+
+                    this._scheduleTableResize();
+
+                    if (bNotify) {
+                        MessageToast.show(
+                            oError &&
+                            oError.message
+                                ? oError.message
+                                : "No fue posible cargar el detalle del responsable"
+                        );
+                    }
+
+                }.bind(this))
+                .finally(function () {
+
+                    if (
+                        iRequestId ===
+                        this._requestId
+                    ) {
+                        this.getView()
+                            .setBusy(false);
+                    }
+
+                }.bind(this));
         },
+
+
+        /* ============================================================
+           RECONSTRUIR DESDE LOS DATOS YA CARGADOS
+           ============================================================ */
 
         _rebuildFromRaw: function () {
-            var model = this.getView().getModel("detail");
+            var oModel =
+                this.getView()
+                    .getModel("detail");
 
             if (!this._rawData) {
                 return;
             }
-            model.setData(DetalleResponsableService.build(this._rawData, this._filters));
-            this._syncControls(model.getData());
+
+            oModel.setData(
+                DetalleResponsableService.build(
+                    this._rawData,
+                    this._filters
+                )
+            );
+
+            this._syncControls(
+                oModel.getData()
+            );
+
             this._paintComplianceDonutAsync();
         },
 
+
+        /* ============================================================
+           CONTEXTO DE NAVEGACIÓN
+           ============================================================ */
+
         _navigationContext: function () {
-            var component = this.getOwnerComponent();
-            var model = component && component.getModel("detalleResponsableNavigation");
-            return model && model.getData ? model.getData() || {} : {};
+            var oComponent =
+                this.getOwnerComponent();
+
+            var oModel =
+                oComponent &&
+                oComponent.getModel(
+                    "detalleResponsableNavigation"
+                );
+
+            return (
+                oModel &&
+                oModel.getData
+                    ? oModel.getData() || {}
+                    : {}
+            );
         },
+
+
+        /* ============================================================
+           ODATA
+           ============================================================ */
 
         _odata: function () {
-            var component = this.getOwnerComponent();
-            return component && component.getModel("dashboardOData") || this.getView().getModel("dashboardOData");
+            var oComponent =
+                this.getOwnerComponent();
+
+            return (
+                oComponent &&
+                oComponent.getModel(
+                    "dashboardOData"
+                )
+            ) ||
+                this.getView()
+                    .getModel(
+                        "dashboardOData"
+                    );
         },
 
-        _syncControls: function (data) {
-            var filters = data.filtros || {};
-            this.byId("detallePeriodo").setSelectedKey(filters.periodKey || "2026-ANUAL");
-            this.byId("selectZona").setSelectedKey(filters.zonaKey || "TODAS");
-            this.byId("pageSizeSelect").setSelectedKey(String(this._filters.pageSize || 5));
+
+        /* ============================================================
+           SINCRONIZAR CONTROLES
+           ============================================================ */
+
+        _syncControls: function (oData) {
+            var oFilters =
+                oData.filtros || {};
+
+            var oPeriodo =
+                this.byId(
+                    "detallePeriodo"
+                );
+
+            var oZona =
+                this.byId(
+                    "selectZona"
+                );
+
+            if (oPeriodo) {
+                oPeriodo.setSelectedKey(
+                    oFilters.periodKey ||
+                    "2026-ANUAL"
+                );
+            }
+
+            if (oZona) {
+                oZona.setSelectedKey(
+                    oFilters.zonaKey ||
+                    "TODAS"
+                );
+            }
         },
+
+
+        /* ============================================================
+           DONUT DE CUMPLIMIENTO
+           ============================================================ */
 
         _paintComplianceDonutAsync: function () {
-            window.setTimeout(this._paintComplianceDonut.bind(this), 0);
+            window.setTimeout(
+                this._paintComplianceDonut.bind(
+                    this
+                ),
+                0
+            );
         },
 
         _paintComplianceDonut: function () {
-            var donut = this.byId("cumplimientoChart");
-            var kpi = this.getView().getModel("detail").getProperty("/kpi") || {};
-            var value = Math.max(0, Math.min(100, Number(kpi.cumplimientoNumero || 0)));
+            var oDonut =
+                this.byId(
+                    "cumplimientoChart"
+                );
 
-            if (donut && donut.getDomRef()) {
-                donut.getDomRef().style.setProperty("--detalle-compliance-angle", (value * 3.6) + "deg");
+            var oModel =
+                this.getView()
+                    .getModel("detail");
+
+            var oKpi =
+                oModel
+                    ? oModel.getProperty(
+                        "/kpi"
+                    ) || {}
+                    : {};
+
+            var iValue =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(
+                            oKpi.cumplimientoNumero ||
+                            0
+                        )
+                    )
+                );
+
+            if (
+                oDonut &&
+                oDonut.getDomRef()
+            ) {
+                oDonut
+                    .getDomRef()
+                    .style
+                    .setProperty(
+                        "--detalle-compliance-angle",
+                        (
+                            iValue *
+                            3.6
+                        ) + "deg"
+                    );
+            }
+        },
+
+
+        /* ============================================================
+           RESIZE
+           ============================================================ */
+
+        _registerResize: function () {
+            var oCard =
+                this.byId(
+                    "detalleTableCard"
+                );
+
+            if (
+                !oCard ||
+                this._resizeHandlerId
+            ) {
+                return;
+            }
+
+            this._resizeHandlerId =
+                ResizeHandler.register(
+                    oCard,
+                    function () {
+                        this._scheduleTableResize();
+                    }.bind(this)
+                );
+        },
+
+        _scheduleTableResize: function () {
+            if (this._resizeTimer) {
+                window.clearTimeout(
+                    this._resizeTimer
+                );
+            }
+
+            this._resizeTimer =
+                window.setTimeout(
+                    function () {
+
+                        this._resizeTimer =
+                            null;
+
+                        this._calculatePageSize();
+
+                    }.bind(this),
+                    120
+                );
+        },
+
+
+        /* ============================================================
+           FILAS AUTOMÁTICAS
+           ============================================================ */
+
+        _calculatePageSize: function () {
+            var oArea =
+                this.byId(
+                    "detalleTableArea"
+                );
+
+            var oTable =
+                this.byId(
+                    "tablaOrdenesDesviadas"
+                );
+
+            if (
+                !oArea ||
+                !oArea.getDomRef() ||
+                !oTable
+            ) {
+                return;
+            }
+
+            var iAvailableHeight =
+                Math.floor(
+                    oArea.getDomRef()
+                        .clientHeight
+                );
+
+            if (
+                !iAvailableHeight ||
+                iAvailableHeight < 40
+            ) {
+                return;
+            }
+
+            var iHeaderHeight = 34;
+
+            var oTableDom =
+                oTable.getDomRef();
+
+            if (oTableDom) {
+                var oHeader =
+                    oTableDom.querySelector(
+                        ".sapMListTblHeader"
+                    );
+
+                if (oHeader) {
+                    iHeaderHeight =
+                        Math.ceil(
+                            oHeader
+                                .getBoundingClientRect()
+                                .height
+                        );
+                }
+            }
+
+            /*
+             * Altura mínima de fila:
+             * monitor = 44px
+             * laptop baja = 39px
+             */
+            var iRowHeight =
+                window.innerHeight <= 720
+                    ? 39
+                    : 44;
+
+            var iNewPageSize =
+                Math.max(
+                    1,
+                    Math.floor(
+                        (
+                            iAvailableHeight -
+                            iHeaderHeight -
+                            2
+                        ) /
+                        iRowHeight
+                    )
+                );
+
+            /*
+             * Evitamos valores exagerados.
+             */
+            iNewPageSize =
+                Math.min(
+                    50,
+                    iNewPageSize
+                );
+
+            if (
+                iNewPageSize ===
+                this._filters.pageSize
+            ) {
+                return;
+            }
+
+            this._filters.pageSize =
+                iNewPageSize;
+
+            this._filters.page = 1;
+
+            if (this._rawData) {
+                this._rebuildFromRaw();
+            }
+        },
+
+
+        /* ============================================================
+           EXIT
+           ============================================================ */
+
+        onExit: function () {
+            if (
+                this._resizeHandlerId
+            ) {
+                ResizeHandler.deregister(
+                    this._resizeHandlerId
+                );
+
+                this._resizeHandlerId =
+                    null;
+            }
+
+            if (
+                this._resizeTimer
+            ) {
+                window.clearTimeout(
+                    this._resizeTimer
+                );
+
+                this._resizeTimer =
+                    null;
             }
         }
     });

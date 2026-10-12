@@ -12,13 +12,14 @@
         showHeader="false"
         enableScrolling="false"
         busy="{detalle>/loading}"
+        busyIndicatorDelay="0"
         class="dmPage">
 
         <VBox
             width="100%"
             height="100%"
             fitContainer="true"
-            class="dmDashboard">
+            class="dmDashboard sapUiSizeCompact">
 
             <!-- =====================================================
                  ENCABEZADO
@@ -29,13 +30,15 @@
                 <Title
                     text="Detalle de mecánicos"
                     level="H1"
-                    class="dmTitle" />
+                    class="dmTitle"/>
 
                 <Text
                     text="Análisis de capacidad, disponibilidad y carga de la plantilla de mecánicos"
-                    class="dmSubtitle" />
+                    wrapping="false"
+                    class="dmSubtitle"/>
 
             </VBox>
+
 
             <!-- =====================================================
                  FILTROS
@@ -48,11 +51,13 @@
                 class="dmFilters">
 
                 <!-- AÑO -->
-                <VBox class="dmFilterItem dmFilterPeriod">
+
+                <VBox
+                    class="dmFilterItem dmFilterPeriod">
 
                     <Label
                         text="Año"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -63,18 +68,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
+
                 <!-- FECHA DESDE -->
-                <VBox class="dmFilterItem dmFilterDate">
+
+                <VBox
+                    class="dmFilterItem dmFilterDate">
 
                     <Label
                         text="Fecha desde"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <DatePicker
                         width="100%"
@@ -82,16 +90,19 @@
                         displayFormat="dd/MM/yyyy"
                         valueFormat="dd/MM/yyyy"
                         change=".onFechaChange"
-                        class="dmDateControl" />
+                        class="dmDateControl"/>
 
                 </VBox>
 
+
                 <!-- FECHA HASTA -->
-                <VBox class="dmFilterItem dmFilterDate">
+
+                <VBox
+                    class="dmFilterItem dmFilterDate">
 
                     <Label
                         text="Fecha hasta"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <DatePicker
                         width="100%"
@@ -99,16 +110,19 @@
                         displayFormat="dd/MM/yyyy"
                         valueFormat="dd/MM/yyyy"
                         change=".onFechaChange"
-                        class="dmDateControl" />
+                        class="dmDateControl"/>
 
                 </VBox>
 
+
                 <!-- ZONA -->
-                <VBox class="dmFilterItem dmFilterZone">
+
+                <VBox
+                    class="dmFilterItem dmFilterZone">
 
                     <Label
                         text="Zona"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -118,18 +132,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
+
                 <!-- SUPERVISOR -->
-                <VBox class="dmFilterItem dmFilterSupervisor">
+
+                <VBox
+                    class="dmFilterItem dmFilterSupervisor">
 
                     <Label
                         text="Supervisor"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -139,18 +156,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
+
                 <!-- TURNO -->
-                <VBox class="dmFilterItem dmFilterTurno">
+
+                <VBox
+                    class="dmFilterItem dmFilterTurno">
 
                     <Label
                         text="Turno"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -160,18 +180,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
-                <!-- TIPO DE SERVICIO -->
-                <VBox class="dmFilterItem dmFilterService">
+
+                <!-- TIPO SERVICIO -->
+
+                <VBox
+                    class="dmFilterItem dmFilterService">
 
                     <Label
                         text="Tipo de servicio"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -181,18 +204,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
+
                 <!-- ESPECIALIDAD -->
-                <VBox class="dmFilterItem dmFilterSpecialty">
+
+                <VBox
+                    class="dmFilterItem dmFilterSpecialty">
 
                     <Label
                         text="Especialidad"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -202,18 +228,21 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
+
                 <!-- ESTADO -->
-                <VBox class="dmFilterItem dmFilterStatus">
+
+                <VBox
+                    class="dmFilterItem dmFilterStatus">
 
                     <Label
                         text="Estado"
-                        class="dmFilterLabel" />
+                        class="dmFilterLabel"/>
 
                     <Select
                         width="100%"
@@ -223,15 +252,16 @@
 
                         <core:Item
                             key="{detalle>key}"
-                            text="{detalle>text}" />
+                            text="{detalle>text}"/>
 
                     </Select>
 
                 </VBox>
 
-                <!-- BOTÓN -->
-                <HBox
-                    alignItems="Center"
+
+                <!-- APLICAR -->
+
+                <VBox
                     justifyContent="Center"
                     class="dmApplyButtonBox">
 
@@ -241,14 +271,15 @@
                         icon="sap-icon://filter"
                         type="Emphasized"
                         press=".onApplyFilters"
-                        class="dmApplyBtn" />
+                        class="dmApplyBtn"/>
 
-                </HBox>
+                </VBox>
 
             </HBox>
 
+
             <!-- =====================================================
-                 KPI
+                 KPIS
                  ===================================================== -->
 
             <HBox
@@ -256,7 +287,8 @@
                 alignItems="Stretch"
                 class="dmKpiRow">
 
-                <!-- MECÁNICOS ACTIVOS -->
+                <!-- ACTIVOS -->
+
                 <HBox
                     alignItems="Center"
                     class="dmKpiCard dmKpiBlue">
@@ -265,7 +297,7 @@
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
+                            baseSize="0%"/>
                     </layoutData>
 
                     <HBox
@@ -275,29 +307,33 @@
 
                         <core:Icon
                             src="sap-icon://group"
-                            class="dmKpiIcon" />
+                            class="dmKpiIcon"/>
 
                     </HBox>
 
-                    <VBox class="dmKpiContent">
-
-                        <Text
-                            text="{detalle>/kpis/activos}"
-                            class="dmKpiValue" />
+                    <VBox
+                        class="dmKpiContent"
+                        justifyContent="Center">
 
                         <Text
                             text="Mecánicos activos"
-                            class="dmKpiLabel" />
+                            class="dmKpiLabel"/>
+
+                        <Text
+                            text="{detalle>/kpis/activos}"
+                            class="dmKpiValue"/>
 
                         <Text
                             text="Plantilla activa en el periodo"
-                            class="dmKpiHelper" />
+                            class="dmKpiHelper"/>
 
                     </VBox>
 
                 </HBox>
 
-                <!-- MECÁNICOS DISPONIBLES -->
+
+                <!-- DISPONIBLES -->
+
                 <HBox
                     alignItems="Center"
                     class="dmKpiCard dmKpiGreen">
@@ -306,7 +342,7 @@
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
+                            baseSize="0%"/>
                     </layoutData>
 
                     <HBox
@@ -316,29 +352,33 @@
 
                         <core:Icon
                             src="sap-icon://employee-approvals"
-                            class="dmKpiIcon" />
+                            class="dmKpiIcon"/>
 
                     </HBox>
 
-                    <VBox class="dmKpiContent">
-
-                        <Text
-                            text="{detalle>/kpis/disponibles}"
-                            class="dmKpiValue" />
+                    <VBox
+                        class="dmKpiContent"
+                        justifyContent="Center">
 
                         <Text
                             text="Mecánicos disponibles"
-                            class="dmKpiLabel" />
+                            class="dmKpiLabel"/>
+
+                        <Text
+                            text="{detalle>/kpis/disponibles}"
+                            class="dmKpiValue"/>
 
                         <Text
                             text="{detalle>/kpis/disponiblesPct}"
-                            class="dmKpiHelper" />
+                            class="dmKpiHelper"/>
 
                     </VBox>
 
                 </HBox>
 
-                <!-- RECURSOS SOBRE CAPACIDAD -->
+
+                <!-- SOBRE CAPACIDAD -->
+
                 <HBox
                     alignItems="Center"
                     class="dmKpiCard dmKpiOrange">
@@ -347,7 +387,7 @@
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
+                            baseSize="0%"/>
                     </layoutData>
 
                     <HBox
@@ -357,29 +397,33 @@
 
                         <core:Icon
                             src="sap-icon://warning"
-                            class="dmKpiIcon" />
+                            class="dmKpiIcon"/>
 
                     </HBox>
 
-                    <VBox class="dmKpiContent">
-
-                        <Text
-                            text="{detalle>/kpis/sobrecapacidad}"
-                            class="dmKpiValue" />
+                    <VBox
+                        class="dmKpiContent"
+                        justifyContent="Center">
 
                         <Text
                             text="Recursos sobre capacidad"
-                            class="dmKpiLabel" />
+                            class="dmKpiLabel"/>
+
+                        <Text
+                            text="{detalle>/kpis/sobrecapacidad}"
+                            class="dmKpiValue"/>
 
                         <Text
                             text="{detalle>/kpis/sobrecapacidadPct}"
-                            class="dmKpiHelper" />
+                            class="dmKpiHelper"/>
 
                     </VBox>
 
                 </HBox>
 
+
                 <!-- COBERTURA -->
+
                 <HBox
                     alignItems="Center"
                     class="dmKpiCard dmKpiPurple">
@@ -388,7 +432,7 @@
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
+                            baseSize="0%"/>
                     </layoutData>
 
                     <HBox
@@ -398,23 +442,25 @@
 
                         <core:Icon
                             src="sap-icon://shield"
-                            class="dmKpiIcon" />
+                            class="dmKpiIcon"/>
 
                     </HBox>
 
-                    <VBox class="dmKpiContent">
-
-                        <Text
-                            text="{detalle>/kpis/cobertura}"
-                            class="dmKpiValue" />
+                    <VBox
+                        class="dmKpiContent"
+                        justifyContent="Center">
 
                         <Text
                             text="Cobertura de demanda programada"
-                            class="dmKpiLabel" />
+                            class="dmKpiLabel"/>
+
+                        <Text
+                            text="{detalle>/kpis/cobertura}"
+                            class="dmKpiValue"/>
 
                         <Text
                             text="Demanda cubierta con la plantilla actual"
-                            class="dmKpiHelper" />
+                            class="dmKpiHelper"/>
 
                     </VBox>
 
@@ -422,8 +468,9 @@
 
             </HBox>
 
+
             <!-- =====================================================
-                 CONTENIDO PRINCIPAL
+                 CONTENIDO
                  ===================================================== -->
 
             <VBox
@@ -435,8 +482,9 @@
                     <FlexItemData
                         growFactor="1"
                         shrinkFactor="1"
-                        baseSize="0%" />
+                        baseSize="0%"/>
                 </layoutData>
+
 
                 <!-- =================================================
                      FILA SUPERIOR
@@ -446,28 +494,27 @@
                     width="100%"
                     fitContainer="true"
                     alignItems="Stretch"
-                    class="dmDashboardRow">
+                    class="dmDashboardRow dmTopRow">
 
                     <layoutData>
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
+                            baseSize="0%"/>
                     </layoutData>
 
-                    <!-- =============================================
-                         DISTRIBUCIÓN DE MECÁNICOS
-                         ============================================= -->
+
+                    <!-- DISTRIBUCIÓN -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardSmall dmDistributionCard">
+                        class="dmCard dmDistributionCard">
 
                         <layoutData>
                             <FlexItemData
                                 growFactor="26"
                                 shrinkFactor="1"
-                                baseSize="0%" />
+                                baseSize="0%"/>
                         </layoutData>
 
                         <HBox
@@ -477,23 +524,25 @@
 
                             <Text
                                 text="Distribución de mecánicos"
-                                class="dmCardTitle" />
+                                class="dmCardTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
 
                         <Text
                             text="Resumen de mecánicos por turno y condición"
-                            class="dmCardSubtitle" />
+                            class="dmCardSubtitle"/>
+
 
                         <VBox
                             width="100%"
                             class="dmDistributionList">
 
                             <!-- DIURNO -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -506,7 +555,7 @@
 
                                     <core:Icon
                                         src="sap-icon://light-mode"
-                                        class="dmBlueText" />
+                                        class="dmBlueText"/>
 
                                 </HBox>
 
@@ -516,7 +565,7 @@
 
                                     <Text
                                         text="{detalle>/turnos/0/label}"
-                                        class="dmDistributionName" />
+                                        class="dmDistributionName"/>
 
                                     <ProgressIndicator
                                         width="100%"
@@ -524,21 +573,23 @@
                                         displayValue=""
                                         showValue="false"
                                         state="None"
-                                        class="dmProgress dmProgressBlue" />
+                                        class="dmProgress dmProgressBlue"/>
 
                                 </VBox>
 
                                 <Text
                                     text="{detalle>/turnos/0/value}"
-                                    class="dmDistributionValue dmBlueText" />
+                                    class="dmDistributionValue dmBlueText"/>
 
                                 <Text
                                     text="{detalle>/turnos/0/pctText}"
-                                    class="dmDistributionPct dmBlueText" />
+                                    class="dmDistributionPct dmBlueText"/>
 
                             </HBox>
 
+
                             <!-- NOCTURNO -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -551,7 +602,7 @@
 
                                     <core:Icon
                                         src="sap-icon://dark-mode"
-                                        class="dmGreenText" />
+                                        class="dmGreenText"/>
 
                                 </HBox>
 
@@ -561,7 +612,7 @@
 
                                     <Text
                                         text="{detalle>/turnos/1/label}"
-                                        class="dmDistributionName" />
+                                        class="dmDistributionName"/>
 
                                     <ProgressIndicator
                                         width="100%"
@@ -569,21 +620,23 @@
                                         displayValue=""
                                         showValue="false"
                                         state="None"
-                                        class="dmProgress dmProgressGreen" />
+                                        class="dmProgress dmProgressGreen"/>
 
                                 </VBox>
 
                                 <Text
                                     text="{detalle>/turnos/1/value}"
-                                    class="dmDistributionValue dmGreenText" />
+                                    class="dmDistributionValue dmGreenText"/>
 
                                 <Text
                                     text="{detalle>/turnos/1/pctText}"
-                                    class="dmDistributionPct dmGreenText" />
+                                    class="dmDistributionPct dmGreenText"/>
 
                             </HBox>
 
+
                             <!-- FIN DE SEMANA -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -596,7 +649,7 @@
 
                                     <core:Icon
                                         src="sap-icon://calendar"
-                                        class="dmPurpleText" />
+                                        class="dmPurpleText"/>
 
                                 </HBox>
 
@@ -606,7 +659,7 @@
 
                                     <Text
                                         text="{detalle>/turnos/2/label}"
-                                        class="dmDistributionName" />
+                                        class="dmDistributionName"/>
 
                                     <ProgressIndicator
                                         width="100%"
@@ -614,21 +667,22 @@
                                         displayValue=""
                                         showValue="false"
                                         state="None"
-                                        class="dmProgress dmProgressPurple" />
+                                        class="dmProgress dmProgressPurple"/>
 
                                 </VBox>
 
                                 <Text
                                     text="{detalle>/turnos/2/value}"
-                                    class="dmDistributionValue dmPurpleText" />
+                                    class="dmDistributionValue dmPurpleText"/>
 
                                 <Text
                                     text="{detalle>/turnos/2/pctText}"
-                                    class="dmDistributionPct dmPurpleText" />
+                                    class="dmDistributionPct dmPurpleText"/>
 
                             </HBox>
 
                         </VBox>
+
 
                         <HBox
                             width="100%"
@@ -640,36 +694,38 @@
 
                                 <core:Icon
                                     src="sap-icon://group"
-                                    class="dmTotalIcon" />
+                                    class="dmTotalIcon"/>
 
                                 <Text
                                     text="Total mecánicos"
-                                    class="dmTotalLabel" />
+                                    class="dmTotalLabel"/>
 
                             </HBox>
 
                             <Text
                                 text="{detalle>/kpis/activos}"
-                                class="dmTotalValue" />
+                                class="dmTotalValue"/>
 
                         </HBox>
 
                     </VBox>
 
-                    <!-- =============================================
-                         UTILIZACIÓN DE PLANTILLA POR TURNO
-                         ============================================= -->
+
+                    <!-- =================================================
+                         UTILIZACIÓN POR TURNO
+                         ================================================= -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardMedium dmTurnUtilCard">
+                        class="dmCard dmTurnUtilCard">
 
                         <layoutData>
                             <FlexItemData
                                 growFactor="35"
                                 shrinkFactor="1"
-                                baseSize="0%" />
+                                baseSize="0%"/>
                         </layoutData>
+
 
                         <HBox
                             width="100%"
@@ -679,19 +735,21 @@
                             <Text
                                 text="Utilización de plantilla por turno"
                                 wrapping="false"
-                                class="dmTurnUtilTitle" />
+                                class="dmTurnUtilTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
+
 
                         <VBox
                             width="100%"
                             class="dmTurnUtilBody">
 
-                            <!-- CABECERA -->
+                            <!-- HEADER -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -700,29 +758,31 @@
                                 <Text
                                     text="Turno"
                                     wrapping="false"
-                                    class="dmTurnUtilHeaderText" />
+                                    class="dmTurnUtilHeaderText"/>
 
                                 <Text
                                     text="Capacidad disponible"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="dmTurnUtilHeaderText" />
+                                    class="dmTurnUtilHeaderText"/>
 
                                 <Text
                                     text="Carga programada"
                                     wrapping="true"
                                     textAlign="Center"
-                                    class="dmTurnUtilHeaderText" />
+                                    class="dmTurnUtilHeaderText"/>
 
                                 <Text
                                     text="Utilización"
                                     wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilHeaderText" />
+                                    class="dmTurnUtilHeaderText"/>
 
                             </HBox>
 
+
                             <!-- DIURNO -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -734,26 +794,24 @@
 
                                     <core:Icon
                                         src="sap-icon://light-mode"
-                                        class="dmTurnUtilShiftIcon" />
+                                        class="dmTurnUtilShiftIcon"/>
 
                                     <Text
                                         text="{detalle>/utilTurno/0/turno}"
                                         wrapping="false"
-                                        class="dmTurnUtilShiftText" />
+                                        class="dmTurnUtilShiftText"/>
 
                                 </HBox>
 
                                 <Text
                                     text="{detalle>/utilTurno/0/capacidad}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <Text
                                     text="{detalle>/utilTurno/0/carga}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <HBox
                                     alignItems="Center"
@@ -765,20 +823,21 @@
 
                                         <VBox
                                             width="{= ${detalle>/utilTurno/0/percentValue} + '%'}"
-                                            class="dmCleanMetricFill dmCleanMetricGreen" />
+                                            class="dmCleanMetricFill dmCleanMetricGreen"/>
 
                                     </HBox>
 
                                     <Text
                                         text="{detalle>/utilTurno/0/utilizacion}"
-                                        wrapping="false"
-                                        class="dmTurnUtilPercent dmTurnUtilGreenText" />
+                                        class="dmTurnUtilPercent dmTurnUtilGreenText"/>
 
                                 </HBox>
 
                             </HBox>
 
+
                             <!-- NOCTURNO -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -790,26 +849,24 @@
 
                                     <core:Icon
                                         src="sap-icon://dark-mode"
-                                        class="dmTurnUtilShiftIcon dmTurnUtilNightIcon" />
+                                        class="dmTurnUtilShiftIcon dmTurnUtilNightIcon"/>
 
                                     <Text
                                         text="{detalle>/utilTurno/1/turno}"
                                         wrapping="false"
-                                        class="dmTurnUtilShiftText" />
+                                        class="dmTurnUtilShiftText"/>
 
                                 </HBox>
 
                                 <Text
                                     text="{detalle>/utilTurno/1/capacidad}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <Text
                                     text="{detalle>/utilTurno/1/carga}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <HBox
                                     alignItems="Center"
@@ -821,20 +878,21 @@
 
                                         <VBox
                                             width="{= ${detalle>/utilTurno/1/percentValue} + '%'}"
-                                            class="dmCleanMetricFill dmCleanMetricOrange" />
+                                            class="dmCleanMetricFill dmCleanMetricOrange"/>
 
                                     </HBox>
 
                                     <Text
                                         text="{detalle>/utilTurno/1/utilizacion}"
-                                        wrapping="false"
-                                        class="dmTurnUtilPercent dmTurnUtilOrangeText" />
+                                        class="dmTurnUtilPercent dmTurnUtilOrangeText"/>
 
                                 </HBox>
 
                             </HBox>
 
+
                             <!-- FIN DE SEMANA -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -846,26 +904,24 @@
 
                                     <core:Icon
                                         src="sap-icon://calendar"
-                                        class="dmTurnUtilShiftIcon" />
+                                        class="dmTurnUtilShiftIcon"/>
 
                                     <Text
                                         text="{detalle>/utilTurno/2/turno}"
                                         wrapping="false"
-                                        class="dmTurnUtilShiftText" />
+                                        class="dmTurnUtilShiftText"/>
 
                                 </HBox>
 
                                 <Text
                                     text="{detalle>/utilTurno/2/capacidad}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <Text
                                     text="{detalle>/utilTurno/2/carga}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <HBox
                                     alignItems="Center"
@@ -877,20 +933,21 @@
 
                                         <VBox
                                             width="{= ${detalle>/utilTurno/2/percentValue} + '%'}"
-                                            class="dmCleanMetricFill dmCleanMetricRed" />
+                                            class="dmCleanMetricFill dmCleanMetricRed"/>
 
                                     </HBox>
 
                                     <Text
                                         text="{detalle>/utilTurno/2/utilizacion}"
-                                        wrapping="false"
-                                        class="dmTurnUtilPercent dmTurnUtilRedText" />
+                                        class="dmTurnUtilPercent dmTurnUtilRedText"/>
 
                                 </HBox>
 
                             </HBox>
 
+
                             <!-- TOTAL -->
+
                             <HBox
                                 width="100%"
                                 alignItems="Center"
@@ -902,26 +959,23 @@
 
                                     <core:Icon
                                         src="sap-icon://bar-chart"
-                                        class="dmTurnUtilShiftIcon" />
+                                        class="dmTurnUtilShiftIcon"/>
 
                                     <Text
                                         text="Total"
-                                        wrapping="false"
-                                        class="dmTurnUtilShiftText" />
+                                        class="dmTurnUtilShiftText"/>
 
                                 </HBox>
 
                                 <Text
                                     text="{detalle>/utilTotal/capacidad}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <Text
                                     text="{detalle>/utilTotal/carga}"
-                                    wrapping="false"
                                     textAlign="Center"
-                                    class="dmTurnUtilValue" />
+                                    class="dmTurnUtilValue"/>
 
                                 <HBox
                                     alignItems="Center"
@@ -933,14 +987,13 @@
 
                                         <VBox
                                             width="{= ${detalle>/utilTotal/percentValue} + '%'}"
-                                            class="dmCleanMetricFill dmCleanMetricGreen" />
+                                            class="dmCleanMetricFill dmCleanMetricGreen"/>
 
                                     </HBox>
 
                                     <Text
                                         text="{detalle>/utilTotal/utilizacion}"
-                                        wrapping="false"
-                                        class="dmTurnUtilPercent dmTurnUtilGreenText" />
+                                        class="dmTurnUtilPercent dmTurnUtilGreenText"/>
 
                                 </HBox>
 
@@ -948,26 +1001,29 @@
 
                         </VBox>
 
+
                         <Link
                             text="Ver detalle por turno →"
-                            class="dmTurnUtilLink" />
+                            class="dmTurnUtilLink"/>
 
                     </VBox>
 
-                    <!-- =============================================
-                         COBERTURA DE MECÁNICOS POR ZONA
-                         ============================================= -->
+
+                    <!-- =================================================
+                         COBERTURA POR ZONA
+                         ================================================= -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardLarge dmCoverageCard">
+                        class="dmCard dmCoverageCard">
 
                         <layoutData>
                             <FlexItemData
                                 growFactor="39"
                                 shrinkFactor="1"
-                                baseSize="0%" />
+                                baseSize="0%"/>
                         </layoutData>
+
 
                         <HBox
                             width="100%"
@@ -977,13 +1033,14 @@
                             <Text
                                 text="Cobertura de mecánicos por zona"
                                 wrapping="false"
-                                class="dmCoverageTitle" />
+                                class="dmCoverageTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
+
 
                         <VBox
                             width="100%"
@@ -998,6 +1055,7 @@
                                 mode="None"
                                 showSeparators="Inner"
                                 items="{detalle>/zonas}"
+                                noDataText="Sin datos para los filtros seleccionados"
                                 class="dmCoverageTable">
 
                                 <columns>
@@ -1010,16 +1068,16 @@
 
                                             <core:Icon
                                                 src="sap-icon://map"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Zona"
-                                                wrapping="false"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
+
 
                                     <Column
                                         width="14%"
@@ -1032,17 +1090,18 @@
 
                                             <core:Icon
                                                 src="sap-icon://group"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Mecánicos asignados"
                                                 wrapping="true"
                                                 textAlign="Center"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
+
 
                                     <Column
                                         width="18%"
@@ -1055,17 +1114,18 @@
 
                                             <core:Icon
                                                 src="sap-icon://time-account"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Horas disponibles (mes)"
                                                 wrapping="true"
                                                 textAlign="Center"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
+
 
                                     <Column
                                         width="18%"
@@ -1078,17 +1138,18 @@
 
                                             <core:Icon
                                                 src="sap-icon://calendar"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Carga programada (mes)"
                                                 wrapping="true"
                                                 textAlign="Center"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
+
 
                                     <Column
                                         width="21%"
@@ -1101,20 +1162,18 @@
 
                                             <core:Icon
                                                 src="sap-icon://line-chart"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Cobertura"
-                                                wrapping="false"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
 
-                                    <Column
-                                        width="16%"
-                                        hAlign="Begin">
+
+                                    <Column width="16%">
 
                                         <HBox
                                             alignItems="Center"
@@ -1122,18 +1181,18 @@
 
                                             <core:Icon
                                                 src="sap-icon://status-positive"
-                                                class="dmCoverageHeaderIcon" />
+                                                class="dmCoverageHeaderIcon"/>
 
                                             <Text
                                                 text="Estado"
-                                                wrapping="false"
-                                                class="dmCoverageHeaderText" />
+                                                class="dmCoverageHeaderText"/>
 
                                         </HBox>
 
                                     </Column>
 
                                 </columns>
+
 
                                 <items>
 
@@ -1146,34 +1205,32 @@
                                             <core:CustomData
                                                 key="tone"
                                                 value="{detalle>tone}"
-                                                writeToDom="true" />
+                                                writeToDom="true"/>
 
                                         </customData>
+
 
                                         <cells>
 
                                             <Text
                                                 text="{detalle>zona}"
-                                                wrapping="false"
-                                                class="dmCoverageZone" />
+                                                class="dmCoverageZone"/>
 
                                             <Text
                                                 text="{detalle>mecanicos}"
-                                                wrapping="false"
                                                 textAlign="Center"
-                                                class="dmCoverageCell" />
+                                                class="dmCoverageCell"/>
 
                                             <Text
                                                 text="{detalle>horasDisponibles}"
-                                                wrapping="false"
                                                 textAlign="Center"
-                                                class="dmCoverageCell" />
+                                                class="dmCoverageCell"/>
 
                                             <Text
                                                 text="{detalle>carga}"
-                                                wrapping="false"
                                                 textAlign="Center"
-                                                class="dmCoverageCell" />
+                                                class="dmCoverageCell"/>
+
 
                                             <HBox
                                                 width="100%"
@@ -1194,7 +1251,7 @@
                                                             <core:CustomData
                                                                 key="tone"
                                                                 value="{detalle>tone}"
-                                                                writeToDom="true" />
+                                                                writeToDom="true"/>
 
                                                         </customData>
 
@@ -1204,15 +1261,14 @@
 
                                                 <Text
                                                     text="{detalle>cobertura}"
-                                                    wrapping="false"
-                                                    class="dmCoveragePercent" />
+                                                    class="dmCoveragePercent"/>
 
                                             </HBox>
+
 
                                             <HBox
                                                 width="100%"
                                                 alignItems="Center"
-                                                justifyContent="Start"
                                                 class="dmCoverageStatus">
 
                                                 <customData>
@@ -1220,16 +1276,16 @@
                                                     <core:CustomData
                                                         key="tone"
                                                         value="{detalle>tone}"
-                                                        writeToDom="true" />
+                                                        writeToDom="true"/>
 
                                                 </customData>
 
-                                                <VBox class="dmCoverageStatusDot" />
+                                                <VBox
+                                                    class="dmCoverageStatusDot"/>
 
                                                 <Text
                                                     text="{detalle>estado}"
-                                                    wrapping="false"
-                                                    class="dmCoverageStatusText" />
+                                                    class="dmCoverageStatusText"/>
 
                                             </HBox>
 
@@ -1243,7 +1299,7 @@
 
                         </VBox>
 
-                        <!-- LEYENDA -->
+
                         <HBox
                             width="100%"
                             alignItems="Center"
@@ -1255,52 +1311,53 @@
                                 class="dmCoverageLegendItem">
 
                                 <VBox
-                                    class="dmCoverageLegendDot dmCoverageLegendRed" />
+                                    class="dmCoverageLegendDot dmCoverageLegendRed"/>
 
                                 <Text
                                     text="&gt;100% Falta capacidad"
-                                    wrapping="false"
-                                    class="dmCoverageLegendRedText" />
+                                    class="dmCoverageLegendRedText"/>
 
                             </HBox>
+
 
                             <HBox
                                 alignItems="Center"
                                 class="dmCoverageLegendItem">
 
                                 <VBox
-                                    class="dmCoverageLegendDot dmCoverageLegendOrange" />
+                                    class="dmCoverageLegendDot dmCoverageLegendOrange"/>
 
                                 <Text
                                     text="100%-120% Balance adecuado"
-                                    wrapping="false"
-                                    class="dmCoverageLegendOrangeText" />
+                                    class="dmCoverageLegendOrangeText"/>
 
                             </HBox>
+
 
                             <HBox
                                 alignItems="Center"
                                 class="dmCoverageLegendItem">
 
                                 <VBox
-                                    class="dmCoverageLegendDot dmCoverageLegendGreen" />
+                                    class="dmCoverageLegendDot dmCoverageLegendGreen"/>
 
                                 <Text
                                     text="&lt;100% Capacidad disponible"
-                                    wrapping="false"
-                                    class="dmCoverageLegendGreenText" />
+                                    class="dmCoverageLegendGreenText"/>
 
                             </HBox>
 
                         </HBox>
 
+
                         <Link
                             text="Ver detalle por zona →"
-                            class="dmCoverageLink" />
+                            class="dmCoverageLink"/>
 
                     </VBox>
 
                 </HBox>
+
 
                 <!-- =================================================
                      FILA INFERIOR
@@ -1310,33 +1367,31 @@
                     width="100%"
                     fitContainer="true"
                     alignItems="Stretch"
-                    class="dmDashboardRow">
+                    class="dmDashboardRow dmBottomRow">
 
                     <layoutData>
-
                         <FlexItemData
                             growFactor="1"
                             shrinkFactor="1"
-                            baseSize="0%" />
-
+                            baseSize="0%"/>
                     </layoutData>
 
-                    <!-- =============================================
+
+                    <!-- =================================================
                          ESTADO DE PLANTILLA
-                         ============================================= -->
+                         ================================================= -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardSmall dmWorkforceStatusCard">
+                        class="dmCard dmWorkforceStatusCard">
 
                         <layoutData>
-
                             <FlexItemData
                                 growFactor="26"
                                 shrinkFactor="1"
-                                baseSize="0%" />
-
+                                baseSize="0%"/>
                         </layoutData>
+
 
                         <HBox
                             width="100%"
@@ -1345,14 +1400,14 @@
 
                             <Text
                                 text="Estado de plantilla"
-                                wrapping="false"
-                                class="dmWorkforceStatusTitle" />
+                                class="dmWorkforceStatusTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
+
 
                         <HBox
                             width="100%"
@@ -1360,7 +1415,9 @@
                             class="dmWorkforceStatusContent">
 
                             <!-- DONA -->
+
                             <HBox
+                                id="workforceDonut"
                                 alignItems="Center"
                                 justifyContent="Center"
                                 class="dmWorkforceDonut">
@@ -1372,17 +1429,19 @@
 
                                     <Text
                                         text="{detalle>/kpis/activos}"
-                                        class="dmWorkforceDonutValue" />
+                                        class="dmWorkforceDonutValue"/>
 
                                     <Text
                                         text="Total"
-                                        class="dmWorkforceDonutLabel" />
+                                        class="dmWorkforceDonutLabel"/>
 
                                 </VBox>
 
                             </HBox>
 
+
                             <!-- LEYENDA -->
+
                             <VBox
                                 width="100%"
                                 class="dmWorkforceLegend">
@@ -1394,19 +1453,20 @@
 
                                     <Text
                                         text=""
-                                        class="dmWorkforceLegendHeaderSpacer" />
+                                        class="dmWorkforceLegendHeaderSpacer"/>
 
                                     <Text
                                         text="Mecánicos"
                                         textAlign="Center"
-                                        class="dmWorkforceLegendHeaderText dmWorkforceHeaderMechanics" />
+                                        class="dmWorkforceLegendHeaderText dmWorkforceHeaderMechanics"/>
 
                                     <Text
                                         text="%"
                                         textAlign="Center"
-                                        class="dmWorkforceLegendHeaderText dmWorkforceHeaderPercent" />
+                                        class="dmWorkforceLegendHeaderText dmWorkforceHeaderPercent"/>
 
                                 </HBox>
+
 
                                 <VBox
                                     width="100%"
@@ -1423,34 +1483,34 @@
                                             <core:CustomData
                                                 key="tone"
                                                 value="{detalle>tone}"
-                                                writeToDom="true" />
+                                                writeToDom="true"/>
 
                                         </customData>
+
 
                                         <HBox
                                             alignItems="Center"
                                             class="dmWorkforceLegendNameBox">
 
-                                            <VBox class="dmWorkforceLegendDot" />
+                                            <VBox
+                                                class="dmWorkforceLegendDot"/>
 
                                             <Text
                                                 text="{detalle>label}"
-                                                wrapping="false"
-                                                class="dmWorkforceLegendName" />
+                                                class="dmWorkforceLegendName"/>
 
                                         </HBox>
 
+
                                         <Text
                                             text="{detalle>value}"
-                                            wrapping="false"
                                             textAlign="Center"
-                                            class="dmWorkforceLegendValue" />
+                                            class="dmWorkforceLegendValue"/>
 
                                         <Text
                                             text="{detalle>pct}"
-                                            wrapping="false"
                                             textAlign="Center"
-                                            class="dmWorkforceLegendPercent" />
+                                            class="dmWorkforceLegendPercent"/>
 
                                     </HBox>
 
@@ -1460,82 +1520,64 @@
 
                         </HBox>
 
+
                         <Link
                             text="Ver detalle por estado →"
-                            class="dmWorkforceStatusLink" />
+                            class="dmWorkforceStatusLink"/>
 
                     </VBox>
 
-                    <!-- =============================================
-                         POR TIPO DE SERVICIO / ORDEN
-                         ============================================= -->
+
+                    <!-- =================================================
+                         TIPO DE SERVICIO / ORDEN
+                         ================================================= -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardMedium dmServiceOrderCard">
+                        class="dmCard dmServiceOrderCard">
 
                         <layoutData>
-
                             <FlexItemData
                                 growFactor="35"
                                 shrinkFactor="1"
-                                baseSize="0%" />
-
+                                baseSize="0%"/>
                         </layoutData>
 
-                        <!-- TÍTULO -->
+
                         <HBox
                             alignItems="Center"
                             class="dmCardHeader dmServiceOrderHeader">
 
                             <Text
                                 text="Por tipo de servicio / orden"
-                                class="dmCardTitle dmServiceOrderTitle" />
+                                class="dmCardTitle dmServiceOrderTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
 
-                        <!-- LEYENDA -->
+
                         <HBox
                             alignItems="Center"
                             class="dmServiceLegend">
 
-                            <HBox
-                                alignItems="Center"
-                                class="dmServiceLegendItem">
+                            <Text
+                                text="■ Horas programadas"
+                                class="dmServiceLegendBlue"/>
 
-                                <Text
-                                    text="■ Horas programadas"
-                                    class="dmServiceLegendBlue" />
+                            <Text
+                                text="■ Horas reales"
+                                class="dmServiceLegendPurple"/>
 
-                            </HBox>
-
-                            <HBox
-                                alignItems="Center"
-                                class="dmServiceLegendItem">
-
-                                <Text
-                                    text="■ Horas reales"
-                                    class="dmServiceLegendPurple" />
-
-                            </HBox>
-
-                            <HBox
-                                alignItems="Center"
-                                class="dmServiceLegendItem">
-
-                                <Text
-                                    text="○ Utilización"
-                                    class="dmServiceLegendGreen" />
-
-                            </HBox>
+                            <Text
+                                text="○ Utilización"
+                                class="dmServiceLegendGreen"/>
 
                         </HBox>
 
-                        <!-- GRÁFICA -->
+
                         <HBox
                             width="100%"
                             alignItems="End"
@@ -1543,6 +1585,7 @@
                             class="dmServiceChartRefined">
 
                             <!-- SERVICIO 1 -->
+
                             <VBox
                                 alignItems="Center"
                                 class="dmServiceGroupRefined">
@@ -1559,12 +1602,14 @@
 
                                         <Text
                                             text="{detalle>/servicios/0/programadas}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalBlueRefined dmBarMantProg" />
+                                            height="{= ${detalle>/servicios/0/programadasLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalBlueRefined"/>
 
                                     </VBox>
+
 
                                     <VBox
                                         alignItems="Center"
@@ -1573,14 +1618,16 @@
 
                                         <Text
                                             text="{detalle>/servicios/0/reales}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalPurpleRefined dmBarMantReal" />
+                                            height="{= ${detalle>/servicios/0/realesLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalPurpleRefined"/>
 
                                     </VBox>
 
                                 </HBox>
+
 
                                 <HBox
                                     alignItems="Center"
@@ -1589,18 +1636,20 @@
 
                                     <core:Icon
                                         src="sap-icon://wrench"
-                                        class="dmServiceFooterIcon" />
+                                        class="dmServiceFooterIcon"/>
 
                                     <Text
                                         text="{detalle>/servicios/0/label}"
                                         textAlign="Center"
-                                        class="dmServiceFooterText" />
+                                        class="dmServiceFooterText"/>
 
                                 </HBox>
 
                             </VBox>
 
+
                             <!-- SERVICIO 2 -->
+
                             <VBox
                                 alignItems="Center"
                                 class="dmServiceGroupRefined">
@@ -1617,12 +1666,14 @@
 
                                         <Text
                                             text="{detalle>/servicios/1/programadas}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalBlueRefined dmBarRepProg" />
+                                            height="{= ${detalle>/servicios/1/programadasLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalBlueRefined"/>
 
                                     </VBox>
+
 
                                     <VBox
                                         alignItems="Center"
@@ -1631,14 +1682,16 @@
 
                                         <Text
                                             text="{detalle>/servicios/1/reales}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalPurpleRefined dmBarRepReal" />
+                                            height="{= ${detalle>/servicios/1/realesLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalPurpleRefined"/>
 
                                     </VBox>
 
                                 </HBox>
+
 
                                 <HBox
                                     alignItems="Center"
@@ -1647,18 +1700,20 @@
 
                                     <core:Icon
                                         src="sap-icon://settings"
-                                        class="dmServiceFooterIcon" />
+                                        class="dmServiceFooterIcon"/>
 
                                     <Text
                                         text="{detalle>/servicios/1/label}"
                                         textAlign="Center"
-                                        class="dmServiceFooterText" />
+                                        class="dmServiceFooterText"/>
 
                                 </HBox>
 
                             </VBox>
 
+
                             <!-- SERVICIO 3 -->
+
                             <VBox
                                 alignItems="Center"
                                 class="dmServiceGroupRefined">
@@ -1675,12 +1730,14 @@
 
                                         <Text
                                             text="{detalle>/servicios/2/programadas}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalBlueRefined dmBarCallProg" />
+                                            height="{= ${detalle>/servicios/2/programadasLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalBlueRefined"/>
 
                                     </VBox>
+
 
                                     <VBox
                                         alignItems="Center"
@@ -1689,14 +1746,16 @@
 
                                         <Text
                                             text="{detalle>/servicios/2/reales}"
-                                            class="dmBarValueRefined" />
+                                            class="dmBarValueRefined"/>
 
                                         <VBox
-                                            class="dmVerticalBarRefined dmVerticalPurpleRefined dmBarCallReal" />
+                                            height="{= ${detalle>/servicios/2/realesLevel} + '%'}"
+                                            class="dmVerticalBarRefined dmVerticalPurpleRefined"/>
 
                                     </VBox>
 
                                 </HBox>
+
 
                                 <HBox
                                     alignItems="Center"
@@ -1705,12 +1764,12 @@
 
                                     <core:Icon
                                         src="sap-icon://headset"
-                                        class="dmServiceFooterIcon" />
+                                        class="dmServiceFooterIcon"/>
 
                                     <Text
                                         text="{detalle>/servicios/2/label}"
                                         textAlign="Center"
-                                        class="dmServiceFooterText" />
+                                        class="dmServiceFooterText"/>
 
                                 </HBox>
 
@@ -1720,24 +1779,23 @@
 
                     </VBox>
 
-                    <!-- =============================================
-                         PRESIÓN OPERATIVA POR ZONA
-                         ============================================= -->
+
+                    <!-- =================================================
+                         PRESIÓN OPERATIVA
+                         ================================================= -->
 
                     <VBox
                         fitContainer="true"
-                        class="dmCard dmCardLarge dmPressureZoneCard">
+                        class="dmCard dmPressureZoneCard">
 
                         <layoutData>
-
                             <FlexItemData
                                 growFactor="39"
                                 shrinkFactor="1"
-                                baseSize="0%" />
-
+                                baseSize="0%"/>
                         </layoutData>
 
-                        <!-- TÍTULO -->
+
                         <HBox
                             width="100%"
                             alignItems="Center"
@@ -1745,16 +1803,15 @@
 
                             <Text
                                 text="Presión operativa por zona"
-                                wrapping="false"
-                                class="dmPressureZoneTitle" />
+                                class="dmPressureZoneTitle"/>
 
                             <core:Icon
                                 src="sap-icon://hint"
-                                class="dmInfoIcon" />
+                                class="dmInfoIcon"/>
 
                         </HBox>
 
-                        <!-- TABLA -->
+
                         <VBox
                             width="100%"
                             class="dmPressureZoneTableWrap">
@@ -1768,17 +1825,15 @@
                                 mode="None"
                                 showSeparators="Inner"
                                 items="{detalle>/presion}"
+                                noDataText="Sin datos para los filtros seleccionados"
                                 class="dmPressureZoneTable">
 
                                 <columns>
 
                                     <Column width="16%">
-
                                         <Text
                                             text="Zona / Turno"
-                                            wrapping="false"
-                                            class="dmPressureZoneHeaderText" />
-
+                                            class="dmPressureZoneHeaderText"/>
                                     </Column>
 
                                     <Column
@@ -1787,9 +1842,8 @@
 
                                         <Text
                                             text="Utilización"
-                                            wrapping="false"
                                             textAlign="Center"
-                                            class="dmPressureZoneHeaderText" />
+                                            class="dmPressureZoneHeaderText"/>
 
                                     </Column>
 
@@ -1801,22 +1855,20 @@
                                             text="Órdenes por recurso (prom.)"
                                             wrapping="true"
                                             textAlign="Center"
-                                            class="dmPressureZoneHeaderText" />
+                                            class="dmPressureZoneHeaderText"/>
 
                                     </Column>
 
-                                    <Column
-                                        width="28%"
-                                        hAlign="Begin">
+                                    <Column width="28%">
 
                                         <Text
                                             text="Estado"
-                                            wrapping="false"
-                                            class="dmPressureZoneHeaderText" />
+                                            class="dmPressureZoneHeaderText"/>
 
                                     </Column>
 
                                 </columns>
+
 
                                 <items>
 
@@ -1829,19 +1881,18 @@
                                             <core:CustomData
                                                 key="tone"
                                                 value="{detalle>tone}"
-                                                writeToDom="true" />
+                                                writeToDom="true"/>
 
                                         </customData>
 
+
                                         <cells>
 
-                                            <!-- ZONA -->
                                             <Text
                                                 text="{detalle>zona}"
-                                                wrapping="false"
-                                                class="dmPressureZoneName" />
+                                                class="dmPressureZoneName"/>
 
-                                            <!-- UTILIZACIÓN -->
+
                                             <HBox
                                                 width="100%"
                                                 alignItems="Center"
@@ -1860,7 +1911,7 @@
                                                             <core:CustomData
                                                                 key="tone"
                                                                 value="{detalle>tone}"
-                                                                writeToDom="true" />
+                                                                writeToDom="true"/>
 
                                                         </customData>
 
@@ -1870,19 +1921,17 @@
 
                                                 <Text
                                                     text="{detalle>utilizacion}"
-                                                    wrapping="false"
-                                                    class="dmPressureZoneUtilText" />
+                                                    class="dmPressureZoneUtilText"/>
 
                                             </HBox>
 
-                                            <!-- ÓRDENES -->
+
                                             <Text
                                                 text="{detalle>ordenes}"
-                                                wrapping="false"
                                                 textAlign="Center"
-                                                class="dmPressureZoneOrders" />
+                                                class="dmPressureZoneOrders"/>
 
-                                            <!-- ESTADO -->
+
                                             <HBox
                                                 width="100%"
                                                 alignItems="Center"
@@ -1893,17 +1942,16 @@
                                                     <core:CustomData
                                                         key="tone"
                                                         value="{detalle>tone}"
-                                                        writeToDom="true" />
+                                                        writeToDom="true"/>
 
                                                 </customData>
 
                                                 <VBox
-                                                    class="dmPressureZoneStatusDot" />
+                                                    class="dmPressureZoneStatusDot"/>
 
                                                 <Text
                                                     text="{detalle>estado}"
-                                                    wrapping="false"
-                                                    class="dmPressureZoneStatusText" />
+                                                    class="dmPressureZoneStatusText"/>
 
                                             </HBox>
 
@@ -1917,9 +1965,10 @@
 
                         </VBox>
 
+
                         <Link
                             text="Ver detalle de presión operativa →"
-                            class="dmPressureZoneLink" />
+                            class="dmPressureZoneLink"/>
 
                     </VBox>
 

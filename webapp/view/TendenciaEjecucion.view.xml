@@ -1,192 +1,667 @@
-<mvc:View controllerName="mantenimiento.controller.TendenciaEjecucion"
+<mvc:View
+    controllerName="mantenimiento.controller.TendenciaEjecucion"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:layout="sap.ui.layout"
-    xmlns:viz="sap.viz.ui5.controls" height="100%">
-    <Page id="pageTendencia" showHeader="false" class="tprPage">
+    xmlns:viz="sap.viz.ui5.controls"
+    height="100%"
+    displayBlock="true">
+
+    <Page
+        id="pageTendencia"
+        showHeader="false"
+        enableScrolling="false"
+        class="tprPage">
+
         <content>
-            <VBox class="tprDashboard">
-                <HBox class="tprHeader" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+
+            <VBox
+                width="100%"
+                height="100%"
+                class="tprDashboard">
+
+                <!-- =====================================================
+                     HEADER
+                     ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    wrap="NoWrap"
+                    class="tprHeader">
+
                     <VBox class="tprHeaderTextBox">
-                        <Title text="Tendencia de ejecución" level="H1" class="tprMainTitle"/>
-                        <Text text="Evolución semanal de OT planeadas vs ejecutadas y análisis de causas de desviación." class="tprMainSubtitle"/>
+
+                        <Title
+                            text="Tendencia de ejecución"
+                            level="H1"
+                            class="tprMainTitle"/>
+
+                        <Text
+                            text="Evolución semanal de OT planeadas vs ejecutadas y análisis de causas de desviación."
+                            wrapping="false"
+                            class="tprMainSubtitle"/>
+
                     </VBox>
-                    <HBox class="tprFilterActions" alignItems="Center" wrap="Wrap">
-                        <HBox class="tprFilterCard tprPeriodCard" alignItems="Center">
-                            <core:Icon src="sap-icon://calendar" class="tprFilterIcon"/>
-                            <VBox class="tprFilterTexts">
-                                <Text text="Periodo" class="tprFilterLabel"/>
-                                <Select id="tendenciaSelPeriodo" selectedKey="{trend>/filtros/periodo}" items="{trend>/opcionesPeriodo}" class="tprFilterSelect">
+
+
+                    <!-- =================================================
+                         FILTROS
+                         ================================================= -->
+
+                    <HBox
+                        alignItems="Center"
+                        wrap="NoWrap"
+                        class="tprFilterActions">
+
+
+                        <!-- PERIODO -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="tprFilterCard tprPeriodCard">
+
+                            <core:Icon
+                                src="sap-icon://calendar"
+                                class="tprFilterIcon"/>
+
+                            <VBox
+                                width="100%"
+                                class="tprFilterTexts">
+
+                                <Text
+                                    text="Periodo"
+                                    class="tprFilterLabel"/>
+
+                                <Select
+                                    id="tendenciaSelPeriodo"
+                                    width="100%"
+                                    selectedKey="{trend>/filtros/periodo}"
+                                    items="{trend>/opcionesPeriodo}"
+                                    class="tprFilterSelect">
+
                                     <items>
-                                        <core:Item key="{trend>key}" text="{trend>text}"/>
+
+                                        <core:Item
+                                            key="{trend>key}"
+                                            text="{trend>text}"/>
+
                                     </items>
+
                                 </Select>
+
                             </VBox>
+
                         </HBox>
-                        <HBox class="tprFilterCard tprZoneCard" alignItems="Center">
-                            <core:Icon src="sap-icon://map" class="tprFilterIcon"/>
-                            <VBox class="tprFilterTexts">
-                                <Text text="Zona" class="tprFilterLabel"/>
-                                <Select id="tendenciaSelZona" selectedKey="{trend>/filtros/zona}" items="{trend>/opcionesZona}" class="tprFilterSelect">
+
+
+                        <!-- ZONA -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="tprFilterCard tprZoneCard">
+
+                            <core:Icon
+                                src="sap-icon://map"
+                                class="tprFilterIcon"/>
+
+                            <VBox
+                                width="100%"
+                                class="tprFilterTexts">
+
+                                <Text
+                                    text="Zona"
+                                    class="tprFilterLabel"/>
+
+                                <Select
+                                    id="tendenciaSelZona"
+                                    width="100%"
+                                    selectedKey="{trend>/filtros/zona}"
+                                    items="{trend>/opcionesZona}"
+                                    class="tprFilterSelect">
+
                                     <items>
-                                        <core:Item key="{trend>key}" text="{trend>text}"/>
+
+                                        <core:Item
+                                            key="{trend>key}"
+                                            text="{trend>text}"/>
+
                                     </items>
+
                                 </Select>
+
                             </VBox>
+
                         </HBox>
-                        <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="tprApplyButton"/>
+
+
+                        <!-- APLICAR -->
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            press=".onApplyFilters"
+                            class="tprApplyButton"/>
+
                     </HBox>
+
                 </HBox>
-                <VBox class="tprSectionCard">
-                    <Title text="CONTEXTO DEL PERIODO" level="H4" class="tprSectionTitle"/>
-                    <layout:Grid defaultSpan="XL4 L4 M12 S12" hSpacing="1" vSpacing="1">
-                        <HBox class="tprInsightCard tprInsightRed" alignItems="Center">
-                            <HBox class="tprInsightIconBox">
-                                <core:Icon src="sap-icon://trend-down" class="tprInsightIcon"/>
+
+
+                <!-- =====================================================
+                     CONTEXTO DEL PERIODO
+                     ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="tprSectionCard">
+
+                    <Title
+                        text="CONTEXTO DEL PERIODO"
+                        level="H4"
+                        class="tprSectionTitle"/>
+
+
+                    <layout:Grid
+                        width="100%"
+                        defaultSpan="XL4 L4 M12 S12"
+                        hSpacing="1"
+                        vSpacing="0">
+
+
+                        <!-- KPI 1 -->
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="tprInsightCard tprInsightRed">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="tprInsightIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://trend-down"
+                                    class="tprInsightIcon"/>
+
                             </HBox>
-                            <VBox>
-                                <Text text="Peor semana" class="tprInsightLabel"/>
-                                <Text text="{trend>/contexto/peorSemana}" class="tprInsightMain"/>
-                                <Text text="{trend>/contexto/peorSemanaDetalle}" class="tprInsightDetail"/>
+
+                            <VBox
+                                justifyContent="Center"
+                                class="tprInsightContent">
+
+                                <Text
+                                    text="Peor semana"
+                                    wrapping="false"
+                                    class="tprInsightLabel"/>
+
+                                <Text
+                                    text="{trend>/contexto/peorSemana}"
+                                    wrapping="false"
+                                    class="tprInsightMain"/>
+
+                                <Text
+                                    text="{trend>/contexto/peorSemanaDetalle}"
+                                    wrapping="false"
+                                    class="tprInsightDetail"/>
+
                             </VBox>
+
                         </HBox>
-                        <HBox class="tprInsightCard tprInsightOrange" alignItems="Center">
-                            <HBox class="tprInsightIconBox">
-                                <core:Icon src="sap-icon://alert" class="tprInsightIcon"/>
+
+
+                        <!-- KPI 2 -->
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="tprInsightCard tprInsightOrange">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="tprInsightIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://alert"
+                                    class="tprInsightIcon"/>
+
                             </HBox>
-                            <VBox>
-                                <Text text="Mayor brecha" class="tprInsightLabel"/>
-                                <Text text="{trend>/contexto/mayorBrecha}" class="tprInsightMain"/>
-                                <Text text="{trend>/contexto/mayorBrechaDetalle}" class="tprInsightDetail"/>
+
+                            <VBox
+                                justifyContent="Center"
+                                class="tprInsightContent">
+
+                                <Text
+                                    text="Mayor brecha"
+                                    wrapping="false"
+                                    class="tprInsightLabel"/>
+
+                                <Text
+                                    text="{trend>/contexto/mayorBrecha}"
+                                    wrapping="false"
+                                    class="tprInsightMain"/>
+
+                                <Text
+                                    text="{trend>/contexto/mayorBrechaDetalle}"
+                                    wrapping="false"
+                                    class="tprInsightDetail"/>
+
                             </VBox>
+
                         </HBox>
-                        <HBox class="tprInsightCard tprInsightGreen" alignItems="Center">
-                            <HBox class="tprInsightIconBox">
-                                <core:Icon src="sap-icon://document-text" class="tprInsightIcon"/>
+
+
+                        <!-- KPI 3 -->
+
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="tprInsightCard tprInsightGreen">
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="Center"
+                                class="tprInsightIconBox">
+
+                                <core:Icon
+                                    src="sap-icon://document-text"
+                                    class="tprInsightIcon"/>
+
                             </HBox>
-                            <VBox>
-                                <Text text="Principal impulsor de la caída" class="tprInsightLabel"/>
-                                <Text text="{trend>/contexto/principalImpulsor}" class="tprInsightMain tprLongText" wrapping="false"/>
-                                <Text text="{= ${trend>/contexto/impulsorOT} + ' · ' + ${trend>/contexto/impulsorPorcentaje} + ' del deterioro'}" class="tprInsightDetail"/>
+
+                            <VBox
+                                justifyContent="Center"
+                                class="tprInsightContent">
+
+                                <Text
+                                    text="Principal impulsor de la caída"
+                                    wrapping="false"
+                                    class="tprInsightLabel"/>
+
+                                <Text
+                                    text="{trend>/contexto/principalImpulsor}"
+                                    wrapping="false"
+                                    class="tprInsightMain tprLongText"/>
+
+                                <Text
+                                    text="{= ${trend>/contexto/impulsorOT} + ' · ' + ${trend>/contexto/impulsorPorcentaje} + ' del deterioro'}"
+                                    wrapping="false"
+                                    class="tprInsightDetail"/>
+
                             </VBox>
+
                         </HBox>
+
                     </layout:Grid>
+
                 </VBox>
-                <layout:Grid hSpacing="1" vSpacing="1" class="tprMiddleGrid">
-                    <VBox class="tprCard tprChartCard">
+
+
+                <!-- =====================================================
+                     ZONA CENTRAL
+                     ===================================================== -->
+
+                <layout:Grid
+                    width="100%"
+                    hSpacing="1"
+                    vSpacing="0"
+                    class="tprMiddleGrid">
+
+
+                    <!-- GRÁFICA -->
+
+                    <VBox
+                        width="100%"
+                        height="100%"
+                        class="tprCard tprChartCard">
+
                         <layoutData>
-                            <layout:GridData span="XL7 L7 M12 S12"/>
+
+                            <layout:GridData
+                                span="XL7 L7 M12 S12"/>
+
                         </layoutData>
-                        <Title text="EVOLUCIÓN SEMANAL" level="H4" class="tprCardTitle"/>
-                        <Text text="OT planeadas, ejecutadas y porcentaje de cumplimiento por semana." class="tprCardSubtitle"/>
-                        <viz:VizFrame id="vfEvolucionSemanal" width="100%" height="285px" vizType="dual_line" uiConfig="{applicationSet:'fiori'}" class="tprVizFrame"/>
+
+                        <Title
+                            text="EVOLUCIÓN SEMANAL"
+                            level="H4"
+                            class="tprCardTitle"/>
+
+                        <Text
+                            text="OT planeadas, ejecutadas y porcentaje de cumplimiento por semana."
+                            wrapping="false"
+                            class="tprCardSubtitle"/>
+
+                        <viz:VizFrame
+                            id="vfEvolucionSemanal"
+                            width="100%"
+                            height="100%"
+                            vizType="dual_line"
+                            uiConfig="{applicationSet:'fiori'}"
+                            class="tprVizFrame"/>
+
                     </VBox>
-                    <VBox class="tprCard tprDropCard">
+
+
+                    <!-- POR QUÉ CAYÓ -->
+
+                    <VBox
+                        width="100%"
+                        height="100%"
+                        class="tprCard tprDropCard">
+
                         <layoutData>
-                            <layout:GridData span="XL5 L5 M12 S12"/>
+
+                            <layout:GridData
+                                span="XL5 L5 M12 S12"/>
+
                         </layoutData>
-                        <Title text="¿POR QUÉ CAYÓ EL CUMPLIMIENTO?" level="H4" class="tprCardTitle"/>
-                        <Text text="Diferencia entre la mejor y la peor semana del periodo." class="tprCardSubtitle"/>
-                        <List items="{trend>/caidaCumplimiento}" showSeparators="None" class="tprCauseList">
+
+                        <Title
+                            text="¿POR QUÉ CAYÓ EL CUMPLIMIENTO?"
+                            level="H4"
+                            class="tprCardTitle"/>
+
+                        <Text
+                            text="Diferencia entre la mejor y la peor semana del periodo."
+                            wrapping="false"
+                            class="tprCardSubtitle"/>
+
+
+                        <List
+                            items="{trend>/caidaCumplimiento}"
+                            showSeparators="None"
+                            noDataText="No data"
+                            class="tprCauseList">
+
                             <items>
+
                                 <CustomListItem>
-                                    <HBox class="tprCauseRow" alignItems="Center">
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        class="tprCauseRow">
+
                                         <VBox class="tprCauseDot">
+
                                             <customData>
-                                                <core:CustomData key="tone" value="{trend>tono}" writeToDom="true"/>
+
+                                                <core:CustomData
+                                                    key="tone"
+                                                    value="{trend>tono}"
+                                                    writeToDom="true"/>
+
                                             </customData>
+
                                         </VBox>
-                                        <Text text="{trend>causa}" class="tprCauseName"/>
-                                        <ObjectNumber number="{trend>incremento}" state="{trend>estado}" class="tprCauseIncrement"/>
-                                        <ProgressIndicator percentValue="{trend>porcentajeValor}" displayValue="" showValue="false" state="{trend>estado}" class="tprCauseBar"/>
-                                        <Text text="{trend>porcentajeTexto}" class="tprCausePercent"/>
+
+                                        <Text
+                                            text="{trend>causa}"
+                                            wrapping="false"
+                                            class="tprCauseName"/>
+
+                                        <ObjectNumber
+                                            number="{trend>incremento}"
+                                            state="{trend>estado}"
+                                            class="tprCauseIncrement"/>
+
+                                        <ProgressIndicator
+                                            percentValue="{trend>porcentajeValor}"
+                                            displayValue=""
+                                            showValue="false"
+                                            state="{trend>estado}"
+                                            class="tprCauseBar"/>
+
+                                        <Text
+                                            text="{trend>porcentajeTexto}"
+                                            class="tprCausePercent"/>
+
                                     </HBox>
+
                                 </CustomListItem>
+
                             </items>
+
                         </List>
-                        <HBox class="tprTotalRow" justifyContent="SpaceBetween">
-                            <Text text="Total de incremento"/>
-                            <Text text="{trend>/totalCaida/incremento}"/>
+
+
+                        <HBox
+                            width="100%"
+                            justifyContent="SpaceBetween"
+                            alignItems="Center"
+                            class="tprTotalRow">
+
+                            <Text
+                                text="Total de incremento"/>
+
+                            <Text
+                                text="{trend>/totalCaida/incremento}"/>
+
                         </HBox>
+
                     </VBox>
+
                 </layout:Grid>
-                <VBox class="tprCard tprHeatmapCard">
-                    <Title text="EVOLUCIÓN DE LAS CAUSAS (OT NO EJECUTADAS)" level="H4" class="tprCardTitle"/>
-                    <Text text="Conteo distinto de órdenes no ejecutadas con causa principal por semana." class="tprCardSubtitle"/>
-                    <Table items="{trend>/evolucionCausas}" fixedLayout="true" class="tprHeatmapTable">
+
+
+                <!-- =====================================================
+                     EVOLUCIÓN DE CAUSAS
+                     ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="tprCard tprHeatmapCard">
+
+                    <Title
+                        text="EVOLUCIÓN DE LAS CAUSAS (OT NO EJECUTADAS)"
+                        level="H4"
+                        class="tprCardTitle"/>
+
+                    <Text
+                        text="Conteo distinto de órdenes no ejecutadas con causa principal por semana."
+                        wrapping="false"
+                        class="tprCardSubtitle"/>
+
+
+                    <Table
+                        width="100%"
+                        items="{trend>/evolucionCausas}"
+                        fixedLayout="true"
+                        showSeparators="Inner"
+                        class="tprHeatmapTable">
+
                         <columns>
+
                             <Column width="27%">
                                 <Text text="Causa"/>
                             </Column>
+
                             <Column hAlign="Center">
                                 <Text text="{trend>/cabecerasSemana/0/semana}"/>
                             </Column>
+
                             <Column hAlign="Center">
                                 <Text text="{trend>/cabecerasSemana/1/semana}"/>
                             </Column>
+
                             <Column hAlign="Center">
                                 <Text text="{trend>/cabecerasSemana/2/semana}"/>
                             </Column>
+
                             <Column hAlign="Center">
                                 <Text text="{trend>/cabecerasSemana/3/semana}"/>
                             </Column>
+
                             <Column hAlign="Center">
                                 <Text text="{trend>/cabecerasSemana/4/semana}"/>
                             </Column>
-                            <Column hAlign="Center" width="12%">
+
+                            <Column
+                                width="12%"
+                                hAlign="Center">
+
                                 <Text text="Variación"/>
+
                             </Column>
+
                         </columns>
+
+
                         <items>
+
                             <ColumnListItem>
+
                                 <customData>
-                                    <core:CustomData key="rowtype" value="{trend>rowtype}" writeToDom="true"/>
+
+                                    <core:CustomData
+                                        key="rowtype"
+                                        value="{trend>rowtype}"
+                                        writeToDom="true"/>
+
                                 </customData>
+
                                 <cells>
-                                    <Text text="{trend>causa}" class="tprHeatCauseName"/>
-                                    <HBox justifyContent="Center" class="tprHeatCell">
+
+                                    <Text
+                                        text="{trend>causa}"
+                                        wrapping="false"
+                                        class="tprHeatCauseName"/>
+
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="tprHeatCell">
+
                                         <customData>
-                                            <core:CustomData key="heat" value="{trend>heat1}" writeToDom="true"/>
+
+                                            <core:CustomData
+                                                key="heat"
+                                                value="{trend>heat1}"
+                                                writeToDom="true"/>
+
                                         </customData>
+
                                         <Text text="{trend>week1}"/>
+
                                     </HBox>
-                                    <HBox justifyContent="Center" class="tprHeatCell">
+
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="tprHeatCell">
+
                                         <customData>
-                                            <core:CustomData key="heat" value="{trend>heat2}" writeToDom="true"/>
+
+                                            <core:CustomData
+                                                key="heat"
+                                                value="{trend>heat2}"
+                                                writeToDom="true"/>
+
                                         </customData>
+
                                         <Text text="{trend>week2}"/>
+
                                     </HBox>
-                                    <HBox justifyContent="Center" class="tprHeatCell">
+
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="tprHeatCell">
+
                                         <customData>
-                                            <core:CustomData key="heat" value="{trend>heat3}" writeToDom="true"/>
+
+                                            <core:CustomData
+                                                key="heat"
+                                                value="{trend>heat3}"
+                                                writeToDom="true"/>
+
                                         </customData>
+
                                         <Text text="{trend>week3}"/>
+
                                     </HBox>
-                                    <HBox justifyContent="Center" class="tprHeatCell">
+
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="tprHeatCell">
+
                                         <customData>
-                                            <core:CustomData key="heat" value="{trend>heat4}" writeToDom="true"/>
+
+                                            <core:CustomData
+                                                key="heat"
+                                                value="{trend>heat4}"
+                                                writeToDom="true"/>
+
                                         </customData>
+
                                         <Text text="{trend>week4}"/>
+
                                     </HBox>
-                                    <HBox justifyContent="Center" class="tprHeatCell">
+
+
+                                    <HBox
+                                        alignItems="Center"
+                                        justifyContent="Center"
+                                        class="tprHeatCell">
+
                                         <customData>
-                                            <core:CustomData key="heat" value="{trend>heat5}" writeToDom="true"/>
+
+                                            <core:CustomData
+                                                key="heat"
+                                                value="{trend>heat5}"
+                                                writeToDom="true"/>
+
                                         </customData>
+
                                         <Text text="{trend>week5}"/>
+
                                     </HBox>
-                                    <ObjectNumber number="{trend>variacion}" state="{trend>estadoVariacion}"/>
+
+
+                                    <ObjectNumber
+                                        number="{trend>variacion}"
+                                        state="{trend>estadoVariacion}"/>
+
                                 </cells>
+
                             </ColumnListItem>
+
                         </items>
+
                     </Table>
-                    <HBox class="tprHeatLegend" justifyContent="Center">
+
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="Center"
+                        class="tprHeatLegend">
+
                         <Text text="Menor impacto"/>
+
                         <VBox class="tprLegendGradient"/>
+
                         <Text text="Mayor impacto"/>
+
                     </HBox>
+
                 </VBox>
+
             </VBox>
+
         </content>
+
     </Page>
+
 </mvc:View>

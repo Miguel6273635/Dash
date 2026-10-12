@@ -156,7 +156,7 @@ test("una relación usa órdenes internamente pero no las repite en la respuesta
 
 
 
-test("conserva requisitos sin identificador conocido y carga eventos de bloqueo por BlockId", async function () {
+test("conserva requisitos y carga órdenes y eventos de bloqueo por BlockId", async function () {
     const calls = [];
     const repository = {
         readAll: async function (entitySet) {
@@ -177,6 +177,9 @@ test("conserva requisitos sin identificador conocido y carga eventos de bloqueo 
             if (entitySet === "DashboardBlockEventsSet") {
                 return [{ BlockEventId: "EV-1", BlockId: "BL-1" }];
             }
+            if (entitySet === "DashboardBlockOrdersSet") {
+                return [{ BlockOrderId: "BL-1-OT-9", BlockId: "BL-1", OrderId: "OT-9" }];
+            }
             return [];
         }
     };
@@ -188,13 +191,15 @@ test("conserva requisitos sin identificador conocido y carga eventos de bloqueo 
     const snapshot = await service.getSnapshot({
         dateFrom: "2026-08-01",
         dateTo: "2026-08-31",
-        include: ["requirements", "blockEvents"]
+        include: ["requirements", "blockOrders", "blockEvents"]
     });
 
     assert.equal(snapshot.requirements.length, 1);
     assert.equal(snapshot.requirements[0].RequirementCode, "REQ-1");
     assert.equal(snapshot.blockEvents[0].BlockEventId, "EV-1");
+    assert.equal(snapshot.blockOrders[0].OrderId, "OT-9");
     assert.ok(calls.includes("DashboardOrderRequirementsSet:OrderId:OT-1"));
+    assert.ok(calls.includes("DashboardBlockOrdersSet:BlockId:BL-1"));
     assert.ok(calls.includes("DashboardBlockEventsSet:BlockId:BL-1"));
 });
 

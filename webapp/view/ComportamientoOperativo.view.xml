@@ -1,40 +1,628 @@
-<mvc:View controllerName="mantenimiento.controller.ComportamientoOperativo" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" height="100%">
-    <Page id="pageComportamiento" showHeader="false" class="coPageBackground">
-        <content><VBox class="coPage">
-            <HBox class="coHeader" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-                <VBox class="coHeaderText"><Title text="Comportamiento operativo por responsables" level="H1" class="coTitle"/><Text text="Análisis del comportamiento de los responsables según las causas que explican sus desviaciones." class="coSubtitle"/></VBox>
-                <HBox class="coFilters" alignItems="Center" wrap="Wrap">
-                    <HBox class="coFilterCard coPeriodCard" alignItems="Center"><core:Icon src="sap-icon://calendar" class="coFilterIcon"/><VBox class="coFilterTexts"><Text text="Periodo" class="coFilterLabel"/><Select id="coPeriod" selectedKey="{data>/filtros/periodo}" change=".onPeriodoChange" class="coFilterSelect" items="{data>/opcionesPeriodo}"><items><core:Item key="{data>key}" text="{data>text}"/></items></Select></VBox></HBox>
-                    <HBox class="coFilterCard coZoneCard" alignItems="Center"><core:Icon src="sap-icon://map" class="coFilterIcon"/><VBox class="coFilterTexts"><Text text="Zona" class="coFilterLabel"/><Select id="coZone" selectedKey="{data>/filtros/zona}" class="coFilterSelect" items="{data>/opcionesZona}"><items><core:Item key="{data>key}" text="{data>text}"/></items></Select></VBox></HBox>
-                    <Button text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press=".onApplyFilters" class="coApplyButton"/>
-                </HBox>
-            </HBox>
-            <VBox class="coMainCard">
-                <HBox class="coCardToolbar" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-                    <HBox class="coTabs" alignItems="Center" wrap="Wrap">
-                        <Button id="coTabTodas" text="Todas" icon="sap-icon://table-view" type="Emphasized" press=".onOriginTabPress" class="coTabButton coTabButtonActive"><customData><core:CustomData key="origin" value="TODAS" writeToDom="false"/></customData></Button>
-                        <Button id="coTabInternas" text="Internas (operación)" icon="sap-icon://wrench" type="Transparent" press=".onOriginTabPress" class="coTabButton"><customData><core:CustomData key="origin" value="INTERNAL" writeToDom="false"/></customData></Button>
-                        <Button id="coTabExternas" text="Externas (cliente/proveedor)" icon="sap-icon://shipping-status" type="Transparent" press=".onOriginTabPress" class="coTabButton"><customData><core:CustomData key="origin" value="EXTERNAL" writeToDom="false"/></customData></Button>
-                        <Button id="coTabJustificadas" text="Justificadas" icon="sap-icon://employee-approvals" type="Transparent" press=".onOriginTabPress" class="coTabButton"><customData><core:CustomData key="origin" value="JUSTIFIED" writeToDom="false"/></customData></Button>
+<mvc:View
+    controllerName="mantenimiento.controller.ComportamientoOperativo"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    height="100%"
+    displayBlock="true">
+
+    <Page
+        id="pageComportamiento"
+        showHeader="false"
+        enableScrolling="false"
+        class="coPageBackground sapUiSizeCompact">
+
+        <content>
+
+            <VBox
+                width="100%"
+                height="100%"
+                fitContainer="true"
+                class="coPage">
+
+                <!-- =====================================================
+                     ENCABEZADO
+                     ===================================================== -->
+
+                <VBox
+                    width="100%"
+                    class="coHeaderText">
+
+                    <Title
+                        text="Comportamiento operativo por responsables"
+                        level="H1"
+                        class="coTitle"/>
+
+                    <Text
+                        text="Análisis del comportamiento de los responsables según las causas que explican sus desviaciones."
+                        wrapping="false"
+                        class="coSubtitle"/>
+
+                </VBox>
+
+
+                <!-- =====================================================
+                     FILTROS
+                     ===================================================== -->
+
+                <HBox
+                    width="100%"
+                    alignItems="Stretch"
+                    justifyContent="End"
+                    wrap="NoWrap"
+                    class="coFilters">
+
+                    <!-- PERIODO -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="coFilterCard coPeriodCard">
+
+                        <core:Icon
+                            src="sap-icon://calendar"
+                            class="coFilterIcon"/>
+
+                        <VBox
+                            width="100%"
+                            class="coFilterTexts">
+
+                            <Text
+                                text="Periodo"
+                                class="coFilterLabel"/>
+
+                            <Select
+                                id="coPeriod"
+                                width="100%"
+                                selectedKey="{data>/filtros/periodo}"
+                                change=".onPeriodoChange"
+                                class="coFilterSelect"
+                                items="{
+                                    path: 'data>/opcionesPeriodo'
+                                }">
+
+                                <core:Item
+                                    key="{data>key}"
+                                    text="{data>text}"/>
+
+                            </Select>
+
+                        </VBox>
+
                     </HBox>
-                    <HBox class="coOriginBox" alignItems="Center"><Text text="Origen activo:" class="coOriginLabel"/><Select id="coOrigin" selectedKey="{data>/filtros/origen}" change=".onOriginSelectChange" width="130px" class="coOriginSelect" items="{data>/opcionesOrigen}"><items><core:Item key="{data>key}" text="{data>text}"/></items></Select></HBox>
+
+
+                    <!-- ZONA -->
+
+                    <HBox
+                        alignItems="Center"
+                        class="coFilterCard coZoneCard">
+
+                        <core:Icon
+                            src="sap-icon://map"
+                            class="coFilterIcon"/>
+
+                        <VBox
+                            width="100%"
+                            class="coFilterTexts">
+
+                            <Text
+                                text="Zona"
+                                class="coFilterLabel"/>
+
+                            <Select
+                                id="coZone"
+                                width="100%"
+                                selectedKey="{data>/filtros/zona}"
+                                class="coFilterSelect"
+                                items="{
+                                    path: 'data>/opcionesZona'
+                                }">
+
+                                <core:Item
+                                    key="{data>key}"
+                                    text="{data>text}"/>
+
+                            </Select>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- APLICAR -->
+
+                    <VBox
+                        justifyContent="Center"
+                        class="coApplyButtonBox">
+
+                        <Button
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            width="100%"
+                            press=".onApplyFilters"
+                            class="coApplyButton"/>
+
+                    </VBox>
+
                 </HBox>
-                <VBox class="coTableWrapper"><Table id="idResponsablesTable" items="{data>/responsables}" class="coTable" fixedLayout="true" mode="None">
-                    <columns>
-                        <Column width="5%" hAlign="Center"><Text text="#" class="coTableHeaderText"/></Column><Column width="17%"><Text text="Responsable" class="coTableHeaderText"/></Column><Column width="9%" hAlign="Center"><Text text="OT desviadas" class="coTableHeaderText"/></Column><Column width="9%" hAlign="Center"><Text text="% del total" class="coTableHeaderText"/></Column><Column width="24%"><Text text="Principal causa" class="coTableHeaderText"/></Column><Column width="10%" hAlign="Center"><Text text="Tipo de OT" class="coTableHeaderText"/></Column><Column width="15%" hAlign="Center"><Text text="Cumplimiento" class="coTableHeaderText"/></Column><Column width="11%" hAlign="Center"><Text text="Riesgo" class="coTableHeaderText"/></Column>
-                    </columns>
-                    <items><ColumnListItem class="coTableRow" vAlign="Middle" type="Inactive"><cells>
-                        <Text text="{data>id}" textAlign="Center" class="coRankText"/>
-                        <HBox alignItems="Center" class="coResponsibleCell"><Avatar displaySize="XS" backgroundColor="{path: 'data>responsableId', formatter: '.getAvatarColor'}" initials="{data>initials}" class="coAvatar"/><Link text="{data>responsable}" press=".onResponsablePress" class="coResponsibleLink"/></HBox>
-                        <Text text="{data>otDesviadas}" textAlign="Center" class="coOtDeviationText"/><Text text="{data>porcentajeTotal}" textAlign="Center" class="coPercentText"/>
-                        <HBox class="coCauseCard" alignItems="Center"><HBox class="coCauseIconBox" alignItems="Center" justifyContent="Center"><core:Icon src="{data>causaIcon}" class="coCauseIcon"/></HBox><VBox class="coCauseTexts"><Text text="{data>causaPrincipal}" class="coCauseTitle" wrapping="false"/><Text text="{data>causaDetalle}" class="coCauseDetail" wrapping="true"/></VBox></HBox>
-                        <HBox justifyContent="Center"><Text text="{data>tipoOt}" class="coTipoOtBadge"/></HBox>
-                        <VBox class="coComplianceCell" alignItems="Center"><Text text="{data>cumplimiento}" class="coComplianceValue"/><ProgressIndicator percentValue="{data>cumplimientoValue}" displayValue="" state="{data>riesgoState}" class="coComplianceProgress"/></VBox>
-                        <HBox justifyContent="Center"><ObjectStatus text="{data>riesgo}" state="{data>riesgoState}" class="coRiskBadge"/></HBox>
-                    </cells></ColumnListItem></items>
-                </Table></VBox>
-                <HBox class="coPagination" justifyContent="SpaceBetween" alignItems="Center"><Text text="{= 'Responsables con desviaciones: ' + ${data>/resumen/totalResponsables}}" class="coPaginationText"/><Text text="{data>/filtros/fechaDesde} - {data>/filtros/fechaHasta}" class="coPaginationText"/></HBox>
+
+
+                <!-- =====================================================
+                     CARD PRINCIPAL
+                     ===================================================== -->
+
+                <VBox
+                    id="coMainCard"
+                    width="100%"
+                    height="100%"
+                    fitContainer="true"
+                    class="coMainCard">
+
+                    <!-- =================================================
+                         TABS Y ORIGEN
+                         ================================================= -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        wrap="NoWrap"
+                        class="coCardToolbar">
+
+                        <HBox
+                            alignItems="Center"
+                            wrap="NoWrap"
+                            class="coTabs">
+
+                            <!-- TODAS -->
+
+                            <Button
+                                id="coTabTodas"
+                                text="Todas"
+                                icon="sap-icon://table-view"
+                                type="Emphasized"
+                                press=".onOriginTabPress"
+                                class="coTabButton coTabButtonActive">
+
+                                <customData>
+
+                                    <core:CustomData
+                                        key="origin"
+                                        value="TODAS"
+                                        writeToDom="false"/>
+
+                                </customData>
+
+                            </Button>
+
+
+                            <!-- INTERNAS -->
+
+                            <Button
+                                id="coTabInternas"
+                                text="Internas (operación)"
+                                icon="sap-icon://wrench"
+                                type="Transparent"
+                                press=".onOriginTabPress"
+                                class="coTabButton">
+
+                                <customData>
+
+                                    <core:CustomData
+                                        key="origin"
+                                        value="INTERNAL"
+                                        writeToDom="false"/>
+
+                                </customData>
+
+                            </Button>
+
+
+                            <!-- EXTERNAS -->
+
+                            <Button
+                                id="coTabExternas"
+                                text="Externas (cliente/proveedor)"
+                                icon="sap-icon://shipping-status"
+                                type="Transparent"
+                                press=".onOriginTabPress"
+                                class="coTabButton">
+
+                                <customData>
+
+                                    <core:CustomData
+                                        key="origin"
+                                        value="EXTERNAL"
+                                        writeToDom="false"/>
+
+                                </customData>
+
+                            </Button>
+
+
+                            <!-- JUSTIFICADAS -->
+
+                            <Button
+                                id="coTabJustificadas"
+                                text="Justificadas"
+                                icon="sap-icon://employee-approvals"
+                                type="Transparent"
+                                press=".onOriginTabPress"
+                                class="coTabButton">
+
+                                <customData>
+
+                                    <core:CustomData
+                                        key="origin"
+                                        value="JUSTIFIED"
+                                        writeToDom="false"/>
+
+                                </customData>
+
+                            </Button>
+
+                        </HBox>
+
+
+                        <!-- ORIGEN -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="coOriginBox">
+
+                            <Text
+                                text="Origen activo:"
+                                class="coOriginLabel"/>
+
+                            <Select
+                                id="coOrigin"
+                                width="130px"
+                                selectedKey="{data>/filtros/origen}"
+                                change=".onOriginSelectChange"
+                                class="coOriginSelect"
+                                items="{
+                                    path: 'data>/opcionesOrigen'
+                                }">
+
+                                <core:Item
+                                    key="{data>key}"
+                                    text="{data>text}"/>
+
+                            </Select>
+
+                        </HBox>
+
+                    </HBox>
+
+
+                    <!-- =================================================
+                         TABLA
+                         ================================================= -->
+
+                    <VBox
+                        id="coTableArea"
+                        width="100%"
+                        height="100%"
+                        fitContainer="true"
+                        class="coTableWrapper">
+
+                        <Table
+                            id="idResponsablesTable"
+                            width="100%"
+                            fixedLayout="true"
+                            mode="None"
+                            growing="false"
+                            inset="false"
+                            showSeparators="Inner"
+                            noDataText="No se encontraron responsables con desviaciones"
+                            class="coTable"
+                            items="{
+                                path: 'data>/responsablesVisibles',
+                                templateShareable: false
+                            }">
+
+                            <columns>
+
+                                <Column
+                                    width="5%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="#"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column width="17%">
+
+                                    <Text
+                                        text="Responsable"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column
+                                    width="9%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="OT desviadas"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column
+                                    width="9%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="% del total"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column width="24%">
+
+                                    <Text
+                                        text="Principal causa"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column
+                                    width="10%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Tipo de OT"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column
+                                    width="15%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Cumplimiento"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                                <Column
+                                    width="11%"
+                                    hAlign="Center">
+
+                                    <Text
+                                        text="Riesgo"
+                                        class="coTableHeaderText"/>
+
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem
+                                    class="coTableRow"
+                                    vAlign="Middle"
+                                    type="Inactive">
+
+                                    <cells>
+
+                                        <!-- RANK -->
+
+                                        <Text
+                                            text="{data>id}"
+                                            textAlign="Center"
+                                            class="coRankText"/>
+
+
+                                        <!-- RESPONSABLE -->
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="coResponsibleCell">
+
+                                            <Avatar
+                                                displaySize="XS"
+                                                backgroundColor="{
+                                                    path: 'data>responsableId',
+                                                    formatter: '.getAvatarColor'
+                                                }"
+                                                initials="{data>initials}"
+                                                class="coAvatar"/>
+
+                                            <Link
+                                                text="{data>responsable}"
+                                                tooltip="{data>responsable}"
+                                                press=".onResponsablePress"
+                                                class="coResponsibleLink"/>
+
+                                        </HBox>
+
+
+                                        <!-- OT DESVIADAS -->
+
+                                        <Text
+                                            text="{data>otDesviadas}"
+                                            textAlign="Center"
+                                            class="coOtDeviationText"/>
+
+
+                                        <!-- PORCENTAJE -->
+
+                                        <Text
+                                            text="{data>porcentajeTotal}"
+                                            textAlign="Center"
+                                            class="coPercentText"/>
+
+
+                                        <!-- PRINCIPAL CAUSA -->
+
+                                        <HBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="coCauseCard">
+
+                                            <HBox
+                                                alignItems="Center"
+                                                justifyContent="Center"
+                                                class="coCauseIconBox">
+
+                                                <core:Icon
+                                                    src="{data>causaIcon}"
+                                                    class="coCauseIcon"/>
+
+                                            </HBox>
+
+                                            <VBox
+                                                width="100%"
+                                                class="coCauseTexts">
+
+                                                <Text
+                                                    text="{data>causaPrincipal}"
+                                                    wrapping="false"
+                                                    tooltip="{data>causaPrincipal}"
+                                                    class="coCauseTitle"/>
+
+                                                <Text
+                                                    text="{data>causaDetalle}"
+                                                    wrapping="false"
+                                                    tooltip="{data>causaDetalle}"
+                                                    class="coCauseDetail"/>
+
+                                            </VBox>
+
+                                        </HBox>
+
+
+                                        <!-- TIPO OT -->
+
+                                        <HBox
+                                            width="100%"
+                                            justifyContent="Center">
+
+                                            <Text
+                                                text="{data>tipoOt}"
+                                                class="coTipoOtBadge"/>
+
+                                        </HBox>
+
+
+                                        <!-- CUMPLIMIENTO -->
+
+                                        <VBox
+                                            width="100%"
+                                            alignItems="Center"
+                                            class="coComplianceCell">
+
+                                            <Text
+                                                text="{data>cumplimiento}"
+                                                class="coComplianceValue"/>
+
+                                            <ProgressIndicator
+                                                width="88%"
+                                                percentValue="{data>cumplimientoValue}"
+                                                displayValue=""
+                                                showValue="false"
+                                                state="{data>riesgoState}"
+                                                class="coComplianceProgress"/>
+
+                                        </VBox>
+
+
+                                        <!-- RIESGO -->
+
+                                        <HBox
+                                            width="100%"
+                                            justifyContent="Center">
+
+                                            <ObjectStatus
+                                                text="{data>riesgo}"
+                                                state="{data>riesgoState}"
+                                                class="coRiskBadge"/>
+
+                                        </HBox>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </VBox>
+
+
+                    <!-- =================================================
+                         FOOTER
+                         ================================================= -->
+
+                    <HBox
+                        width="100%"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="coPagination">
+
+                        <!-- TOTAL -->
+
+                        <Text
+                            text="{= 'Responsables con desviaciones: ' + ${data>/resumen/totalResponsables}}"
+                            class="coPaginationText"/>
+
+
+                        <!-- DERECHA -->
+
+                        <HBox
+                            alignItems="Center"
+                            class="coPaginationRight">
+
+                            <Text
+                                text="{data>/filtros/fechaDesde} - {data>/filtros/fechaHasta}"
+                                class="coDateText"/>
+
+                            <HBox
+                                alignItems="Center"
+                                visible="{data>/paginacion/visible}"
+                                class="coPaginationControls">
+
+                                <Button
+                                    icon="sap-icon://navigation-left-arrow"
+                                    type="Transparent"
+                                    tooltip="Página anterior"
+                                    enabled="{data>/paginacion/tieneAnterior}"
+                                    press=".onPreviousPage"
+                                    class="coPageButton"/>
+
+                                <Text
+                                    text="{data>/paginacion/paginaTexto}"
+                                    class="coPageText"/>
+
+                                <Button
+                                    icon="sap-icon://navigation-right-arrow"
+                                    type="Transparent"
+                                    tooltip="Página siguiente"
+                                    enabled="{data>/paginacion/tieneSiguiente}"
+                                    press=".onNextPage"
+                                    class="coPageButton"/>
+
+                            </HBox>
+
+                        </HBox>
+
+                    </HBox>
+
+                </VBox>
+
             </VBox>
-        </VBox></content>
+
+        </content>
+
     </Page>
+
 </mvc:View>

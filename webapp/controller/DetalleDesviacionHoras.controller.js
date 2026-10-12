@@ -16,27 +16,25 @@ sap.ui.define([
     return Controller.extend(
         "mantenimiento.controller.DetalleDesviacionHoras",
         {
+
             onInit: function () {
                 var iYear =
-                    new Date()
-                        .getFullYear();
+                    new Date().getFullYear();
 
                 var oViewModel =
                     new JSONModel({
-                        isBusy:
-                            false,
+
+                        isBusy: false,
 
                         filters: {
                             periodo:
                                 String(iYear),
 
                             fechaDesde:
-                                "01/01/" +
-                                iYear,
+                                "01/01/" + iYear,
 
                             fechaHasta:
-                                "31/12/" +
-                                iYear,
+                                "31/12/" + iYear,
 
                             zona:
                                 "Todos",
@@ -62,46 +60,36 @@ sap.ui.define([
 
                             zonas: [
                                 {
-                                    key:
-                                        "Todos",
-                                    text:
-                                        "Todos"
+                                    key: "Todos",
+                                    text: "Todos"
                                 }
                             ],
 
                             supervisores: [
                                 {
-                                    key:
-                                        "Todos",
-                                    text:
-                                        "Todos"
+                                    key: "Todos",
+                                    text: "Todos"
                                 }
                             ],
 
                             turnos: [
                                 {
-                                    key:
-                                        "Todos",
-                                    text:
-                                        "Todos"
+                                    key: "Todos",
+                                    text: "Todos"
                                 }
                             ],
 
                             tiposOrden: [
                                 {
-                                    key:
-                                        "Todos",
-                                    text:
-                                        "Todos"
+                                    key: "Todos",
+                                    text: "Todos"
                                 }
                             ],
 
                             estadosOrden: [
                                 {
-                                    key:
-                                        "Todos",
-                                    text:
-                                        "Todos"
+                                    key: "Todos",
+                                    text: "Todos"
                                 }
                             ]
                         },
@@ -143,20 +131,28 @@ sap.ui.define([
                                 "Sin datos"
                         },
 
-                        ordenes:
-                            [],
+                        ordenes: [],
 
-                        resumenZona:
-                            [],
+                        ordenesPaginadas: [],
 
-                        resumenTurno:
-                            [],
+                        resumenZona: [],
 
-                        resumenTipoOrden:
-                            [],
+                        resumenTurno: [],
+
+                        resumenTipoOrden: [],
 
                         footerText:
                             "Mostrando 0 resultados",
+
+                        pagination: {
+                            currentPage: 1,
+                            totalPages: 1,
+                            totalResults: 0,
+                            hasPrevious: false,
+                            hasNext: false,
+                            resultText:
+                                "Mostrando 0 resultados"
+                        },
 
                         meta: {
                             planDisponible:
@@ -174,390 +170,632 @@ sap.ui.define([
                     5000
                 );
 
-                this.getView()
-                    .setModel(
-                        oViewModel,
-                        "ddh"
-                    );
+                this.getView().setModel(
+                    oViewModel,
+                    "ddh"
+                );
 
                 this._iLoadRequest = 0;
 
-                /*
-                 * En 2026 inicia automáticamente:
-                 * 01/01/2026 - 31/12/2026.
-                 */
+                this._aAllOrders = [];
+
+                this._iCurrentPage = 1;
+
+                this._iPageSize =
+                    this._getDefaultPageSize();
+
                 this._loadData(false);
             },
 
-            _buildYearCatalog:
-                function (
-                    iSelectedYear
+
+            /* =====================================================
+               CATÁLOGO DE PERIODOS
+               ===================================================== */
+
+            _buildYearCatalog: function (
+                iSelectedYear
+            ) {
+                var iCurrentYear =
+                    new Date()
+                        .getFullYear();
+
+                var iStartYear =
+                    Math.min(
+                        iCurrentYear - 5,
+                        Number(
+                            iSelectedYear
+                        ) - 2
+                    );
+
+                var iEndYear =
+                    Math.max(
+                        iCurrentYear + 1,
+                        Number(
+                            iSelectedYear
+                        ) + 2
+                    );
+
+                var aYears = [];
+
+                var iYear;
+
+                for (
+                    iYear = iEndYear;
+                    iYear >= iStartYear;
+                    iYear--
                 ) {
-                    var iCurrentYear =
-                        new Date()
-                            .getFullYear();
+                    aYears.push({
+                        key:
+                            String(iYear),
 
-                    var iStartYear =
-                        Math.min(
-                            iCurrentYear - 5,
-                            Number(
-                                iSelectedYear
-                            ) - 2
+                        text:
+                            String(iYear)
+                    });
+                }
+
+                return aYears;
+            },
+
+
+            /* =====================================================
+               ODATA
+               ===================================================== */
+
+            _getODataModel: function () {
+                var oComponent =
+                    this.getOwnerComponent();
+
+                return (
+                    oComponent &&
+                    oComponent.getModel(
+                        "dashboardOData"
+                    )
+                ) ||
+                (
+                    oComponent &&
+                    oComponent.getModel()
+                );
+            },
+
+
+            /* =====================================================
+               FILTROS
+               ===================================================== */
+
+            _getFilters: function () {
+                var oModel =
+                    this.getView()
+                        .getModel(
+                            "ddh"
                         );
 
-                    var iEndYear =
-                        Math.max(
-                            iCurrentYear + 1,
-                            Number(
-                                iSelectedYear
-                            ) + 2
-                        );
+                var mFilters =
+                    oModel.getProperty(
+                        "/filters"
+                    ) || {};
 
-                    var aYears = [];
-                    var iYear;
+                return {
+                    periodo:
+                        mFilters.periodo,
 
-                    for (
-                        iYear = iEndYear;
-                        iYear >= iStartYear;
-                        iYear--
-                    ) {
-                        aYears.push({
-                            key:
-                                String(iYear),
+                    fechaDesde:
+                        mFilters.fechaDesde,
 
-                            text:
-                                String(iYear)
-                        });
-                    }
+                    fechaHasta:
+                        mFilters.fechaHasta,
 
-                    return aYears;
-                },
+                    zona:
+                        mFilters.zona,
 
-            _getODataModel:
-                function () {
-                    var oComponent =
-                        this.getOwnerComponent();
+                    supervisor:
+                        mFilters.supervisor,
 
-                    return (
-                        oComponent &&
-                        oComponent.getModel(
-                            "dashboardOData"
-                        )
-                    ) ||
-                    (
-                        oComponent &&
-                        oComponent.getModel()
-                    );
-                },
+                    turno:
+                        mFilters.turno,
 
-            _getFilters:
-                function () {
-                    var oModel =
-                        this.getView()
-                            .getModel(
-                                "ddh"
-                            );
+                    tipoOrden:
+                        mFilters.tipoOrden,
 
-                    var mFilters =
-                        oModel.getProperty(
-                            "/filters"
-                        ) || {};
+                    estado:
+                        mFilters.estado
+                };
+            },
 
-                    return {
-                        periodo:
-                            mFilters.periodo,
 
-                        fechaDesde:
-                            mFilters.fechaDesde,
-
-                        fechaHasta:
-                            mFilters.fechaHasta,
-
-                        zona:
-                            mFilters.zona,
-
-                        supervisor:
-                            mFilters.supervisor,
-
-                        turno:
-                            mFilters.turno,
-
-                        tipoOrden:
-                            mFilters.tipoOrden,
-
-                        estado:
-                            mFilters.estado
-                    };
-                },
-
-            _loadData:
-                function (
-                    bNotify
-                ) {
-                    var oViewModel =
-                        this.getView()
-                            .getModel(
-                                "ddh"
-                            );
-
-                    var oODataModel =
-                        this._getODataModel();
-
-                    var mFilters =
-                        this._getFilters();
-
-                    var iRequest =
-                        ++this
-                            ._iLoadRequest;
-
-                    console.log(
-                        "[DDH CONTROLLER] _loadData:",
-                        mFilters
-                    );
-
-                    oViewModel.setProperty(
-                        "/isBusy",
-                        true
-                    );
-
-                    Service
-                        .getDashboardData(
-                            oODataModel,
-                            mFilters
-                        )
-                        .then(
-                            function (
-                                oRawData
-                            ) {
-                                var oMappedData;
-
-                                if (
-                                    iRequest !==
-                                    this._iLoadRequest
-                                ) {
-                                    return;
-                                }
-
-                                oMappedData =
-                                    Mapper.mapData(
-                                        oRawData,
-                                        mFilters
-                                    );
-
-                                oViewModel.setProperty(
-                                    "/catalogos",
-                                    oMappedData
-                                        .catalogos
-                                );
-
-                                oViewModel.setProperty(
-                                    "/kpis",
-                                    oMappedData
-                                        .kpis
-                                );
-
-                                oViewModel.setProperty(
-                                    "/totales",
-                                    oMappedData
-                                        .totales
-                                );
-
-                                oViewModel.setProperty(
-                                    "/ordenes",
-                                    oMappedData
-                                        .ordenes
-                                );
-
-                                oViewModel.setProperty(
-                                    "/resumenZona",
-                                    oMappedData
-                                        .resumenZona
-                                );
-
-                                oViewModel.setProperty(
-                                    "/resumenTurno",
-                                    oMappedData
-                                        .resumenTurno
-                                );
-
-                                oViewModel.setProperty(
-                                    "/resumenTipoOrden",
-                                    oMappedData
-                                        .resumenTipoOrden
-                                );
-
-                                oViewModel.setProperty(
-                                    "/footerText",
-                                    oMappedData
-                                        .footerText
-                                );
-
-                                oViewModel.setProperty(
-                                    "/meta",
-                                    oMappedData.meta
-                                );
-
-                                console.log(
-                                    "[DDH CONTROLLER] Modelo actualizado."
-                                );
-
-                                if (bNotify) {
-                                    MessageToast.show(
-                                        "Detalle de desviación actualizado"
-                                    );
-                                }
-                            }.bind(this)
-                        )
-                        .catch(
-                            function (
-                                oError
-                            ) {
-                                if (
-                                    iRequest !==
-                                    this._iLoadRequest
-                                ) {
-                                    return;
-                                }
-
-                                console.error(
-                                    "[DDH CONTROLLER] Error:",
-                                    oError
-                                );
-
-                                MessageToast.show(
-                                    oError &&
-                                    oError.message
-                                        ? oError.message
-                                        : "Error al consultar los datos de SAP"
-                                );
-                            }.bind(this)
-                        )
-                        .finally(
-                            function () {
-                                if (
-                                    iRequest ===
-                                    this._iLoadRequest
-                                ) {
-                                    oViewModel
-                                        .setProperty(
-                                            "/isBusy",
-                                            false
-                                        );
-                                }
-                            }.bind(this)
-                        );
-                },
-
-            onPeriodoChange:
-                function (
+            onPeriodoChange: function (
+                oEvent
+            ) {
+                var sYear =
                     oEvent
+                        .getSource()
+                        .getSelectedKey();
+
+                var iYear =
+                    Number(sYear);
+
+                var oModel =
+                    this.getView()
+                        .getModel(
+                            "ddh"
+                        );
+
+                if (
+                    !Number.isInteger(
+                        iYear
+                    ) ||
+                    iYear < 1900 ||
+                    iYear > 9999
                 ) {
-                    var sYear =
-                        oEvent
-                            .getSource()
-                            .getSelectedKey();
+                    return;
+                }
 
-                    var iYear =
-                        Number(sYear);
+                oModel.setProperty(
+                    "/filters/periodo",
+                    String(iYear)
+                );
 
-                    var oModel =
-                        this.getView()
-                            .getModel(
-                                "ddh"
-                            );
+                oModel.setProperty(
+                    "/filters/fechaDesde",
+                    "01/01/" +
+                    iYear
+                );
 
-                    if (
-                        !Number.isInteger(
-                            iYear
-                        ) ||
-                        iYear < 1900 ||
-                        iYear > 9999
-                    ) {
-                        return;
-                    }
+                oModel.setProperty(
+                    "/filters/fechaHasta",
+                    "31/12/" +
+                    iYear
+                );
+            },
 
+
+            onFechaChange: function () {
+                var oModel =
+                    this.getView()
+                        .getModel(
+                            "ddh"
+                        );
+
+                var sDesde =
+                    oModel.getProperty(
+                        "/filters/fechaDesde"
+                    ) || "";
+
+                var sHasta =
+                    oModel.getProperty(
+                        "/filters/fechaHasta"
+                    ) || "";
+
+                var aDesde =
+                    sDesde.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
+
+                var aHasta =
+                    sHasta.match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
+
+                if (
+                    aDesde &&
+                    aHasta &&
+                    aDesde[3] ===
+                    aHasta[3]
+                ) {
                     oModel.setProperty(
                         "/filters/periodo",
-                        String(iYear)
+                        aDesde[3]
+                    );
+                }
+            },
+
+
+            onAplicarFiltros: function () {
+                var mFilters =
+                    this._getFilters();
+
+                var oDesde =
+                    this._localDate(
+                        mFilters.fechaDesde
                     );
 
-                    oModel.setProperty(
-                        "/filters/fechaDesde",
-                        "01/01/" +
-                        iYear
+                var oHasta =
+                    this._localDate(
+                        mFilters.fechaHasta
                     );
 
-                    oModel.setProperty(
-                        "/filters/fechaHasta",
-                        "31/12/" +
-                        iYear
+                if (
+                    !oDesde ||
+                    !oHasta ||
+                    oDesde > oHasta
+                ) {
+                    MessageToast.show(
+                        "Revisa que la fecha desde sea menor o igual a la fecha hasta."
                     );
-                },
 
-            onFechaChange:
-                function () {
-                    var oModel =
-                        this.getView()
-                            .getModel(
-                                "ddh"
+                    return;
+                }
+
+                this._iCurrentPage = 1;
+
+                this._loadData(true);
+            },
+
+
+            /* =====================================================
+               CARGA SAP
+               ===================================================== */
+
+            _loadData: function (
+                bNotify
+            ) {
+                var oViewModel =
+                    this.getView()
+                        .getModel(
+                            "ddh"
+                        );
+
+                var oODataModel =
+                    this._getODataModel();
+
+                var mFilters =
+                    this._getFilters();
+
+                var iRequest =
+                    ++this._iLoadRequest;
+
+                oViewModel.setProperty(
+                    "/isBusy",
+                    true
+                );
+
+                Service
+                    .getDashboardData(
+                        oODataModel,
+                        mFilters
+                    )
+                    .then(
+                        function (
+                            oRawData
+                        ) {
+                            var oMappedData;
+
+                            if (
+                                iRequest !==
+                                this._iLoadRequest
+                            ) {
+                                return;
+                            }
+
+                            oMappedData =
+                                Mapper.mapData(
+                                    oRawData,
+                                    mFilters
+                                );
+
+                            oViewModel.setProperty(
+                                "/catalogos",
+                                oMappedData.catalogos
                             );
 
-                    var sDesde =
-                        oModel.getProperty(
-                            "/filters/fechaDesde"
-                        ) || "";
+                            oViewModel.setProperty(
+                                "/kpis",
+                                oMappedData.kpis
+                            );
 
-                    var sHasta =
-                        oModel.getProperty(
-                            "/filters/fechaHasta"
-                        ) || "";
+                            oViewModel.setProperty(
+                                "/totales",
+                                oMappedData.totales
+                            );
 
-                    var aDesde =
-                        sDesde.match(
-                            /^(\d{2})\/(\d{2})\/(\d{4})$/
-                        );
+                            this._aAllOrders =
+                                Array.isArray(
+                                    oMappedData.ordenes
+                                )
+                                    ? oMappedData
+                                        .ordenes
+                                        .slice()
+                                    : [];
 
-                    var aHasta =
-                        sHasta.match(
-                            /^(\d{2})\/(\d{2})\/(\d{4})$/
-                        );
+                            oViewModel.setProperty(
+                                "/ordenes",
+                                this._aAllOrders
+                            );
 
-                    if (
-                        aDesde &&
-                        aHasta &&
-                        aDesde[3] ===
-                        aHasta[3]
-                    ) {
-                        oModel.setProperty(
-                            "/filters/periodo",
-                            aDesde[3]
-                        );
-                    }
-                },
+                            oViewModel.setProperty(
+                                "/resumenZona",
+                                oMappedData
+                                    .resumenZona ||
+                                []
+                            );
 
-            onAplicarFiltros:
-                function () {
-                    console.group(
-                        "FILTROS - DETALLE DESVIACIÓN DE HORAS"
+                            oViewModel.setProperty(
+                                "/resumenTurno",
+                                oMappedData
+                                    .resumenTurno ||
+                                []
+                            );
+
+                            oViewModel.setProperty(
+                                "/resumenTipoOrden",
+                                oMappedData
+                                    .resumenTipoOrden ||
+                                []
+                            );
+
+                            oViewModel.setProperty(
+                                "/footerText",
+                                oMappedData
+                                    .footerText ||
+                                "Mostrando 0 resultados"
+                            );
+
+                            oViewModel.setProperty(
+                                "/meta",
+                                oMappedData.meta
+                            );
+
+                            this._iCurrentPage =
+                                1;
+
+                            this._renderPage();
+
+                            if (bNotify) {
+                                MessageToast.show(
+                                    "Detalle de desviación actualizado"
+                                );
+                            }
+
+                        }.bind(this)
+                    )
+                    .catch(
+                        function (
+                            oError
+                        ) {
+                            if (
+                                iRequest !==
+                                this._iLoadRequest
+                            ) {
+                                return;
+                            }
+
+                            this._aAllOrders = [];
+
+                            this._iCurrentPage = 1;
+
+                            oViewModel.setProperty(
+                                "/ordenes",
+                                []
+                            );
+
+                            this._renderPage();
+
+                            MessageToast.show(
+                                oError &&
+                                oError.message
+                                    ? oError.message
+                                    : "Error al consultar los datos de SAP"
+                            );
+
+                        }.bind(this)
+                    )
+                    .finally(
+                        function () {
+                            if (
+                                iRequest ===
+                                this._iLoadRequest
+                            ) {
+                                oViewModel
+                                    .setProperty(
+                                        "/isBusy",
+                                        false
+                                    );
+                            }
+
+                        }.bind(this)
                     );
+            },
 
-                    console.log(
-                        JSON.stringify(
-                            this._getFilters(),
-                            null,
-                            2
+
+            /* =====================================================
+               PAGINACIÓN
+               ===================================================== */
+
+            _getDefaultPageSize: function () {
+                var iHeight =
+                    window.innerHeight ||
+                    768;
+
+                if (
+                    iHeight <= 720
+                ) {
+                    return 7;
+                }
+
+                if (
+                    iHeight <= 850
+                ) {
+                    return 9;
+                }
+
+                return 11;
+            },
+
+
+            _renderPage: function () {
+                var oModel =
+                    this.getView()
+                        .getModel(
+                            "ddh"
+                        );
+
+                var aOrders =
+                    this._aAllOrders ||
+                    [];
+
+                var iTotal =
+                    aOrders.length;
+
+                var iTotalPages =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            iTotal /
+                            this._iPageSize
                         )
                     );
 
-                    console.groupEnd();
+                var iPage =
+                    Math.min(
+                        Math.max(
+                            this._iCurrentPage,
+                            1
+                        ),
+                        iTotalPages
+                    );
 
-                    /*
-                     * Los DatePicker siguen siendo editables.
-                     * La consulta usa exactamente el rango visible.
-                     */
-                    this._loadData(true);
+                var iStart =
+                    (
+                        iPage - 1
+                    ) *
+                    this._iPageSize;
+
+                var iEnd =
+                    Math.min(
+                        iStart +
+                        this._iPageSize,
+                        iTotal
+                    );
+
+                this._iCurrentPage =
+                    iPage;
+
+                oModel.setProperty(
+                    "/ordenesPaginadas",
+                    aOrders.slice(
+                        iStart,
+                        iEnd
+                    )
+                );
+
+                oModel.setProperty(
+                    "/pagination",
+                    {
+                        currentPage:
+                            iPage,
+
+                        totalPages:
+                            iTotalPages,
+
+                        totalResults:
+                            iTotal,
+
+                        hasPrevious:
+                            iPage > 1,
+
+                        hasNext:
+                            iPage <
+                            iTotalPages,
+
+                        resultText:
+                            iTotal === 0
+                                ? "Mostrando 0 resultados"
+                                : (
+                                    "Mostrando " +
+                                    (
+                                        iStart +
+                                        1
+                                    ) +
+                                    " a " +
+                                    iEnd +
+                                    " de " +
+                                    iTotal +
+                                    " resultados"
+                                )
+                    }
+                );
+            },
+
+
+            onPaginaAnterior: function () {
+                if (
+                    this._iCurrentPage <= 1
+                ) {
+                    return;
                 }
+
+                this._iCurrentPage -=
+                    1;
+
+                this._renderPage();
+            },
+
+
+            onPaginaSiguiente: function () {
+                var oPagination =
+                    this.getView()
+                        .getModel(
+                            "ddh"
+                        )
+                        .getProperty(
+                            "/pagination"
+                        ) || {};
+
+                var iTotalPages =
+                    Number(
+                        oPagination
+                            .totalPages
+                    ) || 1;
+
+                if (
+                    this._iCurrentPage >=
+                    iTotalPages
+                ) {
+                    return;
+                }
+
+                this._iCurrentPage +=
+                    1;
+
+                this._renderPage();
+            },
+
+
+            onColumnas: function () {
+                MessageToast.show(
+                    "La tabla muestra OT, cliente, equipo, zona, tipo de orden, responsable, turno, horas, variación y estado."
+                );
+            },
+
+
+            /* =====================================================
+               UTILIDADES
+               ===================================================== */
+
+            _localDate: function (
+                sValue
+            ) {
+                var aMatch =
+                    String(
+                        sValue || ""
+                    ).match(
+                        /^(\d{2})\/(\d{2})\/(\d{4})$/
+                    );
+
+                return aMatch
+                    ? new Date(
+                        Number(
+                            aMatch[3]
+                        ),
+                        Number(
+                            aMatch[2]
+                        ) - 1,
+                        Number(
+                            aMatch[1]
+                        )
+                    )
+                    : null;
+            }
+
         }
     );
 });
-

@@ -20,6 +20,7 @@ sap.ui.define([
     return Controller.extend(
         "mantenimiento.controller.DetalleMecanicos",
         {
+
             onInit: function () {
                 var iYear = 2026;
 
@@ -63,6 +64,16 @@ sap.ui.define([
                 );
             },
 
+
+            onAfterRendering: function () {
+                this._applyWorkforceDonut();
+            },
+
+
+            /* =====================================================
+               CSS
+               ===================================================== */
+
             _loadScreenStyles: function () {
                 var sStyleId =
                     "detalleMecanicosStyles";
@@ -83,18 +94,24 @@ sap.ui.define([
                     );
                 }
 
-                sCssUrl = sap.ui.require.toUrl(
-                    "mantenimiento/css/DetalleMecanicos.css"
-                );
+                sCssUrl =
+                    sap.ui.require.toUrl(
+                        "mantenimiento/css/DetalleMecanicos.css"
+                    );
 
                 sCssUrl +=
-                    "?version=20260821_01";
+                    "?version=20261005-unified-final";
 
                 includeStylesheet(
                     sCssUrl,
                     sStyleId
                 );
             },
+
+
+            /* =====================================================
+               ODATA
+               ===================================================== */
 
             _getODataModel: function () {
                 var oComponent =
@@ -110,6 +127,11 @@ sap.ui.define([
                     oComponent.getModel()
                 );
             },
+
+
+            /* =====================================================
+               PERIODOS
+               ===================================================== */
 
             _buildYearCatalog: function (
                 iSelectedYear
@@ -135,6 +157,7 @@ sap.ui.define([
                     );
 
                 var aYears = [];
+
                 var iYear;
 
                 for (
@@ -143,19 +166,32 @@ sap.ui.define([
                     iYear--
                 ) {
                     aYears.push({
-                        key: String(iYear),
-                        text: String(iYear)
+                        key:
+                            String(
+                                iYear
+                            ),
+
+                        text:
+                            String(
+                                iYear
+                            )
                     });
                 }
 
                 return aYears;
             },
 
+
+            /* =====================================================
+               FILTROS
+               ===================================================== */
+
             _getFilters: function () {
                 var mFilters =
-                    this._oModel.getProperty(
-                        "/filters"
-                    ) || {};
+                    this._oModel
+                        .getProperty(
+                            "/filters"
+                        ) || {};
 
                 return {
                     periodo:
@@ -187,6 +223,7 @@ sap.ui.define([
                 };
             },
 
+
             onApplyFilters: function () {
                 var oFilters =
                     this._getFilters();
@@ -213,6 +250,7 @@ sap.ui.define([
                 );
             },
 
+
             onPeriodoChange: function (
                 oEvent
             ) {
@@ -222,7 +260,9 @@ sap.ui.define([
                         .getSelectedKey();
 
                 var iYear =
-                    Number(sYear);
+                    Number(
+                        sYear
+                    );
 
                 if (
                     !Number.isInteger(
@@ -236,7 +276,9 @@ sap.ui.define([
 
                 this._oModel.setProperty(
                     "/filters/periodo",
-                    String(iYear)
+                    String(
+                        iYear
+                    )
                 );
 
                 this._oModel.setProperty(
@@ -252,16 +294,19 @@ sap.ui.define([
                 );
             },
 
+
             onFechaChange: function () {
                 var sDesde =
-                    this._oModel.getProperty(
-                        "/filters/fechaDesde"
-                    ) || "";
+                    this._oModel
+                        .getProperty(
+                            "/filters/fechaDesde"
+                        ) || "";
 
                 var sHasta =
-                    this._oModel.getProperty(
-                        "/filters/fechaHasta"
-                    ) || "";
+                    this._oModel
+                        .getProperty(
+                            "/filters/fechaHasta"
+                        ) || "";
 
                 var aDesde =
                     sDesde.match(
@@ -277,7 +322,7 @@ sap.ui.define([
                     aDesde &&
                     aHasta &&
                     aDesde[3] ===
-                        aHasta[3]
+                    aHasta[3]
                 ) {
                     this._oModel.setProperty(
                         "/filters/periodo",
@@ -285,6 +330,11 @@ sap.ui.define([
                     );
                 }
             },
+
+
+            /* =====================================================
+               CARGA SAP
+               ===================================================== */
 
             _loadData: function (
                 oFilters,
@@ -307,6 +357,7 @@ sap.ui.define([
                     {
                         filters:
                             oFilters,
+
                         initialLoad:
                             Boolean(
                                 bInitialLoad
@@ -314,13 +365,14 @@ sap.ui.define([
                     }
                 );
 
-                Service.getDashboardData(
-                    oODataModel,
-                    oFilters,
-                    Boolean(
-                        bInitialLoad
+                Service
+                    .getDashboardData(
+                        oODataModel,
+                        oFilters,
+                        Boolean(
+                            bInitialLoad
+                        )
                     )
-                )
                     .then(
                         function (
                             oRawData
@@ -394,6 +446,13 @@ sap.ui.define([
                                 oMapped.meta
                             );
 
+                            window.setTimeout(
+                                this
+                                    ._applyWorkforceDonut
+                                    .bind(this),
+                                0
+                            );
+
                             if (bNotify) {
                                 MessageToast.show(
                                     "Detalle de mecánicos actualizado"
@@ -431,39 +490,192 @@ sap.ui.define([
                                 iRequest ===
                                 this._iLoadRequest
                             ) {
-                                this._oModel.setProperty(
-                                    "/loading",
-                                    false
-                                );
+                                this._oModel
+                                    .setProperty(
+                                        "/loading",
+                                        false
+                                    );
                             }
                         }.bind(this)
                     );
             },
 
+
+            /* =====================================================
+               DONA ESTADO DE PLANTILLA
+               Solo presentación. Usa el resultado del Mapper.
+               ===================================================== */
+
+            _applyWorkforceDonut: function () {
+                var oDonut =
+                    this.byId(
+                        "workforceDonut"
+                    );
+
+                var oDomRef =
+                    oDonut &&
+                    oDonut.getDomRef();
+
+                var aStates =
+                    this._oModel &&
+                    this._oModel.getProperty(
+                        "/estadoPlantilla"
+                    ) || [];
+
+                var mColors = {
+                    green:
+                        "#22a45a",
+
+                    blue:
+                        "#2f6fed",
+
+                    orange:
+                        "#f59e0b",
+
+                    red:
+                        "#ef4444",
+
+                    gray:
+                        "#94a3b8"
+                };
+
+                var aStops = [];
+
+                var fCursor = 0;
+
+                if (!oDomRef) {
+                    return;
+                }
+
+                aStates.forEach(
+                    function (
+                        oState
+                    ) {
+                        var fPct =
+                            parseFloat(
+                                String(
+                                    oState.pct ||
+                                    "0"
+                                )
+                                    .replace(
+                                        "%",
+                                        ""
+                                    )
+                                    .replace(
+                                        ",",
+                                        "."
+                                    )
+                            );
+
+                        var sColor =
+                            mColors[
+                                oState.tone
+                            ] ||
+                            "#94a3b8";
+
+                        var fEnd;
+
+                        if (
+                            !isFinite(
+                                fPct
+                            ) ||
+                            fPct <= 0
+                        ) {
+                            return;
+                        }
+
+                        fEnd =
+                            Math.min(
+                                100,
+                                fCursor +
+                                fPct
+                            );
+
+                        aStops.push(
+                            sColor +
+                            " " +
+                            fCursor +
+                            "% " +
+                            fEnd +
+                            "%"
+                        );
+
+                        fCursor =
+                            fEnd;
+                    }
+                );
+
+                if (
+                    fCursor <
+                    100
+                ) {
+                    aStops.push(
+                        "#e8eef6 " +
+                        fCursor +
+                        "% 100%"
+                    );
+                }
+
+                oDomRef.style.background =
+                    aStops.length
+                        ? (
+                            "conic-gradient(" +
+                            aStops.join(
+                                ","
+                            ) +
+                            ")"
+                        )
+                        : "#e8eef6";
+            },
+
+
+            /* =====================================================
+               MODELO INICIAL
+               ===================================================== */
+
             _getInitialData: function (
                 iYear
             ) {
                 return {
-                    loading: false,
+
+                    loading:
+                        false,
 
                     filters: {
                         /*
                          * La pantalla arranca mostrando
                          * el mismo rango de la primera consulta.
                          */
-                        periodo: "2026",
-                        fechaDesde: "01/08/2026",
-                        fechaHasta: "25/08/2026",
+                        periodo:
+                            "2026",
 
-                        zona: "TODAS",
-                        supervisor: "TODOS",
-                        turno: "TODOS",
-                        tipoServicio: "TODAS",
-                        especialidad: "TODAS",
-                        estado: "TODOS"
+                        fechaDesde:
+                            "01/08/2026",
+
+                        fechaHasta:
+                            "25/08/2026",
+
+                        zona:
+                            "TODAS",
+
+                        supervisor:
+                            "TODOS",
+
+                        turno:
+                            "TODOS",
+
+                        tipoServicio:
+                            "TODAS",
+
+                        especialidad:
+                            "TODAS",
+
+                        estado:
+                            "TODOS"
                     },
 
                     catalogos: {
+
                         periodos:
                             this._buildYearCatalog(
                                 iYear
@@ -471,178 +683,353 @@ sap.ui.define([
 
                         zonas: [
                             {
-                                key: "TODAS",
-                                text: "Todas"
+                                key:
+                                    "TODAS",
+
+                                text:
+                                    "Todas"
                             }
                         ],
 
                         supervisores: [
                             {
-                                key: "TODOS",
-                                text: "Todos"
+                                key:
+                                    "TODOS",
+
+                                text:
+                                    "Todos"
                             }
                         ],
 
                         turnos: [
                             {
-                                key: "TODOS",
-                                text: "Todos"
+                                key:
+                                    "TODOS",
+
+                                text:
+                                    "Todos"
                             }
                         ],
 
                         tiposServicio: [
                             {
-                                key: "TODAS",
-                                text: "Todas"
+                                key:
+                                    "TODAS",
+
+                                text:
+                                    "Todas"
                             }
                         ],
 
                         especialidades: [
                             {
-                                key: "TODAS",
-                                text: "Todas"
+                                key:
+                                    "TODAS",
+
+                                text:
+                                    "Todas"
                             }
                         ],
 
                         estados: [
                             {
-                                key: "TODOS",
-                                text: "Todos"
+                                key:
+                                    "TODOS",
+
+                                text:
+                                    "Todos"
                             }
                         ]
                     },
 
                     kpis: {
-                        activos: "Sin datos",
-                        disponibles: "Sin datos",
-                        disponiblesPct: "Sin datos",
-                        sobrecapacidad: "Sin datos",
-                        sobrecapacidadPct: "Sin datos",
-                        cobertura: "Sin datos"
+                        activos:
+                            "Sin datos",
+
+                        disponibles:
+                            "Sin datos",
+
+                        disponiblesPct:
+                            "Sin datos",
+
+                        sobrecapacidad:
+                            "Sin datos",
+
+                        sobrecapacidadPct:
+                            "Sin datos",
+
+                        cobertura:
+                            "Sin datos"
                     },
 
                     turnos: [
                         {
-                            label: "Diurno",
-                            value: "Sin datos",
-                            pct: 0,
-                            pctText: "Sin datos",
-                            tone: "blue"
+                            label:
+                                "Diurno",
+
+                            value:
+                                "Sin datos",
+
+                            pct:
+                                0,
+
+                            pctText:
+                                "Sin datos",
+
+                            tone:
+                                "blue"
                         },
+
                         {
-                            label: "Nocturno",
-                            value: "Sin datos",
-                            pct: 0,
-                            pctText: "Sin datos",
-                            tone: "green"
+                            label:
+                                "Nocturno",
+
+                            value:
+                                "Sin datos",
+
+                            pct:
+                                0,
+
+                            pctText:
+                                "Sin datos",
+
+                            tone:
+                                "green"
                         },
+
                         {
-                            label: "Fin de semana",
-                            value: "Sin datos",
-                            pct: 0,
-                            pctText: "Sin datos",
-                            tone: "purple"
+                            label:
+                                "Fin de semana",
+
+                            value:
+                                "Sin datos",
+
+                            pct:
+                                0,
+
+                            pctText:
+                                "Sin datos",
+
+                            tone:
+                                "purple"
                         }
                     ],
 
                     utilTurno: [
                         {
-                            turno: "Diurno",
-                            capacidad: "Sin datos",
-                            carga: "Sin datos",
-                            utilizacion: "Sin datos",
-                            percentValue: 0,
-                            tone: "green"
+                            turno:
+                                "Diurno",
+
+                            capacidad:
+                                "Sin datos",
+
+                            carga:
+                                "Sin datos",
+
+                            utilizacion:
+                                "Sin datos",
+
+                            percentValue:
+                                0,
+
+                            tone:
+                                "green"
                         },
+
                         {
-                            turno: "Nocturno",
-                            capacidad: "Sin datos",
-                            carga: "Sin datos",
-                            utilizacion: "Sin datos",
-                            percentValue: 0,
-                            tone: "orange"
+                            turno:
+                                "Nocturno",
+
+                            capacidad:
+                                "Sin datos",
+
+                            carga:
+                                "Sin datos",
+
+                            utilizacion:
+                                "Sin datos",
+
+                            percentValue:
+                                0,
+
+                            tone:
+                                "orange"
                         },
+
                         {
-                            turno: "Fin de semana",
-                            capacidad: "Sin datos",
-                            carga: "Sin datos",
-                            utilizacion: "Sin datos",
-                            percentValue: 0,
-                            tone: "red"
+                            turno:
+                                "Fin de semana",
+
+                            capacidad:
+                                "Sin datos",
+
+                            carga:
+                                "Sin datos",
+
+                            utilizacion:
+                                "Sin datos",
+
+                            percentValue:
+                                0,
+
+                            tone:
+                                "red"
                         }
                     ],
 
                     utilTotal: {
-                        capacidad: "Sin datos",
-                        carga: "Sin datos",
-                        utilizacion: "Sin datos",
-                        percentValue: 0,
-                        tone: "gray"
+                        capacidad:
+                            "Sin datos",
+
+                        carga:
+                            "Sin datos",
+
+                        utilizacion:
+                            "Sin datos",
+
+                        percentValue:
+                            0,
+
+                        tone:
+                            "gray"
                     },
 
-                    zonas: [],
-                    presion: [],
+                    zonas:
+                        [],
+
+                    presion:
+                        [],
 
                     estadoPlantilla: [
                         {
-                            label: "Disponibles",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "green"
+                            label:
+                                "Disponibles",
+
+                            value:
+                                "0",
+
+                            pct:
+                                "0.0%",
+
+                            tone:
+                                "green"
                         },
+
                         {
-                            label: "Dentro de capacidad",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "blue"
+                            label:
+                                "Dentro de capacidad",
+
+                            value:
+                                "0",
+
+                            pct:
+                                "0.0%",
+
+                            tone:
+                                "blue"
                         },
+
                         {
-                            label: "Cerca de saturación",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "orange"
+                            label:
+                                "Cerca de saturación",
+
+                            value:
+                                "0",
+
+                            pct:
+                                "0.0%",
+
+                            tone:
+                                "orange"
                         },
+
                         {
-                            label: "Sobre capacidad",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "red"
+                            label:
+                                "Sobre capacidad",
+
+                            value:
+                                "0",
+
+                            pct:
+                                "0.0%",
+
+                            tone:
+                                "red"
                         },
+
                         {
-                            label: "Inactivos",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "gray"
+                            label:
+                                "Inactivos",
+
+                            value:
+                                "0",
+
+                            pct:
+                                "0.0%",
+
+                            tone:
+                                "gray"
                         }
                     ],
 
                     servicios: [
                         {
-                            label: "Sin datos",
-                            programadas: "Sin datos",
-                            reales: "Sin datos",
-                            programadasLevel: "8",
-                            realesLevel: "8"
+                            label:
+                                "Sin datos",
+
+                            programadas:
+                                "Sin datos",
+
+                            reales:
+                                "Sin datos",
+
+                            programadasLevel:
+                                "8",
+
+                            realesLevel:
+                                "8"
                         },
+
                         {
-                            label: "Sin datos",
-                            programadas: "Sin datos",
-                            reales: "Sin datos",
-                            programadasLevel: "8",
-                            realesLevel: "8"
+                            label:
+                                "Sin datos",
+
+                            programadas:
+                                "Sin datos",
+
+                            reales:
+                                "Sin datos",
+
+                            programadasLevel:
+                                "8",
+
+                            realesLevel:
+                                "8"
                         },
+
                         {
-                            label: "Sin datos",
-                            programadas: "Sin datos",
-                            reales: "Sin datos",
-                            programadasLevel: "8",
-                            realesLevel: "8"
+                            label:
+                                "Sin datos",
+
+                            programadas:
+                                "Sin datos",
+
+                            reales:
+                                "Sin datos",
+
+                            programadasLevel:
+                                "8",
+
+                            realesLevel:
+                                "8"
                         }
                     ],
 
-                    meta: {}
+                    meta:
+                        {}
                 };
             }
+
         }
     );
 });

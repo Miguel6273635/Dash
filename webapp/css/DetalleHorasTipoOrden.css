@@ -1,1249 +1,2048 @@
+/* ================================================================
+   DETALLE HORAS POR TIPO DE ORDEN
+   ESTÁNDAR VISUAL UNIFICADO
+   ================================================================ */
+
 .dhtoPage,
-.dhtoScroll {
-  background: #f6f8fc;
+.dhtoPage.sapMPage,
+.dhtoPage .sapMPageBgStandard,
+.dhtoPage .sapMPageCont,
+.dhtoPage .sapMPageScroll {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: #f7f9fc !important;
 }
 
-.dhtoContainer {
-  padding: 14px 18px 22px 18px;
-  background: #f6f8fc;
-  box-sizing: border-box;
-  gap: 12px;
+.dhtoPage,
+.dhtoPage *,
+.dhtoPage *::before,
+.dhtoPage *::after {
+    box-sizing: border-box !important;
 }
+
+
+/* ================================================================
+   ROOT
+   ================================================================ */
+
+.dhtoPage
+.dhtoContainer.sapMFlexBox {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding:
+        10px
+        14px
+        8px
+        18px !important;
+
+    gap: 8px !important;
+
+    overflow: hidden !important;
+
+    background: #f7f9fc !important;
+}
+
+.dhtoPage
+.dhtoContainer
+> .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+
+/* ================================================================
+   HEADER
+   ================================================================ */
+
+.dhtoPage
+.dhtoHeader.sapMFlexBox {
+    flex: 0 0 48px !important;
+
+    width: 100% !important;
+    height: 48px !important;
+
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 2px !important;
+
+    align-items: center !important;
+
+    overflow: visible !important;
+}
+
+.dhtoPage
+.dhtoHeaderText.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+}
+
+.dhtoPage
+.dhtoTitle.sapMTitle {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #13214a !important;
+
+    font-size: 1.72rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+
+    letter-spacing: -0.03em !important;
+
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoSubtitle.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 3px !important;
+
+    overflow: hidden !important;
+
+    color: #65748b !important;
+
+    font-size: 0.73rem !important;
+    font-weight: 400 !important;
+
+    line-height: 1.15 !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+
+/* EXPORTAR */
+
+.dhtoPage
+.dhtoExportBtn.sapMBtn {
+    flex: 0 0 auto !important;
+
+    height: 30px !important;
+}
+
+.dhtoPage
+.dhtoExportBtn
+.sapMBtnInner {
+    height: 30px !important;
+
+    min-height: 30px !important;
+
+    padding:
+        0
+        0.7rem !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #dce5ef !important;
+
+    border-radius: 7px !important;
+}
+
+.dhtoPage
+.dhtoExportBtn
+.sapMBtnContent {
+    color: #1768d7 !important;
+
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+
+    line-height: 28px !important;
+}
+
+.dhtoPage
+.dhtoExportBtn
+.sapMBtnIcon {
+    color: #0a6ff5 !important;
+
+    font-size: 0.68rem !important;
+}
+
+
+/* ================================================================
+   FILTROS
+   ================================================================ */
+
+.dhtoPage
+.dhtoFilters.sapMFlexBox {
+    flex: 0 0 54px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    width: 100% !important;
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-items: center !important;
+
+    overflow: visible !important;
+}
+
+.dhtoPage
+.dhtoFilters
+> .sapMFlexItem {
+    min-width: 0 !important;
+}
+
+.dhtoPage
+.dhtoFilterItem.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    height: 54px !important;
+
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    padding:
+        6px
+        8px
+        5px
+        9px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(
+            25,
+            45,
+            79,
+            0.05
+        ) !important;
+}
+
+.dhtoPage
+.dhtoFilterPeriod {
+    flex-grow: 0.94 !important;
+}
+
+.dhtoPage
+.dhtoFilterDate {
+    flex-grow: 1.05 !important;
+}
+
+.dhtoPage
+.dhtoFilterNormal {
+    flex-grow: 0.85 !important;
+}
+
+.dhtoPage
+.dhtoFilterOrder {
+    flex-grow: 1.18 !important;
+}
+
+.dhtoPage
+.dhtoFilterEstado {
+    flex-grow: 1 !important;
+}
+
+.dhtoPage
+.dhtoFilterIcon {
+    flex: 0 0 22px !important;
+
+    width: 22px !important;
+
+    min-width: 22px !important;
+
+    margin-right: 4px !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: 0.82rem !important;
+}
+
+.dhtoPage
+.dhtoFilterContent.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+.dhtoPage
+.dhtoFilterLabel.sapMLabel {
+    display: block !important;
+
+    width: 100% !important;
+    height: 14px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        2px !important;
+
+    color: #78869a !important;
+
+    font-size: 0.61rem !important;
+    font-weight: 600 !important;
+
+    line-height: 14px !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* CONTROLES */
+
+.dhtoPage
+.dhtoFilterControl.sapMSlt,
+
+.dhtoPage
+.dhtoFilterControl.sapMInputBase,
+
+.dhtoPage
+.dhtoFilterControl
+.sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+.dhtoPage
+.dhtoFilterControl
+.sapMSltLabel,
+
+.dhtoPage
+.dhtoFilterControl
+.sapMInputBaseInner {
+    height: 1.62rem !important;
+
+    padding:
+        0
+        1.4rem
+        0
+        2px !important;
+
+    overflow: hidden !important;
+
+    color: #1e2e4c !important;
+
+    background: transparent !important;
+
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoFilterControl
+.sapMSltArrow,
+
+.dhtoPage
+.dhtoFilterControl
+.sapMInputBaseIconContainer,
+
+.dhtoPage
+.dhtoFilterControl
+.sapMInputBaseIcon {
+    width: 1.25rem !important;
+
+    height: 1.62rem !important;
+
+    min-width: 1.25rem !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    font-size: 0.70rem !important;
+
+    line-height: 1.62rem !important;
+}
+
+
+/* ================================================================
+   APLICAR
+   ================================================================ */
+
+.dhtoPage
+.dhtoApplyButtonBox.sapMFlexBox {
+    flex: 0 0 118px !important;
+
+    width: 118px !important;
+    height: 54px !important;
+
+    min-width: 118px !important;
+    min-height: 54px !important;
+
+    max-width: 118px !important;
+
+    padding: 0 !important;
+}
+
+.dhtoPage
+.dhtoApplyBtn.sapMBtn {
+    width: 100% !important;
+
+    height: 100% !important;
+}
+
+.dhtoPage
+.dhtoApplyBtn
+.sapMBtnInner {
+    display: flex !important;
+
+    width: 100% !important;
+
+    height: 3rem !important;
+
+    min-height: 3rem !important;
+
+    padding:
+        0
+        0.72rem !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    background: #0a6ff5 !important;
+
+    border: 0 !important;
+
+    border-radius: 0.7rem !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(
+            10,
+            111,
+            245,
+            0.24
+        ) !important;
+}
+
+.dhtoPage
+.dhtoApplyBtn
+.sapMBtnContent {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+}
+
+.dhtoPage
+.dhtoApplyBtn
+.sapMBtnIcon {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    font-size: 0.72rem !important;
+}
+
+
+/* ================================================================
+   KPIS
+   ================================================================ */
+
+.dhtoPage
+.dhtoKpiGrid.sapMFlexBox {
+    flex: 0 0 76px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    gap: 9px !important;
+
+    margin: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.dhtoPage
+.dhtoKpiGrid
+> .sapMFlexItem {
+    flex: 1 1 0 !important;
+
+    width: 0 !important;
+
+    min-width: 0 !important;
+
+    height: 76px !important;
+}
+
+.dhtoPage
+.dhtoKpiCard.sapMFlexBox {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e4eaf2 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            20,
+            39,
+            70,
+            0.06
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiCard.sapMFlexBox::before {
+    position: absolute !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 3px !important;
+
+    content: "" !important;
+}
+
+.dhtoPage
+.dhtoKpiIconCircle.sapMFlexBox {
+    flex: 0 0 43px !important;
+
+    width: 43px !important;
+    height: 43px !important;
+
+    min-width: 43px !important;
+    min-height: 43px !important;
+
+    max-width: 43px !important;
+    max-height: 43px !important;
+
+    margin-right: 8px !important;
+
+    border-radius: 50% !important;
+}
+
+.dhtoPage
+.dhtoKpiIcon {
+    font-size: 1.28rem !important;
+}
+
+.dhtoPage
+.dhtoKpiContent.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+}
+
+.dhtoPage
+.dhtoKpiLabel.sapMText,
+
+.dhtoPage
+.dhtoKpiNumber.sapMText,
+
+.dhtoPage
+.dhtoKpiHelper.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoKpiLabel.sapMText {
+    color: #43516a !important;
+
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.15 !important;
+}
+
+.dhtoPage
+.dhtoKpiNumber.sapMText {
+    margin-top: 2px !important;
+
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+}
+
+.dhtoPage
+.dhtoKpiHelper.sapMText {
+    margin-top: 3px !important;
+
+    color: #6f7c8f !important;
+
+    font-size: 0.52rem !important;
+    font-weight: 600 !important;
+}
+
+
+/* BLUE */
+
+.dhtoPage
+.dhtoKpiCard.dhtoKpiBlue.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46,140,255,.20) 0%,
+            rgba(46,140,255,.11) 22%,
+            rgba(46,140,255,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiBlue::before {
+    background: #2e8cff !important;
+}
+
+.dhtoPage
+.dhtoIconBlue {
+    background:
+        rgba(
+            46,
+            140,
+            255,
+            .13
+        ) !important;
+}
+
+.dhtoPage
+.dhtoIconBlue
+.sapUiIcon,
+
+.dhtoPage
+.dhtoBlueText {
+    color: #1877e8 !important;
+}
+
+
+/* GREEN */
+
+.dhtoPage
+.dhtoKpiCard.dhtoKpiGreen.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,191,66,.20) 0%,
+            rgba(99,191,66,.11) 22%,
+            rgba(99,191,66,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiGreen::before {
+    background: #63bf42 !important;
+}
+
+.dhtoPage
+.dhtoIconGreen {
+    background:
+        rgba(
+            99,
+            191,
+            66,
+            .13
+        ) !important;
+}
+
+.dhtoPage
+.dhtoIconGreen
+.sapUiIcon,
+
+.dhtoPage
+.dhtoGreenText {
+    color: #58b33a !important;
+}
+
+
+/* ORANGE */
+
+.dhtoPage
+.dhtoKpiCard.dhtoKpiOrange.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,158,49,.22) 0%,
+            rgba(255,158,49,.12) 22%,
+            rgba(255,158,49,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiOrange::before {
+    background: #ff9e31 !important;
+}
+
+.dhtoPage
+.dhtoIconOrange {
+    background:
+        rgba(
+            255,
+            158,
+            49,
+            .13
+        ) !important;
+}
+
+.dhtoPage
+.dhtoIconOrange
+.sapUiIcon,
+
+.dhtoPage
+.dhtoOrangeText {
+    color: #f28c1c !important;
+}
+
+
+/* RED */
+
+.dhtoPage
+.dhtoKpiCard.dhtoKpiRed.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,77,83,.20) 0%,
+            rgba(255,77,83,.11) 22%,
+            rgba(255,77,83,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiRed::before {
+    background: #ff4d53 !important;
+}
+
+.dhtoPage
+.dhtoIconRed {
+    background:
+        rgba(
+            255,
+            77,
+            83,
+            .13
+        ) !important;
+}
+
+.dhtoPage
+.dhtoRedText,
+
+.dhtoPage
+.dhtoPercentIcon {
+    color: #ef3f47 !important;
+}
+
+.dhtoPage
+.dhtoPercentIcon {
+    font-size: 1.25rem !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* PURPLE */
+
+.dhtoPage
+.dhtoKpiCard.dhtoKpiPurple.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(134,69,233,.20) 0%,
+            rgba(134,69,233,.11) 22%,
+            rgba(134,69,233,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+}
+
+.dhtoPage
+.dhtoKpiPurple::before {
+    background: #8645e9 !important;
+}
+
+.dhtoPage
+.dhtoIconPurple {
+    background:
+        rgba(
+            134,
+            69,
+            233,
+            .13
+        ) !important;
+}
+
+.dhtoPage
+.dhtoIconPurple
+.sapUiIcon,
+
+.dhtoPage
+.dhtoPurpleText {
+    color: #8645e9 !important;
+}
+
+
+/* ================================================================
+   CARD PRINCIPAL
+   ================================================================ */
+
+.dhtoPage
+.dhtoTableCard.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        8px
+        10px
+        6px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            20,
+            39,
+            70,
+            .05
+        ) !important;
+}
+
 
 /* HEADER */
-.dhtoHeader {
-  width: 100%;
-}
 
-.dhtoTitle {
-  color: #172554;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 900;
-}
+.dhtoPage
+.dhtoTableTop.sapMFlexBox {
+    flex: 0 0 34px !important;
 
-.dhtoSubtitle {
-  color: #64748b;
-  font-size: 10px;
-  line-height: 14px;
-  font-weight: 700;
-  margin-top: 3px;
-}
-
-.dhtoExportBtn {
-  height: 30px;
-}
-
-.dhtoExportBtn .sapMBtnInner {
-  border-radius: 7px !important;
-  border-color: #dbe3ef !important;
-  background: #ffffff !important;
-}
-
-.dhtoExportBtn .sapMBtnContent,
-.dhtoExportBtn .sapMBtnIcon {
-  color: #2563eb !important;
-  font-size: 10px !important;
-  font-weight: 900 !important;
-}
-
-/* FILTERS */
-.dhtoFilters {
-  width: 100% !important;
-  display: grid !important;
-  grid-template-columns:
-    minmax(120px, .90fr) minmax(145px, 1.10fr) minmax(145px, 1.10fr) minmax(105px, .75fr) minmax(115px, .85fr) minmax(105px, .75fr) minmax(165px, 1.20fr) minmax(125px, .90fr) 120px !important;
-  column-gap: 8px !important;
-  row-gap: 8px !important;
-  align-items: center !important;
-  box-sizing: border-box !important;
-  padding: 0 !important;
-  margin-top: 4px !important;
-}
-
-.dhtoFilters>.sapMFlexItem {
-  min-width: 0 !important;
-  width: auto !important;
-}
-
-.dhtoFilterPeriod,
-.dhtoFilterDate,
-.dhtoFilterNormal,
-.dhtoFilterOrder {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  flex: none !important;
-}
-
-.dhtoFilterItem {
-  width: 100% !important;
-  height: 48px !important;
-  min-height: 48px !important;
-  background: #ffffff !important;
-  border: 1px solid #dbe3ef !important;
-  border-radius: 8px !important;
-  padding: 5px 9px !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, .05) !important;
-  overflow: hidden !important;
-}
-
-.dhtoFilterLabel {
-  color: #64748b !important;
-  font-size: 8px !important;
-  line-height: 10px !important;
-  font-weight: 900 !important;
-  margin: 0 0 2px 0 !important;
-  padding: 0 !important;
-}
-
-.dhtoFilterItem .sapMSlt,
-.dhtoFilterItem .sapMInputBase {
-  width: 100% !important;
-  height: 24px !important;
-  min-height: 24px !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.dhtoFilterItem .sapMInputBaseContentWrapper {
-  width: 100% !important;
-  height: 24px !important;
-  min-height: 24px !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-
-.dhtoFilterItem .sapMSltLabel,
-.dhtoFilterItem .sapMInputBaseInner {
-  height: 24px !important;
-  min-height: 24px !important;
-  line-height: 24px !important;
-  color: #172554 !important;
-  font-size: 10px !important;
-  font-weight: 800 !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 26px 0 0 !important;
-}
-
-.dhtoFilterItem .sapMSltArrow,
-.dhtoFilterItem .sapMInputBaseIconContainer,
-.dhtoFilterItem .sapMInputBaseIcon {
-  height: 24px !important;
-  min-height: 24px !important;
-  line-height: 24px !important;
-}
-
-.dhtoFilterItem .sapMSltArrow,
-.dhtoFilterItem .sapMInputBaseIcon {
-  color: #315b88 !important;
-  font-size: 12px !important;
-}
-
-.dhtoApplyBtn {
-  width: 120px !important;
-  min-width: 120px !important;
-  max-width: 120px !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  margin: 7px 0 0 0 !important;
-  padding: 0 !important;
-  align-self: center !important;
-  flex: none !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, .28) !important;
-}
-
-.dhtoApplyBtn .sapMBtnInner {
-  width: 100% !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  border-radius: 8px !important;
-  border-color: #0b63f6 !important;
-  background: #0b63f6 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 7px !important;
-  padding: 0 12px !important;
-  box-sizing: border-box !important;
-}
-
-.dhtoApplyBtn .sapMBtnContent {
-  color: #ffffff !important;
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  height: auto !important;
-  line-height: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  order: 2 !important;
-}
-
-.dhtoApplyBtn .sapMBtnIcon {
-  color: #ffffff !important;
-  font-size: 13px !important;
-  height: auto !important;
-  line-height: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  position: static !important;
-  order: 1 !important;
-}
-
-/* KPI */
-.dhtoKpiGrid {
-  width: 100%;
-  gap: 12px;
-}
-
-.dhtoKpiCard {
-  flex: 1 1 210px;
-  min-width: 200px;
-  height: 82px;
-  background: #fff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  border-left-width: 4px;
-  padding: 12px 16px;
-  gap: 14px;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, .06);
-}
-
-.dhtoKpiBlue {
-  border-left-color: #2563eb;
-  background: linear-gradient(90deg, rgba(37, 99, 235, .12) 0%, #fff 45%);
-}
-
-.dhtoKpiOrange {
-  border-left-color: #f97316;
-  background: linear-gradient(90deg, rgba(249, 115, 22, .12) 0%, #fff 45%);
-}
-
-.dhtoKpiRed {
-  border-left-color: #ef4444;
-  background: linear-gradient(90deg, rgba(239, 68, 68, .12) 0%, #fff 45%);
-}
-
-.dhtoKpiPurple {
-  border-left-color: #7c3aed;
-  background: linear-gradient(90deg, rgba(124, 58, 237, .12) 0%, #fff 45%);
-}
-
-.dhtoKpiIconCircle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-shrink: 0;
-}
-
-.dhtoKpiIcon {
-  font-size: 23px;
-}
-
-.dhtoPercentIcon {
-  font-size: 31px !important;
-  line-height: 31px !important;
-  font-weight: 900 !important;
-  color: #ef4444 !important;
-  text-align: center !important;
-  display: block !important;
-}
-
-.dhtoKpiNumber {
-  font-size: 25px;
-  line-height: 28px;
-  font-weight: 900;
-}
-
-.dhtoKpiLabel {
-  color: #172554;
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.dhtoBlueText {
-  color: #2563eb !important;
-}
-
-.dhtoDarkText {
-  color: #172554 !important;
-}
-
-.dhtoGreenText {
-  color: #16a34a !important;
-}
-
-.dhtoRedText {
-  color: #ef4444 !important;
-}
-
-.dhtoOrangeText {
-  color: #f97316 !important;
-}
-
-.dhtoPurpleText {
-  color: #7c3aed !important;
-}
-
-.dhtoBlueBg {
-  background: #eff6ff;
-}
-
-.dhtoOrangeBg {
-  background: #fff7ed;
-}
-
-.dhtoRedBg {
-  background: #fef2f2;
-}
-
-.dhtoPurpleBg {
-  background: #faf5ff;
-}
-
-/* TABLE CARD */
-.dhtoTableCard {
-  width: 100%;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 10px 12px 12px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
-  box-sizing: border-box;
-}
-
-.dhtoTableTop {
-  margin-bottom: 8px;
-}
-
-.dhtoTableTitle {
-  color: #172554;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.dhtoTableActions {
-  gap: 8px;
-}
-
-.dhtoSearch .sapMSFF {
-  height: 26px !important;
-  border-radius: 7px !important;
-}
-
-.dhtoColumnsBtn {
-  height: 26px !important;
-}
-
-.dhtoColumnsBtn .sapMBtnInner {
-  height: 26px !important;
-  min-height: 26px !important;
-  border-radius: 7px !important;
-  background: #fff !important;
-  border-color: #dbe3ef !important;
-}
-
-.dhtoColumnsBtn .sapMBtnContent,
-.dhtoColumnsBtn .sapMBtnIcon {
-  color: #2563eb !important;
-  font-size: 9px !important;
-  font-weight: 900 !important;
-  line-height: 24px !important;
-}
-
-/* ORDER TABLE */
-.dhtoOrderHeader,
-.dhtoOrderRow {
-  display: grid !important;
-  grid-template-columns: 1fr 1.3fr 1.15fr .8fr 1.2fr 1fr 1fr 1.1fr 1fr 1fr 1.15fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
-}
-
-.dhtoOrderHeader {
-  min-height: 32px;
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 9px;
-  font-weight: 900;
-  text-align: center;
-}
-
-.dhtoOrderRow {
-  min-height: 25px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 9px;
-  font-weight: 800;
-  text-align: center;
-}
-
-.dhtoBlueStrong {
-  color: #2563eb !important;
-  font-weight: 900;
-}
-
-.dhtoRedStrong {
-  color: #ef4444 !important;
-  font-weight: 900;
-}
-
-.dhtoGreenStrong {
-  color: #16a34a !important;
-  font-weight: 900;
-}
-
-/* Colores dinámicos de variación usando los valores existentes del modelo */
-.dhtoVariationValue {
-  font-weight: 900 !important;
-}
-
-.dhtoVariationValue[data-color-class="dhtoRedStrong"],
-.dhtoVariationValue[data-colorclass="dhtoRedStrong"] {
-  color: #ef4444 !important;
-}
-
-.dhtoVariationValue[data-color-class="dhtoGreenStrong"],
-.dhtoVariationValue[data-colorclass="dhtoGreenStrong"] {
-  color: #16a34a !important;
-}
-
-.dhtoVariationValue[data-color-class="dhtoOrangeStrong"],
-.dhtoVariationValue[data-colorclass="dhtoOrangeStrong"] {
-  color: #f59e0b !important;
-}
-
-.dhtoStatusCell {
-  gap: 6px;
-}
-
-.dhtoStatusDot {
-  width: 8px !important;
-  min-width: 8px !important;
-  height: 8px !important;
-  min-height: 8px !important;
-  border-radius: 50% !important;
-  flex-shrink: 0 !important;
-}
-
-.dhtoStatusDot[data-status-class="dhtoDotRed"],
-.dhtoStatusDot[data-statusclass="dhtoDotRed"] {
-  background: #ef4444 !important;
-}
-
-.dhtoStatusDot[data-status-class="dhtoDotOrange"],
-.dhtoStatusDot[data-statusclass="dhtoDotOrange"] {
-  background: #f59e0b !important;
-}
-
-.dhtoStatusDot[data-status-class="dhtoDotGreen"],
-.dhtoStatusDot[data-statusclass="dhtoDotGreen"] {
-  background: #16a34a !important;
-}
-
-.dhtoStatusText {
-  color: #172554;
-  font-size: 8.5px;
-  font-weight: 800;
-}
-
-.dhtoDotRed,
-.dhtoDotOrange,
-.dhtoDotGreen {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dhtoDotRed {
-  background: #ef4444;
-}
-
-.dhtoDotOrange {
-  background: #f59e0b;
-}
-
-.dhtoDotGreen {
-  background: #16a34a;
-}
-
-.dhtoTableFooter {
-  margin-top: 10px;
-}
-
-.dhtoSmallText {
-  color: #64748b;
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.dhtoPagination {
-  gap: 6px;
-}
-
-.dhtoPageBtn,
-.dhtoPageNumber {
-  height: 26px;
-}
-
-.dhtoPageBtn .sapMBtnInner,
-.dhtoPageNumber .sapMBtnInner {
-  height: 26px !important;
-  min-height: 26px !important;
-  border-radius: 7px !important;
-}
-
-.dhtoPageNumber .sapMBtnContent {
-  font-size: 9px !important;
-  font-weight: 900 !important;
-  line-height: 24px !important;
-}
-
-/* SUMMARY */
-.dhtoSummaryGrid {
-  width: 100%;
-  gap: 12px;
-}
-
-.dhtoSummaryCard {
-  flex: 1 1 430px;
-  min-width: 420px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-left-width: 4px;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
-  box-sizing: border-box;
-}
-
-.dhtoSummaryBlue {
-  border-left-color: #2563eb;
-}
-
-.dhtoSummaryGreen {
-  border-left-color: #16a34a;
-}
-
-.dhtoSummaryTitleRow {
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.dhtoSummaryIcon {
-  font-size: 20px;
-}
-
-.dhtoSummaryTitle {
-  color: #172554;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.dhtoSummaryHeader,
-.dhtoSummaryRow {
-  display: grid !important;
-  grid-template-columns: 1.2fr .7fr 1.15fr 1.2fr 1fr 1fr 1.25fr;
-  column-gap: 8px;
-  align-items: center;
-  width: 100%;
-  text-align: center;
-}
-
-.dhtoSummaryHeader {
-  min-height: 34px;
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 9.3px;
-  font-weight: 900;
-}
-
-.dhtoSummaryRow {
-  min-height: 34px;
-  border-left: 1px solid #edf2f7;
-  border-right: 1px solid #edf2f7;
-  border-bottom: 1px solid #edf2f7;
-  color: #172554;
-  font-size: 9.8px;
-  font-weight: 800;
-}
-
-.dhtoSummaryTotal {
-  background: #f8fafc;
-  font-weight: 900;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1450px) {
-  .dhtoFilters {
-    grid-template-columns: repeat(4, minmax(150px, 1fr)) 120px !important;
-  }
-}
-
-@media (max-width: 1200px) {
-
-  .dhtoTableCard,
-  .dhtoSummaryCard {
-    overflow-x: auto;
-  }
-
-  .dhtoOrderHeader,
-  .dhtoOrderRow {
-    min-width: 1180px;
-  }
-
-  .dhtoSummaryHeader,
-  .dhtoSummaryRow {
-    min-width: 760px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .dhtoFilters {
-    grid-template-columns: repeat(2, minmax(160px, 1fr)) !important;
-  }
-
-  .dhtoApplyBtn {
     width: 100% !important;
+    height: 34px !important;
+
+    min-height: 34px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        2px !important;
+
+    overflow: visible !important;
+}
+
+.dhtoPage
+.dhtoTableTitleGroup.sapMFlexBox {
+    gap: 5px !important;
+
     min-width: 0 !important;
-    max-width: none !important;
-    margin-top: 0 !important;
-  }
 }
 
-@media (max-width: 768px) {
-  .dhtoContainer {
-    padding: 12px;
-  }
+.dhtoPage
+.dhtoTableTitle.sapMTitle {
+    color: #1c2940 !important;
 
-  .dhtoTitle {
-    font-size: 20px;
-    line-height: 24px;
-  }
+    font-size: 0.70rem !important;
+    font-weight: 800 !important;
 
-  .dhtoKpiCard,
-  .dhtoSummaryCard {
-    min-width: 100%;
-  }
-
-  .dhtoTableTop {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .dhtoTableActions {
-    width: 100%;
-  }
-}
-
-@media (max-width: 520px) {
-  .dhtoFilters {
-    grid-template-columns: 1fr !important;
-  }
-
-  .dhtoApplyBtn {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-  }
-}
-
-/* ========================================================================== */
-/* AJUSTE FINAL: VISTA COMPLETA EN UNA SOLA PANTALLA                           */
-/* ========================================================================== */
-
-.dhtoPage,
-.dhtoPage .sapMPage,
-.dhtoPage .sapMPageEnableScrolling,
-.dhtoScroll,
-.dhtoScroll .sapMScrollContScroll {
-  width: 100% !important;
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-.dhtoContainer {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  padding: 5px 14px !important;
-  gap: 5px !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-}
-
-.dhtoHeader {
-  width: 100% !important;
-  height: 29px !important;
-  min-height: 29px !important;
-  align-items: center !important;
-}
-
-.dhtoTitle {
-  color: #173f73 !important;
-  font-size: 21px !important;
-  line-height: 25px !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.2px !important;
-}
-
-.dhtoExportBtn,
-.dhtoExportBtn .sapMBtnInner {
-  height: 26px !important;
-  min-height: 26px !important;
-}
-
-.dhtoExportBtn .sapMBtnInner {
-  top: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 5px !important;
-  transform: none !important;
-}
-
-.dhtoExportBtn .sapMBtnIcon,
-.dhtoExportBtn .sapMBtnContent {
-  position: static !important;
-  display: flex !important;
-  align-items: center !important;
-  height: 15px !important;
-  line-height: 15px !important;
-  margin: 0 !important;
-}
-
-/* Filtros compactos, proporcionales y siempre en una sola fila. */
-.dhtoFilters {
-  width: 100% !important;
-  height: 58px !important;
-  min-height: 58px !important;
-  display: grid !important;
-  grid-template-columns:
-    minmax(0, 1.08fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .72fr) minmax(0, .88fr) minmax(0, .72fr) minmax(0, 1.18fr) minmax(0, .98fr) 108px !important;
-  column-gap: 5px !important;
-  row-gap: 0 !important;
-  align-items: center !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-}
-
-.dhtoFilters>.sapMFlexItem {
-  min-width: 0 !important;
-  width: auto !important;
-  height: 58px !important;
-}
-
-.dhtoFilterItem,
-.dhtoFilterPeriod,
-.dhtoFilterDate,
-.dhtoFilterNormal,
-.dhtoFilterOrder {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  height: 58px !important;
-  min-height: 58px !important;
-  padding: 5px 8px 4px 8px !important;
-  border: 1px solid #d8e2ef !important;
-  border-radius: 9px !important;
-  background: #fff !important;
-  box-shadow: 0 3px 9px rgba(23, 63, 115, .06) !important;
-  box-sizing: border-box !important;
-  justify-content: center !important;
-  overflow: hidden !important;
-}
-
-.dhtoFilterLabel {
-  height: 16px !important;
-  min-height: 16px !important;
-  margin: 0 !important;
-  color: #62738d !important;
-  font-size: 10px !important;
-  line-height: 14px !important;
-  font-weight: 700 !important;
-}
-
-.dhtoFilterItem .sapMSlt,
-.dhtoFilterItem .sapMInputBase,
-.dhtoFilterItem .sapMInputBaseContentWrapper {
-  width: 100% !important;
-  height: 28px !important;
-  min-height: 28px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.dhtoFilterItem .sapMSltLabel,
-.dhtoFilterItem .sapMInputBaseInner {
-  height: 28px !important;
-  min-height: 28px !important;
-  padding: 0 25px 0 0 !important;
-  color: #172b4d !important;
-  font-size: 9.5px !important;
-  line-height: 28px !important;
-  font-weight: 800 !important;
-  background: transparent !important;
-  text-overflow: ellipsis !important;
-}
-
-.dhtoFilterItem .sapMSltArrow,
-.dhtoFilterItem .sapMInputBaseIcon,
-.dhtoFilterItem .sapMInputBaseIconContainer .sapUiIcon {
-  color: #0878e8 !important;
-}
-
-.dhtoFilterItem .sapMSltArrow,
-.dhtoFilterItem .sapMInputBaseIconContainer,
-.dhtoFilterItem .sapMInputBaseIcon {
-  width: 25px !important;
-  height: 28px !important;
-  min-height: 28px !important;
-  line-height: 28px !important;
-}
-
-.dhtoApplyBtn,
-.dhtoApplyBtn .sapMBtnInner {
-  width: 108px !important;
-  min-width: 108px !important;
-  max-width: 108px !important;
-  height: 46px !important;
-  min-height: 46px !important;
-}
-
-.dhtoApplyBtn {
-  margin: 6px 0 !important;
-  padding: 0 !important;
-  align-self: center !important;
-}
-
-.dhtoApplyBtn .sapMBtnInner {
-  top: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 5px !important;
-  padding: 0 7px !important;
-  border-radius: 8px !important;
-  border-color: #0878e8 !important;
-  background: #0878e8 !important;
-  box-shadow: 0 5px 12px rgba(8, 120, 232, .24) !important;
-  transform: none !important;
-}
-
-.dhtoApplyBtn .sapMBtnIcon {
-  position: static !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 16px !important;
-  min-width: 16px !important;
-  height: 16px !important;
-  min-height: 16px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  color: #fff !important;
-  line-height: 16px !important;
-  flex: 0 0 16px !important;
-}
-
-.dhtoApplyBtn .sapMBtnIcon::before {
-  display: block !important;
-  width: 16px !important;
-  height: 16px !important;
-  line-height: 16px !important;
-  text-align: center !important;
-}
-
-.dhtoApplyBtn .sapMBtnContent {
-  position: static !important;
-  display: flex !important;
-  align-items: center !important;
-  width: auto !important;
-  height: 16px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  color: #fff !important;
-  font-size: 9px !important;
-  line-height: 16px !important;
-  font-weight: 800 !important;
-  flex: 0 0 auto !important;
-}
-
-/* KPI */
-.dhtoKpiGrid {
-  width: 100% !important;
-  height: 62px !important;
-  min-height: 62px !important;
-  gap: 6px !important;
-  flex-wrap: nowrap !important;
-}
-
-.dhtoKpiCard {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  width: auto !important;
-  height: 62px !important;
-  min-height: 62px !important;
-  padding: 6px 9px !important;
-  gap: 8px !important;
-  border-radius: 9px !important;
+    white-space: nowrap !important;
 }
 
-.dhtoKpiIconCircle {
-  width: 37px !important;
-  min-width: 37px !important;
-  height: 37px !important;
-}
-
-.dhtoKpiIcon {
-  font-size: 18px !important;
-}
-
-.dhtoPercentIcon {
-  font-size: 20px !important;
-  line-height: 20px !important;
-}
-
-.dhtoKpiNumber {
-  font-size: 18px !important;
-  line-height: 20px !important;
-}
-
-.dhtoKpiLabel {
-  font-size: 8.5px !important;
-  line-height: 10px !important;
-}
-
-/* Tabla principal */
-.dhtoTableCard {
-  width: 100% !important;
-  height: 327px !important;
-  min-height: 327px !important;
-  padding: 7px 9px 5px !important;
-  overflow: hidden !important;
-}
-
-.dhtoTableTop {
-  height: 27px !important;
-  min-height: 27px !important;
-  margin-bottom: 3px !important;
-}
-
-.dhtoTableTitle {
-  font-size: 11px !important;
-  line-height: 13px !important;
-}
-
-.dhtoTableActions {
-  height: 25px !important;
-  gap: 5px !important;
-}
-
-.dhtoSearch,
-.dhtoSearch .sapMSFF {
-  width: 245px !important;
-  height: 24px !important;
-  min-height: 24px !important;
-}
-
-.dhtoSearch .sapMSFI {
-  height: 22px !important;
-  font-size: 8px !important;
-}
-
-.dhtoColumnsBtn,
-.dhtoColumnsBtn .sapMBtnInner {
-  height: 24px !important;
-  min-height: 24px !important;
-}
-
-.dhtoColumnsBtn .sapMBtnContent,
-.dhtoColumnsBtn .sapMBtnIcon {
-  font-size: 8px !important;
-  line-height: 22px !important;
-}
-
-.dhtoOrderHeader,
-.dhtoOrderRow {
-  width: 100% !important;
-  min-width: 0 !important;
-  column-gap: 4px !important;
-  box-sizing: border-box !important;
-}
-
-.dhtoOrderHeader>.sapMFlexItem,
-.dhtoOrderRow>.sapMFlexItem {
-  min-width: 0 !important;
-  overflow: hidden !important;
-}
-
-.dhtoOrderHeader {
-  height: 24px !important;
-  min-height: 24px !important;
-  font-size: 7px !important;
-  line-height: 8px !important;
-}
-
-.dhtoOrderRow {
-  height: 23px !important;
-  min-height: 23px !important;
-  font-size: 7.2px !important;
-  line-height: 8px !important;
-}
+.dhtoPage
+.dhtoInfoIcon {
+    color: #0a6ff5 !important;
 
-.dhtoOrderHeader .sapMText,
-.dhtoOrderRow .sapMText {
-  max-width: 100% !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+    font-size: 0.72rem !important;
 }
 
-.dhtoStatusCell {
-  min-width: 0 !important;
-  gap: 3px !important;
-  overflow: hidden !important;
+.dhtoPage
+.dhtoTableActions.sapMFlexBox {
+    gap: 5px !important;
 }
 
-.dhtoStatusDot,
-.dhtoDotRed,
-.dhtoDotOrange,
-.dhtoDotGreen {
-  width: 6px !important;
-  min-width: 6px !important;
-  height: 6px !important;
-  min-height: 6px !important;
+.dhtoPage
+.dhtoSearch.sapMSF {
+    width: 15rem !important;
 }
 
-.dhtoStatusText {
-  font-size: 7px !important;
-  line-height: 8px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
+.dhtoPage
+.dhtoSearch
+.sapMSFF {
+    height: 30px !important;
 
-.dhtoTableFooter {
-  height: 24px !important;
-  min-height: 24px !important;
-  margin-top: 2px !important;
-}
+    background: #ffffff !important;
 
-.dhtoSmallText {
-  font-size: 7.5px !important;
-}
+    border:
+        1px solid
+        #dce5ef !important;
 
-.dhtoPagination {
-  height: 22px !important;
-  gap: 2px !important;
+    border-radius: 7px !important;
 }
 
-.dhtoPagination .sapMSlt,
-.dhtoPagination .sapMSltLabel {
-  height: 22px !important;
-  line-height: 22px !important;
-  font-size: 8px !important;
-}
+.dhtoPage
+.dhtoSearch
+.sapMSFI {
+    height: 28px !important;
 
-.dhtoPageBtn,
-.dhtoPageNumber,
-.dhtoPageBtn .sapMBtnInner,
-.dhtoPageNumber .sapMBtnInner {
-  width: 21px !important;
-  min-width: 21px !important;
-  height: 21px !important;
-  min-height: 21px !important;
-}
+    font-size: 0.60rem !important;
 
-.dhtoPageNumber .sapMBtnContent {
-  font-size: 7.5px !important;
-  line-height: 19px !important;
+    line-height: 28px !important;
 }
 
-/* Resúmenes */
-.dhtoSummaryGrid {
-  width: 100% !important;
-  height: 185px !important;
-  min-height: 185px !important;
-  gap: 6px !important;
-  flex-wrap: nowrap !important;
-  align-items: stretch !important;
-  overflow: hidden !important;
+.dhtoPage
+.dhtoColumnsBtn.sapMBtn {
+    height: 30px !important;
 }
 
-.dhtoSummaryCard {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  width: auto !important;
-  height: 185px !important;
-  min-height: 185px !important;
-  padding: 6px 7px !important;
-  overflow: hidden !important;
-}
+.dhtoPage
+.dhtoColumnsBtn
+.sapMBtnInner {
+    height: 30px !important;
 
-.dhtoSummaryTitleRow {
-  height: 22px !important;
-  min-height: 22px !important;
-  margin-bottom: 3px !important;
-  gap: 5px !important;
-}
+    min-height: 30px !important;
 
-.dhtoSummaryIcon {
-  font-size: 14px !important;
-}
+    padding:
+        0
+        .6rem !important;
 
-.dhtoSummaryTitle {
-  font-size: 10px !important;
-  line-height: 12px !important;
-}
+    background: #ffffff !important;
 
-.dhtoSummaryHeader,
-.dhtoSummaryRow {
-  width: 100% !important;
-  min-width: 0 !important;
-  column-gap: 3px !important;
-  box-sizing: border-box !important;
-}
+    border:
+        1px solid
+        #dce5ef !important;
 
-.dhtoSummaryHeader {
-  height: 22px !important;
-  min-height: 22px !important;
-  font-size: 6.7px !important;
-  line-height: 7.5px !important;
+    border-radius: 7px !important;
 }
 
-.dhtoSummaryRow {
-  height: 21px !important;
-  min-height: 21px !important;
-  font-size: 7px !important;
-  line-height: 8px !important;
-}
+.dhtoPage
+.dhtoColumnsBtn
+.sapMBtnContent {
+    color: #43516a !important;
 
-.dhtoSummaryHeader>.sapMFlexItem,
-.dhtoSummaryRow>.sapMFlexItem {
-  min-width: 0 !important;
-  overflow: hidden !important;
-}
+    font-size: .56rem !important;
 
-.dhtoSummaryHeader .sapMText,
-.dhtoSummaryRow .sapMText {
-  max-width: 100% !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+    font-weight: 700 !important;
 }
-
-@media (max-height: 800px) {
-  .dhtoContainer {
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-  }
 
-  .dhtoHeader {
-    height: 27px !important;
-    min-height: 27px !important;
-  }
+.dhtoPage
+.dhtoColumnsBtn
+.sapMBtnIcon {
+    color: #0a6ff5 !important;
 
-  .dhtoTitle {
-    font-size: 20px !important;
-    line-height: 24px !important;
-  }
-
-  .dhtoTableCard {
-    height: 322px !important;
-    min-height: 322px !important;
-  }
-
-  .dhtoSummaryGrid,
-  .dhtoSummaryCard {
-    height: 180px !important;
-    min-height: 180px !important;
-  }
+    font-size: .66rem !important;
 }
-
-@media (max-width: 1450px) {
-  .dhtoContainer {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-
-  .dhtoFilters {
-    grid-template-columns:
-      minmax(0, 1.05fr) minmax(0, .98fr) minmax(0, .98fr) minmax(0, .68fr) minmax(0, .84fr) minmax(0, .68fr) minmax(0, 1.12fr) minmax(0, .94fr) 104px !important;
-    column-gap: 4px !important;
-  }
-
-  .dhtoFilterItem {
-    padding-left: 6px !important;
-    padding-right: 6px !important;
-  }
-
-  .dhtoFilterLabel {
-    font-size: 9px !important;
-  }
-
-  .dhtoFilterItem .sapMSltLabel,
-  .dhtoFilterItem .sapMInputBaseInner {
-    font-size: 8.8px !important;
-  }
 
-  .dhtoApplyBtn,
-  .dhtoApplyBtn .sapMBtnInner {
-    width: 104px !important;
-    min-width: 104px !important;
-    max-width: 104px !important;
-  }
 
-  .dhtoKpiGrid,
-  .dhtoSummaryGrid {
-    flex-wrap: nowrap !important;
-  }
+/* ================================================================
+   TABLA
+   MARGEN INTERNO RESPECTO A LA CARD
+   ================================================================ */
 
-  .dhtoKpiCard,
-  .dhtoSummaryCard {
+.dhtoPage
+.dhtoOrderTableFrame.sapMFlexBox {
     flex: 1 1 0 !important;
-    min-width: 0 !important;
-  }
 
-  .dhtoOrderHeader,
-  .dhtoOrderRow,
-  .dhtoSummaryHeader,
-  .dhtoSummaryRow {
+    width: calc(100% - 4px) !important;
+    height: 100% !important;
+
     min-width: 0 !important;
-  }
+    min-height: 0 !important;
+
+    margin:
+        3px
+        2px
+        0 !important;
+
+    overflow: hidden !important;
+
+    border:
+        1px solid
+        #e7edf5 !important;
+
+    border-radius: 6px !important;
+
+    background: #ffffff !important;
+}
+
+.dhtoPage
+.dhtoOrderTable.sapMList,
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTbl {
+    width: 100% !important;
+
+    table-layout: fixed !important;
+
+    background: #ffffff !important;
+}
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblHeader,
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblHeaderCell {
+    height: 29px !important;
+
+    min-height: 29px !important;
+
+    background: #f4f7fb !important;
+}
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblHeaderCell {
+    padding:
+        0
+        5px !important;
+
+    border-bottom:
+        1px solid
+        #dce5ef !important;
+}
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblHeaderCell
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #526683 !important;
+
+    font-size: .48rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblRow,
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblCell {
+    height: 29px !important;
+
+    min-height: 29px !important;
+}
+
+.dhtoPage
+.dhtoOrderTable
+.sapMListTblCell {
+    padding:
+        3px
+        5px !important;
+
+    overflow: hidden !important;
+
+    vertical-align: middle !important;
+
+    border-bottom:
+        1px solid
+        #edf1f6 !important;
+}
+
+.dhtoPage
+.dhtoOrderRow:hover
+.sapMListTblCell {
+    background: #fafcff !important;
+}
+
+
+/* CELDAS */
+
+.dhtoPage
+.dhtoCellText.sapMText,
+
+.dhtoPage
+.dhtoNumberText.sapMText,
+
+.dhtoPage
+.dhtoVariationValue.sapMText,
+
+.dhtoPage
+.dhtoBlueStrong.sapMText,
+
+.dhtoPage
+.dhtoStatusText.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    font-size: .52rem !important;
+
+    line-height: 1.1 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoCellText.sapMText,
+
+.dhtoPage
+.dhtoNumberText.sapMText {
+    color: #34455f !important;
+
+    font-weight: 600 !important;
+}
+
+.dhtoPage
+.dhtoBlueStrong.sapMText {
+    color: #1768d7 !important;
+
+    font-weight: 700 !important;
+}
+
+
+/* VARIACIONES */
+
+.dhtoPage
+.dhtoVariationValue {
+    font-weight: 800 !important;
+}
+
+.dhtoPage
+.dhtoVariationValue[data-color-class="dhtoRedStrong"],
+.dhtoPage
+.dhtoVariationValue[data-colorclass="dhtoRedStrong"] {
+    color: #ef3f47 !important;
+}
+
+.dhtoPage
+.dhtoVariationValue[data-color-class="dhtoGreenStrong"],
+.dhtoPage
+.dhtoVariationValue[data-colorclass="dhtoGreenStrong"] {
+    color: #58b33a !important;
+}
+
+.dhtoPage
+.dhtoVariationValue[data-color-class="dhtoOrangeStrong"],
+.dhtoPage
+.dhtoVariationValue[data-colorclass="dhtoOrangeStrong"] {
+    color: #d97706 !important;
+}
+
+
+/* ESTADO */
+
+.dhtoPage
+.dhtoStatusCell.sapMFlexBox,
+
+.dhtoPage
+.dhtoSummaryStatus.sapMFlexBox {
+    min-width: 0 !important;
+
+    gap: 4px !important;
+}
+
+.dhtoPage
+.dhtoStatusDot {
+    flex: 0 0 6px !important;
+
+    width: 6px !important;
+    height: 6px !important;
+
+    min-width: 6px !important;
+    min-height: 6px !important;
+
+    border-radius: 50% !important;
+}
+
+.dhtoPage
+.dhtoStatusDot[data-status-class="dhtoDotRed"],
+.dhtoPage
+.dhtoStatusDot[data-statusclass="dhtoDotRed"] {
+    background: #ef3f47 !important;
+}
+
+.dhtoPage
+.dhtoStatusDot[data-status-class="dhtoDotOrange"],
+.dhtoPage
+.dhtoStatusDot[data-statusclass="dhtoDotOrange"] {
+    background: #f59e0b !important;
+}
+
+.dhtoPage
+.dhtoStatusDot[data-status-class="dhtoDotGreen"],
+.dhtoPage
+.dhtoStatusDot[data-statusclass="dhtoDotGreen"] {
+    background: #16a34a !important;
+}
+
+.dhtoPage
+.dhtoStatusText.sapMText {
+    color: #4b566f !important;
+
+    font-weight: 600 !important;
+}
+
+
+/* ================================================================
+   FOOTER
+   SIN SELECT DE FILAS
+   ================================================================ */
+
+.dhtoPage
+.dhtoTableFooter.sapMFlexBox {
+    flex: 0 0 32px !important;
+
+    width: calc(100% - 4px) !important;
+    height: 32px !important;
+
+    min-height: 32px !important;
+
+    margin:
+        0
+        2px !important;
+
+    padding:
+        4px
+        0
+        0 !important;
+
+    gap: 5px !important;
+
+    border-top:
+        1px solid
+        #edf1f6 !important;
+}
+
+.dhtoPage
+.dhtoSmallText.sapMText {
+    color: #73839c !important;
+
+    font-size: .55rem !important;
+    font-weight: 600 !important;
+}
+
+.dhtoPage
+.dhtoPagination.sapMFlexBox {
+    gap: 5px !important;
+}
+
+.dhtoPage
+.dhtoPageBtn.sapMBtn,
+
+.dhtoPage
+.dhtoPageBtn
+.sapMBtnInner {
+    width: 28px !important;
+    height: 28px !important;
+
+    min-width: 28px !important;
+    min-height: 28px !important;
+}
+
+.dhtoPage
+.dhtoPageBtn
+.sapMBtnInner {
+    padding: 0 !important;
+
+    border-radius: 7px !important;
+}
+
+.dhtoPage
+.dhtoPageBtn
+.sapMBtnIcon {
+    width: 100% !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: .64rem !important;
+
+    line-height: 26px !important;
+}
+
+.dhtoPage
+.dhtoPaginationText.sapMText {
+    min-width: 78px !important;
+
+    color: #43516a !important;
+
+    font-size: .56rem !important;
+    font-weight: 700 !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* ================================================================
+   RESÚMENES
+   ================================================================ */
+
+.dhtoPage
+.dhtoSummaryGrid.sapMFlexBox {
+    flex: 0 0 168px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    width: 100% !important;
+    height: 168px !important;
+
+    min-width: 0 !important;
+    min-height: 168px !important;
+
+    gap: 8px !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.dhtoPage
+.dhtoSummaryGrid
+> .sapMFlexItem {
+    flex: 1 1 0 !important;
+
+    width: 0 !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+.dhtoPage
+.dhtoSummaryCard.sapMFlexBox {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        8px
+        10px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-left-width: 3px !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            20,
+            39,
+            70,
+            .05
+        ) !important;
+}
+
+.dhtoPage
+.dhtoSummaryBlue {
+    border-left-color:
+        #2e8cff !important;
+}
+
+.dhtoPage
+.dhtoSummaryGreen {
+    border-left-color:
+        #63bf42 !important;
+}
+
+.dhtoPage
+.dhtoSummaryTitleRow.sapMFlexBox {
+    flex: 0 0 24px !important;
+
+    width: 100% !important;
+    height: 24px !important;
+
+    min-height: 24px !important;
+
+    gap: 5px !important;
+
+    margin-bottom: 4px !important;
+}
+
+.dhtoPage
+.dhtoSummaryIcon {
+    font-size: .78rem !important;
+}
+
+.dhtoPage
+.dhtoSummaryTitle.sapMTitle {
+    color: #1c2940 !important;
+
+    font-size: .65rem !important;
+    font-weight: 800 !important;
+}
+
+
+/* TABLA INTERNA RESUMEN */
+
+.dhtoPage
+.dhtoSummaryTableFrame.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+
+    border:
+        1px solid
+        #e7edf5 !important;
+
+    border-radius: 6px !important;
+}
+
+.dhtoPage
+.dhtoSummaryHeader,
+
+.dhtoPage
+.dhtoSummaryRow {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1.35fr)
+        minmax(0, .55fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, .9fr)
+        minmax(0, .9fr)
+        minmax(0, 1.2fr) !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    column-gap: 4px !important;
+
+    align-items: center !important;
+
+    text-align: center !important;
+}
+
+.dhtoPage
+.dhtoSummaryHeader {
+    flex: 0 0 27px !important;
+
+    height: 27px !important;
+
+    min-height: 27px !important;
+
+    background: #f4f7fb !important;
+
+    border-bottom:
+        1px solid
+        #dce5ef !important;
+}
+
+.dhtoPage
+.dhtoSummaryHeader
+.sapMText {
+    color: #526683 !important;
+
+    font-size: .46rem !important;
+    font-weight: 800 !important;
+}
+
+.dhtoPage
+.dhtoSummaryRows.sapMFlexBox {
+    flex: 1 1 0 !important;
+
+    width: 100% !important;
+
+    min-height: 0 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.dhtoPage
+.dhtoSummaryRow {
+    flex: 0 0 27px !important;
+
+    height: 27px !important;
+
+    min-height: 27px !important;
+
+    padding:
+        2px
+        3px !important;
+
+    border-bottom:
+        1px solid
+        #edf1f6 !important;
+}
+
+.dhtoPage
+.dhtoSummaryRow
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #34455f !important;
+
+    font-size: .48rem !important;
+    font-weight: 600 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.dhtoPage
+.dhtoSummaryTotal {
+    flex: 0 0 28px !important;
+
+    height: 28px !important;
+
+    min-height: 28px !important;
+
+    background: #f8faff !important;
+
+    border-top:
+        1px solid
+        #dce5ef !important;
+
+    border-bottom: 0 !important;
+}
+
+.dhtoPage
+.dhtoSummaryTotal
+.sapMText {
+    font-weight: 800 !important;
+}
+
+.dhtoPage
+.dhtoRedStrong {
+    color: #ef3f47 !important;
+}
+
+.dhtoPage
+.dhtoOrangeStrong {
+    color: #d97706 !important;
+}
+
+.dhtoPage
+.dhtoGreenStrong {
+    color: #58b33a !important;
+}
+
+
+/* ================================================================
+   LAPTOP BAJO
+   ================================================================ */
+
+@media screen
+and (min-width: 901px)
+and (max-height: 720px) {
+
+    .dhtoPage
+    .dhtoContainer.sapMFlexBox {
+        padding:
+            6px
+            8px
+            5px
+            18px !important;
+
+        gap: 5px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoHeader.sapMFlexBox {
+        flex-basis: 42px !important;
+
+        height: 42px !important;
+
+        min-height: 42px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoTitle.sapMTitle {
+        font-size: 1.38rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSubtitle.sapMText {
+        font-size: .62rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiGrid.sapMFlexBox,
+
+    .dhtoPage
+    .dhtoKpiGrid
+    > .sapMFlexItem,
+
+    .dhtoPage
+    .dhtoKpiCard.sapMFlexBox {
+        height: 66px !important;
+
+        min-height: 66px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiGrid.sapMFlexBox {
+        flex-basis: 66px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiIconCircle.sapMFlexBox {
+        flex-basis: 37px !important;
+
+        width: 37px !important;
+        height: 37px !important;
+
+        min-width: 37px !important;
+        min-height: 37px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiIcon {
+        font-size: 1.02rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiLabel.sapMText {
+        font-size: .55rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiNumber.sapMText {
+        font-size: .98rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiHelper.sapMText {
+        font-size: .47rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSummaryGrid.sapMFlexBox {
+        flex-basis: 145px !important;
+
+        height: 145px !important;
+
+        min-height: 145px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSummaryCard.sapMFlexBox {
+        padding:
+            6px
+            8px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoOrderTable
+    .sapMListTblHeader,
+
+    .dhtoPage
+    .dhtoOrderTable
+    .sapMListTblHeaderCell,
+
+    .dhtoPage
+    .dhtoOrderTable
+    .sapMListTblRow,
+
+    .dhtoPage
+    .dhtoOrderTable
+    .sapMListTblCell {
+        height: 26px !important;
+
+        min-height: 26px !important;
+    }
+}
+
+
+/* ================================================================
+   TABLET
+   ================================================================ */
+
+@media screen
+and (max-width: 900px) {
+
+    .dhtoPage,
+    .dhtoPage.sapMPage,
+    .dhtoPage .sapMPageCont,
+    .dhtoPage .sapMPageScroll {
+        height: auto !important;
+
+        min-height: 100% !important;
+    }
+
+
+    .dhtoPage
+    .sapMPageScroll {
+        overflow-y: auto !important;
+    }
+
+
+    .dhtoPage
+    .dhtoContainer.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        padding: 10px !important;
+
+        overflow: visible !important;
+    }
+
+
+    .dhtoPage
+    .dhtoFilters.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+    }
+
+
+    .dhtoPage
+    .dhtoFilterItem.sapMFlexBox {
+        flex:
+            1
+            1
+            calc(
+                50% - 4px
+            ) !important;
+
+        width:
+            calc(
+                50% - 4px
+            ) !important;
+
+        min-width:
+            calc(
+                50% - 4px
+            ) !important;
+    }
+
+
+    .dhtoPage
+    .dhtoApplyButtonBox.sapMFlexBox {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+
+        max-width: none !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiGrid.sapMFlexBox {
+        height: auto !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+
+        overflow: visible !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiGrid
+    > .sapMFlexItem {
+        flex:
+            1
+            1
+            calc(
+                50% - 5px
+            ) !important;
+
+        width:
+            calc(
+                50% - 5px
+            ) !important;
+
+        height: 76px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoTableCard.sapMFlexBox {
+        min-height: 480px !important;
+
+        overflow-x: auto !important;
+    }
+
+
+    .dhtoPage
+    .dhtoOrderTableFrame.sapMFlexBox {
+        min-width: 70rem !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSummaryGrid.sapMFlexBox {
+        height: auto !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+
+        overflow: visible !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSummaryGrid
+    > .sapMFlexItem {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-height: 180px !important;
+    }
+}
+
+
+/* ================================================================
+   MÓVIL
+   ================================================================ */
+
+@media screen
+and (max-width: 600px) {
+
+    .dhtoPage
+    .dhtoTitle.sapMTitle {
+        font-size: 1.20rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSubtitle.sapMText {
+        font-size: .64rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .dhtoPage
+    .dhtoFilterItem.sapMFlexBox,
+
+    .dhtoPage
+    .dhtoApplyButtonBox.sapMFlexBox {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+    }
+
+
+    .dhtoPage
+    .dhtoKpiGrid
+    > .sapMFlexItem {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+    }
+
+
+    .dhtoPage
+    .dhtoHeader.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 48px !important;
+
+        flex-wrap: wrap !important;
+
+        gap: 5px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoTableTop.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        flex-wrap: wrap !important;
+
+        gap: 5px !important;
+    }
+
+
+    .dhtoPage
+    .dhtoTableActions.sapMFlexBox {
+        width: 100% !important;
+
+        flex-wrap: wrap !important;
+    }
+
+
+    .dhtoPage
+    .dhtoSearch.sapMSF {
+        width: 100% !important;
+    }
 }

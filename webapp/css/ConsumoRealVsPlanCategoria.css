@@ -1,1010 +1,3875 @@
-/* Consumo real vs plan por categoría - vista ejecutiva en una pantalla */
+/* =====================================================================
+   CONSUMO REAL VS PLAN POR CATEGORÍA
+   ESTÁNDAR VISUAL UNIFICADO
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. PÁGINA
+   ===================================================================== */
+
 .ConsumoRealVsPlanCategoria,
-.ConsumoRealVsPlanCategoria .sapMPage,
+.ConsumoRealVsPlanCategoria.sapMPage,
 .ConsumoRealVsPlanCategoria .sapMPageBgStandard,
-.ConsumoRealVsPlanCategoria .sapMPageEnableScrolling {
+.ConsumoRealVsPlanCategoria .sapMPageBgSolid,
+.ConsumoRealVsPlanCategoria .sapMPageEnableScrolling,
+.ConsumoRealVsPlanCategoria .sapMPageScroll {
     width: 100% !important;
     height: 100% !important;
-    background: #F4F7FB !important;
-    overflow: hidden !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcPage {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    padding: 8px 12px !important;
-    box-sizing: border-box !important;
-    display: grid !important;
-    grid-template-rows: 30px 60px 70px minmax(275px, 1fr) minmax(235px, 1fr) !important;
-    gap: 7px !important;
-    overflow: hidden !important;
-}
-
-/* Encabezado */
-.ConsumoRealVsPlanCategoria .crpcHeader {
     min-width: 0 !important;
+    min-height: 0 !important;
+
+    background: #f7f9fc !important;
+}
+
+.ConsumoRealVsPlanCategoria,
+.ConsumoRealVsPlanCategoria *,
+.ConsumoRealVsPlanCategoria *::before,
+.ConsumoRealVsPlanCategoria *::after {
+    box-sizing: border-box !important;
+}
+
+.ConsumoRealVsPlanCategoria .sapMPageScroll {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   2. CONTENEDOR GENERAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria .crpcPage.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-rows:
+        36px
+        54px
+        76px
+        minmax(230px, 1.15fr)
+        minmax(230px, .85fr) !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
     margin: 0 !important;
+
+    padding:
+        10px
+        14px
+        8px
+        18px !important;
+
+    gap: 8px !important;
+
+    overflow: hidden !important;
+
+    background: #f7f9fc !important;
+
+    color: #15243d !important;
+
+    font-family:
+        "72",
+        "72full",
+        Arial,
+        sans-serif !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcPage > .sapMFlexItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+}
+
+
+/* =====================================================================
+   3. ENCABEZADO
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria .crpcHeader {
+    display: flex !important;
+
+    width: 100% !important;
+    height: 36px !important;
+
+    min-width: 0 !important;
+    min-height: 36px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     justify-content: center !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTitle {
-    color: #172B4D !important;
-    font-size: 23px !important;
-    line-height: 25px !important;
+.ConsumoRealVsPlanCategoria
+.crpcTitle.sapMTitle {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #13214a !important;
+
+    font-size: 1.72rem !important;
     font-weight: 800 !important;
-    letter-spacing: -0.3px !important;
+
+    line-height: 1.05 !important;
+
+    letter-spacing: -.03em !important;
+
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcHintButton {
-    margin-left: 3px !important;
+
+/* =====================================================================
+   4. FILTROS
+   7 FILTROS + BOTÓN
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcFilters.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        .92fr
+        1.03fr
+        1.03fr
+        .78fr
+        .92fr
+        .98fr
+        .84fr
+        118px !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: visible !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcSectionInfoIcon {
-    color: #087AF5 !important;
-    font-size: 0.8rem !important;
-    margin-left: 6px !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcFilters > .sapMFlexItem {
+    width: 100% !important;
 
-.ConsumoRealVsPlanCategoria .crpcHintButton .sapMBtnInner {
-    min-width: 24px !important;
-    height: 24px !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcHintButton .sapUiIcon {
-    color: #0B74F1 !important;
-    font-size: 0.85rem !important;
-}
 
-/* Filtros: mismo patrón visual del dashboard principal */
-.ConsumoRealVsPlanCategoria .crpcFilters {
-    width: 100% !important;
-    min-width: 0 !important;
-    display: grid !important;
-    grid-template-columns:
-        minmax(150px, 1.2fr) minmax(128px, 1fr) minmax(128px, 1fr) minmax(94px, 0.76fr) minmax(118px, 0.96fr) minmax(128px, 1.02fr) minmax(105px, 0.84fr) 126px !important;
-    gap: 8px !important;
-    align-items: stretch !important;
-    margin: 0 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcFilters>.sapMFlexItem {
-    width: 100% !important;
-    min-width: 0 !important;
-}
+/* =====================================================================
+   5. CARD DE FILTRO
+   ===================================================================== */
 
 .ConsumoRealVsPlanCategoria .crpcFilter {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 60px !important;
-    padding: 6px 10px 5px !important;
-    box-sizing: border-box !important;
-    justify-content: space-between !important;
-    background: #FFFFFF !important;
-    border: 1px solid #D6E1EF !important;
-    border-radius: 10px !important;
-    box-shadow: 0 3px 9px rgba(15, 42, 77, 0.055) !important;
-    overflow: hidden !important;
-}
+    display: flex !important;
 
-.ConsumoRealVsPlanCategoria .crpcFilterLabel {
-    color: #60738D !important;
-    font-size: 10.5px !important;
-    line-height: 12px !important;
-    font-weight: 800 !important;
+    flex-direction: column !important;
+
+    justify-content: center !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 54px !important;
+    min-height: 54px !important;
+    max-height: 54px !important;
+
     margin: 0 !important;
+
+    padding:
+        6px
+        10px
+        5px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(25,45,79,.05) !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMSlt,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBase,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseContentWrapper {
+.ConsumoRealVsPlanCategoria
+.crpcFilter:focus-within {
+    border-color: #9ac8ff !important;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(10,111,245,.08) !important;
+}
+
+
+/* =====================================================================
+   6. LABEL FILTRO
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcFilterLabel.sapMLabel {
+    display: block !important;
+
     width: 100% !important;
-    min-width: 0 !important;
-    height: 28px !important;
-    min-height: 28px !important;
+
+    height: 14px !important;
+    min-height: 14px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0
+        2px !important;
+
+    color: #78869a !important;
+
+    font-size: .61rem !important;
+    font-weight: 600 !important;
+
+    line-height: 14px !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   7. SELECT Y DATEPICKER
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMSlt,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMInputBase,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMInputBaseContentWrapper {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+
     border: 0 !important;
     border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    outline: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMSlt:hover,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMSlt.sapMSltPressed,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter .sapMInputBaseContentWrapper:hover,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMInputBaseFocused
+.sapMInputBaseContentWrapper {
     background: transparent !important;
+
+    border: 0 !important;
+
     box-shadow: none !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMSltLabel,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseInner {
-    height: 28px !important;
-    min-height: 28px !important;
-    line-height: 28px !important;
-    padding: 0 28px 0 0 !important;
-    color: #142A51 !important;
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMSltLabel,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMInputBaseInner {
+    width: 100% !important;
+
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    padding:
+        0
+        1.38rem
+        0
+        2px !important;
+
+    overflow: hidden !important;
+
+    color: #1e2e4c !important;
+
     background: transparent !important;
-    font-size: 11.5px !important;
-    font-weight: 800 !important;
-    text-overflow: ellipsis !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMSltArrow {
-    width: 24px !important;
-    height: 28px !important;
-    line-height: 28px !important;
-    color: #087AF5 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIconContainer,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIcon {
-    width: 25px !important;
-    height: 28px !important;
-    line-height: 28px !important;
-    color: #087AF5 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIconContainer .sapUiIcon,
-.ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseIcon::before {
-    color: #087AF5 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcApplyButton {
-    width: 126px !important;
-    height: 44px !important;
-    align-self: center !important;
-    margin: 0 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnInner {
-    width: 126px !important;
-    height: 44px !important;
-    min-height: 44px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #FFFFFF !important;
-    background: #087AF5 !important;
     border: 0 !important;
-    border-radius: 9px !important;
-    box-shadow: 0 6px 13px rgba(8, 122, 245, 0.23) !important;
-    text-shadow: none !important;
+
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnContent,
-.ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnIcon {
-    color: #FFFFFF !important;
-    font-size: 11.5px !important;
-    font-weight: 800 !important;
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMSltArrow,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMInputBaseIconContainer,
+
+.ConsumoRealVsPlanCategoria
+.crpcFilter
+.sapMInputBaseIcon {
+    width: 1.25rem !important;
+
+    min-width: 1.25rem !important;
+
+    height: 1.62rem !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    font-size: .72rem !important;
+
+    line-height: 1.62rem !important;
 }
 
-/* KPIs */
-.ConsumoRealVsPlanCategoria .crpcKpis {
-    width: 100% !important;
-    min-width: 0 !important;
-    gap: 8px !important;
-    margin: 0 !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcKpi {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    height: 70px !important;
-    padding: 8px 13px !important;
-    box-sizing: border-box !important;
+/* =====================================================================
+   8. BOTÓN APLICAR FILTROS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcFilters > .sapMFlexItem:last-child {
     display: flex !important;
-    justify-content: center !important;
-    background: #FFFFFF !important;
-    border: 1px solid #DCE5F0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 3px 10px rgba(15, 42, 77, 0.05) !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcKpiBlue {
-    border-left: 4px solid #1479F8 !important;
-    background: linear-gradient(90deg, #EDF5FF 0%, #FFFFFF 55%) !important;
-}
+    width: 118px !important;
 
-.ConsumoRealVsPlanCategoria .crpcKpiGreen {
-    border-left: 4px solid #18A957 !important;
-    background: linear-gradient(90deg, #ECFBF2 0%, #FFFFFF 55%) !important;
-}
+    min-width: 118px !important;
+    max-width: 118px !important;
 
-.ConsumoRealVsPlanCategoria .crpcKpiRed {
-    border-left: 4px solid #F04452 !important;
-    background: linear-gradient(90deg, #FFF0F2 0%, #FFFFFF 55%) !important;
-}
+    height: 54px !important;
 
-.ConsumoRealVsPlanCategoria .crpcKpiIcon {
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    margin-right: 10px !important;
-    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 50% !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcKpiIcon .sapUiIcon {
-    font-size: 1.25rem !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton.sapMBtn {
+    width: 118px !important;
 
-.ConsumoRealVsPlanCategoria .crpcBlueBg {
-    background: #DDEEFF !important;
-}
+    min-width: 118px !important;
+    max-width: 118px !important;
 
-.ConsumoRealVsPlanCategoria .crpcBlueBg .sapUiIcon,
-.ConsumoRealVsPlanCategoria .crpcBlueText {
-    color: #1479F8 !important;
-}
+    height: 54px !important;
 
-.ConsumoRealVsPlanCategoria .crpcGreenBg {
-    background: #DFF8E9 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcGreenBg .sapUiIcon,
-.ConsumoRealVsPlanCategoria .crpcGreenText {
-    color: #18A957 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcRedBgSoft {
-    background: #FFE3E6 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcRedBgSoft .sapUiIcon,
-.ConsumoRealVsPlanCategoria .crpcRedText {
-    color: #F04452 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcKpiLabel {
-    color: #172B4D !important;
-    font-size: 9.5px !important;
-    line-height: 11px !important;
-    font-weight: 800 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcKpiNumber {
-    font-size: 21px !important;
-    line-height: 23px !important;
-    font-weight: 900 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcKpiUnit {
-    color: #172B4D !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-    margin-left: 3px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcKpiSub {
-    font-size: 9px !important;
-    line-height: 10px !important;
-    font-weight: 800 !important;
-}
-
-/* Tarjetas */
-.ConsumoRealVsPlanCategoria .crpcCard {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    padding: 7px 9px !important;
-    box-sizing: border-box !important;
-    background: #FFFFFF !important;
-    border: 1px solid #DCE5F0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 3px 10px rgba(15, 42, 77, 0.05) !important;
-    overflow: hidden !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcCardHead {
-    min-height: 25px !important;
-    margin: 0 0 4px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcCardTitle {
-    color: #172B4D !important;
-    font-size: 12px !important;
-    line-height: 14px !important;
-    font-weight: 900 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcSearch.sapMSF,
-.ConsumoRealVsPlanCategoria .crpcColumnButton .sapMBtnInner {
-    height: 27px !important;
-    min-height: 27px !important;
-    border: 1px solid #DCE5F0 !important;
-    border-radius: 7px !important;
-    background: #FFFFFF !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcSearch {
-    margin-right: 6px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcSearch .sapMSFI,
-.ConsumoRealVsPlanCategoria .crpcColumnButton .sapMBtnContent {
-    font-size: 9.5px !important;
-}
-
-/* Tabla principal */
-.ConsumoRealVsPlanCategoria .crpcTableCard {
-    height: 100% !important;
     margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcMainTable {
-    width: 100% !important;
-    min-height: 0 !important;
-    border: 1px solid #DCE5F0 !important;
-    border-radius: 7px 7px 0 0 !important;
-    overflow: hidden !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblHeader,
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblHeaderCell {
-    height: 31px !important;
-    min-height: 31px !important;
-    box-sizing: border-box !important;
-    padding: 2px 4px !important;
-    vertical-align: middle !important;
-    background: #F4F7FB !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcMainTable th .sapMText {
-    width: 100% !important;
-    color: #526781 !important;
-    font-size: 8px !important;
-    line-height: 9px !important;
-    font-weight: 900 !important;
-    text-align: center !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMColumnHeader,
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMColumnHeader {
-    height: auto !important;
-    min-height: 0 !important;
     padding: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblRow,
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
-    height: 23px !important;
-    min-height: 23px !important;
-    box-sizing: border-box !important;
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton
+.sapMBtnInner {
+    display: flex !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 44px !important;
+    min-height: 44px !important;
+
+    margin:
+        5px
+        0 !important;
+
+    padding:
+        0
+        .72rem !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    background: #0a6ff5 !important;
+
+    border:
+        1px solid
+        #0a6ff5 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(10,111,245,.24) !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
-    padding: 2px 4px !important;
-    vertical-align: middle !important;
-    border-color: #E7EDF5 !important;
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton
+.sapMBtnContent,
+
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton
+.sapMBtnIcon {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
 }
+
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton
+.sapMBtnContent {
+    font-size: .63rem !important;
+    font-weight: 700 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton
+.sapMBtnIcon {
+    font-size: .72rem !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcApplyButton:hover
+.sapMBtnInner {
+    background: #075fcf !important;
+
+    border-color: #075fcf !important;
+}
+
+
+/* =====================================================================
+   9. KPI ROW
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpis.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0,1fr)
+        ) !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 76px !important;
+    min-height: 76px !important;
+
+    gap: 9px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpis > .sapMFlexItem {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 76px !important;
+
+    margin: 0 !important;
+}
+
+
+/* =====================================================================
+   10. KPI BASE
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria .crpcKpi {
+    position: relative !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 76px !important;
+    min-height: 76px !important;
+    max-height: 76px !important;
+
+    margin: 0 !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e4eaf2 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20,39,70,.06) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi::before {
+    position: absolute !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 3px !important;
+
+    border-radius:
+        7px
+        0
+        0
+        7px !important;
+
+    content: "" !important;
+}
+
+
+/* =====================================================================
+   11. KPI AZUL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiBlue {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46,140,255,.20) 0%,
+            rgba(46,140,255,.11) 22%,
+            rgba(46,140,255,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #ffffff 100%
+        ) !important;
+
+    border-color:
+        rgba(46,140,255,.18) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiBlue::before {
+    background: #2e8cff !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcBlueBg {
+    background:
+        rgba(46,140,255,.13) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcBlueBg
+.sapUiIcon,
+
+.ConsumoRealVsPlanCategoria
+.crpcBlueText {
+    color: #1877e8 !important;
+}
+
+
+/* =====================================================================
+   12. KPI VERDE
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiGreen {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,191,66,.20) 0%,
+            rgba(99,191,66,.11) 22%,
+            rgba(99,191,66,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #ffffff 100%
+        ) !important;
+
+    border-color:
+        rgba(99,191,66,.18) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiGreen::before {
+    background: #63bf42 !important;
+}
+
+.ConsumoRealVsPlanCategoria .crpcGreenBg {
+    background:
+        rgba(99,191,66,.13) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcGreenBg
+.sapUiIcon,
+
+.ConsumoRealVsPlanCategoria
+.crpcGreenText {
+    color: #58b33a !important;
+}
+
+
+/* =====================================================================
+   13. KPI ROJO
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiRed {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,77,83,.20) 0%,
+            rgba(255,77,83,.11) 22%,
+            rgba(255,77,83,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #ffffff 100%
+        ) !important;
+
+    border-color:
+        rgba(255,77,83,.18) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi.crpcKpiRed::before {
+    background: #ff4d53 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcRedBgSoft {
+    background:
+        rgba(255,77,83,.13) !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcRedBgSoft
+.sapUiIcon,
+
+.ConsumoRealVsPlanCategoria
+.crpcRedText {
+    color: #ef3f47 !important;
+}
+
+
+/* =====================================================================
+   14. KPI INTERNO
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi > .sapMFlexItem,
+.ConsumoRealVsPlanCategoria
+.crpcKpi > .sapMFlexItem > .sapMFlexBox {
+    min-width: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpi > .sapMFlexItem > .sapMFlexBox {
+    height: 100% !important;
+
+    align-items: center !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiIcon.sapMFlexBox {
+    flex: 0 0 43px !important;
+
+    width: 43px !important;
+    min-width: 43px !important;
+    max-width: 43px !important;
+
+    height: 43px !important;
+    min-height: 43px !important;
+    max-height: 43px !important;
+
+    margin:
+        0
+        8px
+        0
+        0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiIcon
+.sapUiIcon {
+    font-size: 1.28rem !important;
+}
+
+
+/* =====================================================================
+   15. KPI TEXTOS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiLabel.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #43516a !important;
+
+    font-size: .62rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1.15 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiNumber.sapMText {
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    font-size: 1.18rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
+
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiUnit.sapMText {
+    margin-left: 3px !important;
+
+    color: #43516a !important;
+
+    font-size: .53rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcKpiSub.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 3px !important;
+
+    overflow: hidden !important;
+
+    color: #6f7c8f !important;
+
+    font-size: .49rem !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.05 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   16. CARD GENERAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria .crpcCard {
+    width: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(20,39,70,.05) !important;
+}
+
+
+/* =====================================================================
+   17. TABLA PRINCIPAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTableCard.sapMFlexBox {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   18. HEADER DE CARD
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcCardHead.sapMFlexBox {
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-width: 0 !important;
+
+    min-height: 28px !important;
+
+    margin:
+        7px
+        10px
+        6px !important;
+
+    padding: 0 !important;
+
+    align-items: center !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcCardTitle.sapMTitle {
+    color: #243858 !important;
+
+    font-size: .72rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .90rem !important;
+
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSectionInfoIcon {
+    margin-left: 5px !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: .72rem !important;
+}
+
+
+/* =====================================================================
+   19. SEARCH
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcSearch.sapMSF {
+    width: 190px !important;
+
+    height: 30px !important;
+
+    margin-right: 6px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSearch
+.sapMSFF {
+    height: 30px !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #dce5ef !important;
+
+    border-radius: 7px !important;
+
+    box-shadow: none !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSearch
+.sapMSFI {
+    height: 28px !important;
+
+    color: #334158 !important;
+
+    font-size: .58rem !important;
+
+    line-height: 28px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSearch
+.sapMSFB {
+    width: 28px !important;
+
+    height: 28px !important;
+
+    line-height: 28px !important;
+}
+
+
+/* =====================================================================
+   20. BOTÓN COLUMNAS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcColumnButton.sapMBtn {
+    height: 30px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcColumnButton
+.sapMBtnInner {
+    height: 30px !important;
+    min-height: 30px !important;
+
+    padding:
+        0
+        8px !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #dce5ef !important;
+
+    border-radius: 7px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcColumnButton
+.sapMBtnContent,
+.ConsumoRealVsPlanCategoria
+.crpcColumnButton
+.sapMBtnIcon {
+    color: #526178 !important;
+
+    font-size: .55rem !important;
+
+    line-height: 28px !important;
+}
+
+
+/* =====================================================================
+   21. TABLA PRINCIPAL - MARGEN REAL DENTRO DE CARD
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable {
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-width: 0 !important;
+
+    margin:
+        0
+        10px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius:
+        6px
+        6px
+        0
+        0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTbl {
+    width: 100% !important;
+
+    table-layout: fixed !important;
+
+    border-collapse: separate !important;
+
+    border-spacing: 0 !important;
+}
+
+
+/* =====================================================================
+   22. HEADER TABLA PRINCIPAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHeader,
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHeaderRow,
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHeaderCell {
+    background: #f5f7fa !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHeaderCell {
+    height: 38px !important;
+    min-height: 38px !important;
+
+    padding:
+        4px
+        5px !important;
+
+    vertical-align: middle !important;
+
+    border-right:
+        1px solid
+        #e8edf3 !important;
+
+    border-bottom:
+        1px solid
+        #e2e8f0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHeaderCell:last-child {
+    border-right: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+th
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #43516a !important;
+
+    font-size: .51rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .62rem !important;
+
+    text-align: center !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMColumnHeader {
+    height: auto !important;
+
+    min-height: 0 !important;
+
+    padding: 0 !important;
+}
+
+
+/* =====================================================================
+   23. FILAS PRINCIPALES
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblRow,
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblCell {
+    height: 32px !important;
+    min-height: 32px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblCell {
+    padding:
+        4px
+        5px !important;
+
+    vertical-align: middle !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border-right:
+        1px solid
+        #edf1f5 !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblCell:last-child {
+    border-right: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblRow:hover
+.sapMListTblCell {
+    background: #f8fbff !important;
+}
+
+
+/* =====================================================================
+   24. TEXTO TABLA PRINCIPAL
+   ===================================================================== */
 
 .ConsumoRealVsPlanCategoria .crpcCell,
 .ConsumoRealVsPlanCategoria .crpcNum,
 .ConsumoRealVsPlanCategoria .crpcMaterialLink,
 .ConsumoRealVsPlanCategoria .crpcZoneVal,
 .ConsumoRealVsPlanCategoria .crpcTotalVar {
-    color: #172B4D !important;
-    font-size: 8.3px !important;
-    line-height: 9px !important;
-    font-weight: 800 !important;
+    color: #334158 !important;
+
+    font-size: .53rem !important;
+
+    font-weight: 600 !important;
+
+    line-height: .68rem !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcNum,
-.ConsumoRealVsPlanCategoria .crpcTotalVar {
+.ConsumoRealVsPlanCategoria
+.crpcMaterialLink {
+    color: #1877e8 !important;
+
+    font-weight: 700 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcMaterialIcon {
+    margin-right: 4px !important;
+
+    color: #1877e8 !important;
+
+    font-size: .64rem !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcNum,
+.ConsumoRealVsPlanCategoria
+.crpcTotalVar {
     display: block !important;
+
     width: 100% !important;
+
     text-align: center !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMaterialIcon {
-    color: #087AF5 !important;
-    font-size: 0.72rem !important;
-    margin-right: 4px !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcMaterialLink {
-    color: #087AF5 !important;
-    font-weight: 900 !important;
-}
+/* =====================================================================
+   25. CONTRIBUCIÓN
+   ===================================================================== */
 
-.ConsumoRealVsPlanCategoria .crpcContribBox {
+.ConsumoRealVsPlanCategoria
+.crpcContribBox.sapMFlexBox {
     width: 100% !important;
+
     min-width: 0 !important;
+
+    gap: 5px !important;
+
     align-items: center !important;
     justify-content: center !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBox>.sapMFlexItem {
-    min-height: 0 !important;
-    line-height: 8px !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcContribBar.sapMPI {
+    flex: 1 1 auto !important;
 
-.ConsumoRealVsPlanCategoria .crpcContribBar {
-    width: 48px !important;
-    min-width: 48px !important;
-}
+    width: auto !important;
 
-.ConsumoRealVsPlanCategoria .crpcContribBar.sapMPI {
+    min-width: 28px !important;
+    max-width: 52px !important;
+
     height: 5px !important;
     min-height: 5px !important;
+
     margin: 0 !important;
     padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 20px !important;
+
     overflow: hidden !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBar,
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBarRemaining {
-    height: 5px !important;
-    min-height: 5px !important;
-    line-height: 5px !important;
-    border-radius: 20px !important;
-}
+    background: #e2e8f0 !important;
 
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIBarRemaining {
-    background: transparent !important;
     border: 0 !important;
-    box-shadow: none !important;
-    opacity: 0 !important;
+
+    border-radius: 999px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPIText,
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPITextLeft,
-.ConsumoRealVsPlanCategoria .crpcContribBar .sapMPITextRight {
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPIBar,
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPIBarRemaining {
+    height: 5px !important;
+
+    min-height: 5px !important;
+
+    line-height: 5px !important;
+
+    border-radius: 999px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPIBarRemaining {
+    background: #e2e8f0 !important;
+
+    opacity: 1 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPIText,
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPITextLeft,
+.ConsumoRealVsPlanCategoria
+.crpcContribBar
+.sapMPITextRight {
     display: none !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Red"] .sapMPIBar {
-    background: #F04452 !important;
+.ConsumoRealVsPlanCategoria
+.crpcContribBar[data-estado="Red"]
+.sapMPIBar {
+    background: #ff4d53 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Orange"] .sapMPIBar {
-    background: #F98220 !important;
+.ConsumoRealVsPlanCategoria
+.crpcContribBar[data-estado="Orange"]
+.sapMPIBar {
+    background: #ff9e31 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Yellow"] .sapMPIBar {
-    background: #ECAE12 !important;
+.ConsumoRealVsPlanCategoria
+.crpcContribBar[data-estado="Yellow"]
+.sapMPIBar {
+    background: #f4b400 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribBar[data-estado="Green"] .sapMPIBar {
-    background: #18A957 !important;
+.ConsumoRealVsPlanCategoria
+.crpcContribBar[data-estado="Green"]
+.sapMPIBar {
+    background: #63bf42 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcContribText {
-    color: #526781 !important;
-    font-size: 7.5px !important;
-    line-height: 8px !important;
-    font-weight: 900 !important;
-    margin-left: 5px !important;
+.ConsumoRealVsPlanCategoria
+.crpcContribText.sapMText {
+    flex: 0 0 auto !important;
+
+    color: #526178 !important;
+
+    font-size: .49rem !important;
+
+    font-weight: 800 !important;
+
     white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcZones {
-    width: 100% !important;
+
+/* =====================================================================
+   26. ZONAS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcZones.sapMFlexBox {
     display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0,1fr)
+        ) !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
     gap: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcZoneVal {
-    flex: 1 1 0 !important;
-    text-align: center !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Red"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Red"] {
-    color: #F04452 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Green"],
-.ConsumoRealVsPlanCategoria .crpcTotalVar[data-estado="Green"] {
-    color: #18A957 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneVal[data-estado="Neutral"] {
-    color: #526781 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneHeader {
-    width: 100% !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneHeaderLabels {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcZoneHeaderLabels .sapMText {
-    width: 100% !important;
-    color: #65758B !important;
-    font-size: 6.6px !important;
-    line-height: 8px !important;
-    font-weight: 800 !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTotalZones {
-    height: 100% !important;
-    align-items: center !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTotalZones .crpcZoneVal {
+.ConsumoRealVsPlanCategoria
+.crpcZoneVal.sapMText {
     display: block !important;
-    width: 100% !important;
-    font-size: 8.2px !important;
-    font-weight: 900 !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcTotalRow {
     width: 100% !important;
-    min-height: 25px !important;
-    display: grid !important;
-    grid-template-columns: 4fr 16fr 10fr 8fr 8fr 10fr 9fr 7fr 8fr 8fr 12fr 7fr !important;
-    align-items: center !important;
-    background: #F4F7FB !important;
-    border: 1px solid #DCE5F0 !important;
-    border-top: 0 !important;
-    box-sizing: border-box !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcTotalLabel {
-    grid-column: 1 / 4 !important;
-    padding-left: 8px !important;
-    color: #172B4D !important;
-    font-size: 8.2px !important;
-    font-weight: 900 !important;
-    white-space: nowrap !important;
-}
+    min-width: 0 !important;
 
-.ConsumoRealVsPlanCategoria .crpcTotalCell {
-    display: block !important;
-    width: 100% !important;
-    color: #172B4D !important;
-    font-size: 8.2px !important;
-    font-weight: 900 !important;
     text-align: center !important;
+
     white-space: nowrap !important;
 }
 
-/* Paneles inferiores */
-.ConsumoRealVsPlanCategoria .crpcBottom {
+.ConsumoRealVsPlanCategoria
+.crpcZoneVal[data-estado="Red"],
+.ConsumoRealVsPlanCategoria
+.crpcTotalVar[data-estado="Red"] {
+    color: #ef3f47 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcZoneVal[data-estado="Green"],
+.ConsumoRealVsPlanCategoria
+.crpcTotalVar[data-estado="Green"] {
+    color: #58b33a !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcZoneVal[data-estado="Neutral"] {
+    color: #65748b !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcZoneHeader {
     width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    gap: 7px !important;
-    align-items: stretch !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetail {
-    flex: 1.12 1 0 !important;
-    min-width: 0 !important;
-    height: 100% !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcZoneHeaderLabels.sapMFlexBox {
+    display: grid !important;
 
-.ConsumoRealVsPlanCategoria .crpcTrend {
-    flex: 0.88 1 0 !important;
-    min-width: 0 !important;
-    height: 100% !important;
-}
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0,1fr)
+        ) !important;
 
-.ConsumoRealVsPlanCategoria .crpcTrend>.crpcCardHead {
-    min-height: 21px !important;
-    margin-bottom: 2px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTrend .crpcTrendKpis {
-    margin-bottom: 2px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcPill {
-    padding: 1px 7px !important;
-    margin-left: 6px !important;
-    background: #EDF5FF !important;
-    border-radius: 8px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcPill .sapMText {
-    color: #087AF5 !important;
-    font-size: 7.5px !important;
-    font-weight: 900 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcMiniKpis,
-.ConsumoRealVsPlanCategoria .crpcTrendKpis {
     width: 100% !important;
-    gap: 5px !important;
-    margin-bottom: 4px !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcMiniKpi,
-.ConsumoRealVsPlanCategoria .crpcTrendKpi {
-    flex: 1 1 0 !important;
     min-width: 0 !important;
-    height: 35px !important;
-    padding: 4px 6px !important;
-    box-sizing: border-box !important;
-    border: 1px solid #E1E8F1 !important;
-    border-radius: 6px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcMiniKpi .sapUiIcon,
-.ConsumoRealVsPlanCategoria .crpcTrendKpi .sapUiIcon {
-    color: #087AF5 !important;
-    font-size: 0.82rem !important;
-    margin-right: 5px !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcZoneHeaderLabels
+.sapMText {
+    display: block !important;
 
-.ConsumoRealVsPlanCategoria .crpcMiniLabel,
-.ConsumoRealVsPlanCategoria .crpcTrendLbl {
-    color: #65758B !important;
-    font-size: 7px !important;
-    line-height: 8px !important;
-    font-weight: 800 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcMiniValue,
-.ConsumoRealVsPlanCategoria .crpcTrendVal {
-    color: #172B4D !important;
-    font-size: 8px !important;
-    line-height: 9px !important;
-    font-weight: 900 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTabs {
     width: 100% !important;
-    gap: 3px !important;
-    margin-bottom: 4px !important;
+
+    color: #718095 !important;
+
+    font-size: .43rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: .54rem !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTab {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    height: 22px !important;
-    min-height: 22px !important;
+
+/* =====================================================================
+   27. TOTAL PRINCIPAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTotalRow.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        4fr
+        16fr
+        10fr
+        8fr
+        8fr
+        10fr
+        9fr
+        7fr
+        8fr
+        8fr
+        12fr
+        7fr !important;
+
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-height: 31px !important;
+
+    margin:
+        0
+        10px !important;
+
     padding: 0 !important;
+
+    align-items: center !important;
+
+    background: #f5f7fa !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-top: 0 !important;
+
+    border-radius:
+        0
+        0
+        6px
+        6px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTab .sapMBtnInner {
-    min-width: 0 !important;
-    height: 22px !important;
-    min-height: 22px !important;
-    padding: 0 5px !important;
-    background: #F4F7FB !important;
-    border: 1px solid #DCE5F0 !important;
-    border-radius: 5px !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcTotalLabel.sapMText {
+    grid-column:
+        1 / 4 !important;
 
-.ConsumoRealVsPlanCategoria .crpcTab .sapMBtnContent {
-    font-size: 7.5px !important;
-    line-height: 20px !important;
+    padding-left: 7px !important;
+
+    color: #334158 !important;
+
+    font-size: .51rem !important;
+
     font-weight: 800 !important;
+
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTabActive .sapMBtnInner {
-    background: #087AF5 !important;
-    border-color: #087AF5 !important;
+.ConsumoRealVsPlanCategoria
+.crpcTotalCell.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #334158 !important;
+
+    font-size: .51rem !important;
+
+    font-weight: 800 !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTabActive .sapMBtnContent {
-    color: #FFFFFF !important;
+.ConsumoRealVsPlanCategoria
+.crpcTotalZones {
+    height: 100% !important;
+
+    align-items: center !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable {
-    border: 1px solid #E1E8F1 !important;
-    border-radius: 6px !important;
+
+/* =====================================================================
+   28. BOTTOM
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcBottom.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0,1.12fr)
+        minmax(0,.88fr) !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: 10px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
     overflow: hidden !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblHeaderCell {
-    height: 24px !important;
-    min-height: 24px !important;
-    box-sizing: border-box !important;
-    padding: 2px 3px !important;
-    background: #F4F7FB !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcBottom > .sapMFlexItem {
+    display: flex !important;
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblRow,
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
-    height: 21px !important;
-    min-height: 21px !important;
-    box-sizing: border-box !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
-    padding: 1px 3px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcDetailTable th .sapMText,
-.ConsumoRealVsPlanCategoria .crpcDetailTable td .sapMText {
-    color: #172B4D !important;
-    font-size: 7.2px !important;
-    line-height: 8px !important;
-    font-weight: 800 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTrigger {
-    height: 20px !important;
-    min-height: 20px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListDescription,
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText {
-    font-size: 7.5px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcLink {
-    height: 10px !important;
-    color: #087AF5 !important;
-    font-size: 8px !important;
-    line-height: 10px !important;
-    font-weight: 900 !important;
-    margin-top: 3px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcDetail>.sapMFlexItem:last-child {
-    height: 10px !important;
-    min-height: 10px !important;
-    line-height: 10px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcLegend {
-    gap: 12px !important;
-    min-height: 14px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcLegend .sapMText {
-    color: #526781 !important;
-    font-size: 7.5px !important;
-    font-weight: 800 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcLegendLine {
-    width: 17px !important;
-    height: 2px !important;
-    margin-right: 4px !important;
-    border-radius: 10px !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcPlanLine {
-    background: #93C5FD !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcRealLine {
-    background: #2563EB !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcVarLine {
-    background: repeating-linear-gradient(90deg,
-            #EF4444 0 5px,
-            transparent 5px 8px) !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcTrendSvgInner {
     width: 100% !important;
-    height: 110px !important;
-    min-height: 110px !important;
-    overflow: visible !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcTrendSvgInner svg {
-    display: block !important;
+
+/* =====================================================================
+   29. DETAIL Y TREND
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail.sapMFlexBox,
+.ConsumoRealVsPlanCategoria
+.crpcTrend.sapMFlexBox {
+    display: flex !important;
+
+    flex-direction: column !important;
+
     width: 100% !important;
     height: 100% !important;
-    overflow: visible !important;
-}
 
-.ConsumoRealVsPlanCategoria .crpcWeekAxis {
-    width: 100% !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    padding: 0 16px 0 41px !important;
-    box-sizing: border-box !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    align-items: start !important;
-    margin-top: 0 !important;
-    position: relative !important;
-    z-index: 2 !important;
-}
-
-.ConsumoRealVsPlanCategoria .crpcWeekAxis>.sapMFlexItem {
     min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcWeekName,
-.ConsumoRealVsPlanCategoria .crpcWeekDate {
-    display: block !important;
-    width: 100% !important;
-    color: #526781 !important;
-    font-size: 6.8px !important;
-    line-height: 8px !important;
-    text-align: center !important;
+
+/* =====================================================================
+   30. PILL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcPill.sapMFlexBox {
+    display: inline-flex !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    margin-left: 6px !important;
+
+    padding:
+        2px
+        7px !important;
+
+    background: #eaf4ff !important;
+
+    border:
+        1px solid
+        #d4e8ff !important;
+
+    border-radius: 999px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcPill
+.sapMText {
+    color: #1877e8 !important;
+
+    font-size: .47rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .56rem !important;
+
     white-space: nowrap !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcWeekName {
-    color: #31445F !important;
-    font-weight: 900 !important;
+
+/* =====================================================================
+   31. MINI KPIs
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpis.sapMFlexBox,
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpis.sapMFlexBox {
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-width: 0 !important;
+
+    gap: 5px !important;
+
+    margin:
+        0
+        10px
+        5px !important;
+
+    padding: 0 !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcWeekDate {
-    font-weight: 700 !important;
-}
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi.sapMFlexBox,
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi.sapMFlexBox {
+    flex: 1 1 0 !important;
 
-.ConsumoRealVsPlanCategoria .crpcSuccess {
-    height: 23px !important;
-    min-height: 23px !important;
-    margin-top: 2px !important;
-    background: #ECFDF3 !important;
-    border: 1px solid #C5F0D4 !important;
+    min-width: 0 !important;
+
+    height: 39px !important;
+    min-height: 39px !important;
+
+    padding:
+        4px
+        6px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
     border-radius: 6px !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcSuccess .sapUiIcon {
-    color: #18A957 !important;
-    font-size: 0.7rem !important;
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi
+.sapUiIcon,
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi
+.sapUiIcon {
+    flex: 0 0 auto !important;
+
     margin-right: 5px !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: .78rem !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcSuccess .sapMText {
-    color: #16884A !important;
-    font-size: 8px !important;
-    font-weight: 900 !important;
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi
+.sapMFlexItem,
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi
+.sapMFlexItem {
+    min-width: 0 !important;
 }
 
-/* Compactación adicional para laptops con poco alto */
-@media screen and (max-height: 800px) {
-    .ConsumoRealVsPlanCategoria .crpcPage {
-        padding: 5px 8px !important;
-        grid-template-rows: 28px 56px 62px minmax(275px, 1fr) minmax(235px, 1fr) !important;
-        gap: 5px !important;
-    }
+.ConsumoRealVsPlanCategoria
+.crpcMiniLabel.sapMText,
+.ConsumoRealVsPlanCategoria
+.crpcTrendLbl.sapMText {
+    color: #718095 !important;
 
-    .ConsumoRealVsPlanCategoria .crpcTitle {
-        font-size: 20px !important;
-        line-height: 22px !important;
-    }
+    font-size: .46rem !important;
 
-    .ConsumoRealVsPlanCategoria .crpcFilter {
-        height: 56px !important;
-        padding-top: 4px !important;
-        padding-bottom: 3px !important;
-    }
+    font-weight: 700 !important;
 
-    .ConsumoRealVsPlanCategoria .crpcKpi {
-        height: 62px !important;
-        padding-top: 5px !important;
-        padding-bottom: 5px !important;
-    }
+    line-height: .56rem !important;
 
-    .ConsumoRealVsPlanCategoria .crpcKpiIcon {
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcCard {
-        padding: 5px 7px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcCardHead {
-        min-height: 22px !important;
-        margin-bottom: 2px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcMiniKpis,
-    .ConsumoRealVsPlanCategoria .crpcTrendKpis {
-        margin-bottom: 2px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcMiniKpi,
-    .ConsumoRealVsPlanCategoria .crpcTrendKpi {
-        height: 30px !important;
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcTabs {
-        margin-bottom: 2px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcTab,
-    .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnInner {
-        height: 20px !important;
-        min-height: 20px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcTab .sapMBtnContent {
-        line-height: 18px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblRow,
-    .ConsumoRealVsPlanCategoria .crpcMainTable .sapMListTblCell {
-        height: 21px !important;
-        min-height: 21px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblHeaderCell {
-        height: 22px !important;
-        min-height: 22px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblRow,
-    .ConsumoRealVsPlanCategoria .crpcDetailTable .sapMListTblCell {
-        height: 19px !important;
-        min-height: 19px !important;
-    }
-
-    .ConsumoRealVsPlanCategoria .crpcTrendSvgInner {
-        height: 110px !important;
-        min-height: 110px !important;
-    }
+    white-space: nowrap !important;
 }
 
-/* Ajuste horizontal sin romper la fila de filtros */
-@media screen and (max-width: 1400px) {
-    .ConsumoRealVsPlanCategoria .crpcPage {
-        padding-left: 7px !important;
-        padding-right: 7px !important;
-    }
+.ConsumoRealVsPlanCategoria
+.crpcMiniValue.sapMText,
+.ConsumoRealVsPlanCategoria
+.crpcTrendVal.sapMText {
+    display: block !important;
 
-    .ConsumoRealVsPlanCategoria .crpcFilters {
-        grid-template-columns: 1.16fr 1fr 1fr 0.72fr 0.9fr 0.98fr 0.8fr 118px !important;
-        gap: 5px !important;
-    }
+    max-width: 100% !important;
 
-    .ConsumoRealVsPlanCategoria .crpcFilter {
-        padding-left: 7px !important;
-        padding-right: 7px !important;
-    }
+    overflow: hidden !important;
 
-    .ConsumoRealVsPlanCategoria .crpcApplyButton,
-    .ConsumoRealVsPlanCategoria .crpcApplyButton .sapMBtnInner {
-        width: 118px !important;
-    }
+    color: #334158 !important;
 
-    .ConsumoRealVsPlanCategoria .crpcFilterLabel,
-    .ConsumoRealVsPlanCategoria .crpcFilter .sapMSltLabel,
-    .ConsumoRealVsPlanCategoria .crpcFilter .sapMInputBaseInner {
-        font-size: 9.5px !important;
-    }
+    font-size: .52rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .62rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
-/* El disparador growing de SAPUI5 usa internamente alturas de lista estándar.
-   Se compacta de forma explícita para que "Más" no quede recortado. */
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTrigger {
+
+/* =====================================================================
+   32. TABS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTabs.sapMFlexBox {
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-width: 0 !important;
+
+    gap: 3px !important;
+
+    margin:
+        0
+        10px
+        5px !important;
+
+    padding: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTab.sapMBtn {
+    flex: 1 1 0 !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    height: 25px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTab
+.sapMBtnInner {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 25px !important;
+    min-height: 25px !important;
+
+    padding:
+        0
+        4px !important;
+
+    background: #f5f7fa !important;
+
+    border:
+        1px solid
+        #dce5ef !important;
+
+    border-radius: 5px !important;
+
+    box-shadow: none !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTab
+.sapMBtnContent {
+    overflow: hidden !important;
+
+    color: #526178 !important;
+
+    font-size: .47rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: 23px !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTabActive
+.sapMBtnInner {
+    background: #0a6ff5 !important;
+
+    border-color: #0a6ff5 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTabActive
+.sapMBtnContent {
+    color: #ffffff !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* =====================================================================
+   33. DETAIL TABLE
+   MARGEN REAL DE LA CARD
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable {
+    flex: 1 1 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin:
+        0
+        10px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 6px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTbl {
+    width: 100% !important;
+
+    table-layout: fixed !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblHeader,
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblHeaderCell {
+    background: #f5f7fa !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblHeaderCell {
+    height: 28px !important;
+    min-height: 28px !important;
+
+    padding:
+        3px
+        4px !important;
+
+    vertical-align: middle !important;
+
+    border-bottom:
+        1px solid
+        #e2e8f0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+th
+.sapMText {
+    color: #43516a !important;
+
+    font-size: .46rem !important;
+
+    font-weight: 800 !important;
+
+    line-height: .56rem !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblRow,
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblCell {
+    height: 26px !important;
+    min-height: 26px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblCell {
+    padding:
+        3px
+        4px !important;
+
+    vertical-align: middle !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+td
+.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    color: #334158 !important;
+
+    font-size: .47rem !important;
+
+    font-weight: 600 !important;
+
+    line-height: .58rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   34. GROWING
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMGrowingListTrigger {
     height: 24px !important;
     min-height: 24px !important;
     max-height: 24px !important;
+
     padding: 0 !important;
+
     overflow: hidden !important;
-    box-sizing: border-box !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText {
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMGrowingListTriggerText {
     display: flex !important;
+
+    height: 23px !important;
+
+    min-height: 23px !important;
+
+    padding: 0 !important;
+
     align-items: center !important;
     justify-content: center !important;
-    height: 23px !important;
-    min-height: 23px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListTriggerText .sapMSLITitle {
-    display: block !important;
-    height: auto !important;
-    min-height: 0 !important;
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMGrowingListTriggerText
+.sapMSLITitle {
     margin: 0 !important;
-    color: #0878E8 !important;
-    font-size: 9px !important;
+
+    color: #1877e8 !important;
+
+    font-size: .50rem !important;
+
     font-weight: 700 !important;
-    line-height: 12px !important;
+
+    line-height: .62rem !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMGrowingListDescription {
+    display: none !important;
+}
+
+
+/* =====================================================================
+   35. LINK INFERIOR
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcLink {
+    flex: 0 0 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-height: 16px !important;
+
+    margin:
+        4px
+        10px
+        5px !important;
+
+    color: #1877e8 !important;
+
+    font-size: .50rem !important;
+
+    font-weight: 700 !important;
+
+    line-height: .65rem !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   36. BOTÓN INFO TREND
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcHintButton.sapMBtn {
+    width: 24px !important;
+
+    min-width: 24px !important;
+    max-width: 24px !important;
+
+    height: 24px !important;
+
+    margin-left: 3px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcHintButton
+.sapMBtnInner {
+    width: 24px !important;
+    min-width: 24px !important;
+
+    height: 24px !important;
+    min-height: 24px !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcHintButton
+.sapMBtnIcon {
+    color: #0a6ff5 !important;
+
+    font-size: .72rem !important;
+
+    line-height: 22px !important;
+}
+
+
+/* =====================================================================
+   37. LEYENDA TENDENCIA
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcLegend.sapMFlexBox {
+    flex: 0 0 18px !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-height: 18px !important;
+
+    gap: 12px !important;
+
+    margin:
+        0
+        10px
+        3px !important;
+
+    align-items: center !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcLegend
+.sapMText {
+    color: #526178 !important;
+
+    font-size: .48rem !important;
+
+    font-weight: 700 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcLegendLine {
+    width: 17px !important;
+
+    min-width: 17px !important;
+
+    height: 2px !important;
+
+    margin-right: 4px !important;
+
+    border-radius: 999px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcPlanLine {
+    background: #93c5fd !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcRealLine {
+    background: #2563eb !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcVarLine {
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #ef4444 0 5px,
+            transparent 5px 8px
+        ) !important;
+}
+
+
+/* =====================================================================
+   38. GRÁFICA
+   USA TODO EL ESPACIO DISPONIBLE
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendSvg {
+    display: block !important;
+
+    flex: 1 1 auto !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    min-height: 72px !important;
+
+    margin:
+        0
+        10px !important;
+
+    overflow: hidden !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendSvgInner {
+    width: 100% !important;
+
+    height: 100% !important;
+    min-height: 72px !important;
+
+    overflow: hidden !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendSvgInner
+svg {
+    display: block !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
     overflow: visible !important;
 }
 
-.ConsumoRealVsPlanCategoria .crpcDetailTable .sapMGrowingListDescription {
+
+/* =====================================================================
+   39. EJE SEMANAL
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekAxis.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(
+            5,
+            minmax(0,1fr)
+        ) !important;
+
+    flex: 0 0 28px !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    margin:
+        0
+        10px !important;
+
+    padding:
+        0
+        16px
+        0
+        41px !important;
+
+    align-items: start !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekAxis > .sapMFlexItem {
+    min-width: 0 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekName.sapMText,
+.ConsumoRealVsPlanCategoria
+.crpcWeekDate.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #65748b !important;
+
+    font-size: .43rem !important;
+
+    line-height: .54rem !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekName.sapMText {
+    color: #334158 !important;
+
+    font-weight: 800 !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekDate.sapMText {
+    font-weight: 600 !important;
+}
+
+
+/* =====================================================================
+   40. MENSAJE VERDE
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcSuccess.sapMFlexBox {
+    flex: 0 0 26px !important;
+
+    width:
+        calc(100% - 20px) !important;
+
+    height: 26px !important;
+    min-height: 26px !important;
+
+    margin:
+        2px
+        10px
+        7px !important;
+
+    padding:
+        0
+        7px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    background: #ecfdf3 !important;
+
+    border:
+        1px solid
+        #c5f0d4 !important;
+
+    border-radius: 6px !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSuccess
+.sapUiIcon {
+    flex: 0 0 auto !important;
+
+    margin-right: 5px !important;
+
+    color: #18a957 !important;
+
+    font-size: .64rem !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcSuccess
+.sapMText {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #16884a !important;
+
+    font-size: .49rem !important;
+
+    font-weight: 800 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   41. NO DATA
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListNoData,
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListNoData {
+    color: #526178 !important;
+
+    font-size: .65rem !important;
+}
+
+
+/* =====================================================================
+   42. OCULTAR COLUMNAS TÉCNICAS SAP
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHighlightCol,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblHighlightCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblNavigatedCol,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblNavigatedCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblSelCol,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblSelColCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblDummyCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcMainTable
+.sapMListTblNavCol,
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblHighlightCol,
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblHighlightCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblDummyCell,
+
+.ConsumoRealVsPlanCategoria
+.crpcDetailTable
+.sapMListTblNavCol {
     display: none !important;
+
+    width: 0 !important;
+
+    min-width: 0 !important;
+    max-width: 0 !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    border: 0 !important;
+}
+
+
+/* =====================================================================
+   43. FOCUS
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.sapMBtnInner::after,
+
+.ConsumoRealVsPlanCategoria
+.sapMBtn:focus
+.sapMFocusable::before {
+    display: none !important;
+}
+
+
+/* =====================================================================
+   44. LAPTOP 1366 x 768 / ALTURA REDUCIDA
+   ===================================================================== */
+
+@media screen
+and (min-width: 1051px)
+and (max-height: 720px) {
+
+    .ConsumoRealVsPlanCategoria
+    .crpcPage.sapMFlexBox {
+        grid-template-rows:
+            30px
+            48px
+            62px
+            minmax(190px,1.08fr)
+            minmax(205px,.92fr) !important;
+
+        padding:
+            6px
+            8px
+            5px
+            18px !important;
+
+        gap: 5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcHeader {
+        height: 30px !important;
+        min-height: 30px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTitle.sapMTitle {
+        font-size: 1.38rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter {
+        height: 48px !important;
+
+        min-height: 48px !important;
+        max-height: 48px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox {
+        gap: 5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter {
+        padding:
+            3px
+            7px
+            2px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilterLabel.sapMLabel {
+        height: 12px !important;
+
+        min-height: 12px !important;
+
+        font-size: .54rem !important;
+
+        line-height: 12px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter
+    .sapMSltLabel,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter
+    .sapMInputBaseInner {
+        font-size: .59rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters > .sapMFlexItem:last-child,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcApplyButton.sapMBtn {
+        height: 48px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcApplyButton
+    .sapMBtnInner {
+        height: 38px !important;
+
+        min-height: 38px !important;
+
+        margin:
+            5px
+            0 !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis > .sapMFlexItem,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpi {
+        height: 62px !important;
+
+        min-height: 62px !important;
+        max-height: 62px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis.sapMFlexBox {
+        gap: 6px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpi {
+        padding:
+            6px
+            7px
+            6px
+            10px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpiIcon.sapMFlexBox {
+        flex-basis: 35px !important;
+
+        width: 35px !important;
+        min-width: 35px !important;
+        max-width: 35px !important;
+
+        height: 35px !important;
+        min-height: 35px !important;
+        max-height: 35px !important;
+
+        margin-right: 6px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpiIcon
+    .sapUiIcon {
+        font-size: 1rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpiLabel.sapMText {
+        font-size: .55rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpiNumber.sapMText {
+        font-size: .98rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpiSub.sapMText {
+        font-size: .44rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcCardHead.sapMFlexBox {
+        min-height: 24px !important;
+
+        margin:
+            5px
+            8px
+            3px !important;
+
+        width:
+            calc(100% - 16px) !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTotalRow,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpis,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpis,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTabs,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetailTable,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcLink,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcLegend,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendSvg,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcWeekAxis,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcSuccess {
+        width:
+            calc(100% - 16px) !important;
+
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable
+    .sapMListTblHeaderCell {
+        height: 33px !important;
+
+        min-height: 33px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable
+    .sapMListTblRow,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable
+    .sapMListTblCell {
+        height: 27px !important;
+
+        min-height: 27px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpi.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpi.sapMFlexBox {
+        height: 33px !important;
+
+        min-height: 33px !important;
+
+        padding:
+            2px
+            5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTabs.sapMFlexBox {
+        margin-bottom: 3px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTab.sapMBtn,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTab
+    .sapMBtnInner {
+        height: 22px !important;
+
+        min-height: 22px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTab
+    .sapMBtnContent {
+        line-height: 20px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetailTable
+    .sapMListTblHeaderCell {
+        height: 24px !important;
+
+        min-height: 24px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetailTable
+    .sapMListTblRow,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetailTable
+    .sapMListTblCell {
+        height: 22px !important;
+
+        min-height: 22px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcWeekAxis.sapMFlexBox {
+        height: 24px !important;
+
+        min-height: 24px !important;
+
+        flex-basis: 24px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcSuccess.sapMFlexBox {
+        height: 23px !important;
+
+        min-height: 23px !important;
+
+        flex-basis: 23px !important;
+
+        margin-bottom: 5px !important;
+    }
+}
+
+
+/* =====================================================================
+   45. ANCHO MEDIO
+   ===================================================================== */
+
+@media screen
+and (max-width: 1400px) {
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox {
+        grid-template-columns:
+            .92fr
+            .98fr
+            .98fr
+            .72fr
+            .85fr
+            .92fr
+            .78fr
+            118px !important;
+
+        gap: 5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter {
+        padding-left: 7px !important;
+        padding-right: 7px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilterLabel.sapMLabel {
+        font-size: .56rem !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter
+    .sapMSltLabel,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilter
+    .sapMInputBaseInner {
+        font-size: .61rem !important;
+    }
+}
+
+
+/* =====================================================================
+   46. TABLET
+   ===================================================================== */
+
+@media screen
+and (max-width: 1050px) {
+
+    .ConsumoRealVsPlanCategoria,
+    .ConsumoRealVsPlanCategoria.sapMPage,
+    .ConsumoRealVsPlanCategoria .sapMPageScroll {
+        height: auto !important;
+
+        overflow: auto !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcPage.sapMFlexBox {
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        padding:
+            9px
+            8px
+            12px !important;
+
+        overflow: visible !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcHeader {
+        height: auto !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTitle.sapMTitle {
+        font-size: 1.20rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0,1fr)
+            ) !important;
+
+        height: auto !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters > .sapMFlexItem:last-child {
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcApplyButton.sapMBtn {
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis.sapMFlexBox {
+        height: auto !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTableCard {
+        min-height: 280px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable {
+        overflow-x: auto !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMainTable
+    .sapMListTbl {
+        min-width: 1100px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcBottom.sapMFlexBox {
+        grid-template-columns:
+            1fr !important;
+
+        height: auto !important;
+
+        overflow: visible !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetail,
+    .ConsumoRealVsPlanCategoria
+    .crpcTrend {
+        min-height: 260px !important;
+    }
+}
+
+
+/* =====================================================================
+   47. MÓVIL
+   ===================================================================== */
+
+@media screen
+and (max-width: 760px) {
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            ) !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis.sapMFlexBox {
+        grid-template-columns:
+            1fr !important;
+
+        overflow: visible !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpis > .sapMFlexItem,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcKpi {
+        height: 76px !important;
+
+        min-height: 76px !important;
+
+        max-height: 76px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcCardHead.sapMFlexBox {
+        flex-wrap: wrap !important;
+
+        height: auto !important;
+
+        gap: 5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcSearch.sapMSF {
+        width: 155px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpis.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpis.sapMFlexBox {
+        flex-wrap: wrap !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpi.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpi.sapMFlexBox {
+        flex:
+            1
+            1
+            calc(50% - 5px) !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTabs.sapMFlexBox {
+        flex-wrap: wrap !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTab.sapMBtn {
+        flex:
+            1
+            1
+            calc(33.333% - 3px) !important;
+    }
+}
+
+
+/* =====================================================================
+   48. MÓVIL PEQUEÑO
+   ===================================================================== */
+
+@media screen
+and (max-width: 480px) {
+
+    .ConsumoRealVsPlanCategoria
+    .crpcFilters.sapMFlexBox {
+        grid-template-columns:
+            1fr !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcApplyButton.sapMBtn,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcApplyButton
+    .sapMBtnInner {
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpis.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpis.sapMFlexBox {
+        flex-direction: column !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpi.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpi.sapMFlexBox {
+        width: 100% !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTab.sapMBtn {
+        flex:
+            1
+            1
+            calc(50% - 3px) !important;
+    }
+}
+/* =====================================================================
+   AJUSTE FINAL - CARDS INFERIORES
+   1. Alineación icono + texto
+   2. Distribución correcta del alto disponible
+   3. Evitar contenido cortado
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. REPARTO VERTICAL DE TODA LA PANTALLA
+
+   La tabla superior ya no se queda con demasiado espacio vacío.
+   Damos más espacio a Detalle + Tendencia.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcPage.sapMFlexBox {
+    grid-template-rows:
+        36px
+        54px
+        76px
+        minmax(205px, .82fr)
+        minmax(260px, 1.18fr) !important;
+}
+
+
+/* =====================================================================
+   2. FILA INFERIOR
+   Usa TODO el espacio que recibe.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcBottom.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        minmax(0, 1.12fr)
+        minmax(0, .88fr) !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    gap: 10px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    align-items: stretch !important;
+}
+
+.ConsumoRealVsPlanCategoria
+.crpcBottom > .sapMFlexItem {
+    display: flex !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    align-self: stretch !important;
+}
+
+
+/* =====================================================================
+   3. LAS DOS CARDS INFERIORES OCUPAN EL ALTO COMPLETO
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail.sapMFlexBox,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend.sapMFlexBox {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   4. MINI KPIs
+   Icono y texto perfectamente centrados.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpis.sapMFlexBox,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpis.sapMFlexBox {
+    display: flex !important;
+
+    flex: 0 0 40px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 40px !important;
+    min-height: 40px !important;
+
+    gap: 5px !important;
+
+    margin:
+        0
+        10px
+        5px !important;
+
+    padding: 0 !important;
+
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+}
+
+
+/* cada mini card */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi.sapMFlexBox,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi.sapMFlexBox {
+    display: flex !important;
+
+    flex: 1 1 0 !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+
+    margin: 0 !important;
+
+    padding:
+        4px
+        7px !important;
+
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 6px !important;
+}
+
+
+/* =====================================================================
+   5. WRAPPER DEL ICONO
+   SAPUI5 puede insertar sapMFlexItem.
+   Lo controlamos explícitamente.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi > .sapMFlexItem:first-child,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi > .sapMFlexItem:first-child {
+    display: flex !important;
+
+    flex: 0 0 18px !important;
+
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    height: 100% !important;
+
+    margin:
+        0
+        7px
+        0
+        0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    align-self: stretch !important;
+}
+
+
+/* icono */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi .sapUiIcon,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi .sapUiIcon {
+    display: flex !important;
+
+    flex: 0 0 18px !important;
+
+    width: 18px !important;
+    min-width: 18px !important;
+
+    height: 18px !important;
+    min-height: 18px !important;
+
+    margin:
+        0
+        7px
+        0
+        0 !important;
+
+    padding: 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    align-self: center !important;
+
+    color: #0a6ff5 !important;
+
+    font-size: .82rem !important;
+
+    line-height: 18px !important;
+
+    vertical-align: middle !important;
+}
+
+
+/* Si el icono está dentro del wrapper SAP,
+   quitamos el margen duplicado */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi > .sapMFlexItem:first-child
+.sapUiIcon,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi > .sapMFlexItem:first-child
+.sapUiIcon {
+    margin: 0 !important;
+}
+
+
+/* =====================================================================
+   6. BLOQUE DE TEXTO DE LA MINI KPI
+   Valor y label quedan centrados respecto al icono.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi > .sapMFlexItem:last-child,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi > .sapMFlexItem:last-child {
+    display: flex !important;
+
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniKpi > .sapMFlexItem:last-child > .sapMFlexBox,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendKpi > .sapMFlexItem:last-child > .sapMFlexBox {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    justify-content: center !important;
+    align-items: flex-start !important;
+}
+
+
+/* =====================================================================
+   7. TEXTO MINI KPI
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniLabel.sapMText,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendLbl.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 1px 0 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #718095 !important;
+
+    font-size: .46rem !important;
+    font-weight: 700 !important;
+
+    line-height: .58rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcMiniValue.sapMText,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrendVal.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    color: #334158 !important;
+
+    font-size: .54rem !important;
+    font-weight: 800 !important;
+
+    line-height: .66rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   8. HEADER DE LAS CARDS INFERIORES
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail > .crpcCardHead,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend > .crpcCardHead {
+    flex: 0 0 27px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 27px !important;
+    min-height: 27px !important;
+
+    margin:
+        6px
+        10px
+        4px !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   9. CARD DETALLE
+   La tabla crece y ocupa todo el espacio disponible.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail
+.crpcTabs.sapMFlexBox {
+    flex: 0 0 25px !important;
+
+    height: 25px !important;
+    min-height: 25px !important;
+
+    margin-bottom: 4px !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail
+.crpcDetailTable {
+    flex: 1 1 0 !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: auto !important;
+
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin:
+        0
+        10px !important;
+
+    overflow: hidden !important;
+}
+
+
+/* No data ocupa el espacio de la tabla */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail
+.crpcDetailTable
+.sapMListNoData {
+    height: 100% !important;
+
+    min-height: 44px !important;
+}
+
+
+/* link siempre visible abajo */
+
+.ConsumoRealVsPlanCategoria
+.crpcDetail
+.crpcLink {
+    flex: 0 0 18px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 18px !important;
+    min-height: 18px !important;
+
+    margin:
+        4px
+        10px
+        5px !important;
+
+    overflow: visible !important;
+
+    line-height: 16px !important;
+}
+
+
+/* =====================================================================
+   10. CARD TENDENCIA
+   ESTA ES LA QUE SE ESTABA CORTANDO.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend {
+    overflow: hidden !important;
+}
+
+
+/* leyenda compacta */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcLegend.sapMFlexBox {
+    flex: 0 0 18px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 18px !important;
+    min-height: 18px !important;
+
+    margin:
+        0
+        10px
+        2px !important;
+
+    padding: 0 !important;
+
+    align-items: center !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   11. GRÁFICA
+   Usa TODO el espacio que quede entre leyenda y semanas.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcTrendSvg {
+    display: block !important;
+
+    flex: 1 1 0 !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: auto !important;
+
+    min-height: 55px !important;
+    max-height: none !important;
+
+    margin:
+        0
+        10px !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcTrendSvg > div,
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcTrendSvgInner {
+    display: block !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcTrendSvgInner svg {
+    display: block !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+}
+
+
+/* =====================================================================
+   12. SEMANAS
+   Siempre quedan visibles.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcWeekAxis.sapMFlexBox {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(5, minmax(0,1fr)) !important;
+
+    flex: 0 0 31px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 31px !important;
+    min-height: 31px !important;
+
+    margin:
+        1px
+        10px
+        0 !important;
+
+    padding:
+        0
+        16px
+        0
+        41px !important;
+
+    align-items: start !important;
+
+    overflow: visible !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekAxis > .sapMFlexItem {
+    min-width: 0 !important;
+
+    overflow: visible !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekName.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    color: #334158 !important;
+
+    font-size: .43rem !important;
+    font-weight: 800 !important;
+
+    line-height: .56rem !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+}
+
+
+.ConsumoRealVsPlanCategoria
+.crpcWeekDate.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 1px !important;
+
+    color: #65748b !important;
+
+    font-size: .42rem !important;
+    font-weight: 600 !important;
+
+    line-height: .54rem !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================================
+   13. MENSAJE VERDE
+   Nunca se corta.
+   ===================================================================== */
+
+.ConsumoRealVsPlanCategoria
+.crpcTrend
+.crpcSuccess.sapMFlexBox {
+    display: flex !important;
+
+    flex: 0 0 26px !important;
+
+    width: calc(100% - 20px) !important;
+
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+
+    margin:
+        3px
+        10px
+        6px !important;
+
+    padding:
+        0
+        7px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================================
+   14. LAPTOP / ALTURA MENOR
+   Mantiene la misma lógica sin cortar contenido.
+   ===================================================================== */
+
+@media screen
+and (min-width: 761px)
+and (max-height: 720px) {
+
+    .ConsumoRealVsPlanCategoria
+    .crpcPage.sapMFlexBox {
+        grid-template-rows:
+            30px
+            48px
+            62px
+            minmax(170px, .78fr)
+            minmax(235px, 1.22fr) !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpis.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpis.sapMFlexBox {
+        flex-basis: 34px !important;
+
+        height: 34px !important;
+        min-height: 34px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcMiniKpi.sapMFlexBox,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrendKpi.sapMFlexBox {
+        height: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+
+        padding:
+            2px
+            5px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcDetail > .crpcCardHead,
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrend > .crpcCardHead {
+        flex-basis: 24px !important;
+
+        height: 24px !important;
+        min-height: 24px !important;
+
+        margin-top: 4px !important;
+        margin-bottom: 2px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrend
+    .crpcWeekAxis.sapMFlexBox {
+        flex-basis: 27px !important;
+
+        height: 27px !important;
+        min-height: 27px !important;
+    }
+
+
+    .ConsumoRealVsPlanCategoria
+    .crpcTrend
+    .crpcSuccess.sapMFlexBox {
+        flex-basis: 23px !important;
+
+        height: 23px !important;
+        min-height: 23px !important;
+        max-height: 23px !important;
+
+        margin-bottom: 4px !important;
+    }
 }

@@ -1,661 +1,1086 @@
 /* ================================================================
    DETALLE DE MECÁNICOS
-   ARCHIVO COMPLETO
-   ================================================================ */
-
-/* ================================================================
-   PANTALLA GENERAL
+   ESTÁNDAR VISUAL UNIFICADO
    ================================================================ */
 
 .dmView,
 .dmPage,
-.dmPage .sapMPage,
+.dmPage.sapMPage,
 .dmPage .sapMPageBgStandard,
 .dmPage .sapMPageCont,
 .dmPage .sapMPageEnableScrolling,
 .dmPage .sapMPageScroll {
     width: 100% !important;
     height: 100% !important;
-    max-height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     overflow: hidden !important;
-    background: #f6f8fc !important;
+
+    background: #f7f9fc !important;
 }
 
-.dmDashboard {
+
+.dmPage,
+.dmPage *,
+.dmPage *::before,
+.dmPage *::after {
+    box-sizing: border-box !important;
+}
+
+
+/* ================================================================
+   DASHBOARD
+   ================================================================ */
+
+.dmPage
+.dmDashboard.sapMFlexBox {
     display: flex !important;
     flex-direction: column !important;
 
     width: 100% !important;
     height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
 
-    padding: 9px 12px 9px 18px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding:
+        9px
+        14px
+        8px
+        18px !important;
+
+    gap: 8px !important;
 
     overflow: hidden !important;
-    background: #f6f8fc !important;
 
-    box-sizing: border-box !important;
+    background: #f7f9fc !important;
 }
 
-.dmDashboard,
-.dmDashboard * {
-    box-sizing: border-box !important;
-}
 
-.dmDashboard > .sapMFlexItem,
-.dmContentArea > .sapMFlexItem,
-.dmDashboardRow > .sapMFlexItem,
-.dmKpiRow > .sapMFlexItem {
+.dmPage
+.dmDashboard
+> .sapMFlexItem,
+
+.dmPage
+.dmContentArea
+> .sapMFlexItem,
+
+.dmPage
+.dmDashboardRow
+> .sapMFlexItem,
+
+.dmPage
+.dmKpiRow
+> .sapMFlexItem,
+
+.dmPage
+.dmFilters
+> .sapMFlexItem {
     min-width: 0 !important;
     min-height: 0 !important;
 }
+
 
 /* ================================================================
    ENCABEZADO
    ================================================================ */
 
-.dmHeaderBox {
-    flex: 0 0 auto !important;
+.dmPage
+.dmHeaderBox.sapMFlexBox {
+    flex: 0 0 48px !important;
 
     width: 100% !important;
-    padding: 1px 6px 7px !important;
+    height: 48px !important;
 
-    border-top: 1px solid #dce4ef !important;
+    min-height: 48px !important;
+
+    padding:
+        0
+        2px !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
 }
 
+
+.dmPage
 .dmTitle.sapMTitle {
-    margin: 4px 0 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
     color: #13214a !important;
-    font-size: 1.48rem !important;
+
+    font-size: 1.72rem !important;
     font-weight: 800 !important;
-    line-height: 1.02 !important;
+
+    line-height: 1.05 !important;
+
     letter-spacing: -0.03em !important;
+
+    white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmSubtitle.sapMText {
-    margin-top: 4px !important;
+    display: block !important;
+
+    width: 100% !important;
+
+    margin-top: 3px !important;
+
+    overflow: hidden !important;
 
     color: #65748b !important;
-    font-size: 0.65rem !important;
-    font-weight: 600 !important;
-    line-height: 1.1 !important;
+
+    font-size: .73rem !important;
+    font-weight: 400 !important;
+
+    line-height: 1.15 !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
+
 
 /* ================================================================
    FILTROS
    ================================================================ */
 
-.dmFilters {
+.dmPage
+.dmFilters.sapMFlexBox {
+    flex: 0 0 54px !important;
+
     display: flex !important;
-    flex: 0 0 auto !important;
 
     width: 100% !important;
-    min-width: 0 !important;
+    height: 54px !important;
 
-    gap: 6px !important;
-    padding: 0 1px !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    gap: 8px !important;
 
     overflow: visible !important;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
 }
 
-.dmFilterItem {
+
+.dmPage
+.dmFilterItem.sapMFlexBox {
     flex: 1 1 0 !important;
 
-    min-width: 0 !important;
-    height: 49px !important;
-    min-height: 49px !important;
+    width: 0 !important;
+    height: 54px !important;
 
-    padding: 5px 8px 4px !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+
+    padding:
+        6px
+        10px
+        5px !important;
 
     justify-content: center !important;
 
     overflow: hidden !important;
+
     background: #ffffff !important;
-    border: 1px solid #dfe6f0 !important;
-    border-radius: 8px !important;
 
-    box-shadow: 0 2px 7px rgba(25, 45, 79, 0.05) !important;
+    border:
+        1px solid
+        #e3e9f2 !important;
+
+    border-radius: 9px !important;
+
+    box-shadow:
+        0 2px 7px
+        rgba(
+            25,
+            45,
+            79,
+            .05
+        ) !important;
 }
 
+
+.dmPage
 .dmFilterPeriod {
-    flex-basis: 88px !important;
+    flex-grow: .72 !important;
 }
 
+
+.dmPage
 .dmFilterDate {
-    flex-basis: 112px !important;
+    flex-grow: 1.08 !important;
 }
 
+
+.dmPage
 .dmFilterZone {
-    flex-basis: 84px !important;
+    flex-grow: .78 !important;
 }
 
+
+.dmPage
 .dmFilterSupervisor {
-    flex-basis: 104px !important;
+    flex-grow: .88 !important;
 }
 
+
+.dmPage
 .dmFilterTurno {
-    flex-basis: 82px !important;
+    flex-grow: .78 !important;
 }
 
+
+.dmPage
 .dmFilterService {
-    flex-basis: 118px !important;
+    flex-grow: 1.03 !important;
 }
 
+
+.dmPage
 .dmFilterSpecialty {
-    flex-basis: 104px !important;
+    flex-grow: .94 !important;
 }
 
+
+.dmPage
 .dmFilterStatus {
-    flex-basis: 88px !important;
+    flex-grow: .78 !important;
 }
 
+
+.dmPage
 .dmFilterLabel.sapMLabel {
     display: block !important;
 
-    height: 12px !important;
+    width: 100% !important;
+    height: 14px !important;
+
     margin: 0 !important;
 
-    color: #728096 !important;
-    font-size: 0.54rem !important;
-    font-weight: 700 !important;
-    line-height: 12px !important;
-}
+    padding:
+        0
+        2px !important;
 
-/* ================================================================
-   SELECTS
-   ================================================================ */
+    color: #78869a !important;
 
-.dmFilterControl.sapMSlt {
-    width: 100% !important;
-    height: 1.55rem !important;
-    min-height: 1.55rem !important;
+    font-size: .61rem !important;
+    font-weight: 600 !important;
 
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
+    line-height: 14px !important;
 
-    box-shadow: none !important;
-}
-
-.dmFilterControl.sapMSlt:hover,
-.dmFilterControl.sapMSltPressed,
-.dmFilterControl.sapMSlt.sapMSltPressed {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-}
-
-.dmFilterControl.sapMSlt .sapMSltLabel {
-    height: 1.55rem !important;
-
-    padding: 0 1.35rem 0 0 !important;
-
-    overflow: hidden !important;
-
-    color: #1e2e4c !important;
-    font-size: 0.63rem !important;
-    font-weight: 700 !important;
-    line-height: 1.55rem !important;
-
-    text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
 
-.dmFilterControl.sapMSlt .sapMSltArrow {
-    width: 1.2rem !important;
-    height: 1.55rem !important;
 
-    color: #0a6ff5 !important;
-    font-size: 0.68rem !important;
-    line-height: 1.55rem !important;
-}
+.dmPage
+.dmFilterControl.sapMSlt,
 
-.dmFilterControl.sapMSlt::after,
-.dmFilterControl.sapMSlt:focus::after {
-    border: 0 !important;
-    outline: 0 !important;
-}
+.dmPage
+.dmDateControl.sapMInputBase,
 
-/* ================================================================
-   DATE PICKER
-   ================================================================ */
-
-.dmDateControl.sapMInputBase {
+.dmPage
+.dmDateControl
+.sapMInputBaseContentWrapper {
     width: 100% !important;
-    height: 1.55rem !important;
-    min-height: 1.55rem !important;
-}
 
-.dmDateControl.sapMInputBase .sapMInputBaseContentWrapper {
-    height: 1.55rem !important;
-    min-height: 1.55rem !important;
+    height: 1.62rem !important;
+    min-height: 1.62rem !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
 
     background: transparent !important;
+
     border: 0 !important;
     border-radius: 0 !important;
 
     box-shadow: none !important;
 }
 
-.dmDateControl.sapMInputBase .sapMInputBaseInner {
-    height: 1.55rem !important;
 
-    padding: 0 1.5rem 0 0 !important;
+.dmPage
+.dmFilterControl
+.sapMSltLabel,
 
-    color: #1e2e4c !important;
-    background: transparent !important;
+.dmPage
+.dmDateControl
+.sapMInputBaseInner {
+    height: 1.62rem !important;
 
-    font-size: 0.62rem !important;
-    font-weight: 700 !important;
-    line-height: 1.55rem !important;
-}
-
-.dmDateControl .sapMInputBaseIconContainer,
-.dmDateControl .sapMInputBaseIcon {
-    width: 1.3rem !important;
-    height: 1.55rem !important;
-    min-height: 1.55rem !important;
-
-    color: #0a6ff5 !important;
-    background: transparent !important;
-
-    font-size: 0.71rem !important;
-    line-height: 1.55rem !important;
-}
-
-.dmDateControl .sapMInputBaseContentWrapper::before,
-.dmDateControl .sapMInputBaseContentWrapper::after {
-    display: none !important;
-}
-
-/* ================================================================
-   BOTÓN APLICAR FILTROS
-   ================================================================ */
-
-.dmApplyButtonBox {
-    flex: 0 0 108px !important;
-
-    width: 108px !important;
-    min-width: 108px !important;
-
-    height: 49px !important;
-    min-height: 49px !important;
-}
-
-.dmApplyBtn {
-    width: 100% !important;
-}
-
-.dmApplyBtn .sapMBtnInner {
-    width: 100% !important;
-
-    height: 1.95rem !important;
-    min-height: 1.95rem !important;
-
-    padding: 0 0.5rem !important;
-
-    background: #0a6ff5 !important;
-    border: 0 !important;
-    border-radius: 5px !important;
-
-    box-shadow: 0 3px 8px rgba(10, 111, 245, 0.24) !important;
-    text-shadow: none !important;
-}
-
-.dmApplyBtn:hover .sapMBtnInner {
-    background: #0866e5 !important;
-}
-
-.dmApplyBtn .sapMBtnContent,
-.dmApplyBtn .sapMBtnIcon {
-    color: #ffffff !important;
-
-    font-size: 0.59rem !important;
-    font-weight: 700 !important;
-    line-height: 1.95rem !important;
-}
-
-.dmApplyBtn .sapMBtnIcon {
-    font-size: 0.7rem !important;
-}
-
-.dmApplyBtn .sapMBtnInner::after,
-.dmApplyBtn .sapMBtnInner:focus::after,
-.dmApplyBtn .sapMFocusable:focus::after {
-    border: 0 !important;
-    outline: 0 !important;
-}
-
-/* ================================================================
-   KPI
-   ================================================================ */
-
-.dmKpiRow {
-    display: flex !important;
-    flex: 0 0 auto !important;
-
-    width: 100% !important;
-
-    gap: 8px !important;
-    margin-top: 8px !important;
-}
-
-.dmKpiCard {
-    position: relative !important;
-
-    min-width: 0 !important;
-    min-height: 69px !important;
-
-    padding: 8px 10px 8px 12px !important;
+    padding:
+        0
+        1.4rem
+        0
+        2px !important;
 
     overflow: hidden !important;
 
-    background: #ffffff;
-    border: 1px solid #e4eaf2;
-    border-radius: 8px;
+    color: #1e2e4c !important;
 
-    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.06);
+    background: transparent !important;
+
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.62rem !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
+
+.dmPage
+.dmFilterControl
+.sapMSltArrow,
+
+.dmPage
+.dmDateControl
+.sapMInputBaseIconContainer,
+
+.dmPage
+.dmDateControl
+.sapMInputBaseIcon {
+    width: 1.25rem !important;
+    height: 1.62rem !important;
+
+    min-width: 1.25rem !important;
+
+    color: #0a6ff5 !important;
+
+    background: transparent !important;
+
+    font-size: .70rem !important;
+
+    line-height: 1.62rem !important;
+}
+
+
+.dmPage
+.dmDateControl
+.sapMInputBaseContentWrapper::before,
+
+.dmPage
+.dmDateControl
+.sapMInputBaseContentWrapper::after,
+
+.dmPage
+.dmFilterControl.sapMSlt::after,
+
+.dmPage
+.dmFilterControl.sapMSlt:focus::after {
+    display: none !important;
+}
+
+
+/* ================================================================
+   BOTÓN APLICAR
+   ================================================================ */
+
+.dmPage
+.dmApplyButtonBox.sapMFlexBox {
+    flex: 0 0 118px !important;
+
+    width: 118px !important;
+    height: 54px !important;
+
+    min-width: 118px !important;
+    min-height: 54px !important;
+
+    max-width: 118px !important;
+
+    padding: 0 !important;
+}
+
+
+.dmPage
+.dmApplyButtonBox
+> .sapMFlexItem {
+    width: 100% !important;
+}
+
+
+.dmPage
+.dmApplyBtn.sapMBtn {
+    width: 100% !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.dmPage
+.dmApplyBtn
+.sapMBtnInner {
+    display: flex !important;
+
+    width: 100% !important;
+
+    height: 3rem !important;
+    min-height: 3rem !important;
+
+    padding:
+        0
+        .72rem !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 5px !important;
+
+    background: #0a6ff5 !important;
+
+    border: 0 !important;
+
+    border-radius: .7rem !important;
+
+    box-shadow:
+        0 3px 8px
+        rgba(
+            10,
+            111,
+            245,
+            .24
+        ) !important;
+}
+
+
+.dmPage
+.dmApplyBtn
+.sapMBtnContent,
+
+.dmPage
+.dmApplyBtn
+.sapMBtnIcon {
+    position: static !important;
+
+    color: #ffffff !important;
+
+    font-size: .63rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+.dmPage
+.dmApplyBtn
+.sapMBtnIcon {
+    font-size: .72rem !important;
+}
+
+
+/* ================================================================
+   KPIS
+   ================================================================ */
+
+.dmPage
+.dmKpiRow.sapMFlexBox {
+    flex: 0 0 76px !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-height: 76px !important;
+
+    gap: 9px !important;
+
+    overflow: hidden !important;
+}
+
+
+.dmPage
+.dmKpiRow
+> .sapMFlexItem {
+    flex: 1 1 0 !important;
+
+    width: 0 !important;
+    height: 76px !important;
+}
+
+
+.dmPage
+.dmKpiCard.sapMFlexBox {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 76px !important;
+
+    min-width: 0 !important;
+    min-height: 76px !important;
+
+    padding:
+        10px
+        9px
+        10px
+        12px !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+
+    border:
+        1px solid
+        #e4eaf2 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            20,
+            39,
+            70,
+            .06
+        ) !important;
+}
+
+
+.dmPage
 .dmKpiCard::before {
-    position: absolute;
+    position: absolute !important;
 
-    top: 0;
-    bottom: 0;
-    left: 0;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
 
-    width: 3px;
+    width: 3px !important;
 
-    border-radius: 8px 0 0 8px;
-
-    content: "";
+    content: "" !important;
 }
 
-.dmKpiIconCircle {
-    flex: 0 0 39px !important;
 
-    width: 39px !important;
-    height: 39px !important;
-    min-width: 39px !important;
-    min-height: 39px !important;
+.dmPage
+.dmKpiIconCircle.sapMFlexBox {
+    flex: 0 0 43px !important;
 
-    margin-right: 9px !important;
+    width: 43px !important;
+    height: 43px !important;
+
+    min-width: 43px !important;
+    min-height: 43px !important;
+
+    max-width: 43px !important;
+    max-height: 43px !important;
+
+    margin-right: 8px !important;
 
     border-radius: 50% !important;
 }
 
+
+.dmPage
 .dmKpiIcon {
-    font-size: 1.13rem !important;
+    font-size: 1.28rem !important;
 }
 
-.dmKpiContent {
+
+.dmPage
+.dmKpiContent.sapMFlexBox {
+    flex: 1 1 auto !important;
+
     min-width: 0 !important;
-    justify-content: center !important;
+
+    overflow: hidden !important;
 }
 
-.dmKpiValue.sapMText {
-    font-size: 1.13rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
+
+.dmPage
+.dmKpiLabel.sapMText,
+
+.dmPage
+.dmKpiValue.sapMText,
+
+.dmPage
+.dmKpiHelper.sapMText {
+    display: block !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmKpiLabel.sapMText {
+    color: #43516a !important;
+
+    font-size: .62rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.15 !important;
+}
+
+
+.dmPage
+.dmKpiValue.sapMText {
     margin-top: 2px !important;
 
-    color: #43516a !important;
-    font-size: 0.57rem !important;
-    font-weight: 700 !important;
-    line-height: 1.08 !important;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+
+    line-height: 1.05 !important;
 }
 
+
+.dmPage
 .dmKpiHelper.sapMText {
     margin-top: 3px !important;
 
     color: #6f7c8f !important;
-    font-size: 0.46rem !important;
+
+    font-size: .52rem !important;
     font-weight: 600 !important;
-    line-height: 1.06 !important;
+
+    line-height: 1.1 !important;
 }
 
-/* KPI AZUL */
 
-.dmKpiBlue {
-    background: linear-gradient(
-        90deg,
-        rgba(46, 140, 255, 0.20) 0%,
-        rgba(46, 140, 255, 0.08) 35%,
-        #ffffff 78%
-    );
+/* AZUL */
 
-    border-color: rgba(46, 140, 255, 0.18);
+.dmPage
+.dmKpiCard.dmKpiBlue.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(46,140,255,.20) 0%,
+            rgba(46,140,255,.11) 22%,
+            rgba(46,140,255,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            46,
+            140,
+            255,
+            .18
+        ) !important;
 }
 
+
+.dmPage
 .dmKpiBlue::before {
-    background: #2e8cff;
+    background: #2e8cff !important;
 }
 
-.dmKpiBlue .dmKpiIconCircle {
-    background: rgba(46, 140, 255, 0.13);
+
+.dmPage
+.dmKpiBlue
+.dmKpiIconCircle {
+    background:
+        rgba(
+            46,
+            140,
+            255,
+            .13
+        ) !important;
 }
 
-.dmKpiBlue .dmKpiIcon,
-.dmKpiBlue .dmKpiValue {
+
+.dmPage
+.dmKpiBlue
+.dmKpiIcon,
+
+.dmPage
+.dmKpiBlue
+.dmKpiValue {
     color: #1877e8 !important;
 }
 
-/* KPI VERDE */
 
-.dmKpiGreen {
-    background: linear-gradient(
-        90deg,
-        rgba(35, 180, 93, 0.20) 0%,
-        rgba(35, 180, 93, 0.08) 35%,
-        #ffffff 78%
-    );
+/* VERDE */
 
-    border-color: rgba(35, 180, 93, 0.18);
+.dmPage
+.dmKpiCard.dmKpiGreen.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,191,66,.20) 0%,
+            rgba(99,191,66,.11) 22%,
+            rgba(99,191,66,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            99,
+            191,
+            66,
+            .18
+        ) !important;
 }
 
+
+.dmPage
 .dmKpiGreen::before {
-    background: #23b45d;
+    background: #63bf42 !important;
 }
 
-.dmKpiGreen .dmKpiIconCircle {
-    background: rgba(35, 180, 93, 0.13);
+
+.dmPage
+.dmKpiGreen
+.dmKpiIconCircle {
+    background:
+        rgba(
+            99,
+            191,
+            66,
+            .13
+        ) !important;
 }
 
-.dmKpiGreen .dmKpiIcon,
-.dmKpiGreen .dmKpiValue {
-    color: #16a34a !important;
+
+.dmPage
+.dmKpiGreen
+.dmKpiIcon,
+
+.dmPage
+.dmKpiGreen
+.dmKpiValue {
+    color: #58b33a !important;
 }
 
-/* KPI NARANJA */
 
-.dmKpiOrange {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 136, 36, 0.22) 0%,
-        rgba(255, 136, 36, 0.08) 35%,
-        #ffffff 78%
-    );
+/* NARANJA */
 
-    border-color: rgba(255, 136, 36, 0.20);
+.dmPage
+.dmKpiCard.dmKpiOrange.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,158,49,.22) 0%,
+            rgba(255,158,49,.12) 22%,
+            rgba(255,158,49,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            255,
+            158,
+            49,
+            .20
+        ) !important;
 }
 
+
+.dmPage
 .dmKpiOrange::before {
-    background: #ff8824;
+    background: #ff9e31 !important;
 }
 
-.dmKpiOrange .dmKpiIconCircle {
-    background: rgba(255, 136, 36, 0.14);
+
+.dmPage
+.dmKpiOrange
+.dmKpiIconCircle {
+    background:
+        rgba(
+            255,
+            158,
+            49,
+            .14
+        ) !important;
 }
 
-.dmKpiOrange .dmKpiIcon,
-.dmKpiOrange .dmKpiValue {
-    color: #f97316 !important;
+
+.dmPage
+.dmKpiOrange
+.dmKpiIcon,
+
+.dmPage
+.dmKpiOrange
+.dmKpiValue {
+    color: #f28c1c !important;
 }
 
-/* KPI MORADO */
 
-.dmKpiPurple {
-    background: linear-gradient(
-        90deg,
-        rgba(124, 58, 237, 0.20) 0%,
-        rgba(124, 58, 237, 0.08) 35%,
-        #ffffff 78%
-    );
+/* MORADO */
 
-    border-color: rgba(124, 58, 237, 0.18);
+.dmPage
+.dmKpiCard.dmKpiPurple.sapMFlexBox {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(134,69,233,.20) 0%,
+            rgba(134,69,233,.11) 22%,
+            rgba(134,69,233,.04) 48%,
+            rgba(255,255,255,.98) 76%,
+            #fff 100%
+        ) !important;
+
+    border-color:
+        rgba(
+            134,
+            69,
+            233,
+            .18
+        ) !important;
 }
 
+
+.dmPage
 .dmKpiPurple::before {
-    background: #7c3aed;
+    background: #8645e9 !important;
 }
 
-.dmKpiPurple .dmKpiIconCircle {
-    background: rgba(124, 58, 237, 0.13);
+
+.dmPage
+.dmKpiPurple
+.dmKpiIconCircle {
+    background:
+        rgba(
+            134,
+            69,
+            233,
+            .13
+        ) !important;
 }
 
-.dmKpiPurple .dmKpiIcon,
-.dmKpiPurple .dmKpiValue {
-    color: #7c3aed !important;
+
+.dmPage
+.dmKpiPurple
+.dmKpiIcon,
+
+.dmPage
+.dmKpiPurple
+.dmKpiValue {
+    color: #8645e9 !important;
 }
+
 
 /* ================================================================
    CONTENIDO PRINCIPAL
    ================================================================ */
 
-.dmContentArea {
-    display: flex !important;
+.dmPage
+.dmContentArea.sapMFlexBox {
     flex: 1 1 0 !important;
+
+    display: flex !important;
     flex-direction: column !important;
 
     width: 100% !important;
+
+    min-width: 0 !important;
     min-height: 0 !important;
 
     gap: 8px !important;
-    margin-top: 8px !important;
 
     overflow: hidden !important;
 }
 
-.dmDashboardRow {
-    display: flex !important;
+
+.dmPage
+.dmDashboardRow.sapMFlexBox {
     flex: 1 1 0 !important;
 
+    display: flex !important;
+
     width: 100% !important;
+
+    min-width: 0 !important;
     min-height: 0 !important;
 
     gap: 8px !important;
 
     overflow: hidden !important;
 }
+
 
 /* ================================================================
-   CARDS GENERALES
+   CARDS
    ================================================================ */
 
-.dmCard {
+.dmPage
+.dmCard.sapMFlexBox {
     display: flex !important;
     flex-direction: column !important;
 
-    width: auto !important;
+    width: 100% !important;
     height: 100% !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
 
-    padding: 9px 10px !important;
+    padding:
+        8px
+        10px !important;
 
     overflow: hidden !important;
 
     background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 8px !important;
 
-    box-shadow: 0 2px 8px rgba(20, 39, 70, 0.05) !important;
+    border:
+        1px solid
+        #e2e8f0 !important;
+
+    border-radius: 7px !important;
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            20,
+            39,
+            70,
+            .05
+        ) !important;
 }
 
-.dmCardHeader {
-    flex: 0 0 auto !important;
+
+.dmPage
+.dmCardHeader.sapMFlexBox,
+
+.dmPage
+.dmTurnUtilTitleRow.sapMFlexBox,
+
+.dmPage
+.dmCoverageTitleRow.sapMFlexBox,
+
+.dmPage
+.dmWorkforceStatusTitleRow.sapMFlexBox,
+
+.dmPage
+.dmPressureZoneTitleRow.sapMFlexBox {
+    flex: 0 0 24px !important;
 
     width: 100% !important;
-    min-height: 17px !important;
+
+    min-height: 24px !important;
+
+    gap: 5px !important;
+
+    align-items: center !important;
 }
 
-.dmCardTitle.sapMText {
-    color: #244c74 !important;
-    font-size: 0.67rem !important;
+
+.dmPage
+.dmCardTitle.sapMText,
+
+.dmPage
+.dmTurnUtilTitle.sapMText,
+
+.dmPage
+.dmCoverageTitle.sapMText,
+
+.dmPage
+.dmWorkforceStatusTitle.sapMText,
+
+.dmPage
+.dmPressureZoneTitle.sapMText {
+    color: #1c2940 !important;
+
+    font-size: .70rem !important;
     font-weight: 800 !important;
-    line-height: 1.12 !important;
+
+    line-height: 1.15 !important;
+
+    white-space: nowrap !important;
 }
 
-.dmCardSubtitle.sapMText {
-    margin-top: 2px !important;
 
-    color: #748196 !important;
-    font-size: 0.47rem !important;
-    font-weight: 600 !important;
-    line-height: 1.08 !important;
-}
-
+.dmPage
 .dmInfoIcon {
-    margin-left: 5px !important;
-
     color: #0a6ff5 !important;
-    font-size: 0.58rem !important;
+
+    font-size: .66rem !important;
 }
 
-.dmCardLeadingIcon {
-    margin-right: 5px !important;
 
-    color: #34445c !important;
-    font-size: 0.69rem !important;
+.dmPage
+.dmCardSubtitle.sapMText {
+    margin-top: 1px !important;
+
+    color: #8792a3 !important;
+
+    font-size: .49rem !important;
+    font-weight: 600 !important;
+
+    line-height: 1.15 !important;
 }
 
-.dmCardLink {
-    flex: 0 0 auto !important;
 
-    margin-top: 4px !important;
+.dmPage
+.dmCardLink,
+
+.dmPage
+.dmTurnUtilLink,
+
+.dmPage
+.dmCoverageLink,
+
+.dmPage
+.dmWorkforceStatusLink,
+
+.dmPage
+.dmPressureZoneLink {
+    flex: 0 0 20px !important;
+
+    min-height: 20px !important;
+
+    margin-top: 3px !important;
 
     color: #0a6ff5 !important;
-    font-size: 0.51rem !important;
+
+    font-size: .49rem !important;
     font-weight: 700 !important;
 }
 
-/* ================================================================
-   COLORES GENERALES
-   ================================================================ */
 
+.dmPage
 .dmBlueText {
     color: #2563eb !important;
 }
 
+
+.dmPage
 .dmGreenText {
     color: #16a34a !important;
 }
 
+
+.dmPage
 .dmOrangeText {
     color: #f97316 !important;
 }
 
+
+.dmPage
 .dmPurpleText {
     color: #7c3aed !important;
 }
 
+
 /* ================================================================
-   PROGRESS INDICATOR GENERAL
+   PROGRESS
    ================================================================ */
 
+.dmPage
 .dmProgress.sapMPI {
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
+    height: 6px !important;
+
+    min-height: 6px !important;
+    max-height: 6px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -663,297 +1088,315 @@
     overflow: hidden !important;
 
     background: #e3e8ee !important;
+
     border: 0 !important;
+
     border-radius: 999px !important;
 
     box-shadow: none !important;
 }
 
-.dmProgress .sapMPIText,
-.dmProgress .sapMPITextLeft,
-.dmProgress .sapMPITextRight {
+
+.dmPage
+.dmProgress
+.sapMPIText,
+
+.dmPage
+.dmProgress
+.sapMPITextLeft,
+
+.dmPage
+.dmProgress
+.sapMPITextRight {
     display: none !important;
-    visibility: hidden !important;
 }
 
-.dmProgress .sapMPIBar,
-.dmProgress .sapMPIBarNeutral,
-.dmProgress .sapMPIBarPositive,
-.dmProgress .sapMPIBarCritical,
-.dmProgress .sapMPIBarNegative {
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
+
+.dmPage
+.dmProgress
+.sapMPIBar,
+
+.dmPage
+.dmProgress
+.sapMPIBarNeutral,
+
+.dmPage
+.dmProgress
+.sapMPIBarPositive,
+
+.dmPage
+.dmProgress
+.sapMPIBarCritical,
+
+.dmPage
+.dmProgress
+.sapMPIBarNegative {
+    height: 6px !important;
+
+    min-height: 6px !important;
+    max-height: 6px !important;
 
     border: 0 !important;
+
     border-radius: 999px !important;
-
-    box-shadow: none !important;
 }
 
-.dmProgress .sapMPIBarRemaining,
-.dmProgress .sapMPIBarRemainingFull {
-    background: transparent !important;
-    border: 0 !important;
-}
 
-/* BARRAS AZULES */
+.dmPage
+.dmProgressBlue
+.sapMPIBar,
 
-.dmProgressBlue .sapMPIBar,
-.dmProgressBlue .sapMPIBarNeutral,
-.dmProgressBlue .sapMPIBarPositive,
-.dmProgressBlue .sapMPIBarCritical,
-.dmProgressBlue .sapMPIBarNegative {
+.dmPage
+.dmProgressBlue
+.sapMPIBarNeutral,
+
+.dmPage
+.dmProgressBlue
+.sapMPIBarPositive {
     background: #2563eb !important;
 }
 
-/* BARRAS VERDES */
 
-.dmProgressGreen .sapMPIBar,
-.dmProgressGreen .sapMPIBarNeutral,
-.dmProgressGreen .sapMPIBarPositive,
-.dmProgressGreen .sapMPIBarCritical,
-.dmProgressGreen .sapMPIBarNegative {
+.dmPage
+.dmProgressGreen
+.sapMPIBar,
+
+.dmPage
+.dmProgressGreen
+.sapMPIBarNeutral,
+
+.dmPage
+.dmProgressGreen
+.sapMPIBarPositive {
     background: #16a34a !important;
 }
 
-/* BARRAS MORADAS */
 
-.dmProgressPurple .sapMPIBar,
-.dmProgressPurple .sapMPIBarNeutral,
-.dmProgressPurple .sapMPIBarPositive,
-.dmProgressPurple .sapMPIBarCritical,
-.dmProgressPurple .sapMPIBarNegative {
+.dmPage
+.dmProgressPurple
+.sapMPIBar,
+
+.dmPage
+.dmProgressPurple
+.sapMPIBarNeutral,
+
+.dmPage
+.dmProgressPurple
+.sapMPIBarPositive {
     background: #8b5cf6 !important;
 }
 
-/* BARRAS NARANJAS */
-
-.dmProgressOrange .sapMPIBar,
-.dmProgressOrange .sapMPIBarNeutral,
-.dmProgressOrange .sapMPIBarPositive,
-.dmProgressOrange .sapMPIBarCritical,
-.dmProgressOrange .sapMPIBarNegative {
-    background: #f97316 !important;
-}
-
-/* BARRAS ROJAS */
-
-.dmProgressRed .sapMPIBar,
-.dmProgressRed .sapMPIBarNeutral,
-.dmProgressRed .sapMPIBarPositive,
-.dmProgressRed .sapMPIBarCritical,
-.dmProgressRed .sapMPIBarNegative {
-    background: #dc2626 !important;
-}
 
 /* ================================================================
    DISTRIBUCIÓN DE MECÁNICOS
    ================================================================ */
 
-.dmDistributionCard {
-    padding: 11px 12px 10px !important;
+.dmPage
+.dmDistributionCard.sapMFlexBox {
+    padding:
+        9px
+        10px
+        8px !important;
 }
 
-.dmDistributionList {
+
+.dmPage
+.dmDistributionList.sapMFlexBox {
+    flex: 1 1 0 !important;
+
     display: flex !important;
-    flex: 1 1 auto !important;
     flex-direction: column !important;
+
     justify-content: space-evenly !important;
 
     width: 100% !important;
+
     min-height: 0 !important;
 
-    margin: 6px 0 8px !important;
-    padding: 0 !important;
+    margin:
+        5px
+        0
+        6px !important;
 
     overflow: hidden !important;
 }
 
-.dmDistributionRow {
-    display: flex !important;
+
+.dmPage
+.dmDistributionRow.sapMFlexBox {
     flex: 1 1 0 !important;
 
     width: 100% !important;
-    min-height: 40px !important;
+
+    min-height: 42px !important;
 
     gap: 8px !important;
-    margin: 0 !important;
-    padding: 2px 0 !important;
+
+    padding:
+        2px
+        0 !important;
+
+    align-items: center !important;
 }
 
-.dmRoundIcon {
-    flex: 0 0 27px !important;
 
-    width: 27px !important;
-    height: 27px !important;
-    min-width: 27px !important;
-    min-height: 27px !important;
+.dmPage
+.dmRoundIcon.sapMFlexBox {
+    flex: 0 0 29px !important;
+
+    width: 29px !important;
+    height: 29px !important;
+
+    min-width: 29px !important;
+    min-height: 29px !important;
 
     border-radius: 50% !important;
 }
 
-.dmRoundIcon .sapUiIcon {
-    font-size: 0.78rem !important;
+
+.dmPage
+.dmRoundIcon
+.sapUiIcon {
+    font-size: .80rem !important;
 }
 
+
+.dmPage
 .dmRoundBlue {
     background: #eaf3ff !important;
 }
 
+
+.dmPage
 .dmRoundGreen {
     background: #e8f8ef !important;
 }
 
+
+.dmPage
 .dmRoundPurple {
     background: #f2ebff !important;
 }
 
-.dmDistributionBody {
-    display: flex !important;
-    flex: 1 1 auto !important;
-    flex-direction: column !important;
 
-    width: 100% !important;
+.dmPage
+.dmDistributionBody.sapMFlexBox {
+    flex: 1 1 auto !important;
+
     min-width: 0 !important;
 
     justify-content: center !important;
 }
 
+
+.dmPage
 .dmDistributionName.sapMText {
     display: block !important;
 
     width: 100% !important;
-    margin: 0 0 5px !important;
+
+    margin-bottom: 5px !important;
 
     overflow: hidden !important;
 
     color: #244c74 !important;
-    font-size: 0.56rem !important;
+
+    font-size: .56rem !important;
     font-weight: 700 !important;
+
     line-height: 1 !important;
 
     text-overflow: ellipsis !important;
+
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmDistributionValue.sapMText {
-    flex: 0 0 23px !important;
+    flex: 0 0 30px !important;
 
-    width: 23px !important;
-    min-width: 23px !important;
+    width: 30px !important;
 
-    font-size: 0.55rem !important;
+    font-size: .55rem !important;
     font-weight: 800 !important;
 
     text-align: right !important;
+
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmDistributionPct.sapMText {
-    flex: 0 0 42px !important;
+    flex: 0 0 46px !important;
 
-    width: 42px !important;
-    min-width: 42px !important;
+    width: 46px !important;
 
-    font-size: 0.54rem !important;
+    font-size: .54rem !important;
     font-weight: 800 !important;
 
     text-align: right !important;
+
     white-space: nowrap !important;
 }
 
-.dmDistributionBody .dmProgress.sapMPI {
-    width: 100% !important;
 
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
-
-    background: #e3e8ee !important;
-}
-
-.dmDistributionBody .dmProgress .sapMPIBar,
-.dmDistributionBody .dmProgress .sapMPIBarNeutral,
-.dmDistributionBody .dmProgress .sapMPIBarPositive,
-.dmDistributionBody .dmProgress .sapMPIBarCritical,
-.dmDistributionBody .dmProgress .sapMPIBarNegative {
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
-}
-
-.dmDistributionCard .dmProgress::before,
-.dmDistributionCard .dmProgress::after,
-.dmDistributionCard .dmProgress *::before,
-.dmDistributionCard .dmProgress *::after {
-    display: none !important;
-
-    content: none !important;
-}
-
-.dmTotalMechanics {
-    display: flex !important;
-    flex: 0 0 34px !important;
+.dmPage
+.dmTotalMechanics.sapMFlexBox {
+    flex: 0 0 36px !important;
 
     width: 100% !important;
-    min-height: 34px !important;
+
+    min-height: 36px !important;
 
     margin-top: auto !important;
-    padding: 7px 10px !important;
+
+    padding:
+        7px
+        10px !important;
 
     background: #edf5ff !important;
-    border: 0 !important;
+
     border-radius: 7px !important;
 }
 
+
+.dmPage
 .dmTotalIcon {
     margin-right: 7px !important;
 
     color: #2563eb !important;
-    font-size: 0.73rem !important;
+
+    font-size: .73rem !important;
 }
 
+
+.dmPage
 .dmTotalLabel.sapMText,
+
+.dmPage
 .dmTotalValue.sapMText {
     color: #244c74 !important;
 
-    font-size: 0.64rem !important;
+    font-size: .64rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
 }
+
 
 /* ================================================================
-   UTILIZACIÓN DE PLANTILLA POR TURNO
+   UTILIZACIÓN POR TURNO
    ================================================================ */
 
-.dmTurnUtilCard {
-    padding: 10px 12px 7px !important;
-}
+.dmPage
+.dmTurnUtilBody.sapMFlexBox {
+    flex: 1 1 0 !important;
 
-.dmTurnUtilTitleRow {
-    flex: 0 0 23px !important;
-
-    width: 100% !important;
-    min-height: 23px !important;
-}
-
-.dmTurnUtilTitle.sapMText {
-    color: #244c74 !important;
-
-    font-size: 0.67rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-}
-
-.dmTurnUtilBody {
     display: flex !important;
-    flex: 1 1 auto !important;
     flex-direction: column !important;
 
     width: 100% !important;
+
     min-height: 0 !important;
 
     margin-top: 3px !important;
@@ -961,1046 +1404,1116 @@
     overflow: hidden !important;
 }
 
-.dmTurnUtilGrid {
+
+.dmPage
+.dmTurnUtilGrid.sapMFlexBox {
     display: grid !important;
 
     grid-template-columns:
-        minmax(100px, 1.16fr)
-        minmax(78px, 0.92fr)
-        minmax(78px, 0.92fr)
-        minmax(124px, 1.34fr);
+        minmax(105px,1.15fr)
+        minmax(90px,.95fr)
+        minmax(90px,.95fr)
+        minmax(135px,1.35fr) !important;
 
     column-gap: 10px !important;
+
     align-items: center !important;
 
     width: 100% !important;
-}
 
-.dmTurnUtilGrid > * {
-    width: auto !important;
     min-width: 0 !important;
-    max-width: none !important;
-
-    flex: none !important;
 }
 
-.dmTurnUtilHeader {
-    flex: 0 0 32px !important;
 
-    min-height: 32px !important;
+.dmPage
+.dmTurnUtilGrid
+> .sapMFlexItem {
+    width: 100% !important;
 
-    padding: 0 7px 4px !important;
-
-    border-bottom: 1px solid #e3e9f0 !important;
+    min-width: 0 !important;
 }
 
+
+.dmPage
+.dmTurnUtilHeader.sapMFlexBox {
+    flex: 0 0 34px !important;
+
+    min-height: 34px !important;
+
+    padding:
+        0
+        7px
+        4px !important;
+
+    border-bottom:
+        1px solid
+        #e3e9f0 !important;
+}
+
+
+.dmPage
 .dmTurnUtilHeaderText.sapMText {
     display: block !important;
 
     width: 100% !important;
 
     color: #536176 !important;
-    font-size: 0.47rem !important;
+
+    font-size: .47rem !important;
     font-weight: 800 !important;
+
     line-height: 1.08 !important;
-
-    word-break: normal !important;
-    overflow-wrap: normal !important;
 }
 
-.dmTurnUtilHeader > .sapMText:first-child,
-.dmTurnUtilHeader > .sapMText:last-child {
-    white-space: nowrap !important;
-}
 
-.dmTurnUtilRow {
+.dmPage
+.dmTurnUtilRow.sapMFlexBox {
     flex: 1 1 0 !important;
 
-    min-height: 34px !important;
+    min-height: 40px !important;
 
-    padding: 3px 7px !important;
+    padding:
+        3px
+        7px !important;
 
-    border-bottom: 1px solid #edf1f5 !important;
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
 }
 
-.dmTurnUtilShift {
-    width: 100% !important;
+
+.dmPage
+.dmTurnUtilTotalRow.sapMFlexBox {
+    background: #f2f6fa !important;
+
+    border-bottom: 0 !important;
+}
+
+
+.dmPage
+.dmTurnUtilShift.sapMFlexBox {
     min-width: 0 !important;
 }
 
+
+.dmPage
 .dmTurnUtilShiftIcon {
     flex: 0 0 20px !important;
 
     width: 20px !important;
-    min-width: 20px !important;
 
     margin-right: 6px !important;
 
     color: #34445c !important;
-    font-size: 0.84rem !important;
+
+    font-size: .84rem !important;
 }
 
+
+.dmPage
 .dmTurnUtilNightIcon {
-    font-size: 0.67rem !important;
+    font-size: .67rem !important;
 }
 
-.dmTurnUtilShiftText.sapMText {
-    display: block !important;
 
+.dmPage
+.dmTurnUtilShiftText.sapMText {
     min-width: 0 !important;
 
     overflow: hidden !important;
 
     color: #244c74 !important;
-    font-size: 0.53rem !important;
+
+    font-size: .53rem !important;
     font-weight: 800 !important;
-    line-height: 1.1 !important;
 
     text-overflow: ellipsis !important;
+
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmTurnUtilValue.sapMText {
     display: block !important;
 
     width: 100% !important;
 
     color: #244c74 !important;
-    font-size: 0.52rem !important;
+
+    font-size: .52rem !important;
     font-weight: 800 !important;
 
     text-align: center !important;
+
     white-space: nowrap !important;
 }
 
-.dmTurnUtilChart {
-    display: flex !important;
 
+.dmPage
+.dmTurnUtilChart.sapMFlexBox {
     width: 100% !important;
+
     min-width: 0 !important;
 
-    gap: 7px !important;
+    gap: 8px !important;
 }
 
-/* Barra formada por segmentos separados */
 
-.dmTurnBarTrack {
-    display: flex !important;
+.dmPage
+.dmCleanMetricBar.sapMFlexBox {
     flex: 1 1 auto !important;
 
-    width: auto !important;
-    min-width: 68px !important;
+    width: 100% !important;
 
-    height: 6px !important;
-    min-height: 6px !important;
-
-    gap: 2px !important;
-
-    overflow: visible !important;
-    background: transparent !important;
-}
-
-.dmTurnBarFill,
-.dmTurnBarRemain {
-    height: 6px !important;
-    min-height: 6px !important;
-
-    border-radius: 999px !important;
-}
-
-.dmTurnBarFill {
-    flex-grow: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-.dmTurnBarRemain {
-    flex: 1 1 auto !important;
-
-    min-width: 3px !important;
-
-    background: #dde5ed !important;
-}
-
-.dmTurnBar85 {
-    flex-basis: 84.9% !important;
-}
-
-.dmTurnBar95 {
-    flex-basis: 95.1% !important;
-}
-
-.dmTurnBar100 {
-    flex-basis: 100% !important;
-}
-
-.dmTurnBar92 {
-    flex-basis: 92.1% !important;
-}
-
-.dmTurnBarGreen {
-    background: #16a34a !important;
-}
-
-.dmTurnBarOrange {
-    background: #f97316 !important;
-}
-
-.dmTurnBarRed {
-    background: #dc2626 !important;
-}
-
-/* Compatibilidad si todavía existe ProgressIndicator */
-
-.dmTurnUtilProgress.sapMPI {
-    flex: 1 1 auto !important;
-
-    width: auto !important;
     min-width: 60px !important;
 
     height: 6px !important;
     min-height: 6px !important;
-    max-height: 6px !important;
+
+    overflow: hidden !important;
 
     background: #dde5ed !important;
+
+    border-radius: 999px !important;
 }
 
-.dmTurnUtilProgress .sapMPIBar,
-.dmTurnUtilProgress .sapMPIBarNeutral,
-.dmTurnUtilProgress .sapMPIBarPositive,
-.dmTurnUtilProgress .sapMPIBarCritical,
-.dmTurnUtilProgress .sapMPIBarNegative {
+
+.dmPage
+.dmCleanMetricFill {
     height: 6px !important;
+
     min-height: 6px !important;
-    max-height: 6px !important;
+
+    max-width: 100% !important;
+
+    border-radius: 999px !important;
 }
 
-.dmTurnUtilProgressGreen .sapMPIBar,
-.dmTurnUtilProgressGreen .sapMPIBarNeutral,
-.dmTurnUtilProgressGreen .sapMPIBarPositive {
+
+.dmPage
+.dmCleanMetricGreen {
     background: #16a34a !important;
 }
 
-.dmTurnUtilProgressOrange .sapMPIBar,
-.dmTurnUtilProgressOrange .sapMPIBarNeutral,
-.dmTurnUtilProgressOrange .sapMPIBarPositive {
+
+.dmPage
+.dmCleanMetricOrange {
     background: #f97316 !important;
 }
 
-.dmTurnUtilProgressRed .sapMPIBar,
-.dmTurnUtilProgressRed .sapMPIBarNeutral,
-.dmTurnUtilProgressRed .sapMPIBarPositive {
+
+.dmPage
+.dmCleanMetricRed {
     background: #dc2626 !important;
 }
 
+
+.dmPage
 .dmTurnUtilPercent.sapMText {
-    flex: 0 0 39px !important;
+    flex: 0 0 44px !important;
 
-    width: 39px !important;
-    min-width: 39px !important;
+    width: 44px !important;
 
-    font-size: 0.5rem !important;
+    font-size: .50rem !important;
     font-weight: 800 !important;
 
     text-align: right !important;
+
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmTurnUtilGreenText {
     color: #16a34a !important;
 }
 
+
+.dmPage
 .dmTurnUtilOrangeText {
     color: #f97316 !important;
 }
 
+
+.dmPage
 .dmTurnUtilRedText {
     color: #dc2626 !important;
 }
 
-.dmTurnUtilTotalRow {
-    background: #f2f6fa !important;
-    border-bottom: 0 !important;
-}
-
-.dmTurnUtilTotalRow .dmTurnUtilShiftText.sapMText,
-.dmTurnUtilTotalRow .dmTurnUtilValue.sapMText,
-.dmTurnUtilTotalRow .dmTurnUtilShiftIcon {
-    color: #244c74 !important;
-    font-weight: 800 !important;
-}
-
-.dmTurnUtilLink {
-    flex: 0 0 18px !important;
-
-    min-height: 18px !important;
-    margin-top: 3px !important;
-
-    color: #0a6ff5 !important;
-    font-size: 0.49rem !important;
-    font-weight: 700 !important;
-}
 
 /* ================================================================
-   COBERTURA DE MECÁNICOS POR ZONA
+   COBERTURA POR ZONA
    ================================================================ */
 
-.dmCoverageCard {
-    padding: 8px 10px 6px !important;
-}
+.dmPage
+.dmCoverageTableWrapper.sapMFlexBox {
+    flex: 1 1 0 !important;
 
-.dmCoverageTitleRow {
-    flex: 0 0 21px !important;
+    width:
+        calc(
+            100% - 8px
+        ) !important;
 
-    width: 100% !important;
-    min-height: 21px !important;
-}
-
-.dmCoverageTitle.sapMText {
-    color: #244c74 !important;
-
-    font-size: 0.66rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-}
-
-.dmCoverageTableWrapper {
-    flex: 1 1 auto !important;
-
-    width: 100% !important;
     min-height: 0 !important;
 
-    margin-top: 2px !important;
+    margin:
+        3px
+        4px
+        0 !important;
 
-    overflow: hidden !important;
+    overflow: auto !important;
+
+    border:
+        1px solid
+        #e7edf5 !important;
+
+    border-radius: 6px !important;
 }
 
-.dmCoverageTable {
-    width: 100% !important;
 
-    background: transparent !important;
-}
+.dmPage
+.dmCoverageTable.sapMList,
 
-.dmCoverageTable .sapMListTbl {
+.dmPage
+.dmCoverageTable
+.sapMListTbl {
     width: 100% !important;
 
     table-layout: fixed !important;
-    border-collapse: collapse !important;
 
-    background: transparent !important;
+    background: #ffffff !important;
 }
 
-.dmCoverageTable .sapMListTblHeader {
-    background: #f8fafc !important;
+
+.dmPage
+.dmCoverageTable
+.sapMListTblHeader,
+
+.dmPage
+.dmCoverageTable
+.sapMListTblHeaderCell {
+    height: 34px !important;
+
+    min-height: 34px !important;
+
+    background: #f4f7fb !important;
 }
 
-.dmCoverageTable .sapMListTblHeaderCell,
-.dmCoverageTable .sapMListTbl th {
-    height: 29px !important;
-    min-height: 29px !important;
 
-    padding: 2px 4px !important;
+.dmPage
+.dmCoverageTable
+.sapMListTblHeaderCell {
+    padding:
+        2px
+        5px !important;
+
+    border-bottom:
+        1px solid
+        #dce5ef !important;
 
     vertical-align: middle !important;
-
-    background: #f8fafc !important;
-    border-bottom: 1px solid #e3e9f0 !important;
 }
 
-.dmCoverageHeaderContent {
+
+.dmPage
+.dmCoverageHeaderContent.sapMFlexBox {
     width: 100% !important;
+
     min-width: 0 !important;
 
     gap: 4px !important;
 }
 
-.dmCoverageHeaderIcon {
-    flex: 0 0 auto !important;
 
+.dmPage
+.dmCoverageHeaderIcon {
     color: #8390a3 !important;
-    font-size: 0.5rem !important;
+
+    font-size: .52rem !important;
 }
 
-.dmCoverageHeaderText.sapMText {
-    display: block !important;
 
+.dmPage
+.dmCoverageHeaderText.sapMText {
     min-width: 0 !important;
 
-    color: #536176 !important;
-    font-size: 0.4rem !important;
+    color: #526683 !important;
+
+    font-size: .42rem !important;
     font-weight: 800 !important;
+
     line-height: 1.05 !important;
-
-    word-break: normal !important;
-    overflow-wrap: normal !important;
 }
 
-.dmCoverageTable .sapMListTblRow {
-    height: 26px !important;
-    min-height: 26px !important;
 
-    background: #ffffff !important;
+.dmPage
+.dmCoverageTable
+.sapMListTblRow,
+
+.dmPage
+.dmCoverageTable
+.sapMListTblCell {
+    height: 30px !important;
+
+    min-height: 30px !important;
 }
 
-.dmCoverageTable .sapMListTblCell {
-    height: 26px !important;
-    min-height: 26px !important;
 
-    padding: 2px 4px !important;
+.dmPage
+.dmCoverageTable
+.sapMListTblCell {
+    padding:
+        2px
+        5px !important;
 
     vertical-align: middle !important;
 
-    border-bottom: 1px solid #edf1f5 !important;
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
 }
 
-.dmCoverageTable
-.sapMListTblRow:last-child
-.sapMListTblCell {
-    border-bottom: 0 !important;
-}
 
+.dmPage
 .dmCoverageZone.sapMText {
     color: #244c74 !important;
 
-    font-size: 0.47rem !important;
+    font-size: .48rem !important;
     font-weight: 800 !important;
 
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmCoverageCell.sapMText {
     display: block !important;
 
     width: 100% !important;
 
     color: #34445c !important;
-    font-size: 0.46rem !important;
+
+    font-size: .47rem !important;
     font-weight: 700 !important;
 
     text-align: center !important;
+
     white-space: nowrap !important;
 }
 
-/* Gráfica de cobertura */
 
-.dmCoverageChart {
-    display: flex !important;
-
+.dmPage
+.dmCoverageChart.sapMFlexBox {
     width: 100% !important;
+
     min-width: 0 !important;
 
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 6px !important;
+    gap: 7px !important;
 }
 
-.dmCoverageProgress.sapMPI {
-    flex: 0 0 58px !important;
 
-    width: 58px !important;
-    min-width: 58px !important;
-    max-width: 58px !important;
+.dmPage
+.dmCoverageCleanBar.sapMFlexBox {
+    flex: 1 1 auto !important;
 
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
+    width: auto !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
-
-    overflow: hidden !important;
-
-    background: #dde5ed !important;
-    border: 0 !important;
-    border-radius: 999px !important;
-
-    box-shadow: none !important;
+    min-width: 45px !important;
+    max-width: 88px !important;
 }
 
-.dmCoverageProgress .sapMPIText,
-.dmCoverageProgress .sapMPITextLeft,
-.dmCoverageProgress .sapMPITextRight {
-    display: none !important;
-}
 
-.dmCoverageProgress .sapMPIBar,
-.dmCoverageProgress .sapMPIBarNeutral,
-.dmCoverageProgress .sapMPIBarPositive,
-.dmCoverageProgress .sapMPIBarCritical,
-.dmCoverageProgress .sapMPIBarNegative {
-    height: 5px !important;
-    min-height: 5px !important;
-    max-height: 5px !important;
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-tone="green"],
 
-    border-radius: 999px !important;
-}
-
-.dmCoverageProgress[data-tone="green"] .sapMPIBar,
-.dmCoverageProgress[data-sap-ui-custom-tone="green"] .sapMPIBar,
-.dmCoverageProgress[data-tone="green"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-sap-ui-custom-tone="green"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-tone="green"] .sapMPIBarPositive,
-.dmCoverageProgress[data-sap-ui-custom-tone="green"] .sapMPIBarPositive {
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-sap-ui-custom-tone="green"] {
     background: #18a85b !important;
 }
 
-.dmCoverageProgress[data-tone="orange"] .sapMPIBar,
-.dmCoverageProgress[data-sap-ui-custom-tone="orange"] .sapMPIBar,
-.dmCoverageProgress[data-tone="orange"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-sap-ui-custom-tone="orange"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-tone="orange"] .sapMPIBarPositive,
-.dmCoverageProgress[data-sap-ui-custom-tone="orange"] .sapMPIBarPositive {
+
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-tone="orange"],
+
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-sap-ui-custom-tone="orange"] {
     background: #f59e0b !important;
 }
 
-.dmCoverageProgress[data-tone="red"] .sapMPIBar,
-.dmCoverageProgress[data-sap-ui-custom-tone="red"] .sapMPIBar,
-.dmCoverageProgress[data-tone="red"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-sap-ui-custom-tone="red"] .sapMPIBarNeutral,
-.dmCoverageProgress[data-tone="red"] .sapMPIBarPositive,
-.dmCoverageProgress[data-sap-ui-custom-tone="red"] .sapMPIBarPositive {
+
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-tone="red"],
+
+.dmPage
+.dmCoverageCleanBar
+.dmCleanMetricFill[data-sap-ui-custom-tone="red"] {
     background: #ef4444 !important;
 }
 
+
+.dmPage
 .dmCoveragePercent.sapMText {
-    flex: 0 0 30px !important;
+    flex: 0 0 34px !important;
 
-    width: 30px !important;
-    min-width: 30px !important;
+    width: 34px !important;
 
-    font-size: 0.43rem !important;
+    font-size: .45rem !important;
     font-weight: 800 !important;
 
-    text-align: left !important;
     white-space: nowrap !important;
 }
 
-.dmCoverageRow[data-tone="green"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="green"] .dmCoveragePercent {
+
+.dmPage
+.dmCoverageRow[data-tone="green"]
+.dmCoveragePercent,
+
+.dmPage
+.dmCoverageRow[data-sap-ui-custom-tone="green"]
+.dmCoveragePercent {
     color: #18a85b !important;
 }
 
-.dmCoverageRow[data-tone="orange"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="orange"] .dmCoveragePercent {
+
+.dmPage
+.dmCoverageRow[data-tone="orange"]
+.dmCoveragePercent,
+
+.dmPage
+.dmCoverageRow[data-sap-ui-custom-tone="orange"]
+.dmCoveragePercent {
     color: #f59e0b !important;
 }
 
-.dmCoverageRow[data-tone="red"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="red"] .dmCoveragePercent {
+
+.dmPage
+.dmCoverageRow[data-tone="red"]
+.dmCoveragePercent,
+
+.dmPage
+.dmCoverageRow[data-sap-ui-custom-tone="red"]
+.dmCoveragePercent {
     color: #ef4444 !important;
 }
 
-/* Estado con punto */
 
-.dmCoverageStatus {
-    display: flex !important;
+/* STATUS */
 
+.dmPage
+.dmCoverageStatus.sapMFlexBox,
+
+.dmPage
+.dmPressureZoneStatus.sapMFlexBox {
     width: 100% !important;
-    min-width: 0 !important;
 
-    align-items: center !important;
-    justify-content: flex-start !important;
+    min-width: 0 !important;
 
     gap: 5px !important;
 }
 
-.dmCoverageStatusDot {
+
+.dmPage
+.dmCoverageStatusDot,
+
+.dmPage
+.dmPressureZoneStatusDot {
     flex: 0 0 6px !important;
 
     width: 6px !important;
     height: 6px !important;
+
     min-width: 6px !important;
     min-height: 6px !important;
 
     border-radius: 50% !important;
 }
 
-.dmCoverageStatusText.sapMText {
-    display: block !important;
 
+.dmPage
+.dmCoverageStatusText.sapMText,
+
+.dmPage
+.dmPressureZoneStatusText.sapMText {
     min-width: 0 !important;
 
     overflow: hidden !important;
 
-    font-size: 0.43rem !important;
+    font-size: .44rem !important;
     font-weight: 800 !important;
 
     text-overflow: ellipsis !important;
+
     white-space: nowrap !important;
 }
 
-.dmCoverageStatus[data-tone="green"] .dmCoverageStatusDot,
-.dmCoverageStatus[data-sap-ui-custom-tone="green"] .dmCoverageStatusDot,
-.dmCoverageRow[data-tone="green"] .dmCoverageStatusDot,
-.dmCoverageRow[data-sap-ui-custom-tone="green"] .dmCoverageStatusDot {
+
+.dmPage
+[data-tone="green"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="green"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-tone="green"]
+.dmPressureZoneStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="green"]
+.dmPressureZoneStatusDot {
     background: #18a85b !important;
 }
 
-.dmCoverageStatus[data-tone="green"] .dmCoverageStatusText,
-.dmCoverageStatus[data-sap-ui-custom-tone="green"] .dmCoverageStatusText,
-.dmCoverageRow[data-tone="green"] .dmCoverageStatusText,
-.dmCoverageRow[data-sap-ui-custom-tone="green"] .dmCoverageStatusText {
-    color: #168a4c !important;
-}
 
-.dmCoverageStatus[data-tone="orange"] .dmCoverageStatusDot,
-.dmCoverageStatus[data-sap-ui-custom-tone="orange"] .dmCoverageStatusDot,
-.dmCoverageRow[data-tone="orange"] .dmCoverageStatusDot,
-.dmCoverageRow[data-sap-ui-custom-tone="orange"] .dmCoverageStatusDot {
+.dmPage
+[data-tone="orange"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="orange"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-tone="orange"]
+.dmPressureZoneStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="orange"]
+.dmPressureZoneStatusDot {
     background: #f59e0b !important;
 }
 
-.dmCoverageStatus[data-tone="orange"] .dmCoverageStatusText,
-.dmCoverageStatus[data-sap-ui-custom-tone="orange"] .dmCoverageStatusText,
-.dmCoverageRow[data-tone="orange"] .dmCoverageStatusText,
-.dmCoverageRow[data-sap-ui-custom-tone="orange"] .dmCoverageStatusText {
-    color: #d97706 !important;
-}
 
-.dmCoverageStatus[data-tone="red"] .dmCoverageStatusDot,
-.dmCoverageStatus[data-sap-ui-custom-tone="red"] .dmCoverageStatusDot,
-.dmCoverageRow[data-tone="red"] .dmCoverageStatusDot,
-.dmCoverageRow[data-sap-ui-custom-tone="red"] .dmCoverageStatusDot {
+.dmPage
+[data-tone="red"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="red"]
+.dmCoverageStatusDot,
+
+.dmPage
+[data-tone="red"]
+.dmPressureZoneStatusDot,
+
+.dmPage
+[data-sap-ui-custom-tone="red"]
+.dmPressureZoneStatusDot {
     background: #ef4444 !important;
 }
 
-.dmCoverageStatus[data-tone="red"] .dmCoverageStatusText,
-.dmCoverageStatus[data-sap-ui-custom-tone="red"] .dmCoverageStatusText,
-.dmCoverageRow[data-tone="red"] .dmCoverageStatusText,
-.dmCoverageRow[data-sap-ui-custom-tone="red"] .dmCoverageStatusText {
+
+.dmPage
+[data-tone="green"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="green"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-tone="green"]
+.dmPressureZoneStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="green"]
+.dmPressureZoneStatusText {
+    color: #168a4c !important;
+}
+
+
+.dmPage
+[data-tone="orange"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="orange"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-tone="orange"]
+.dmPressureZoneStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="orange"]
+.dmPressureZoneStatusText {
+    color: #d97706 !important;
+}
+
+
+.dmPage
+[data-tone="red"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="red"]
+.dmCoverageStatusText,
+
+.dmPage
+[data-tone="red"]
+.dmPressureZoneStatusText,
+
+.dmPage
+[data-sap-ui-custom-tone="red"]
+.dmPressureZoneStatusText {
     color: #dc2626 !important;
 }
 
-/* Leyenda */
 
-.dmCoverageLegend {
-    flex: 0 0 27px !important;
+/* LEYENDA */
 
-    width: 100% !important;
-    min-height: 27px !important;
+.dmPage
+.dmCoverageLegend.sapMFlexBox {
+    flex: 0 0 28px !important;
 
-    margin-top: 4px !important;
-    padding: 4px 6px !important;
+    width:
+        calc(
+            100% - 8px
+        ) !important;
+
+    min-height: 28px !important;
+
+    margin:
+        4px
+        4px
+        0 !important;
+
+    padding:
+        4px
+        6px !important;
 
     background: #fbfcfe !important;
-    border: 1px solid #edf1f5 !important;
+
+    border:
+        1px solid
+        #edf1f5 !important;
+
     border-radius: 6px !important;
 }
 
-.dmCoverageLegendItem {
-    min-width: 0 !important;
 
+.dmPage
+.dmCoverageLegendItem.sapMFlexBox {
     gap: 5px !important;
 }
 
-.dmCoverageLegendDot {
-    flex: 0 0 6px !important;
 
+.dmPage
+.dmCoverageLegendDot {
     width: 6px !important;
     height: 6px !important;
+
     min-width: 6px !important;
-    min-height: 6px !important;
 
     border-radius: 50% !important;
 }
 
+
+.dmPage
 .dmCoverageLegendRed {
     background: #ef4444 !important;
 }
 
+
+.dmPage
 .dmCoverageLegendOrange {
     background: #f59e0b !important;
 }
 
+
+.dmPage
 .dmCoverageLegendGreen {
     background: #18a85b !important;
 }
 
-.dmCoverageLegend .sapMText {
-    font-size: 0.37rem !important;
+
+.dmPage
+.dmCoverageLegend
+.sapMText {
+    font-size: .37rem !important;
     font-weight: 700 !important;
 
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmCoverageLegendRedText {
     color: #dc2626 !important;
 }
 
+
+.dmPage
 .dmCoverageLegendOrangeText {
     color: #d97706 !important;
 }
 
+
+.dmPage
 .dmCoverageLegendGreenText {
     color: #168a4c !important;
 }
 
-.dmCoverageLink {
-    flex: 0 0 16px !important;
-
-    margin-top: 2px !important;
-
-    color: #0a6ff5 !important;
-    font-size: 0.44rem !important;
-    font-weight: 700 !important;
-}
 
 /* ================================================================
    ESTADO DE PLANTILLA
    ================================================================ */
 
-.dmWorkforceStatusCard {
-    padding: 10px 12px 8px !important;
-}
-
-.dmWorkforceStatusTitleRow {
-    flex: 0 0 23px !important;
+.dmPage
+.dmWorkforceStatusContent.sapMFlexBox {
+    flex: 1 1 0 !important;
 
     width: 100% !important;
-    min-height: 23px !important;
-}
 
-.dmWorkforceStatusTitle.sapMText {
-    color: #244c74 !important;
-
-    font-size: 0.67rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-}
-
-.dmWorkforceStatusContent {
-    display: flex !important;
-    flex: 1 1 auto !important;
-
-    width: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
 
-    gap: 14px !important;
-    padding: 7px 3px 4px !important;
+    gap: 18px !important;
+
+    padding:
+        8px
+        4px
+        4px !important;
 
     overflow: hidden !important;
 }
 
-/* Dona */
 
-.dmWorkforceDonut {
-    flex: 0 0 104px !important;
+.dmPage
+.dmWorkforceDonut.sapMFlexBox {
+    position: relative !important;
 
-    width: 104px !important;
-    height: 104px !important;
-    min-width: 104px !important;
-    min-height: 104px !important;
+    flex: 0 0 118px !important;
 
-    background: conic-gradient(
-        #22a45a 0deg 66.24deg,
-        #2f6fed 66.24deg 269.76deg,
-        #f59e0b 269.76deg 317.28deg,
-        #ef4444 317.28deg 360deg
-    ) !important;
+    width: 118px !important;
+    height: 118px !important;
 
-    border: 0 !important;
+    min-width: 118px !important;
+    min-height: 118px !important;
+
+    max-width: 118px !important;
+    max-height: 118px !important;
+
+    background: #e8eef6;
+
     border-radius: 50% !important;
-
-    box-shadow: none !important;
 }
 
-.dmWorkforceDonutCenter {
-    width: 61px !important;
-    height: 61px !important;
+
+.dmPage
+.dmWorkforceDonut::after {
+    position: absolute !important;
+
+    top: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    left: 20px !important;
 
     background: #ffffff !important;
-    border: 0 !important;
+
     border-radius: 50% !important;
 
-    box-shadow: none !important;
+    content: "" !important;
 }
 
+
+.dmPage
+.dmWorkforceDonutCenter.sapMFlexBox {
+    position: relative !important;
+
+    z-index: 1 !important;
+}
+
+
+.dmPage
 .dmWorkforceDonutValue.sapMText {
     color: #244c74 !important;
 
-    font-size: 1.2rem !important;
+    font-size: 1.20rem !important;
     font-weight: 800 !important;
+
     line-height: 1 !important;
 }
 
+
+.dmPage
 .dmWorkforceDonutLabel.sapMText {
     margin-top: 3px !important;
 
     color: #748196 !important;
-    font-size: 0.46rem !important;
+
+    font-size: .46rem !important;
     font-weight: 600 !important;
-    line-height: 1 !important;
 }
 
-/* Leyenda */
 
-.dmWorkforceLegend {
-    display: flex !important;
-    flex: 1 1 auto !important;
-    flex-direction: column !important;
+.dmPage
+.dmWorkforceLegend.sapMFlexBox {
+    flex: 1 1 0 !important;
 
-    width: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
 }
 
-.dmWorkforceLegendHeader {
+
+.dmPage
+.dmWorkforceLegendHeader.sapMFlexBox,
+
+.dmPage
+.dmWorkforceLegendRow.sapMFlexBox {
     display: grid !important;
-    flex: 0 0 18px !important;
 
     grid-template-columns:
-        minmax(92px, 1fr)
-        45px
-        43px;
+        minmax(110px,1fr)
+        48px
+        44px !important;
 
     width: 100% !important;
-    min-height: 18px !important;
+
+    min-width: 0 !important;
 
     align-items: center !important;
-
-    padding: 0 2px 2px !important;
 }
 
-.dmWorkforceLegendHeaderSpacer {
-    width: auto !important;
-    min-width: 0 !important;
+
+.dmPage
+.dmWorkforceLegendHeader.sapMFlexBox {
+    flex: 0 0 20px !important;
+
+    min-height: 20px !important;
+
+    padding-bottom: 2px !important;
 }
 
+
+.dmPage
 .dmWorkforceLegendHeaderText.sapMText {
     display: block !important;
 
     width: 100% !important;
 
     color: #748196 !important;
-    font-size: 0.41rem !important;
+
+    font-size: .41rem !important;
     font-weight: 700 !important;
-    line-height: 1 !important;
 
     text-align: center !important;
-    white-space: nowrap !important;
 }
 
-.dmWorkforceHeaderMechanics,
-.dmWorkforceHeaderPercent {
-    width: auto !important;
-    min-width: 0 !important;
-}
 
-.dmWorkforceLegendRows {
+.dmPage
+.dmWorkforceLegendRows.sapMFlexBox {
+    flex: 1 1 0 !important;
+
     display: flex !important;
-    flex: 1 1 auto !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
 
-    width: 100% !important;
+    justify-content: space-evenly !important;
+
     min-height: 0 !important;
 }
 
-.dmWorkforceLegendRow {
-    display: grid !important;
+
+.dmPage
+.dmWorkforceLegendRow.sapMFlexBox {
     flex: 1 1 0 !important;
 
-    grid-template-columns:
-        minmax(92px, 1fr)
-        45px
-        43px;
-
-    width: 100% !important;
-    min-height: 23px !important;
-
-    align-items: center !important;
+    min-height: 24px !important;
 
     padding: 2px !important;
 }
 
-.dmWorkforceLegendRow > * {
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
 
-    flex: none !important;
-}
-
-.dmWorkforceLegendNameBox {
-    display: flex !important;
-
+.dmPage
+.dmWorkforceLegendRow
+> .sapMFlexItem {
     width: 100% !important;
+
     min-width: 0 !important;
 }
 
+
+.dmPage
+.dmWorkforceLegendNameBox.sapMFlexBox {
+    width: 100% !important;
+
+    min-width: 0 !important;
+}
+
+
+.dmPage
 .dmWorkforceLegendDot {
     flex: 0 0 7px !important;
 
     width: 7px !important;
     height: 7px !important;
+
     min-width: 7px !important;
-    min-height: 7px !important;
 
     margin-right: 7px !important;
 
     border-radius: 50% !important;
 }
 
-.dmWorkforceLegendName.sapMText {
-    display: block !important;
 
+.dmPage
+.dmWorkforceLegendRow[data-tone="green"]
+.dmWorkforceLegendDot,
+
+.dmPage
+.dmWorkforceLegendRow[data-sap-ui-custom-tone="green"]
+.dmWorkforceLegendDot {
+    background: #22a45a !important;
+}
+
+
+.dmPage
+.dmWorkforceLegendRow[data-tone="blue"]
+.dmWorkforceLegendDot,
+
+.dmPage
+.dmWorkforceLegendRow[data-sap-ui-custom-tone="blue"]
+.dmWorkforceLegendDot {
+    background: #2f6fed !important;
+}
+
+
+.dmPage
+.dmWorkforceLegendRow[data-tone="orange"]
+.dmWorkforceLegendDot,
+
+.dmPage
+.dmWorkforceLegendRow[data-sap-ui-custom-tone="orange"]
+.dmWorkforceLegendDot {
+    background: #f59e0b !important;
+}
+
+
+.dmPage
+.dmWorkforceLegendRow[data-tone="red"]
+.dmWorkforceLegendDot,
+
+.dmPage
+.dmWorkforceLegendRow[data-sap-ui-custom-tone="red"]
+.dmWorkforceLegendDot {
+    background: #ef4444 !important;
+}
+
+
+.dmPage
+.dmWorkforceLegendRow[data-tone="gray"]
+.dmWorkforceLegendDot,
+
+.dmPage
+.dmWorkforceLegendRow[data-sap-ui-custom-tone="gray"]
+.dmWorkforceLegendDot {
+    background: #94a3b8 !important;
+}
+
+
+.dmPage
+.dmWorkforceLegendName.sapMText {
     min-width: 0 !important;
 
     overflow: hidden !important;
 
     color: #34445c !important;
-    font-size: 0.5rem !important;
+
+    font-size: .50rem !important;
     font-weight: 700 !important;
-    line-height: 1.05 !important;
 
     text-overflow: ellipsis !important;
+
     white-space: nowrap !important;
 }
 
-.dmWorkforceLegendValue.sapMText {
-    display: block !important;
 
-    width: 100% !important;
+.dmPage
+.dmWorkforceLegendValue.sapMText,
 
-    color: #244c74 !important;
-    font-size: 0.51rem !important;
-    font-weight: 800 !important;
-
-    text-align: center !important;
-    white-space: nowrap !important;
-}
-
+.dmPage
 .dmWorkforceLegendPercent.sapMText {
     display: block !important;
 
     width: 100% !important;
 
-    color: #34445c !important;
-    font-size: 0.5rem !important;
-    font-weight: 700 !important;
+    color: #244c74 !important;
+
+    font-size: .50rem !important;
+    font-weight: 800 !important;
 
     text-align: center !important;
+
     white-space: nowrap !important;
 }
 
-/* Colores de puntos */
 
-.dmWorkforceLegendRow[data-tone="green"] .dmWorkforceLegendDot,
-.dmWorkforceLegendRow[data-sap-ui-custom-tone="green"] .dmWorkforceLegendDot {
-    background: #22a45a !important;
-}
-
-.dmWorkforceLegendRow[data-tone="blue"] .dmWorkforceLegendDot,
-.dmWorkforceLegendRow[data-sap-ui-custom-tone="blue"] .dmWorkforceLegendDot {
-    background: #2f6fed !important;
-}
-
-.dmWorkforceLegendRow[data-tone="orange"] .dmWorkforceLegendDot,
-.dmWorkforceLegendRow[data-sap-ui-custom-tone="orange"] .dmWorkforceLegendDot {
-    background: #f59e0b !important;
-}
-
-.dmWorkforceLegendRow[data-tone="red"] .dmWorkforceLegendDot,
-.dmWorkforceLegendRow[data-sap-ui-custom-tone="red"] .dmWorkforceLegendDot {
-    background: #ef4444 !important;
-}
-
-.dmWorkforceLegendRow[data-tone="gray"] .dmWorkforceLegendDot,
-.dmWorkforceLegendRow[data-sap-ui-custom-tone="gray"] .dmWorkforceLegendDot {
-    background: #94a3b8 !important;
-}
-
-.dmWorkforceStatusLink {
-    flex: 0 0 18px !important;
-
-    margin-top: 3px !important;
-
-    color: #0a6ff5 !important;
-    font-size: 0.49rem !important;
-    font-weight: 700 !important;
-}
 /* ================================================================
-   POR TIPO DE SERVICIO / ORDEN
-   GRÁFICAS MÁS GRANDES
+   SERVICIO / ORDEN
    ================================================================ */
 
-.dmServiceOrderCard {
-    padding: 9px 12px 8px !important;
-}
+.dmPage
+.dmServiceLegend.sapMFlexBox {
+    flex: 0 0 22px !important;
 
-/* TÍTULO */
-
-.dmServiceOrderHeader {
-    flex: 0 0 21px !important;
     width: 100% !important;
-    min-height: 21px !important;
-}
 
-.dmServiceOrderTitle.sapMText {
-    color: #244C74 !important;
-    font-size: 0.69rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-}
-
-/* LEYENDA */
-
-.dmServiceLegend {
-    flex: 0 0 19px !important;
-    width: 100% !important;
-    min-height: 19px !important;
+    min-height: 22px !important;
 
     gap: 14px !important;
+
     margin-top: 2px !important;
-    margin-bottom: 1px !important;
 }
 
-.dmServiceLegendItem {
-    gap: 4px !important;
-}
 
-.dmServiceLegend .sapMText,
-.dmServiceLegendBlue,
-.dmServiceLegendPurple,
-.dmServiceLegendGreen {
-    font-size: 0.48rem !important;
+.dmPage
+.dmServiceLegend
+.sapMText {
+    font-size: .47rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
+
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmServiceLegendBlue {
-    color: #2563EB !important;
+    color: #2563eb !important;
 }
 
+
+.dmPage
 .dmServiceLegendPurple {
-    color: #8B5CF6 !important;
+    color: #8b5cf6 !important;
 }
 
+
+.dmPage
 .dmServiceLegendGreen {
-    color: #22A45A !important;
+    color: #22a45a !important;
 }
 
-/* ================================================================
-   ÁREA COMPLETA DE LA GRÁFICA
-   ================================================================ */
 
-.dmServiceChartRefined {
-    display: flex !important;
-    flex: 1 1 auto !important;
+.dmPage
+.dmServiceChartRefined.sapMFlexBox {
+    flex: 1 1 0 !important;
 
     width: 100% !important;
     height: 100% !important;
+
     min-height: 0 !important;
 
-    padding: 0 4px 1px !important;
-    margin: 0 !important;
+    padding:
+        3px
+        8px
+        1px !important;
 
     align-items: flex-end !important;
     justify-content: space-around !important;
@@ -2008,30 +2521,30 @@
     overflow: hidden !important;
 }
 
-/* CADA GRUPO DE SERVICIO */
 
-.dmServiceGroupRefined {
-    display: flex !important;
+.dmPage
+.dmServiceGroupRefined.sapMFlexBox {
     flex: 1 1 0 !important;
-    flex-direction: column !important;
 
     width: 33.333% !important;
-    min-width: 95px !important;
-    max-width: 145px !important;
     height: 100% !important;
 
-    align-items: center !important;
+    min-width: 85px !important;
+    min-height: 0 !important;
+
+    max-width: 150px !important;
+
     justify-content: flex-end !important;
 }
 
-/* CONTENEDOR DE LAS DOS BARRAS */
 
-.dmServiceBarsRefined {
-    display: flex !important;
+.dmPage
+.dmServiceBarsRefined.sapMFlexBox {
+    flex: 1 1 0 !important;
 
     width: 100% !important;
-    height: 155px !important;
-    min-height: 155px !important;
+
+    min-height: 80px !important;
     max-height: 155px !important;
 
     gap: 10px !important;
@@ -2040,1465 +2553,968 @@
     justify-content: center !important;
 }
 
-/* COLUMNA: VALOR + BARRA */
 
-.dmBarColumnRefined {
-    display: flex !important;
-    flex-direction: column !important;
+.dmPage
+.dmBarColumnRefined.sapMFlexBox {
+    width: 40px !important;
+    height: 100% !important;
 
-    width: 39px !important;
-    height: 155px !important;
-    min-height: 155px !important;
+    min-height: 0 !important;
 
     align-items: center !important;
     justify-content: flex-end !important;
 }
 
-/* VALORES SOBRE LAS BARRAS */
 
+.dmPage
 .dmBarValueRefined.sapMText {
-    flex: 0 0 auto !important;
+    flex: 0 0 14px !important;
 
-    margin: 0 0 5px !important;
+    margin-bottom: 5px !important;
 
-    color: #243B6B !important;
-    font-size: 0.47rem !important;
+    color: #243b6b !important;
+
+    font-size: .47rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
+
     white-space: nowrap !important;
 }
 
-/* BARRAS */
 
+.dmPage
 .dmVerticalBarRefined {
-    flex: 0 0 auto !important;
+    width: 34px !important;
 
-    width: 33px !important;
-    min-width: 33px !important;
-    min-height: 18px !important;
+    min-width: 34px !important;
+    min-height: 8px !important;
 
-    border: 0 !important;
-    border-radius: 5px 5px 0 0 !important;
+    max-height:
+        calc(
+            100% - 20px
+        ) !important;
 
-    box-shadow: none !important;
+    border-radius:
+        5px
+        5px
+        0
+        0 !important;
 }
 
-/* AZUL */
 
+.dmPage
 .dmVerticalBlueRefined {
-    background: linear-gradient(
-        180deg,
-        #4B8BFF 0%,
-        #2563EB 100%
-    ) !important;
+    background:
+        linear-gradient(
+            180deg,
+            #4b8bff 0%,
+            #2563eb 100%
+        ) !important;
 }
 
-/* MORADO */
 
+.dmPage
 .dmVerticalPurpleRefined {
-    background: linear-gradient(
-        180deg,
-        #9C6BFF 0%,
-        #7C3AED 100%
-    ) !important;
+    background:
+        linear-gradient(
+            180deg,
+            #9c6bff 0%,
+            #7c3aed 100%
+        ) !important;
 }
 
-/* ================================================================
-   ALTURAS DE LAS GRÁFICAS
-   ================================================================ */
 
-/* Mantenimiento planeado */
-
-.dmBarMantProg {
-    height: 112px !important;
-}
-
-.dmBarMantReal {
-    height: 107px !important;
-}
-
-/* Reparación / correctivo */
-
-.dmBarRepProg {
-    height: 72px !important;
-}
-
-.dmBarRepReal {
-    height: 80px !important;
-}
-
-/* Call Center */
-
-.dmBarCallProg {
-    height: 44px !important;
-}
-
-.dmBarCallReal {
-    height: 38px !important;
-}
-
-/* ================================================================
-   ICONO Y NOMBRE DEL SERVICIO
-   ================================================================ */
-
-.dmServiceFooterRefined {
-    flex: 0 0 32px !important;
+.dmPage
+.dmServiceFooterRefined.sapMFlexBox {
+    flex: 0 0 34px !important;
 
     width: 100% !important;
-    min-height: 32px !important;
+
+    min-height: 34px !important;
 
     gap: 5px !important;
-    margin-top: 7px !important;
+
+    margin-top: 6px !important;
 
     align-items: flex-start !important;
     justify-content: center !important;
 }
 
-.dmServiceFooterIcon {
-    flex: 0 0 auto !important;
 
+.dmPage
+.dmServiceFooterIcon {
     margin-top: 1px !important;
 
-    color: #64748B !important;
-    font-size: 0.61rem !important;
+    color: #64748b !important;
+
+    font-size: .61rem !important;
 }
 
+
+.dmPage
 .dmServiceFooterText.sapMText {
-    display: block !important;
+    max-width: 96px !important;
 
-    width: auto !important;
-    max-width: 90px !important;
+    color: #244c74 !important;
 
-    color: #244C74 !important;
-    font-size: 0.46rem !important;
+    font-size: .46rem !important;
     font-weight: 700 !important;
+
     line-height: 1.08 !important;
 
     text-align: center !important;
 }
 
-/* ================================================================
-   AJUSTE PARA PANTALLAS CON MENOR ALTURA
-   ================================================================ */
 
-@media screen and (min-width: 1181px) and (max-height: 720px) {
-
-    .dmServiceOrderCard {
-        padding: 7px 9px 6px !important;
-    }
-
-    .dmServiceOrderHeader {
-        flex-basis: 18px !important;
-        min-height: 18px !important;
-    }
-
-    .dmServiceOrderTitle.sapMText {
-        font-size: 0.61rem !important;
-    }
-
-    .dmServiceLegend {
-        flex-basis: 16px !important;
-        min-height: 16px !important;
-
-        gap: 10px !important;
-        margin-top: 1px !important;
-        margin-bottom: 0 !important;
-    }
-
-    .dmServiceLegend .sapMText,
-    .dmServiceLegendBlue,
-    .dmServiceLegendPurple,
-    .dmServiceLegendGreen {
-        font-size: 0.41rem !important;
-    }
-
-    .dmServiceGroupRefined {
-        min-width: 80px !important;
-        max-width: 120px !important;
-    }
-
-    .dmServiceBarsRefined {
-        height: 130px !important;
-        min-height: 130px !important;
-        max-height: 130px !important;
-
-        gap: 8px !important;
-    }
-
-    .dmBarColumnRefined {
-        width: 33px !important;
-        height: 130px !important;
-        min-height: 130px !important;
-    }
-
-    .dmBarValueRefined.sapMText {
-        margin-bottom: 4px !important;
-        font-size: 0.41rem !important;
-    }
-
-    .dmVerticalBarRefined {
-        width: 28px !important;
-        min-width: 28px !important;
-    }
-
-    .dmBarMantProg {
-        height: 94px !important;
-    }
-
-    .dmBarMantReal {
-        height: 89px !important;
-    }
-
-    .dmBarRepProg {
-        height: 60px !important;
-    }
-
-    .dmBarRepReal {
-        height: 68px !important;
-    }
-
-    .dmBarCallProg {
-        height: 36px !important;
-    }
-
-    .dmBarCallReal {
-        height: 31px !important;
-    }
-
-    .dmServiceFooterRefined {
-        flex-basis: 27px !important;
-        min-height: 27px !important;
-
-        gap: 3px !important;
-        margin-top: 5px !important;
-    }
-
-    .dmServiceFooterIcon {
-        font-size: 0.51rem !important;
-    }
-
-    .dmServiceFooterText.sapMText {
-        max-width: 76px !important;
-        font-size: 0.39rem !important;
-    }
-}
 /* ================================================================
    PRESIÓN OPERATIVA POR ZONA
    ================================================================ */
 
-.dmPressureZoneCard {
-    padding: 9px 11px 7px !important;
-}
+.dmPage
+.dmPressureZoneTableWrap.sapMFlexBox {
+    flex: 1 1 0 !important;
 
-/* TÍTULO */
+    width:
+        calc(
+            100% - 8px
+        ) !important;
 
-.dmPressureZoneTitleRow {
-    flex: 0 0 22px !important;
-
-    width: 100% !important;
-    min-height: 22px !important;
-}
-
-.dmPressureZoneTitle.sapMText {
-    color: #244c74 !important;
-
-    font-size: 0.67rem !important;
-    font-weight: 800 !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-}
-
-/* CONTENEDOR */
-
-.dmPressureZoneTableWrap {
-    flex: 1 1 auto !important;
-
-    width: 100% !important;
     min-height: 0 !important;
 
-    margin-top: 2px !important;
+    margin:
+        3px
+        4px
+        0 !important;
 
-    overflow: hidden !important;
+    overflow: auto !important;
+
+    border:
+        1px solid
+        #e7edf5 !important;
+
+    border-radius: 6px !important;
 }
 
-/* TABLA */
 
-.dmPressureZoneTable {
-    width: 100% !important;
+.dmPage
+.dmPressureZoneTable.sapMList,
 
-    background: transparent !important;
-}
-
-.dmPressureZoneTable .sapMListTbl {
+.dmPage
+.dmPressureZoneTable
+.sapMListTbl {
     width: 100% !important;
 
     table-layout: fixed !important;
-    border-collapse: collapse !important;
-
-    background: transparent !important;
-}
-
-/* CABECERA */
-
-.dmPressureZoneTable .sapMListTblHeader {
-    background: #ffffff !important;
-}
-
-.dmPressureZoneTable .sapMListTblHeaderCell,
-.dmPressureZoneTable .sapMListTbl th {
-    height: 33px !important;
-    min-height: 33px !important;
-
-    padding: 3px 7px !important;
-
-    vertical-align: middle !important;
 
     background: #ffffff !important;
-    border-bottom: 1px solid #e5eaf1 !important;
 }
 
+
+.dmPage
+.dmPressureZoneTable
+.sapMListTblHeader,
+
+.dmPage
+.dmPressureZoneTable
+.sapMListTblHeaderCell {
+    height: 34px !important;
+
+    min-height: 34px !important;
+
+    background: #f4f7fb !important;
+}
+
+
+.dmPage
+.dmPressureZoneTable
+.sapMListTblHeaderCell {
+    padding:
+        3px
+        7px !important;
+
+    border-bottom:
+        1px solid
+        #e5eaf1 !important;
+}
+
+
+.dmPage
 .dmPressureZoneHeaderText.sapMText {
     display: block !important;
 
     width: 100% !important;
-    min-width: 0 !important;
 
-    color: #5f6d82 !important;
-    font-size: 0.44rem !important;
+    color: #526683 !important;
+
+    font-size: .44rem !important;
     font-weight: 800 !important;
+
     line-height: 1.08 !important;
-
-    word-break: normal !important;
-    overflow-wrap: normal !important;
 }
 
-/* FILAS */
 
-.dmPressureZoneTable .sapMListTblRow {
+.dmPage
+.dmPressureZoneTable
+.sapMListTblRow,
+
+.dmPage
+.dmPressureZoneTable
+.sapMListTblCell {
     height: 34px !important;
-    min-height: 34px !important;
 
-    background: #ffffff !important;
+    min-height: 34px !important;
 }
 
-.dmPressureZoneTable .sapMListTblCell {
-    height: 34px !important;
-    min-height: 34px !important;
 
-    padding: 3px 7px !important;
+.dmPage
+.dmPressureZoneTable
+.sapMListTblCell {
+    padding:
+        3px
+        7px !important;
+
+    border-bottom:
+        1px solid
+        #edf1f5 !important;
 
     vertical-align: middle !important;
-
-    border-bottom: 1px solid #edf1f5 !important;
 }
 
-.dmPressureZoneTable
-.sapMListTblRow:last-child
-.sapMListTblCell {
-    border-bottom: 0 !important;
-}
 
-/* ZONA */
+.dmPage
+.dmPressureZoneName.sapMText,
 
-.dmPressureZoneName.sapMText {
-    display: block !important;
-
-    color: #244c74 !important;
-    font-size: 0.5rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    white-space: nowrap !important;
-}
-
-/* ÓRDENES */
-
+.dmPage
 .dmPressureZoneOrders.sapMText {
     display: block !important;
 
     width: 100% !important;
 
-    color: #34445c !important;
-    font-size: 0.49rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
+    color: #244c74 !important;
 
-    text-align: center !important;
+    font-size: .49rem !important;
+    font-weight: 800 !important;
+
     white-space: nowrap !important;
 }
 
-/* ================================================================
-   UTILIZACIÓN
-   ================================================================ */
 
-.dmPressureZoneUtilization {
-    display: flex !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 8px !important;
+.dmPage
+.dmPressureZoneOrders.sapMText {
+    text-align: center !important;
 }
 
-.dmPressureZoneBarTrack {
-    display: flex !important;
-    flex: 0 0 74px !important;
 
-    width: 74px !important;
-    min-width: 74px !important;
-    max-width: 74px !important;
+.dmPage
+.dmPressureZoneUtilization.sapMFlexBox {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    gap: 8px !important;
+
+    justify-content: center !important;
+}
+
+
+.dmPage
+.dmPressureZoneBarTrack.sapMFlexBox {
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+
+    min-width: 70px !important;
+    max-width: 115px !important;
 
     height: 6px !important;
     min-height: 6px !important;
-    max-height: 6px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    align-items: center !important;
 
     overflow: hidden !important;
 
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 999px !important;
+    background: #e3e8ee !important;
 
-    box-shadow: none !important;
+    border-radius: 999px !important;
 }
 
+
+.dmPage
 .dmPressureZoneBarFill {
-    display: block !important;
-    flex: 0 0 auto !important;
-
     height: 6px !important;
+
     min-height: 6px !important;
-    max-height: 6px !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
+    max-width: 100% !important;
 
-    border: 0 !important;
     border-radius: 999px !important;
-
-    box-shadow: none !important;
 }
 
-/* Quitar puntos y pseudo-elementos */
 
-.dmPressureZoneBarTrack::before,
-.dmPressureZoneBarTrack::after,
-.dmPressureZoneBarFill::before,
-.dmPressureZoneBarFill::after,
-.dmPressureZoneBarTrack *::before,
-.dmPressureZoneBarTrack *::after {
-    display: none !important;
-    visibility: hidden !important;
-
-    width: 0 !important;
-    height: 0 !important;
-
-    content: none !important;
-}
-
-/* BARRA ROJA */
-
+.dmPage
 .dmPressureZoneBarFill[data-tone="red"],
+
+.dmPage
 .dmPressureZoneBarFill[data-sap-ui-custom-tone="red"] {
     background: #ef4444 !important;
 }
 
-/* BARRA NARANJA */
 
+.dmPage
 .dmPressureZoneBarFill[data-tone="orange"],
+
+.dmPage
 .dmPressureZoneBarFill[data-sap-ui-custom-tone="orange"] {
     background: #f59e0b !important;
 }
 
-/* BARRA VERDE */
 
+.dmPage
 .dmPressureZoneBarFill[data-tone="green"],
+
+.dmPage
 .dmPressureZoneBarFill[data-sap-ui-custom-tone="green"] {
     background: #18a85b !important;
 }
 
-/* PORCENTAJE */
 
+.dmPage
 .dmPressureZoneUtilText.sapMText {
-    flex: 0 0 39px !important;
+    flex: 0 0 42px !important;
 
-    width: 39px !important;
-    min-width: 39px !important;
+    width: 42px !important;
 
-    font-size: 0.48rem !important;
+    font-size: .48rem !important;
     font-weight: 800 !important;
-    line-height: 1 !important;
 
-    text-align: left !important;
     white-space: nowrap !important;
 }
 
+
+.dmPage
 .dmPressureZoneRow[data-tone="red"]
 .dmPressureZoneUtilText,
+
+.dmPage
 .dmPressureZoneRow[data-sap-ui-custom-tone="red"]
 .dmPressureZoneUtilText {
     color: #ef4444 !important;
 }
 
+
+.dmPage
 .dmPressureZoneRow[data-tone="orange"]
 .dmPressureZoneUtilText,
+
+.dmPage
 .dmPressureZoneRow[data-sap-ui-custom-tone="orange"]
 .dmPressureZoneUtilText {
     color: #f59e0b !important;
 }
 
+
+.dmPage
 .dmPressureZoneRow[data-tone="green"]
 .dmPressureZoneUtilText,
+
+.dmPage
 .dmPressureZoneRow[data-sap-ui-custom-tone="green"]
 .dmPressureZoneUtilText {
     color: #18a85b !important;
 }
 
-/* ================================================================
-   ESTADO CON PUNTO
-   ================================================================ */
-
-.dmPressureZoneStatus {
-    display: flex !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-
-    align-items: center !important;
-    justify-content: flex-start !important;
-
-    gap: 6px !important;
-}
-
-.dmPressureZoneStatusDot {
-    flex: 0 0 6px !important;
-
-    width: 6px !important;
-    height: 6px !important;
-    min-width: 6px !important;
-    min-height: 6px !important;
-
-    border: 0 !important;
-    border-radius: 50% !important;
-}
-
-.dmPressureZoneStatusText.sapMText {
-    display: block !important;
-
-    min-width: 0 !important;
-
-    overflow: hidden !important;
-
-    font-size: 0.47rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-}
-
-/* ROJO */
-
-.dmPressureZoneStatus[data-tone="red"]
-.dmPressureZoneStatusDot,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="red"]
-.dmPressureZoneStatusDot {
-    background: #ef4444 !important;
-}
-
-.dmPressureZoneStatus[data-tone="red"]
-.dmPressureZoneStatusText,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="red"]
-.dmPressureZoneStatusText {
-    color: #dc2626 !important;
-}
-
-/* NARANJA */
-
-.dmPressureZoneStatus[data-tone="orange"]
-.dmPressureZoneStatusDot,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="orange"]
-.dmPressureZoneStatusDot {
-    background: #f59e0b !important;
-}
-
-.dmPressureZoneStatus[data-tone="orange"]
-.dmPressureZoneStatusText,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="orange"]
-.dmPressureZoneStatusText {
-    color: #d97706 !important;
-}
-
-/* VERDE */
-
-.dmPressureZoneStatus[data-tone="green"]
-.dmPressureZoneStatusDot,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="green"]
-.dmPressureZoneStatusDot {
-    background: #18a85b !important;
-}
-
-.dmPressureZoneStatus[data-tone="green"]
-.dmPressureZoneStatusText,
-.dmPressureZoneStatus[data-sap-ui-custom-tone="green"]
-.dmPressureZoneStatusText {
-    color: #168a4c !important;
-}
-
-/* ENLACE */
-
-.dmPressureZoneLink {
-    flex: 0 0 17px !important;
-
-    min-height: 17px !important;
-    margin-top: 3px !important;
-
-    color: #0a6ff5 !important;
-    font-size: 0.47rem !important;
-    font-weight: 700 !important;
-}
 
 /* ================================================================
-   PRESIÓN OPERATIVA — 1366 × 768
+   1366 × 768 / ALTURA REDUCIDA
    ================================================================ */
 
-@media screen and (min-width: 1181px) and (max-height: 720px) {
+@media screen
+and (min-width: 901px)
+and (max-height: 720px) {
 
-    .dmPressureZoneCard {
-        padding: 6px 7px 5px !important;
+    .dmPage
+    .dmDashboard.sapMFlexBox {
+        padding:
+            5px
+            8px
+            5px
+            18px !important;
+
+        gap: 5px !important;
     }
 
-    .dmPressureZoneTitleRow {
-        flex-basis: 18px !important;
-        min-height: 18px !important;
+
+    .dmPage
+    .dmHeaderBox.sapMFlexBox {
+        flex-basis: 40px !important;
+
+        height: 40px !important;
+
+        min-height: 40px !important;
     }
 
-    .dmPressureZoneTitle.sapMText {
-        font-size: 0.58rem !important;
+
+    .dmPage
+    .dmTitle.sapMTitle {
+        font-size: 1.38rem !important;
     }
 
-    .dmPressureZoneTable .sapMListTblHeaderCell,
-    .dmPressureZoneTable .sapMListTbl th {
-        height: 27px !important;
-        min-height: 27px !important;
 
-        padding: 2px 5px !important;
+    .dmPage
+    .dmSubtitle.sapMText {
+        font-size: .62rem !important;
     }
 
-    .dmPressureZoneHeaderText.sapMText {
-        font-size: 0.38rem !important;
+
+    .dmPage
+    .dmFilters.sapMFlexBox,
+
+    .dmPage
+    .dmFilterItem.sapMFlexBox,
+
+    .dmPage
+    .dmApplyButtonBox.sapMFlexBox {
+        height: 48px !important;
+
+        min-height: 48px !important;
     }
 
-    .dmPressureZoneTable .sapMListTblRow,
-    .dmPressureZoneTable .sapMListTblCell {
-        height: 28px !important;
-        min-height: 28px !important;
+
+    .dmPage
+    .dmFilters.sapMFlexBox {
+        flex-basis: 48px !important;
+
+        gap: 5px !important;
     }
 
-    .dmPressureZoneTable .sapMListTblCell {
-        padding: 2px 5px !important;
+
+    .dmPage
+    .dmFilterItem.sapMFlexBox {
+        padding:
+            3px
+            7px
+            2px !important;
     }
 
-    .dmPressureZoneName.sapMText,
-    .dmPressureZoneOrders.sapMText,
-    .dmPressureZoneUtilText.sapMText,
-    .dmPressureZoneStatusText.sapMText {
-        font-size: 0.42rem !important;
+
+    .dmPage
+    .dmFilterLabel.sapMLabel {
+        font-size: .54rem !important;
     }
 
-    .dmPressureZoneBarTrack {
-        flex-basis: 60px !important;
 
-        width: 60px !important;
-        min-width: 60px !important;
-        max-width: 60px !important;
+    .dmPage
+    .dmApplyBtn
+    .sapMBtnInner {
+        height: 42px !important;
 
-        height: 5px !important;
-        min-height: 5px !important;
-        max-height: 5px !important;
+        min-height: 42px !important;
     }
 
-    .dmPressureZoneBarFill {
-        height: 5px !important;
-        min-height: 5px !important;
-        max-height: 5px !important;
+
+    .dmPage
+    .dmKpiRow.sapMFlexBox,
+
+    .dmPage
+    .dmKpiRow
+    > .sapMFlexItem,
+
+    .dmPage
+    .dmKpiCard.sapMFlexBox {
+        height: 64px !important;
+
+        min-height: 64px !important;
     }
 
-    .dmPressureZoneUtilText.sapMText {
+
+    .dmPage
+    .dmKpiRow.sapMFlexBox {
+        flex-basis: 64px !important;
+
+        gap: 6px !important;
+    }
+
+
+    .dmPage
+    .dmKpiCard.sapMFlexBox {
+        padding:
+            6px
+            7px
+            6px
+            10px !important;
+    }
+
+
+    .dmPage
+    .dmKpiIconCircle.sapMFlexBox {
         flex-basis: 35px !important;
 
         width: 35px !important;
+        height: 35px !important;
+
         min-width: 35px !important;
-    }
+        min-height: 35px !important;
 
-    .dmPressureZoneStatusDot {
-        flex-basis: 5px !important;
-
-        width: 5px !important;
-        height: 5px !important;
-        min-width: 5px !important;
-        min-height: 5px !important;
-    }
-
-    .dmPressureZoneLink {
-        flex-basis: 14px !important;
-
-        min-height: 14px !important;
-        margin-top: 1px !important;
-
-        font-size: 0.4rem !important;
-    }
-}
-
-/* ================================================================
-   MONITOR 1366 × 768
-   ================================================================ */
-
-@media screen and (min-width: 1181px) and (max-height: 720px) {
-
-    .dmDashboard {
-        padding: 5px 8px 5px 18px !important;
-    }
-
-    .dmHeaderBox {
-        padding: 0 5px 4px !important;
-    }
-
-    .dmTitle.sapMTitle {
-        margin-top: 1px !important;
-
-        font-size: 1.22rem !important;
-    }
-
-    .dmSubtitle.sapMText {
-        margin-top: 1px !important;
-
-        font-size: 0.54rem !important;
-    }
-
-    .dmFilterItem,
-    .dmApplyButtonBox {
-        height: 43px !important;
-        min-height: 43px !important;
-    }
-
-    .dmFilterItem {
-        padding: 3px 7px 2px !important;
-    }
-
-    .dmFilterLabel.sapMLabel {
-        height: 10px !important;
-
-        font-size: 0.49rem !important;
-        line-height: 10px !important;
-    }
-
-    .dmFilterControl.sapMSlt,
-    .dmFilterControl.sapMSlt .sapMSltLabel,
-    .dmFilterControl.sapMSlt .sapMSltArrow,
-    .dmDateControl.sapMInputBase,
-    .dmDateControl.sapMInputBase .sapMInputBaseContentWrapper,
-    .dmDateControl.sapMInputBase .sapMInputBaseInner,
-    .dmDateControl .sapMInputBaseIconContainer,
-    .dmDateControl .sapMInputBaseIcon {
-        height: 1.4rem !important;
-        min-height: 1.4rem !important;
-
-        line-height: 1.4rem !important;
-    }
-
-    .dmKpiRow {
-        gap: 6px !important;
-        margin-top: 5px !important;
-    }
-
-    .dmKpiCard {
-        min-height: 57px !important;
-
-        padding: 4px 7px 4px 9px !important;
-    }
-
-    .dmKpiIconCircle {
-        flex-basis: 32px !important;
-
-        width: 32px !important;
-        height: 32px !important;
-        min-width: 32px !important;
-        min-height: 32px !important;
+        max-width: 35px !important;
+        max-height: 35px !important;
 
         margin-right: 6px !important;
     }
 
+
+    .dmPage
     .dmKpiIcon {
-        font-size: 0.93rem !important;
-    }
-
-    .dmKpiValue.sapMText {
-        font-size: 0.93rem !important;
-    }
-
-    .dmKpiLabel.sapMText {
-        font-size: 0.49rem !important;
-    }
-
-    .dmKpiHelper.sapMText {
-        font-size: 0.39rem !important;
-    }
-
-    .dmContentArea {
-        gap: 6px !important;
-        margin-top: 6px !important;
-    }
-
-    .dmDashboardRow {
-        gap: 6px !important;
-    }
-
-    .dmCard {
-        padding: 6px 7px !important;
-    }
-
-    .dmCardTitle.sapMText {
-        font-size: 0.58rem !important;
-    }
-
-    .dmCardSubtitle.sapMText {
-        font-size: 0.4rem !important;
-    }
-
-    /* Distribución */
-
-    .dmDistributionCard {
-        padding: 7px 8px 6px !important;
-    }
-
-    .dmDistributionList {
-        margin-top: 3px !important;
-        margin-bottom: 4px !important;
-    }
-
-    .dmDistributionRow {
-        min-height: 29px !important;
-
-        gap: 6px !important;
-        padding: 1px 0 !important;
-    }
-
-    .dmRoundIcon {
-        flex-basis: 22px !important;
-
-        width: 22px !important;
-        height: 22px !important;
-        min-width: 22px !important;
-        min-height: 22px !important;
-    }
-
-    .dmRoundIcon .sapUiIcon {
-        font-size: 0.66rem !important;
-    }
-
-    .dmDistributionName.sapMText {
-        margin-bottom: 3px !important;
-
-        font-size: 0.5rem !important;
-    }
-
-    .dmDistributionValue.sapMText {
-        flex-basis: 21px !important;
-
-        width: 21px !important;
-        min-width: 21px !important;
-
-        font-size: 0.49rem !important;
-    }
-
-    .dmDistributionPct.sapMText {
-        flex-basis: 38px !important;
-
-        width: 38px !important;
-        min-width: 38px !important;
-
-        font-size: 0.48rem !important;
-    }
-
-    .dmTotalMechanics {
-        flex-basis: 28px !important;
-
-        min-height: 28px !important;
-
-        padding: 5px 8px !important;
-    }
-
-    .dmTotalLabel.sapMText,
-    .dmTotalValue.sapMText {
-        font-size: 0.56rem !important;
-    }
-
-    /* Utilización */
-
-    .dmTurnUtilCard {
-        padding: 7px 8px 6px !important;
-    }
-
-    .dmTurnUtilGrid {
-        grid-template-columns:
-            minmax(88px, 1.12fr)
-            minmax(69px, 0.9fr)
-            minmax(69px, 0.9fr)
-            minmax(105px, 1.28fr);
-
-        column-gap: 7px !important;
-    }
-
-    .dmTurnUtilTitleRow {
-        flex-basis: 19px !important;
-        min-height: 19px !important;
-    }
-
-    .dmTurnUtilTitle.sapMText {
-        font-size: 0.59rem !important;
-    }
-
-    .dmTurnUtilHeader {
-        flex-basis: 28px !important;
-        min-height: 28px !important;
-
-        padding: 0 5px 3px !important;
-    }
-
-    .dmTurnUtilHeaderText.sapMText {
-        font-size: 0.41rem !important;
-    }
-
-    .dmTurnUtilRow {
-        min-height: 29px !important;
-
-        padding: 2px 5px !important;
-    }
-
-    .dmTurnUtilShiftIcon {
-        flex-basis: 17px !important;
-
-        width: 17px !important;
-        min-width: 17px !important;
-
-        margin-right: 4px !important;
-
-        font-size: 0.69rem !important;
-    }
-
-    .dmTurnUtilShiftText.sapMText,
-    .dmTurnUtilValue.sapMText {
-        font-size: 0.46rem !important;
-    }
-
-    .dmTurnBarTrack,
-    .dmTurnBarFill,
-    .dmTurnBarRemain {
-        height: 5px !important;
-        min-height: 5px !important;
-    }
-
-    .dmTurnUtilPercent.sapMText {
-        flex-basis: 34px !important;
-
-        width: 34px !important;
-        min-width: 34px !important;
-
-        font-size: 0.43rem !important;
-    }
-
-    .dmTurnUtilLink {
-        flex-basis: 16px !important;
-
-        min-height: 16px !important;
-
-        margin-top: 2px !important;
-
-        font-size: 0.43rem !important;
-    }
-
-    /* Cobertura */
-
-    .dmCoverageCard {
-        padding: 6px 7px 5px !important;
-    }
-
-    .dmCoverageTitleRow {
-        flex-basis: 18px !important;
-        min-height: 18px !important;
-    }
-
-    .dmCoverageTitle.sapMText {
-        font-size: 0.57rem !important;
-    }
-
-    .dmCoverageTable .sapMListTblHeaderCell,
-    .dmCoverageTable .sapMListTbl th {
-        height: 26px !important;
-        min-height: 26px !important;
-
-        padding: 1px 3px !important;
-    }
-
-    .dmCoverageHeaderText.sapMText {
-        font-size: 0.35rem !important;
-    }
-
-    .dmCoverageHeaderIcon {
-        font-size: 0.42rem !important;
-    }
-
-    .dmCoverageTable .sapMListTblRow,
-    .dmCoverageTable .sapMListTblCell {
-        height: 23px !important;
-        min-height: 23px !important;
-    }
-
-    .dmCoverageTable .sapMListTblCell {
-        padding: 1px 3px !important;
-    }
-
-    .dmCoverageZone.sapMText,
-    .dmCoverageCell.sapMText {
-        font-size: 0.41rem !important;
-    }
-
-    .dmCoverageProgress.sapMPI {
-        flex-basis: 48px !important;
-
-        width: 48px !important;
-        min-width: 48px !important;
-        max-width: 48px !important;
-    }
-
-    .dmCoveragePercent.sapMText,
-    .dmCoverageStatusText.sapMText {
-        font-size: 0.37rem !important;
-    }
-
-    .dmCoverageLegend {
-        flex-basis: 24px !important;
-
-        min-height: 24px !important;
-
-        margin-top: 3px !important;
-        padding: 3px 5px !important;
-    }
-
-    .dmCoverageLegend .sapMText {
-        font-size: 0.31rem !important;
-    }
-
-    .dmCoverageLink {
-        flex-basis: 14px !important;
-
-        margin-top: 1px !important;
-
-        font-size: 0.4rem !important;
-    }
-
-    /* Estado de plantilla */
-
-    .dmWorkforceStatusCard {
-        padding: 7px 8px 6px !important;
-    }
-
-    .dmWorkforceStatusTitleRow {
-        flex-basis: 19px !important;
-        min-height: 19px !important;
-    }
-
-    .dmWorkforceStatusTitle.sapMText {
-        font-size: 0.59rem !important;
-    }
-
-    .dmWorkforceStatusContent {
-        gap: 10px !important;
-        padding: 4px 1px 2px !important;
-    }
-
-    .dmWorkforceDonut {
-        flex-basis: 84px !important;
-
-        width: 84px !important;
-        height: 84px !important;
-        min-width: 84px !important;
-        min-height: 84px !important;
-    }
-
-    .dmWorkforceDonutCenter {
-        width: 49px !important;
-        height: 49px !important;
-    }
-
-    .dmWorkforceDonutValue.sapMText {
         font-size: 1rem !important;
     }
 
-    .dmWorkforceDonutLabel.sapMText {
-        font-size: 0.38rem !important;
+
+    .dmPage
+    .dmKpiLabel.sapMText {
+        font-size: .54rem !important;
     }
 
-    .dmWorkforceLegendHeader,
-    .dmWorkforceLegendRow {
-        grid-template-columns:
-            minmax(78px, 1fr)
-            38px
-            34px;
+
+    .dmPage
+    .dmKpiValue.sapMText {
+        font-size: .96rem !important;
     }
 
-    .dmWorkforceLegendHeader {
-        flex-basis: 14px !important;
-        min-height: 14px !important;
+
+    .dmPage
+    .dmKpiHelper.sapMText {
+        font-size: .47rem !important;
     }
 
-    .dmWorkforceLegendHeaderText.sapMText {
-        font-size: 0.33rem !important;
+
+    .dmPage
+    .dmContentArea.sapMFlexBox,
+
+    .dmPage
+    .dmDashboardRow.sapMFlexBox {
+        gap: 5px !important;
     }
 
-    .dmWorkforceLegendRow {
+
+    .dmPage
+    .dmCard.sapMFlexBox {
+        padding:
+            6px
+            7px !important;
+    }
+
+
+    .dmPage
+    .dmCardTitle.sapMText,
+
+    .dmPage
+    .dmTurnUtilTitle.sapMText,
+
+    .dmPage
+    .dmCoverageTitle.sapMText,
+
+    .dmPage
+    .dmWorkforceStatusTitle.sapMText,
+
+    .dmPage
+    .dmPressureZoneTitle.sapMText {
+        font-size: .60rem !important;
+    }
+
+
+    .dmPage
+    .dmCardSubtitle.sapMText {
+        font-size: .42rem !important;
+    }
+
+
+    .dmPage
+    .dmDistributionRow.sapMFlexBox {
+        min-height: 31px !important;
+    }
+
+
+    .dmPage
+    .dmRoundIcon.sapMFlexBox {
+        flex-basis: 23px !important;
+
+        width: 23px !important;
+        height: 23px !important;
+
+        min-width: 23px !important;
+        min-height: 23px !important;
+    }
+
+
+    .dmPage
+    .dmTotalMechanics.sapMFlexBox {
+        flex-basis: 29px !important;
+
+        min-height: 29px !important;
+
+        padding:
+            5px
+            8px !important;
+    }
+
+
+    .dmPage
+    .dmTurnUtilHeader.sapMFlexBox {
+        flex-basis: 28px !important;
+
+        min-height: 28px !important;
+    }
+
+
+    .dmPage
+    .dmTurnUtilRow.sapMFlexBox {
+        min-height: 30px !important;
+
+        padding:
+            2px
+            5px !important;
+    }
+
+
+    .dmPage
+    .dmCoverageTable
+    .sapMListTblHeader,
+
+    .dmPage
+    .dmCoverageTable
+    .sapMListTblHeaderCell {
+        height: 27px !important;
+
+        min-height: 27px !important;
+    }
+
+
+    .dmPage
+    .dmCoverageTable
+    .sapMListTblRow,
+
+    .dmPage
+    .dmCoverageTable
+    .sapMListTblCell {
+        height: 25px !important;
+
+        min-height: 25px !important;
+    }
+
+
+    .dmPage
+    .dmCoverageLegend.sapMFlexBox {
+        flex-basis: 24px !important;
+
+        min-height: 24px !important;
+    }
+
+
+    .dmPage
+    .dmWorkforceDonut.sapMFlexBox {
+        flex-basis: 88px !important;
+
+        width: 88px !important;
+        height: 88px !important;
+
+        min-width: 88px !important;
+        min-height: 88px !important;
+
+        max-width: 88px !important;
+        max-height: 88px !important;
+    }
+
+
+    .dmPage
+    .dmWorkforceDonut::after {
+        top: 15px !important;
+        right: 15px !important;
+        bottom: 15px !important;
+        left: 15px !important;
+    }
+
+
+    .dmPage
+    .dmWorkforceLegendRow.sapMFlexBox {
         min-height: 18px !important;
-
-        padding: 1px !important;
     }
 
-    .dmWorkforceLegendDot {
-        flex-basis: 6px !important;
 
-        width: 6px !important;
-        height: 6px !important;
-        min-width: 6px !important;
-        min-height: 6px !important;
-
-        margin-right: 5px !important;
-    }
-
+    .dmPage
     .dmWorkforceLegendName.sapMText,
+
+    .dmPage
     .dmWorkforceLegendValue.sapMText,
+
+    .dmPage
     .dmWorkforceLegendPercent.sapMText {
-        font-size: 0.4rem !important;
+        font-size: .40rem !important;
     }
 
-    .dmWorkforceStatusLink {
-        flex-basis: 15px !important;
 
-        margin-top: 1px !important;
+    .dmPage
+    .dmServiceLegend.sapMFlexBox {
+        flex-basis: 18px !important;
 
-        font-size: 0.41rem !important;
+        min-height: 18px !important;
     }
 
-    /* Servicio */
 
-    .dmServiceBars,
-    .dmBarColumn {
-        height: 92px !important;
+    .dmPage
+    .dmServiceBarsRefined.sapMFlexBox {
+        min-height: 65px !important;
+
+        max-height: 120px !important;
     }
 
-    .dmBar100 {
-        height: 75px !important;
+
+    .dmPage
+    .dmVerticalBarRefined {
+        width: 29px !important;
+
+        min-width: 29px !important;
     }
 
-    .dmBar95 {
-        height: 71px !important;
+
+    .dmPage
+    .dmServiceFooterRefined.sapMFlexBox {
+        flex-basis: 28px !important;
+
+        min-height: 28px !important;
+
+        margin-top: 4px !important;
     }
 
-    .dmBar60 {
-        height: 45px !important;
+
+    .dmPage
+    .dmPressureZoneTable
+    .sapMListTblHeader,
+
+    .dmPage
+    .dmPressureZoneTable
+    .sapMListTblHeaderCell {
+        height: 28px !important;
+
+        min-height: 28px !important;
     }
 
-    .dmBar54 {
-        height: 41px !important;
-    }
 
-    .dmBar32 {
-        height: 24px !important;
-    }
+    .dmPage
+    .dmPressureZoneTable
+    .sapMListTblRow,
 
-    .dmBar28 {
-        height: 21px !important;
+    .dmPage
+    .dmPressureZoneTable
+    .sapMListTblCell {
+        height: 29px !important;
+
+        min-height: 29px !important;
     }
 }
+
 
 /* ================================================================
-   ANCHO DE LAPTOP
+   TABLET
    ================================================================ */
 
-@media screen and (max-width: 1180px) {
+@media screen
+and (max-width: 900px) {
 
-    .dmDashboard {
-        padding-right: 8px !important;
-        padding-left: 12px !important;
+    .dmPage.sapMPage,
+
+    .dmPage
+    .sapMPageCont,
+
+    .dmPage
+    .sapMPageScroll {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        overflow-y: auto !important;
     }
 
-    .dmFilters {
-        gap: 4px !important;
+
+    .dmPage
+    .dmDashboard.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 100% !important;
+
+        padding: 10px !important;
+
+        overflow: visible !important;
     }
 
-    .dmFilterItem {
-        padding-right: 5px !important;
-        padding-left: 5px !important;
+
+    .dmPage
+    .dmHeaderBox.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 48px !important;
+
+        flex-basis: auto !important;
     }
 
-    .dmFilterControl.sapMSlt .sapMSltLabel,
-    .dmDateControl.sapMInputBase .sapMInputBaseInner {
-        font-size: 0.56rem !important;
+
+    .dmPage
+    .dmFilters.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+
+        overflow: visible !important;
     }
 
-    .dmApplyButtonBox {
-        flex-basis: 99px !important;
 
-        width: 99px !important;
-        min-width: 99px !important;
+    .dmPage
+    .dmFilterItem.sapMFlexBox {
+        flex:
+            1
+            1
+            calc(
+                50% - 4px
+            ) !important;
+
+        width:
+            calc(
+                50% - 4px
+            ) !important;
+
+        min-width:
+            calc(
+                50% - 4px
+            ) !important;
     }
 
-    .dmDashboardRow {
-        gap: 6px !important;
+
+    .dmPage
+    .dmApplyButtonBox.sapMFlexBox {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+
+        max-width: none !important;
     }
 
-    .dmWorkforceStatusContent {
-        gap: 8px !important;
+
+    .dmPage
+    .dmKpiRow.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+
+        overflow: visible !important;
     }
 
-    .dmWorkforceDonut {
-        flex-basis: 82px !important;
 
-        width: 82px !important;
-        height: 82px !important;
-        min-width: 82px !important;
-        min-height: 82px !important;
+    .dmPage
+    .dmKpiRow
+    > .sapMFlexItem {
+        flex:
+            1
+            1
+            calc(
+                50% - 5px
+            ) !important;
+
+        width:
+            calc(
+                50% - 5px
+            ) !important;
+
+        height: 76px !important;
     }
 
-    .dmWorkforceDonutCenter {
-        width: 48px !important;
-        height: 48px !important;
+
+    .dmPage
+    .dmContentArea.sapMFlexBox,
+
+    .dmPage
+    .dmDashboardRow.sapMFlexBox {
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        flex-basis: auto !important;
+
+        flex-wrap: wrap !important;
+
+        overflow: visible !important;
     }
 
-    .dmWorkforceLegendHeader,
-    .dmWorkforceLegendRow {
-        grid-template-columns:
-            minmax(70px, 1fr)
-            35px
-            34px;
+
+    .dmPage
+    .dmDashboardRow
+    > .sapMFlexItem {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-height: 250px !important;
+    }
+
+
+    .dmPage
+    .dmCard.sapMFlexBox {
+        min-height: 250px !important;
     }
 }
-/* ================================================================
-   BARRAS LIMPIAS
-   UTILIZACIÓN POR TURNO Y COBERTURA POR ZONA
-   ================================================================ */
 
-.dmCleanMetricBar {
-    display: flex !important;
-    flex: 1 1 auto !important;
-
-    width: 100% !important;
-    min-width: 58px !important;
-
-    height: 6px !important;
-    min-height: 6px !important;
-    max-height: 6px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    align-items: center !important;
-
-    overflow: hidden !important;
-
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 999px !important;
-
-    box-shadow: none !important;
-}
-
-.dmCleanMetricFill {
-    display: block !important;
-    flex: 0 0 auto !important;
-
-    height: 6px !important;
-    min-height: 6px !important;
-    max-height: 6px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    border: 0 !important;
-    border-radius: 999px !important;
-
-    box-shadow: none !important;
-}
-
-/* Eliminar puntos, marcadores o pseudo-elementos */
-
-.dmCleanMetricBar::before,
-.dmCleanMetricBar::after,
-.dmCleanMetricFill::before,
-.dmCleanMetricFill::after,
-.dmCleanMetricBar *::before,
-.dmCleanMetricBar *::after {
-    display: none !important;
-    visibility: hidden !important;
-
-    width: 0 !important;
-    height: 0 !important;
-
-    content: none !important;
-}
-
-/* ================================================================
-   UTILIZACIÓN POR TURNO
-   ================================================================ */
-
-.dmCleanMetricGreen {
-    background: #16A34A !important;
-}
-
-.dmCleanMetricOrange {
-    background: #F97316 !important;
-}
-
-.dmCleanMetricRed {
-    background: #DC2626 !important;
-}
-
-.dmTurnUtilChart {
-    display: flex !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-
-    align-items: center !important;
-
-    gap: 8px !important;
-}
-
-.dmTurnUtilChart .dmCleanMetricBar {
-    flex: 1 1 auto !important;
-}
-
-.dmTurnUtilPercent.sapMText {
-    flex: 0 0 39px !important;
-
-    width: 39px !important;
-    min-width: 39px !important;
-
-    font-size: 0.5rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    text-align: right !important;
-    white-space: nowrap !important;
-}
 
 /* ================================================================
-   COBERTURA POR ZONA
+   MÓVIL
    ================================================================ */
 
-.dmCoverageCleanBar {
-    flex: 0 0 58px !important;
+@media screen
+and (max-width: 600px) {
 
-    width: 58px !important;
-    min-width: 58px !important;
-    max-width: 58px !important;
-}
+    .dmPage
+    .dmTitle.sapMTitle {
+        font-size: 1.20rem !important;
 
-/* Verde */
-
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-tone="green"],
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-sap-ui-custom-tone="green"] {
-    background: #18A85B !important;
-}
-
-/* Naranja */
-
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-tone="orange"],
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-sap-ui-custom-tone="orange"] {
-    background: #F59E0B !important;
-}
-
-/* Rojo */
-
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-tone="red"],
-.dmCoverageCleanBar
-.dmCleanMetricFill[data-sap-ui-custom-tone="red"] {
-    background: #EF4444 !important;
-}
-
-.dmCoverageChart {
-    display: flex !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 7px !important;
-}
-
-.dmCoveragePercent.sapMText {
-    flex: 0 0 31px !important;
-
-    width: 31px !important;
-    min-width: 31px !important;
-
-    font-size: 0.45rem !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    text-align: left !important;
-    white-space: nowrap !important;
-}
-
-/* Color del porcentaje de cobertura */
-
-.dmCoverageRow[data-tone="green"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="green"] .dmCoveragePercent {
-    color: #18A85B !important;
-}
-
-.dmCoverageRow[data-tone="orange"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="orange"] .dmCoveragePercent {
-    color: #F59E0B !important;
-}
-
-.dmCoverageRow[data-tone="red"] .dmCoveragePercent,
-.dmCoverageRow[data-sap-ui-custom-tone="red"] .dmCoveragePercent {
-    color: #EF4444 !important;
-}
-
-/* ================================================================
-   AJUSTE PARA ALTURA REDUCIDA
-   ================================================================ */
-
-@media screen and (min-width: 1181px) and (max-height: 720px) {
-
-    .dmCleanMetricBar,
-    .dmCleanMetricFill {
-        height: 5px !important;
-        min-height: 5px !important;
-        max-height: 5px !important;
+        white-space: normal !important;
     }
 
-    .dmCoverageCleanBar {
-        flex-basis: 50px !important;
 
-        width: 50px !important;
-        min-width: 50px !important;
-        max-width: 50px !important;
+    .dmPage
+    .dmSubtitle.sapMText {
+        font-size: .64rem !important;
+
+        white-space: normal !important;
+    }
+
+
+    .dmPage
+    .dmFilterItem.sapMFlexBox,
+
+    .dmPage
+    .dmApplyButtonBox.sapMFlexBox {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+    }
+
+
+    .dmPage
+    .dmKpiRow
+    > .sapMFlexItem {
+        flex: 1 1 100% !important;
+
+        width: 100% !important;
+    }
+
+
+    .dmPage
+    .dmWorkforceStatusContent.sapMFlexBox {
+        flex-direction: column !important;
     }
 }

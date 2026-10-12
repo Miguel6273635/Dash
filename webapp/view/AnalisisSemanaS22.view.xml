@@ -1,207 +1,795 @@
-<mvc:View controllerName="mantenimiento.controller.AnalisisSemanaS22"
+<mvc:View
+    controllerName="mantenimiento.controller.AnalisisSemanaS22"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:core="sap.ui.core">
-    <Page showHeader="false" enableScrolling="true" class="analisisS22View analisisGeneralPage">
-        <VBox class="analisisGeneralRoot">
-            <FlexBox class="analisisGeneralHeader" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-                <VBox class="analisisGeneralHeaderText">
-                    <Title text="Análisis General" level="H1" class="analisisGeneralTitle"/>
-                    <Text text="Detalle de OT no ejecutadas que explican la brecha de cumplimiento en la semana seleccionada." class="analisisGeneralSubtitle"/>
+    xmlns:core="sap.ui.core"
+    height="100%"
+    displayBlock="true">
+
+    <Page
+        showHeader="false"
+        enableScrolling="true"
+        class="analisisS22View analisisGeneralPage">
+
+        <VBox
+            width="100%"
+            height="100%"
+            class="analisisGeneralRoot">
+
+            <!-- =====================================================
+                 HEADER
+                 ===================================================== -->
+
+            <FlexBox
+                width="100%"
+                class="analisisGeneralHeader"
+                justifyContent="SpaceBetween"
+                alignItems="Center"
+                wrap="NoWrap">
+
+                <VBox
+                    class="analisisGeneralHeaderText">
+
+                    <Title
+                        text="Análisis General"
+                        level="H1"
+                        class="analisisGeneralTitle"/>
+
+                    <Text
+                        text="Detalle de OT no ejecutadas que explican la brecha de cumplimiento en la semana seleccionada."
+                        wrapping="false"
+                        class="analisisGeneralSubtitle"/>
+
                 </VBox>
-                <FlexBox class="analisisGeneralFilters" alignItems="Stretch" justifyContent="End" wrap="Wrap">
-                    <HBox class="analisisFilterCard analisisFilterCardWeek" alignItems="Center">
-                        <core:Icon src="sap-icon://calendar" class="analisisFilterIcon"/>
-                        <VBox class="analisisFilterContent">
-                            <Label text="Semana" class="analisisFilterLabel"/>
-                            <Select id="idSemanaSelect" selectedKey="{otModel>/filters/week}" items="{otModel>/weekOptions}" width="100%" class="analisisFilterSelect">
+
+
+                <!-- =================================================
+                     FILTROS
+                     ================================================= -->
+
+                <FlexBox
+                    class="analisisGeneralFilters"
+                    alignItems="Center"
+                    justifyContent="End"
+                    wrap="NoWrap">
+
+                    <!-- SEMANA -->
+
+                    <HBox
+                        class="analisisFilterCard analisisFilterCardWeek"
+                        alignItems="Center">
+
+                        <core:Icon
+                            src="sap-icon://calendar"
+                            class="analisisFilterIcon"/>
+
+                        <VBox
+                            class="analisisFilterContent">
+
+                            <Label
+                                text="Semana"
+                                class="analisisFilterLabel"/>
+
+                            <Select
+                                id="idSemanaSelect"
+                                selectedKey="{otModel>/filters/week}"
+                                items="{otModel>/weekOptions}"
+                                width="100%"
+                                class="analisisFilterSelect">
+
                                 <items>
-                                    <core:Item key="{otModel>key}" text="{otModel>text}"/>
+
+                                    <core:Item
+                                        key="{otModel>key}"
+                                        text="{otModel>text}"/>
+
                                 </items>
+
                             </Select>
+
                         </VBox>
+
                     </HBox>
-                    <HBox class="analisisFilterCard analisisFilterCardZone" alignItems="Center">
-                        <core:Icon src="sap-icon://map-2" class="analisisFilterIcon"/>
-                        <VBox class="analisisFilterContent">
-                            <Label text="Zona" class="analisisFilterLabel"/>
-                            <Select id="idZonaSelect" selectedKey="{otModel>/filters/zone}" items="{otModel>/zoneOptions}" width="100%" class="analisisFilterSelect">
+
+
+                    <!-- ZONA -->
+
+                    <HBox
+                        class="analisisFilterCard analisisFilterCardZone"
+                        alignItems="Center">
+
+                        <core:Icon
+                            src="sap-icon://map-2"
+                            class="analisisFilterIcon"/>
+
+                        <VBox
+                            class="analisisFilterContent">
+
+                            <Label
+                                text="Zona"
+                                class="analisisFilterLabel"/>
+
+                            <Select
+                                id="idZonaSelect"
+                                selectedKey="{otModel>/filters/zone}"
+                                items="{otModel>/zoneOptions}"
+                                width="100%"
+                                class="analisisFilterSelect">
+
                                 <items>
-                                    <core:Item key="{otModel>key}" text="{otModel>text}"/>
+
+                                    <core:Item
+                                        key="{otModel>key}"
+                                        text="{otModel>text}"/>
+
                                 </items>
+
                             </Select>
+
                         </VBox>
+
                     </HBox>
-                    <Button id="idAplicarFiltrosButton" text="Aplicar filtros" icon="sap-icon://filter" type="Emphasized" press="onApplyFilters" class="analisisApplyFilterButton"/>
-                </FlexBox>
-            </FlexBox>
-            <VBox class="analisisContextCard">
-                <Title text="CONTEXTO DE LA SEMANA" level="H4" class="analisisSectionTitle"/>
-                <FlexBox class="analisisMainKpiRow" justifyContent="SpaceBetween" alignItems="Stretch" wrap="Wrap">
-                    <HBox class="analisisMainKpiCard analisisMainKpiBlue" alignItems="Center">
-                        <VBox class="analisisMainKpiIcon analisisMainKpiIconBlue" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://form" class="analisisMainKpiIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisMainKpiContent">
-                            <Text text="OT planeadas" class="analisisMainKpiLabel"/>
-                            <Title text="{otModel>/summary/plannedOrders}" level="H2" class="analisisMainKpiValue analisisValueBlue"/>
-                            <Text text="Total de OT" class="analisisMainKpiDescription"/>
-                        </VBox>
-                    </HBox>
-                    <HBox class="analisisMainKpiCard analisisMainKpiGreen" alignItems="Center">
-                        <VBox class="analisisMainKpiIcon analisisMainKpiIconGreen" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://accept" class="analisisMainKpiIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisMainKpiContent">
-                            <Text text="OT ejecutadas" class="analisisMainKpiLabel"/>
-                            <Title text="{otModel>/summary/executedOrders}" level="H2" class="analisisMainKpiValue analisisValueGreen"/>
-                            <Text text="{otModel>/summary/executedDescription}" class="analisisMainKpiDescription"/>
-                        </VBox>
-                    </HBox>
-                    <HBox class="analisisMainKpiCard analisisMainKpiOrange" alignItems="Center">
-                        <VBox class="analisisMainKpiIcon analisisMainKpiIconOrange" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://appointment-2" class="analisisMainKpiIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisMainKpiContent">
-                            <Text text="OT no ejecutadas" class="analisisMainKpiLabel"/>
-                            <Title text="{otModel>/summary/notExecutedOrders}" level="H2" class="analisisMainKpiValue analisisValueOrange"/>
-                            <Text text="{otModel>/summary/notExecutedDescription}" class="analisisMainKpiDescription"/>
-                        </VBox>
-                    </HBox>
-                    <HBox class="analisisMainKpiCard analisisMainKpiPurple" alignItems="Center">
-                        <VBox class="analisisMainKpiIcon analisisMainKpiIconPurple" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://target-group" class="analisisMainKpiIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisMainKpiContent">
-                            <Text text="Cumplimiento de la semana" class="analisisMainKpiLabel"/>
-                            <Title text="{= ${otModel>/summary/compliance} + '%' }" level="H2" class="analisisMainKpiValue analisisValuePurple"/>
-                            <Text text="Ejecutadas / planeadas" class="analisisMainKpiDescription"/>
-                        </VBox>
-                    </HBox>
-                </FlexBox>
-                <FlexBox class="analisisSecondaryKpiRow" wrap="Wrap">
-                    <HBox class="analisisSecondaryKpiCard" alignItems="Center">
-                        <VBox class="analisisSecondaryIcon analisisSecondaryIconCyan" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://customer" class="analisisSecondaryIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisSecondaryText">
-                            <Text text="{= ${otModel>/summary/clientsCount} + ' clientes concentran la brecha' }" class="analisisSecondaryTitle"/>
-                            <Text text="OT no ejecutadas de clientes principales" class="analisisSecondaryDescription"/>
-                        </VBox>
-                        <VBox class="analisisPercentageCircle analisisPercentageCircleCyan" justifyContent="Center" alignItems="Center">
-                            <Text text="{= ${otModel>/summary/clientsImpact} + '%' }" class="analisisPercentageText analisisPercentageCyan"/>
-                        </VBox>
-                    </HBox>
-                    <HBox class="analisisSecondaryKpiCard" alignItems="Center">
-                        <VBox class="analisisSecondaryIcon analisisSecondaryIconBlue" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://product" class="analisisSecondaryIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisSecondaryText">
-                            <Text text="{= ${otModel>/summary/elevatorsCount} + ' elevadores explican el impacto' }" class="analisisSecondaryTitle"/>
-                            <Text text="OT no ejecutadas por equipo" class="analisisSecondaryDescription"/>
-                        </VBox>
-                        <VBox class="analisisPercentageCircle analisisPercentageCircleBlue" justifyContent="Center" alignItems="Center">
-                            <Text text="{= ${otModel>/summary/elevatorsImpact} + '%' }" class="analisisPercentageText analisisPercentageBlue"/>
-                        </VBox>
-                    </HBox>
-                    <HBox class="analisisSecondaryKpiCard analisisSecondaryKpiWide" alignItems="Center">
-                        <VBox class="analisisSecondaryIcon analisisSecondaryIconGreen" justifyContent="Center" alignItems="Center">
-                            <core:Icon src="sap-icon://map-2" class="analisisSecondaryIconSymbol"/>
-                        </VBox>
-                        <VBox class="analisisSecondaryText">
-                            <Text text="{= ${otModel>/summary/zonesLabel} + ' concentran la afectación' }" class="analisisSecondaryTitle"/>
-                            <Text text="OT no ejecutadas por zona" class="analisisSecondaryDescription"/>
-                        </VBox>
-                        <VBox class="analisisPercentageCircle analisisPercentageCircleGreen" justifyContent="Center" alignItems="Center">
-                            <Text text="{= ${otModel>/summary/zonesImpact} + '%' }" class="analisisPercentageText analisisPercentageGreen"/>
-                        </VBox>
-                    </HBox>
-                </FlexBox>
-            </VBox>
-            <VBox class="analisisTableCard">
-                <FlexBox class="analisisTableHeader" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-                    <VBox>
-                        <HBox alignItems="Center">
-                            <Title text="{= 'OT NO EJECUTADAS (' + ${otModel>/pagination/totalResults} + ')' }" level="H4" class="analisisTableTitle"/>
-                            <core:Icon src="sap-icon://hint" class="analisisTableInfoIcon"/>
-                        </HBox>
-                        <Text text="Ordenadas por contribución a la brecha (mayor a menor)." class="analisisTableSubtitle"/>
+
+
+                    <!-- APLICAR -->
+
+                    <VBox
+                        class="analisisApplyButtonBox"
+                        justifyContent="Center">
+
+                        <Button
+                            id="idAplicarFiltrosButton"
+                            text="Aplicar filtros"
+                            icon="sap-icon://filter"
+                            type="Emphasized"
+                            width="100%"
+                            press=".onApplyFilters"
+                            class="analisisApplyFilterButton"/>
+
                     </VBox>
-                    <SearchField id="idOtSearchField" width="17rem" value="{otModel>/filters/search}" placeholder="Buscar OT, cliente, elevador..." liveChange="onSearch" search="onSearch" class="analisisSearchField"/>
+
                 </FlexBox>
-                <Table id="idOtTable" items="{path: 'otModel>/results'}" inset="false" fixedLayout="true" showSeparators="Inner" noDataText="No se encontraron órdenes no ejecutadas." class="analisisOtTable">
-                    <columns>
-                        <Column width="8%">
-                            <Text text="Prioridad"/>
-                        </Column>
-                        <Column width="10%">
-                            <Text text="OT"/>
-                        </Column>
-                        <Column width="16%">
-                            <Text text="Cliente"/>
-                        </Column>
-                        <Column width="9%">
-                            <Text text="Zona"/>
-                        </Column>
-                        <Column width="10%">
-                            <Text text="Elevador"/>
-                        </Column>
-                        <Column width="16%">
-                            <Text text="Causa"/>
-                        </Column>
-                        <Column width="13%">
-                            <Text text="Responsable"/>
-                        </Column>
-                        <Column width="10%">
-                            <Text text="Estado"/>
-                        </Column>
-                        <Column width="13%">
-                            <Text text="Contribución"/>
-                        </Column>
-                    </columns>
-                    <items>
-                        <ColumnListItem type="Inactive" class="analisisTableRow">
-                            <cells>
-                                <HBox class="analisisPriorityPill">
-                                    <Text text="{otModel>prioridad}" class="analisisPriorityPillText"/>
-                                </HBox>
-                                <Link text="{otModel>ot}" class="analisisTableLink"/>
-                                <Text text="{otModel>cliente}" class="analisisTablePlainText"/>
-                                <Text text="{otModel>zona}" class="analisisTablePlainText"/>
-                                <Link text="{otModel>elevador}" class="analisisTableLink"/>
-                                <Link text="{otModel>causa}" class="analisisTableCauseLink"/>
-                                <Text text="{otModel>responsable}" class="analisisTablePlainText"/>
-                                <Text text="{otModel>estado}" class="analisisStatusText"/>
-                                <HBox class="analisisContributionContainer">
-                                    <VBox width="{= ${otModel>contribucion} + '%' }" class="analisisContributionFill"/>
-                                    <Text text="{= ${otModel>contribucion} + '%' }" class="analisisContributionValue"/>
-                                </HBox>
-                            </cells>
-                        </ColumnListItem>
-                    </items>
-                </Table>
-                <FlexBox class="analisisTableFooter" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
-                    <Text text="{otModel>/pagination/summaryText}" class="analisisTableResults"/>
-                    <HBox class="analisisPagination">
-                        <Button icon="sap-icon://navigation-left-arrow" type="Transparent" press="onPreviousPage" enabled="{otModel>/pagination/canGoPrevious}"/>
-                        <Button text="1" type="{= ${otModel>/pagination/currentPage} === 1 ? 'Emphasized' : 'Transparent' }" press="onGoToPage" visible="{= ${otModel>/pagination/totalPages} >= 1 }"/>
-                        <Button text="2" type="{= ${otModel>/pagination/currentPage} === 2 ? 'Emphasized' : 'Transparent' }" press="onGoToPage" visible="{= ${otModel>/pagination/totalPages} >= 2 }"/>
-                        <Button text="3" type="{= ${otModel>/pagination/currentPage} === 3 ? 'Emphasized' : 'Transparent' }" press="onGoToPage" visible="{= ${otModel>/pagination/totalPages} >= 3 }"/>
-                        <Button icon="sap-icon://navigation-right-arrow" type="Transparent" press="onNextPage" enabled="{otModel>/pagination/canGoNext}"/>
+
+            </FlexBox>
+
+
+            <!-- =====================================================
+                 CONTEXTO DE LA SEMANA
+                 ===================================================== -->
+
+            <VBox
+                width="100%"
+                class="analisisContextSection">
+
+                <Title
+                    text="CONTEXTO DE LA SEMANA"
+                    level="H4"
+                    class="analisisSectionTitle"/>
+
+
+                <!-- =================================================
+                     KPIs PRINCIPALES
+                     ================================================= -->
+
+                <FlexBox
+                    width="100%"
+                    class="analisisMainKpiRow"
+                    justifyContent="SpaceBetween"
+                    alignItems="Stretch"
+                    wrap="NoWrap">
+
+
+                    <!-- PLANEADAS -->
+
+                    <HBox
+                        class="analisisMainKpiCard analisisMainKpiBlue"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisMainKpiIcon analisisMainKpiIconBlue"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://form"
+                                class="analisisMainKpiIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisMainKpiContent"
+                            justifyContent="Center">
+
+                            <Text
+                                text="OT planeadas"
+                                wrapping="false"
+                                class="analisisMainKpiLabel"/>
+
+                            <Text
+                                text="{otModel>/summary/plannedOrders}"
+                                wrapping="false"
+                                class="analisisMainKpiValue analisisValueBlue"/>
+
+                            <Text
+                                text="Total de OT"
+                                wrapping="false"
+                                class="analisisMainKpiDescription"/>
+
+                        </VBox>
+
                     </HBox>
-                    <Select id="idRowsPerPageSelect" selectedKey="10" width="8rem" change="onRowsPerPageChange">
-                        <items>
-                            <core:Item key="10" text="10 por página"/>
-                            <core:Item key="20" text="20 por página"/>
-                            <core:Item key="50" text="50 por página"/>
-                        </items>
-                    </Select>
+
+
+                    <!-- EJECUTADAS -->
+
+                    <HBox
+                        class="analisisMainKpiCard analisisMainKpiGreen"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisMainKpiIcon analisisMainKpiIconGreen"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://accept"
+                                class="analisisMainKpiIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisMainKpiContent"
+                            justifyContent="Center">
+
+                            <Text
+                                text="OT ejecutadas"
+                                wrapping="false"
+                                class="analisisMainKpiLabel"/>
+
+                            <Text
+                                text="{otModel>/summary/executedOrders}"
+                                wrapping="false"
+                                class="analisisMainKpiValue analisisValueGreen"/>
+
+                            <Text
+                                text="{otModel>/summary/executedDescription}"
+                                wrapping="false"
+                                class="analisisMainKpiDescription"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- NO EJECUTADAS -->
+
+                    <HBox
+                        class="analisisMainKpiCard analisisMainKpiRed"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisMainKpiIcon analisisMainKpiIconRed"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://appointment-2"
+                                class="analisisMainKpiIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisMainKpiContent"
+                            justifyContent="Center">
+
+                            <Text
+                                text="OT no ejecutadas"
+                                wrapping="false"
+                                class="analisisMainKpiLabel"/>
+
+                            <Text
+                                text="{otModel>/summary/notExecutedOrders}"
+                                wrapping="false"
+                                class="analisisMainKpiValue analisisValueRed"/>
+
+                            <Text
+                                text="{otModel>/summary/notExecutedDescription}"
+                                wrapping="false"
+                                class="analisisMainKpiDescription"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- CUMPLIMIENTO -->
+
+                    <HBox
+                        class="analisisMainKpiCard analisisMainKpiPurple"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisMainKpiIcon analisisMainKpiIconPurple"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://target-group"
+                                class="analisisMainKpiIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisMainKpiContent"
+                            justifyContent="Center">
+
+                            <Text
+                                text="Cumplimiento de la semana"
+                                wrapping="false"
+                                class="analisisMainKpiLabel"/>
+
+                            <Text
+                                text="{= ${otModel>/summary/compliance} + '%' }"
+                                wrapping="false"
+                                class="analisisMainKpiValue analisisValuePurple"/>
+
+                            <Text
+                                text="Ejecutadas / planeadas"
+                                wrapping="false"
+                                class="analisisMainKpiDescription"/>
+
+                        </VBox>
+
+                    </HBox>
+
                 </FlexBox>
+
+
+                <!-- =================================================
+                     KPIs SECUNDARIOS
+                     ================================================= -->
+
+                <FlexBox
+                    width="100%"
+                    class="analisisSecondaryKpiRow"
+                    alignItems="Stretch"
+                    wrap="NoWrap">
+
+
+                    <!-- CLIENTES -->
+
+                    <HBox
+                        class="analisisSecondaryKpiCard"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisSecondaryIcon analisisSecondaryIconCyan"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://customer"
+                                class="analisisSecondaryIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisSecondaryText"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/clientsCount} + ' clientes concentran la brecha' }"
+                                wrapping="false"
+                                class="analisisSecondaryTitle"/>
+
+                            <Text
+                                text="OT no ejecutadas de clientes principales"
+                                wrapping="false"
+                                class="analisisSecondaryDescription"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisPercentageCircle analisisPercentageCircleCyan"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/clientsImpact} + '%' }"
+                                class="analisisPercentageText analisisPercentageCyan"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- ELEVADORES -->
+
+                    <HBox
+                        class="analisisSecondaryKpiCard"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisSecondaryIcon analisisSecondaryIconBlue"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://product"
+                                class="analisisSecondaryIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisSecondaryText"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/elevatorsCount} + ' elevadores explican el impacto' }"
+                                wrapping="false"
+                                class="analisisSecondaryTitle"/>
+
+                            <Text
+                                text="OT no ejecutadas por equipo"
+                                wrapping="false"
+                                class="analisisSecondaryDescription"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisPercentageCircle analisisPercentageCircleBlue"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/elevatorsImpact} + '%' }"
+                                class="analisisPercentageText analisisPercentageBlue"/>
+
+                        </VBox>
+
+                    </HBox>
+
+
+                    <!-- ZONAS -->
+
+                    <HBox
+                        class="analisisSecondaryKpiCard"
+                        alignItems="Center">
+
+                        <VBox
+                            class="analisisSecondaryIcon analisisSecondaryIconGreen"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <core:Icon
+                                src="sap-icon://map-2"
+                                class="analisisSecondaryIconSymbol"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisSecondaryText"
+                            justifyContent="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/zonesLabel} + ' concentran la afectación' }"
+                                wrapping="false"
+                                class="analisisSecondaryTitle"/>
+
+                            <Text
+                                text="OT no ejecutadas por zona"
+                                wrapping="false"
+                                class="analisisSecondaryDescription"/>
+
+                        </VBox>
+
+                        <VBox
+                            class="analisisPercentageCircle analisisPercentageCircleGreen"
+                            justifyContent="Center"
+                            alignItems="Center">
+
+                            <Text
+                                text="{= ${otModel>/summary/zonesImpact} + '%' }"
+                                class="analisisPercentageText analisisPercentageGreen"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                </FlexBox>
+
             </VBox>
-            <HBox class="analisisInformationBar" alignItems="Center">
-                <core:Icon src="sap-icon://hint" class="analisisInformationIcon"/>
-                <Text text="La prioridad y la contribución usan una regla provisional hasta que la regla funcional sea aprobada." class="analisisInformationText"/>
+
+
+            <!-- =====================================================
+                 TABLA
+                 ===================================================== -->
+
+            <VBox
+                id="idAnalisisTableCard"
+                width="100%"
+                height="100%"
+                fitContainer="true"
+                class="analisisTableCard">
+
+                <layoutData>
+
+                    <FlexItemData
+                        growFactor="1"
+                        shrinkFactor="1"
+                        baseSize="0%"/>
+
+                </layoutData>
+
+
+                <!-- HEADER TABLA -->
+
+                <FlexBox
+                    id="idAnalisisTableHeader"
+                    width="100%"
+                    class="analisisTableHeader"
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    wrap="NoWrap">
+
+                    <VBox>
+
+                        <HBox
+                            alignItems="Center">
+
+                            <Title
+                                text="{= 'OT NO EJECUTADAS (' + ${otModel>/pagination/totalResults} + ')' }"
+                                level="H4"
+                                class="analisisTableTitle"/>
+
+                            <core:Icon
+                                src="sap-icon://hint"
+                                class="analisisTableInfoIcon"/>
+
+                        </HBox>
+
+                        <Text
+                            text="Ordenadas por contribución a la brecha (mayor a menor)."
+                            wrapping="false"
+                            class="analisisTableSubtitle"/>
+
+                    </VBox>
+
+                    <SearchField
+                        id="idOtSearchField"
+                        width="17rem"
+                        value="{otModel>/filters/search}"
+                        placeholder="Buscar OT, cliente, elevador..."
+                        liveChange=".onSearch"
+                        search=".onSearch"
+                        class="analisisSearchField"/>
+
+                </FlexBox>
+
+
+                <!-- ÁREA TABLA -->
+
+                <VBox
+                    width="100%"
+                    class="analisisTableArea">
+
+                    <layoutData>
+
+                        <FlexItemData
+                            growFactor="1"
+                            shrinkFactor="1"
+                            baseSize="0%"/>
+
+                    </layoutData>
+
+                    <Table
+                        id="idOtTable"
+                        width="100%"
+                        items="{path: 'otModel>/results'}"
+                        inset="false"
+                        fixedLayout="true"
+                        showSeparators="Inner"
+                        noDataText="No se encontraron órdenes no ejecutadas."
+                        class="analisisOtTable">
+
+                        <columns>
+
+                            <Column width="7%">
+                                <Text text="Prioridad"/>
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="OT"/>
+                            </Column>
+
+                            <Column width="16%">
+                                <Text text="Cliente"/>
+                            </Column>
+
+                            <Column width="8%">
+                                <Text text="Zona"/>
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Elevador"/>
+                            </Column>
+
+                            <Column width="15%">
+                                <Text text="Causa"/>
+                            </Column>
+
+                            <Column width="13%">
+                                <Text text="Responsable"/>
+                            </Column>
+
+                            <Column width="10%">
+                                <Text text="Estado"/>
+                            </Column>
+
+                            <Column width="11%">
+                                <Text text="Contribución"/>
+                            </Column>
+
+                        </columns>
+
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Inactive"
+                                class="analisisTableRow">
+
+                                <cells>
+
+                                    <HBox
+                                        class="analisisPriorityPill"
+                                        alignItems="Center"
+                                        justifyContent="Center">
+
+                                        <Text
+                                            text="{otModel>prioridad}"
+                                            class="analisisPriorityPillText"/>
+
+                                    </HBox>
+
+
+                                    <Link
+                                        text="{otModel>ot}"
+                                        wrapping="false"
+                                        class="analisisTableLink"/>
+
+
+                                    <Text
+                                        text="{otModel>cliente}"
+                                        wrapping="false"
+                                        tooltip="{otModel>cliente}"
+                                        class="analisisTablePlainText"/>
+
+
+                                    <Text
+                                        text="{otModel>zona}"
+                                        wrapping="false"
+                                        tooltip="{otModel>zona}"
+                                        class="analisisTablePlainText"/>
+
+
+                                    <Link
+                                        text="{otModel>elevador}"
+                                        wrapping="false"
+                                        class="analisisTableLink"/>
+
+
+                                    <Link
+                                        text="{otModel>causa}"
+                                        wrapping="false"
+                                        class="analisisTableCauseLink"/>
+
+
+                                    <Text
+                                        text="{otModel>responsable}"
+                                        wrapping="false"
+                                        tooltip="{otModel>responsable}"
+                                        class="analisisTablePlainText"/>
+
+
+                                    <Text
+                                        text="{otModel>estado}"
+                                        wrapping="false"
+                                        class="analisisStatusText"/>
+
+
+                                    <HBox
+                                        width="100%"
+                                        alignItems="Center"
+                                        class="analisisContributionContainer">
+
+                                        <VBox
+                                            class="analisisContributionTrack">
+
+                                            <VBox
+                                                width="{= ${otModel>contribucion} + '%' }"
+                                                class="analisisContributionFill"/>
+
+                                        </VBox>
+
+                                        <Text
+                                            text="{= ${otModel>contribucion} + '%' }"
+                                            class="analisisContributionValue"/>
+
+                                    </HBox>
+
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </VBox>
+
+
+                <!-- FOOTER TABLA -->
+
+                <FlexBox
+                    id="idAnalisisTableFooter"
+                    width="100%"
+                    class="analisisTableFooter"
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    wrap="NoWrap">
+
+                    <Text
+                        text="{otModel>/pagination/summaryText}"
+                        class="analisisTableResults"/>
+
+
+                    <HBox
+                        class="analisisPagination"
+                        alignItems="Center">
+
+                        <Button
+                            icon="sap-icon://navigation-left-arrow"
+                            type="Transparent"
+                            press=".onPreviousPage"
+                            enabled="{otModel>/pagination/canGoPrevious}"
+                            class="analisisPagerButton"/>
+
+                        <Text
+                            text="{= 'Página ' + ${otModel>/pagination/currentPage} + ' de ' + ${otModel>/pagination/totalPages} }"
+                            class="analisisPagerText"/>
+
+                        <Button
+                            icon="sap-icon://navigation-right-arrow"
+                            type="Transparent"
+                            press=".onNextPage"
+                            enabled="{otModel>/pagination/canGoNext}"
+                            class="analisisPagerButton"/>
+
+                    </HBox>
+
+                </FlexBox>
+
+            </VBox>
+
+
+            <!-- =====================================================
+                 NOTA
+                 ===================================================== -->
+
+            <HBox
+                width="100%"
+                class="analisisInformationBar"
+                alignItems="Center">
+
+                <Text
+                    text="La prioridad y la contribución usan una regla provisional hasta que la regla funcional sea aprobada."
+                    class="analisisInformationText"/>
+
             </HBox>
+
         </VBox>
+
     </Page>
+
 </mvc:View>
