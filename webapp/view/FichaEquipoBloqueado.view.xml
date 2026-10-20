@@ -37,7 +37,7 @@
                         class="debPageTitle" />
 
                     <Text
-                        text="Consulta integral del equipo, bloqueo, órdenes afectadas, pendientes y seguimiento."
+                        text="Consulta integral del equipo, bloqueo, órdenes afectadas y seguimiento."
                         wrapping="false"
                         class="debPageSubtitle" />
 
@@ -165,126 +165,6 @@
 
                             <Text
                                 text="{detalle>/kpis/affectedOrders/label}"
-                                wrapping="false"
-                                class="debKpiLabel" />
-
-                        </VBox>
-
-                    </HBox>
-
-                    <!-- KPI 4: PENDIENTES -->
-
-                    <HBox
-                        alignItems="Center"
-                        class="debKpiCard debKpiPurple">
-
-                        <layoutData>
-                            <FlexItemData
-                                growFactor="1"
-                                shrinkFactor="1"
-                                baseSize="0%" />
-                        </layoutData>
-
-                        <HBox
-                            alignItems="Center"
-                            justifyContent="Center"
-                            class="debKpiIconContainer">
-
-                            <core:Icon
-                                src="sap-icon://history"
-                                class="debKpiIcon" />
-
-                        </HBox>
-
-                        <VBox class="debKpiTextContainer">
-
-                            <Text
-                                text="{detalle>/kpis/pendingUnlock/value}"
-                                wrapping="false"
-                                class="debKpiValue" />
-
-                            <Text
-                                text="{detalle>/kpis/pendingUnlock/label}"
-                                wrapping="false"
-                                class="debKpiLabel" />
-
-                        </VBox>
-
-                    </HBox>
-
-                    <!-- KPI 5: PRIORIDAD -->
-
-                    <HBox
-                        alignItems="Center"
-                        class="debKpiCard debKpiRed">
-
-                        <layoutData>
-                            <FlexItemData
-                                growFactor="1"
-                                shrinkFactor="1"
-                                baseSize="0%" />
-                        </layoutData>
-
-                        <HBox
-                            alignItems="Center"
-                            justifyContent="Center"
-                            class="debKpiIconContainer">
-
-                            <core:Icon
-                                src="sap-icon://flag"
-                                class="debKpiIcon" />
-
-                        </HBox>
-
-                        <VBox class="debKpiTextContainer">
-
-                            <Text
-                                text="{detalle>/kpis/priority/value}"
-                                wrapping="false"
-                                class="debKpiValue debKpiStatusValue" />
-
-                            <Text
-                                text="{detalle>/kpis/priority/label}"
-                                wrapping="false"
-                                class="debKpiLabel" />
-
-                        </VBox>
-
-                    </HBox>
-
-                    <!-- KPI 6: FECHA COMPROMISO -->
-
-                    <HBox
-                        alignItems="Center"
-                        class="debKpiCard debKpiBlue">
-
-                        <layoutData>
-                            <FlexItemData
-                                growFactor="1"
-                                shrinkFactor="1"
-                                baseSize="0%" />
-                        </layoutData>
-
-                        <HBox
-                            alignItems="Center"
-                            justifyContent="Center"
-                            class="debKpiIconContainer">
-
-                            <core:Icon
-                                src="sap-icon://calendar"
-                                class="debKpiIcon" />
-
-                        </HBox>
-
-                        <VBox class="debKpiTextContainer">
-
-                            <Text
-                                text="{detalle>/kpis/commitmentDate/value}"
-                                wrapping="false"
-                                class="debKpiValue debKpiDateValue" />
-
-                            <Text
-                                text="{detalle>/kpis/commitmentDate/label}"
                                 wrapping="false"
                                 class="debKpiLabel" />
 
@@ -768,48 +648,6 @@
 
             </HBox>
 
-            <!-- ESTADO DE GESTIÓN -->
-
-            <HBox
-                width="100%"
-                wrap="NoWrap"
-                alignItems="Center"
-                class="debBlockInfoLine">
-
-                <Label
-                    text="Estado de gestión"
-                    wrapping="false"
-                    class="debBlockInfoKey">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="0"
-                            shrinkFactor="0"
-                            baseSize="40%" />
-                    </layoutData>
-
-                </Label>
-
-                <HBox
-                    alignItems="Center"
-                    class="debBlockInfoValueContainer">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="1"
-                            shrinkFactor="1"
-                            baseSize="0%" />
-                    </layoutData>
-
-                    <Text
-                        text="{detalle>/blockInformation/managementStatus}"
-                        wrapping="false"
-                        class="debBlockInfoStatusPill" />
-
-                </HBox>
-
-            </HBox>
-
             <!-- FECHA DE BLOQUEO -->
 
             <HBox
@@ -874,130 +712,6 @@
                     text="{detalle>/blockInformation/responsible}"
                     wrapping="false"
                     class="debBlockInfoValue">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="1"
-                            shrinkFactor="1"
-                            baseSize="0%" />
-                    </layoutData>
-
-                </Text>
-
-            </HBox>
-
-        </VBox>
-
-        <!-- SEGUNDO GRUPO -->
-
-        <VBox
-            width="100%"
-            class="debBlockInfoGroup debBlockInfoSecondGroup">
-
-            <!-- PRÓXIMA ACCIÓN -->
-
-            <HBox
-                width="100%"
-                wrap="NoWrap"
-                alignItems="Center"
-                class="debBlockInfoLine">
-
-                <Label
-                    text="Próxima acción"
-                    wrapping="false"
-                    class="debBlockInfoKey">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="0"
-                            shrinkFactor="0"
-                            baseSize="40%" />
-                    </layoutData>
-
-                </Label>
-
-                <Text
-                    text="{detalle>/blockInformation/nextAction}"
-                    wrapping="false"
-                    class="debBlockInfoValue">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="1"
-                            shrinkFactor="1"
-                            baseSize="0%" />
-                    </layoutData>
-
-                </Text>
-
-            </HBox>
-
-            <!-- FECHA COMPROMISO -->
-
-            <HBox
-                width="100%"
-                wrap="NoWrap"
-                alignItems="Center"
-                class="debBlockInfoLine">
-
-                <Label
-                    text="Fecha compromiso"
-                    wrapping="false"
-                    class="debBlockInfoKey">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="0"
-                            shrinkFactor="0"
-                            baseSize="40%" />
-                    </layoutData>
-
-                </Label>
-
-                <Text
-                    text="{detalle>/blockInformation/commitmentDate}"
-                    wrapping="false"
-                    class="debBlockInfoValue">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="1"
-                            shrinkFactor="1"
-                            baseSize="0%" />
-                    </layoutData>
-
-                </Text>
-
-            </HBox>
-
-            <!-- OBSERVACIÓN GENERAL -->
-
-            <HBox
-                width="100%"
-                wrap="NoWrap"
-                alignItems="Start"
-                class="debBlockInfoLine debBlockInfoObservationLine">
-
-                <Label
-                    text="Observación general"
-                    wrapping="false"
-                    class="debBlockInfoKey">
-
-                    <layoutData>
-                        <FlexItemData
-                            growFactor="0"
-                            shrinkFactor="0"
-                            baseSize="40%" />
-                    </layoutData>
-
-                </Label>
-
-                <Text
-                    text="{detalle>/blockInformation/observation}"
-                    tooltip="{detalle>/blockInformation/observation}"
-                    wrapping="true"
-                    maxLines="2"
-                    class="debBlockInfoValue debBlockInfoObservationValue">
 
                     <layoutData>
                         <FlexItemData
@@ -1223,6 +937,7 @@
 
                         <VBox
                             fitContainer="true"
+                            visible="false"
                             class="debPanel debPendingPanel">
 
                             <layoutData>
@@ -1245,7 +960,7 @@
                             </HBox>
 
                             <Table
-                                id="pendingTable"
+                                id="fichaPendingTable"
                                 width="100%"
                                 inset="false"
                                 fixedLayout="true"
@@ -1410,7 +1125,7 @@
 
                             <layoutData>
                                 <FlexItemData
-                                    growFactor="57"
+                                    growFactor="100"
                                     shrinkFactor="1"
                                     baseSize="0%" />
                             </layoutData>

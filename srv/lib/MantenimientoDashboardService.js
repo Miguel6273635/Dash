@@ -38,12 +38,15 @@ function overlapsRange(startValue, endValue, from, to) {
 }
 
 function canonicalStatus(order) {
-    const status = normalize(order && (order.SapUserStatusCode || order.AppStatusCode));
+    const sapStatus = normalize(order && order.SapUserStatusCode);
+    const applicationStatus = normalize(order && order.AppStatusCode);
     const appStatus = {
         "0100": "E0013", "0200": "E0014", "0300": "E0015", "0400": "E0016",
         "0500": "E0017", "0600": "E0018", "0301": "E0019"
     };
-    return appStatus[status] || status;
+    if (/^E00\d{2}$/.test(sapStatus)) { return sapStatus; }
+    if (/^E00\d{2}$/.test(applicationStatus)) { return applicationStatus; }
+    return appStatus[sapStatus] || appStatus[applicationStatus] || "";
 }
 
 function mapOrderType(value) {

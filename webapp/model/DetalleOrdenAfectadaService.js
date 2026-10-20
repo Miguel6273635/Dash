@@ -26,6 +26,7 @@ sap.ui.define([
             oRow.MaterialRequirementId ||
             oRow.RequirementId ||
             oRow.OrderEventId ||
+            oRow.BlockEventId ||
             ""
         );
     }
@@ -172,7 +173,7 @@ sap.ui.define([
         oModel = DashboardCacheODataModel.wrap(
             oModel,
             {},
-            ["catalogs","orders","operations","confirmations","assignments","resources","blocks","blockOrders","materials","requirements","events"]
+            ["catalogs","orders","operations","confirmations","assignments","resources","blocks","blockOrders","blockEvents","materials","requirements","events"]
         );
         if (
             !oModel ||
@@ -360,7 +361,34 @@ sap.ui.define([
                 }
             );
 
-            return oResult;
+            var aBlockIds = Array.from(new Set(
+                oResult.blockOrders.map(function (oRelation) {
+                    return String(oRelation.BlockId || "");
+                }).filter(Boolean)
+            ));
+            var aBlockEventFilters = aBlockIds.length
+                ? [new Filter({
+                    filters: aBlockIds.map(function (sBlockId) {
+                        return new Filter("BlockId", FilterOperator.EQ, sBlockId);
+                    }),
+                    and: false
+                })]
+                : [];
+
+            if (!aBlockIds.length) {
+                oResult.blockEvents = [];
+                return oResult;
+            }
+
+            return fetchAll(
+                oModel,
+                "/DashboardBlockEventsSet",
+                aBlockEventFilters,
+                true
+            ).then(function (aBlockEvents) {
+                oResult.blockEvents = aBlockEvents || [];
+                return oResult;
+            });
         });
     }
 

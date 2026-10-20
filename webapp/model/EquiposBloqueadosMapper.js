@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/BlockedEquipmentRules"
+], function (BlockedEquipmentRules) {
     "use strict";
 
     var COLORS = [
@@ -163,20 +165,9 @@ sap.ui.define([], function () {
     }
 
     function diffDays(oStart, oEnd) {
-        if (!oStart || !oEnd) {
-            return 0;
-        }
+        var iDays = BlockedEquipmentRules.businessDays(oStart, oEnd);
 
-        return Math.max(
-            0,
-            Math.floor(
-                (
-                    startOfDay(oEnd).getTime() -
-                    startOfDay(oStart).getTime()
-                ) /
-                86400000
-            )
-        );
+        return iDays === null ? 0 : iDays;
     }
 
     function overlaps(
@@ -742,8 +733,17 @@ sap.ui.define([], function () {
                 oRaw.resources || []
             );
 
+        var aEnrichedBlocks =
+            (oRaw.blocks || []).map(function (oBlock) {
+                return BlockedEquipmentRules.enrichBlock(
+                    oBlock,
+                    oRaw.blockOrders || [],
+                    oRaw.orders || []
+                );
+            });
+
         var aFilteredBlocks =
-            (oRaw.blocks || [])
+            aEnrichedBlocks
                 .filter(
                     function (oBlock) {
                         return (
@@ -951,11 +951,21 @@ sap.ui.define([], function () {
 
         var iOrdenesAfectadas =
             distinctCount(
-                aRelations,
+                aRepresentative.reduce(
+                    function (aResult, oBlock) {
+                        return aResult.concat(
+                            BlockedEquipmentRules.affectedOrderIds(oBlock)
+                                .map(function (sOrderId) {
+                                    return {
+                                        OrderId: sOrderId
+                                    };
+                                })
+                        );
+                    },
+                    []
+                ),
                 function (oRelation) {
-                    return (
-                        oRelation.OrderId
-                    );
+                    return oRelation.OrderId;
                 }
             );
 
@@ -972,7 +982,6 @@ sap.ui.define([], function () {
                             parseDate(
                                 oBlock.ReleasedAt
                             ) ||
-                            oTo ||
                             new Date();
 
                         return (
@@ -1350,7 +1359,6 @@ sap.ui.define([], function () {
                         parseDate(
                             oBlock.ReleasedAt
                         ) ||
-                        oTo ||
                         new Date()
                     );
 
@@ -1601,90 +1609,13 @@ sap.ui.define([], function () {
                     }
                 );
 
-        var mBlocksByEquipment =
-            Object.create(null);
-
-        aFilteredBlocks.forEach(
-            function (oBlock) {
-                var sEquipment =
-                    String(
-                        oBlock.EquipmentId ||
-                        ""
-                    );
-
-                if (!sEquipment) {
-                    return;
-                }
-
-                if (!mBlocksByEquipment[
-                    sEquipment
-                ]) {
-                    mBlocksByEquipment[
-                        sEquipment
-                    ] = [];
-                }
-
-                mBlocksByEquipment[
-                    sEquipment
-                ].push(
-                    oBlock
-                );
-            }
-        );
-
         var aEquipos =
             aRepresentative.map(
                 function (oBlock) {
-                    var sEquipment =
-                        String(
-                            oBlock.EquipmentId ||
-                            ""
-                        );
-
-                    var aEquipmentBlocks =
-                        mBlocksByEquipment[
-                            sEquipment
-                        ] || [];
-
-                    var mEquipmentBlockIds =
-                        Object.create(null);
-
-                    aEquipmentBlocks.forEach(
-                        function (oItem) {
-                            if (
-                                oItem.BlockId
-                            ) {
-                                mEquipmentBlockIds[
-                                    String(
-                                        oItem.BlockId
-                                    )
-                                ] = true;
-                            }
-                        }
-                    );
-
                     var iAffected =
-                        distinctCount(
-                            aRelations.filter(
-                                function (
-                                    oRelation
-                                ) {
-                                    return !!mEquipmentBlockIds[
-                                        String(
-                                            oRelation.BlockId ||
-                                            ""
-                                        )
-                                    ];
-                                }
-                            ),
-                            function (
-                                oRelation
-                            ) {
-                                return (
-                                    oRelation.OrderId
-                                );
-                            }
-                        );
+                        BlockedEquipmentRules.affectedOrderIds(
+                            oBlock
+                        ).length;
 
                     var iDays =
                         diffDays(
@@ -1694,7 +1625,6 @@ sap.ui.define([], function () {
                             parseDate(
                                 oBlock.ReleasedAt
                             ) ||
-                            oTo ||
                             new Date()
                         );
 

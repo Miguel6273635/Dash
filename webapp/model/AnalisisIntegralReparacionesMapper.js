@@ -239,6 +239,7 @@ sap.ui.define([], function () {
 
         return {
             material: oSelected,
+            sourceCount: asArray(aMaterials).length,
             publishableCount: aPublishable.length,
             usedFallback: aPublishable.length > 1 && aPrimary.length === 0
         };
@@ -316,9 +317,11 @@ sap.ui.define([], function () {
             return Object.assign({}, oOrder, {
                 _classification: oClassification,
                 _material: oMaterial,
-                _materialId: String(oMaterial && oMaterial.MaterialId || "SIN_MATERIAL"),
+                _materialId: String(oMaterial && oMaterial.MaterialId ||
+                    (oMaterialSelection.sourceCount ? "SIN_MATERIAL_PUBLICABLE" : "SIN_MATERIAL")),
                 _materialName: oMaterial &&
-                    (oMaterial.MaterialName || oMaterial.MaterialId) || "Sin material asociado",
+                    (oMaterial.MaterialName || oMaterial.MaterialId) ||
+                    (oMaterialSelection.sourceCount ? "Sin material publicable" : "Sin material asociado"),
                 _materialCategory: oMaterial &&
                     (oMaterial.MaterialCategoryCode || oMaterial.MaterialCategoryName) || "",
                 _responsibleId: sResourceId || String(oOrder.SupervisorId || ""),

@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/BlockedEquipmentRules"
+], function (BlockedEquipmentRules) {
     "use strict";
 
     function normalize(vValue) {
@@ -40,18 +42,6 @@ sap.ui.define([], function () {
         )
             ? null
             : oDate;
-    }
-
-    function startOfDay(oDate) {
-        if (!oDate) {
-            return null;
-        }
-
-        return new Date(
-            oDate.getFullYear(),
-            oDate.getMonth(),
-            oDate.getDate()
-        );
     }
 
     function formatDate(vValue) {
@@ -100,27 +90,7 @@ sap.ui.define([], function () {
         oStart,
         oEnd
     ) {
-        if (
-            !oStart ||
-            !oEnd
-        ) {
-            return null;
-        }
-
-        return Math.max(
-            0,
-            Math.floor(
-                (
-                    startOfDay(
-                        oEnd
-                    ).getTime() -
-                    startOfDay(
-                        oStart
-                    ).getTime()
-                ) /
-                86400000
-            )
-        );
+        return BlockedEquipmentRules.businessDays(oStart, oEnd);
     }
 
     function buildMap(
@@ -491,6 +461,14 @@ sap.ui.define([], function () {
                 oSelectionData.blockId
             );
 
+        if (oBlock) {
+            oBlock = BlockedEquipmentRules.enrichBlock(
+                oBlock,
+                oRaw.blockOrders || [],
+                oRaw.orders || []
+            );
+        }
+
         var mResources =
             buildResourceMap(
                 oRaw.resources || []
@@ -710,14 +688,40 @@ sap.ui.define([], function () {
                     return (
                         normalize(
                             oEvent.RecordTypeCode
-                        ) ===
-                        "HISTORY_EVENT"
+                        ) !==
+                        "PENDING_ACTION"
                     );
                 }
             );
 
+        var aAffectedOrderIds =
+            BlockedEquipmentRules.affectedOrderIds(
+                oBlock
+            );
+
+        var mAffectedOrderIds =
+            aAffectedOrderIds.reduce(
+                function (mResult, sOrderId) {
+                    mResult[sOrderId] = true;
+                    return mResult;
+                },
+                Object.create(null)
+            );
+
         var aOrders =
-            aRelations.map(
+            aRelations
+                .filter(function (oRelation) {
+                    return !!mAffectedOrderIds[
+                        String(oRelation.OrderId || "")
+                    ];
+                })
+                .filter(function (oRelation, iIndex, aAll) {
+                    return aAll.findIndex(function (oCandidate) {
+                        return String(oCandidate.OrderId || "") ===
+                            String(oRelation.OrderId || "");
+                    }) === iIndex;
+                })
+                .map(
                 function (oRelation) {
                     var oOrder =
                         mOrders[
@@ -1007,20 +1011,7 @@ sap.ui.define([], function () {
                 affectedOrders: {
                     value:
                         String(
-                            new Set(
-                                aRelations
-                                    .map(
-                                        function (
-                                            oRelation
-                                        ) {
-                                            return (
-                                                oRelation.OrderId ||
-                                                ""
-                                            );
-                                        }
-                                    )
-                                    .filter(Boolean)
-                            ).size
+                            aAffectedOrderIds.length
                         ),
 
                     label:

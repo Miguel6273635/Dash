@@ -87,6 +87,28 @@ sap.ui.define([], function () {
         };
     }
 
+    function displayInputDate(value, endOfDay) {
+        var match = String(value || "").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        var date;
+
+        if (!match) {
+            return null;
+        }
+        date = new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]),
+            endOfDay ? 23 : 0, endOfDay ? 59 : 0, endOfDay ? 59 : 0);
+        return date.getFullYear() === Number(match[3]) && date.getMonth() === Number(match[2]) - 1 &&
+            date.getDate() === Number(match[1]) ? date : null;
+    }
+
+    function selectedRange(filters) {
+        var values = filters || {};
+        var fallback = period(values.periodKey || "2026-ANUAL") || period("2026-ANUAL");
+        var start = displayInputDate(values.fechaDesde, false);
+        var end = displayInputDate(values.fechaHasta, true);
+
+        return start && end && start <= end ? { startDate: start, endDate: end } : fallback;
+    }
+
     function periodOptions() {
         var result = [];
         var year;
@@ -142,7 +164,7 @@ sap.ui.define([], function () {
     }
 
     function orderInPeriod(order, start, end) {
-        var planned = parseDate(order && (order.PlannedStartDate || order.PlannedFinishDate));
+        var planned = parseDate(order && (order.PlannedFinishDate || order.PlannedStartDate));
         return !!planned && planned >= start && planned <= end;
     }
 
@@ -151,20 +173,29 @@ sap.ui.define([], function () {
             (norm(assignment && assignment.RoleCode) === "LEAD_MECHANIC" ? 0 : 1);
     }
 
-    function resolveAssignments(assignments, resourceId, cutoff) {
+    function resolveAssignments(assignments) {
         var result = new Map();
 
         array(assignments).filter(function (assignment) {
-            return assignment && assignment.OrderId && String(assignment.ResourceId || "") === String(resourceId || "") && isActive(assignment, cutoff);
+            return assignment && assignment.OrderId && assignment.ResourceId;
         }).forEach(function (assignment) {
             var id = String(assignment.OrderId);
-            var current = result.get(id);
-
-            if (!current || assignmentRank(assignment) < assignmentRank(current)) {
-                result.set(id, assignment);
-            }
+            var current = result.get(id) || [];
+            current.push(assignment);
+            result.set(id, current);
         });
         return result;
+    }
+
+    function responsibleForOrder(order, assignmentIndex) {
+        var reference = parseDate(order && (order.PlannedFinishDate || order.PlannedStartDate));
+        var all = assignmentIndex.get(String(order && order.OrderId)) || [];
+        var active = all.filter(function (assignment) { return isActive(assignment, reference); });
+        var selected = (active.length ? active : all).slice().sort(function (left, right) {
+            return assignmentRank(left) - assignmentRank(right);
+        })[0];
+
+        return selected && selected.ResourceId || order && (order.Mecanico || order.SupervisorId) || "SIN_ASIGNAR";
     }
 
     function resolveResource(resources, resourceId, start, end) {
@@ -281,23 +312,18 @@ sap.ui.define([], function () {
         };
     }
 
-    function firstResourceId(raw) {
-        var assignment = array(raw.assignments)[0];
-        var resource = array(raw.resources)[0];
-        return assignment && assignment.ResourceId || resource && resource.ResourceId || "";
-    }
-
     function build(raw, filters) {
         var values = Object.assign({ periodKey: "2026-ANUAL", zona: "TODAS", origen: "TODAS", page: 1, pageSize: 5 }, filters || {});
-        var range = period(values.periodKey) || period("2026-ANUAL");
-        var resourceId = values.responsableId || firstResourceId(raw);
+        var range = selectedRange(values);
+        var resourceId = values.responsableId || "";
         var resource = resolveResource(raw.resources, resourceId, range.startDate, range.endDate);
-        var assignments = resolveAssignments(raw.assignments, resourceId, range.endDate);
+        var assignments = resolveAssignments(raw.assignments);
         var causeMap = causesByOrder(raw.causes, range.endDate);
         var rescheduled = reprogrammedIds(raw.events);
         var resourceZone = resource && (resource.ZoneId || resource.ZoneName);
         var allOrders = array(raw.orders).filter(function (order) {
-            return order && assignments.has(String(order.OrderId)) && ORDER_TYPES.indexOf(norm(order.OrderTypeCode)) >= 0 &&
+            return order && resourceId && String(responsibleForOrder(order, assignments)) === String(resourceId) &&
+                ORDER_TYPES.indexOf(norm(order.OrderTypeCode)) >= 0 &&
                 orderInPeriod(order, range.startDate, range.endDate);
         });
         var orders = allOrders.filter(function (order) {
@@ -313,6 +339,9 @@ sap.ui.define([], function () {
         var rows;
         var pageData;
         var selectedOption = periodOptions().filter(function (item) { return item.key === values.periodKey; })[0];
+        var customRange = !!(displayInputDate(values.fechaDesde, false) && displayInputDate(values.fechaHasta, true));
+        var periodText = customRange ? displayDate(range.startDate) + " - " + displayDate(range.endDate) :
+            (selectedOption ? selectedOption.text : values.periodKey);
 
         rows = deviatedOrders.map(function (order) {
             var cause = causeMap.get(String(order.OrderId));
@@ -348,11 +377,11 @@ sap.ui.define([], function () {
             responsable: resource && resource.ResourceName || resourceId || "Sin responsable asignado",
             zona: resource ? (resource.ZoneName || resource.ZoneId || "Sin zona") :
                 (values.zona === "TODAS" ? "Todas" : values.zona),
-            semana: selectedOption ? selectedOption.text : values.periodKey,
+            semana: periodText,
             origenActivo: ORIGIN_TEXT[norm(values.origen)] || ORIGIN_TEXT.TODAS,
             filtros: {
                 periodKey: values.periodKey,
-                periodoTexto: selectedOption ? selectedOption.text : values.periodKey,
+                periodoTexto: periodText,
                 zonaKey: values.zona,
                 origen: values.origen,
                 fechaDesde: displayDate(range.startDate),
@@ -383,6 +412,7 @@ sap.ui.define([], function () {
 
     return {
         build: build,
-        period: period
+        period: period,
+        selectedRange: selectedRange
     };
 });

@@ -32,8 +32,11 @@ sap.ui.define([], function () {
     function display(d) { return d ? String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear() : ""; }
     function weekStart(y, w) { var d = new Date(y, 0, 4), day = d.getDay() || 7; return new Date(y, 0, 4 - day + 1 + (w - 1) * 7); }
     function period(s) {
-        var annual = String(s || "").match(/^(\d{4})-ANUAL$/), week = String(s || "").match(/^(\d{4})-W(\d{2})$/), start;
+        var annual = String(s || "").match(/^(\d{4})-ANUAL$/), monthly = String(s || "").match(/^(\d{4})-(\d{2})$/), week = String(s || "").match(/^(\d{4})-W(\d{2})$/), start;
         if (annual) { return { startDate: new Date(Number(annual[1]), 0, 1), endDate: new Date(Number(annual[1]), 11, 31, 23, 59, 59) }; }
+        if (monthly && Number(monthly[2]) >= 1 && Number(monthly[2]) <= 12) {
+            return { startDate: new Date(Number(monthly[1]), Number(monthly[2]) - 1, 1), endDate: new Date(Number(monthly[1]), Number(monthly[2]), 0, 23, 59, 59) };
+        }
         if (!week) { return null; }
         start = weekStart(Number(week[1]), Number(week[2]));
         return { startDate: start, endDate: new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59) };
@@ -81,13 +84,21 @@ sap.ui.define([], function () {
     function mainByCount(items, get) { var counts = new Map(); items.forEach(function (x) { var key = get(x) || ""; if (key) { counts.set(key, (counts.get(key) || 0) + 1); } }); return Array.from(counts.entries()).sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0], "es"); })[0]; }
     function periodOptions(selected) {
         var options = [], y, w, start, end;
-        [2024, 2025, 2026].forEach(function (year) { options.push({ key: year + "-ANUAL", text: year + " (Anual)" }); });
+        [2024, 2025, 2026].forEach(function (year) {
+            options.push({ key: year + "-ANUAL", text: year + " (Anual)" });
+            MONTHS.forEach(function (month, index) {
+                options.push({ key: year + "-" + String(index + 1).padStart(2, "0"), text: month.charAt(0).toUpperCase() + month.slice(1) + " " + year + " (Mensual)" });
+            });
+        });
         for (y = 2024; y <= 2026; y += 1) { for (w = 1; w <= 52; w += 1) { start = weekStart(y, w); end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6); options.push({ key: y + "-W" + String(w).padStart(2, "0"), text: "Semana " + w + " (" + String(start.getDate()).padStart(2, "0") + " " + MONTHS[start.getMonth()] + " - " + String(end.getDate()).padStart(2, "0") + " " + MONTHS[end.getMonth()] + " " + end.getFullYear() + ")" }); } }
+        if (selected && !options.some(function (option) { return option.key === selected; })) {
+            options.unshift({ key: selected, text: selected });
+        }
         return options;
     }
     function zoneOptions(orders) { var m = new Map([["TODAS", "Todas"]]); arr(orders).forEach(function (o) { var key = norm(o._zone); if (key && key !== "SIN_ZONA") { m.set(key, o._zone); } }); return Array.from(m.entries()).map(function (e) { return { key: e[0], text: e[1] }; }); }
     function buildData(raw, filters) {
-        var values = Object.assign({ periodo: DEFAULT_PERIOD, zona: DEFAULT_ZONE, origen: "TODAS" }, filters || {}), base = period(values.periodo), start = parseDisplay(values.fechaDesde) || raw.range.startDate || base.startDate, end = parseDisplay(values.fechaHasta) || raw.range.endDate || base.endDate, orders = enrichedOrders(raw).filter(function (o) { return TYPES.indexOf(norm(o.OrderTypeCode)) >= 0 && inRange(o.PlannedFinishDate || o.PlannedStartDate, start, end) && (norm(values.zona) === "TODAS" || comparable(o._zone) === comparable(values.zona)); }), causes = causeMap(raw.causes, end), groups = new Map(), allDeviated, total;
+        var values = Object.assign({ periodo: DEFAULT_PERIOD, zona: DEFAULT_ZONE, origen: "TODAS" }, filters || {}), base = period(values.periodo) || period(DEFAULT_PERIOD), start = parseDisplay(values.fechaDesde) || raw.range.startDate || base.startDate, end = parseDisplay(values.fechaHasta) || raw.range.endDate || base.endDate, orders = enrichedOrders(raw).filter(function (o) { return TYPES.indexOf(norm(o.OrderTypeCode)) >= 0 && inRange(o.PlannedFinishDate || o.PlannedStartDate, start, end) && (norm(values.zona) === "TODAS" || comparable(o._zone) === comparable(values.zona)); }), causes = causeMap(raw.causes, end), groups = new Map(), allDeviated, total;
         orders.forEach(function (o) { var id = o._responsableId, g = groups.get(id); if (!g) { g = { id: id, name: o._responsable, planned: new Map(), executed: new Map(), deviations: new Map() }; groups.set(id, g); } g.planned.set(String(o.OrderId), o); if (executed(o)) { g.executed.set(String(o.OrderId), o); } if (deviated(o) && originMatch(causes.get(String(o.OrderId)), values.origen)) { g.deviations.set(String(o.OrderId), o); } });
         allDeviated = Array.from(groups.values()).reduce(function (list, g) { return list.concat(Array.from(g.deviations.values())); }, []); total = new Set(allDeviated.map(function (o) { return String(o.OrderId); })).size;
         return {

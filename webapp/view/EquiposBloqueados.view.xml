@@ -297,75 +297,6 @@
                             class="ebKpiLink" />
                     </VBox>
 
-                    <VBox class="ebKpiCard ebKpiPurple">
-                        <HBox
-                            class="ebKpiMain"
-                            alignItems="Center">
-
-                            <VBox
-                                class="ebKpiIconBox"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon
-                                    src="sap-icon://message-warning"
-                                    class="ebKpiIcon" />
-                            </VBox>
-
-                            <VBox
-                                class="ebKpiTextBox"
-                                alignItems="Center">
-
-                                <Text
-                                    text="Equipos críticos"
-                                    class="ebKpiLabel" />
-
-                                <ObjectNumber
-                                    number="{dashboard>/kpis/criticos}"
-                                    class="ebKpiNumber" />
-                            </VBox>
-                        </HBox>
-
-                        <Link
-                            text="Ver detalle"
-                            press=".onKpiDetail"
-                            class="ebKpiLink" />
-                    </VBox>
-
-                    <VBox class="ebKpiCard ebKpiGreen">
-                        <HBox
-                            class="ebKpiMain"
-                            alignItems="Center">
-
-                            <VBox
-                                class="ebKpiIconBox"
-                                alignItems="Center"
-                                justifyContent="Center">
-
-                                <core:Icon
-                                    src="sap-icon://unlocked"
-                                    class="ebKpiIcon" />
-                            </VBox>
-
-                            <VBox
-                                class="ebKpiTextBox"
-                                alignItems="Center">
-
-                                <Text
-                                    text="Pendientes de desbloqueo"
-                                    class="ebKpiLabel" />
-
-                                <ObjectNumber
-                                    number="{dashboard>/kpis/pendientesDesbloqueo}"
-                                    class="ebKpiNumber" />
-                            </VBox>
-                        </HBox>
-
-                        <Link
-                            text="Ver detalle"
-                            press=".onKpiDetail"
-                            class="ebKpiLink" />
-                    </VBox>
                 </FlexBox>
 
                 <!-- =====================================================
@@ -396,91 +327,6 @@
                             content="{dashboard>/charts/motivos}"
                             sanitizeContent="false"
                             class="ebHtmlChart" />
-                    </VBox>
-
-                    <VBox class="ebPanel ebPanelQuarter">
-                        <HBox
-                            class="ebPanelHeader"
-                            alignItems="Center">
-
-                            <Title
-                                text="Estado de gestión del desbloqueo"
-                                level="H4"
-                                class="ebPanelTitle ebTitleNormal" />
-                        </HBox>
-
-                        <HBox
-                            class="ebManagementHeader"
-                            justifyContent="SpaceBetween">
-
-                            <Text text="Estado" />
-
-                            <HBox>
-                                <Text
-                                    text="Equipos"
-                                    class="ebManagementNumberHeader" />
-
-                                <Text
-                                    text="%"
-                                    class="ebManagementPercentHeader" />
-                            </HBox>
-                        </HBox>
-
-                        <VBox
-                            items="{dashboard>/gestionDesbloqueo}"
-                            class="ebManagementList">
-
-                            <HBox
-                                class="ebManagementRow"
-                                justifyContent="SpaceBetween"
-                                alignItems="Center">
-
-                                <HBox
-                                    alignItems="Center"
-                                    class="ebManagementNameBox">
-
-                                    <VBox class="ebLegendDot">
-                                        <customData>
-                                            <core:CustomData
-                                                key="tone"
-                                                value="{dashboard>tono}"
-                                                writeToDom="true" />
-                                        </customData>
-                                    </VBox>
-
-                                    <Text
-                                        text="{dashboard>estado}"
-                                        class="ebManagementName" />
-                                </HBox>
-
-                                <HBox class="ebManagementValues">
-                                    <Text
-                                        text="{dashboard>equipos}"
-                                        class="ebManagementValue" />
-
-                                    <Text
-                                        text="{dashboard>porcentaje}"
-                                        class="ebManagementPercent" />
-                                </HBox>
-                            </HBox>
-                        </VBox>
-
-                        <HBox
-                            class="ebManagementTotal"
-                            justifyContent="SpaceBetween">
-
-                            <Text text="Total" />
-
-                            <HBox class="ebManagementValues">
-                                <Text
-                                    text="{dashboard>/kpis/totalBloqueados}"
-                                    class="ebManagementValue" />
-
-                                <Text
-                                    text="100%"
-                                    class="ebManagementPercent" />
-                            </HBox>
-                        </HBox>
                     </VBox>
 
                     <VBox class="ebPanel ebPanelQuarter">
@@ -527,7 +373,7 @@
                             alignItems="Center">
 
                             <Title
-                                text="Afectación en órdenes"
+                                text="Estatus operativo de la orden"
                                 level="H4"
                                 class="ebPanelTitle ebTitleNormal" />
 
@@ -542,7 +388,7 @@
                             class="ebHtmlChart" />
 
                         <Text
-                            text="Distribución operativa"
+                            text="Distribución por estatus operativo"
                             class="ebChartFootnote" />
                     </VBox>
                 </FlexBox>
@@ -759,13 +605,6 @@
                                             </customData>
                                         </MenuItem>
 
-                                        <MenuItem text="Próxima acción">
-                                            <customData>
-                                                <core:CustomData
-                                                    key="columnId"
-                                                    value="colAccion" />
-                                            </customData>
-                                        </MenuItem>
                                     </Menu>
                                 </menu>
                             </MenuButton>
@@ -783,7 +622,7 @@
 
                         <columns>
 
-                            <Column width="8%">
+                            <Column width="12%">
                                 <Text
                                     text="Equipo / Elevador"
                                     wrapping="true" />
@@ -791,7 +630,7 @@
 
                             <Column
                                 id="colCliente"
-                                width="7%">
+                                width="11%">
 
                                 <Text
                                     text="Cliente"
@@ -800,7 +639,7 @@
 
                             <Column
                                 id="colZona"
-                                width="5%">
+                                width="8%">
 
                                 <Text
                                     text="Zona"
@@ -808,7 +647,7 @@
                             </Column>
 
                             <Column
-                                width="8%"
+                                width="11%"
                                 hAlign="Center">
 
                                 <Text
@@ -819,7 +658,7 @@
 
                             <Column
                                 id="colMotivo"
-                                width="14%">
+                                width="20%">
 
                                 <Text
                                     text="Motivo de bloqueo"
@@ -827,7 +666,7 @@
                             </Column>
 
                             <Column
-                                width="8%"
+                                width="11%"
                                 hAlign="Center">
 
                                 <Text
@@ -837,7 +676,7 @@
                             </Column>
 
                             <Column
-                                width="6%"
+                                width="8%"
                                 hAlign="Center">
 
                                 <Text
@@ -847,7 +686,7 @@
                             </Column>
 
                             <Column
-                                width="7%"
+                                width="9%"
                                 hAlign="Center">
 
                                 <Text
@@ -858,41 +697,13 @@
 
                             <Column
                                 id="colResponsable"
-                                width="9%">
+                                width="10%">
 
                                 <Text
                                     text="Responsable"
                                     wrapping="true" />
                             </Column>
 
-                            <Column
-                                id="colAccion"
-                                width="12%">
-
-                                <Text
-                                    text="Próxima acción"
-                                    wrapping="true" />
-                            </Column>
-
-                            <Column
-                                width="9%"
-                                hAlign="Center">
-
-                                <Text
-                                    text="Fecha compromiso"
-                                    wrapping="true"
-                                    textAlign="Center" />
-                            </Column>
-
-                            <Column
-                                width="7%"
-                                hAlign="Center">
-
-                                <Text
-                                    text="Prioridad"
-                                    wrapping="true"
-                                    textAlign="Center" />
-                            </Column>
                         </columns>
 
                         <items>
@@ -957,34 +768,6 @@
                                         wrapping="true"
                                         maxLines="2" />
 
-                                    <Text
-                                        text="{dashboard>proximaAccion}"
-                                        wrapping="true"
-                                        maxLines="2" />
-
-                                    <HBox
-                                        alignItems="Center"
-                                        justifyContent="Center"
-                                        class="ebCommitmentDate">
-
-                                        <core:Icon src="sap-icon://calendar" />
-
-                                        <Text
-                                            text="{dashboard>fechaCompromiso}"
-                                            wrapping="false" />
-                                    </HBox>
-
-                                    <Text
-                                        text="{dashboard>prioridad}"
-                                        class="ebPriorityPill">
-
-                                        <customData>
-                                            <core:CustomData
-                                                key="priority"
-                                                value="{dashboard>prioridadKey}"
-                                                writeToDom="true" />
-                                        </customData>
-                                    </Text>
                                 </cells>
                             </ColumnListItem>
                         </items>

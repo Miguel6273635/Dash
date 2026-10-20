@@ -28,7 +28,7 @@ sap.ui.define([
          * semanas que termina en ella; al seleccionar "Anual", se envía el
          * año completo. El Mapper asigna cada OT por PlannedStartDate.
          */
-        var range = TendenciaEjecucionMapper.period(filters && filters.period || "2026-ANUAL");
+        var range = TendenciaEjecucionMapper.period(filters && (filters.periodo || filters.period) || "2026-ANUAL");
         return [
             "PlannedStartDate eq datetime'" + odataDate(range.startDate) + "'",
             "PlannedFinishDate eq datetime'" + odataDate(range.endDate) + "'"
@@ -37,7 +37,7 @@ sap.ui.define([
     function emptyRaw() { return { orders: [], causes: [], assignments: [], resources: [], catalogs: [], meta: { unavailableEntitySets: [] } }; }
     function createEmpty(filters) { return TendenciaEjecucionMapper.build(emptyRaw(), filters); }
     function load(model, filters) {
-        var range = TendenciaEjecucionMapper.period(filters && filters.period || "2026-ANUAL");
+        var range = TendenciaEjecucionMapper.period(filters && (filters.periodo || filters.period) || "2026-ANUAL");
 
         return RelatedData.load(model, {
             ordersFilter: ordersFilter(filters),

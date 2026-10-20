@@ -100,9 +100,7 @@ sap.ui.define([], function () {
         AnalisisElevadores: [],
         AnalisisFallas: [],
         ComportamientoOperativo: [
-            card(".coCauseCard", "RouteDetalleResponsable", "Abrir detalle del responsable", {
-                parameters: { responsableId: { model: "data", property: "id" } }
-            })
+            local(".coCauseCard", "onCauseCardPress", "Abrir detalle del responsable")
         ],
         DetalleResponsable: [], // Conserva su filtro semanal y sus menús existentes.
         TendenciaEjecucion: [

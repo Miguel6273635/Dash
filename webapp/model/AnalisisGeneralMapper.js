@@ -108,7 +108,7 @@ sap.ui.define([], function () {
         var result = new Map();
         list(causes).filter(function (cause) {
             return cause && cause.OrderId && activeRecord(cause, cutOff) &&
-                (!cause.CauseContextCode || norm(cause.CauseContextCode) === "NON_EXECUTION");
+                norm(cause.CauseContextCode) === "NON_EXECUTION";
         }).forEach(function (cause) {
             var id = String(cause.OrderId);
             var old = result.get(id);
@@ -143,10 +143,11 @@ sap.ui.define([], function () {
         });
         return Array.from(zones.entries()).map(function (entry) { return { key: entry[0], text: entry[1] }; });
     }
-    function topConcentration(rows, property, total) {
+    function topConcentration(rows, property, total, missingLabel) {
         var counts = new Map();
         rows.forEach(function (row) {
-            var value = String(row[property] || "Sin dato");
+            var value = String(row[property] || "").trim();
+            if (!value || norm(value) === norm(missingLabel)) { return; }
             counts.set(value, (counts.get(value) || 0) + 1);
         });
         var top = Array.from(counts.entries()).sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0], "es"); }).slice(0, 2);
@@ -188,9 +189,9 @@ sap.ui.define([], function () {
                 showFilterIcon: index < 2
             };
         }).sort(function (a, b) { return b.contribucion - a.contribucion || a.ot.localeCompare(b.ot); });
-        var clients = topConcentration(rows, "cliente", notExecuted.length);
-        var elevators = topConcentration(rows, "elevador", notExecuted.length);
-        var zones = topConcentration(rows, "zona", notExecuted.length);
+        var clients = topConcentration(rows, "cliente", notExecuted.length, "Sin cliente");
+        var elevators = topConcentration(rows, "elevador", notExecuted.length, "Sin elevador");
+        var zones = topConcentration(rows, "zona", notExecuted.length, "Sin zona");
         var compliance = orders.length ? Number((executed.length / orders.length * 100).toFixed(1)) : 0;
         return {
             filters: { week: selectedPeriod.key, zone: norm(values.zone) || "TODAS", search: "" },

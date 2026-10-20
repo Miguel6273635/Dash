@@ -42,14 +42,15 @@ sap.ui.define([
         },
 
         onPeriodoChange: function (oEvent) {
-            var sYear = String(oEvent.getSource().getSelectedKey() || "");
+            var sKey = String(oEvent.getSource().getSelectedKey() || "");
             var oModel = this.getView().getModel("cumplimientoModel");
+            var oRange = InitialLoadPeriod.rangeForKey(sKey);
 
-            if (!/^\d{4}$/.test(sYear)) {
+            if (!oRange) {
                 return;
             }
-            oModel.setProperty("/filters/fechaDesde", "01/01/" + sYear);
-            oModel.setProperty("/filters/fechaHasta", "31/12/" + sYear);
+            oModel.setProperty("/filters/fechaDesde", InitialLoadPeriod.display(oRange.startDate));
+            oModel.setProperty("/filters/fechaHasta", InitialLoadPeriod.display(oRange.endDate));
         },
 
         _loadData: function (bNotify) {
@@ -120,14 +121,20 @@ sap.ui.define([
 
         _getDefaultFilters: function () {
             var initialPeriod = InitialLoadPeriod.previousMonth();
-            return {
-                periodo: initialPeriod.year,
+            var defaults = {
+                periodo: initialPeriod.monthKey,
                 fechaDesde: initialPeriod.startDisplay,
                 fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS",
                 supervisor: "TODOS",
                 tipoServicio: "TODOS"
             };
+            var component = this.getOwnerComponent && this.getOwnerComponent();
+            var contextModel = component && component.getModel("dashboardNavigationContext");
+            var context = contextModel && contextModel.getData();
+            var inherited = context && context.targetRoute === "RouteDetalleCumplimientoOrdenes" && context.filters;
+
+            return Object.assign(defaults, inherited || {});
         },
 
         _renderizarVisualizaciones: function () {

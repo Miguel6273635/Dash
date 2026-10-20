@@ -17,7 +17,7 @@ sap.ui.define([
             var initialPeriod = InitialLoadPeriod.previousMonth();
             includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/TendenciaEjecucion.css") + "?v=20260821-live-data");
             this._requestId = 0;
-            this._filters = { periodo: initialPeriod.monthKey, zona: "TODAS" };
+            this._filters = this._navigationFilters({ periodo: initialPeriod.monthKey, zona: "TODAS" });
             this.getView().setModel(new JSONModel(Service.createEmpty(this._filters)), "trend");
             this.getView().getModel("trend").setSizeLimit(1000);
             this._load(false);
@@ -61,6 +61,21 @@ sap.ui.define([
         _odata: function () {
             var component = this.getOwnerComponent();
             return component && component.getModel("dashboardOData") || this.getView().getModel("dashboardOData");
+        },
+
+        _navigationFilters: function (defaults) {
+            var component = this.getOwnerComponent && this.getOwnerComponent();
+            var contextModel = component && component.getModel("dashboardNavigationContext");
+            var context = contextModel && contextModel.getData();
+            var inherited = context && context.targetRoute === "RouteTendenciasEjecucion" && context.filters;
+            var result = Object.assign({}, defaults);
+
+            if (inherited) {
+                result.periodo = InitialLoadPeriod.keyForRange(inherited.fechaDesde, inherited.fechaHasta, true) ||
+                    inherited.periodo || result.periodo;
+                result.zona = inherited.zona || result.zona;
+            }
+            return result;
         },
 
         _syncControls: function (data) {
