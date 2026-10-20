@@ -513,6 +513,13 @@ sap.ui.define([
                         oModel,
                         "/DashboardBlockEventsSet",
                         aBlockIds
+                    ),
+
+                    fetchAll(
+                        oModel,
+                        "/DashboardOrdersSet",
+                        aOrdersFilters,
+                        true
                     )
                 ]).then(function (
                     aDetailResponses
@@ -524,8 +531,11 @@ sap.ui.define([
                         blocks:
                             aBlocks,
 
+                        orders:
+                            aDetailResponses[2] || [],
+
                         ordersFallback:
-                            [],
+                            aDetailResponses[2] || [],
 
                         blockOrders:
                             aDetailResponses[0] ||
@@ -577,6 +587,9 @@ sap.ui.define([
                         [],
 
                     ordersFallback:
+                        aOrders || [],
+
+                    orders:
                         aOrders || [],
 
                     blockOrders:
