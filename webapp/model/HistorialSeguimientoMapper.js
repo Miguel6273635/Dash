@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/BlockedEquipmentRules"
+], function (BlockedEquipmentRules) {
     "use strict";
 
     function normalize(vValue) {
@@ -571,6 +573,14 @@ sap.ui.define([], function () {
         var aEvents =
             oRaw.events || [];
 
+        if (oBlock) {
+            oBlock = BlockedEquipmentRules.enrichBlock(
+                oBlock,
+                oRaw.blockOrders || [],
+                oRaw.orders || []
+            );
+        }
+
         var mResources =
             buildResourceMap(
                 oRaw.resources || []
@@ -736,6 +746,17 @@ sap.ui.define([], function () {
                 aEvents
             );
 
+        var oLatestBlockEvent =
+            aEvents
+                .filter(function (oEvent) {
+                    return normalize(oEvent.ActionCode) === "BLOCK";
+                })
+                .slice()
+                .sort(function (a, b) {
+                    return (parseDate(b.EventAt) || 0) -
+                        (parseDate(a.EventAt) || 0);
+                })[0] || null;
+
         var oBlockedAt =
             parseDate(
                 oBlock.BlockedAt
@@ -748,7 +769,7 @@ sap.ui.define([], function () {
 
         var iBlockedDays =
             oBlockedAt
-                ? diffDays(
+                ? BlockedEquipmentRules.businessDays(
                     oBlockedAt,
                     oReleasedAt ||
                     new Date()
@@ -1070,12 +1091,19 @@ sap.ui.define([], function () {
                     "Sin datos",
 
                 direccion:
+                    oBlock.EquipmentAddress ||
+                    oBlock.SiteAddress ||
+                    oBlock.Address ||
                     "Sin datos",
 
                 tipoEquipo:
+                    oBlock.EquipmentTypeText ||
+                    oBlock.EquipmentTypeCode ||
                     "Sin datos",
 
                 modelo:
+                    oBlock.EquipmentModel ||
+                    oBlock.Model ||
                     "Sin datos"
             },
 
@@ -1088,6 +1116,7 @@ sap.ui.define([], function () {
                 responsableActual:
                     getResourceName(
                         mResources,
+                        oLatestBlockEvent && oLatestBlockEvent.ResponsibleId ||
                         oBlock.ResponsibleId
                     ),
 

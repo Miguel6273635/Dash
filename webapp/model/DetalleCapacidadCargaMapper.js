@@ -86,6 +86,9 @@ sap.ui.define([], function () {
         return valid(resource && resource.CapacitySourceValidated) &&
             ["INACTIVE", "UNAVAILABLE", "ABSENT", "NO_DISPONIBLE", "OFF"].indexOf(clean(resource && resource.AvailabilityStatusCode)) < 0;
     }
+    function hasValidShift(resource) { return valid(resource && resource.ShiftSourceValidated) && !!norm(resource && resource.ShiftId); }
+    function shiftKey(resource) { return hasValidShift(resource) ? String(resource.ShiftId) : "SIN_TURNO"; }
+    function shiftText(resource) { return hasValidShift(resource) ? String(resource.ShiftName || resource.ShiftId) : "Sin turno"; }
     function activeAssignment(item, cutOff) {
         var from = date(item && item.ValidFrom);
         var to = date(item && item.ValidTo);
@@ -154,26 +157,29 @@ sap.ui.define([], function () {
     }
     function detailsRows(groups, thresholds) {
         return Array.from(groups.values()).map(function (item) {
-            var planUtilization = percentage(item.planned, item.capacity);
-            var realUtilization = percentage(item.actual, item.capacity);
+            var planUtilization = item.capacityKnown ? percentage(item.planned, item.capacity) : null;
+            var realUtilization = item.capacityKnown && item.actualKnown ? percentage(item.actual, item.capacity) : null;
             var margin = item.capacity - item.actual;
             var variation = item.actual - item.planned;
-            var variationPct = percentage(variation, item.planned);
+            var variationPct = item.actualKnown ? percentage(variation, item.planned) : null;
             return {
                 zona: item.zona,
                 turno: item.turno,
-                capacidadValor: round(item.capacity),
+                turnoKey: item.turnoKey,
+                capacidadConocida: item.capacityKnown,
+                realesConocidas: item.actualKnown,
+                capacidadValor: item.capacityKnown ? round(item.capacity) : null,
                 programadasValor: round(item.planned),
-                realesValor: round(item.actual),
-                capacidad: hoursText(item.capacity),
+                realesValor: item.actualKnown ? round(item.actual) : null,
+                capacidad: item.capacityKnown ? hoursText(item.capacity) : "Sin datos",
                 programadas: hoursText(item.planned),
-                reales: hoursText(item.actual),
-                margen: item.capacity ? hoursText(margin, true) : "Sin datos",
+                reales: item.actualKnown ? hoursText(item.actual) : "Sin datos",
+                margen: item.capacityKnown && item.actualKnown ? hoursText(margin, true) : "Sin datos",
                 utilizacion: percent(realUtilization),
                 utilizacionValor: realUtilization,
                 utilizacionProgramada: percent(planUtilization),
-                variacionProgH: hoursText(variation, true),
-                variacionProgP: variationPct === null ? "Sin datos" : (variation >= 0 ? "+" : "-") + percent(Math.abs(variationPct)),
+                variacionProgH: item.actualKnown ? hoursText(variation, true) : "Sin datos",
+                variacionProgP: item.actualKnown && variationPct !== null ? (variation >= 0 ? "+" : "-") + percent(Math.abs(variationPct)) : "Sin datos",
                 estado: classify(realUtilization, thresholds),
                 icon: iconForTurn(item.turno)
             };
@@ -183,12 +189,12 @@ sap.ui.define([], function () {
         var value = clean(turn);
         return value.indexOf("NOCT") >= 0 ? "sap-icon://lateness" : value.indexOf("FIN") >= 0 ? "sap-icon://calendar" : "sap-icon://light-mode";
     }
-    function groupKey(resource) { return [resource.ZoneName || resource.ZoneId || "Sin zona", resource.ShiftName || resource.ShiftId || "Sin turno"].join("|"); }
+    function groupKey(resource) { return [resource.ZoneName || resource.ZoneId || "Sin zona", shiftKey(resource)].join("|"); }
     function createGroup(groups, resource) {
         var key = groupKey(resource);
         var row = groups.get(key);
         if (!row) {
-            row = { zona: resource.ZoneName || resource.ZoneId || "Sin zona", turno: resource.ShiftName || resource.ShiftId || "Sin turno", capacity: 0, planned: 0, actual: 0 };
+            row = { zona: resource.ZoneName || resource.ZoneId || "Sin zona", turno: shiftText(resource), turnoKey: shiftKey(resource), capacity: 0, capacityKnown: true, planned: 0, actual: 0, actualKnown: true };
             groups.set(key, row);
         }
         return row;
@@ -198,13 +204,15 @@ sap.ui.define([], function () {
         var filters = current.filters;
         var allResources = list(raw.resources).filter(function (resource) { return inRange(resource && resource.WorkDate, current.startDate, current.endDate); });
         var filteredResources = allResources.filter(function (resource) { return resourcePasses(resource, filters, current.startDate, current.endDate); });
-        var references = resourceReferences(filteredResources, raw.assignments, current.endDate);
+        var references = resourceReferences(allResources, raw.assignments, current.endDate);
         var thresholds = statusThresholds(raw.catalogs, current.endDate);
         var groups = new Map();
         var selectedResourceIds = new Set();
         var operationMap = new Map();
         var plannedByGroup = new Map();
         var actualByGroup = new Map();
+        var selectedOrderIds = new Set();
+        var actualAttributionMissing = false;
         var capacity;
         var planned;
         var actual;
@@ -216,6 +224,7 @@ sap.ui.define([], function () {
         filteredResources.forEach(function (resource) {
             var row = createGroup(groups, resource);
             selectedResourceIds.add(String(resource.ResourceId || ""));
+            if (!valid(resource.CapacitySourceValidated)) { row.capacityKnown = false; }
             if (isAvailable(resource)) { row.capacity += number(resource.CapacityHours); }
         });
 
@@ -229,6 +238,7 @@ sap.ui.define([], function () {
             var key;
             var value;
             if (!resource || !selectedResourceIds.has(String(resource.ResourceId || ""))) { return; }
+            selectedOrderIds.add(String(operation.OrderId));
             key = groupKey(resource);
             value = hours(operation.PlannedValueOriginal, operation.PlannedUnitOriginal);
             add(plannedByGroup, key, value);
@@ -236,12 +246,14 @@ sap.ui.define([], function () {
 
         list(raw.confirmations).filter(function (confirmation) {
             return confirmation && valid(confirmation.IncludedInCalculation) && !valid(confirmation.CancellationIndicator) && !confirmation.ReversalReference &&
-                (!confirmation.ActualStartDate || inRange(confirmation.ActualStartDate, current.startDate, current.endDate));
+                (!confirmation.ActualStartDate || inRange(confirmation.ActualStartDate, current.startDate, current.endDate)) &&
+                selectedOrderIds.has(String(confirmation.OrderId));
         }).forEach(function (confirmation) {
             var resource = references.byPersonnel.get(String(confirmation.ExecutorPersonnelNumber || ""));
             var key;
             var value;
-            if (!resource || !selectedResourceIds.has(String(resource.ResourceId || ""))) { return; }
+            if (!resource) { actualAttributionMissing = true; return; }
+            if (!selectedResourceIds.has(String(resource.ResourceId || ""))) { return; }
             key = groupKey(resource);
             value = hours(confirmation.ActualValueOriginal, confirmation.ActualUnitOriginal);
             add(actualByGroup, key, value);
@@ -250,13 +262,16 @@ sap.ui.define([], function () {
         groups.forEach(function (row, key) {
             row.planned = plannedByGroup.get(key) || 0;
             row.actual = actualByGroup.get(key) || 0;
+            row.actualKnown = !actualAttributionMissing && list(raw.meta && raw.meta.unavailableEntitySets).indexOf("DashboardOrderConfirmationsSet") < 0;
         });
         capacity = Array.from(groups.values()).reduce(function (sum, row) { return sum + row.capacity; }, 0);
         planned = Array.from(groups.values()).reduce(function (sum, row) { return sum + row.planned; }, 0);
         actual = Array.from(groups.values()).reduce(function (sum, row) { return sum + row.actual; }, 0);
+        var capacityKnown = groups.size > 0 && Array.from(groups.values()).every(function (row) { return row.capacityKnown; });
+        var actualKnown = groups.size > 0 && Array.from(groups.values()).every(function (row) { return row.actualKnown; });
         margin = capacity - planned;
-        plannedUtilization = percentage(planned, capacity);
-        realUtilization = percentage(actual, capacity);
+        plannedUtilization = capacityKnown ? percentage(planned, capacity) : null;
+        realUtilization = capacityKnown && actualKnown ? percentage(actual, capacity) : null;
         details = detailsRows(groups, thresholds);
 
         return {
@@ -271,19 +286,19 @@ sap.ui.define([], function () {
             catalogos: {
                 periodos: [{ key: "2026", text: "2026 (Anual)" }, { key: "2025", text: "2025 (Anual)" }, { key: "2024", text: "2024 (Anual)" }],
                 zonas: options(allResources, "ZoneId", "ZoneName", "Todas"),
-                turnos: options(allResources.filter(function (item) { return valid(item.ShiftSourceValidated); }), "ShiftId", "ShiftName", "Todos"),
+                turnos: options(allResources.filter(hasValidShift), "ShiftId", "ShiftName", "Todos"),
                 supervisores: options(allResources, "SupervisorId", "SupervisorName", "Todos")
             },
             kpis: {
-                capacidadDisponible: { valor: capacity ? hoursText(capacity) : "Sin datos" },
+                capacidadDisponible: { valor: capacityKnown ? hoursText(capacity) : "Sin datos" },
                 horasProgramadas: { valor: hoursText(planned), subtitulo: "Utilización programada: " + percent(plannedUtilization) },
-                horasReales: { valor: hoursText(actual), subtitulo: "Utilización real: " + percent(realUtilization) },
-                margenDisponible: { valor: capacity ? hoursText(margin, true) : "Sin datos", subtitulo: capacity ? percent(percentage(margin, capacity)) + " de capacidad disponible" : "Capacidad no validada" },
-                utilizacionReal: { valor: percent(realUtilization), subtitulo: capacity ? "Horas reales / capacidad" : "Capacidad no validada" }
+                horasReales: { valor: actualKnown ? hoursText(actual) : "Sin datos", subtitulo: actualKnown ? "Utilización real: " + percent(realUtilization) : "Horas reales sin atribución validada" },
+                margenDisponible: { valor: capacityKnown ? hoursText(margin, true) : "Sin datos", subtitulo: capacityKnown ? percent(percentage(margin, capacity)) + " de capacidad disponible" : "Capacidad no validada" },
+                utilizacionReal: { valor: percent(realUtilization), subtitulo: capacityKnown && actualKnown ? "Horas reales / capacidad" : "Capacidad o atribución sin validar" }
             },
             resumenTurno: summarizeByTurn(details, thresholds),
             detalles: details,
-            charts: donut(capacity, planned, actual),
+            charts: donut(capacityKnown ? capacity : null, planned, actualKnown ? actual : null),
             paginacion: { pageSize: "10", total: details.length, footerText: "Mostrando " + details.length + " resultados" },
             meta: { startDate: current.startDate, endDate: current.endDate, source: "BTP_DESTINATION_ODATA_V2" }
         };
@@ -291,30 +306,28 @@ sap.ui.define([], function () {
     function summarizeByTurn(details, thresholds) {
         var values = new Map();
         details.forEach(function (detail) {
-            var item = values.get(detail.turno) || { turno: detail.turno, capacity: 0, planned: 0, actual: 0, icon: detail.icon };
-            item.capacity += detail.capacidadValor;
+            var item = values.get(detail.turnoKey) || { turno: detail.turno, capacity: 0, capacityKnown: true, planned: 0, actual: 0, actualKnown: true, icon: detail.icon };
+            if (!detail.capacidadConocida) { item.capacityKnown = false; }
+            if (!detail.realesConocidas) { item.actualKnown = false; }
+            item.capacity += detail.capacidadValor || 0;
             item.planned += detail.programadasValor;
-            item.actual += detail.realesValor;
-            values.set(detail.turno, item);
+            item.actual += detail.realesValor || 0;
+            values.set(detail.turnoKey, item);
         });
         return Array.from(values.values()).map(function (item) {
-            var real = percentage(item.actual, item.capacity);
-            return { turno: item.turno, icon: item.icon, capacidad: hoursText(item.capacity), programadas: hoursText(item.planned), reales: hoursText(item.actual), utilizacion: percent(real), estado: classify(real, thresholds) };
+            var real = item.capacityKnown && item.actualKnown ? percentage(item.actual, item.capacity) : null;
+            return { turno: item.turno, icon: item.icon, capacidad: item.capacityKnown ? hoursText(item.capacity) : "Sin datos", programadas: hoursText(item.planned), reales: item.actualKnown ? hoursText(item.actual) : "Sin datos", utilizacion: percent(real), estado: classify(real, thresholds) };
         });
     }
     function donut(capacity, planned, actual) {
-        var sum = capacity + planned + actual;
-        var capacityPct = sum ? round(capacity / sum * 100) : 0;
-        var plannedPct = sum ? round(planned / sum * 100) : 0;
-        var actualPct = sum ? round(actual / sum * 100) : 0;
+        var plannedPct = capacity === null ? null : percentage(planned, capacity);
+        var actualPct = capacity === null || actual === null ? null : percentage(actual, capacity);
         return {
-            total: hoursText(capacity),
-            capacity: hoursText(capacity) + " (" + capacityPct.toFixed(1) + "%)",
-            planned: hoursText(planned) + " (" + plannedPct.toFixed(1) + "%)",
-            actual: hoursText(actual) + " (" + actualPct.toFixed(1) + "%)",
-            capacityPct: capacityPct.toFixed(1) + "%",
-            plannedPct: plannedPct.toFixed(1) + "%",
-            actualPct: actualPct.toFixed(1) + "%"
+            total: capacity === null ? "Sin datos" : hoursText(capacity),
+            capacity: capacity === null ? "Sin datos" : hoursText(capacity),
+            planned: hoursText(planned) + (plannedPct === null ? " (capacidad sin validar)" : " (" + percent(plannedPct) + " de capacidad)"),
+            actual: actual === null ? "Sin datos por turno" : hoursText(actual) + (actualPct === null ? " (capacidad sin validar)" : " (" + percent(actualPct) + " de capacidad)"),
+            angle: plannedPct === null ? null : round(Math.max(0, Math.min(plannedPct, 100)) * 3.6, 1)
         };
     }
 

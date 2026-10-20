@@ -34,15 +34,15 @@ sap.ui.define([
         onPeriodoChange: function () {
             var sKey = this._getSelectedKey("slPeriodo") || "";
             var oModel = this.getView().getModel("dash");
-            var iYear;
+            var oRange;
 
             // El periodo representa un año completo. Al seleccionar un año,
             // las fechas se ajustan y la consulta se ejecuta al pulsar
             // "Aplicar filtros".
-            if (/^\d{4}$/.test(sKey)) {
-                iYear = Number(sKey);
-                oModel.setProperty("/filtros/fechaInicio", "01/01/" + iYear);
-                oModel.setProperty("/filtros/fechaFin", "31/12/" + iYear);
+            oRange = InitialLoadPeriod.rangeForKey(sKey);
+            if (oRange) {
+                oModel.setProperty("/filtros/fechaInicio", InitialLoadPeriod.display(oRange.startDate));
+                oModel.setProperty("/filtros/fechaFin", InitialLoadPeriod.display(oRange.endDate));
             }
 
             this.onFilterChange();
@@ -238,8 +238,7 @@ sap.ui.define([
             var initialPeriod = InitialLoadPeriod.previousMonth();
             return {
                 filtros: {
-                    // Primera carga: último mes completo; el selector anual mantiene su uso normal.
-                    periodo: initialPeriod.year,
+                    periodo: initialPeriod.monthKey,
                     fechaInicio: initialPeriod.startDisplay,
                     fechaFin: initialPeriod.endDisplay,
                     zona: "TODAS",
@@ -251,6 +250,7 @@ sap.ui.define([
                 },
                 filterOptions: {
                     periodos: [
+                        { key: initialPeriod.monthKey, text: initialPeriod.startDisplay.slice(3) + " (Mensual)" },
                         { key: "2024", text: "2024 (Anual)" },
                         { key: "2025", text: "2025 (Anual)" },
                         { key: "2026", text: "2026 (Anual)" }

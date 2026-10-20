@@ -114,7 +114,9 @@ sap.ui.define([
                 return control.isA && control.isA("sap.ui.core.HTML");
             })[0];
             if (html) {
-                html.setContent('<div class="dccDonut"><div class="dccDonutHole"><span>Capacidad</span><strong>' + this._escape(charts.total) + '</strong></div><span class="dccDonutPercent dccPctOrange">' + this._escape(charts.plannedPct) + '</span><span class="dccDonutPercent dccPctGreen">' + this._escape(charts.capacityPct) + '</span><span class="dccDonutPercent dccPctBlue">' + this._escape(charts.actualPct) + '</span></div>');
+                var background = charts.angle === null ? "#e8edf4" :
+                    "conic-gradient(#22c55e 0deg " + charts.angle + "deg, #e8edf4 " + charts.angle + "deg 360deg)";
+                html.setContent('<div class="dccDonut" style="background:' + background + '"><div class="dccDonutHole"><span>Capacidad</span><strong>' + this._escape(charts.total) + '</strong></div></div>');
             }
             [charts.capacity, charts.planned, charts.actual].forEach(function (value, index) {
                 if (values[index]) { values[index].setText(value); }
@@ -188,8 +190,8 @@ sap.ui.define([
             if (!Number.isFinite(numberValue)) { return "None"; }
             return numberValue >= 100 ? "Error" : numberValue >= 90 ? "Warning" : "Success";
         },
-        formatMargenState: function (value) { return String(value || "").indexOf("-") === 0 ? "Error" : "Success"; },
-        formatTrendState: function (value) { return String(value || "").indexOf("+") === 0 ? "Error" : "Success"; },
+        formatMargenState: function (value) { return !value || value === "Sin datos" ? "None" : String(value).indexOf("-") === 0 ? "Error" : "Success"; },
+        formatTrendState: function (value) { return !value || value === "Sin datos" ? "None" : String(value).indexOf("+") === 0 ? "Error" : "Success"; },
         formatEstadoState: function (value) { return value === "Sobrecargado" ? "Error" : value === "Cerca de saturación" ? "Warning" : value === "Normal" ? "Success" : "None"; },
         formatEstadoColor: function (value) { return value === "Sobrecargado" ? "#ef4444" : value === "Cerca de saturación" ? "#f59e0b" : value === "Normal" ? "#16a34a" : "#94a3b8"; },
         formatEstadoCircleVisible: function (value) { return value !== "Sin datos"; },

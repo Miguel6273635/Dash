@@ -1092,7 +1092,7 @@ sap.ui.define([
                         ).join("");
 
                     return [
-                        "<svg class='ebLineSvg' viewBox='0 0 ",
+                        "<svg class='ebLineSvg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 ",
                         iWidth,
                         " ",
                         iHeight,
@@ -1395,7 +1395,7 @@ sap.ui.define([
                         ).join("");
 
                     return [
-                        "<svg class='ebLineSvg' viewBox='0 0 ",
+                        "<svg class='ebLineSvg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 ",
                         iWidth,
                         " ",
                         iHeight,

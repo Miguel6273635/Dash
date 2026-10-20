@@ -1,15 +1,9 @@
+/* global Promise */
 sap.ui.define([
     "mantenimiento/model/AnalisisFallasMapper",
     "mantenimiento/model/DashboardCacheApiService"
 ], function (AnalisisFallasMapper, DashboardCacheApiService) {
     "use strict";
-
-    var AUXILIARY_SETS = {
-        DashboardOrderCausesSet: "causes",
-        DashboardOrderResourcesSet: "assignments",
-        DashboardResourceDailySet: "resources",
-        DashboardFilterCatalogSet: "catalogs"
-    };
 
     function parseDisplayDate(sValue) {
         var aMatch = String(sValue || "").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
@@ -173,39 +167,49 @@ sap.ui.define([
         oTrendStart = aPeriods[0].startDate;
 
         /*
-         * La tendencia utiliza cinco periodos. Se obtiene completa desde la
-         * generación activa; si alguno no fue precargado API_DASH responde con
-         * CACHE_MISS y nunca intenta completar datos contra SAP desde el
-         * navegador.
+         * La tendencia de cinco periodos sólo necesita órdenes. Causas,
+         * asignaciones y recursos alimentan el detalle del periodo visible,
+         * por lo que pedirlas para todos los meses multiplicaba innecesariamente
+         * las respuestas de API_DASH.
          */
-        return DashboardCacheApiService.loadSnapshot({
-            fechaDesde: formatODataDate(oTrendStart),
-            fechaHasta: formatODataDate(oContext.endDate)
-        }, [
-            "orders",
-            "causes",
-            "assignments",
-            "resources",
-            "catalogs"
-        ]).then(function (oSnapshot) {
+        return Promise.all([
+            DashboardCacheApiService.loadSnapshot({
+                fechaDesde: formatODataDate(oTrendStart),
+                fechaHasta: formatODataDate(oContext.endDate)
+            }, ["orders"]),
+            DashboardCacheApiService.loadSnapshot({
+                fechaDesde: formatODataDate(oContext.startDate),
+                fechaHasta: formatODataDate(oContext.endDate)
+            }, ["causes", "assignments", "resources", "catalogs"])
+        ]).then(function (aSnapshots) {
+            var oTrendSnapshot = aSnapshots[0] || {};
+            var oDetailSnapshot = aSnapshots[1] || {};
+            var sTrendGeneration = oTrendSnapshot.meta && oTrendSnapshot.meta.namespace;
+            var sDetailGeneration = oDetailSnapshot.meta && oDetailSnapshot.meta.namespace;
             var oRawData = createRawData(oContext);
-            var aOrders = oSnapshot.orders || [];
+            var aOrders = oTrendSnapshot.orders || [];
             var aOrdersByPeriod = aPeriods.map(function (oRange) {
                 return aOrders.filter(function (oOrder) {
                     return orderIsInRange(oOrder, oRange);
                 });
             });
 
+            if (sTrendGeneration && sDetailGeneration && sTrendGeneration !== sDetailGeneration) {
+                throw new Error("La generación de caché cambió durante la consulta; vuelve a cargar la vista.");
+            }
+
             oRawData.orders = aOrdersByPeriod[aOrdersByPeriod.length - 1] || [];
             oRawData.trendOrders = aOrders;
             oRawData.trendPeriods = aPeriods;
             ["causes", "assignments", "resources", "catalogs"].forEach(function (sKey) {
-                oRawData[sKey] = oSnapshot[sKey] || [];
+                oRawData[sKey] = oDetailSnapshot[sKey] || [];
             });
             oRawData.meta = Object.assign({}, oRawData.meta, {
                 source: "API_DASH_ACTIVE_GENERATION",
                 generatedAt: new Date().toISOString(),
-                cache: oSnapshot.meta && oSnapshot.meta.cache,
+                cache: Object.assign({},
+                    oTrendSnapshot.meta && oTrendSnapshot.meta.cache || {},
+                    oDetailSnapshot.meta && oDetailSnapshot.meta.cache || {}),
                 ordersFilter: buildOrdersFilter(aPeriods[aPeriods.length - 1])
             });
             oRawData.meta.records = {

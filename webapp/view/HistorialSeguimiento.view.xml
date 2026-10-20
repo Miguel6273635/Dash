@@ -187,7 +187,7 @@
                                 class="hsKpiLabel" />
 
                             <Text
-                                text="Bloqueado activo"
+                                text="{historial>/kpis/estatusActual}"
                                 class="hsKpiValue hsKpiValueText" />
                         </VBox>
                     </HBox>
@@ -208,7 +208,7 @@
                                 class="hsKpiLabel" />
 
                             <Text
-                                text="41"
+                                text="{historial>/kpis/diasBloqueado}"
                                 class="hsKpiValue" />
                         </VBox>
                     </HBox>
@@ -229,13 +229,14 @@
                                 class="hsKpiLabel" />
 
                             <Text
-                                text="12"
+                                text="{historial>/kpis/eventosRegistrados}"
                                 class="hsKpiValue" />
                         </VBox>
                     </HBox>
 
                     <HBox
                         class="hsKpiCard hsKpiBlue"
+                        visible="false"
                         alignItems="Center">
 
                         <VBox class="hsKpiIconWrap">
@@ -271,13 +272,14 @@
                                 class="hsKpiLabel" />
 
                             <Text
-                                text="31/05/2024 10:20"
+                                text="{historial>/kpis/ultimaActualizacion}"
                                 class="hsKpiValue hsKpiValueText" />
                         </VBox>
                     </HBox>
 
                     <HBox
                         class="hsKpiCard hsKpiRose"
+                        visible="false"
                         alignItems="Center">
 
                         <VBox class="hsKpiIconWrap">
@@ -568,7 +570,7 @@
                                         class="hsSummaryValue" />
                                 </HBox>
 
-                                <HBox class="hsSummaryRow">
+                                <HBox class="hsSummaryRow" visible="false">
                                     <Text
                                         text="Estado de gestión"
                                         class="hsSummaryLabel" />
@@ -586,7 +588,7 @@
                                     </ObjectStatus>
                                 </HBox>
 
-                                <HBox class="hsSummaryRow">
+                                <HBox class="hsSummaryRow" visible="false">
                                     <Text
                                         text="Fecha compromiso"
                                         class="hsSummaryLabel" />
@@ -596,7 +598,7 @@
                                         class="hsSummaryValue" />
                                 </HBox>
 
-                                <HBox class="hsSummaryRow hsSummaryObservationRow">
+                                <HBox class="hsSummaryRow hsSummaryObservationRow" visible="false">
                                     <Text
                                         text="Observación general"
                                         class="hsSummaryLabel" />
@@ -609,7 +611,7 @@
                             </VBox>
                         </VBox>
 
-                        <VBox class="hsPanel hsTrackingPanel">
+                        <VBox class="hsPanel hsTrackingPanel" visible="false">
                             <layoutData>
                                 <FlexItemData
                                     growFactor="12"
@@ -831,7 +833,7 @@
                                 <Text text="Usuario" />
                             </Column>
 
-                            <Column width="9%">
+                            <Column width="9%" visible="false">
                                 <Text text="Área" />
                             </Column>
 
@@ -857,6 +859,7 @@
 
                             <Column
                                 width="6%"
+                                visible="false"
                                 hAlign="Center">
 
                                 <Text text="Evidencia" />
@@ -880,6 +883,7 @@
 
                                     <Text
                                         text="{historial>area}"
+                                        visible="false"
                                         wrapping="false" />
 
                                     <Text
@@ -923,6 +927,7 @@
 
                                     <ObjectStatus
                                         text="{historial>evidence}"
+                                        visible="false"
                                         class="hsEvidencePill">
 
                                         <customData>

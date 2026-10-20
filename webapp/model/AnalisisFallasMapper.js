@@ -8,7 +8,7 @@ sap.ui.define([], function () {
     var DEFAULT_START_DATE = "03/08/2026";
     var DEFAULT_END_DATE = "07/08/2026";
     var DEFAULT_ZONE = "TODAS";
-    var KNOWN_ZONES = ["CENTRO", "ESTE", "NORTE", "SUR"];
+    var KNOWN_ZONES = ["CENTRO", "ESTE", "NORTE", "OESTE", "SUR"];
     var MONTHS = [
         "ene", "feb", "mar", "abr", "may", "jun",
         "jul", "ago", "sep", "oct", "nov", "dic"
@@ -91,6 +91,7 @@ sap.ui.define([], function () {
 
     function parsePeriod(sPeriod) {
         var aAnnual = String(sPeriod || "").match(/^(\d{4})-ANUAL$/);
+        var aMonthly = String(sPeriod || "").match(/^(\d{4})-(\d{2})$/);
         var aWeek = String(sPeriod || "").match(/^(\d{4})-W(\d{2})$/);
         var oStart;
         var oEnd;
@@ -99,6 +100,12 @@ sap.ui.define([], function () {
             return {
                 startDate: new Date(Number(aAnnual[1]), 0, 1),
                 endDate: new Date(Number(aAnnual[1]), 11, 31, 23, 59, 59)
+            };
+        }
+        if (aMonthly && Number(aMonthly[2]) >= 1 && Number(aMonthly[2]) <= 12) {
+            return {
+                startDate: new Date(Number(aMonthly[1]), Number(aMonthly[2]) - 1, 1),
+                endDate: new Date(Number(aMonthly[1]), Number(aMonthly[2]), 0, 23, 59, 59)
             };
         }
         if (!aWeek) {
@@ -417,6 +424,9 @@ sap.ui.define([], function () {
 
         [2024, 2025, 2026].forEach(function (iAnnualYear) {
             aOptions.push({ key: iAnnualYear + "-ANUAL", text: iAnnualYear + " (Anual)" });
+            MONTHS.forEach(function (sMonth, iMonth) {
+                aOptions.push({ key: iAnnualYear + "-" + String(iMonth + 1).padStart(2, "0"), text: sMonth + " " + iAnnualYear + " (Mensual)" });
+            });
         });
         for (iYear = 2024; iYear <= 2026; iYear += 1) {
             for (iWeek = 1; iWeek <= 53; iWeek += 1) {

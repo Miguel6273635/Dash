@@ -37,10 +37,12 @@ sap.ui.define([
     }
 
     function ordersFilter(filters) {
-        var range = DetalleResponsableMapper.period(filters.periodKey || "2026-ANUAL");
+        var range = DetalleResponsableMapper.selectedRange(filters);
+        // Contrato GET_ENTITYSET de SAP: ambos EQ transmiten los límites del
+        // rango; no son comparaciones de igualdad de una OT individual.
         return [
-            "PlannedStartDate ge datetime'" + asODataDate(range.startDate) + "'",
-            "PlannedStartDate le datetime'" + asODataDate(range.endDate) + "'",
+            "PlannedStartDate eq datetime'" + asODataDate(range.startDate) + "'",
+            "PlannedFinishDate eq datetime'" + asODataDate(range.endDate) + "'",
             "(OrderTypeCode eq 'SM01' or OrderTypeCode eq 'SM02' or OrderTypeCode eq 'SM03')"
         ].join(" and ");
     }
@@ -63,7 +65,11 @@ sap.ui.define([
     }
 
     function load(model, filters) {
-        var range = DetalleResponsableMapper.period(filters.periodKey || "2026-ANUAL");
+        var range = DetalleResponsableMapper.selectedRange(filters);
+
+        if (!filters || !String(filters.responsableId || "").trim()) {
+            return Promise.reject(new Error("Selecciona un responsable identificado"));
+        }
 
         return RelatedData.load(model, {
             ordersFilter: ordersFilter(filters),

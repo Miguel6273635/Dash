@@ -186,7 +186,9 @@ sap.ui.define([], function () {
     }
     function labelForWeek(item) { return item.week + " (" + labelDate(item.start) + ")"; }
     function build(raw, filters) {
-        var values = Object.assign({ period: "2026-ANUAL", zona: "TODAS" }, filters || {});
+        var input = filters || {};
+        var values = Object.assign({ period: "2026-ANUAL", zona: "TODAS" }, input);
+        values.period = input.periodo || input.period || values.period;
         var range = filterPeriod(values.period);
         var weekData = weeksInRange(range.startDate, range.endDate);
         var zoneData = orderZones(raw, range.endDate);

@@ -1,4 +1,6 @@
-sap.ui.define([], function () {
+sap.ui.define([
+    "mantenimiento/model/BlockedEquipmentRules"
+], function (BlockedEquipmentRules) {
     "use strict";
 
     var NEAR_DUE_DAYS = 3;
@@ -147,27 +149,7 @@ sap.ui.define([], function () {
         oFrom,
         oTo
     ) {
-        if (
-            !oFrom ||
-            !oTo
-        ) {
-            return null;
-        }
-
-        return Math.max(
-            0,
-            Math.floor(
-                (
-                    startOfDay(
-                        oTo
-                    ).getTime() -
-                    startOfDay(
-                        oFrom
-                    ).getTime()
-                ) /
-                    86400000
-            )
-        );
+        return BlockedEquipmentRules.businessDays(oFrom, oTo);
     }
 
     function uniqueCount(
@@ -344,62 +326,6 @@ sap.ui.define([], function () {
                         oItem.ResourceName ||
                         sId;
                 }
-            }
-        );
-
-        return mMap;
-    }
-
-    function buildOrdersByBlock(
-        aBlockOrders
-    ) {
-        var mMap =
-            Object.create(
-                null
-            );
-
-        (aBlockOrders || []).forEach(
-            function (
-                oItem
-            ) {
-                var sBlockId =
-                    String(
-                        oItem.BlockId ||
-                            ""
-                    );
-
-                var sOrderId =
-                    String(
-                        oItem.OrderId ||
-                            ""
-                    );
-
-                if (
-                    !sBlockId ||
-                    !sOrderId
-                ) {
-                    return;
-                }
-
-                if (
-                    !mMap[
-                        sBlockId
-                    ]
-                ) {
-                    mMap[
-                        sBlockId
-                    ] =
-                        Object.create(
-                            null
-                        );
-                }
-
-                mMap[
-                    sBlockId
-                ][
-                    sOrderId
-                ] =
-                    true;
             }
         );
 
@@ -828,7 +754,6 @@ sap.ui.define([], function () {
             );
 
         var oCutoff =
-            oEnd ||
             new Date();
 
         var mCatalogText =
@@ -843,12 +768,6 @@ sap.ui.define([], function () {
                     []
             );
 
-        var mOrdersByBlock =
-            buildOrdersByBlock(
-                oRaw.blockOrders ||
-                    []
-            );
-
         var mCurrentEvent =
             buildCurrentEventMap(
                 oRaw.blockEvents ||
@@ -858,7 +777,13 @@ sap.ui.define([], function () {
         var aRows =
             (
                 oRaw.blocks || []
-            ).map(function (
+            ).map(function (oBlock) {
+                return BlockedEquipmentRules.enrichBlock(
+                    oBlock,
+                    oRaw.blockOrders || [],
+                    oRaw.orders || oRaw.ordersFallback || []
+                );
+            }).map(function (
                 oBlock
             ) {
                 var sBlockId =
@@ -931,10 +856,8 @@ sap.ui.define([], function () {
                         sBlockId,
 
                     orderIds:
-                        Object.keys(
-                            mOrdersByBlock[
-                                sBlockId
-                            ] || {}
+                        BlockedEquipmentRules.affectedOrderIds(
+                            oBlock
                         ),
 
                     equipo:
@@ -1023,10 +946,8 @@ sap.ui.define([], function () {
 
                     ordenesAfectadas:
                         String(
-                            Object.keys(
-                                mOrdersByBlock[
-                                    sBlockId
-                                ] || {}
+                            BlockedEquipmentRules.affectedOrderIds(
+                                oBlock
                             ).length
                         ),
 

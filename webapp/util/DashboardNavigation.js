@@ -1,268 +1,202 @@
 sap.ui.define([
     "mantenimiento/model/DashboardNavigationMap",
+    "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast"
-], function (NavigationMap, MessageToast) {
+], function (NavigationMap, JSONModel, MessageToast) {
     "use strict";
 
     var INTERACTIVE = "button, a, input, select, textarea, [contenteditable='true'], " +
         "[role='button'], [role='link'], [role='combobox'], .sapMBtn, .sapMLnk, .sapMLIBActive";
+    var FILTER_MODELS = [
+        "cumplimientoModel", "mantenimientoModel", "dashboard", "data", "trend",
+        "fallasModel", "horasModel", "materialesModel", "crpc"
+    ];
 
-    function matches(oControl, oRule) {
-        var oDom = oControl.getDomRef && oControl.getDomRef();
-        var sText = oControl.getText ? oControl.getText() : "";
+    function matches(control, rule) {
+        var dom = control.getDomRef && control.getDomRef();
+        var text = control.getText ? control.getText() : "";
 
-        if (!oDom || !oDom.matches(oRule.selector) ||
-            (oControl.getEnabled && !oControl.getEnabled())) {
+        if (!dom || !dom.matches(rule.selector) || (control.getEnabled && !control.getEnabled())) {
             return false;
         }
-        if (oRule.text !== undefined && sText !== oRule.text) {
-            return false;
-        }
-        if (oRule.textPrefix && sText.indexOf(oRule.textPrefix) !== 0) {
-            return false;
-        }
-        return !oRule.data || Object.keys(oRule.data).every(function (sKey) {
-            return oControl.data(sKey) === oRule.data[sKey];
+        if (rule.text !== undefined && text !== rule.text) { return false; }
+        if (rule.textPrefix && text.indexOf(rule.textPrefix) !== 0) { return false; }
+        return !rule.data || Object.keys(rule.data).every(function (key) {
+            return control.data(key) === rule.data[key];
         });
     }
 
-    function Manager(oComponent) {
-        this.component = oComponent;
+    function copy(value) {
+        return value && typeof value === "object" ? JSON.parse(JSON.stringify(value)) : value;
+    }
+
+    function readFilters(view) {
+        var result = null;
+
+        FILTER_MODELS.some(function (name) {
+            var model = view.getModel(name);
+            var value = model && (model.getProperty("/filters") || model.getProperty("/filtros"));
+
+            if (!value || typeof value !== "object") { return false; }
+            result = copy(value);
+            return true;
+        });
+        return result;
+    }
+
+    function Manager(component) {
+        this.component = component;
         this.views = new Map();
-        this.targets = oComponent.getRouter().getTargets();
-        this.onDisplay = function (oEvent) {
-            this.connectView(oEvent.getParameter("view"));
-        }.bind(this);
+        this.targets = component.getRouter().getTargets();
+        this.onDisplay = function (event) { this.connectView(event.getParameter("view")); }.bind(this);
         this.targets.attachDisplay(this.onDisplay);
     }
 
-    Manager.prototype.connectView = function (oView) {
-        var sName = oView && oView.getViewName().split(".").pop();
-        var aRules = NavigationMap.views[sName];
-        var oState;
+    Manager.prototype.connectView = function (view) {
+        var name = view && view.getViewName().split(".").pop();
+        var rules = NavigationMap.views[name];
+        var state;
 
-        if (!aRules || !aRules.length || this.views.has(oView)) {
-            return;
-        }
-        oState = {
-            view: oView,
-            controller: oView.getController(),
-            rules: aRules,
-            entries: new Map(),
-            observer: null,
-            delegate: null
+        if (!rules || !rules.length || this.views.has(view)) { return; }
+        state = { view: view, controller: view.getController(), rules: rules, entries: new Map() };
+        state.delegate = {
+            onAfterRendering: function () { this._scan(state); }.bind(this)
         };
-        oState.delegate = {
-            onBeforeRendering: function () {
-                if (oState.observer) {
-                    oState.observer.disconnect();
-                }
-            },
-            onAfterRendering: function () {
-                this._scan(oState);
-                this._observe(oState);
-            }.bind(this)
-        };
-        oView.addEventDelegate(oState.delegate);
-        this.views.set(oView, oState);
-        this._scan(oState);
-        this._observe(oState);
+        view.addEventDelegate(state.delegate);
+        this.views.set(view, state);
+        this._scan(state);
     };
 
-    Manager.prototype._observe = function (oState) {
-        var oRoot = oState.view.getDomRef();
-
-        if (!oRoot || typeof MutationObserver === "undefined") {
-            return;
-        }
-        if (!oState.observer) {
-            // Los agregados enlazados pueden crear nuevas cards al filtrar o
-            // paginar sin volver a renderizar la vista completa.
-            oState.observer = new MutationObserver(function () {
-                this._scan(oState);
-            }.bind(this));
-        }
-        oState.observer.disconnect();
-        oState.observer.observe(oRoot, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ["class", "data-tone"]
+    Manager.prototype._scan = function (state) {
+        var controls = state.view.findAggregatedObjects(true, function (control) {
+            return !!(control.isA && control.isA("sap.ui.core.Control") && control.getDomRef && control.getDomRef());
         });
-    };
 
-    Manager.prototype._scan = function (oState) {
-        var aControls = oState.view.findAggregatedObjects(true, function (oControl) {
-            return !!(oControl.isA && oControl.isA("sap.ui.core.Control") &&
-                oControl.getDomRef && oControl.getDomRef());
-        });
-        var oPresent = new Set(aControls);
+        controls.forEach(function (control) {
+            var rule = state.rules.find(function (candidate) { return matches(control, candidate); });
+            var current = state.entries.get(control);
 
-        oState.entries.forEach(function (oEntry, oControl) {
-            if (!oPresent.has(oControl)) {
-                this._unbind(oEntry);
-                oState.entries.delete(oControl);
+            if (current && current.rule !== rule) {
+                this._unbind(current);
+                state.entries.delete(control);
+                current = null;
             }
-        }.bind(this));
-
-        aControls.forEach(function (oControl) {
-            var oRule = oState.rules.find(function (oCandidate) {
-                return matches(oControl, oCandidate);
-            });
-            var oEntry = oState.entries.get(oControl);
-
-            if (oEntry && oEntry.rule !== oRule) {
-                this._unbind(oEntry);
-                oState.entries.delete(oControl);
-                oEntry = null;
+            if (!rule || current) { return; }
+            current = this._bind(state, control, rule);
+            if (current) {
+                state.entries.set(control, current);
+                this._setAccessibility(current);
             }
-            if (!oRule) {
-                return;
-            }
-            if (!oEntry) {
-                oEntry = this._bind(oState, oControl, oRule);
-                if (!oEntry) {
-                    return;
-                }
-                oState.entries.set(oControl, oEntry);
-            }
-            this._setAccessibility(oEntry);
         }.bind(this));
     };
 
-    Manager.prototype._bind = function (oState, oControl, oRule) {
-        var oEntry = { control: oControl, rule: oRule, state: oState };
+    Manager.prototype._bind = function (state, control, rule) {
+        var entry = { control: control, rule: rule, state: state };
 
-        if (oRule.event === "press") {
-            if (!oControl.attachPress) {
-                return null;
-            }
-            oEntry.original = oState.controller[oRule.replace];
-            if (typeof oEntry.original === "function") {
-                oControl.detachPress(oEntry.original, oState.controller);
-            }
-            oEntry.press = function (oEvent) {
-                this._execute(oEntry, oEvent);
-            }.bind(this);
-            oControl.attachPress(oEntry.press);
+        if (rule.event === "press") {
+            if (!control.attachPress) { return null; }
+            entry.original = state.controller[rule.replace];
+            if (typeof entry.original === "function") { control.detachPress(entry.original, state.controller); }
+            entry.press = function (event) { this._execute(entry, event); }.bind(this);
+            control.attachPress(entry.press);
         } else {
-            oEntry.click = function (oEvent) {
-                var oDom = oControl.getDomRef();
-                var oInteractive = oEvent.target.closest && oEvent.target.closest(INTERACTIVE);
+            entry.click = function (event) {
+                var dom = control.getDomRef();
+                var interactive = event.target.closest && event.target.closest(INTERACTIVE);
 
-                // Conserva filtros, enlaces, botones de información y controles
-                // internos. Una card anidada gestiona su propio clic.
-                if (oInteractive && oInteractive !== oDom) {
-                    return;
-                }
-                oEvent.stopPropagation();
-                this._execute(oEntry);
+                if (interactive && interactive !== dom) { return; }
+                event.stopPropagation();
+                this._execute(entry);
             }.bind(this);
-            oEntry.keydown = function (oEvent) {
-                if (oEvent.target !== oControl.getDomRef() ||
-                    (oEvent.key !== "Enter" && oEvent.key !== " ")) {
-                    return;
-                }
-                oEvent.preventDefault();
-                oEvent.stopPropagation();
-                this._execute(oEntry);
+            entry.keydown = function (event) {
+                if (event.target !== control.getDomRef() || (event.key !== "Enter" && event.key !== " ")) { return; }
+                event.preventDefault();
+                event.stopPropagation();
+                this._execute(entry);
             }.bind(this);
-            oControl.attachBrowserEvent("click", oEntry.click);
-            oControl.attachBrowserEvent("keydown", oEntry.keydown);
+            control.attachBrowserEvent("click", entry.click);
+            control.attachBrowserEvent("keydown", entry.keydown);
         }
-        return oEntry;
+        return entry;
     };
 
-    Manager.prototype._setAccessibility = function (oEntry) {
-        var oDom = oEntry.control.getDomRef();
+    Manager.prototype._setAccessibility = function (entry) {
+        var dom = entry.control.getDomRef();
 
-        if (!oDom || oEntry.rule.event === "press") {
-            return;
-        }
-        if (oEntry.dom !== oDom) {
-            oEntry.dom = oDom;
-            oEntry.attributes = ["role", "tabindex", "aria-label"].map(function (sName) {
-                return { name: sName, value: oDom.getAttribute(sName) };
-            });
-        }
-        oDom.setAttribute("role", "button");
-        oDom.setAttribute("tabindex", "0");
-        oDom.setAttribute("aria-label", oEntry.rule.label);
+        if (!dom || entry.rule.event === "press") { return; }
+        entry.dom = dom;
+        entry.attributes = ["role", "tabindex", "aria-label"].map(function (name) {
+            return { name: name, value: dom.getAttribute(name) };
+        });
+        dom.setAttribute("role", "button");
+        dom.setAttribute("tabindex", "0");
+        dom.setAttribute("aria-label", entry.rule.label);
     };
 
-    Manager.prototype._execute = function (oEntry, oEvent) {
-        var oRule = oEntry.rule;
-        var oController = oEntry.state.controller;
-        var oRouter = this.component.getRouter();
-        var mParameters = {};
+    Manager.prototype._saveContext = function (entry) {
+        var filters = readFilters(entry.state.view);
 
-        if (oRule.call) {
-            if (typeof oController[oRule.call] === "function") {
-                oController[oRule.call](oEvent || {
-                    getSource: function () { return oEntry.control; }
-                });
+        if (!filters) { return; }
+        this.component.setModel(new JSONModel({
+            sourceView: entry.state.view.getViewName().split(".").pop(),
+            targetRoute: entry.rule.route,
+            filters: filters
+        }), "dashboardNavigationContext");
+    };
+
+    Manager.prototype._execute = function (entry, event) {
+        var rule = entry.rule;
+        var controller = entry.state.controller;
+        var router = this.component.getRouter();
+        var parameters = {};
+
+        if (rule.call) {
+            if (typeof controller[rule.call] === "function") {
+                controller[rule.call](event || { getSource: function () { return entry.control; } });
             }
             return;
         }
-        if (!oRouter.getRoute(oRule.route)) {
+        if (!router.getRoute(rule.route)) {
             MessageToast.show("La pantalla de destino no está registrada.");
             return;
         }
-        Object.keys(oRule.parameters || {}).forEach(function (sName) {
-            var oParameter = oRule.parameters[sName];
-            var oContext = oEntry.control.getBindingContext(oParameter.model);
-            var vValue = oContext && oContext.getProperty(oParameter.property);
+        Object.keys(rule.parameters || {}).forEach(function (name) {
+            var parameter = rule.parameters[name];
+            var context = entry.control.getBindingContext(parameter.model);
+            var value = context && context.getProperty(parameter.property);
 
-            if (vValue !== undefined && vValue !== null) {
-                mParameters[sName] = String(vValue);
-            }
+            if (value !== undefined && value !== null) { parameters[name] = String(value); }
         });
-        oRouter.navTo(oRule.route, mParameters);
+        this._saveContext(entry);
+        router.navTo(rule.route, parameters);
     };
 
-    Manager.prototype._unbind = function (oEntry) {
-        var oControl = oEntry.control;
-
-        if (oEntry.press) {
-            oControl.detachPress(oEntry.press);
-            if (typeof oEntry.original === "function") {
-                oControl.attachPress(oEntry.original, oEntry.state.controller);
-            }
-        } else {
-            oControl.detachBrowserEvent("click", oEntry.click);
-            oControl.detachBrowserEvent("keydown", oEntry.keydown);
-            (oEntry.attributes || []).forEach(function (oAttribute) {
-                if (oAttribute.value === null) {
-                    oEntry.dom.removeAttribute(oAttribute.name);
-                } else {
-                    oEntry.dom.setAttribute(oAttribute.name, oAttribute.value);
-                }
-            });
-        }
-    };
-
-    Manager.prototype.disconnectView = function (oView) {
-        var oState = this.views.get(oView);
-
-        if (!oState) {
+    Manager.prototype._unbind = function (entry) {
+        if (entry.press) {
+            entry.control.detachPress(entry.press);
+            if (typeof entry.original === "function") { entry.control.attachPress(entry.original, entry.state.controller); }
             return;
         }
-        if (oState.observer) {
-            oState.observer.disconnect();
-        }
-        oView.removeEventDelegate(oState.delegate);
-        oState.entries.forEach(this._unbind.bind(this));
-        oState.entries.clear();
-        this.views.delete(oView);
+        entry.control.detachBrowserEvent("click", entry.click);
+        entry.control.detachBrowserEvent("keydown", entry.keydown);
+        (entry.attributes || []).forEach(function (attribute) {
+            if (attribute.value === null) { entry.dom.removeAttribute(attribute.name); }
+            else { entry.dom.setAttribute(attribute.name, attribute.value); }
+        });
     };
 
     Manager.prototype.destroy = function () {
         this.targets.detachDisplay(this.onDisplay);
-        Array.from(this.views.keys()).forEach(this.disconnectView.bind(this));
+        this.views.forEach(function (state) {
+            state.view.removeEventDelegate(state.delegate);
+            state.entries.forEach(this._unbind.bind(this));
+        }.bind(this));
+        this.views.clear();
     };
 
     return {
-        create: function (oComponent) { return new Manager(oComponent); },
-        matches: matches
+        create: function (component) { return new Manager(component); },
+        matches: matches,
+        readFilters: readFilters
     };
 });

@@ -30,8 +30,8 @@ sap.ui.define([
             this._iLoadRequest = 0;
             this._iPageSize = 5;
             this._sTextoBusqueda = "";
-            this._sPeriodoSeleccionado = "2026";
             this._oFiltrosAplicados = this._getDefaultFilters();
+            this._sPeriodoSeleccionado = String(this._oFiltrosAplicados.periodo || "2026").slice(0, 4);
 
             this.getView().setModel(new JSONModel(
                 AnalisisElevadoresService.createEmpty(this._oFiltrosAplicados)
@@ -86,7 +86,7 @@ sap.ui.define([
 
         _getDefaultFilters: function () {
             var initialPeriod = InitialLoadPeriod.previousMonth();
-            return {
+            var defaults = {
                 periodo: initialPeriod.year,
                 fechaDesde: initialPeriod.startDisplay,
                 fechaHasta: initialPeriod.endDisplay,
@@ -94,6 +94,20 @@ sap.ui.define([
                 supervisor: "TODOS",
                 tipoOrden: "TODOS"
             };
+            var component = this.getOwnerComponent && this.getOwnerComponent();
+            var contextModel = component && component.getModel("dashboardNavigationContext");
+            var context = contextModel && contextModel.getData();
+            var inherited = context && context.targetRoute === "RouteAnalisisElevadores" && context.filters;
+
+            if (inherited) {
+                defaults.periodo = String(inherited.periodo || defaults.periodo).slice(0, 4);
+                defaults.fechaDesde = inherited.fechaDesde || defaults.fechaDesde;
+                defaults.fechaHasta = inherited.fechaHasta || defaults.fechaHasta;
+                defaults.zona = inherited.zona || defaults.zona;
+                defaults.supervisor = inherited.supervisor || defaults.supervisor;
+                defaults.tipoOrden = inherited.tipoOrden || inherited.tipoServicio || defaults.tipoOrden;
+            }
+            return defaults;
         },
 
         _getODataModel: function () {

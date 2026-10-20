@@ -13,7 +13,8 @@ sap.ui.define([
             var model, initialPeriod;
             includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/ComportamientoOperativo.css") + "?v=20260821-live-data");
             initialPeriod = InitialLoadPeriod.previousMonth();
-            this._request = 0; this._origin = "TODAS"; this._filters = { periodo: initialPeriod.year + "-ANUAL", fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "TODAS", origen: "TODAS" };
+            this._request = 0; this._origin = "TODAS";
+            this._filters = this._navigationFilters({ periodo: initialPeriod.monthKey, fechaDesde: initialPeriod.startDisplay, fechaHasta: initialPeriod.endDisplay, zona: "TODAS", origen: "TODAS" });
             model = new JSONModel(Service.createEmpty(this._filters)); model.setSizeLimit(1000); this.getView().setModel(model, "data"); this._load(false);
         },
         onPeriodoChange: function (event) {
@@ -36,30 +37,36 @@ sap.ui.define([
         onVerDetalleResponsable: function () {
             var popover = this.byId("responsablePopover");
             var data = popover && popover.getModel("popover").getData();
-            var component = this.getOwnerComponent();
-            var filters = this.getView().getModel("data").getProperty("/filtros") || {};
 
             if (popover) {
                 popover.close();
             }
-            if (!data) {
-                MessageToast.show("Detalle no disponible");
+            this._openResponsible(data);
+        },
+        onCauseCardPress: function (event) {
+            var source = event && event.getSource && event.getSource();
+            var context = source && source.getBindingContext("data");
+            this._openResponsible(context && context.getObject());
+        },
+        _openResponsible: function (data) {
+            var component = this.getOwnerComponent();
+            var router = component && component.getRouter();
+            var filters = this.getView().getModel("data").getProperty("/filtros") || {};
+            var resourceId = data && String(data.responsableId || "").trim();
+
+            if (!resourceId || resourceId === "SIN_ASIGNAR" || !router || !router.getRoute("RouteDetalleResponsable")) {
+                MessageToast.show("No hay un responsable identificado para abrir el detalle");
                 return;
             }
-
-            /*
-             * El detalle recibe el ResourceId real, no el nombre mostrado.
-             * Al agregar la ruta de DetalleResponsable, este mismo modelo queda
-             * disponible para que la nueva vista cargue al responsable correcto.
-             */
             component.setModel(new JSONModel({
-                responsableId: data.responsableId,
+                responsableId: resourceId,
                 periodKey: filters.periodo || "2026-ANUAL",
+                fechaDesde: filters.fechaDesde || "",
+                fechaHasta: filters.fechaHasta || "",
                 zona: filters.zona || "TODAS",
                 origen: filters.origen || this._origin || "TODAS"
             }), "detalleResponsableNavigation");
-
-            MessageToast.show("Contexto preparado para el detalle de " + data.responsable);
+            router.navTo("RouteDetalleResponsable", { responsableId: resourceId });
         },
         _load: function (notify) {
             var request = ++this._request, model = this.getView().getModel("data"), filters = Object.assign({}, this._filters, { origen: this._origin });
@@ -68,6 +75,17 @@ sap.ui.define([
         },
         _rebuild: function () { var model = this.getView().getModel("data"), filters; if (!this._raw) { return; } filters = Object.assign({}, this._filters, { origen: this._origin }); model.setData(Service.build(this._raw, filters)); this._setControls(model.getProperty("/filtros")); },
         _odata: function () { var component = this.getOwnerComponent(); return component && component.getModel("dashboardOData") || this.getView().getModel("dashboardOData"); },
+        _navigationFilters: function (defaults) {
+            var component = this.getOwnerComponent && this.getOwnerComponent();
+            var contextModel = component && component.getModel("dashboardNavigationContext");
+            var context = contextModel && contextModel.getData();
+            var inherited = context && context.targetRoute === "RouteComportamientoOperativo" && context.filters;
+            var result = Object.assign({}, defaults, inherited || {});
+
+            result.periodo = InitialLoadPeriod.keyForRange(result.fechaDesde, result.fechaHasta, true) || result.periodo;
+            result.tipoServicio = undefined;
+            return result;
+        },
         _setControls: function (f) { this.byId("coPeriod").setSelectedKey(f.periodo || "2026-ANUAL"); this.byId("coZone").setSelectedKey(f.zona || "TODAS"); this.byId("coOrigin").setSelectedKey(this._origin); },
         _paintTabs: function () { ["Todas", "Internas", "Externas", "Justificadas"].forEach(function (id) { var button = this.byId("coTab" + id), origin = button && button.data("origin"); if (!button) { return; } button.toggleStyleClass("coTabButtonActive", origin === this._origin); button.setType(origin === this._origin ? "Emphasized" : "Transparent"); }.bind(this)); },
         _date: function (d) { return String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear(); },

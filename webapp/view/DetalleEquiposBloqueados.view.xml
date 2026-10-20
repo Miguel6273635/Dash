@@ -222,23 +222,6 @@
 
                     </m:VBox>
 
-                    <m:VBox class="blockedFilterCard blockedFilterPriority">
-
-                        <m:Label
-                            text="Prioridad desbloqueo"
-                            class="blockedFilterLabel" />
-
-                        <m:Select
-                            selectedKey="{dashboard>/filters/prioridad}"
-                            change=".onFilterChange"
-                            width="100%"
-                            items="{dashboard>/catalogos/prioridades}"
-                            class="blockedFilterControl">
-                            <core:Item key="{dashboard>key}" text="{dashboard>text}" />
-                        </m:Select>
-
-                    </m:VBox>
-
                     <m:HBox
                         alignItems="Stretch"
                         justifyContent="Center"
@@ -297,37 +280,6 @@
 
                     <m:HBox
                         alignItems="Center"
-                        class="blockedKpiCard blockedKpiRed">
-
-                        <m:VBox
-                            alignItems="Center"
-                            justifyContent="Center"
-                            class="blockedKpiIconCircle blockedKpiIconRed">
-
-                            <core:Icon
-                                src="sap-icon://message-warning"
-                                size="1.8rem" />
-
-                        </m:VBox>
-
-                        <m:VBox
-                            justifyContent="Center"
-                            class="blockedKpiTextGroup">
-
-                            <m:Text
-                                text="Críticos"
-                                class="blockedKpiLabel" />
-
-                            <m:ObjectNumber
-                                number="{dashboard>/kpis/criticos}"
-                                class="blockedKpiValue" />
-
-                        </m:VBox>
-
-                    </m:HBox>
-
-                    <m:HBox
-                        alignItems="Center"
                         class="blockedKpiCard blockedKpiOrange">
 
                         <m:VBox
@@ -357,37 +309,6 @@
 
                     </m:HBox>
 
-                    <m:HBox
-                        alignItems="Center"
-                        class="blockedKpiCard blockedKpiBlue">
-
-                        <m:VBox
-                            alignItems="Center"
-                            justifyContent="Center"
-                            class="blockedKpiIconCircle blockedKpiIconBlue">
-
-                            <core:Icon
-                                src="sap-icon://history"
-                                size="1.8rem" />
-
-                        </m:VBox>
-
-                        <m:VBox
-                            justifyContent="Center"
-                            class="blockedKpiTextGroup">
-
-                            <m:Text
-                                text="Pendientes abiertos"
-                                class="blockedKpiLabel" />
-
-                            <m:ObjectNumber
-                                number="{dashboard>/kpis/pendientesAbiertos}"
-                                class="blockedKpiValue" />
-
-                        </m:VBox>
-
-                    </m:HBox>
-
                 </m:FlexBox>
 
                 <!-- =====================================================
@@ -409,47 +330,6 @@
                                 text="Listado de equipos bloqueados"
                                 level="H2"
                                 class="blockedTableTitle" />
-
-                            <m:HBox
-                                wrap="Wrap"
-                                alignItems="Center"
-                                class="blockedFilterChips">
-
-                                <m:HBox
-                                    alignItems="Center"
-                                    class="blockedChip">
-
-                                    <m:Text
-                                        text="Origen: KPI Equipos críticos"
-                                        class="blockedChipText" />
-
-                                    <m:Button
-                                        icon="sap-icon://decline"
-                                        type="Transparent"
-                                        tooltip="Quitar filtro de origen"
-                                        press=".onRemoveOriginChip"
-                                        class="blockedChipClose" />
-
-                                </m:HBox>
-
-                                <m:HBox
-                                    alignItems="Center"
-                                    class="blockedChip">
-
-                                    <m:Text
-                                        text="Filtro aplicado: Prioridad = Crítica"
-                                        class="blockedChipText" />
-
-                                    <m:Button
-                                        icon="sap-icon://decline"
-                                        type="Transparent"
-                                        tooltip="Quitar filtro de prioridad"
-                                        press=".onRemovePriorityChip"
-                                        class="blockedChipClose" />
-
-                                </m:HBox>
-
-                            </m:HBox>
 
                         </m:VBox>
 
@@ -514,7 +394,7 @@
         class="blockedEquipmentTable">
                  <m:columns>
 
-    <m:Column width="9%">
+    <m:Column width="14%">
 
         <m:HBox
             alignItems="Center"
@@ -530,7 +410,7 @@
 
     </m:Column>
 
-    <m:Column width="9%">
+    <m:Column width="12%">
 
         <m:Text
             text="Cliente"
@@ -538,7 +418,7 @@
 
     </m:Column>
 
-    <m:Column width="6.5%">
+    <m:Column width="9%">
 
         <m:Text
             text="Zona"
@@ -546,7 +426,7 @@
 
     </m:Column>
 
-    <m:Column width="7.5%">
+    <m:Column width="12%">
 
         <m:HBox
             alignItems="Center"
@@ -562,7 +442,7 @@
 
     </m:Column>
 
-    <m:Column width="10%">
+    <m:Column width="18%">
 
         <m:Text
             text="Motivo de bloqueo"
@@ -570,24 +450,8 @@
 
     </m:Column>
 
-    <m:Column width="9%">
-
-        <m:HBox
-            alignItems="Center"
-            class="blockedColumnHeader">
-
-            <m:Text text="Estado gestión" />
-
-            <core:Icon
-                src="sap-icon://filter"
-                size="0.52rem" />
-
-        </m:HBox>
-
-    </m:Column>
-
     <m:Column
-        width="7%"
+        width="11%"
         hAlign="Center">
 
         <m:HBox
@@ -607,7 +471,7 @@
     </m:Column>
 
     <m:Column
-        width="5.5%"
+        width="8%"
         hAlign="Center">
 
         <m:HBox
@@ -627,7 +491,7 @@
     </m:Column>
 
     <m:Column
-        width="5.5%"
+        width="8%"
         hAlign="Center">
 
         <m:HBox
@@ -646,81 +510,11 @@
 
     </m:Column>
 
-    <m:Column width="9%">
+    <m:Column width="8%">
 
         <m:Text
             text="Responsable"
             class="blockedColumnHeaderText" />
-
-    </m:Column>
-
-    <m:Column
-        width="4.5%"
-        hAlign="Center">
-
-        <m:Text
-            text="Próxima acción"
-            class="blockedColumnHeaderText" />
-
-    </m:Column>
-
-    <m:Column
-        width="7.5%"
-        hAlign="Center">
-
-        <m:HBox
-            width="100%"
-            alignItems="Center"
-            justifyContent="Center"
-            class="blockedColumnHeader">
-
-            <m:Text text="Fecha compromiso" />
-
-            <core:Icon
-                src="sap-icon://sort"
-                size="0.52rem" />
-
-        </m:HBox>
-
-    </m:Column>
-
-    <m:Column
-        width="6%"
-        hAlign="Center">
-
-        <m:HBox
-            width="100%"
-            alignItems="Center"
-            justifyContent="Center"
-            class="blockedColumnHeader">
-
-            <m:Text text="Prioridad desbloqueo" />
-
-            <core:Icon
-                src="sap-icon://filter"
-                size="0.52rem" />
-
-        </m:HBox>
-
-    </m:Column>
-
-    <m:Column
-        width="4%"
-        hAlign="Center">
-
-        <m:HBox
-            width="100%"
-            alignItems="Center"
-            justifyContent="Center"
-            class="blockedColumnHeader">
-
-            <m:Text text="Estado" />
-
-            <core:Icon
-                src="sap-icon://filter"
-                size="0.52rem" />
-
-        </m:HBox>
 
     </m:Column>
 
@@ -774,11 +568,6 @@
                                             wrapping="true"
                                             class="blockedCellText" />
 
-                                        <m:ObjectStatus
-                                            text="{dashboard>estadoGestion}"
-                                            state="{dashboard>estadoGestionState}"
-                                            class="blockedStatusPill blockedManagementPill" />
-
                                         <m:Text
                                             text="{dashboard>fechaBloqueo}"
                                             textAlign="Center"
@@ -798,28 +587,6 @@
                                             text="{dashboard>responsable}"
                                             wrapping="true"
                                             class="blockedCellText" />
-
-                                        <m:Button
-                                            icon="sap-icon://slim-arrow-right"
-                                            type="Transparent"
-                                            tooltip="{dashboard>proximaAccion}"
-                                            press=".onOpenNextAction"
-                                            class="blockedNextActionButton" />
-
-                                        <m:Text
-                                            text="{dashboard>fechaCompromiso}"
-                                            textAlign="Center"
-                                            class="blockedCellText blockedCenteredText" />
-
-                                        <m:ObjectStatus
-                                            text="{dashboard>prioridadDesbloqueo}"
-                                            state="Error"
-                                            class="blockedStatusPill blockedPriorityPill" />
-
-                                        <m:ObjectStatus
-                                            text="{dashboard>estado}"
-                                            state="{dashboard>estadoState}"
-                                            class="blockedStatusPill blockedFinalStatePill" />
 
                                     </m:cells>
 

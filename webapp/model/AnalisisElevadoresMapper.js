@@ -313,7 +313,9 @@ sap.ui.define([
             })).size;
 
             return {
-                elevador: oGroup.elevador,
+                elevador: oGroup.elevador === "SIN_EQUIPO" ?
+                    "Sin equipo identificado" : oGroup.elevador,
+                identificado: oGroup.elevador !== "SIN_EQUIPO",
                 cliente: mostFrequent(oGroup.customerNames, "Sin cliente"),
                 zona: mostFrequent(oGroup.zones, "Sin zona"),
                 causa: mostFrequent(oGroup.causes, "Sin causa registrada"),
@@ -426,6 +428,9 @@ sap.ui.define([
         var aAffected = aOrders.filter(orderIsAffected);
         var mCauses = buildPrincipalCausesByOrder(oRaw.causes, oRange.endDate);
         var aElevators = buildElevators(aAffected, mCauses);
+        var iIdentifiedElevators = aElevators.filter(function (oElevator) {
+            return oElevator.identificado;
+        }).length;
         var aCatalogZones = activeCatalogOptions(
             oRaw.catalogs, ["ZONE"], ALL_ZONES, "Todas", oRange.endDate
         );
@@ -438,7 +443,10 @@ sap.ui.define([
 
         return {
             filters: Object.assign({}, mValues, {
-                periodoTexto: String(mValues.periodo || "2026") + " (Anual)"
+                periodoTexto: mValues.fechaDesde === "01/01/" + mValues.periodo &&
+                    mValues.fechaHasta === "31/12/" + mValues.periodo ?
+                    String(mValues.periodo) + " (Anual)" :
+                    mValues.fechaDesde + " - " + mValues.fechaHasta
             }),
             opcionesPeriodo: buildPeriods(aEnriched, mValues, oRange),
             opcionesZona: chooseOptions(
@@ -466,7 +474,8 @@ sap.ui.define([
                 )
             ),
             kpis: {
-                elevadores: String(aElevators.length),
+                elevadores: iIdentifiedElevators ? String(iIdentifiedElevators) :
+                    (aAffected.length ? "Sin datos" : "0"),
                 otAfectadas: String(aAffected.length),
                 brecha: "-" + aAffected.length + " OT",
                 criticos: "--",
@@ -482,7 +491,10 @@ sap.ui.define([
             meta: {
                 plannedOrders: aOrders.length,
                 affectedOrders: aAffected.length,
-                affectedElevators: aElevators.length,
+                affectedElevators: iIdentifiedElevators,
+                ordersWithoutEquipment: aAffected.filter(function (oOrder) {
+                    return !oOrder.EquipmentId && !oOrder.EquipmentName;
+                }).length,
                 source: "BTP_DESTINATION_ODATA_V2"
             }
         };

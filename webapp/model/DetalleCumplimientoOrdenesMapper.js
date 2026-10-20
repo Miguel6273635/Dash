@@ -566,6 +566,8 @@ sap.ui.define([
 
     function buildPeriods(aOrders, mFilters, oRange) {
         var mYears = new Map();
+        var aOptions;
+        var sSelected = String(mFilters.periodo || "");
 
         asArray(aOrders).forEach(function (oOrder) {
             var oDate = parseDate(oOrder.PlannedStartDate);
@@ -580,9 +582,13 @@ sap.ui.define([
         if (/^\d{4}$/.test(String(mFilters.periodo || ""))) {
             mYears.set(String(mFilters.periodo), true);
         }
-        return Array.from(mYears.keys()).sort().map(function (sYear) {
+        aOptions = Array.from(mYears.keys()).sort().map(function (sYear) {
             return { key: sYear, text: sYear + " (Anual)" };
         });
+        if (/^\d{4}-\d{2}$/.test(sSelected)) {
+            aOptions.unshift({ key: sSelected, text: sSelected.slice(5) + "/" + sSelected.slice(0, 4) + " (Mensual)" });
+        }
+        return aOptions;
     }
 
     function buildCatalogs(aOrders, aCatalogs, mFilters, oRange) {

@@ -68,12 +68,22 @@ sap.ui.define([
 
         _getDefaultFilters: function () {
             var initialPeriod = InitialLoadPeriod.previousMonth();
-            return {
-                periodo: initialPeriod.year + "-ANUAL",
+            var defaults = {
+                periodo: initialPeriod.monthKey,
                 fechaDesde: initialPeriod.startDisplay,
                 fechaHasta: initialPeriod.endDisplay,
                 zona: "TODAS"
             };
+            var component = this.getOwnerComponent && this.getOwnerComponent();
+            var contextModel = component && component.getModel("dashboardNavigationContext");
+            var context = contextModel && contextModel.getData();
+            var inherited = context && context.targetRoute === "RouteAnalisisFallas" && context.filters;
+
+            if (inherited) {
+                defaults = Object.assign(defaults, inherited);
+                defaults.periodo = InitialLoadPeriod.keyForRange(defaults.fechaDesde, defaults.fechaHasta, true) || defaults.periodo;
+            }
+            return defaults;
         },
 
         _getODataModel: function () {

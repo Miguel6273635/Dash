@@ -29,15 +29,18 @@ sap.ui.define([
         DashboardOrdersSet: [
             "OrderId", "OrderTypeCode", "OrderTypeText", "PlannedStartDate",
             "PlannedFinishDate", "SapUserStatusCode", "AppStatusCode", "StatusText",
-            "SupervisorId", "Mecanico", "Turno", "Zona"
+            "SupervisorId", "Mecanico", "Turno", "Zona", "CustomerId", "CustomerName",
+            "SiteId", "SiteName", "EquipmentId", "EquipmentName"
         ],
         DashboardOrderCausesSet: [
             "OrderCauseId", "OrderId", "CauseCode", "CauseText", "CauseContextCode",
             "IsPrimary", "ValidTo"
         ],
         DashboardOrderMaterialsSet: [
-            "MaterialRequirementId", "OrderId", "MaterialCategoryCode", "MaterialCategoryName",
-            "BaseUnitCode", "PlannedQuantity", "IsPublishable"
+            "MaterialRequirementId", "OrderId", "ReservationNumber", "ReservationItem",
+            "MaterialId", "MaterialName", "MaterialCategoryCode", "MaterialCategoryName",
+            "BaseUnitCode", "PlannedQuantity", "RequiredDate", "DataValidationStatusCode",
+            "IsPublishable"
         ],
         DashboardOrderResourcesSet: [
             "OrderResourceId", "OrderId", "RoutingNumber", "OperationCounter", "ResourceId",
@@ -52,28 +55,43 @@ sap.ui.define([
             "CurrentStatusCode"
         ],
         DashboardEquipmentBlocksSet: [
-            "BlockId", "ZoneId", "SupervisorId", "BlockedAt", "ReleasedAt",
-            "CurrentStatusCode", "IsPublishable"
+            "BlockId", "EquipmentId", "EquipmentName", "CustomerId", "CustomerName",
+            "SiteId", "SiteName", "ZoneId", "ZoneName", "BlockReasonCode",
+            "BlockReasonText", "BlockCategoryCode", "BlockedAt", "ReleasedAt",
+            "CurrentStatusCode", "CurrentStatusText", "ManagementStatusCode",
+            "ResponsibleId", "SupervisorId", "PriorityCode", "CriticalityCode",
+            "DifficultyCode", "CommitmentDate", "NextAction", "GeneralObservation",
+            "DataValidationStatusCode", "IsPublishable", "ChangedAt"
         ],
         DashboardBlockOrdersSet: [
-            "BlockOrderId", "BlockId", "OrderId", "ImpactStartAt", "ImpactEndAt"
+            "BlockOrderId", "BlockId", "OrderId", "ImpactLevelCode",
+            "ImpactStartAt", "ImpactEndAt"
+        ],
+        DashboardBlockEventsSet: [
+            "BlockEventId", "BlockId", "RecordTypeCode", "PendingTypeCode",
+            "ActionCode", "EventAt", "CommitmentDate", "ClosedAt", "StatusCode",
+            "StatusText", "ResponsibleId", "SupervisorId", "PriorityCode", "Comment",
+            "IsCurrent", "ChangedAt"
         ],
         DashboardFilterCatalogSet: [
             "FilterCatalogId", "FilterDomain", "ValueId", "ValueText", "NumericValue",
             "UnitCode", "ScopeTypeCode", "ScopeId", "SortOrder", "Active"
         ],
         DashboardResourceDailySet: [
-            "ResourceDateId", "ResourceId", "ResourceName", "ResourceTypeCode", "WorkDate",
+            "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName", "ResourceTypeCode", "WorkDate",
             "ZoneId", "ZoneName", "SupervisorId", "SupervisorName", "ShiftId", "ShiftName",
-            "AvailabilityStatusCode", "CapacitySourceValidated", "CapacityHours"
+            "ShiftSourceValidated", "AvailabilityStatusCode", "CapacitySourceValidated", "CapacityHours"
         ],
         DashboardOrderOperationsSet: [
-            "OperationKey", "OrderId", "OperationCounter", "PlannedSourceCode",
+            "OperationKey", "OrderId", "RoutingNumber", "OperationCounter",
+            "AssignedPersonnelNumber", "PlannedSourceCode",
             "PlannedValueOriginal", "PlannedUnitOriginal", "CapacityLineNumber", "PlannedStartDate"
         ],
         DashboardOrderConfirmationsSet: [
-            "ConfirmationId", "OrderId", "ActualValueOriginal", "ActualUnitOriginal",
-            "ActualStartDate", "IncludedInCalculation"
+            "ConfirmationId", "OrderId", "RoutingNumber", "OperationCounter",
+            "ExecutorPersonnelNumber", "ActualValueOriginal", "ActualUnitOriginal",
+            "ActualStartDate", "CancellationIndicator", "ReversalReference",
+            "IncludedInCalculation"
         ]
     };
     var INDEPENDENT_SETS = {

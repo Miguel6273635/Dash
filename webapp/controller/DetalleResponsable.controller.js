@@ -10,6 +10,12 @@ sap.ui.define([
     return Controller.extend("mantenimiento.controller.DetalleResponsable", {
         onInit: function () {
             var context = this._navigationContext();
+            var routeId = this._routeResourceId();
+            var route = this.getOwnerComponent().getRouter().getRoute("RouteDetalleResponsable");
+
+            if (routeId && routeId !== context.responsableId) {
+                context = { responsableId: routeId };
+            }
 
             includeStylesheet(sap.ui.require.toUrl("mantenimiento/css/DetalleResponsable.css") + "?v=20260821-live-data");
             this._requestId = 0;
@@ -17,6 +23,8 @@ sap.ui.define([
             this._filters = {
                 responsableId: context.responsableId || "",
                 periodKey: context.periodKey || "2026-ANUAL",
+                fechaDesde: context.fechaDesde || "",
+                fechaHasta: context.fechaHasta || "",
                 zona: context.zona || "TODAS",
                 origen: context.origen || "TODAS",
                 page: 1,
@@ -27,7 +35,13 @@ sap.ui.define([
                 DetalleResponsableService.createEmpty(this._filters)
             ), "detail");
             this.getView().getModel("detail").setSizeLimit(1000);
-            this._load(false);
+            if (route) {
+                route.attachPatternMatched(this._onRouteMatched, this);
+                this._detailRoute = route;
+            }
+            if (this._filters.responsableId) {
+                this._load(false);
+            }
         },
 
         onAfterRendering: function () {
@@ -35,7 +49,13 @@ sap.ui.define([
         },
 
         onApplyFilters: function () {
-            this._filters.periodKey = this.byId("detallePeriodo").getSelectedKey() || "2026-W01";
+            var selectedPeriod = this.byId("detallePeriodo").getSelectedKey() || "2026-ANUAL";
+            if (selectedPeriod !== this._filters.periodKey) {
+                // Al elegir otro periodo, deja de aplicar el rango heredado de la vista anterior.
+                this._filters.fechaDesde = "";
+                this._filters.fechaHasta = "";
+            }
+            this._filters.periodKey = selectedPeriod;
             this._filters.zona = this.byId("selectZona").getSelectedKey() || "TODAS";
             this._filters.page = 1;
             this._load(true);
@@ -116,6 +136,44 @@ sap.ui.define([
             return model && model.getData ? model.getData() || {} : {};
         },
 
+        _routeResourceId: function () {
+            var match = String(window.location.hash || "").match(/(?:^|[#/])detalle-responsable\/([^/?]+)/);
+            try {
+                return match ? decodeURIComponent(match[1]) : "";
+            } catch (error) {
+                return "";
+            }
+        },
+
+        _onRouteMatched: function (event) {
+            var id = event && event.getParameter("arguments") && event.getParameter("arguments").responsableId;
+            var context = this._navigationContext();
+            var next;
+
+            if (!id) {
+                return;
+            }
+            next = context.responsableId === id ? context : { responsableId: id };
+            if (id === this._filters.responsableId &&
+                (next.periodKey || "2026-ANUAL") === this._filters.periodKey &&
+                (next.fechaDesde || "") === (this._filters.fechaDesde || "") &&
+                (next.fechaHasta || "") === (this._filters.fechaHasta || "") &&
+                (next.zona || "TODAS") === this._filters.zona &&
+                (next.origen || "TODAS") === this._filters.origen) {
+                return;
+            }
+            this._filters = Object.assign({}, this._filters, {
+                responsableId: id,
+                periodKey: next.periodKey || "2026-ANUAL",
+                fechaDesde: next.fechaDesde || "",
+                fechaHasta: next.fechaHasta || "",
+                zona: next.zona || "TODAS",
+                origen: next.origen || "TODAS",
+                page: 1
+            });
+            this._load(false);
+        },
+
         _odata: function () {
             var component = this.getOwnerComponent();
             return component && component.getModel("dashboardOData") || this.getView().getModel("dashboardOData");
@@ -139,6 +197,12 @@ sap.ui.define([
 
             if (donut && donut.getDomRef()) {
                 donut.getDomRef().style.setProperty("--detalle-compliance-angle", (value * 3.6) + "deg");
+            }
+        },
+
+        onExit: function () {
+            if (this._detailRoute) {
+                this._detailRoute.detachPatternMatched(this._onRouteMatched, this);
             }
         }
     });
