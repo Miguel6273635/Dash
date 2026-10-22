@@ -444,22 +444,18 @@ sap.ui.define([
         }
 
         /*
-         * SOLO PRIMERA CONSULTA:
-         * 01/08/2026 - 25/08/2026
+         * LEGACY CONSERVADO (NO EJECUTAR).
+         * La primera carga estaba fijada al 01/08/2026 - 25/08/2026:
          *
-         * Después se usan las fechas que mande el Controller.
+         * if (bInitialLoad) {
+         *     oEffectiveFilters.periodo = "2026";
+         *     oEffectiveFilters.fechaDesde = "01/08/2026";
+         *     oEffectiveFilters.fechaHasta = "25/08/2026";
+         * }
+         *
+         * Se deshabilitó para respetar el mes anterior calculado por el
+         * controlador y cualquier rango seleccionado por el usuario.
          */
-        if (bInitialLoad) {
-            oEffectiveFilters.periodo =
-                "2026";
-
-            oEffectiveFilters.fechaDesde =
-                "01/08/2026";
-
-            oEffectiveFilters.fechaHasta =
-                "25/08/2026";
-        }
-
         aOrdersFilters =
             buildOrdersFilters(
                 oEffectiveFilters
@@ -530,21 +526,24 @@ sap.ui.define([
                             }
                         )
                     );
-/*
- * Primera carga rápida:
- * muestra órdenes, recursos y catálogos sin disparar
- * consultas individuales por cada OrderId.
- */
-if (bInitialLoad) {
-    return {
-        resources: aResources,
-        orders: aOrders,
-        orderResources: [],
-        operations: [],
-        confirmations: [],
-        catalogs: aCatalogs
-    };
-}
+                /*
+                 * LEGACY CONSERVADO (NO EJECUTAR).
+                 * La carga rápida anterior omitía asignaciones, operaciones y
+                 * confirmaciones durante la primera consulta:
+                 *
+                 * if (bInitialLoad) {
+                 *     return {
+                 *         resources: aResources,
+                 *         orders: aOrders,
+                 *         orderResources: [],
+                 *         operations: [],
+                 *         confirmations: [],
+                 *         catalogs: aCatalogs
+                 *     };
+                 * }
+                 *
+                 * Se conserva deshabilitada porque impedía calcular los KPIs.
+                 */
                 /*
                  * Si no hay órdenes, NO dispara
                  * consultas pesadas de detalle.

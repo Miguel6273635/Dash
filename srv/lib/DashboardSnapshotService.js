@@ -201,6 +201,20 @@ function normalizeZone(value) {
 }
 
 function mergeZoneCatalog(catalogs, zoneRows) {
+    /*
+     * LEGACY CONSERVADO (NO EJECUTAR).
+     * Antes se eliminaban las bases repetidas y sólo se conservaba una fila
+     * por zona, lo que impedía traducir Base -> Zona:
+     *
+     * const zones = (zoneRows || []).map((row) => normalizeZone(row && row.Zona))
+     *     .filter((zone) => {
+     *         if (!OFFICIAL_ZONES.includes(zone) || seen.has(zone)) {
+     *             return false;
+     *         }
+     *         seen.add(zone);
+     *         return true;
+     *     });
+     */
     const baseCatalogs = (catalogs || []).filter((catalog) => {
         if (normalizeZone(catalog && catalog.FilterDomain) !== "ZONE") {
             return true;
@@ -210,12 +224,15 @@ function mergeZoneCatalog(catalogs, zoneRows) {
         ));
     });
     const seen = new Set();
-    const zones = (zoneRows || []).map((row) => normalizeZone(row && row.Zona))
-        .filter((zone) => {
-            if (!OFFICIAL_ZONES.includes(zone) || seen.has(zone)) {
+    const zones = (zoneRows || []).map((row) => ({
+        zone: normalizeZone(row && row.Zona),
+        base: String(row && row.Base || "").trim()
+    })).filter((item) => {
+            const key = item.zone + "|" + normalizeZone(item.base);
+            if (!OFFICIAL_ZONES.includes(item.zone) || seen.has(key)) {
                 return false;
             }
-            seen.add(zone);
+            seen.add(key);
             return true;
         });
 
@@ -224,12 +241,14 @@ function mergeZoneCatalog(catalogs, zoneRows) {
     }
 
     return baseCatalogs.filter((catalog) => normalizeZone(catalog.FilterDomain) !== "ZONE")
-        .concat(zones.map((zone) => ({
-            FilterCatalogId: "ZONE:" + zone,
+        .concat(zones.map((item) => ({
+            FilterCatalogId: "ZONE:" + item.zone + ":" + (item.base || "GLOBAL"),
             FilterDomain: "ZONE",
-            ValueId: zone,
-            ValueText: zone,
-            SortOrder: OFFICIAL_ZONES.indexOf(zone) + 1,
+            ValueId: item.zone,
+            ValueText: item.zone,
+            ScopeTypeCode: item.base ? "BASE" : "GLOBAL",
+            ScopeId: item.base,
+            SortOrder: OFFICIAL_ZONES.indexOf(item.zone) + 1,
             Active: true
         })));
 }
@@ -328,8 +347,12 @@ class DashboardSnapshotService {
             "' and WorkDate le datetime'" + SapODataRepository.odataDate(bucket.to) + "'";
 
         return this._cached(key, () => this._repository.readAll("DashboardResourceDailySet", {
-            filter,
-            select: SELECTS.DashboardResourceDailySet
+            // El contrato de personal sigue ampliándose (puesto, base y estado
+            // laboral). Sin $select conservamos esos campos cuando ABAP los
+            // publique, sin adivinar nombres técnicos que romperían OData.
+            // LEGACY CONSERVADO (NO EJECUTAR):
+            // select: SELECTS.DashboardResourceDailySet,
+            filter
         }), POLICIES.resources, forceRefresh, cacheOnly);
     }
 

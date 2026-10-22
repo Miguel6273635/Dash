@@ -5,7 +5,8 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/m/MessageBox",
     "mantenimiento/model/DetalleMecanicosService",
-    "mantenimiento/model/DetalleMecanicosMapper"
+    "mantenimiento/model/DetalleMecanicosMapper",
+    "mantenimiento/model/InitialLoadPeriod"
 ], function (
     Controller,
     JSONModel,
@@ -13,7 +14,8 @@ sap.ui.define([
     MessageToast,
     MessageBox,
     Service,
-    Mapper
+    Mapper,
+    InitialLoadPeriod
 ) {
     "use strict";
 
@@ -21,13 +23,27 @@ sap.ui.define([
         "mantenimiento.controller.DetalleMecanicos",
         {
             onInit: function () {
-                var iYear = 2026;
+                var oInitialPeriod = InitialLoadPeriod.previousMonth();
+                var iYear = Number(oInitialPeriod.year);
+
+                /*
+                 * LEGACY CONSERVADO (NO EJECUTAR).
+                 * var iYear = 2026;
+                 * this._loadData({
+                 *     periodo: "2026",
+                 *     fechaDesde: "01/08/2026",
+                 *     fechaHasta: "25/08/2026",
+                 *     zona: "TODAS", supervisor: "TODOS", turno: "TODOS",
+                 *     especialidad: "TODAS", servicio: "TODOS", estado: "TODOS"
+                 * }, false, true);
+                 */
 
                 this._loadScreenStyles();
 
                 this._oModel = new JSONModel(
                     this._getInitialData(
-                        iYear
+                        iYear,
+                        oInitialPeriod
                     )
                 );
 
@@ -42,15 +58,11 @@ sap.ui.define([
 
                 this._iLoadRequest = 0;
 
-                /*
-                 * SOLO LA PRIMERA CONSULTA:
-                 * 01/08/2026 - 25/08/2026
-                 */
                 this._loadData(
                     {
-                        periodo: "2026",
-                        fechaDesde: "01/08/2026",
-                        fechaHasta: "25/08/2026",
+                        periodo: oInitialPeriod.monthKey,
+                        fechaDesde: oInitialPeriod.startDisplay,
+                        fechaHasta: oInitialPeriod.endDisplay,
                         zona: "TODAS",
                         supervisor: "TODOS",
                         turno: "TODOS",
@@ -59,7 +71,7 @@ sap.ui.define([
                         estado: "TODOS"
                     },
                     false,
-                    true
+                    false
                 );
             },
 
@@ -112,7 +124,8 @@ sap.ui.define([
             },
 
             _buildYearCatalog: function (
-                iSelectedYear
+                iSelectedYear,
+                oInitialPeriod
             ) {
                 var iCurrentYear =
                     new Date()
@@ -136,6 +149,13 @@ sap.ui.define([
 
                 var aYears = [];
                 var iYear;
+
+                if (oInitialPeriod && oInitialPeriod.monthKey) {
+                    aYears.push({
+                        key: oInitialPeriod.monthKey,
+                        text: oInitialPeriod.monthKey
+                    });
+                }
 
                 for (
                     iYear = iEnd;
@@ -441,19 +461,16 @@ sap.ui.define([
             },
 
             _getInitialData: function (
-                iYear
+                iYear,
+                oInitialPeriod
             ) {
                 return {
                     loading: false,
 
                     filters: {
-                        /*
-                         * La pantalla arranca mostrando
-                         * el mismo rango de la primera consulta.
-                         */
-                        periodo: "2026",
-                        fechaDesde: "01/08/2026",
-                        fechaHasta: "25/08/2026",
+                        periodo: oInitialPeriod.monthKey,
+                        fechaDesde: oInitialPeriod.startDisplay,
+                        fechaHasta: oInitialPeriod.endDisplay,
 
                         zona: "TODAS",
                         supervisor: "TODOS",
@@ -466,7 +483,8 @@ sap.ui.define([
                     catalogos: {
                         periodos:
                             this._buildYearCatalog(
-                                iYear
+                                iYear,
+                                oInitialPeriod
                             ),
 
                         zonas: [
@@ -513,6 +531,7 @@ sap.ui.define([
                     },
 
                     kpis: {
+                        totalPlantilla: "Sin datos",
                         activos: "Sin datos",
                         disponibles: "Sin datos",
                         disponiblesPct: "Sin datos",
@@ -585,33 +604,15 @@ sap.ui.define([
 
                     estadoPlantilla: [
                         {
-                            label: "Disponibles",
-                            value: "0",
-                            pct: "0.0%",
+                            label: "Activos",
+                            value: "—",
+                            pct: "Sin datos",
                             tone: "green"
                         },
                         {
-                            label: "Dentro de capacidad",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "blue"
-                        },
-                        {
-                            label: "Cerca de saturación",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "orange"
-                        },
-                        {
-                            label: "Sobre capacidad",
-                            value: "0",
-                            pct: "0.0%",
-                            tone: "red"
-                        },
-                        {
                             label: "Inactivos",
-                            value: "0",
-                            pct: "0.0%",
+                            value: "—",
+                            pct: "Sin datos",
                             tone: "gray"
                         }
                     ],

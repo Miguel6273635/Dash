@@ -90,15 +90,15 @@ function staffingData() {
     };
 }
 
-test("muestra técnicos y turnos observados sin fabricar capacidad", function () {
+test("cuenta sólo puestos MECANICO y no toma turnos de órdenes como dato laboral", function () {
     [serverMapper, browserMapper].forEach(function (mapper) {
         const raw = staffingData();
         const staff = mapper.buildCapacity(
             raw.orders, raw.resources, raw.assignments, raw.operations, raw.confirmations
         );
 
-        assert.equal(staff.technicians, "6");
-        assert.equal(staff.activeTurns, "3");
+        assert.equal(staff.technicians, "1");
+        assert.equal(staff.activeTurns, "0");
         assert.equal(staff.capacity, "Sin datos");
         assert.equal(staff.committed, "Sin datos");
         assert.equal(staff.margin, "Sin datos");

@@ -306,70 +306,110 @@ sap.ui.define([], function () {
     }
 
     /*
-     * DashboardFilterCatalogSet actualmente ya
-     * publica MECHANIC aunque ResourceTypeCode
-     * pueda llegar vacío.
+     * LEGACY CONSERVADO (NO EJECUTAR).
+     * Antes se aceptaba un recurso sin ResourceTypeCode cuando aparecía en el
+     * catálogo MECHANIC. La nueva especificación exige el puesto explícito.
+     *
+     * function getMechanicCatalogMap(aCatalogs) {
+     *     var mMap = Object.create(null);
+     *     (aCatalogs || []).forEach(function (oItem) {
+     *         if (normalize(oItem.FilterDomain) === "MECHANIC" &&
+     *             (oItem.Active === undefined || oItem.Active === null ||
+     *              isTrue(oItem.Active))) {
+     *             mMap[String(oItem.ValueId || "")] = true;
+     *         }
+     *     });
+     *     return mMap;
+     * }
+     *
+     * function isMechanic(oResource, mMechanicCatalog) {
+     *     var sType = normalize(oResource.ResourceTypeCode);
+     *     var sResourceId = String(oResource.ResourceId || "");
+     *     return sType === "MECHANIC" ||
+     *         (!sType && Boolean(mMechanicCatalog[sResourceId]));
+     * }
      */
-    function getMechanicCatalogMap(
-        aCatalogs
-    ) {
-        var mMap =
-            Object.create(null);
-
-        (aCatalogs || [])
-            .forEach(function (oItem) {
-                if (
-                    normalize(
-                        oItem.FilterDomain
-                    ) === "MECHANIC" &&
-                    (
-                        oItem.Active ===
-                            undefined ||
-                        oItem.Active ===
-                            null ||
-                        isTrue(
-                            oItem.Active
-                        )
-                    )
-                ) {
-                    mMap[
-                        String(
-                            oItem.ValueId ||
-                            ""
-                        )
-                    ] = true;
-                }
-            });
-
-        return mMap;
-    }
-
-    function isMechanic(
-        oResource,
-        mMechanicCatalog
-    ) {
+    function isMechanic(oResource) {
         var sType =
             normalize(
                 oResource.ResourceTypeCode
             );
 
-        var sResourceId =
-            String(
-                oResource.ResourceId ||
-                ""
-            );
-
         return (
             sType === "MECHANIC" ||
-            (
-                !sType &&
-                Boolean(
-                    mMechanicCatalog[
-                        sResourceId
-                    ]
-                )
+            sType === "MECANICO"
+        );
+    }
+
+    function getEmploymentState(oResource) {
+        var sCode = normalize(
+            oResource && (
+                oResource.EmploymentStatusCode ||
+                oResource.EmploymentStatus
             )
         );
+
+        if (sCode === "3" || sCode === "ACTIVE" || sCode === "ACTIVO") {
+            return "ACTIVE";
+        }
+
+        if (["0", "1", "2", "INACTIVE", "INACTIVO"].indexOf(sCode) >= 0) {
+            return "INACTIVE";
+        }
+
+        return "NO_DATA";
+    }
+
+    function getOfficialShift(oResource) {
+        var sShift = normalize(oResource && oResource.ShiftName);
+        var mLabels = {
+            "LUNES A VIERNES": "Lunes a Viernes",
+            "SABADO": "Sábado",
+            "DOMINICAL": "Dominical",
+            "NOCTURNO": "Nocturno"
+        };
+
+        return mLabels[sShift] || "";
+    }
+
+    function getBaseZoneMap(aCatalogs) {
+        var mZones = Object.create(null);
+
+        (aCatalogs || []).forEach(function (oItem) {
+            var sBase;
+            var sZone;
+
+            if (normalize(oItem.FilterDomain) !== "ZONE") {
+                return;
+            }
+
+            sBase = normalize(oItem.ScopeId || oItem.Base || oItem.BaseId);
+            sZone = String(oItem.ValueText || oItem.ValueId || "").trim();
+
+            if (sBase && sZone) {
+                mZones[sBase] = sZone;
+            }
+        });
+
+        return mZones;
+    }
+
+    function enrichMechanic(oResource, mBaseZones) {
+        var oCopy = Object.assign({}, oResource);
+        var sBase = normalize(
+            oResource.Base || oResource.BaseId || oResource.BaseCode || oResource.WorkBase
+        );
+        var sZone = sBase && mBaseZones[sBase];
+        var sShift = getOfficialShift(oResource);
+
+        oCopy.ZoneId = sZone || oResource.ZoneId || oResource.ZoneName || "";
+        oCopy.ZoneName = sZone || oResource.ZoneName || oResource.ZoneId || "";
+        oCopy.ShiftId = sShift;
+        oCopy.ShiftName = sShift;
+        oCopy.ShiftSourceValidated = Boolean(sShift);
+        oCopy._employmentState = getEmploymentState(oResource);
+
+        return oCopy;
     }
 
     function getOrderMap(
@@ -805,6 +845,11 @@ sap.ui.define([], function () {
 
         var aYears = [];
         var iYear;
+        var sSelectedPeriod = String(mFilters.periodo || "");
+
+        if (/^\d{4}-\d{2}$/.test(sSelectedPeriod)) {
+            aYears.push({ key: sSelectedPeriod, text: sSelectedPeriod });
+        }
 
         for (
             iYear = iEnd;
@@ -1011,29 +1056,23 @@ sap.ui.define([], function () {
                     "Todas"
                 ),
 
+            /*
+             * LEGACY CONSERVADO (NO EJECUTAR): el filtro anterior clasificaba
+             * Disponibles, Dentro de capacidad, Cerca de saturación,
+             * Sobre capacidad e Inactivos. Ahora el filtro representa el
+             * estado laboral ACTIVO/INACTIVO recibido desde SAP.
+             */
             estados: [
                 {
                     key: "TODOS",
                     text: "Todos"
                 },
                 {
-                    key: "DISPONIBLES",
-                    text: "Disponibles"
+                    key: "ACTIVE",
+                    text: "Activos"
                 },
                 {
-                    key: "DENTRO_CAPACIDAD",
-                    text: "Dentro de capacidad"
-                },
-                {
-                    key: "CERCA_SATURACION",
-                    text: "Cerca de saturación"
-                },
-                {
-                    key: "SOBRE_CAPACIDAD",
-                    text: "Sobre capacidad"
-                },
-                {
-                    key: "INACTIVOS",
+                    key: "INACTIVE",
                     text: "Inactivos"
                 }
             ]
@@ -1117,11 +1156,7 @@ sap.ui.define([], function () {
                 oFilters.fechaHasta
             );
 
-        var mMechanicCatalog =
-            getMechanicCatalogMap(
-                oRaw.catalogs ||
-                []
-            );
+        var mBaseZones = getBaseZoneMap(oRaw.catalogs || []);
 
         /*
          * 1. Población de mecánicos en periodo.
@@ -1136,13 +1171,13 @@ sap.ui.define([], function () {
                                 oStart,
                                 oEnd
                             ) &&
-                            isMechanic(
-                                oResource,
-                                mMechanicCatalog
-                            )
+                            isMechanic(oResource)
                         );
                     }
-                );
+                )
+                .map(function (oResource) {
+                    return enrichMechanic(oResource, mBaseZones);
+                });
 
         /*
          * 2. Filtros organizativos.
@@ -1178,6 +1213,10 @@ sap.ui.define([], function () {
                                 [
                                     oResource.SpecialtyCode
                                 ]
+                            ) &&
+                            (
+                                isAll(oFilters.estado) ||
+                                oResource._employmentState === normalize(oFilters.estado)
                             )
                         );
                     }
@@ -1223,7 +1262,11 @@ sap.ui.define([], function () {
                 if (sId) {
                     mSelectedResourceIds[
                         sId
-                    ] = true;
+                    ] = sId;
+
+                    if (oResource.PersonnelNumber) {
+                        mSelectedResourceIds[String(oResource.PersonnelNumber)] = sId;
+                    }
                 }
             });
 
@@ -1275,6 +1318,9 @@ sap.ui.define([], function () {
                         inactive:
                             false,
 
+                        employmentState:
+                            oRow._employmentState,
+
                         shifts:
                             Object.create(
                                 null
@@ -1291,6 +1337,10 @@ sap.ui.define([], function () {
                         sId
                     ].available =
                         true;
+                }
+
+                if (oRow._employmentState !== "NO_DATA") {
+                    mResources[sId].employmentState = oRow._employmentState;
                 }
 
                 if (
@@ -1466,22 +1516,59 @@ sap.ui.define([], function () {
                             var sResourceId =
                                 String(
                                     oAssignment.ResourceId ||
+                                    oAssignment.PersonnelNumber ||
                                     ""
                                 );
 
+                            var sSelectedId = mSelectedResourceIds[sResourceId];
+
                             if (
                                 mResources[
-                                    sResourceId
+                                    sSelectedId
                                 ]
                             ) {
                                 mResources[
-                                    sResourceId
+                                    sSelectedId
                                 ].load +=
                                     nShare;
                             }
                         }
                     );
             });
+
+        var mAssignedMechanics = Object.create(null);
+
+        Object.keys(mAssignments).forEach(function (sOrderId) {
+            if (!mOrders[sOrderId]) {
+                return;
+            }
+
+            (mAssignments[sOrderId] || []).forEach(function (oAssignment) {
+                var sResourceId = String(
+                    oAssignment.ResourceId || oAssignment.PersonnelNumber || ""
+                );
+
+                if (mSelectedResourceIds[sResourceId]) {
+                    mAssignedMechanics[mSelectedResourceIds[sResourceId]] = true;
+                }
+            });
+        });
+
+        aOrders.forEach(function (oOrder) {
+            var sResourceId = String(oOrder.Mecanico || "");
+
+            if (mSelectedResourceIds[sResourceId]) {
+                mAssignedMechanics[mSelectedResourceIds[sResourceId]] = true;
+            }
+        });
+
+        (oRaw.operations || []).forEach(function (oOperation) {
+            var sResourceId = String(oOperation.AssignedPersonnelNumber || "");
+
+            if (mOrders[String(oOperation.OrderId || "")] && mSelectedResourceIds[sResourceId]) {
+                mAssignedMechanics[mSelectedResourceIds[sResourceId]] = true;
+            }
+        });
 
         var aResourceSummaries =
             Object.keys(
@@ -1507,7 +1594,7 @@ sap.ui.define([], function () {
                         function (oResource) {
                             return (
                                 normalize(
-                                    oResource.state
+                                    oResource.employmentState
                                 ) ===
                                 normalize(
                                     oFilters.estado
@@ -1517,8 +1604,11 @@ sap.ui.define([], function () {
                     );
         }
 
-        var iActive =
-            aResourceSummaries.length;
+        var iWorkforce = aResourceSummaries.length;
+
+        var iActive = aResourceSummaries.filter(function (oResource) {
+            return Boolean(mAssignedMechanics[oResource.id]);
+        }).length;
 
         var bAvailabilityData =
             aResourcesFiltered.some(
@@ -1535,6 +1625,7 @@ sap.ui.define([], function () {
                     .filter(
                         function (oResource) {
                             return (
+                                mAssignedMechanics[oResource.id] &&
                                 oResource.available
                             );
                         }
@@ -1588,8 +1679,13 @@ sap.ui.define([], function () {
                 : null;
 
         var oKpis = {
+            totalPlantilla:
+                iWorkforce > 0
+                    ? String(iWorkforce)
+                    : "Sin datos",
+
             activos:
-                iActive > 0
+                iWorkforce > 0
                     ? String(
                         iActive
                     )
@@ -2238,13 +2334,10 @@ sap.ui.define([], function () {
         /*
          * 8. Estado de plantilla.
          */
-        var aStateCodes = [
-            "DISPONIBLES",
-            "DENTRO_CAPACIDAD",
-            "CERCA_SATURACION",
-            "SOBRE_CAPACIDAD",
-            "INACTIVOS"
-        ];
+        var aStateCodes = ["ACTIVE", "INACTIVE"];
+        var iKnownEmployment = aResourceSummaries.filter(function (oResource) {
+            return oResource.employmentState !== "NO_DATA";
+        }).length;
 
         var aEstadoPlantilla =
             aStateCodes
@@ -2254,40 +2347,31 @@ sap.ui.define([], function () {
                             .filter(
                                 function (oResource) {
                                     return (
-                                        oResource.state ===
+                                        oResource.employmentState ===
                                         sState
                                     );
                                 }
                             ).length;
 
                     var nPct =
-                        iActive > 0
+                        iKnownEmployment > 0
                             ? (
                                 iCount /
-                                iActive
+                                iKnownEmployment
                             ) * 100
                             : null;
 
                     return {
-                        label:
-                            getStateLabel(
-                                sState
-                            ),
+                        label: sState === "ACTIVE" ? "Activos" : "Inactivos",
 
-                        value:
-                            String(
-                                iCount
-                            ),
+                        value: iKnownEmployment > 0 ? String(iCount) : "—",
 
                         pct:
                             formatPct(
                                 nPct
                             ),
 
-                        tone:
-                            getStateTone(
-                                sState
-                            )
+                        tone: sState === "ACTIVE" ? "green" : "gray"
                     };
                 });
 
@@ -2684,7 +2768,13 @@ sap.ui.define([], function () {
                     bActualData,
 
                 assignmentsData:
-                    bAssignmentData
+                    bAssignmentData,
+
+                workforceCount:
+                    iWorkforce,
+
+                employmentStatusData:
+                    iKnownEmployment > 0
             }
         };
     }

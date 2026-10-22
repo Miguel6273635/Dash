@@ -381,98 +381,158 @@ sap.ui.define([], function () {
         return mLatest;
     }
 
-    function getMechanicIds(oRaw) {
-        var mIds = Object.create(null);
+    /*
+     * LEGACY CONSERVADO (NO EJECUTAR).
+     * La versión anterior completaba la población de mecánicos con catálogos,
+     * órdenes y asignaciones aunque el puesto no viniera informado. Se deja
+     * comentada por si en el futuro se autoriza nuevamente ese respaldo.
+     *
+     * function getMechanicIds(oRaw) {
+     *     var mIds = Object.create(null);
+     *
+     *     catalogRows(oRaw.catalogs, "MECHANIC").forEach(function (oRow) {
+     *         var sId = idKey(oRow.ValueId);
+     *         if (sId) {
+     *             mIds[sId] = true;
+     *         }
+     *     });
+     *
+     *     (oRaw.resources || []).forEach(function (oRow) {
+     *         var sType = norm(oRow.ResourceTypeCode);
+     *         var sId;
+     *         if (sType === "MECHANIC" || sType.indexOf("MECAN") >= 0) {
+     *             sId = idKey(oRow.ResourceId || oRow.PersonnelNumber);
+     *             if (sId) {
+     *                 mIds[sId] = true;
+     *             }
+     *         }
+     *     });
+     *
+     *     (oRaw.orders || []).forEach(function (oOrder) {
+     *         var sId = idKey(oOrder.Mecanico);
+     *         if (sId && sId !== "0") {
+     *             mIds[sId] = true;
+     *         }
+     *     });
+     *
+     *     (oRaw.orderResources || []).forEach(function (oAssignment) {
+     *         var sRole = norm(oAssignment.RoleCode);
+     *         var sId;
+     *         if (sRole === "MECHANIC" || sRole.indexOf("MECAN") >= 0 ||
+     *             sRole === "LEAD_MECHANIC") {
+     *             sId = idKey(oAssignment.ResourceId || oAssignment.PersonnelNumber);
+     *             if (sId) {
+     *                 mIds[sId] = true;
+     *             }
+     *         }
+     *     });
+     *
+     *     return mIds;
+     * }
+     *
+     * function isMechanicRow(oRow, mMechanicIds) {
+     *     var sType = norm(oRow.ResourceTypeCode);
+     *     var sResource = idKey(oRow.ResourceId || oRow.PersonnelNumber);
+     *     return sType === "MECHANIC" || sType.indexOf("MECAN") >= 0 ||
+     *         Boolean(mMechanicIds[sResource]);
+     * }
+     */
+    function isMechanicRow(oRow) {
+        var sType = norm(oRow.ResourceTypeCode);
 
         /*
-         * En QAS ResourceTypeCode puede estar vacío. Por eso se usa
-         * FilterCatalog(MECHANIC) como fallback de identificación.
+         * Regla funcional EF-04: sólo ZCS_EMPLEADO-PUESTO = MECANICO.
+         * El catálogo MECHANIC, las órdenes y los roles de asignación no son
+         * evidencia del puesto y por tanto no se usan como respaldo.
          */
-        catalogRows(
-            oRaw.catalogs,
-            "MECHANIC"
-        ).forEach(function (oRow) {
-            var sId = idKey(oRow.ValueId);
-
-            if (sId) {
-                mIds[sId] = true;
-            }
-        });
-
-        (oRaw.resources || []).forEach(function (oRow) {
-            var sType = norm(oRow.ResourceTypeCode);
-            var sId;
-
-            if (
-                sType === "MECHANIC" ||
-                sType.indexOf("MECAN") >= 0
-            ) {
-                sId = idKey(
-                    oRow.ResourceId ||
-                    oRow.PersonnelNumber
-                );
-
-                if (sId) {
-                    mIds[sId] = true;
-                }
-            }
-        });
-
-        (oRaw.orders || []).forEach(function (oOrder) {
-            var sId = idKey(oOrder.Mecanico);
-
-            if (sId && sId !== "0") {
-                mIds[sId] = true;
-            }
-        });
-
-        (oRaw.orderResources || []).forEach(function (oAssignment) {
-            var sRole = norm(oAssignment.RoleCode);
-            var sId;
-
-            if (
-                sRole === "MECHANIC" ||
-                sRole.indexOf("MECAN") >= 0 ||
-                sRole === "LEAD_MECHANIC"
-            ) {
-                sId = idKey(
-                    oAssignment.ResourceId ||
-                    oAssignment.PersonnelNumber
-                );
-
-                if (sId) {
-                    mIds[sId] = true;
-                }
-            }
-        });
-
-        return mIds;
-    }
-
-    function isMechanicRow(oRow, mMechanicIds) {
-        var sType = norm(oRow.ResourceTypeCode);
-        var sResource = idKey(
-            oRow.ResourceId ||
-            oRow.PersonnelNumber
-        );
-
         return (
             sType === "MECHANIC" ||
-            sType.indexOf("MECAN") >= 0 ||
-            Boolean(mMechanicIds[sResource])
+            sType === "MECANICO"
         );
+    }
+
+    function getEmploymentState(oRow) {
+        var sCode = norm(
+            oRow && (
+                oRow.EmploymentStatusCode ||
+                oRow.EmploymentStatus
+            )
+        );
+
+        if (sCode === "3" || sCode === "ACTIVE" || sCode === "ACTIVO") {
+            return "ACTIVE";
+        }
+
+        if (["0", "1", "2", "INACTIVE", "INACTIVO"].indexOf(sCode) >= 0) {
+            return "INACTIVE";
+        }
+
+        return "NO_DATA";
+    }
+
+    function getOfficialShift(oRow) {
+        var sShift = norm(oRow && oRow.ShiftName);
+        var mLabels = {
+            "LUNES A VIERNES": "Lunes a Viernes",
+            "SABADO": "Sábado",
+            "DOMINICAL": "Dominical",
+            "NOCTURNO": "Nocturno"
+        };
+
+        return mLabels[sShift] || "";
+    }
+
+    function getBaseZoneMap(aCatalogs) {
+        var mZones = Object.create(null);
+
+        (aCatalogs || []).forEach(function (oRow) {
+            var sBase;
+            var sZone;
+
+            if (norm(oRow.FilterDomain) !== "ZONE") {
+                return;
+            }
+
+            sBase = norm(oRow.ScopeId || oRow.Base || oRow.BaseId);
+            sZone = String(oRow.ValueText || oRow.ValueId || "").trim();
+
+            if (sBase && sZone) {
+                mZones[sBase] = sZone;
+            }
+        });
+
+        return mZones;
+    }
+
+    function enrichMechanicRow(oRow, mBaseZones) {
+        var oCopy = Object.assign({}, oRow);
+        var sBase = norm(
+            oRow.Base || oRow.BaseId || oRow.BaseCode || oRow.WorkBase
+        );
+        var sMappedZone = sBase && mBaseZones[sBase];
+        var sShift = getOfficialShift(oRow);
+
+        oCopy._mecZoneId = sMappedZone || oRow.ZoneId || oRow.ZoneName || "";
+        oCopy._mecZoneName = sMappedZone || oRow.ZoneName || oRow.ZoneId || "";
+        oCopy._mecShiftName = sShift;
+        oCopy._mecEmploymentState = getEmploymentState(oRow);
+        oCopy.ZoneId = oCopy._mecZoneId;
+        oCopy.ZoneName = oCopy._mecZoneName;
+        oCopy.ShiftId = sShift;
+        oCopy.ShiftName = sShift;
+        oCopy.ShiftSourceValidated = Boolean(sShift);
+
+        return oCopy;
     }
 
     function resourceMatchesFilters(oRow, oFilters) {
         var bShiftOk =
             isAll(oFilters.turno) ||
             (
-                isTrue(oRow.ShiftSourceValidated) &&
                 matches(
                     oFilters.turno,
                     [
-                        oRow.ShiftId,
-                        oRow.ShiftName
+                        oRow._mecShiftName
                     ]
                 )
             );
@@ -481,8 +541,8 @@ sap.ui.define([], function () {
             matches(
                 oFilters.zona,
                 [
-                    oRow.ZoneId,
-                    oRow.ZoneName
+                    oRow._mecZoneId,
+                    oRow._mecZoneName
                 ]
             ) &&
             matches(
@@ -505,7 +565,7 @@ sap.ui.define([], function () {
     function buildCatalogs(oRaw, aPeriodRows) {
         var aZones = catalogRows(oRaw.catalogs, "ZONE");
         var aSupervisors = catalogRows(oRaw.catalogs, "SUPERVISOR");
-        var aShifts = catalogRows(oRaw.catalogs, "SHIFT");
+        var aShifts = [];
         var aServices = catalogRows(oRaw.catalogs, "ORDER_TYPE");
         var aSpecialties = catalogRows(oRaw.catalogs, "SPECIALTY");
 
@@ -517,12 +577,12 @@ sap.ui.define([], function () {
             aZones = uniqueBy(
                 aPeriodRows
                     .filter(function (oRow) {
-                        return oRow.ZoneId || oRow.ZoneName;
+                        return oRow._mecZoneId || oRow._mecZoneName;
                     })
                     .map(function (oRow) {
                         return {
-                            key: oRow.ZoneName || oRow.ZoneId,
-                            text: oRow.ZoneName || oRow.ZoneId
+                            key: oRow._mecZoneName || oRow._mecZoneId,
+                            text: oRow._mecZoneName || oRow._mecZoneId
                         };
                     }),
                 function (oItem) {
@@ -556,33 +616,14 @@ sap.ui.define([], function () {
             );
         }
 
-        if (!aShifts.length) {
-            aShifts = uniqueBy(
-                aPeriodRows
-                    .filter(function (oRow) {
-                        return (
-                            isTrue(oRow.ShiftSourceValidated) &&
-                            (
-                                oRow.ShiftId ||
-                                oRow.ShiftName
-                            )
-                        );
-                    })
-                    .map(function (oRow) {
-                        return {
-                            key:
-                                oRow.ShiftId ||
-                                oRow.ShiftName,
-                            text:
-                                oRow.ShiftName ||
-                                oRow.ShiftId
-                        };
-                    }),
-                function (oItem) {
-                    return norm(oItem.key);
-                }
-            );
-        }
+        aShifts = uniqueBy(
+            aPeriodRows
+                .filter(function (oRow) { return Boolean(oRow._mecShiftName); })
+                .map(function (oRow) {
+                    return { key: oRow._mecShiftName, text: oRow._mecShiftName };
+                }),
+            function (oItem) { return norm(oItem.key); }
+        );
 
         if (!aServices.length) {
             aServices = uniqueBy(
@@ -635,13 +676,21 @@ sap.ui.define([], function () {
             tiposServicio: makeCatalog(aServices, "Todos", false),
             especialidades: makeCatalog(aSpecialties, "Todas", false),
 
+            /*
+             * LEGACY CONSERVADO (NO EJECUTAR):
+             * estados: [
+             *     { key: "ALL", text: "Todos" },
+             *     { key: "AVAILABLE", text: "Disponibles" },
+             *     { key: "BALANCED", text: "Dentro de capacidad" },
+             *     { key: "NEAR", text: "Cerca de saturación" },
+             *     { key: "OVER", text: "Sobre capacidad" },
+             *     { key: "CRITICAL", text: "Crítico" },
+             *     { key: "INACTIVE", text: "Inactivos" }
+             * ]
+             */
             estados: [
                 { key: "ALL", text: "Todos" },
-                { key: "AVAILABLE", text: "Disponibles" },
-                { key: "BALANCED", text: "Dentro de capacidad" },
-                { key: "NEAR", text: "Cerca de saturación" },
-                { key: "OVER", text: "Sobre capacidad" },
-                { key: "CRITICAL", text: "Crítico" },
+                { key: "ACTIVE", text: "Activos" },
                 { key: "INACTIVE", text: "Inactivos" }
             ]
         };
@@ -1031,23 +1080,14 @@ sap.ui.define([], function () {
         );
     }
 
-    function buildStateDistribution(mPopulation, iDenominator) {
+    function buildStateDistribution(mPopulation) {
+        var iKnown = Object.keys(mPopulation).filter(function (sResource) {
+            return mPopulation[sResource]._mecEmploymentState !== "NO_DATA";
+        }).length;
         var aDefinitions = [
             {
-                codes: ["AVAILABLE"],
-                label: "Disponibles"
-            },
-            {
-                codes: ["BALANCED"],
-                label: "Dentro de capacidad"
-            },
-            {
-                codes: ["NEAR"],
-                label: "Cerca de saturación"
-            },
-            {
-                codes: ["OVER", "CRITICAL"],
-                label: "Sobre capacidad"
+                codes: ["ACTIVE"],
+                label: "Activos"
             },
             {
                 codes: ["INACTIVE"],
@@ -1062,22 +1102,22 @@ sap.ui.define([], function () {
                         oDef.codes.indexOf(
                             mPopulation[
                                 sResource
-                            ]._mecDisplayState
+                            ]._mecEmploymentState
                         ) >= 0
                     );
                 }).length;
 
-            var nPct = iDenominator > 0
+            var nPct = iKnown > 0
                 ? (
                     iCount /
-                    iDenominator
+                    iKnown
                 ) * 100
                 : null;
 
             return {
                 label: oDef.label,
                 value:
-                    iDenominator > 0
+                    iKnown > 0
                         ? iCount
                         : "—",
                 pct:
@@ -1111,13 +1151,16 @@ sap.ui.define([], function () {
         var oFrom = parseInputDate(oFilters.fechaDesde);
         var oTo = parseInputDate(oFilters.fechaHasta);
 
-        var mMechanicIds = getMechanicIds(oRaw);
+        var mBaseZones = getBaseZoneMap(oRaw.catalogs || []);
         var oThresholds = getThresholds(oRaw.catalogs || []);
 
+        var aAllMechanicRows;
         var aPeriodRows;
         var aMechanicRows;
         var aFilteredRows;
         var mLatestAll;
+        var mWorkforcePopulation;
+        var iTotalMechanics;
 
         var mCapacityByResource = Object.create(null);
         var mOrderMap = Object.create(null);
@@ -1162,8 +1205,14 @@ sap.ui.define([], function () {
         var nCapacityPct = null;
         var nLoadPct = null;
 
+        aAllMechanicRows = (oRaw.resources || [])
+            .filter(isMechanicRow)
+            .map(function (oRow) {
+                return enrichMechanicRow(oRow, mBaseZones);
+            });
+
         aPeriodRows = uniqueBy(
-            (oRaw.resources || [])
+            aAllMechanicRows
                 .filter(function (oRow) {
                     return inRange(
                         oRow.WorkDate,
@@ -1186,17 +1235,9 @@ sap.ui.define([], function () {
             }
         );
 
-        oCatalogs = buildCatalogs(
-            oRaw,
-            aPeriodRows
-        );
+        oCatalogs = buildCatalogs(oRaw, aAllMechanicRows);
 
-        aMechanicRows = aPeriodRows.filter(function (oRow) {
-            return isMechanicRow(
-                oRow,
-                mMechanicIds
-            );
-        });
+        aMechanicRows = aPeriodRows;
 
         aFilteredRows = aMechanicRows.filter(function (oRow) {
             return resourceMatchesFilters(
@@ -1206,6 +1247,12 @@ sap.ui.define([], function () {
         });
 
         mLatestAll = getLatestRowsByResource(aFilteredRows);
+
+        mWorkforcePopulation = getLatestRowsByResource(
+            aAllMechanicRows.filter(function (oRow) {
+                return resourceMatchesFilters(oRow, oFilters);
+            })
+        );
 
         /*
          * CapacitySourceValidated=false NO es 0 h.
@@ -1470,10 +1517,18 @@ sap.ui.define([], function () {
                     var sFilter =
                         norm(oFilters.estado);
 
-                    if (
-                        oRow._mecDisplayState === sFilter ||
-                        oRow._mecComputedState === sFilter
-                    ) {
+                    if (oRow._mecEmploymentState === sFilter) {
+                        mResult[sResource] = oRow;
+                    }
+
+                    return mResult;
+                }, Object.create(null));
+
+            mWorkforcePopulation = Object.keys(mWorkforcePopulation)
+                .reduce(function (mResult, sResource) {
+                    var oRow = mWorkforcePopulation[sResource];
+
+                    if (oRow._mecEmploymentState === norm(oFilters.estado)) {
                         mResult[sResource] = oRow;
                     }
 
@@ -1488,7 +1543,7 @@ sap.ui.define([], function () {
                 if (
                     mPopulation[
                         sResource
-                    ]._mecDisplayState !==
+                    ]._mecEmploymentState !==
                     "INACTIVE"
                 ) {
                     mResult[sResource] =
@@ -1502,6 +1557,7 @@ sap.ui.define([], function () {
 
         aActiveIds = Object.keys(mActive);
         iActive = aActiveIds.length;
+        iTotalMechanics = Object.keys(mWorkforcePopulation).length;
 
         if (bAvailabilityData) {
             nAvailable = aActiveIds.filter(
@@ -1648,13 +1704,13 @@ sap.ui.define([], function () {
 
         aTurnDist = finalizeDistribution(
             groupDistinctLatest(
-                mActive,
-                "ShiftId",
-                "ShiftName",
-                true
+                mWorkforcePopulation,
+                "_mecShiftName",
+                "_mecShiftName",
+                false
             ),
-            iActive,
-            3
+            iTotalMechanics,
+            4
         );
 
         aSpecialtyDist = finalizeDistribution(
@@ -1670,19 +1726,16 @@ sap.ui.define([], function () {
 
         aZoneDist = finalizeDistribution(
             groupDistinctLatest(
-                mActive,
-                "ZoneId",
-                "ZoneName",
+                mWorkforcePopulation,
+                "_mecZoneId",
+                "_mecZoneName",
                 false
             ),
-            iActive,
+            iTotalMechanics,
             5
         );
 
-        aStateDist = buildStateDistribution(
-            mPopulation,
-            Object.keys(mPopulation).length
-        );
+        aStateDist = buildStateDistribution(mWorkforcePopulation);
 
         /*
          * Capacidad por especialidad.
@@ -2132,8 +2185,8 @@ sap.ui.define([], function () {
 
             kpis: {
                 activos:
-                    aMechanicRows.length
-                        ? String(iActive)
+                    iTotalMechanics > 0
+                        ? String(iTotalMechanics)
                         : "Sin datos",
 
                 disponibles:
@@ -2296,8 +2349,8 @@ sap.ui.define([], function () {
                 ),
 
             zonaTotal:
-                iActive > 0
-                    ? String(iActive)
+                iTotalMechanics > 0
+                    ? String(iTotalMechanics)
                     : "—",
 
             especialidadMensaje:
@@ -2346,7 +2399,12 @@ sap.ui.define([], function () {
 
             meta: {
                 hasMechanicPopulation:
-                    aMechanicRows.length > 0,
+                    iTotalMechanics > 0,
+
+                employmentStatusData:
+                    Object.keys(mWorkforcePopulation).some(function (sResource) {
+                        return mWorkforcePopulation[sResource]._mecEmploymentState !== "NO_DATA";
+                    }),
 
                 availabilityData:
                     bAvailabilityData,

@@ -90,7 +90,11 @@ test("la precarga conserva cliente, equipo y campos de vinculación confirmados 
     ].forEach(function (entitySet) {
         const call = calls.find(function (item) { return item.entitySet === entitySet; });
         assert.ok(call, entitySet + " fue consultado");
-        assertProjection(entitySet, call.select);
+        if (entitySet === "DashboardResourceDailySet") {
+            assert.equal(call.select, undefined, "personal se consulta sin $select para conservar el contrato ampliable");
+        } else {
+            assertProjection(entitySet, call.select);
+        }
         assertProjection(entitySet, SELECTS[entitySet]);
     });
     assert.equal(snapshot.orders[0].CustomerName, "Cliente QAS");
@@ -132,7 +136,11 @@ test("la lectura directa de BAS solicita la misma proyección verificada", async
     ].forEach(function (entitySet) {
         const call = reads.find(function (item) { return item.entitySet === entitySet; });
         assert.ok(call, entitySet + " fue consultado");
-        assertProjection(entitySet, call.select);
+        if (entitySet === "DashboardResourceDailySet") {
+            assert.deepEqual(call.select, [""], "la lectura directa conserva todos los campos de personal");
+        } else {
+            assertProjection(entitySet, call.select);
+        }
     });
     assert.equal(dashboard.orders[0].CustomerName, "Cliente QAS");
     assert.equal(dashboard.orders[0].EquipmentName, "Equipo QAS");

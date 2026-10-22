@@ -593,8 +593,12 @@ function validPersonnelId(value) {
 
 function isMechanicResource(resource) {
     const type = normalize(resource && resource.ResourceTypeCode);
-    return type === "MECHANIC" || type.includes("MECAN") ||
-        type === "TECHNICIAN" || type.includes("TECNIC");
+    /*
+     * LEGACY CONSERVADO (NO EJECUTAR):
+     * return type === "MECHANIC" || type.includes("MECAN") ||
+     *     type === "TECHNICIAN" || type.includes("TECNIC");
+     */
+    return type === "MECHANIC" || type === "MECANICO";
 }
 
 function buildCapacity(orders, resources, assignments, operations, confirmations) {
@@ -603,6 +607,9 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
     const periodResources = asArray(resources).filter((resource) =>
         normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
     );
+    const mechanicIds = new Set(periodResources.filter(isMechanicResource)
+        .map((resource) => validPersonnelId(resource.ResourceId || resource.PersonnelNumber))
+        .filter(Boolean));
     const validResources = periodResources.filter((resource) =>
         resource.CapacitySourceValidated !== false && normalize(resource.AvailabilityStatusCode) !== "INACTIVE"
     );
@@ -633,7 +640,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
         };
         const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
         current.capacity += asNumber(resource.CapacityHours);
-        if (technicianId) {
+        if (technicianId && mechanicIds.has(technicianId)) {
             current.technicians.add(technicianId);
         }
         resourceShiftMap.set(key, current);
@@ -641,7 +648,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
 
     function addOrderTechnician(order, value) {
         const technicianId = validPersonnelId(value);
-        if (!technicianId) {
+        if (!technicianId || !mechanicIds.has(technicianId)) {
             return;
         }
         const key = toShiftKey(order && order.Turno);
@@ -662,13 +669,7 @@ function buildCapacity(orders, resources, assignments, operations, confirmations
     });
     officialOrders.forEach((order) => addOrderTechnician(order, order.Mecanico));
 
-    const technicians = new Set();
-    periodResources.filter(isMechanicResource).forEach((resource) => {
-        const technicianId = validPersonnelId(resource.ResourceId || resource.PersonnelNumber);
-        if (technicianId) {
-            technicians.add(technicianId);
-        }
-    });
+    const technicians = new Set(mechanicIds);
     resourceShiftMap.forEach((shift) => {
         shift.technicians.forEach((technician) => technicians.add(technician));
     });
@@ -790,6 +791,30 @@ function derivedOptions(records, keyProperty, textProperty, allKey, allText) {
     return [{ key: allKey, text: allText }, ...uniqueBy(values, "key")];
 }
 
+function mechanicOptions(resources) {
+    return derivedOptions(
+        asArray(resources).filter(isMechanicResource).map((resource) => ({
+            key: resource.ResourceId || resource.PersonnelNumber,
+            text: resource.ResourceName || resource.ResourceId || resource.PersonnelNumber
+        })),
+        "key", "text", "TODOS", "Todos"
+    );
+}
+
+function mechanicShiftOptions(resources) {
+    const labels = {
+        "LUNES A VIERNES": "Lunes a Viernes",
+        "SABADO": "Sábado",
+        "DOMINICAL": "Dominical",
+        "NOCTURNO": "Nocturno"
+    };
+    const rows = asArray(resources).filter(isMechanicResource).map((resource) => {
+        const key = normalize(resource.ShiftName).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return labels[key] ? { key: labels[key], text: labels[key] } : null;
+    }).filter(Boolean);
+    return [{ key: "TODOS", text: "Todos" }, ...uniqueBy(rows, "key")];
+}
+
 function preferCatalog(catalogValues, derivedValues) {
     return catalogValues.length > 1 ? catalogValues : derivedValues;
 }
@@ -816,6 +841,20 @@ function buildPeriodOptions(orders) {
 }
 
 function buildFilterOptions(catalogs, orders, resources) {
+    /*
+     * LEGACY CONSERVADO (NO EJECUTAR).
+     * Los filtros anteriores mezclaban catálogos genéricos y datos de órdenes:
+     * turnos: preferCatalog(catalogOptions(catalogs, ["SHIFT"], "TODOS", "Todos"),
+     *     derivedOptions(allRecords.map((record) => ({
+     *         key: record.Turno || record.ShiftId,
+     *         text: record.ShiftName || record.Turno || record.ShiftId
+     *     })), "key", "text", "TODOS", "Todos")),
+     * mecanicos: preferCatalog(catalogOptions(catalogs, ["MECHANIC", "RESOURCE"],
+     *     "TODOS", "Todos"), derivedOptions(allRecords.map((record) => ({
+     *         key: record.Mecanico || record.ResourceId,
+     *         text: record.ResourceName || record.Mecanico || record.ResourceId
+     *     })), "key", "text", "TODOS", "Todos"))
+     */
     const allRecords = [...asArray(orders), ...asArray(resources)];
     return {
         periodos: buildPeriodOptions(orders),
@@ -828,14 +867,8 @@ function buildFilterOptions(catalogs, orders, resources) {
             catalogOptions(catalogs, ["ORDER_TYPE"], "TODOS", "Todos"),
             derivedOptions(orders, "OrderTypeCode", "OrderTypeText", "TODOS", "Todos")
         ),
-        turnos: preferCatalog(
-            catalogOptions(catalogs, ["SHIFT"], "TODOS", "Todos"),
-            derivedOptions(allRecords.map((record) => ({ key: record.Turno || record.ShiftId, text: record.ShiftName || record.Turno || record.ShiftId })), "key", "text", "TODOS", "Todos")
-        ),
-        mecanicos: preferCatalog(
-            catalogOptions(catalogs, ["MECHANIC", "RESOURCE"], "TODOS", "Todos"),
-            derivedOptions(allRecords.map((record) => ({ key: record.Mecanico || record.ResourceId, text: record.ResourceName || record.Mecanico || record.ResourceId })), "key", "text", "TODOS", "Todos")
-        ),
+        turnos: mechanicShiftOptions(resources),
+        mecanicos: mechanicOptions(resources),
         estadosOrden: preferCatalog(
             catalogOptions(catalogs, ["STATUS"], "TODOS", "Todos"),
             derivedOptions(asArray(orders).map((order) => ({

@@ -77,11 +77,20 @@ sap.ui.define([
             "FilterCatalogId", "FilterDomain", "ValueId", "ValueText", "NumericValue",
             "UnitCode", "ScopeTypeCode", "ScopeId", "SortOrder", "Active"
         ],
-        DashboardResourceDailySet: [
-            "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName", "ResourceTypeCode", "WorkDate",
-            "ZoneId", "ZoneName", "SupervisorId", "SupervisorName", "ShiftId", "ShiftName",
-            "ShiftSourceValidated", "AvailabilityStatusCode", "CapacitySourceValidated", "CapacityHours"
-        ],
+        /*
+         * LEGACY CONSERVADO (NO EJECUTAR).
+         * Este $select se retiró temporalmente para que SAP pueda entregar los
+         * nuevos campos de puesto, base y estado laboral sin que el frontend
+         * tenga que adivinar sus nombres técnicos.
+         *
+         * DashboardResourceDailySet: [
+         *     "ResourceDateId", "ResourceId", "PersonnelNumber", "ResourceName",
+         *     "ResourceTypeCode", "WorkDate", "ZoneId", "ZoneName",
+         *     "SupervisorId", "SupervisorName", "ShiftId", "ShiftName",
+         *     "ShiftSourceValidated", "AvailabilityStatusCode",
+         *     "CapacitySourceValidated", "CapacityHours"
+         * ],
+         */
         DashboardOrderOperationsSet: [
             "OperationKey", "OrderId", "RoutingNumber", "OperationCounter",
             "AssignedPersonnelNumber", "PlannedSourceCode",

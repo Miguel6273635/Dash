@@ -433,11 +433,7 @@ sap.ui.define([
                     ],
                     estados: [
                         { key: "ALL", text: "Todos" },
-                        { key: "AVAILABLE", text: "Disponibles" },
-                        { key: "BALANCED", text: "Dentro de capacidad" },
-                        { key: "NEAR", text: "Cerca de saturación" },
-                        { key: "OVER", text: "Sobre capacidad" },
-                        { key: "CRITICAL", text: "Crítico" },
+                        { key: "ACTIVE", text: "Activos" },
                         { key: "INACTIVE", text: "Inactivos" }
                     ]
                 },
@@ -544,25 +540,7 @@ sap.ui.define([
         _emptyState: function () {
             return [
                 {
-                    label: "Disponibles",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
-                },
-                {
-                    label: "Dentro de capacidad",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
-                },
-                {
-                    label: "Cerca de saturación",
-                    value: "—",
-                    pct: 0,
-                    pctText: "—"
-                },
-                {
-                    label: "Sobre capacidad",
+                    label: "Activos",
                     value: "—",
                     pct: 0,
                     pctText: "—"

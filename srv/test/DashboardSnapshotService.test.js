@@ -108,7 +108,7 @@ test("reemplaza el falso dominio de zonas con DashboardZonasSet", async function
             readAll: async function (entitySet, options) {
                 catalogCalls.push({ entitySet, select: options.select });
                 return ["CENTRO", "ESTE", "NORTE", "OESTE", "SUR"].map((zone) => ({
-                    ZonaId: "", Zona: zone, Base: ""
+                    ZonaId: "", Zona: zone, Base: "BASE-" + zone
                 }));
             }
         }
@@ -124,6 +124,7 @@ test("reemplaza el falso dominio de zonas con DashboardZonasSet", async function
     assert.equal(catalogCalls[0].entitySet, "DashboardZonasSet");
     assert.deepEqual(catalogCalls[0].select, ["ZonaId", "Zona", "Base"]);
     assert.deepEqual(zones.map((item) => item.ValueId).sort(), ["CENTRO", "ESTE", "NORTE", "OESTE", "SUR"]);
+    assert.equal(zones.find((item) => item.ValueId === "NORTE").ScopeId, "BASE-NORTE");
     assert.equal(snapshot.catalogs.some((item) => item.ValueId === "MANTENIMIENTO D.F."), false);
     assert.equal(snapshot.catalogs.some((item) => item.FilterDomain === "STATUS"), true);
 });
