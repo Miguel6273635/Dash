@@ -38,11 +38,8 @@ sap.ui.define([
 
     function createEmpty(filters) { return Mapper.build(Mapper.emptyRaw(), filters); }
 
-    function load(model, filters) {
-        var currentRange = Mapper.range(filters);
-
-        return RelatedData.load(model, {
-            ordersFilter: buildOrdersFilter(filters),
+    function directConfig(currentRange) {
+        return {
             orderRelations: [
                 { entitySet: "DashboardOrderResourcesSet", target: "assignments" },
                 { entitySet: "DashboardOrderOperationsSet", target: "operations" },
@@ -52,13 +49,42 @@ sap.ui.define([
                 { entitySet: "DashboardOrderMaterialsSet", target: "materials" }
             ],
             independent: [
-                { entitySet: "DashboardResourceDailySet", target: "resources", filter: RelatedData.rangeFilter("WorkDate", currentRange) },
+                {
+                    entitySet: "DashboardResourceDailySet",
+                    target: "resources",
+                    filter: RelatedData.rangeFilter("WorkDate", currentRange)
+                },
                 { entitySet: "DashboardFilterCatalogSet", target: "catalogs" }
             ]
+        };
+    }
+
+    function load(model, filters) {
+        var currentRange = Mapper.range(filters);
+        var ordersFilter = buildOrdersFilter(filters);
+
+        // Excepción temporal: solamente BalanceOperativoZona lee QAS de forma
+        // directa. Primero obtiene las OT del periodo y después consulta los
+        // detalles en lotes de OrderId mediante ODataRelatedDataService.
+        return read(model, "DashboardOrdersSet", ordersFilter).then(function (orders) {
+            return RelatedData.loadForOrders(model, orders, directConfig(currentRange));
         }).then(function (raw) {
-            raw.meta.ordersFilter = buildOrdersFilter(filters);
+            raw.meta.ordersFilter = ordersFilter;
+            raw.meta.source = "ODATA_DIRECT";
             return { data: Mapper.build(raw, filters), rawData: raw };
         });
+
+        /*
+         * LEGACY CONSERVADO (NO EJECUTAR): flujo de API_DASH. Se conserva para
+         * reactivarlo cuando la precarga anual vuelva a ser la fuente oficial.
+         *
+         * return RelatedData.load(model, Object.assign({
+         *     ordersFilter: ordersFilter
+         * }, directConfig(currentRange))).then(function (raw) {
+         *     raw.meta.ordersFilter = ordersFilter;
+         *     return { data: Mapper.build(raw, filters), rawData: raw };
+         * });
+         */
     }
 
     return { load: load, createEmpty: createEmpty, buildOrdersFilter: buildOrdersFilter };
